@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.jianfei.core.bean.MenBuilder;
 import com.jianfei.core.bean.User;
 
 /**
@@ -25,43 +24,11 @@ public class ShrioUser implements Serializable {
 	 * @version 1.0.0
 	 */
 
-	private static final long serialVersionUID = -6957137697772659128L;
-
-	private long id;
-
-	private String name;
-
-	private String loginName;
+	private static final long serialVersionUID = 7760388468366884626L;
 
 	private List<String> permission = Lists.newArrayList();
 
-	private List<MenBuilder> menus = Lists.newArrayList();
-
 	private User user;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getLoginName() {
-		return loginName;
-	}
-
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
-	}
 
 	public List<String> getPermission() {
 		return permission;
@@ -77,14 +44,6 @@ public class ShrioUser implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public List<MenBuilder> getMenus() {
-		return menus;
-	}
-
-	public void setMenus(List<MenBuilder> menus) {
-		this.menus = menus;
 	}
 
 	/*

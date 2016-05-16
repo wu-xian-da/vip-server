@@ -25,12 +25,13 @@ import com.jianfei.core.bean.MenBuilder;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.cache.CacheUtils;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
-import com.jianfei.core.common.shrio.ShrioUser;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.TreeGrid;
 import com.jianfei.core.common.utils.TreeNodeUtil;
 import com.jianfei.core.mapper.ResourceMapper;
@@ -53,12 +54,30 @@ public class SystemService {
 	 * 日志对象
 	 */
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+
+	public static final String CURRENT_MENU = "currentMenus";
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
 	private RoleMapper roleMapper;
 	@Autowired
 	private ResourceMapper resourceMapper;
+
+	@SuppressWarnings("unchecked")
+	public List<MenBuilder> getCurrentMenus() {
+
+		Object object = CacheUtils.get(CacheUtils.BROKER_CACHE, CURRENT_MENU);
+		if (null != object && !StringUtils.isEmpty(object.toString())) {
+			return (List<MenBuilder>) CacheUtils.get(CacheUtils.BROKER_CACHE,
+					CURRENT_MENU);
+		}
+		List<Resource> resources = resourceMapper
+				.findResourceByUserId(ShiroUtils.getShrioUser().getUser()
+						.getId());
+		List<MenBuilder> menus = MenBuilder.buildMenus(resources);
+		CacheUtils.put(CacheUtils.BROKER_CACHE, CURRENT_MENU);
+		return menus;
+	}
 
 	public List<JsonTreeData> buildResourceTreeNode() {
 		List<Resource> resources = resourceMapper
@@ -112,12 +131,6 @@ public class SystemService {
 				list.add(map);
 			}
 			roleMapper.batchInsertRoleResource(list);
-			// 更新当前用户的权限
-			ShrioUser shrioUser = ShiroUtils.getShrioUser();
-			List<Resource> userResources = resourceMapper
-					.findResourceByUserId(shrioUser.getUser().getId());
-			List<MenBuilder> menus = MenBuilder.buildMenus(userResources);
-			shrioUser.setMenus(menus);
 		} catch (Exception e) {
 			logger.error("更新用户角色:{}", e.getMessage());
 			return dto.setMsgBody("操作失败，请稍后重试...");
@@ -142,6 +155,7 @@ public class SystemService {
 				map.put("roleId", str);
 				list.add(map);
 			}
+			CacheUtils.remove(CacheUtils.BROKER_CACHE, CURRENT_MENU);
 		} catch (Exception e) {
 			logger.error("更新用户角色:{}", e.getMessage());
 			return dto.setMsgBody(MessageDto.MsgFlag.ERROR);
@@ -204,6 +218,7 @@ public class SystemService {
 		this.resourceMapper = resourceMapper;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Grid bindGridData(PageInfo pageInfo) {
 		Grid grid = new Grid();
 		grid.setRows(pageInfo.getList());
