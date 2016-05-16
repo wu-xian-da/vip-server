@@ -52,7 +52,6 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		try {
 
 			UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
-			System.out.println(authcToken.getUsername());
 			ShrioUser userMsgDto = new ShrioUser();
 			userMsgDto.setName(authcToken.getUsername());
 			User user = systemService.getUserMapper().getUserByName(
@@ -61,8 +60,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 				userMsgDto.setUser(user);
 				List<Resource> resources = systemService.getResourceMapper()
 						.findResourceByUserId(user.getId());
-				List<MenBuilder> trees = MenBuilder.buildTree(resources);
-				List<MenBuilder> menus = MenBuilder.buildMenu(trees);
+				List<MenBuilder> menus = MenBuilder.buildMenus(resources);
 				userMsgDto.setMenus(menus);
 				if (user.isLogin()) {
 					throw new AuthenticationException("msg:该帐号已经登录.");
