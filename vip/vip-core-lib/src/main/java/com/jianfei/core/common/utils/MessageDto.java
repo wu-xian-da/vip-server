@@ -63,4 +63,11 @@ public class MessageDto implements Serializable {
 	public String toString() {
 		return JSONObject.toJSONString(this);
 	}
+
+	public static interface MsgFlag {
+
+		public static final String SUCCESS = "操作陈功...";
+		public static final String ERROR = "操作失败,请稍后重试...";
+
+	}
 }

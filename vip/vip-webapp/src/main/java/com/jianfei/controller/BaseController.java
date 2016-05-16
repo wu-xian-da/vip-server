@@ -7,7 +7,6 @@
  */
 package com.jianfei.controller;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;

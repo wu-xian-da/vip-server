@@ -6,9 +6,7 @@
 		}, 'json');
 	};
 	var logoutFun = function() {
-		$.post(sy.contextPath + '/base/syuser!doNotNeedSessionAndSecurity_logout.sy', function(result) {
-			location.replace(sy.contextPath + '/index.jsp');
-		}, 'json');
+		 window.location.href=sy.contextPath + '/logout';
 	};
 	var showMyInfoFun = function() {
 		var dialog = parent.sy.modalDialog({

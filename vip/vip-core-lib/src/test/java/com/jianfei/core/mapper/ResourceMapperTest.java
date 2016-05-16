@@ -67,12 +67,6 @@ public class ResourceMapperTest {
 	 */
 	@Test
 	public void testSaveMaps() {
-		List<Resource> list = resourceMapper.get(new HashMap<String, Object>());
-		List<MenBuilder> trees = MenBuilder.buildTree(list);
-		trees = MenBuilder.buildMenu(trees);
-		for (MenBuilder menu : trees) {
-			System.out.println(JSONObject.toJSONString(menu));
-		}
 	}
 
 	/**

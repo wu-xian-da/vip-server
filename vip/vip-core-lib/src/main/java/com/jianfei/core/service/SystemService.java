@@ -21,9 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.MenBuilder;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.security.shiro.ShiroUtils;
+import com.jianfei.core.common.shrio.ShrioUser;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
@@ -63,11 +66,23 @@ public class SystemService {
 		return TreeNodeUtil.buildTree(resources);
 	}
 
+	/**
+	 * buildRoleTreeNode(构造树)
+	 * 
+	 * @return List<JsonTreeData>
+	 * @version 1.0.0
+	 */
 	public List<JsonTreeData> buildRoleTreeNode() {
 		List<Role> roles = roleMapper.get(new HashMap<String, Object>());
 		return TreeNodeUtil.buildRoleTree(roles);
 	}
 
+	/**
+	 * buildResourceTreeGrid(构建树形资源表格)
+	 * 
+	 * @return TreeGrid<Map<String,Object>>
+	 * @version 1.0.0
+	 */
 	public TreeGrid<Map<String, Object>> buildResourceTreeGrid() {
 		List<Resource> resources = resourceMapper
 				.get(new HashMap<String, Object>());
@@ -76,6 +91,14 @@ public class SystemService {
 		return treeGrid;
 	}
 
+	/**
+	 * updateRoleResource(更新角色资源)
+	 * 
+	 * @param id
+	 * @param ids
+	 * @return MessageDto
+	 * @version 1.0.0
+	 */
 	public MessageDto updateRoleResource(Long id, String ids) {
 		MessageDto dto = new MessageDto();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -89,6 +112,12 @@ public class SystemService {
 				list.add(map);
 			}
 			roleMapper.batchInsertRoleResource(list);
+			// 更新当前用户的权限
+			ShrioUser shrioUser = ShiroUtils.getShrioUser();
+			List<Resource> userResources = resourceMapper
+					.findResourceByUserId(shrioUser.getUser().getId());
+			List<MenBuilder> menus = MenBuilder.buildMenus(userResources);
+			shrioUser.setMenus(menus);
 		} catch (Exception e) {
 			logger.error("更新用户角色:{}", e.getMessage());
 			return dto.setMsgBody("操作失败，请稍后重试...");
@@ -115,10 +144,21 @@ public class SystemService {
 			}
 		} catch (Exception e) {
 			logger.error("更新用户角色:{}", e.getMessage());
-			return dto.setMsgBody("操作失败，请稍后重试...");
+			return dto.setMsgBody(MessageDto.MsgFlag.ERROR);
 		}
 		userMapper.batchInsertUserRole(list);
-		return dto.setOk(true).setMsgBody("操作成功...");
+		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+	}
+
+	public MessageDto saveResourc(Resource resource) {
+		MessageDto dto = new MessageDto();
+		try {
+			resourceMapper.save(resource);
+		} catch (Exception e) {
+			logger.error("保存资源:{}", e.getMessage());
+			return dto.setMsgBody(MessageDto.MsgFlag.ERROR);
+		}
+		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
 	/**

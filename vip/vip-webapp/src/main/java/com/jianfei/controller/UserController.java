@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,6 @@ import org.springframework.web.util.WebUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.security.shiro.PassWd;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;

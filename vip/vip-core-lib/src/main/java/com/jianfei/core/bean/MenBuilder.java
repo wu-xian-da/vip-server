@@ -133,7 +133,8 @@ public class MenBuilder implements Serializable {
 		}
 	}
 
-	public static List<MenBuilder> creationTreeNode(List<MenBuilder> menuList, String pid) {
+	public static List<MenBuilder> creationTreeNode(List<MenBuilder> menuList,
+			String pid) {
 
 		List<MenBuilder> childrenTreeNodes = new ArrayList<MenBuilder>();
 
@@ -142,8 +143,8 @@ public class MenBuilder implements Serializable {
 			String id = String.valueOf(treeNode.getId());
 			if (!StringUtils.isEmpty(parentId) && parentId.equals(pid)) {
 				@SuppressWarnings("unused")
-				List<MenBuilder> childrenTreeNodesTemps = creationTreeNode(menuList,
-						id);
+				List<MenBuilder> childrenTreeNodesTemps = creationTreeNode(
+						menuList, id);
 				childrenTreeNodes.add(treeNode);
 			}
 		}
@@ -153,8 +154,8 @@ public class MenBuilder implements Serializable {
 		return childrenTreeNodes;
 	}
 
-	public static List<MenBuilder> buildMenu(List<MenBuilder> menuList) {
-
+	public static List<MenBuilder> buildMenus(List<Resource> resources) {
+		List<MenBuilder> menuList = buildTree(resources);
 		List<MenBuilder> roots = new ArrayList<MenBuilder>();
 		// 根节点集合(一个跟节点一棵树)
 		List<MenBuilder> rootsTemp = getRootTreeNode(menuList);
