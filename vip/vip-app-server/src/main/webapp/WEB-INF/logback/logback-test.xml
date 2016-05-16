@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <property resource="logcenter.extract.properties"/>
+    <appender name="STUOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成日志文件 -->
+    <appender name="METHOD_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${storage.basedir}extract.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名,按分钟滚动-->
+            <FileNamePattern>${storage.basedir}extract-%d{yyyy-MM-dd-HH-mm}.%i.log</FileNamePattern>
+            <!--日志文件最大的大小-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%date表示日期，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>[%date]-[%level]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="STUOUT"/>
+    </root>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+     	<file>${BASE_HOME}/logs/server.log</file>  
+     	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+          	<fileNamePattern>${BASE_HOME}/logs/server.log.%d</fileNamePattern>  
+          	<maxHistory>7</maxHistory>  
+     	</rollingPolicy>  
+  
+     	<encoder>  
+          	<pattern>%d %p [%thread] %c - &lt;%m&gt;%n</pattern>
+     	</encoder>  
+	</appender>
+
+    <!--配置文件的引入-->
+    <property resource="logcenter.extract.properties"/>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="METHOD_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 只接受INFO级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${storage.basedir}extract.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名,按分钟滚动-->
+            <FileNamePattern>${storage.basedir}extract-%d{yyyy-MM-dd-HH-mm}.%i.log</FileNamePattern>
+            <maxHistory>100</maxHistory>
+            <!--日志文件最大的大小-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%date表示日期，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>[%date]-[%level]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--只写入access包中的日志，屏蔽其他的日志，级别不能低于INFO，设为DEBUG可以在控制台查看调式信息-->
+    <logger name="com.iflytek.edu.usp.logcenter.extract.access" level="DEBUG" additivity="false">
+        <appender-ref ref="STUOUT"/>
+        <appender-ref ref="METHOD_INFO"/>
+    </logger>
+</configuration>

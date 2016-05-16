@@ -1,0 +1,65 @@
+
+package com.jianfei.frame.error;
+
+
+/**
+ *
+ */
+public enum MainErrorType {
+
+    //
+    //
+    //
+    HTTP_ACTION_NOT_ALLOWED(101),
+    FORBIDDEN_REQUEST(102),
+    METHOD_OBSOLETED(103),
+    BUSINESS_LOGIC_ERROR(104),
+    MISSING_ACCESS_TOKEN(105),
+    INVALID_ACCESS_TOKEN(106),
+    MISSING_METHOD(107),
+    INVALID_METHOD(108),
+    MISSING_VERSION(109),
+    INVALID_VERSION(110),
+    UNSUPPORTED_VERSION(111),
+    INVALID_FORMAT(112),
+    EXCEED_USER_INVOKE_LIMITED(113),
+    EXCEED_SESSION_INVOKE_LIMITED(114),
+    EXCEED_APP_INVOKE_LIMITED(115),
+    EXCEED_APP_INVOKE_FREQUENCY_LIMITED(116),
+    MISSING_APPKEY(117),
+    INVALID_APPKEY(118),
+    METHOD_DISABLED(119),
+    UNSUPPORTED_HTTP_METHOD(120),
+    MISSING_OPEN_ID(121),
+    INVALID_OPEN_ID(122),
+    INVALID_SKIP(123),
+    INVALID_LIMIT(124),
+    INVALID_PAGE(125),
+
+    //
+    //
+    //
+    SERVICE_CURRENTLY_UNAVAILABLE(201),
+
+    //
+    //
+    //
+    MISSING_REQUIRED_ARGUMENTS(301),
+    INVALID_ARGUMENTS(302),
+    RETURN_VALUE_CONVERT(303),
+    PERMISSION_DENIED(304),
+    BUSSINESS_EXCEPTION(305),
+    CYCORE_ERROR(310);
+
+
+    private int code;
+
+    MainErrorType(int code) {
+        this.code = code;
+    }
+
+    public int value() {
+        return this.code;
+    }
+}
+
