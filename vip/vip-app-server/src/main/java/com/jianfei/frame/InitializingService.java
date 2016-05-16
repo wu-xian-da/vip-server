@@ -12,6 +12,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 import java.util.Locale;
 
+
 /**
  * @author libinsong1204@gmail.com
  */
