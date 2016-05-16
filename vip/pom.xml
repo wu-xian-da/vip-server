@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.jianfei</groupId>
+	<artifactId>vip</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>jianfei</name>
+	<url>http://maven.apache.org</url>
+	<!-- 设定主仓库，按设定顺序进行查找�? -->
+	<repositories>
+
+		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地�? <repository> <id>nexus-repos</id> <name>Team 
+			Nexus Repository</name> <url>http://192.168.11.36:8888/nexus/content/groups/public</url> 
+			</repository> -->
+
+		<repository>
+			<id>oschina-repos</id>
+			<name>Oschina Releases</name>
+			<url>http://maven.oschina.net/content/groups/public</url>
+		</repository>
+
+		<repository>
+			<id>java-repos</id>
+			<name>Java Repository</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+
+		<repository>
+			<id>springsource-repos</id>
+			<name>SpringSource Repository</name>
+			<url>http://repo.spring.io/release/</url>
+		</repository>
+
+		<repository>
+			<id>central-repos</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+
+		<repository>
+			<id>central-repos2</id>
+			<name>Central Repository 2</name>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
+
+		<repository>
+			<id>activiti-repos</id>
+			<name>Activiti Repository</name>
+			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+
+		<repository>
+			<id>activiti-repos2</id>
+			<name>Activiti Repository 2</name>
+			<url>https://app.camunda.com/nexus/content/groups/public</url>
+		</repository>
+
+		<repository>
+			<id>thinkgem-repos</id>
+			<name>ThinkGem Repository</name>
+			<url>http://git.oschina.net/thinkgem/repos/raw/master</url>
+		</repository>
+
+		<repository>
+			<id>thinkgem-repos2</id>
+			<name>ThinkGem Repository 2</name>
+			<url>https://raw.github.com/thinkgem/repository/master</url>
+		</repository>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<properties>
+		<shiro.version>1.2.1</shiro.version>
+		<spring.version>4.0.2.RELEASE</spring.version>
+		<hibernate.version>4.1.6.Final</hibernate.version>
+		<spring-data-jpa.version>1.6.2.RELEASE</spring-data-jpa.version>
+		<druid.version>1.0.14</druid.version>
+		<mybatis.version>3.1.1</mybatis.version>
+		<commons-lang3.version>3.3.2</commons-lang3.version>
+		<commons-collections.version>3.2.1</commons-collections.version>
+		<commons-io.version>2.4</commons-io.version>
+		<joda-time.version>2.1</joda-time.version>
+		<commons-fileupload.version>1.3.1</commons-fileupload.version>
+		<db.name>shiro</db.name>
+		<guava.version>14.0.1</guava.version>
+		<mybatis.version>3.2.8</mybatis.version>
+		<mybatis-spring.version>1.2.2</mybatis-spring.version>
+		<jackson.version>2.2.3</jackson.version>
+		<slf4j.version>1.7.7</slf4j.version>
+		<aspectj.version>1.7.1</aspectj.version>
+		<jackson.version>2.2.3</jackson.version>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- SPRING begin -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- spring orm -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<!-- SPRING end -->
+
+			<!-- AOP begin -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib</artifactId>
+				<version>2.2.2</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>asm</groupId>
+				<artifactId>asm</artifactId>
+				<version>3.3.1</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- ***************spring data jpa******************** -->
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${spring-data-jpa.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>junit</groupId>
+						<artifactId>junit-dep</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- MyBatis -->
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>${mybatis-spring.version}</version>
+			</dependency>
+			<!-- *****************数据�?************************ -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>5.1.25</version>
+			</dependency>
+			<!-- alibaba datasource pool -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${druid.version}</version>
+			</dependency>
+			<!-- ******************shrio框架 start********************* -->
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-ehcache</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-quartz</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+
+
+			<!-- **************web基础******************* -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>1.2</version>
+			</dependency>
+
+			<!-- ******************工具�?***************** -->
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.1.3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>${commons-collections.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${commons-fileupload.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.6</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.8.3</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- google java library -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>1.2.11</version>
+			</dependency>
+			<!-- jackson json -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- LOGGING begin -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<!-- common-logging 实际调用slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<!-- java.util.logging 实际调用slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<!-- LOGGING end -->
+
+
+			<!-- jackson json -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- Database settings -->
+				<hbm2ddl.drop>false</hbm2ddl.drop>
+				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
+				<dbunit.dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dbunit.dataTypeFactoryName>
+				<hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+				<jdbc.groupId>mysql</jdbc.groupId>
+				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
+				<jdbc.version>5.1.37</jdbc.version>
+				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+				<jdbc.url>jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>refineli</jdbc.password>
+				<jdbc.pool.init>10</jdbc.pool.init>
+				<jdbc.pool.minIdle>15</jdbc.pool.minIdle>
+				<jdb.pool.maxActive>30</jdb.pool.maxActive>
+
+				<!-- updload config -->
+				<upload.home.dir>E:\workspace\money\vip\vip-webapp\src\main\webapp\uploadPath</upload.home.dir>
+				<static.resource.server.address>http://127.0.0.1:8080/vip</static.resource.server.address>
+				<relative.path.to.server>/uploadPath</relative.path.to.server>
+			</properties>
+		</profile>
+
+		<!-- ================= Production Settings Profile ================= -->
+		<!-- Use "-P prod" when you want to use the settings in this profile -->
+		<!-- =============================================================== -->
+		<profile>
+			<id>prod</id>
+			<properties>
+				<!-- Database settings -->
+				<dbunit.dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dbunit.dataTypeFactoryName>
+				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
+				<hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+				<jdbc.groupId>mysql</jdbc.groupId>
+				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
+				<jdbc.version>5.1.13</jdbc.version>
+				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+				<jdbc.url>jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>refineli</jdbc.password>
+				<jdbc.pool.init>10</jdbc.pool.init>
+				<jdbc.pool.minIdle>15</jdbc.pool.minIdle>
+				<jdb.pool.maxActive>30</jdb.pool.maxActive>
+			</properties>
+			<build>
+				<plugins>
+					<!-- Override location of data file for DbUnit to load (doesn't have 
+						negative keys) -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>dbunit-maven-plugin</artifactId>
+						<configuration>
+							<src>src/main/resources/default-data.xml</src>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>8.1.8.v20121106</version>
+					<configuration>
+						<webAppConfig>
+							<contextPath>/${project.build.finalName}</contextPath>
+						</webAppConfig>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+						<path>/${project.build.finalName}</path>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.3.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.3</version>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<modules>
+		<module>vip-core-lib</module>
+		<module>vip-webapp</module>
+	</modules>
+</project>

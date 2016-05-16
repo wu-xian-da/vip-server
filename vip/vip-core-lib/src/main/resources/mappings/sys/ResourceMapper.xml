@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianfei.core.mapper.ResourceMapper">
+	<resultMap type="Resource" id="resource">
+		<id property="id" column="id" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="description" property="description" />
+		<result column="iconCls" property="iconCls" />
+		<result column="seq" property="seq" />
+		<result column="target" property="target" />
+		<result column="isShow" property="isShow" />
+		<result column="permission" property="permission" />
+		<result column="createdatetime" property="createdatetime" />
+		<result column="updatedatetime" property="updatedatetime" />
+		<result column="pid" property="parent.id" />
+	</resultMap>
+
+	<insert id="save" parameterType="Resource">
+		INSERT INTO
+		sys_resources(name,url,description,iconCls,pid,permission,seq,target,isShow,createdatetime,updatedatetime)
+		VALUES
+		(#{name},#{url},#{description},#{iconCls},#{parent.id},#{permission},#{seq},#{target},#{isShow},#{createdatetime},#{updatedatetime})
+	</insert>
+
+	<delete id="delete" parameterType="Long">
+		delete from sys_resources where id=#{id}
+	</delete>
+
+	<update id="update" parameterType="Resource">
+		update sys_resources set
+		name=#{name},url=#{url},permission=#{permission},iconCls=#{iconCls},seq=#{seq},description=#{description},target=#{target},pid=#{parent.id},isShow=#{isShow},updatedatetime=#{updatedatetime}
+		where id=#{id}
+	</update>
+
+	<select id="get" parameterType="java.util.Map" resultMap="resource">
+		select * from sys_resources
+		<where>
+			<if test="id!= null ">
+				id= #{id}
+			</if>
+			<if test="name!= null ">
+				and name= #{name}
+			</if>
+			<if test="pid!=null">
+				and pid=#{pid}
+			</if>
+		</where>
+	</select>
+
+	<select id="findResourceByRoleId" parameterType="Long"
+		resultMap="resource">
+		SELECT sr.* FROM `sys_resources` sr INNER JOIN
+		`sys_role_resource` srr
+		ON sr.`id`=srr.`resourceId`  WHERE srr.`roleId`=#{id}
+		
+	</select>
+	
+	<select id="findResourceByUserId" parameterType="Long"
+		resultMap="resource">
+		SELECT r.* FROM sys_resources r INNER JOIN sys_role_resource
+		role ON
+		r.`id`=role.`resourceId` INNER JOIN `sys_users_roles` u ON
+		role.`roleId`=u.`role_id`
+		WHERE u.`user_id`=#{id}
+	</select>
+	
+	<select id="findEntityById" parameterType="Long"  resultMap="resource">
+		select * from sys_resources where id=#{id}
+	</select>
+
+</mapper>

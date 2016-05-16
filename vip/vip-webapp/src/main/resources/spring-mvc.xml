@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:beans="http://cxf.apache.org/configuration/beans"
+	xmlns:configuration="http://cxf.apache.org/transports/http/configuration"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:core="http://activemq.apache.org/schema/core" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://cxf.apache.org/configuration/beans http://cxf.apache.org/schemas/configuration/cxf-beans.xsd
+		http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/wsdl/http-conf.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://activemq.apache.org/schema/core http://activemq.org/config/1.0/1.0.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<context:component-scan base-package="com.jianfei"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+	<!-- 配置视图解析器 ,定义JSP文件的位置 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- default-servlet-handler 将在 SpringMVC 上下文中定义一个 DefaultServletHttpRequestHandler, 
+		它会对进入 DispatcherServlet 的请求进行筛查, 如果发现是没有经过映射的请求, 就将该请求交由 WEB 应用服务器默认的 Servlet 
+		处理. 如果不是静态资源的请求，才由 DispatcherServlet 继续处理 一般 WEB 应用服务器默认的 Servlet 的名称都是 default. 
+		若所使用的 WEB 服务器的默认 Servlet 名称不是 default，则需要通过 default-servlet-name 属性显式指定 -->
+	<mvc:default-servlet-handler
+		default-servlet-name="default" />
+	<!--配置直接转发的页面 可以直接相应转发的页面, 而无需再经过 Handler 的方法. -->
+	<mvc:view-controller path="/success" view-name="login" />
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:resources mapping="/images/**" location="/images/" />
+	<aop:config proxy-target-class="true"></aop:config>
+
+
+
+</beans>

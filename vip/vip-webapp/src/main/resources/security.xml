@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+	default-lazy-init="true">
+	<description>Shiro安全配置</description>
+	<bean name="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"></property>
+		<!-- loginUrl认证提交地址，如果没有认证将会请求此地址进行认证，请求此地址将由formAuthenticationFilter进行表单认证 -->
+		<property name="loginUrl" value="/login" />
+		<!-- 通过unauthorizedUrl指定没有权限操作时跳转页面 -->
+		<property name="unauthorizedUrl" value="/refuse.jsp" />
+		<property name="filters">
+			<map>
+				<entry key="authc" value-ref="myFormAuth" />
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+				<!-- 对静态资源设置匿名访问 -->
+				/jslib/** = anon
+				/layout/** = anon
+				/uploadPath/** = anon
+				/style/** = anon
+				/logout = logout
+				/**=authc
+			</value>
+		</property>
+	</bean>
+
+	<!-- SecurityManager -->
+	<bean name="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm">
+			<bean class="com.jianfei.core.common.shrio.ShiroDbRealm">
+				<property name="credentialsMatcher" ref="credentialsMatcher"></property>
+			</bean>
+		</property>
+	</bean>
+	<!-- 凭证匹配器 -->
+	<bean id="credentialsMatcher"
+		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="md5" />
+		<property name="hashIterations" value="1" />
+	</bean>
+
+	<!-- 封装Form认证 -->
+	<bean name="myFormAuth"
+		class="com.jianfei.core.common.shrio.FormAuthenticationFilter">
+		<property name="usernameParam" value="loginName"></property>
+		<property name="passwordParam" value="password"></property>
+		<property name="rememberMeParam" value="rememberMe"></property>
+	</bean>
+
+
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<!-- AOP式方法级权限检查 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+</beans>
