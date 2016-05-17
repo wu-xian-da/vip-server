@@ -5,19 +5,22 @@
 	<resultMap id="userRs" type="User">
 		<id property="id" column="id" />
 		<result property="name" column="name" />
+		<result property="state" column="state" />
+		<result property="phone" column="phone" />
 		<result property="password" column="password" />
-		<result property="loginName" column="loginName" />
+		<result property="loginName" column="login_name" />
 		<result property="salt" column="salt" />
 		<result property="locked" column="locked" />
-		<result property="type" column="type" />
+		<result property="userType" column="user_type" />
 		<result property="sex" column="sex" />
-		<result property="delTag" column="delTag" />
+		<result property="dtflag" column="dtflag" />
 		<result property="photo" column="photo" />
-		<result property="createdatetime" column="createdatetime" />
-		<result property="updatedatetime" column="updatedatetime" />
+		<result property="createdatetime" column="create_time" />
+		<result property="updatedatetime" column="update_time" />
+		<result property="entryTime" column="entry_time" />
 		<collection property="roles" ofType="Role">
-			<id property="id" column="resources.id" />
-			<id property="name" column="resources.name" />
+			<id property="id" column="roles.id" />
+			<id property="name" column="roles.name" />
 		</collection>
 	</resultMap>
 
@@ -25,7 +28,7 @@
 		SELECT * from sys_users
 		<where>
 			<if test="1==1">
-				delTag=0
+				dtflag=0
 			</if>
 			<if test="id!=null">
 				and id=#{id}
@@ -34,16 +37,16 @@
 				and name like CONCAT('%', #{name}, '%')
 			</if>
 			<if test="loginName!=null">
-				and loginName like CONCAT('%', #{loginName}, '%')
+				and login_name like CONCAT('%', #{loginName}, '%')
 			</if>
 			<if test="sex!=null">
 				and sex = #{sex}
 			</if>
 			<if test="start!=null">
-				and createdatetime &gt; #{start}
+				and create_time &gt; #{start}
 			</if>
 			<if test="ends!=null">
-				and createdatetime &lt; #{ends}
+				and create_time &lt; #{ends}
 			</if>
 		</where>
 		<if test="sort!=null">
@@ -51,55 +54,94 @@
 		</if>
 	</select>
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where loginName =#{loginName}
+		SELECT * from sys_users where login_name =#{loginName}
 	</select>
 
 	<insert id="save" parameterType="User">
-		INSERT INTO
-		sys_users(photo,name,password,salt,locked,loginName,createdatetime,updatedatetime,sex,delTag)
-		VALUES(#{photo},#{name},#{password},#{salt},#{locked},
-		#{loginName},#{createdatetime},#{updatedatetime},#{sex},#{delTag}
-		)
+		<![CDATA[
+			INSERT INTO  sys_users (
+				  `name`,
+				  `phone`,
+				  `state`,
+				  `entry_time`,
+				  `password`,
+				  `sex`,
+				  `photo`,
+				  `user_type`,
+				  `login_name`,
+				  `create_time`,
+				  `update_time`,
+				  `salt`,
+				  `dtflag`
+				) 
+				VALUES
+				  (
+				    #{name},
+				    #{phone},
+				    #{state},
+				    #{entryTime},
+				    #{password},
+				    #{sex},
+				    #{photo},
+				    #{userType},
+				    #{loginName},
+				    #{createdatetime},
+				    #{updatedatetime},
+				    #{salt},
+				    #{dtflag}
+				  )
+			   ]]>
 	</insert>
 
 	<update id="update" parameterType="User">
 		<if test="id!=0">
-			update sys_users set updatedatetime=#{updatedatetime}
+			update sys_users set update_time=#{updatedatetime}
 			<if test="name!=null">
 				,name=#{name}
 			</if>
 			<if test="password!=null">
 				,password=#{password}
 			</if>
+			<if test="entryTime!=null">
+				,entryTime=#{entryTime}
+			</if>
+			<if test="state!=null">
+				,state=#{state}
+			</if>
+			<if test="phone!=null">
+				,phone=#{phone}
+			</if>
 			<if test="photo!=null">
 				,photo=#{photo}
 			</if>
-			<if test="locked!=null">
-				,password=#{locked}
+			<if test="userType!=null">
+				,sex=#{userType}
 			</if>
 			<if test="loginName!=null">
-				,loginName=#{loginName}
+				,login_name=#{loginName}
 			</if>
-			,sex=#{sex},delTag=#{delTag} where id=#{id}
+			,sex=#{sex},dtflag=#{dtflag} where id=#{id}
 		</if>
 	</update>
 
 	<delete id="delete" parameterType="Long">
-		update sys_users set delTag =1 where id=#{id}
+		<![CDATA[
+			update sys_users set dtflag =1 where id=#{id}
+		]]>
 	</delete>
 
 	<delete id="deleteRolesFromUser" parameterType="Long">
-		DELETE FROM
-		`sys_users_roles` WHERE `user_id`=#{userId}
+		<![CDATA[
+			DELETE FROM `sys_use_role`  WHERE user_id=#{userId}
+		]]>
 	</delete>
 
-
 	<insert id="batchInsertUserRole" parameterType="ArrayList">
-		INSERT INTO sys_users_roles (user_id,role_id)
+		INSERT INTO sys_use_role (user_id,role_id)
 		VALUES
 		<foreach collection="list" item="item" index="index"
 			separator=",">
-			( #{item.userId},#{item.roleId}	)
+			( #{item.userId},#{item.roleId} )
 		</foreach>
 	</insert>
 

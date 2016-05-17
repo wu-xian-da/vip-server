@@ -1,11 +1,9 @@
 package com.jianfei.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jianfei.core.bean.MenBuilder;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
-import com.jianfei.core.bean.User;
-import com.jianfei.core.common.shrio.ShrioUser;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
@@ -56,7 +52,7 @@ public class ResourceController extends BaseController {
 	@RequestMapping(value = "/menus", method = RequestMethod.POST)
 	@ResponseBody
 	public List<MenBuilder> menuTree() {
-		return getShrioUser().getMenus();
+		return systemService.getCurrentMenus();
 	}
 
 	/**

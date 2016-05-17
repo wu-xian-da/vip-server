@@ -39,7 +39,7 @@ public class BaseEntity implements Serializable {
 
 	private Date updatedatetime = new Date();
 
-	private int delTag = 0;// 0:ok 1:delete
+	private int dtflag = 0;// 0:ok 1:delete
 
 	public long getId() {
 		return id;
@@ -75,12 +75,23 @@ public class BaseEntity implements Serializable {
 		this.updatedatetime = updatedatetime;
 	}
 
-	public int getDelTag() {
-		return delTag;
+	/**
+	 * dtflag
+	 *
+	 * @return the dtflag
+	 * @version 1.0.0
+	 */
+
+	public int getDtflag() {
+		return dtflag;
 	}
 
-	public void setDelTag(int delTag) {
-		this.delTag = delTag;
+	/**
+	 * @param dtflag
+	 *            the dtflag to set
+	 */
+	public void setDtflag(int dtflag) {
+		this.dtflag = dtflag;
 	}
 
 }

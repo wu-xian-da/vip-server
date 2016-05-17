@@ -11,30 +11,43 @@
 		<result column="target" property="target" />
 		<result column="isShow" property="isShow" />
 		<result column="permission" property="permission" />
-		<result column="createdatetime" property="createdatetime" />
-		<result column="updatedatetime" property="updatedatetime" />
+		<result column="create_time" property="createdatetime" />
+		<result column="update_time" property="updatedatetime" />
 		<result column="pid" property="parent.id" />
 	</resultMap>
 
 	<insert id="save" parameterType="Resource">
-		INSERT INTO
-		sys_resources(name,url,description,iconCls,pid,permission,seq,target,isShow,createdatetime,updatedatetime)
-		VALUES
-		(#{name},#{url},#{description},#{iconCls},#{parent.id},#{permission},#{seq},#{target},#{isShow},#{createdatetime},#{updatedatetime})
+		<![CDATA[
+			INSERT INTO
+				sys_author(name,url,description,iconCls,pid,permission,seq,target,isShow,create_time,update_time)
+			VALUES
+				(#{name},#{url},#{description},#{iconCls},#{parent.id},#{permission},#{seq},#{target},#{isShow},#{createdatetime},#{updatedatetime})
+		]]>
 	</insert>
 
 	<delete id="delete" parameterType="Long">
-		delete from sys_resources where id=#{id}
+		<![CDATA[delete from sys_author	where id=#{id}]]>
 	</delete>
 
 	<update id="update" parameterType="Resource">
-		update sys_resources set
-		name=#{name},url=#{url},permission=#{permission},iconCls=#{iconCls},seq=#{seq},description=#{description},target=#{target},pid=#{parent.id},isShow=#{isShow},updatedatetime=#{updatedatetime}
-		where id=#{id}
+		<![CDATA[	
+			update sys_author set
+				name=#{name},
+				url=#{url},
+				permission=#{permission},
+				iconCls=#{iconCls},
+				seq=#{seq},
+				description=#{description},
+				target=#{target},
+				pid=#{parent.id},
+				isShow=#{isShow},
+				update_time=#{updatedatetime}
+			where id=#{id}
+		]]>
 	</update>
 
 	<select id="get" parameterType="java.util.Map" resultMap="resource">
-		select * from sys_resources
+		select * from sys_author
 		<where>
 			<if test="id!= null ">
 				id= #{id}
@@ -50,23 +63,20 @@
 
 	<select id="findResourceByRoleId" parameterType="Long"
 		resultMap="resource">
-		SELECT sr.* FROM `sys_resources` sr INNER JOIN
-		`sys_role_resource` srr
-		ON sr.`id`=srr.`resourceId`  WHERE srr.`roleId`=#{id}
-		
+		<![CDATA[  SELECT auth.* FROM `sys_author` auth INNER JOIN `sys_role_author` ra ON auth.`id`=ra.`author_id` WHERE ra.`role_id`=#{id} ]]>
 	</select>
-	
+
 	<select id="findResourceByUserId" parameterType="Long"
 		resultMap="resource">
-		SELECT r.* FROM sys_resources r INNER JOIN sys_role_resource
-		role ON
-		r.`id`=role.`resourceId` INNER JOIN `sys_users_roles` u ON
-		role.`roleId`=u.`role_id`
-		WHERE u.`user_id`=#{id}
+		<![CDATA[  SELECT auth.* FROM `sys_author` auth 
+						INNER JOIN `sys_role_author` ra ON auth.`id`=ra.`author_id` 
+						INNER JOIN `sys_use_role` sur ON sur.`role_id`=ra.`role_id` 
+						WHERE sur.`user_id`=#{id}
+		 ]]>
 	</select>
-	
-	<select id="findEntityById" parameterType="Long"  resultMap="resource">
-		select * from sys_resources where id=#{id}
+
+	<select id="findEntityById" parameterType="Long" resultMap="resource">
+		select * from sys_author where id=#{id}
 	</select>
 
 </mapper>

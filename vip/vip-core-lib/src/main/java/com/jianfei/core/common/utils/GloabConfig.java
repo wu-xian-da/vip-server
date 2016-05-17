@@ -18,7 +18,7 @@ import com.google.common.collect.Maps;
 
 /**
  *
- * @Description: TODO
+ * @Description:加载全局配置文件
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年5月13日 下午1:13:32
  * 
@@ -35,16 +35,17 @@ public class GloabConfig {
 	 * 当前对象实例
 	 */
 	private static GloabConfig global = new GloabConfig();
-	
+
 	/**
 	 * 保存全局属性值
 	 */
 	private static Map<String, String> map = Maps.newHashMap();
-	
+
 	/**
 	 * 属性文件加载对象
 	 */
-	private static PropertiesLoader loader = new PropertiesLoader("config.properties");
+	private static PropertiesLoader loader = new PropertiesLoader(
+			"config.properties");
 
 	/**
 	 * 显示/隐藏
@@ -57,59 +58,60 @@ public class GloabConfig {
 	 */
 	public static final String YES = "1";
 	public static final String NO = "0";
-	
+
 	/**
 	 * 对/错
 	 */
 	public static final String TRUE = "true";
 	public static final String FALSE = "false";
-	
+
 	/**
 	 * 上传文件基础虚拟路径
 	 */
 	public static final String USERFILES_BASE_URL = "/uploadPath/";
-	
+
 	/**
 	 * 获取当前对象实例
 	 */
 	public static GloabConfig getInstance() {
 		return global;
 	}
-	
+
 	/**
 	 * 获取配置
+	 * 
 	 * @see ${fns:getConfig('adminPath')}
 	 */
 	public static String getConfig(String key) {
 		String value = map.get(key);
-		if (value == null){
+		if (value == null) {
 			value = loader.getProperty(key);
 			map.put(key, value != null ? value : StringUtils.EMPTY);
 		}
 		return value;
 	}
-	
+
 	/**
 	 * 获取管理端根路径
 	 */
 	public static String getAdminPath() {
 		return getConfig("adminPath");
 	}
-	
+
 	/**
 	 * 获取前端根路径
 	 */
 	public static String getFrontPath() {
 		return getConfig("frontPath");
 	}
-	
+
 	/**
 	 * 获取URL后缀
 	 */
 	public static String getUrlSuffix() {
 		return getConfig("urlSuffix");
 	}
-	
+
 	/**
 	 * 是否是演示模式，演示模式下不能修改用户、角色、密码、菜单、授权
 	 */
@@ -117,7 +119,7 @@ public class GloabConfig {
 		String dm = getConfig("demoMode");
 		return "true".equals(dm) || "1".equals(dm);
 	}
-	
+
 	/**
 	 * 在修改系统用户和角色时是否同步到Activiti
 	 */
@@ -125,9 +127,10 @@ public class GloabConfig {
 		String dm = getConfig("activiti.isSynActivitiIndetity");
 		return "true".equals(dm) || "1".equals(dm);
 	}
-    
+
 	/**
 	 * 页面获取常量
+	 * 
 	 * @see ${fns:getConst('YES')}
 	 */
 	public static Object getConst(String field) {
@@ -141,45 +144,49 @@ public class GloabConfig {
 
 	/**
 	 * 获取上传文件的根目录
+	 * 
 	 * @return
 	 */
 	public static String getUserfilesBaseDir() {
 		String dir = getConfig("uploadPath.basedir");
-		if (StringUtils.isBlank(dir)){
+		if (StringUtils.isBlank(dir)) {
 			try {
-				dir = ServletContextFactory.getServletContext().getRealPath("/");
+				dir = ServletContextFactory.getServletContext()
+						.getRealPath("/");
 			} catch (Exception e) {
 				return "";
 			}
 		}
-		if(!dir.endsWith("/")) {
+		if (!dir.endsWith("/")) {
 			dir += "/";
 		}
 		System.out.println("uploadPath.basedir: " + dir);
 		return dir;
 	}
-	
-    /**
-     * 获取工程路径
-     * @return
-     */
-    public static String getProjectPath(){
-    	// 如果配置了工程路径，则直接返回，否则自动获取。
+
+	/**
+	 * 获取工程路径
+	 * 
+	 * @return
+	 */
+	public static String getProjectPath() {
+		// 如果配置了工程路径，则直接返回，否则自动获取。
 		String projectPath = GloabConfig.getConfig("projectPath");
-		if (StringUtils.isNotBlank(projectPath)){
+		if (StringUtils.isNotBlank(projectPath)) {
 			return projectPath;
 		}
 		try {
 			File file = new DefaultResourceLoader().getResource("").getFile();
-			if (file != null){
-				while(true){
-					File f = new File(file.getPath() + File.separator + "src" + File.separator + "main");
-					if (f == null || f.exists()){
+			if (file != null) {
+				while (true) {
+					File f = new File(file.getPath() + File.separator + "src"
+							+ File.separator + "main");
+					if (f == null || f.exists()) {
 						break;
 					}
-					if (file.getParentFile() != null){
+					if (file.getParentFile() != null) {
 						file = file.getParentFile();
-					}else{
+					} else {
 						break;
 					}
 				}
@@ -189,6 +196,6 @@ public class GloabConfig {
 			e.printStackTrace();
 		}
 		return projectPath;
-    }
+	}
 
 }

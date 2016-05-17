@@ -6,88 +6,91 @@
 		<id property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="description" column="description" />
+		<result column="create_time" property="createdatetime" />
+		<result column="update_time" property="updatedatetime" />
 		<collection property="resources" ofType="Resource">
 			<id property="id" column="resources.id" />
 			<result column="resources.name" property="name" />
+			<result column="resources.permission" property="permission" />
 		</collection>
 	</resultMap>
 
 	<select id="get" resultMap="roleResult" parameterType="java.util.Map">
-		SELECT
-		sr.`id`,
-		sr.`name`,
-		sr.`description`,
-		res.`id` AS
-		'resources.id',
-		res.`name` AS 'resources.name'
-		FROM `sys_roles` sr
-		LEFT
-		JOIN
-		`sys_role_resource` srr ON sr.`id`=srr.`roleId`
-		LEFT JOIN
-		`sys_resources` res ON srr.`resourceId`=res.`id`
+		<![CDATA[
+			SELECT role.*,sa.`id`,sa.`name`,sa.`permission`  FROM `sys_roles` role LEFT JOIN `sys_role_author` sra ON role.`id`=sra.`role_id` LEFT JOIN `sys_author` sa ON sa.`id`=sra.`author_id`
+		]]>
 		<where>
 			<if test="id!=null">
-				sr.id =#{id}
+				role.id =#{id}
 			</if>
 			<if test="notLikeName!=null">
-				and sr.name=#{notLikeName}
+				and role.name=#{notLikeName}
 			</if>
 			<if test="name!=null">
-				and sr.name like CONCAT('%', #{name}, '%')
+				and role.name like CONCAT('%', #{name}, '%')
 			</if>
 			<if test="description!=null">
-				and sr.description like CONCAT('%', #{description}, '%')
+				and role.description like CONCAT('%', #{description},
+				'%')
 			</if>
 		</where>
 	</select>
 
 	<insert id="save" parameterType="Role">
-		INSERT INTO sys_roles
-		(
-			name,
-			description,
-			createdatetime,
-			updatedatetime
-		)
-		VALUES
-		(
-			#{name},
-			#{description},
-			#{createdatetime},
-			#{updatedatetime}
-		)
+		<![CDATA[
+			INSERT INTO sys_roles
+			(
+				name,
+				description,
+				create_time,
+				update_time
+			)
+			VALUES
+			(
+				#{name},
+				#{description},
+				#{createdatetime},
+				#{updatedatetime}
+			)
+		]]>
 	</insert>
-	
+
 	<update id="update" parameterType="Role">
-		UPDATE 
-		  sys_roles 
-		SET
-		  name = name,
-		  description = #{description},
-		  updatedatetime = #{updatedatetime} 
-		WHERE id = #{id}
+		<![CDATA[
+			UPDATE sys_roles
+			SET
+				name = name,
+				description = #{description},
+				update_time = #{updatedatetime}
+			WHERE id = #{id}
+		]]>
 	</update>
 
 	<delete id="delete" parameterType="Long">
-		delete from sys_roles where id=#{id}
+		<![CDATA[
+			delete from sys_roles where id=#{id}
+		]]>
 	</delete>
 
 	<delete id="deleteByResourceFromRole" parameterType="Long">
-		delete from sys_role_resource where roleId=#{roleId}
+		<![CDATA[
+			DELETE FROM sys_role_author  WHERE role_id=#{roleId}
+		]]>
 	</delete>
-	
+
 	<insert id="batchInsertRoleResource" parameterType="ArrayList">
-		INSERT INTO sys_role_resource (roleId,resourceId)
+		INSERT INTO sys_role_author (role_id,author_id)
 		VALUES
 		<foreach collection="list" item="item" index="index"
 			separator=",">
 			(#{item.roleId}, #{item.resourceId})
 		</foreach>
 	</insert>
-	
+
 	<select id="selectRoleByUserId" parameterType="Long" resultMap="roleResult">
-			SELECT  role.* FROM sys_roles role INNER JOIN sys_users_roles sur ON role.id=sur.role_id WHERE sur.user_id=#{id}
+		<![CDATA[
+			SELECT role.* FROM `sys_roles` role INNER JOIN `sys_use_role` sur ON role.`id`=sur.`role_id` WHERE sur.`user_id`=#{id}
+		]]>
 	</select>
 
 </mapper>
