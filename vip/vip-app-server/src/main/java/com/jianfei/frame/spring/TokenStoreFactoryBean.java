@@ -1,7 +1,6 @@
 
 package com.jianfei.frame.spring;
 
-import com.jianfei.frame.utils.EnvUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -28,15 +27,9 @@ public class TokenStoreFactoryBean implements FactoryBean<TokenStore>, Initializ
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (EnvUtil.redisEnabled()) {
             JedisPool jedisPool = applicationContext.getBean(JedisPool.class);
             tokenStore = new RedisTokenStore(jedisPool);
             LOGGER.info("使用redis存储token");
-        } else {
-            DataSource dataSource = applicationContext.getBean("oauthDataSource", DataSource.class);
-            tokenStore = new JdbcTokenStoreEx(dataSource);
-            LOGGER.info("使用jdbc存储token");
-        }
     }
 
     @Override

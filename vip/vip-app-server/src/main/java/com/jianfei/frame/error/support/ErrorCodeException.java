@@ -1,6 +1,8 @@
 package com.jianfei.frame.error.support;
 
-
+/**
+ * Created by XiaFan on 15-12-21.
+ */
 public class ErrorCodeException extends Exception {
     static final long serialVersionUID = -4312169147091467431L;
     private int errorCode = -1;

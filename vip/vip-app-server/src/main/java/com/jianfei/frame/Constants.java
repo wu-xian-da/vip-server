@@ -1,6 +1,4 @@
-/**
- * Copyright (C) 2013-2014 科大讯飞股份有限公司 - All rights reserved.
- */
+
 package com.jianfei.frame;
 
 /**

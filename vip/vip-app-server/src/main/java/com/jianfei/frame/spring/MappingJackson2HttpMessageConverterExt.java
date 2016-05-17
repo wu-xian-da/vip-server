@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import com.jianfei.frame.Constants;
-import com.jianfei.frame.utils.RestContextHolder;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -48,7 +47,7 @@ public class MappingJackson2HttpMessageConverterExt extends MappingJackson2HttpM
             jsonGenerator.useDefaultPrettyPrinter();
         }
 
-        String callBack = (String) RestContextHolder.getContext().getParam(Constants.SYS_PARAM_KEY_CALLBACK);
+        String callBack = "";/*(String) RestContextHolder.getContext().getParam(Constants.SYS_PARAM_KEY_CALLBACK)*/
         try {
             if (StringUtils.hasText(callBack)) {
                 String json = this.getObjectMapper().writeValueAsString(object);

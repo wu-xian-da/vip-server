@@ -1,6 +1,7 @@
 package com.jianfei.frame.error.support;
 
 
+
 import com.jianfei.frame.error.MainErrorType;
 
 import java.util.HashMap;

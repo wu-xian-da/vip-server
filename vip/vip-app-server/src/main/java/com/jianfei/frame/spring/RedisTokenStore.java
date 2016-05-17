@@ -75,6 +75,11 @@ public class RedisTokenStore implements TokenStore {
 		return authentication;
 	}
 
+	/**
+	 * 存储认证信息
+	 * @param token
+	 * @param authentication
+     */
 	@Override
 	public void storeAccessToken(OAuth2AccessToken token, OAuth2Authentication authentication) {
 		String refreshToken = null;
@@ -313,7 +318,12 @@ public class RedisTokenStore implements TokenStore {
 	protected OAuth2Authentication deserializeAuthentication(byte[] authentication) {
 		return SerializationUtils.deserialize(authentication);
 	}
-	
+
+	/**
+	 * MD5存储
+	 * @param value
+	 * @return
+     */
 	protected String extractTokenKey(String value) {
 		if (value == null) {
 			return null;

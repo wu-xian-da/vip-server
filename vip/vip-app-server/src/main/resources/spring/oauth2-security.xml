@@ -25,6 +25,21 @@
             <security:access-denied-handler ref="oauthAccessDeniedHandler"/>
         </security:http>
 
+        <security:authentication-manager>
+            <security:authentication-provider>
+                <security:jdbc-user-service
+                        data-source-ref="dataSource"
+                        users-by-username-query="select username, password, enabled from t_user where username = ?" />
+                <security:password-encoder hash="md5"/>
+            </security:authentication-provider>
+            <security:authentication-provider user-service-ref="userDetailsService"/>
+        </security:authentication-manager>
+
+        <!--自定义实现认证 手机验证码认证-->
+        <bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+            <property name="dataSource" ref="dataSource"/>
+        </bean>
+
         <bean id="oauthAccessDeniedHandler"
               class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
         <bean id="oauthAuthenticationEntryPoint"
@@ -41,8 +56,10 @@
             </constructor-arg>
         </bean>
 
+        <!--使用redis存储Token-->
         <bean id="tokenStore" class="com.jianfei.frame.spring.TokenStoreFactoryBean"/>
 
+        <!--如果允许刷新token 请将supportRefreshToken 的值设置为true, 默认为不允许-->
         <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
             <property name="tokenStore" ref="tokenStore"/>
             <property name="supportRefreshToken" value="true"/>
