@@ -63,7 +63,7 @@ public class UserController extends BaseController {
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
-		searchParams.put("sort", request.getParameter("sort"));
+		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
 		PageHelper.startPage(pageNo, pageSize);
 		List<User> list = systemService.getUserMapper().get(searchParams);
@@ -133,5 +133,29 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public MessageDto grantRoles(Long id, String ids) {
 		return systemService.batchUpdateUserRoles(id, ids);
+	}
+
+	/**
+	 * sortCplumn(这里用一句话描述这个方法的作用)
+	 * 
+	 * @param request
+	 *            void
+	 * @version 1.0.0
+	 */
+	private String sortCplumn(HttpServletRequest request) {
+		String sort = request.getParameter("sort");
+		if (!StringUtils.isEmpty(sort)) {
+			if ("loginName".equals(sort)) {
+				sort = "login_name";
+			}
+			if ("createdatetime".equals(sort)) {
+				sort = "create_time";
+			}
+			if ("updatedatetime".equals(sort)) {
+				sort = "update_time";
+			}
+		}
+
+		return sort;
 	}
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jianfei.core.bean.MenBuilder;
+import com.jianfei.core.bean.Menu;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.utils.JsonTreeData;
@@ -51,7 +51,7 @@ public class ResourceController extends BaseController {
 	 */
 	@RequestMapping(value = "/menus", method = RequestMethod.POST)
 	@ResponseBody
-	public List<MenBuilder> menuTree() {
+	public List<Menu> menuTree() {
 		return systemService.getCurrentMenus();
 	}
 
