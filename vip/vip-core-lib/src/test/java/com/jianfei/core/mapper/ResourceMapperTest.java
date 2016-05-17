@@ -18,9 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jianfei.core.bean.MenBuilder;
+import com.jianfei.core.bean.Menu;
 import com.jianfei.core.bean.Resource;
 
 /**
@@ -93,19 +92,14 @@ public class ResourceMapperTest {
 	/**
 	 * Test method for
 	 * {@link com.jianfei.core.mapper.BaseMapper#get(java.util.Map)}.
+	 * 
+	 * @throws Exception
 	 */
 	@Test
-	public void testGet() {
+	public void testGet() throws Exception {
 		List<Resource> list = resourceMapper.get(new HashMap<String, Object>());
-		ObjectMapper mapper = new ObjectMapper();
-		for (Resource resource : list) {
-			try {
-				System.out.println(mapper.writeValueAsString(resource));
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+		List<Menu> menus = com.jianfei.core.bean.Menu.getSecondMenu(list);
+		System.out.println(JSONObject.toJSONString(menus));
 
+	}
 }

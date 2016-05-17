@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianfei.core.mapper.ResourceMapper">
+	<resultMap type="Resource" id="resource">
+		<id property="id" column="id" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="description" property="description" />
+		<result column="iconCls" property="iconCls" />
+		<result column="seq" property="seq" />
+		<result column="target" property="target" />
+		<result column="isShow" property="isShow" />
+		<result column="permission" property="permission" />
+		<result column="create_time" property="createdatetime" />
+		<result column="update_time" property="updatedatetime" />
+		<result column="pid" property="parent.id" />
+	</resultMap>
+
+	<insert id="save" parameterType="Resource">
+		<![CDATA[
+			INSERT INTO
+				sys_author(name,url,description,iconCls,pid,permission,seq,target,isShow,create_time,update_time)
+			VALUES
+				(#{name},#{url},#{description},#{iconCls},#{parent.id},#{permission},#{seq},#{target},#{isShow},#{createdatetime},#{updatedatetime})
+		]]>
+	</insert>
+
+	<delete id="delete" parameterType="Long">
+		<![CDATA[delete from sys_author	where id=#{id}]]>
+	</delete>
+
+	<update id="update" parameterType="Resource">
+		<![CDATA[	
+			update sys_author set
+				name=#{name},
+				url=#{url},
+				permission=#{permission},
+				iconCls=#{iconCls},
+				seq=#{seq},
+				description=#{description},
+				target=#{target},
+				pid=#{parent.id},
+				isShow=#{isShow},
+				update_time=#{updatedatetime}
+			where id=#{id}
+		]]>
+	</update>
+
+	<select id="get" parameterType="java.util.Map" resultMap="resource">
+		select * from sys_author
+		<where>
+			<if test="id!= null ">
+				id= #{id}
+			</if>
+			<if test="name!= null ">
+				and name= #{name}
+			</if>
+			<if test="pid!=null">
+				and pid=#{pid}
+			</if>
+		</where>
+	</select>
+
+	<select id="findResourceByRoleId" parameterType="Long"
+		resultMap="resource">
+		<![CDATA[  SELECT auth.* FROM `sys_author` auth INNER JOIN `sys_role_author` ra ON auth.`id`=ra.`author_id` WHERE ra.`role_id`=#{id} ]]>
+	</select>
+
+	<select id="findResourceByUserId" parameterType="Long"
+		resultMap="resource">
+		<![CDATA[  SELECT auth.* FROM `sys_author` auth 
+						INNER JOIN `sys_role_author` ra ON auth.`id`=ra.`author_id` 
+						INNER JOIN `sys_use_role` sur ON sur.`role_id`=ra.`role_id` 
+						WHERE sur.`user_id`=#{id}
+		 ]]>
+	</select>
+
+	<select id="findEntityById" parameterType="Long" resultMap="resource">
+		select * from sys_author where id=#{id}
+	</select>
+
+</mapper>

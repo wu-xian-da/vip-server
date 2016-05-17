@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.MenBuilder;
+import com.jianfei.core.bean.Menu;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
@@ -31,7 +31,6 @@ import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.TreeGrid;
 import com.jianfei.core.common.utils.TreeNodeUtil;
 import com.jianfei.core.mapper.ResourceMapper;
@@ -64,18 +63,11 @@ public class SystemService {
 	private ResourceMapper resourceMapper;
 
 	@SuppressWarnings("unchecked")
-	public List<MenBuilder> getCurrentMenus() {
-
-		Object object = CacheUtils.get(CacheUtils.BROKER_CACHE, CURRENT_MENU);
-		if (null != object && !StringUtils.isEmpty(object.toString())) {
-			return (List<MenBuilder>) CacheUtils.get(CacheUtils.BROKER_CACHE,
-					CURRENT_MENU);
-		}
+	public List<Menu> getCurrentMenus() {
 		List<Resource> resources = resourceMapper
 				.findResourceByUserId(ShiroUtils.getShrioUser().getUser()
 						.getId());
-		List<MenBuilder> menus = MenBuilder.buildMenus(resources);
-		CacheUtils.put(CacheUtils.BROKER_CACHE, CURRENT_MENU);
+		List<Menu> menus = Menu.getSecondMenu(resources);
 		return menus;
 	}
 

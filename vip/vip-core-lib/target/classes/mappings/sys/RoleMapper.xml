@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianfei.core.mapper.RoleMapper">
+
+	<resultMap id="roleResult" type="Role">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="description" column="description" />
+		<result column="create_time" property="createdatetime" />
+		<result column="update_time" property="updatedatetime" />
+		<collection property="resources" ofType="Resource">
+			<id property="id" column="resources.id" />
+			<result column="resources.name" property="name" />
+			<result column="resources.permission" property="permission" />
+		</collection>
+	</resultMap>
+
+	<select id="get" resultMap="roleResult" parameterType="java.util.Map">
+		<![CDATA[
+			SELECT role.*,sa.`id`,sa.`name`,sa.`permission`  FROM `sys_roles` role LEFT JOIN `sys_role_author` sra ON role.`id`=sra.`role_id` LEFT JOIN `sys_author` sa ON sa.`id`=sra.`author_id`
+		]]>
+		<where>
+			<if test="id!=null">
+				role.id =#{id}
+			</if>
+			<if test="notLikeName!=null">
+				and role.name=#{notLikeName}
+			</if>
+			<if test="name!=null">
+				and role.name like CONCAT('%', #{name}, '%')
+			</if>
+			<if test="description!=null">
+				and role.description like CONCAT('%', #{description},
+				'%')
+			</if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="Role">
+		<![CDATA[
+			INSERT INTO sys_roles
+			(
+				name,
+				description,
+				create_time,
+				update_time
+			)
+			VALUES
+			(
+				#{name},
+				#{description},
+				#{createdatetime},
+				#{updatedatetime}
+			)
+		]]>
+	</insert>
+
+	<update id="update" parameterType="Role">
+		<![CDATA[
+			UPDATE sys_roles
+			SET
+				name = name,
+				description = #{description},
+				update_time = #{updatedatetime}
+			WHERE id = #{id}
+		]]>
+	</update>
+
+	<delete id="delete" parameterType="Long">
+		<![CDATA[
+			delete from sys_roles where id=#{id}
+		]]>
+	</delete>
+
+	<delete id="deleteByResourceFromRole" parameterType="Long">
+		<![CDATA[
+			DELETE FROM sys_role_author  WHERE role_id=#{roleId}
+		]]>
+	</delete>
+
+	<insert id="batchInsertRoleResource" parameterType="ArrayList">
+		INSERT INTO sys_role_author (role_id,author_id)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.roleId}, #{item.resourceId})
+		</foreach>
+	</insert>
+
+	<select id="selectRoleByUserId" parameterType="Long" resultMap="roleResult">
+		<![CDATA[
+			SELECT role.* FROM `sys_roles` role INNER JOIN `sys_use_role` sur ON role.`id`=sur.`role_id` WHERE sur.`user_id`=#{id}
+		]]>
+	</select>
+
+</mapper>
