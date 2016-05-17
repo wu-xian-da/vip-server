@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianfei.common.mapper.OrderMapper">
+	<!-- 定义返回数据类型 -->
+	<resultMap id="orderInfo" type="Order">
+		<id property="orderId" column="order_id" />
+		<result property="orderTime" column="order_time" />
+	</resultMap>
+	
+	<!--根据订单编号返回订单信息 -->
+	<select id="getOrderByOrderId" resultMap="orderInfo" parameterType="String">
+		SELECT * from app_orders where order_id =#{order_id}
+	</select>
+	
+
+</mapper>
