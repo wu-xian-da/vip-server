@@ -7,6 +7,10 @@
  */
 package com.jianfei.common.orders;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +18,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jianfei.common.mapper.OrderMapper;
+import com.github.pagehelper.PageInfo;
+import com.jianfei.common.entity.Order;
 import com.jianfei.common.service.OrderService;
+
 
 
 
@@ -36,9 +42,21 @@ public class OrderMapperTest {
 	@Autowired
 	private OrderService orderService;
 	
+	//订单详情
 	@Test
 	public void testGetOrderInfo(){
 		orderService.getOrderByOrderId("1001");
+	}
+	
+	//分页查询
+	@Test
+	public void testPageSel(){
+		Map<String, Object> map = new HashMap<>();
+		PageInfo<Order> page = orderService.pageSel(2, 2, map);
+		List<Order> orderList = page.getList();
+		for(Order order : orderList){
+			System.out.println("order_id:"+order.getOrderId()+" order_time:"+order.getOrderTime());
+		}
 	}
 	
 

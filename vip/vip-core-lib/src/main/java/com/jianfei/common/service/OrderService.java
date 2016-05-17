@@ -7,14 +7,20 @@
  */
 package com.jianfei.common.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jianfei.common.entity.Order;
 import com.jianfei.common.mapper.OrderMapper;
+import com.jianfei.core.bean.Role;
 
 
 
@@ -37,10 +43,34 @@ public class OrderService {
 	@Autowired
 	private OrderMapper orderMapper;
 	
+	/**
+	 * 根据订单编号返回订单的详细信息
+	 * @param orderId 订单编号
+	 * @return
+	 * Order
+	 * @version  1.0.0
+	 */
 	public Order getOrderByOrderId(String orderId){
 		Order orderInfo = orderMapper.getOrderByOrderId(orderId);
 		logger.info("order_time="+orderInfo.getOrderTime());
 		return orderInfo;
+	}
+	
+	/**
+	 * 
+	 * @param pageNo 第几页
+	 * @param pageSize 每页的条数
+	 * @param params 查询条件
+	 * @return
+	 * PageInfo<Role>
+	 * @version  1.0.0
+	 */
+	public PageInfo<Order> pageSel(int pageNo, int pageSize,
+			Map<String, Object> params) {
+		PageHelper.startPage(pageNo, pageSize);
+		List<Order> list = orderMapper.get(params);
+		PageInfo<Order> pageInfo = new PageInfo(list);
+		return pageInfo;
 	}
 	
 }
