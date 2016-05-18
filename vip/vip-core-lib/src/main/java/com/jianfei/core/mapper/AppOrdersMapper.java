@@ -2,7 +2,7 @@ package com.jianfei.core.mapper;
 
 import com.jianfei.core.bean.AppOrders;
 
-public interface AppOrdersMapper {
+public interface AppOrdersMapper extends BaseMapper<AppOrders>{
     int deleteByPrimaryKey(String orderId);
 
     int insert(AppOrders record);
