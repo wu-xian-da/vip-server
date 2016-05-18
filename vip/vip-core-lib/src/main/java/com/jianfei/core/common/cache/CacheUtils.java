@@ -7,7 +7,14 @@ import net.sf.ehcache.Element;
 import com.jianfei.core.common.utils.SpringContextHolder;
 
 /**
- * Cache工具类
+ *
+ * @Description: Cache工具类
+ * 
+ * @author: li.binbin@jianfeitech.com
+ * @date: 2016年5月18日 下午1:32:21
+ * 
+ * @version 1.0.0
+ *
  */
 public class CacheUtils {
 

@@ -59,15 +59,15 @@ public class RoleController extends BaseController {
 	 */
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	public Grid list(
+	public Grid<Role> list(
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			@RequestParam(value = "name", required = false) String name) {
 		PageHelper.startPage(page, rows);
 		List<Role> roles = systemService.getRoleMapper().get(
-				new MapUtils.Build().setKeyValue("name", name).build());
+				new MapUtils.Builder().setKeyValue("name", name).build());
 		PageInfo<Role> pageInfo = new PageInfo<Role>(roles);
-		return systemService.bindGridData(pageInfo);
+		return bindDataGrid(pageInfo);
 	}
 
 	@RequestMapping(value = "form")
@@ -79,7 +79,7 @@ public class RoleController extends BaseController {
 	@ResponseBody
 	public MessageDto save(Role role) {
 		List<Role> list = systemService.getRoleMapper().get(
-				new MapUtils.Build().setKeyValue("name", role.getName())
+				new MapUtils.Builder().setKeyValue("name", role.getName())
 						.build());
 		if (CollectionUtils.isEmpty(list)) {
 			return new MessageDto().setMsgBody("同名的角色已经存在，请更换名字...");

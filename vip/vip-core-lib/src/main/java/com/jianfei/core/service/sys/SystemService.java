@@ -210,13 +210,6 @@ public class SystemService {
 		this.resourceMapper = resourceMapper;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public Grid bindGridData(PageInfo pageInfo) {
-		Grid grid = new Grid();
-		grid.setRows(pageInfo.getList());
-		grid.setTotal(pageInfo.getTotal());
-		return grid;
-	}
 
 	ObjectMapper mapper = new ObjectMapper();
 

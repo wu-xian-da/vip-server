@@ -29,7 +29,7 @@ public class GloabConfig {
 
 	public final static String SPLIT = ",";
 
-	private final static String SESSION_USER = "sessionInfo";
+	public final static String SESSION_USER = "sessionInfo";
 
 	/**
 	 * 当前对象实例

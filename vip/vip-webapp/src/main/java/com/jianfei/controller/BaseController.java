@@ -7,14 +7,20 @@
  */
 package com.jianfei.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.jianfei.core.common.shrio.ShrioUser;
+import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.User;
+import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.utils.GloabConfig;
+import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
 
 /**
@@ -28,7 +34,6 @@ import com.jianfei.core.common.utils.MessageDto;
  */
 public class BaseController {
 
-	@SuppressWarnings("rawtypes")
 	public MessageDto buildDtoMsg(boolean isOk) {
 		MessageDto dto = new MessageDto();
 		if (isOk) {
@@ -37,20 +42,24 @@ public class BaseController {
 		return dto;
 	}
 
+	public <T> Grid<T> bindDataGrid(PageInfo<T> pageInfo) {
+		Grid<T> grid = new Grid<T>();
+		grid.setRows(pageInfo.getList());
+		grid.setTotal(pageInfo.getTotal());
+		return grid;
+	}
+
+	public User getCurrentUser() {
+		return (User) ShiroUtils.getSession().getAttribute(
+				GloabConfig.SESSION_USER);
+	}
+
 	public void intiWebContentEnv() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
 				.getRequestAttributes()).getRequest();
 		request.setAttribute("uploadRoot",
 				GloabConfig.getConfig("static.resource.server.address"));
 		request.setAttribute("webRoot", getBaseUrl(request));
-	}
-
-	public ShrioUser getShrioUser() {
-		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
-		if (null != subject && null != subject.getPrincipal()) {
-			return (ShrioUser) subject.getPrincipal();
-		}
-		return null;
 	}
 
 	/**

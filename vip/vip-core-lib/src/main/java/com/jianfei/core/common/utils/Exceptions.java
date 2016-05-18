@@ -9,13 +9,15 @@ import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AccountException;
-import org.apache.shiro.authc.CredentialsException;
 
 /**
- * 关于异常的工具类.
+ *
+ * @Description: 关于异常的工具类.
+ * @author: li.binbin@jianfeitech.com
+ * @date: 2016年5月18日 下午1:34:22
  * 
- * @author calvin
- * @version 2013-01-15
+ * @version 1.0.0
+ *
  */
 public class Exceptions {
 

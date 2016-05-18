@@ -56,11 +56,20 @@ public class MapUtils extends org.apache.commons.collections.MapUtils {
 
 	}
 
-	public static class Build {
+	/**
+	 *
+	 * @Description: 构建查询map
+	 * @author: li.binbin@jianfeitech.com
+	 * @date: 2016年5月18日 上午7:14:06
+	 * 
+	 * @version 1.0.0
+	 *
+	 */
+	public static class Builder {
 
 		public Map<String, Object> map = new HashMap<String, Object>();
 
-		public Build setKeyValue(String key, Object value) {
+		public Builder setKeyValue(String key, Object value) {
 			if (!StringUtils.isEmpty(key) && value != null
 					&& !StringUtils.isEmpty(value.toString()))
 				map.put(key, value);

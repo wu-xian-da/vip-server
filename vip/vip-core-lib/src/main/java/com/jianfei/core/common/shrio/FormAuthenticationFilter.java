@@ -1,6 +1,3 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- */
 package com.jianfei.core.common.shrio;
 
 import javax.servlet.ServletRequest;
@@ -18,10 +15,13 @@ import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.utils.StringUtils;
 
 /**
- * 表单验证（包含验证码）过滤类
+ *
+ * @Description: 表单验证（包含验证码）过滤类
+ * @author: li.binbin@jianfeitech.com
+ * @date: 2016年5月18日 下午1:33:45
  * 
- * @author ThinkGem
- * @version 2014-5-19
+ * @version 1.0.0
+ *
  */
 @Service
 public class FormAuthenticationFilter extends
