@@ -31,7 +31,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.service.SystemService;
+import com.jianfei.core.service.sys.SystemService;
 
 /**
  *

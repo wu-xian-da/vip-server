@@ -5,7 +5,7 @@
  * Copyright (c) 2016建飞科联公司-版权所有
  *
  */
-package com.jianfei.core.service;
+package com.jianfei.core.service.sys;
 
 import java.util.ArrayList;
 import java.util.HashMap;

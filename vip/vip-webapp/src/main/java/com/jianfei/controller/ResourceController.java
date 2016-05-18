@@ -19,7 +19,7 @@ import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.TreeGrid;
-import com.jianfei.core.service.SystemService;
+import com.jianfei.core.service.sys.SystemService;
 
 /**
  *

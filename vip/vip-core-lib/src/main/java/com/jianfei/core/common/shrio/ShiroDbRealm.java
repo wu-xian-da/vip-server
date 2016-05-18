@@ -18,7 +18,7 @@ import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.utils.SpringContextHolder;
-import com.jianfei.core.service.SystemService;
+import com.jianfei.core.service.sys.SystemService;
 
 /**
  *
