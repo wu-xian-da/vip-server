@@ -4,7 +4,7 @@
  * @date:2016年5月15日-下午3:54:37
  * Copyright (c) 2016建飞科联公司-版权所有
  *
- */
+ *//*
 package com.jianfei.common.orders;
 
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import com.jianfei.common.service.OrderService;
 
 
 
-/**
+*//**
  *
  * @Description: TODO
  * @author: guo.jian@jianfeitech.com
@@ -33,7 +33,7 @@ import com.jianfei.common.service.OrderService;
  * 
  * @version 1.0.0
  *
- */
+ *//*
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml" })
 @Transactional
@@ -61,3 +61,4 @@ public class OrderMapperTest {
 	
 
 }
+*/
