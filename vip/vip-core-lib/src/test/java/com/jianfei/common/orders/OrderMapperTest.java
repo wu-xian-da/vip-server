@@ -58,7 +58,7 @@ public class OrderMapperTest {
 		Map<String, Object> map = new HashMap<String, Object>();
 	
 		PageInfo<AppOrders> pageinfo = orderService.simplePage(1, 2, map);
-		System.out.println("a="+pageinfo.getSize());
+		System.out.println("a="+pageinfo.getTotal());
 	}
 
 }

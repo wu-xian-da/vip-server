@@ -7,7 +7,9 @@
  */
 package com.jianfei.core.service.order;
 
+import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.mapper.AppOrdersMapper;
-import com.sun.tools.javac.util.List;
 
 /**
  *
@@ -44,7 +45,7 @@ public class OrderService {
 	public PageInfo<AppOrders> simplePage(int pageNo, int pageSize,
 			Map<String, Object> params) {
 		PageHelper.startPage(pageNo, pageSize);
-		List<AppOrders> list = (List<AppOrders>) appOrdersMapper.get(params);
+		List<AppOrders> list = appOrdersMapper.get(params);
 		PageInfo<AppOrders> pageInfo = new PageInfo(list);
 		return pageInfo;
 	}

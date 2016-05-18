@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jianfei.core.mapper.AppOrdersMapper" >
+
   <resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppOrders" >
     <id column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="id" property="id" jdbcType="VARCHAR" />
@@ -17,9 +18,9 @@
   </resultMap>
   
   <!-- 分页查询 -->
-  <sql id="get">
-  	select * from  app_orders
-  </sql>
+  <select id="get" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select * from app_orders
+  </select>
   
   
   <sql id="Base_Column_List" >

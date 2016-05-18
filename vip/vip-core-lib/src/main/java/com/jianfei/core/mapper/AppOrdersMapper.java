@@ -5,6 +5,8 @@ import com.jianfei.core.common.persistence.MyBatisDao;
 
 @MyBatisDao
 public interface AppOrdersMapper extends BaseMapper<AppOrders>{
+	
+	
     int deleteByPrimaryKey(String orderId);
 
     int insert(AppOrders record);
