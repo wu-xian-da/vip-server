@@ -14,9 +14,9 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-    <beans profile="oauth">
+   <!-- <beans profile="oauth">
         <security:http pattern="/api" create-session="never"
-                       entry-point-ref="oauthAuthenticationEntryPoint"
+                       entry-point-ref="oauth2AuthenticationEntryPoint"
                        access-decision-manager-ref="accessDecisionManager"
                        authentication-manager-ref="authenticationManager">
             <security:anonymous enabled="false"/>
@@ -35,17 +35,17 @@
             <security:authentication-provider user-service-ref="userDetailsService"/>
         </security:authentication-manager>
 
-        <!--自定义实现认证 手机验证码认证-->
+        &lt;!&ndash;自定义实现认证 手机验证码认证&ndash;&gt;
         <bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
             <property name="dataSource" ref="dataSource"/>
         </bean>
 
         <bean id="oauthAccessDeniedHandler"
               class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
-        <bean id="oauthAuthenticationEntryPoint"
-              class="com.jianfei.frame.spring.OAuth2AuthenticationEntryPointExt">
-            <property name="messageConverter" ref="errorRequestMessageConverter"/>
-        </bean>
+
+        &lt;!&ndash;默认使用OAuth2AuthenticationEntryPoint处理认证结果&ndash;&gt;
+        <bean id="oauth2AuthenticationEntryPoint"
+                    class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint"/>
 
         <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased"
               xmlns="http://www.springframework.org/schema/beans">
@@ -56,10 +56,11 @@
             </constructor-arg>
         </bean>
 
-        <!--使用redis存储Token-->
-        <bean id="tokenStore" class="com.jianfei.frame.spring.TokenStoreFactoryBean"/>
-
-        <!--如果允许刷新token 请将supportRefreshToken 的值设置为true, 默认为不允许-->
+        &lt;!&ndash;使用redis存储Token&ndash;&gt;
+      &lt;!&ndash;  <bean id="tokenStore" class="com.jianfei.frame.spring.TokenStoreFactoryBean"/>&ndash;&gt;
+        &lt;!&ndash;使用内存存储Token&ndash;&gt;
+        <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore"/>
+        &lt;!&ndash;如果允许刷新token 请将supportRefreshToken 的值设置为true, 默认为不允许&ndash;&gt;
         <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
             <property name="tokenStore" ref="tokenStore"/>
             <property name="supportRefreshToken" value="true"/>
@@ -75,6 +76,6 @@
             <property name="authenticationManager" ref="authenticationManager"/>
             <property name="authenticationEntryPoint" ref="oauthAuthenticationEntryPoint"/>
         </bean>
-    </beans>
+    </beans>-->
 
 </beans>

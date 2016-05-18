@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jianfei.core.mapper.AppAttendanceMapper" >
+  <resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppAttendance" >
+    <id column="chck_id" property="chckId" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="VARCHAR" />
+    <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+    <result column="valide_check" property="valideCheck" jdbcType="INTEGER" />
+    <result column="dflag" property="dflag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    chck_id, agent_id, check_time, valide_check, dflag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_attendance
+    where chck_id = #{chckId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_attendance
+    where chck_id = #{chckId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jianfei.core.bean.AppAttendance" >
+    insert into app_attendance (chck_id, agent_id, check_time, 
+      valide_check, dflag)
+    values (#{chckId,jdbcType=BIGINT}, #{agentId,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, 
+      #{valideCheck,jdbcType=INTEGER}, #{dflag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jianfei.core.bean.AppAttendance" >
+    insert into app_attendance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="chckId != null" >
+        chck_id,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
+      <if test="checkTime != null" >
+        check_time,
+      </if>
+      <if test="valideCheck != null" >
+        valide_check,
+      </if>
+      <if test="dflag != null" >
+        dflag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="chckId != null" >
+        #{chckId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null" >
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valideCheck != null" >
+        #{valideCheck,jdbcType=INTEGER},
+      </if>
+      <if test="dflag != null" >
+        #{dflag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppAttendance" >
+    update app_attendance
+    <set >
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null" >
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valideCheck != null" >
+        valide_check = #{valideCheck,jdbcType=INTEGER},
+      </if>
+      <if test="dflag != null" >
+        dflag = #{dflag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where chck_id = #{chckId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jianfei.core.bean.AppAttendance" >
+    update app_attendance
+    set agent_id = #{agentId,jdbcType=VARCHAR},
+      check_time = #{checkTime,jdbcType=TIMESTAMP},
+      valide_check = #{valideCheck,jdbcType=INTEGER},
+      dflag = #{dflag,jdbcType=INTEGER}
+    where chck_id = #{chckId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jianfei.core.mapper.SysAirportMapper" >
+  <resultMap id="BaseResultMap" type="com.jianfei.core.bean.SysAirport" >
+    <id column="airport_id" property="airportId" jdbcType="VARCHAR" />
+    <result column="airport_name" property="airportName" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="agent_num" property="agentNum" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+    <result column="header_name" property="headerName" jdbcType="VARCHAR" />
+    <result column="header_phone" property="headerPhone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    airport_id, airport_name, state, agent_num, province, city, country, address, longitude, 
+    latitude, dtflag, header_name, header_phone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_airport
+    where airport_id = #{airportId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_airport
+    where airport_id = #{airportId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jianfei.core.bean.SysAirport" >
+    insert into sys_airport (airport_id, airport_name, state, 
+      agent_num, province, city, 
+      country, address, longitude, 
+      latitude, dtflag, header_name, 
+      header_phone)
+    values (#{airportId,jdbcType=VARCHAR}, #{airportName,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{agentNum,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR}, #{dtflag,jdbcType=INTEGER}, #{headerName,jdbcType=VARCHAR}, 
+      #{headerPhone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jianfei.core.bean.SysAirport" >
+    insert into sys_airport
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="airportId != null" >
+        airport_id,
+      </if>
+      <if test="airportName != null" >
+        airport_name,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="agentNum != null" >
+        agent_num,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="dtflag != null" >
+        dtflag,
+      </if>
+      <if test="headerName != null" >
+        header_name,
+      </if>
+      <if test="headerPhone != null" >
+        header_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="airportId != null" >
+        #{airportId,jdbcType=VARCHAR},
+      </if>
+      <if test="airportName != null" >
+        #{airportName,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="agentNum != null" >
+        #{agentNum,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="dtflag != null" >
+        #{dtflag,jdbcType=INTEGER},
+      </if>
+      <if test="headerName != null" >
+        #{headerName,jdbcType=VARCHAR},
+      </if>
+      <if test="headerPhone != null" >
+        #{headerPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.SysAirport" >
+    update sys_airport
+    <set >
+      <if test="airportName != null" >
+        airport_name = #{airportName,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="agentNum != null" >
+        agent_num = #{agentNum,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="dtflag != null" >
+        dtflag = #{dtflag,jdbcType=INTEGER},
+      </if>
+      <if test="headerName != null" >
+        header_name = #{headerName,jdbcType=VARCHAR},
+      </if>
+      <if test="headerPhone != null" >
+        header_phone = #{headerPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where airport_id = #{airportId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jianfei.core.bean.SysAirport" >
+    update sys_airport
+    set airport_name = #{airportName,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      agent_num = #{agentNum,jdbcType=INTEGER},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      dtflag = #{dtflag,jdbcType=INTEGER},
+      header_name = #{headerName,jdbcType=VARCHAR},
+      header_phone = #{headerPhone,jdbcType=VARCHAR}
+    where airport_id = #{airportId,jdbcType=VARCHAR}
+  </update>
+</mapper>
