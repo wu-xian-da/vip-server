@@ -5,7 +5,7 @@ import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
-import com.jianfei.core.common.shrio.ShrioUser;
+import com.jianfei.core.common.shrio.ShiroDbRealm.Principal;
 
 /**
  *
@@ -18,10 +18,10 @@ import com.jianfei.core.common.shrio.ShrioUser;
  */
 public class ShiroUtils {
 
-	public static ShrioUser getShrioUser() {
+	public static Principal getPrincipal() {
 		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
 		if (null != subject && null != subject.getPrincipal()) {
-			return (ShrioUser) subject.getPrincipal();
+			return (Principal) subject.getPrincipal();
 		}
 		return null;
 	}

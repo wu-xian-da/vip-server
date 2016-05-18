@@ -4,22 +4,17 @@
 package com.jianfei.core.common.shrio;
 
 /**
- *
- * @Description:用户和密码（包含验证码）令牌类
- * @author: li.binbin@jianfeitech.com
- * @date: 2016年5月18日 下午1:34:04
- * 
- * @version 1.0.0
- *
+ * 用户和密码（包含验证码）令牌类
+ * @author ThinkGem
+ * @version 2013-5-19
  */
-public class UsernamePasswordToken extends
-		org.apache.shiro.authc.UsernamePasswordToken {
+public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswordToken {
 
 	private static final long serialVersionUID = 1L;
 
 	private String captcha;
 	private boolean mobileLogin;
-
+	
 	public UsernamePasswordToken() {
 		super();
 	}
@@ -42,5 +37,5 @@ public class UsernamePasswordToken extends
 	public boolean isMobileLogin() {
 		return mobileLogin;
 	}
-
+	
 }

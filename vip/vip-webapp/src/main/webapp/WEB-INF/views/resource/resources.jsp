@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.jianfei.core.common.security.shiro.HasAnyPermissionsTag"%>
 <%@ include file="/WEB-INF/include/taglib.jsp"%>
+<%
+	HasAnyPermissionsTag anyPermissionsTag = new HasAnyPermissionsTag();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -102,8 +106,12 @@
 							width : '180',
 							formatter : function(value, row) {
 								var str = '';
+								<%if (anyPermissionsTag.showTagBody("system:resource:update")) {%>
 									str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_edit" onclick="editFun(\'{0}\');"/>', row.id);
+								<%}%>
+								<%if (anyPermissionsTag.showTagBody("system:resource:delete")) {%>
 									str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_delete"  onclick="removeFun(\'{0}\');"/>', row.id);
+								<%}%>
 								return str;
 							}
 						},	{field:'description',title:'描述',width:180},
@@ -126,8 +134,10 @@
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
-				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
-				<td><div class="datagrid-btn-separator"></div></td>
+				<shiro:hasPermission name="system:resource:add">
+					<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
+					<td><div class="datagrid-btn-separator"></div></td>
+				</shiro:hasPermission>
 				<td><a onclick="redoFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'ext-icon-resultset_next'">展开</a><a onclick="undoFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'ext-icon-resultset_previous'">折叠</a></td>
 				<td><div class="datagrid-btn-separator"></div></td>
 				<td><a onclick="grid.treegrid('reload');" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'ext-icon-arrow_refresh'">刷新</a></td>

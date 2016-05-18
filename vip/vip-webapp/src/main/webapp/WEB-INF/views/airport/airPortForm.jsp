@@ -34,24 +34,6 @@
 		}
 	};
 	$(function() {
-		if ($(':input[name="id"]').val()!='') {
-			parent.$.messager.progress({
-				text : '数据加载中....'
-			});
-			$.post(sy.contextPath + '/base/syrole!getById.sy', {
-				id : $(':input[name="id"]').val()
-			}, function(result) {
-				if (result.id != undefined) {
-					$('form').form('load', {
-						'data.id' : result.id,
-						'data.name' : result.name,
-						'data.description' : result.description,
-						'data.seq' : result.seq
-					});
-				}
-				parent.$.messager.progress('close');
-			}, 'json');
-		}
 	});
 </script>
 </head>
@@ -68,10 +50,11 @@
 				<tr style="padding-top: 5px;">
 					<th>省市信息:</th>
 					<td>
+					
 						<div class="demo-wrap">
-							<div><input id="pr1" type="text" name="province" placeholder="省份" value="${ariPort.province }"  /></div>
-							<div><input id="ci1" type="text" name="city" placeholder="城市" style="display: none"  value="${ariPort.city }"/></div>
-							<div><input id="co1" type="text" name="country" placeholder="县级" style="display: none" value="${ariPort.country }" /></div>
+							<div><input id="pr2" type="text" name="province" placeholder="省份" value="${ariPort.province }"  /></div>
+							<div><input id="ci2" type="text" name="city" placeholder="城市"  <c:if test="${empty ariPort.city   }"> style="display: none"</c:if>  value="${ariPort.city }"/></div>
+							<div><input id="co2" type="text" name="country" placeholder="县级" <c:if test="${empty ariPort.country   }"> style="display: none"</c:if> value="${ariPort.country }" /></div>
 						</div>
 					</td>
 				</tr>

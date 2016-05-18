@@ -7,13 +7,17 @@
  */
 package com.jianfei.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -67,7 +71,8 @@ public class AriPortController extends BaseController {
 	public MessageDto save(AriPort ariPort) {
 		System.out.println(ariPort.getId().length());
 		List<AriPort> list = ariPortService.getAriPortMapper().get(
-				new MapUtils.Builder().build());
+				new MapUtils.Builder().setKeyValue("name", ariPort.getName())
+						.build());
 		if (!CollectionUtils.isEmpty(list)) {
 			return new MessageDto().setMsgBody("场站已经存在...");
 		}
@@ -77,7 +82,7 @@ public class AriPortController extends BaseController {
 
 	@RequestMapping(value = "form")
 	public String form(String id, Model model) {
-		if (StringUtils.isEmpty(id)) {
+		if (!StringUtils.isEmpty(id)) {
 			List<AriPort> ariPorts = ariPortService.getAriPortMapper().get(
 					new MapUtils.Builder().setKeyValue("id", id).build());
 			if (!CollectionUtils.isEmpty(ariPorts)) {
@@ -87,4 +92,20 @@ public class AriPortController extends BaseController {
 		return "airport/airPortForm";
 	}
 
+
+	@RequestMapping(value = "/datePermission/data", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String, Object>> datePermissionData() {
+		List<AriPort> ariPorts = ariPortService.getAriPortMapper().get(
+				new MapUtils.Builder().build());
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (AriPort ariPort : ariPorts) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", ariPort.getId());
+			map.put("name", ariPort.getName());
+			map.put("checked", false);
+			list.add(map);
+		}
+		return list;
+	}
 }

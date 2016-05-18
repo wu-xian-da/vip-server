@@ -13,7 +13,7 @@
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
-				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
+				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFuns();">添加</a></td>
 				<td><div class="datagrid-btn-separator"></div></td>
 				<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索角色名称'"></input></td>
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">清空查询</a></td>
@@ -26,7 +26,7 @@
 	
 	<script type="text/javascript">
 	var grid;
-	var addFun = function() {
+	var addFuns = function() {
 		var dialog = parent.sy.modalDialog({
 			title : '添加角色信息',
 			url : sy.contextPath + '/airport/form',
@@ -65,18 +65,6 @@
 					grid.datagrid('reload');
 				}, 'json');
 			}
-		});
-	};
-	var grantFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '角色授权',
-			url : sy.contextPath + '/role/grantForm?id=' + id,
-			buttons : [ {
-				text : '授权',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
 		});
 	};
 	$(function() {
@@ -137,9 +125,7 @@
 				width : '300',
 				formatter : function(value, row) {
 					var str = '';
-						str += sy.formatString('<img class="iconImg ext-icon-note" title="查看" onclick="showFun(\'{0}\');"/>', row.id);
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-key" title="授权" onclick="grantFun(\'{0}\');"/>', row.id);
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
 					return str;
 				}

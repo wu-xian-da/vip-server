@@ -158,4 +158,25 @@ public class UserController extends BaseController {
 
 		return sort;
 	}
+
+	@RequestMapping(value = "/datapermission/save")
+	@ResponseBody
+	public MessageDto saveDataPermission() {
+
+		return buildDtoMsg(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+
+	}
+
+	@RequestMapping(value = "/datePermission")
+	public String datePermission() {
+		return "user/permission";
+	}
+
+	@RequestMapping(value = "/datapermission/update")
+	@ResponseBody
+	public MessageDto saveDataPermissionu() {
+
+		return buildDtoMsg(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+
+	}
 }

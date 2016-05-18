@@ -1,6 +1,9 @@
 package com.jianfei.core.common.shrio;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -18,6 +21,7 @@ import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.utils.SpringContextHolder;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.sys.SystemService;
 
 /**
@@ -44,20 +48,29 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
-		ShrioUser shrioUser = (ShrioUser) principals;
+		Principal principal = (Principal) getAvailablePrincipal(principals);
 		// 创建简单的授权模块
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		List<Role> roles = shrioUser.getUser().getRoles();
+		List<Role> roleList = systemService.getRoleMapper().selectRoleByUserId(
+				StringUtils.toLong(principal.getId()));
+		Set<String> roles = new HashSet<String>();
 		// 添加用户角色
-		for (Role role : roles) {
-			authorizationInfo.getRoles().add(role.getName());
+		for (Role role : roleList) {
+			if (!StringUtils.isEmpty(role.getName())) {
+				roles.add(role.getName());
+			}
 		}
+		authorizationInfo.setRoles(roles);
+
 		// 获取资源菜单
 		List<Resource> resources = systemService.getResourceMapper()
-				.findResourceByUserId(shrioUser.getUser().getId());
+				.findResourceByUserId(Long.valueOf(principal.getId()));
+
 		// 添加资源访问权限
 		for (Resource resource : resources) {
-			authorizationInfo.getStringPermissions().add(resource.getName());
+			if (!StringUtils.isEmpty(resource.getPermission())) {
+				authorizationInfo.addStringPermission(resource.getPermission());
+			}
 		}
 		return authorizationInfo;
 	}
@@ -100,11 +113,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			}
 			// 判断是否有后台的登入权限
 			if (1 == user.getUserType()) {
-				ShrioUser shrioUser = new ShrioUser();
-				shrioUser.setUser(user);
-				return new SimpleAuthenticationInfo(shrioUser,
-						"f59cf5692216275b832bd98223516774",
-						ByteSource.Util.bytes("refineli"), getName());
+				return new SimpleAuthenticationInfo(new Principal(user, false),
+						user.getPassword(), ByteSource.Util.bytes(user
+								.getSalt()), getName());
 			}
 			ShiroUtils.getSession()
 					.setAttribute(
@@ -114,5 +125,60 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		} catch (Exception e) {
 		}
 		return null;
+	}
+
+	/**
+	 * 授权用户信息
+	 */
+	public static class Principal implements Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		private String id; // 编号
+		private String loginName; // 登录名
+		private String name; // 姓名
+		private boolean mobileLogin; // 是否手机登录
+
+		// private Map<String, Object> cacheMap;
+
+		public Principal(User user, boolean mobileLogin) {
+			this.id = String.valueOf(user.getId());
+			this.loginName = user.getLoginName();
+			this.name = user.getName();
+			this.mobileLogin = mobileLogin;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public String getLoginName() {
+			return loginName;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public boolean isMobileLogin() {
+			return mobileLogin;
+		}
+
+		/**
+		 * 获取SESSIONID
+		 */
+		public String getSessionid() {
+			try {
+				return (String) ShiroUtils.getSession().getId();
+			} catch (Exception e) {
+				return "";
+			}
+		}
+
+		@Override
+		public String toString() {
+			return id;
+		}
+
 	}
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.Role;
@@ -66,6 +67,7 @@ public class RoleController extends BaseController {
 		PageHelper.startPage(page, rows);
 		List<Role> roles = systemService.getRoleMapper().get(
 				new MapUtils.Builder().setKeyValue("name", name).build());
+		System.out.println(JSONObject.toJSONString(roles));
 		PageInfo<Role> pageInfo = new PageInfo<Role>(roles);
 		return bindDataGrid(pageInfo);
 	}

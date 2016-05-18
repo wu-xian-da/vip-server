@@ -72,13 +72,17 @@ if (StringUtils.indexOfIgnoreCase(User_Agent, "MSIE") > -1 && (StringUtils.index
 <%-- 引入easyui扩展 --%>
 <script src="<%=contextPath%>/jslib/syExtEasyUI.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
 
-<link rel="stylesheet" href="<%=contextPath%>/jsliblayer-v2.2/layer/skin/layer.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+<link rel="stylesheet" href="<%=contextPath%>/jslib/layer-v2.2/layer/skin/layer.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
 <script type="text/javascript" src="<%=contextPath%>/jslib/layer-v2.2/layer/layer.js"></script>
 <%-- 引入扩展图标 --%>
 <link rel="stylesheet" href="<%=contextPath%>/style/syExtIcon.css?version=<%=version%>" type="text/css">
 
 <%-- 引入自定义样式 --%>
 <link rel="stylesheet" href="<%=contextPath%>/style/syExtCss.css?version=<%=version%>" type="text/css">
-
+<link rel="stylesheet" href="<%=contextPath%>/jslib/areaSelect/areaselect.css?version=<%=version%>" type="text/css">
 <%-- 引入javascript扩展 --%>
 <script src="<%=contextPath%>/jslib/syExtJavascript.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
+<script src="<%=contextPath%>/jslib/areaSelect/data.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
+<script src="<%=contextPath%>/jslib/areaSelect/areaselect.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
+
+

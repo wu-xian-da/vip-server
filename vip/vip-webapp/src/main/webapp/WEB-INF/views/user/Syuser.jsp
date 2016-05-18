@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.jianfei.core.common.security.shiro.HasAnyPermissionsTag"%>
+<%@ include file="/WEB-INF/include/taglib.jsp"%>
+<%
+	HasAnyPermissionsTag anyPermissionsTag = new HasAnyPermissionsTag();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,16 +69,15 @@
 		});
 	};
 	var grantOrganizationFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '修改机构',
-			url : sy.contextPath + '/securityJsp/base/SyuserOrganizationGrant.jsp?id=' + id,
-			buttons : [ {
-				text : '修改',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
-		});
+		   layer.open({
+			      type: 2,
+			      title: '授数据权限。',
+			      shadeClose: true,
+			      shade: false,
+			      maxmin: true, //开启最大化最小化按钮
+			      area: ['590px', '480px'],
+			      content: sy.contextPath + '/user/datePermission'
+			    });
 	};
 	$(function() {
 		grid = $('#grid').datagrid({
@@ -137,11 +141,22 @@
 				width : '90',
 				formatter : function(value, row) {
 					var str = '';
-					str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+					<%if (anyPermissionsTag.showTagBody("system:user:look")) {%>
+						str += sy.formatString('<img class="iconImg ext-icon-note" title="查看" onclick="showFun(\'{0}\');"/>', row.id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
+						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:user:auth")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-user" title="用户角色" onclick="grantRoleFun(\'{0}\');"/>', row.id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:user:dataPermission")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-group" title="用户机构" onclick="grantOrganizationFun(\'{0}\');"/>', row.id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
-					return str;
+					<%}%>
+						return str;
 				}
 			} ] ],
 			toolbar : '#toolbar',
@@ -187,10 +202,16 @@
 				<td>
 					<table>
 						<tr>
+						<shiro:hasPermission name="system:user:add">
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
+						</shiro:hasPermission>
+							<shiro:hasPermission name="system:user:import">
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_add',plain:true" onclick="">导入</a></td>
+							</shiro:hasPermission>
+								<shiro:hasPermission name="system:user:output">
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_go',plain:true" onclick="">导出</a></td>
+							</shiro:hasPermission>
 						</tr>
 					</table>
 				</td>

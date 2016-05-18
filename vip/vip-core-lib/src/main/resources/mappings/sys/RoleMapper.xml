@@ -8,16 +8,11 @@
 		<result property="description" column="description" />
 		<result column="create_time" property="createdatetime" />
 		<result column="update_time" property="updatedatetime" />
-		<collection property="resources" ofType="Resource">
-			<id property="id" column="resources.id" />
-			<result column="resources.name" property="name" />
-			<result column="resources.permission" property="permission" />
-		</collection>
 	</resultMap>
 
 	<select id="get" resultMap="roleResult" parameterType="java.util.Map">
 		<![CDATA[
-			SELECT role.*,sa.`id`,sa.`name`,sa.`permission`  FROM `sys_roles` role LEFT JOIN `sys_role_author` sra ON role.`id`=sra.`role_id` LEFT JOIN `sys_author` sa ON sa.`id`=sra.`author_id`
+			SELECT role.* FROM `sys_roles`  role
 		]]>
 		<where>
 			<if test="id!=null">

@@ -36,6 +36,12 @@
 				<property name="credentialsMatcher" ref="credentialsMatcher"></property>
 			</bean>
 		</property>
+		<property name="cacheManager" ref="cacheManagerShiro"></property>
+	</bean>
+
+	<!-- cacheManager -->
+	<bean name="cacheManagerShiro" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"></property>
 	</bean>
 	<!-- 凭证匹配器 -->
 	<bean id="credentialsMatcher"

@@ -31,6 +31,7 @@ import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.TreeGrid;
 import com.jianfei.core.common.utils.TreeNodeUtil;
 import com.jianfei.core.mapper.ResourceMapper;
@@ -61,12 +62,12 @@ public class SystemService {
 	private RoleMapper roleMapper;
 	@Autowired
 	private ResourceMapper resourceMapper;
+	
 
-	@SuppressWarnings("unchecked")
 	public List<Menu> getCurrentMenus() {
 		List<Resource> resources = resourceMapper
-				.findResourceByUserId(ShiroUtils.getShrioUser().getUser()
-						.getId());
+				.findResourceByUserId(StringUtils.toLong(ShiroUtils
+						.getPrincipal().getId()));
 		List<Menu> menus = Menu.getSecondMenu(resources);
 		return menus;
 	}
@@ -190,29 +191,21 @@ public class SystemService {
 		return userMapper;
 	}
 
-	public void setUserMapper(UserMapper userMapper) {
-		this.userMapper = userMapper;
-	}
-
+	
 	public RoleMapper getRoleMapper() {
 		return roleMapper;
 	}
 
-	public void setRoleMapper(RoleMapper roleMapper) {
-		this.roleMapper = roleMapper;
-	}
+
 
 	public ResourceMapper getResourceMapper() {
 		return resourceMapper;
 	}
 
-	public void setResourceMapper(ResourceMapper resourceMapper) {
-		this.resourceMapper = resourceMapper;
-	}
-
 
 	ObjectMapper mapper = new ObjectMapper();
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Grid bindUserGridData(PageInfo<User> pageInfo) {
 		List<User> list = pageInfo.getList();
 		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
