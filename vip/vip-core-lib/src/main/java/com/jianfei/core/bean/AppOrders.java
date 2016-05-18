@@ -26,8 +26,29 @@ public class AppOrders {
     private String remark2;
 
     private Integer dtflag;
+    
+    private String operation;
+    
 
-    public String getOrderId() {
+    /**
+	 * operation
+	 *
+	 * @return  the operation
+	 * @version   1.0.0
+	*/
+	
+	public String getOperation() {
+		return operation;
+	}
+
+	/**
+	 * @param operation the operation to set
+	 */
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+
+	public String getOrderId() {
         return orderId;
     }
 

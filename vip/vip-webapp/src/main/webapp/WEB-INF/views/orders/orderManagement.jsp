@@ -6,15 +6,15 @@
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 
 
-<link rel="stylesheet" href="css/theme/default/easyui.css">
-<link rel="stylesheet" href="css/theme/icon.css">
-<link rel="stylesheet" href="css/site.css">
-<script src="./js/jquery.min.js"></script>
-<script src="./js/jquery.easyui.min.js"></script>
-<script src="./js/plugins/datagrid-scrollview.js"></script>
+<link rel="stylesheet" href="public/css/theme/default/easyui.css">
+<link rel="stylesheet" href="public/css/theme/icon.css">
+<link rel="stylesheet" href="public/css/site.css">
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/jquery.easyui.min.js"></script>
+<script src="public/js/plugins/datagrid-scrollview.js"></script>
 </head>
 <body>
-	<table id="tt" title="" style="width:1000px;height:300px" 
+	<table id="tt" title="" style="width:890px;height:300px" 
     		data-options="singleSelect:true,collapsible:true,
                 			url:'orderList',
 			                method:'get',
@@ -23,14 +23,16 @@
 			                pagination="true">
         <thead>
             <tr>
-                <th data-options="align:'center', field:'itemid',width:100">订单编号</th>
-                <th data-options="align:'center', field:'datetime',width:100">日期</th>
+                <th data-options="align:'center', field:'orderId',width:100">订单编号</th>
+                <th data-options="align:'center', field:'orderTime',width:100">日期</th>
+                
                 <th data-options="align:'center', field:'listprice',width:100">场站</th>
                 <th data-options="align:'center', field:'unitcost',width:100">业务员</th>
                 <th data-options="align:'center', field:'userphone',width:100">用户手机</th>
-                <th data-options="align:'center', field:'status',width:50">发票</th>
-                <th data-options="align:'center', field:'active',width:50">状态</th>
-                <th data-options="align:'center', field:'operation',width:200">操作</th>
+                
+                <th data-options="align:'center', field:'invoiceFlag',width:50">发票</th>
+                <th data-options="align:'center', field:'orderState',width:50">状态</th>
+                <th data-options="align:'center', field:'operation',width:280">操作</th>
             </tr>
         </thead>
 
@@ -68,7 +70,7 @@
 
                 <div class="easyui-window-footer">
                     <button>退款</button>
-                    <button>取消</button>
+                    <button id="cancleButton">取消</button>
                 </div>
             </div>
         </div>            
@@ -82,7 +84,9 @@
             $('#tt').datagrid();
         });
 
-
+		$("#cancleButton").click(function(){
+			$("#w").window('close')
+		})
 
         function onRefund( args ){
         	$("#w").window('open')
