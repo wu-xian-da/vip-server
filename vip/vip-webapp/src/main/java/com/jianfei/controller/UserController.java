@@ -18,12 +18,14 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.User;
@@ -161,8 +163,9 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value = "/datapermission/save")
 	@ResponseBody
-	public MessageDto saveDataPermission() {
-
+	public MessageDto saveDataPermission(Map<String, Object> map) {
+		System.out.println(JSONObject.toJSONString(map));
+		System.out.println("refineli....");
 		return buildDtoMsg(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 
 	}
@@ -175,7 +178,6 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/datapermission/update")
 	@ResponseBody
 	public MessageDto saveDataPermissionu() {
-
 		return buildDtoMsg(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 
 	}

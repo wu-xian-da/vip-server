@@ -7,16 +7,12 @@
  */
 package com.jianfei.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.SecurityUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.utils.GloabConfig;

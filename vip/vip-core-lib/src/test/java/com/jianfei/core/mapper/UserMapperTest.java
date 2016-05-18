@@ -48,59 +48,9 @@ public class UserMapperTest {
 	 */
 	@Test
 	public void testSaveT() {
-		fail("Not yet implemented");
+		System.out.println("dsfdfd");
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.mapper.BaseMapper#save(java.util.List)}.
-	 */
-	@Test
-	public void testSaveListOfT() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.mapper.BaseMapper#saveMaps(java.util.List)}.
-	 */
-	@Test
-	public void testSaveMaps() {
-		userMapper.getUserByName("refineli");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.mapper.BaseMapper#update(java.lang.Object)}.
-	 */
-	@Test
-	public void testUpdate() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.mapper.BaseMapper#delete(java.lang.Object)}.
-	 */
-	@Test
-	public void testDelete() {
-		SimpleHash simpleHash = new SimpleHash("md5","123456",
-				"refineli",1);
-		System.out.println(simpleHash.toString());
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.mapper.BaseMapper#get(java.util.Map)}.
-	 */
-	@Test
-	public void testGet() {
-		PageHelper.startPage(1, 5);
-		Map<String, Object> map = new HashMap<String, Object>();
-		List<User> list = userMapper.get(map);
-		for (User user : list) {
-			System.out.println(user.getName());
-		}
-	}
+	
 
 }
