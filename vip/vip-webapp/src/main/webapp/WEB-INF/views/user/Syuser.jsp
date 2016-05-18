@@ -75,7 +75,7 @@
 			      shadeClose: true,
 			      shade: false,
 			      maxmin: true, //开启最大化最小化按钮
-			      area: ['590px', '480px'],
+			      area: ['590px', '460px'],
 			      content: sy.contextPath + '/user/datePermission'
 			    });
 	};
