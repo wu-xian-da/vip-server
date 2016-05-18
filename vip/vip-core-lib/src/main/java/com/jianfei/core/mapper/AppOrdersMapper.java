@@ -1,7 +1,9 @@
 package com.jianfei.core.mapper;
 
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.common.persistence.MyBatisDao;
 
+@MyBatisDao
 public interface AppOrdersMapper extends BaseMapper<AppOrders>{
     int deleteByPrimaryKey(String orderId);
 

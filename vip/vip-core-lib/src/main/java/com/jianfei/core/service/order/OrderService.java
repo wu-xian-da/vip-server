@@ -9,6 +9,8 @@ package com.jianfei.core.service.order;
 
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
@@ -24,6 +26,7 @@ import com.sun.tools.javac.util.List;
  * @version 1.0.0
  *
  */
+@Service
 public class OrderService {
 	@Autowired
 	private AppOrdersMapper appOrdersMapper;
