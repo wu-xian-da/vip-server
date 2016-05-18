@@ -14,12 +14,13 @@
 <script src="./js/plugins/datagrid-scrollview.js"></script>
 </head>
 <body>
-	<table id="tt" title="" style="width:800px;height:300px" 
+	<table id="tt" title="" style="width:1000px;height:300px" 
     		data-options="singleSelect:true,collapsible:true,
                 			url:'orderList',
 			                method:'get',
 			                remoteSort:false,
-			                multiSort:true">
+			                multiSort:true"
+			                pagination="true">
         <thead>
             <tr>
                 <th data-options="align:'center', field:'itemid',width:100">订单编号</th>

@@ -89,7 +89,7 @@
 			sortName : 'createdatetime',
 			sortOrder : 'desc',
 			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+			pageList : [5, 10, 20, 30, 40, 50],
 			frozenColumns : [ [ {
 				width : '80',
 				title : '序号',
