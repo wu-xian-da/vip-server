@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.User;
@@ -36,7 +35,7 @@ import com.jianfei.core.service.sys.SystemService;
 
 /**
  *
- * @Description: TODO
+ * @Description: 用户管理
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年5月13日 上午2:02:32
  * 
@@ -56,6 +55,15 @@ public class UserController extends BaseController {
 		return "user/Syuser";
 	}
 
+	/**
+	 * list(展示用户列表的数据)
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return Grid
+	 * @version 1.0.0
+	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
@@ -74,6 +82,14 @@ public class UserController extends BaseController {
 		return systemService.bindUserGridData(pageInfo);
 	}
 
+	/**
+	 * from(用户添加、更新视图)
+	 * 
+	 * @param user
+	 * @param model
+	 * @return String
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "form")
 	public String from(User user, Model model) {
 		if (0 != user.getId()) {
@@ -87,53 +103,92 @@ public class UserController extends BaseController {
 		return "user/SyuserForm";
 	}
 
+	/**
+	 * save(保存用户信息)
+	 * 
+	 * @param user
+	 * @return MessageDto<User>
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	@ResponseBody
-	public MessageDto save(User user) {
+	public MessageDto<User> save(User user) {
 		SimpleHash simpleHash = new SimpleHash("md5",
 				GloabConfig.getConfig("defalut.passwd"), user.getSalt());
+		MessageDto<User> dto = new MessageDto<User>();
 		user.setPassword(simpleHash.toString());
 		if (!StringUtils.isEmpty(user.getLoginName())) {
 			User u = systemService.getUserMapper().getUserByName(
 					StringUtils.trim(user.getLoginName()));
 			if (null != u)
-				return new MessageDto().setMsgBody("用户名已经存在,请更换用户名...");
+				return dto.setMsgBody("用户名已经存在,请更换用户名...");
 		}
 		systemService.getUserMapper().save(user);
-		return buildDtoMsg(true).setMsgBody("success...");
+		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
+	/**
+	 * update(更新用户信息)
+	 * 
+	 * @param user
+	 * @return MessageDto<User>
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
-	public MessageDto update(User user) {
+	public MessageDto<User> update(User user) {
 		user.setLoginName(StringUtils.trim(user.getLoginName()));
-
+		MessageDto<User> dto = new MessageDto<User>();
 		if (!StringUtils.isEmpty(user.getLoginName())) {
 			User u = systemService.getUserMapper().getUserByName(
 					StringUtils.trim(user.getLoginName()));
 			if (null != u && user.getId() != u.getId())
-				return new MessageDto().setMsgBody("用户名已经存在,请更换用户名...");
+				return dto.setMsgBody("用户名已经存在,请更换用户名...");
 		}
 		systemService.getUserMapper().update(user);
-		return buildDtoMsg(true).setMsgBody("更新成功...");
+		return dto.setOk(true).setMsgBody("更新成功...");
 	}
 
+	/**
+	 * delete(删除用户信息)
+	 * 
+	 * @param user
+	 * @return MessageDto<User>
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "delete")
 	@ResponseBody
-	public MessageDto delete(User user) {
+	public MessageDto<User> delete(User user) {
 		systemService.getUserMapper().delete(user.getId());
-		return buildDtoMsg(true);
+		return new MessageDto<User>().setOk(true).setMsgBody(
+				MessageDto.MsgFlag.SUCCESS);
 	}
 
+	/**
+	 * grantRole(授权)
+	 * 
+	 * @param user
+	 * @param model
+	 * @return String
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "grant")
 	public String grantRole(User user, Model model) {
 		model.addAttribute("user", user);
 		return "user/userRoleGrant";
 	}
 
+	/**
+	 * grantRoles(获取用权限)
+	 * 
+	 * @param id
+	 * @param ids
+	 * @return MessageDto<User>
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "grantRole")
 	@ResponseBody
-	public MessageDto grantRoles(Long id, String ids) {
+	public MessageDto<User> grantRoles(Long id, String ids) {
 		return systemService.batchUpdateUserRoles(id, ids);
 	}
 
@@ -161,24 +216,18 @@ public class UserController extends BaseController {
 		return sort;
 	}
 
-	@RequestMapping(value = "/datapermission/save")
-	@ResponseBody
-	public MessageDto saveDataPermission(Map<String, Object> map) {
-		System.out.println(JSONObject.toJSONString(map));
-		System.out.println("refineli....");
-		return buildDtoMsg(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
-
-	}
-
+	/**
+	 * datePermission(为用户授权数据权限视图)
+	 * 
+	 * @param id
+	 * @param model
+	 * @return String
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "/datePermission")
-	public String datePermission() {
+	public String datePermission(Long id, Model model) {
+		model.addAttribute("id", id);
 		return "user/permission";
 	}
 
-	@RequestMapping(value = "/datapermission/update")
-	@ResponseBody
-	public MessageDto saveDataPermissionu() {
-		return buildDtoMsg(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
-
-	}
 }

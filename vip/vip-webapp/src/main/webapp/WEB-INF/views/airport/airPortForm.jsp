@@ -1,14 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/include/taglib.jsp"%>
-<%
-	String contextPath = request.getContextPath();
-%>
-<%
-	String id = request.getParameter("id");
-	if (id == null) {
-		id = "";
-	}
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +8,7 @@
 <script type="text/javascript">
 	var submitForm = function($dialog, $grid, $pjq) {
 		if ($('form').form('validate')) {
+			
 			var url;
 			if ($(':input[name="id"]').val()!='') {
 				url = sy.contextPath + '/airport/update';
@@ -33,8 +25,6 @@
 			}, 'json');
 		}
 	};
-	$(function() {
-	});
 </script>
 </head>
 <body>
@@ -53,40 +43,39 @@
 					
 						<div class="demo-wrap">
 							<div><input id="pr2" type="text" name="province" placeholder="省份" value="${ariPort.province }"  /></div>
-							<div><input id="ci2" type="text" name="city" placeholder="城市"  <c:if test="${empty ariPort.city   }"> style="display: none"</c:if>  value="${ariPort.city }"/></div>
-							<div><input id="co2" type="text" name="country" placeholder="县级" <c:if test="${empty ariPort.country   }"> style="display: none"</c:if> value="${ariPort.country }" /></div>
+							<div><input id="ci2" type="text" name="city" placeholder="城市"   value="${ariPort.city }"/></div>
+							<div><input id="co2" type="text" name="country" placeholder="县级" value="${ariPort.country }" /></div>
 						</div>
 					</td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>场站负责人:</th>
-					<td><input name="headerName" class="easyui-validatebox" data-options="required:true" ${ariPort.headerName } /></td>
+					<td><input name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.headerName }" /></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>负责人联系方式:</th>
-					<td><input name="headerPhone" class="easyui-validatebox" data-options="required:true" ${ariPort.headerPhone } /></td>
+					<td><input name="headerPhone" class="easyui-validatebox" data-options="required:true" value="${ariPort.headerPhone }" /></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>业务员数量:</th>
 					<td>
-					<input class="easyui-numberspinner" name="agentNum"  value="6" data-options="increment:1" style="width:120px;" ${ariPort. agentNum}></input>
+					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agentNum } data-options="increment:1" style="width:120px;" ></input>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>场站状态:</th>
-					<c:if test="${ariPort.state==0 }">
-						<td><input type="radio" value="0" name="state"  checked>运营<input type="radio" value="1" name="state" >冻结</td>
-					</c:if>
-					<c:if test="${empty ariPort or ariPort.state==1 }">
-						<td><input type="radio" value="0" name="state"  checked>运营<input type="radio" value="1" name="state" >冻结</td>
-					</c:if>
+					<c:choose>
+						<c:when test="${!empty ariPort and ariPort.state==1}">
+							<td><input type="radio" value="1" name="state"  checked>运营<input type="radio" value="0" name="state" >冻结</td>
+						</c:when>
+						<c:otherwise>
+							<td><input type="radio" value="1" name="state"  >运营<input type="radio" value="0" name="state" checked >冻结</td>
+						</c:otherwise>
+					</c:choose>
 				</tr>
 			</table>
 		</fieldset>
 	</form>
 	 <script type="text/javascript">
-            new locationCard({
-                ids: ['pr1', 'ci1', 'co1']
-            }).init();
             new locationCard({
                 ids: ['pr2', 'ci2', 'co2']
             }).init();

@@ -7,8 +7,6 @@
  */
 package com.jianfei.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +23,11 @@ import com.alibaba.druid.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.service.sys.AriPortService;
+import com.jianfei.core.service.base.AriPortService;
 
 /**
  *
@@ -42,8 +41,9 @@ import com.jianfei.core.service.sys.AriPortService;
 @Controller
 @RequestMapping(value = "airport")
 public class AriPortController extends BaseController {
+
 	@Autowired
-	private AriPortService ariPortService;
+	private AriPortService<AriPort> ariPortService;
 
 	@RequestMapping(value = { "", "/home" })
 	public String home() {
@@ -58,54 +58,69 @@ public class AriPortController extends BaseController {
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			@RequestParam(value = "name", required = false) String name) {
 		PageHelper.startPage(page, rows);
-		List<AriPort> ariPorts = ariPortService.getAriPortMapper().get(
-				new MapUtils.Builder().setKeyValue("name", name).build());
-
-		PageInfo<AriPort> pageInfo = new PageInfo<AriPort>(ariPorts);
-
+		MessageDto<List<AriPort>> messageDto = ariPortService
+				.get(new MapUtils.Builder().setKeyValue("name", name).build());
+		PageInfo<AriPort> pageInfo = new PageInfo<AriPort>();
+		if (messageDto.isOk()) {
+			pageInfo.setList(messageDto.getData());
+		}
 		return bindDataGrid(pageInfo);
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "save")
 	@ResponseBody
-	public MessageDto save(AriPort ariPort) {
-		System.out.println(ariPort.getId().length());
-		List<AriPort> list = ariPortService.getAriPortMapper().get(
-				new MapUtils.Builder().setKeyValue("name", ariPort.getName())
-						.build());
-		if (!CollectionUtils.isEmpty(list)) {
-			return new MessageDto().setMsgBody("场站已经存在...");
+	public MessageDto<AriPort> save(AriPort ariPort) {
+		MessageDto<List<AriPort>> messageDto = ariPortService
+				.get(new MapUtils.Builder().setKeyValue("name",
+						ariPort.getName()).build());
+		if (messageDto.isOk() && !CollectionUtils.isEmpty(messageDto.getData())) {
+			return new MessageDto<AriPort>().setMsgBody("场站已经存在...");
 		}
-		ariPortService.getAriPortMapper().save(ariPort);
-		return buildDtoMsg(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+		return ariPortService.save(ariPort);
+	}
+
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	@ResponseBody
+	public MessageDto<AriPort> update(AriPort ariPort) {
+		MessageDto<AriPort> messageDto = ariPortService.update(ariPort);
+		return messageDto;
+	}
+
+	@RequestMapping(value = "delete", method = RequestMethod.POST)
+	@ResponseBody
+	public MessageDto<AriPort> delete(AriPort ariPort) {
+		ariPort.setState(GloabConfig.FORBIT);
+		MessageDto<AriPort> messageDto = ariPortService.update(ariPort);
+		return messageDto;
 	}
 
 	@RequestMapping(value = "form")
 	public String form(String id, Model model) {
 		if (!StringUtils.isEmpty(id)) {
-			List<AriPort> ariPorts = ariPortService.getAriPortMapper().get(
-					new MapUtils.Builder().setKeyValue("id", id).build());
-			if (!CollectionUtils.isEmpty(ariPorts)) {
-				model.addAttribute("ariPort", ariPorts.get(0));
+			MessageDto<List<AriPort>> messageDto = ariPortService
+					.get(new MapUtils.Builder().setKeyValue("id", id).build());
+			if (messageDto.isOk()
+					&& !CollectionUtils.isEmpty(messageDto.getData())) {
+				model.addAttribute("ariPort", messageDto.getData().get(0));
 			}
 		}
 		return "airport/airPortForm";
 	}
 
-
 	@RequestMapping(value = "/datePermission/data", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Map<String, Object>> datePermissionData() {
-		List<AriPort> ariPorts = ariPortService.getAriPortMapper().get(
-				new MapUtils.Builder().build());
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for (AriPort ariPort : ariPorts) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", ariPort.getId());
-			map.put("name", ariPort.getName());
-			map.put("checked", false);
-			list.add(map);
-		}
-		return list;
+	public List<Map<String, Object>> datePermissionData(Long id) {
+
+		return ariPortService.datePermissionData(id);
 	}
+
+	@RequestMapping(value = "/datapermission/update")
+	@ResponseBody
+	public MessageDto<String> saveDataPermissionu(String formJson, Long userId) {
+		return ariPortService.batchInsertUserAriport(formJson, userId,
+				GloabConfig.FORBIT, GloabConfig.SYSTEM_USER);
+
+	}
+
 }

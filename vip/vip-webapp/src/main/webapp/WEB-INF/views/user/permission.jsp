@@ -46,7 +46,7 @@ $(function(){
 
 		methods:{
 			onRefund:function(){
-				$.post(sy.contextPath + '/user/datapermission/update',JSON.stringify(App.$data),function(_d){
+				$.post(sy.contextPath + '/airport/datapermission/update',{"formJson":JSON.stringify(App.$data),"userId":${id }},function(_d){
 					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 					parent.layer.close(index); //再执行关闭   
 			    })
@@ -62,7 +62,7 @@ $(function(){
 	})
 
 
-	$.get(sy.contextPath +'/airport/datePermission/data',function(data){
+	$.get(sy.contextPath +'/airport/datePermission/data?id=${id}',function(data){
 			App.air_port_data = data;
 	})
 

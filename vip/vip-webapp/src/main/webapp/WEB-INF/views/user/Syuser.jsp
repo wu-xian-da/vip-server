@@ -76,7 +76,7 @@
 			      shade: false,
 			      maxmin: true, //开启最大化最小化按钮
 			      area: ['590px', '460px'],
-			      content: sy.contextPath + '/user/datePermission'
+			      content: sy.contextPath + '/user/datePermission?id='+id
 			    });
 	};
 	$(function() {
