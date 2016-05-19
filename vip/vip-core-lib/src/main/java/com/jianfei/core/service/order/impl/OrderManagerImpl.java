@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.dto.OrderAddInfoDto;
+import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.order.OrderManager;
 
@@ -20,6 +22,7 @@ import com.jianfei.core.service.order.OrderManager;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/18 16:31
  */
+@Service
 public class OrderManagerImpl implements OrderManager {
 
     @Autowired
@@ -53,11 +56,11 @@ public class OrderManagerImpl implements OrderManager {
      * @version 1.0.0
      */
 
-    public PageInfo<AppOrders> simplePage(int pageNo, int pageSize,
+    public PageInfo<OrderShowInfoDto> simplePage(int pageNo, int pageSize,
                                           Map<String, Object> params) {
         PageHelper.startPage(pageNo, pageSize);
-        List<AppOrders> list = (List<AppOrders>) appOrdersMapper.get(params);
-        PageInfo<AppOrders> pageInfo = new PageInfo(list);
+        List<OrderShowInfoDto> list = appOrdersMapper.get(params);
+        PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
         return pageInfo;
     }
 }

@@ -25,6 +25,13 @@ public interface VipUserManager {
     boolean updateUser(AppCustomer vipUser);
 
     /**
+     * 根据手机号获取用户信息
+     * @param phone 手机号
+     * @return
+     */
+    AppCustomer getUser(String phone);
+
+    /**
      * 更改用户状态
      * @param sate
      */

@@ -1,5 +1,7 @@
 package com.jianfei.core.service.user;
 
+import com.jianfei.core.bean.User;
+
 /**
  * 销售用户管理
  *
@@ -17,6 +19,13 @@ public interface SalerUserManager {
      * @return
      */
     boolean validatePassword(String userNo,String password);
+
+    /**
+     * 根据用户工号获取用户信息
+     * @param userNo
+     * @return
+     */
+    User getSalerUser(String userNo);
 
     /**
      * 更新用户密码
