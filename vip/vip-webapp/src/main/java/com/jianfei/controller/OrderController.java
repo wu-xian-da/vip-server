@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.order.OrderService;
 
 /**
@@ -44,12 +45,12 @@ public class OrderController {
 	@ResponseBody
 	public Map<Object,Object> list(){
 		Map paramsMap = new HashMap();
-		PageInfo<AppOrders> pageinfo = orderService.simplePage(1, 10, paramsMap);
+		PageInfo<OrderShowInfoDto> pageinfo = orderService.getOrderPage(1, 10, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
-		List<AppOrders> list = pageinfo.getList();
-		for(AppOrders appOrder : list){
+		List<OrderShowInfoDto> list = pageinfo.getList();
+		for(OrderShowInfoDto appOrder : list){
 			if(appOrder.getOrderState() ==0){//未支付
-				appOrder.setOperation("<button class='btn'>查看</button>");
+				appOrder.setOperation("<button class='btn' onclick='showOrderDetailInfo()'>查看</button>");
 			}else if(appOrder.getOrderState() == 1){//已支付
 				appOrder.setOperation("<button class='btn'>查看</button><button class='btn btn-back'>退单申请</button>");
 			}else if(appOrder.getOrderState() == 2){

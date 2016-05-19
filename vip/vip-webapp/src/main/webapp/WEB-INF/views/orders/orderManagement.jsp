@@ -5,16 +5,17 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 
-
 <link rel="stylesheet" href="public/css/theme/default/easyui.css">
 <link rel="stylesheet" href="public/css/theme/icon.css">
 <link rel="stylesheet" href="public/css/site.css">
+
 <script src="public/js/jquery.min.js"></script>
 <script src="public/js/jquery.easyui.min.js"></script>
 <script src="public/js/plugins/datagrid-scrollview.js"></script>
+
 </head>
 <body>
-	<table id="tt" title="" style="width:890px;height:300px" 
+	<table id="tt" title="" style="width:970px;height:300px" 
     		data-options="singleSelect:true,collapsible:true,
                 			url:'orderList',
 			                method:'get',
@@ -26,13 +27,15 @@
                 <th data-options="align:'center', field:'orderId',width:100">订单编号</th>
                 <th data-options="align:'center', field:'orderTime',width:100">日期</th>
                 
-                <th data-options="align:'center', field:'listprice',width:100">场站</th>
-                <th data-options="align:'center', field:'unitcost',width:100">业务员</th>
-                <th data-options="align:'center', field:'userphone',width:100">用户手机</th>
+                <th data-options="align:'center', field:'airportName',width:150">场站</th>
+                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
+                
+                <th data-options="align:'center', field:'customerName',width:100">用户名称</th>
+                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
                 
                 <th data-options="align:'center', field:'invoiceFlag',width:50">发票</th>
                 <th data-options="align:'center', field:'orderState',width:50">状态</th>
-                <th data-options="align:'center', field:'operation',width:280">操作</th>
+                <th data-options="align:'center', field:'operation',width:210">操作</th>
             </tr>
         </thead>
 
@@ -92,6 +95,10 @@
         	$("#w").window('open')
         }
         
+		//点击显示详细详细信息
+		function showOrderDetailInfo(){
+			window.alert($(this).attr("orderId"));
+		}
 
         $(".radio-tab-head label").on({
             "click":function(){

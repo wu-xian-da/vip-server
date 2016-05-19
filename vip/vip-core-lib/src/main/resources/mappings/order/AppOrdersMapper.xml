@@ -17,9 +17,29 @@
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
   </resultMap>
   
+  <!--订单列表展示返回类型 -->
+  <resultMap id="OrderShowInfoDto" type="com.jianfei.core.dto.OrderShowInfoDto">
+  	<id column="order_id" property="orderId" jdbcType="VARCHAR"/>
+  	<result column="order_time" property="orderTime" jdbcType="TIMESTAMP"/>
+  	<result column="airport_name" property="airportName" jdbcType="VARCHAR"/>
+  	<result column="name" property="agentName" jdbcType="VARCHAR"/>
+  	<result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+  	<result column="phone" property="customerPhone" jdbcType="VARCHAR"/>
+  	<result column="order_state" property="orderState" jdbcType="INTEGER"/>
+  	<result column="invoice_flag" property="invoiceFlag" jdbcType="INTEGER"/>
+  </resultMap>
+  
   <!-- 分页查询 -->
   <select id="get" resultMap="BaseResultMap" parameterType="java.util.Map" >
     select * from app_orders
+  </select>
+  
+  <!--订单列表信息展示  -->
+  <select id="getOrderListByPageNo" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
+  	select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,     ap.airport_name,agent.name,
+  	 customer.customer_name,customer.phone 
+  	 from app_orders ord,sys_airport ap,sys_users agent,app_customer customer
+  	 where ord.id=agent.id and ord.customer_id = customer.customer_id and ord.airport_id = ap.airport_id
   </select>
   
   

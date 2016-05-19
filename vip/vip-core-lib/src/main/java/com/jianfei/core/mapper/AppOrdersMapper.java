@@ -1,10 +1,19 @@
 package com.jianfei.core.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import com.jianfei.core.dto.OrderShowInfoDto;
 
 @MyBatisDao
-public interface AppOrdersMapper extends BaseMapper<AppOrders>{
+public interface AppOrdersMapper{
+	//分页查询
+	List<AppOrders> get(Map<String, Object> params);
+	
+	//返回字段多的分页
+	List<OrderShowInfoDto> getOrderListByPageNo(Map<String, Object> params);
 	
 	
     int deleteByPrimaryKey(String orderId);
