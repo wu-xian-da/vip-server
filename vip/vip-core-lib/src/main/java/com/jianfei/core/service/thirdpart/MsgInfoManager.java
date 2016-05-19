@@ -35,4 +35,10 @@ public interface MsgInfoManager {
      */
     boolean sendMsgInfo(String phone,String content);
 
+    /**
+     * 发送并获得短信验证码
+     * @param phone
+     */
+    String sendAndGetValidateCode(String phone, MsgType msgType);
+
 }
