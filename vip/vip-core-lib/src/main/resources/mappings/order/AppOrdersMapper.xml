@@ -24,19 +24,66 @@
   	<result column="airport_name" property="airportName" jdbcType="VARCHAR"/>
   	<result column="name" property="agentName" jdbcType="VARCHAR"/>
   	<result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
-  	<result column="phone" property="customerPhone" jdbcType="VARCHAR"/>
+  	<result column="customer_phone" property="customerPhone" jdbcType="VARCHAR"/>
   	<result column="order_state" property="orderState" jdbcType="INTEGER"/>
   	<result column="invoice_flag" property="invoiceFlag" jdbcType="INTEGER"/>
   </resultMap>
   
+  <!--订单详细信息展示返回类型 -->
+  <resultMap id="orderDetailInfo" type="com.jianfei.core.dto.OrderDetailInfo">
+  	<!--1、订单表  -->
+  	<id column="order_id" property="orderId" jdbcType="VARCHAR"/>
+  	<result column="order_time" property="orderTime" jdbcType="TIMESTAMP"/>
+  	<result column="order_state" property="orderState" jdbcType="INTEGER"/>
+  	<result column="pay_type" property="payMethod"/>
+  	<result column="pay_time" property="payTime"/>
+  	<result column="activat_time" property="activatTime"/>
+  	<!--2、 机场表 -->
+  	<result column="airport_name" property="airportName" jdbcType="VARCHAR"/>
+  	<!--3、业务人员表 -->
+  	<result column="name" property="agentName" jdbcType="VARCHAR"/>
+  	<result column="phone" property="agentPhone"/>
+  	<!-- 4、卡表 -->
+  	<result column="card_id" property="vipCardNo"/>
+  	<result column="card_type" property="cardType"/>
+  	<result column="init_money" property="initMoney"/>
+  	<!--5、用户表 -->
+  	<result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+  	<result column="phone" property="customerPhone" jdbcType="VARCHAR"/>
+  	<result column="customer_identi" property="customerIdent"/>
+  	<result column="sex" property="sex"/>
+  	<result column="address" property="address"/>
+  	<!--6、发票表 -->
+  	<result column="address" property="emailAddress"/>
+  	<result column="invoice_type" property="invoiceType"/>
+  	<result column="invoice_title" property="invoiceTitle"/>
+  </resultMap>
   
+  <!--查询订单详细信息 -->
+  <!--  
+  <select id="selOrderDetailInfo" resultMap="orderDetailInfo" parameterType="java.lang.String">
+	select ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,
+  		       ap.airport_name,
+  		       agent.name,agent.phone,
+  		       card.card_no,card.card_type,card.init_money,
+  		       customer.customer_name,customer.customer_phone,customer.customer_identi,customer.sex,customer.address,
+  		       invo.address,invo.invoice_type,invo.invoice_title
+  		          from app_orders ord,sys_airport ap,sys_users agent,app_customer customer,app_order_card,app_vipcard card,app_invoice invo
+  		              where ord.airport_id = ap.airport_id   and ord.id = agent.id and ord.order_id = app_order_card.order_id
+  		              and app_order_card.card_id = card.card_no  and ord.customer_id = customer.customer_id and ord.order_id = invo.order_id 
+  		              and ord.order_id = #{dd1001}
+  		       
+ </select>
+  -->
   <!--订单列表信息展示  -->
   <select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
   	select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,     ap.airport_name,agent.name,
-  	 customer.customer_name,customer.phone 
+  	 customer.customer_name,customer.customer_phone 
   	 from app_orders ord,sys_airport ap,sys_users agent,app_customer customer
   	 where ord.id=agent.id and ord.customer_id = customer.customer_id and ord.airport_id = ap.airport_id
   </select>
+  
+  
   
   
   <sql id="Base_Column_List" >
