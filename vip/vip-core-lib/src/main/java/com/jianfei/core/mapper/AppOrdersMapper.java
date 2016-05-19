@@ -10,13 +10,9 @@ import com.jianfei.core.dto.OrderShowInfoDto;
 @MyBatisDao
 public interface AppOrdersMapper{
 	//分页查询
-	List<AppOrders> get(Map<String, Object> params);
+	List<OrderShowInfoDto> get(Map<String, Object> params);
 	
-	//返回字段多的分页
-	List<OrderShowInfoDto> getOrderListByPageNo(Map<String, Object> params);
-	
-	
-    int deleteByPrimaryKey(String orderId);
+	int deleteByPrimaryKey(String orderId);
 
     int insert(AppOrders record);
 

@@ -1,5 +1,6 @@
 package com.jianfei.core.service.user.impl;
 
+import com.jianfei.core.bean.User;
 import com.jianfei.core.service.user.SalerUserManager;
 
 /**
@@ -21,6 +22,17 @@ public class SalerUserManagerImpl implements SalerUserManager {
     @Override
     public boolean validatePassword(String userNo, String password) {
         return false;
+    }
+
+    /**
+     * 根据用户工号获取用户信息
+     *
+     * @param userNo
+     * @return
+     */
+    @Override
+    public User getSalerUser(String userNo) {
+        return null;
     }
 
     /**

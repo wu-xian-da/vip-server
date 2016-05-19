@@ -58,4 +58,15 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
     public boolean sendMsgInfo(String phone, String content) {
         return false;
     }
+
+    /**
+     * 发送并获得短信验证码
+     *
+     * @param phone
+     * @param msgType
+     */
+    @Override
+    public String sendAndGetValidateCode(String phone, MsgType msgType) {
+        return null;
+    }
 }

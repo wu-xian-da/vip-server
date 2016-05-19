@@ -28,7 +28,7 @@
 	var grid;
 	var addFuns = function() {
 		var dialog = parent.sy.modalDialog({
-			title : '添加角色信息',
+			title : '添加场站信息',
 			url : sy.contextPath + '/airport/form',
 			buttons : [ {
 				text : '添加',
@@ -46,8 +46,8 @@
 	};
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
-			title : '编辑角色信息',
-			url : sy.contextPath + '/ariport/form?id=' + id,
+			title : '编辑场站信息',
+			url : sy.contextPath + '/airport/form?id=' + id,
 			buttons : [ {
 				text : '编辑',
 				handler : function() {
@@ -57,9 +57,9 @@
 		});
 	};
 	var removeFun = function(id) {
-		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
+		parent.$.messager.confirm('询问', '您确定要禁用此记录？', function(r) {
 			if (r) {
-				$.post(sy.contextPath + '/base/syrole!delete.sy', {
+				$.post(sy.contextPath + '/airport/delete', {
 					id : id
 				}, function() {
 					grid.datagrid('reload');
@@ -102,9 +102,9 @@
 			},{
 				width : '100',
 				title : '开卡总量',
-				field : 'num',
+				field : 'appOrders',
 				formatter : function(value, row) {
-					return '100';
+					return value.length;
 				}
 			},{
 				width : '60',

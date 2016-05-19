@@ -18,9 +18,9 @@ import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.TreeGrid;
 import com.jianfei.core.service.sys.SystemService;
-
 
 /**
  *
@@ -99,21 +99,27 @@ public class ResourceController extends BaseController {
 	 */
 	@RequestMapping(value = "save")
 	@ResponseBody
-	public MessageDto save(Resource resource) {
+	public MessageDto<String> save(Resource resource) {
+		MessageDto<String> dto = new MessageDto<String>();
 		List<Resource> list = systemService.getResourceMapper().get(
 				MapUtils.<Resource> entityInitMap(resource));
 		if (!CollectionUtils.isEmpty(list)) {
-			return buildDtoMsg(false).setMsgBody("资源名称已经存在...");
+			return dto.setMsgBody("资源名称已经存在...");
 		}
 		systemService.getResourceMapper().save(resource);
-		return buildDtoMsg(true);
+		return dto.setOk(true).setData(MsgFlag.SUCCESS);
 	}
 
 	@RequestMapping(value = "update")
 	@ResponseBody
-	public MessageDto update(Resource resource) {
-		systemService.getResourceMapper().update(resource);
-		return buildDtoMsg(true);
+	public MessageDto<String> update(Resource resource) {
+		MessageDto<String> dto = new MessageDto<String>();
+		try {
+			systemService.getResourceMapper().update(resource);
+		} catch (Exception e) {
+			dto.setMsgBody(MessageDto.MsgFlag.ERROR);
+		}
+		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
 	/**
@@ -125,9 +131,15 @@ public class ResourceController extends BaseController {
 	 */
 	@RequestMapping(value = "/delete/{id}")
 	@ResponseBody
-	public MessageDto delete(@PathVariable("id") Long id) {
-		systemService.getResourceMapper().delete(id);
-		return buildDtoMsg(true).setMsgBody("ok");
+	public MessageDto<String> delete(@PathVariable("id") Long id) {
+		MessageDto<String> dto = new MessageDto<String>();
+		try {
+			systemService.getResourceMapper().delete(id);
+		} catch (Exception e) {
+			dto.setMsgBody(MessageDto.MsgFlag.ERROR);
+		}
+
+		return dto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
 	}
 
 	@RequestMapping(value = "roleResources")

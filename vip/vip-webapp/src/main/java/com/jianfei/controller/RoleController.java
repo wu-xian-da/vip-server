@@ -79,15 +79,16 @@ public class RoleController extends BaseController {
 
 	@RequestMapping(value = "save")
 	@ResponseBody
-	public MessageDto save(Role role) {
+	public MessageDto<String> save(Role role) {
 		List<Role> list = systemService.getRoleMapper().get(
 				new MapUtils.Builder().setKeyValue("name", role.getName())
 						.build());
+		MessageDto<String> dto = new MessageDto<String>();
 		if (CollectionUtils.isEmpty(list)) {
-			return new MessageDto().setMsgBody("同名的角色已经存在，请更换名字...");
+			return dto.setMsgBody("同名的角色已经存在，请更换名字...");
 		}
 		systemService.getRoleMapper().save(role);
-		return buildDtoMsg(true);
+		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
 	@RequestMapping(value = "grantForm")
@@ -98,7 +99,7 @@ public class RoleController extends BaseController {
 
 	@RequestMapping(value = "grant", method = RequestMethod.POST)
 	@ResponseBody
-	public MessageDto grant(@RequestParam(value = "id") Long id,
+	public MessageDto<String> grant(@RequestParam(value = "id") Long id,
 			@RequestParam(value = "ids") String ids) {
 		return systemService.updateRoleResource(id, ids);
 	}

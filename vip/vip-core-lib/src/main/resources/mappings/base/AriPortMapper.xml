@@ -5,38 +5,50 @@
 	<resultMap id="airportRs" type="AriPort">
 		<id property="id" column="airport_id" />
 		<result property="name" column="airport_name" />
-		<result property="state" column="agent_num" />
-		<result column="agentNum" property="createdatetime" />
+		<result property="state" column="state" />
+		<result column="agent_num" property="agentNum" />
 		<result column="province" property="province" />
+		<result column="city" property="city" />
 		<result column="country" property="country" />
 		<result column="address" property="address" />
 		<result column="longitude" property="longitude" />
 		<result column="latitude" property="latitude" />
 		<result column="header_name" property="headerName" />
 		<result column="header_phone" property="headerPhone" />
+		<result column="dtflag" property="dtflag" />
+		<collection property="appOrders" ofType="AppOrders">
+			<id property="id" column="appOrders.id" />
+			<id property="orderId" column="appOrders.orderId" />
+			<id property="customerId" column="appOrders.customer_id" />
+		</collection>
 	</resultMap>
 
 	<select id="get" resultMap="airportRs" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT 
-			  airport_id,
-			  airport_name,
-			  state,
-			  agent_num,
-			  province,
-			  city,
-			  country,
-			  address,
-			  longitude,
-			  latitude,
-			  header_name,
-			  header_phone
+			  t1.airport_id,
+			  t1.airport_name,
+			  t1.state,
+			  t1.agent_num,
+			  t1.province,
+			  t1.city,
+			  t1.country,
+			  t1.address,
+			  t1.longitude,
+			  t1.latitude,
+			  t1.dtflag,
+			  t1.header_name,
+			  t1.header_phone,
+			  t2.id as 'appOrders.id',
+			  t2.order_id as 'appOrders.orderId',
+			  t2.customer_id as 'appOrders.customerId'
 			FROM
-			  sys_airport
+			  sys_airport t1 
+			  LEFT JOIN app_orders t2 ON t1.airport_id=t2.airport_id 
 		]]>
 		<where>
 			<if test="id!=null">
-				airport_id =#{id}
+				and t1.airport_id =#{id}
 			</if>
 			<if test="notLikeName!=null">
 				and airport_name=#{notLikeName}
@@ -103,15 +115,13 @@
 		<![CDATA[
 			UPDATE 
 			  sys_airport 
-			SET `airport_id` = #{id}
+			SET `airport_id` = #{id},
+			dtflag =#{dtflag},state = #{state}
 		]]>
 		<if test="name!=null">
 			,airport_name = #{name}
 		</if>
-		<if test="state!=0 and state!=null">
-			,state = #{state}
-		</if>
-		<if test="agentNum!=null">
+		<if test="agentNum!=0 and agentNum!=null">
 			,agent_num = #{agentNum}
 		</if>
 		<if test="province!=null">
@@ -140,15 +150,32 @@
 		</if>
 		WHERE airport_id = #{id}
 	</update>
-
-	<delete id="delete" parameterType="String">
-		<![CDATA[
-			DELETE 
-			FROM
-			  sys_airport 
-			WHERE airport_id = #{id} 
+	
+	
+	
+	<update id="deleteAriport" parameterType="Long">
+	<![CDATA[	
+		delete from  
+		  sys_user_airport 
+		WHERE sys_id = #{userId}
 		]]>
-	</delete>
-
+	</update>
+	<insert id="batchInsertUserAriport" parameterType="ArrayList">
+		   INSERT INTO sys_user_airport (
+			  airport_id,
+			  sys_id,
+			  dtflag,
+			  user_type
+			) 
+			VALUES 
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.aid}, #{item.uid},#{item.dtflag},#{item.userType})
+		</foreach>
+	</insert>
+	
+	<select id="selectAriportByUserId" resultMap="airportRs" parameterType="Long">
+		<![CDATA[	SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=#{id} 	]]>
+	</select>
 
 </mapper>

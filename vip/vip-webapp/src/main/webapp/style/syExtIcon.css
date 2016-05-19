@@ -1,5 +1,6 @@
 img {	cursor: pointer; }
 
+.logo {	background: url('images/logo.png') no-repeat;top:0px; }
 
 .iconImg {
 	width: 16px;
