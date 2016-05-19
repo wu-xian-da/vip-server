@@ -29,7 +29,7 @@ import com.jianfei.core.mapper.AppOrdersMapper;
  *
  */
 @Service
-public class OrderService {
+public class OrderService{
 	@Autowired
 	private AppOrdersMapper appOrdersMapper;
 	/**

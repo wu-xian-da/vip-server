@@ -31,6 +31,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
+import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.order.OrderService;
 
 /**
@@ -58,7 +59,20 @@ public class OrderMapperTest {
 		Map<String, Object> map = new HashMap<String, Object>();
 	
 		PageInfo<AppOrders> pageinfo = orderService.simplePage(1, 2, map);
-		System.out.println("a="+pageinfo.getSize());
+		System.out.println("a="+pageinfo.getTotal());
+	}
+	
+	@Test
+	public void testpage() {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+	
+		PageInfo<OrderShowInfoDto> pageinfo = orderService.getOrderPage(1, 4, map);
+		List<OrderShowInfoDto> list = pageinfo.getList();
+		for(OrderShowInfoDto a :list){
+			System.out.println(a);
+		}
+		System.out.println("a="+pageinfo.getTotal());
 	}
 
 }
