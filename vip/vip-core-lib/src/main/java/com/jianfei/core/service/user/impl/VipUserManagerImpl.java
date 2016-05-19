@@ -35,6 +35,17 @@ public class VipUserManagerImpl implements VipUserManager {
     }
 
     /**
+     * 根据手机号获取用户信息
+     *
+     * @param phone 手机号
+     * @return
+     */
+    @Override
+    public AppCustomer getUser(String phone) {
+        return null;
+    }
+
+    /**
      * 更改用户状态
      *
      * @param sate
