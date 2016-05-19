@@ -3,8 +3,8 @@ package com.jianfei.core.service.order;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.dto.OrderAddInfoDto;
+import com.jianfei.core.dto.OrderShowInfoDto;
 
 /**
  * 订单管理
@@ -32,7 +32,7 @@ public interface OrderManager {
      * @return Page<Role>
      * @version 1.0.0
      */
-    PageInfo<AppOrders> simplePage(int pageNo, int pageSize,
+    PageInfo<OrderShowInfoDto> simplePage(int pageNo, int pageSize,
                                    Map<String, Object> params);
 
 }

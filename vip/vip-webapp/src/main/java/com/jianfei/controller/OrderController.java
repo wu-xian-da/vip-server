@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.dto.OrderShowInfoDto;
-import com.jianfei.core.service.order.OrderService;
+import com.jianfei.core.service.order.impl.OrderManagerImpl;
 
 /**
  * 订单管理
@@ -33,7 +32,7 @@ import com.jianfei.core.service.order.OrderService;
 @Controller
 public class OrderController {
 	@Autowired
-	private OrderService orderService;
+	private OrderManagerImpl orderManagerImpl;
 	
 	@RequestMapping("/goOrderManagementView")
 	public String orderList(){
@@ -45,7 +44,7 @@ public class OrderController {
 	@ResponseBody
 	public Map<Object,Object> list(){
 		Map paramsMap = new HashMap();
-		PageInfo<OrderShowInfoDto> pageinfo = orderService.getOrderPage(1, 10, paramsMap);
+		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(1, 10, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
 		List<OrderShowInfoDto> list = pageinfo.getList();
 		for(OrderShowInfoDto appOrder : list){

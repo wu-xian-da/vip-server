@@ -32,7 +32,7 @@ import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.dto.OrderShowInfoDto;
-import com.jianfei.core.service.order.OrderService;
+import com.jianfei.core.service.order.impl.OrderManagerImpl;
 
 /**
  *
@@ -50,7 +50,7 @@ import com.jianfei.core.service.order.OrderService;
 public class OrderMapperTest {
 
 	@Autowired
-	private OrderService orderService;
+	private OrderManagerImpl orderManagerImpl;
 
 	//分页测试
 	@Test
@@ -58,21 +58,10 @@ public class OrderMapperTest {
 		PageHelper.startPage(1, 2);
 		Map<String, Object> map = new HashMap<String, Object>();
 	
-		PageInfo<AppOrders> pageinfo = orderService.simplePage(1, 2, map);
+		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(1, 2, map);
 		System.out.println("a="+pageinfo.getTotal());
 	}
 	
-	@Test
-	public void testpage() {
-		
-		Map<String, Object> map = new HashMap<String, Object>();
 	
-		PageInfo<OrderShowInfoDto> pageinfo = orderService.getOrderPage(1, 4, map);
-		List<OrderShowInfoDto> list = pageinfo.getList();
-		for(OrderShowInfoDto a :list){
-			System.out.println(a);
-		}
-		System.out.println("a="+pageinfo.getTotal());
-	}
 
 }
