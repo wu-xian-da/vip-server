@@ -50,7 +50,6 @@ public interface OrderManager {
      */
     PageInfo<OrderShowInfoDto> simplePage(int pageNo, int pageSize,
                                    Map<String, Object> params);
-<<<<<<< HEAD
     
     /**
      * 
@@ -61,7 +60,6 @@ public interface OrderManager {
      * @version  1.0.0
      */
     public void updateOrderState(String orderId,int operationType);
-=======
 
     /**
      * 订单发票信息
@@ -69,6 +67,5 @@ public interface OrderManager {
      * @return
      */
     boolean addOrderMailInfo(AppInvoice appInvoice);
->>>>>>> 584798f39b4e089b56aa7c2b0f696870ff25a8d7
 
 }

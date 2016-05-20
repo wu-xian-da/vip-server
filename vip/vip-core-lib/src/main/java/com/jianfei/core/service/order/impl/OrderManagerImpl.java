@@ -65,7 +65,6 @@ public class OrderManagerImpl implements OrderManager {
         return pageInfo;
     }
 
-<<<<<<< HEAD
 
 	/**
 	 * 改变订单状态
@@ -88,7 +87,7 @@ public class OrderManagerImpl implements OrderManager {
 			orderState = 4;
 		}
 	}
-=======
+
     /**
      * 更新订单信息付款
      *
@@ -121,5 +120,5 @@ public class OrderManagerImpl implements OrderManager {
     public boolean addOrderMailInfo(AppInvoice appInvoice) {
         return false;
     }
->>>>>>> 584798f39b4e089b56aa7c2b0f696870ff25a8d7
+
 }
