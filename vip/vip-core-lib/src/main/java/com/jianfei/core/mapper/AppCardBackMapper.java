@@ -1,7 +1,8 @@
 package com.jianfei.core.mapper;
 
 import com.jianfei.core.bean.AppCardBack;
-
+import com.jianfei.core.common.persistence.MyBatisDao;
+@MyBatisDao
 public interface AppCardBackMapper {
     int deleteByPrimaryKey(String backId);
 

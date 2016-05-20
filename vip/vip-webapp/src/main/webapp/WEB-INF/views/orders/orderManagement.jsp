@@ -87,10 +87,8 @@
         </table>
     </div>
 
-    
-
-
-		<div id="w" class="easyui-window" title="退款" 
+    <!--用户账号信息录入 -->
+	<div id="w" class="easyui-window" title="退款" 
             data-options = "modal:'true',closed:'true'" 
             style="width:500px;height:260px;padding:10px;">
        	<div class="easy-window-item">
@@ -103,6 +101,7 @@
 
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
+                    	<input type="text" value="" id="hideOrderId"/>
                         <label>输入微信号:</label><input type="text" id="backCardNo0">
                     </div>
 
@@ -127,7 +126,32 @@
         </div>            
         
     </div>
+    
+    <!-- 退款确认 -->
+	<div id="refund" class="easyui-window" title="退款" 
+            data-options = "modal:'true',closed:'true'" 
+            style="width:500px;height:260px;padding:10px;">
+       	<div class="easy-window-item">
+            <div class="easy-window-radio-tab">
+                <div class="radio-tab-content">
+                    <div class="raidp-tab-content-item" style="display:block">
+                        <label>输入微信号:</label><input type="text" id="backCardNo0">
+                    </div>
 
+                </div>
+
+                <div class="raido-tab-refund-price">
+                    <label>可退金额: ￥<span id="remainMoney">0.00</span></label>
+                </div>
+
+                <div class="easyui-window-footer">
+                    <button id="">退款确认</button>
+                    <button id="refundCloseWindow">取消</button>
+                </div>
+            </div>
+        </div>            
+        
+    </div>
 
 
     <script type="text/javascript">
@@ -156,18 +180,40 @@
                 return new Date();
             }
         }
-
-		//审核通过时，输入用户的账户信息
+        
+		/*
+		*==================最终退款页面===============
+		*/
+        //1、打开最终退款页面
+        function finalBackMoneyToUser(args){
+        	$("#refund").window('open');
+        }
+        //2、关闭最终退款页面
+        $("#refundCloseWindow").click(function(){
+        	$("#refund").window('close');
+        })
+        
+        
+        /*
+        *===================业务人员审核页面，录入用户信息=============
+        */
+		//1、审核通过时，输入用户的账户信息（已完成）
         function onRefund(args){
         	$("#w").window('open');
-        	$(".remainMoney").text(args);
+        	$(".remainMoney").text(args.remainMoney);
+        	$("#hideOrderId").val(args.orderId);
         }
+        //2、取消录入页面（已完成）
+        $("#cancleBt").click(function(){
+        	$("#w").window('close');
+        })
 		
-		//将用户填写的信息写入到退卡流水表中
+		//3、将用户填写的信息写入到退卡流水表中
 		$("#writerUserInfo").click(function(){
 			var backCardNo = "";
 			var remainMoney = $("#remainMoney").text();
 			var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
+			var orderId = $("#hideOrderId").val();
 			//sconsole.log(payMethod);s
 			if(payMethod==0){
 				backCardNo = $("#backCardNo0").val();
@@ -176,23 +222,23 @@
 			}else if(payMethod ==2){
 				backCardNo = $("#backCardNo2").val();
 			}
-			alert(11)
-			$.ajax({
-				type:"POST",
-				url:"onRefund",
-				send_data:{"backCardNo":backCardNo,"remainMoney":remainMoney,"payMethod":payMethod},
-				dataType:"json",
-				success:function(data){
-					alert("nihll="+data.data)
-				}
-				
+			alert(backCardNo)
+			var url = "onRefund?orderId="+orderId+"&backCardNo="+backCardNo+"&remainMoney="+remainMoney+"&payMethod="+payMethod+"&opr="+3;
+			$.get(url,function(data){
+				alert("1111")
 			})
+			
 			
 		})
         
-       //退单申请
-        function onRefundApplication(arg, elem){
-            $.get('applyBackCard',function(_d){
+		
+		
+       /*
+       	*==================退单申请 已完成===============
+       	*/
+        function onRefundApplication(args,elem){
+        	var url = "applyBackCard?orderId="+args.orderId+"&operationType="+args.opr+"&phone="+args.phone;
+            $.get(url,function(_d){
                 if(_d.result == 1){
                     $(elem).after($(_d.data));
                     $(elem).parent().parent().prev().find("div").text(_d.orderStateName);
@@ -202,7 +248,7 @@
             })
         }
        
-      //审核不通过
+       //审核不通过
         function onError(args,elem){
         	$.get('applyBackCardaAudit',function(_d){
         		alert(JSON.stringify(_d));
@@ -225,28 +271,14 @@
             })()
         }
 		
-        
-
-
-
-
-
-        $(".radio-tab-head label").on({
+         $(".radio-tab-head label").on({
             "click":function(){
                 var _index = $(this).index(".radio-tab-head label");
                 $(".radio-tab-content .raidp-tab-content-item").eq(_index).css("display","block").siblings().css("display","none")
             }
             
         })
-
-
-
-
-
-
-
-
-
-    </script>
+	</script>
+	
 </body>
 </html>

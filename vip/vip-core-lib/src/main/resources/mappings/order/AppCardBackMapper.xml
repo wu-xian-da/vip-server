@@ -3,13 +3,24 @@
 <mapper namespace="com.jianfei.core.mapper.AppCardBackMapper" >
   <resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppCardBack" >
     <id column="back_id" property="backId" jdbcType="VARCHAR" />
-    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
-    <result column="back_time" property="backTime" jdbcType="TIMESTAMP" />
-    <result column="back_type" property="backType" jdbcType="INTEGER" />
-    <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
-    <result column="agent_id" property="agentId" jdbcType="VARCHAR" />
-    <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime"/>
+    <result column="back_type" property="backType"/>
+    <result column="customer_name" property="customerName"/>
+    <result column="customer_card" property="customerCard"/>
+    <result column="dtflag" property="dtflag"/>
+    <result column="money" property="money"/>
+    <result column="finish_time" property="finishTime"/>
+    <result column="order_id" property="orderId"/>
+    <result column="creater_id" property="createrId"/>
+    <result column="check_id" property="checkId"/>
+    <result column="agreement_url" property="agreementUrl"/>
+    <result column="card_no" property="cardNo"/>
+    <result column="bank_name" property="bankName"/>
   </resultMap>
+  
+  
+  
+  
   <sql id="Base_Column_List" >
     back_id, card_no, back_time, back_type, customer_id, agent_id, dtflag
   </sql>

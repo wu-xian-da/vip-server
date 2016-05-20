@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.OrderShowInfoDto;
@@ -68,26 +69,37 @@ public class OrderController {
 		String orderId = null;
 		String phone = null;
 		for(OrderShowInfoDto appOrder : list){
-			if(appOrder.getOrderState() ==0){//未支付
+			if(appOrder.getOrderState() ==0){
+				//未支付
 				appOrder.setOrderStateName("未支付");
 				appOrder.setOperation("<button class='btn'><a href='/returnOrderDetailInfoByOrderId?orderId=1'>查看</a></button>");
-			}else if(appOrder.getOrderState() == 1){//已支付
+			}else if(appOrder.getOrderState() == 1){
+				//已支付
 				appOrder.setOrderStateName("已支付");
-				/*orderId = appOrder.getOrderId();
+				orderId = appOrder.getOrderId();
 				phone = appOrder.getCustomerPhone();
-				String opre = "<button class='btn'><a href='order-details.html?id="+orderId+"'>查看</a></button>";
-				opre = opre+"<button class='btn btn-back' onclick='onRefundApplication(dd1002,1,13965011405,this)'>退单申请</button>";
-				System.out.println("aaa="+opre);*/
-				appOrder.setOperation("<button class='btn'><a href='order-details.html?id=1'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication(1,this)'>退单申请</button>");
-				//appOrder.setOperation(opre);
+				JSONObject outData = new JSONObject(); 
+				outData.put("orderId", orderId);
+				outData.put("opr", "0");
+				outData.put("phone", phone);
+				
+				appOrder.setOperation("<button class='btn'><a href='order-details.html?id=1'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
+			
 			}else if(appOrder.getOrderState() == 2){
 				appOrder.setOrderStateName("正在审核");
+				JSONObject outData = new JSONObject(); 
 				float remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());
-				appOrder.setOperation("<button class='btn'>查看</button><input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+remainMoney+")'>✓</button><button class='btn btn-close'>✕</button>");
-			}else if(appOrder.getOrderState() ==3){//退款
+				outData.put("remainMoney", remainMoney);
+				outData.put("orderId", appOrder.getOrderId());
+				appOrder.setOperation("<button class='btn'>查看</button><input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close'>✕</button>");
+			
+			}else if(appOrder.getOrderState() ==3){
+				//退款
 				appOrder.setOrderStateName("审核通过");
-				appOrder.setOperation("<button class='btn'>查看</button><button class='btn btn-refund' onclick='onRefund(500)'>退款</button>");
-			}else if(appOrder.getOrderState() ==4){//退款成功
+				appOrder.setOperation("<button class='btn'>查看</button><button class='btn btn-refund' onclick='finalBackMoneyToUser(500)'>退款</button>");
+			
+			}else if(appOrder.getOrderState() ==4){
+				//退款成功
 				appOrder.setOrderStateName("已退款");
 				appOrder.setOperation("<button class='btn' onclick='showOrderDetailInfo()'>查看</button>");
 			}
@@ -106,8 +118,6 @@ public class OrderController {
 	public Map<String,Object> applyBackCard(String orderId,Integer operationType,String phone){
 		System.out.println("orderId="+orderId+" operationType="+operationType+" phone="+phone);
 		//1、改变订单状态
-		orderId="dd1001";
-		operationType=1;
 		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、发送验证码
 		String smsCode = msgInfoManagerImpl.sendAndGetValidateCode(phone, MsgType.BACK_CARD);
@@ -147,9 +157,13 @@ public class OrderController {
 	/*
 	 * 核算退卡金额,并将用户账号信息记录到退卡流水表中
 	 */
-	@RequestMapping(value="/onRefund",method=RequestMethod.POST)
+	@RequestMapping(value="/onRefund")
 	@ResponseBody
-	public String onRefund(String backCardNo,String remainMoney,String payMethod){
+	public String onRefund(String orderId,String backCardNo,String remainMoney,String payMethod,Integer opr){
+		System.out.println("orderId="+orderId+" backCardNo="+backCardNo);
+		//1、将订单状态有'正在审核'变成'审核通过'
+		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
+		//2、将退款信息录入到流水表中
 		
 		return "{'result':'1','data':'120'}";
 	}
