@@ -63,4 +63,27 @@ public class OrderManagerImpl implements OrderManager {
         PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
         return pageInfo;
     }
+
+
+	/**
+	 * 改变订单状态
+	 * 0 未支付
+	 * 1 已支付
+	 * 2 正在审核
+	 * 3 审核通过
+	 * 4 退款成功
+	 */
+	@Override
+	public void updateOrderState(String orderId, int operationType) {
+		int orderState =1;
+		if(operationType == 0){//退款申请 
+			orderState = 2;
+		}else if(operationType == 1){//审核通过
+			orderState = 3;
+		}else if(operationType == 2){//审核不通过
+			orderState = 1;
+		}else if(operationType == 3){//退款
+			orderState = 4;
+		}
+	}
 }

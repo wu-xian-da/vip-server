@@ -35,8 +35,8 @@ import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 public class OrderController {
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
-	/*@Autowired
-	private MsgInfoManagerImpl msgInfoManagerImpl;*/
+	@Autowired
+	private MsgInfoManagerImpl msgInfoManagerImpl;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -92,9 +92,11 @@ public class OrderController {
 	 * 退单申请,给用户发送短信验证码，并将短信验证码回显
 	 */
 	@RequestMapping(value="/applyBackCard")
-	public String applyBackCard(String phone){
-		//1发送验证码
-		//msgInfoManagerImpl.sendValidateCode(phone,MsgType.REGISTER);
+	@ResponseBody
+	public String applyBackCard(String orderId,String phone){
+		//1、改变订单状态
+		//2、发送验证码
+		String smsCode = msgInfoManagerImpl.sendAndGetValidateCode(phone, MsgType.BACK_CARD);
 		return "";
 	}
 	

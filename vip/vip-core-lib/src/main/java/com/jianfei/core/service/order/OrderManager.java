@@ -35,6 +35,14 @@ public interface OrderManager {
     PageInfo<OrderShowInfoDto> simplePage(int pageNo, int pageSize,
                                    Map<String, Object> params);
     
-    
+    /**
+     * 
+     * 改变订单状态
+     * @param orderId 订单编号
+     * @param operationType 操作类型
+     *void
+     * @version  1.0.0
+     */
+    public void updateOrderState(String orderId,int operationType);
 
 }

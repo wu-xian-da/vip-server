@@ -121,7 +121,7 @@
 
                 <div class="easyui-window-footer">
                     <button>退款</button>
-                    <button>取消</button>
+                    <button id="cancleBt">取消</button>
                 </div>
             </div>
         </div>            
@@ -162,7 +162,9 @@
         	$("#w").window('open')
         }
         
+       //退单申请
         function onRefundApplication(args, elem){
+    	   window.alert("1111")
             $.get('./on-refund-application.json',function(_d){
                 if(_d.data != null){
                     $(elem).after($(_d.data));
