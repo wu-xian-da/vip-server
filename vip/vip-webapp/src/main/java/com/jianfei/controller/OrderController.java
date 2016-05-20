@@ -14,6 +14,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
@@ -64,19 +65,28 @@ public class OrderController {
 		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(1, 10, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
 		List<OrderShowInfoDto> list = pageinfo.getList();
+		String orderId = null;
+		String phone = null;
 		for(OrderShowInfoDto appOrder : list){
 			if(appOrder.getOrderState() ==0){//未支付
 				appOrder.setOrderStateName("未支付");
 				appOrder.setOperation("<button class='btn'><a href='/returnOrderDetailInfoByOrderId?orderId=1'>查看</a></button>");
 			}else if(appOrder.getOrderState() == 1){//已支付
 				appOrder.setOrderStateName("已支付");
+				/*orderId = appOrder.getOrderId();
+				phone = appOrder.getCustomerPhone();
+				String opre = "<button class='btn'><a href='order-details.html?id="+orderId+"'>查看</a></button>";
+				opre = opre+"<button class='btn btn-back' onclick='onRefundApplication(dd1002,1,13965011405,this)'>退单申请</button>";
+				System.out.println("aaa="+opre);*/
 				appOrder.setOperation("<button class='btn'><a href='order-details.html?id=1'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication(1,this)'>退单申请</button>");
+				//appOrder.setOperation(opre);
 			}else if(appOrder.getOrderState() == 2){
 				appOrder.setOrderStateName("正在审核");
-				appOrder.setOperation("<button class='btn'>查看</button><input type='text' value='214' /> <button class='btn btn-confirm'>✓</button><button class='btn btn-close'>✕</button>");
+				float remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());
+				appOrder.setOperation("<button class='btn'>查看</button><input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+remainMoney+")'>✓</button><button class='btn btn-close'>✕</button>");
 			}else if(appOrder.getOrderState() ==3){//退款
 				appOrder.setOrderStateName("审核通过");
-				appOrder.setOperation("<button class='btn'>查看</button><button class='btn btn-refund' onclick='onRefund(2)'>退款</button>");
+				appOrder.setOperation("<button class='btn'>查看</button><button class='btn btn-refund' onclick='onRefund(500)'>退款</button>");
 			}else if(appOrder.getOrderState() ==4){//退款成功
 				appOrder.setOrderStateName("已退款");
 				appOrder.setOperation("<button class='btn' onclick='showOrderDetailInfo()'>查看</button>");
@@ -93,31 +103,54 @@ public class OrderController {
 	 */
 	@RequestMapping(value="/applyBackCard")
 	@ResponseBody
-	public String applyBackCard(String orderId,String phone){
+	public Map<String,Object> applyBackCard(String orderId,Integer operationType,String phone){
+		System.out.println("orderId="+orderId+" operationType="+operationType+" phone="+phone);
 		//1、改变订单状态
+		orderId="dd1001";
+		operationType=1;
+		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、发送验证码
 		String smsCode = msgInfoManagerImpl.sendAndGetValidateCode(phone, MsgType.BACK_CARD);
-		return "{\"result\":\"1\",\"data\":\"<input type='text' value='214' /> <button class='btn btn-confirm' onClick='onSuccess(1,this)'>✓</button><button class='btn btn-close' onClick='onError(2)'>✕</button>\"}";
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", "1");
+		map.put("orderStateName", "正在审核");
+		map.put("data", "<input type='text' value='214' /> <button class='btn btn-confirm' onClick='onSuccess(1,this)'>✓</button><button class='btn btn-close' onClick='onError(2,this)'>✕</button>");
+		return map;
 	}
 	
 	/*
-	 * 审核通过
+	 * 订单退款审核
 	 */
-	@RequestMapping(value="/auditPass")
-	public String auditPass(String orderId,String opType){
-		if (opType.equals("1"))
-			return "{'result':'1','data':'<button class='btn'>查看</button><button class='btn btn-refund' onclick='onRefund(2)'>退款</button>'}";
-		else if (opType.equals("0"))
-			return "";
-		else
-			return "";
+	@RequestMapping(value="/applyBackCardaAudit")
+	@ResponseBody
+	public Map<String,Object> auditPass(String orderId,Integer opType){
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		orderId="dd1001";
+		opType=1;
+		orderManagerImpl.updateOrderStateByOrderId(orderId, opType);
+		if (opType.equals("1")){
+			float remainMoney = orderManagerImpl.remainMoney(orderId);
+			resMap.put("result", "1");
+			resMap.put("data", "<button class='btn'>查看</button><input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+remainMoney+")'>✓</button><button class='btn btn-close'>✕</button>");
+			resMap.put("orderStateName", "正在审核");
+			
+		}else if (opType == 3){
+			resMap.put("result", "1");
+			resMap.put("data", "<button class='btn'><a href='order-details.html?id=1'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication(1,this)'>退单申请</button>");
+			resMap.put("orderStateName", "已支付");
+			
+		}
+		return resMap;	
+		
 	}
 	
 	/*
-	 * 核算退卡金额
+	 * 核算退卡金额,并将用户账号信息记录到退卡流水表中
 	 */
-	@RequestMapping(value="/onRefund")
-	public String onRefund(){
+	@RequestMapping(value="/onRefund",method=RequestMethod.POST)
+	@ResponseBody
+	public String onRefund(String backCardNo,String remainMoney,String payMethod){
+		
 		return "{'result':'1','data':'120'}";
 	}
 	

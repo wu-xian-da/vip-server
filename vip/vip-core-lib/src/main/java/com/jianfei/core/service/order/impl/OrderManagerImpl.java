@@ -1,9 +1,12 @@
 package com.jianfei.core.service.order.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppOrderCard;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,8 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.mapper.AppConsumeMapper;
+import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.order.OrderManager;
 
@@ -28,6 +33,10 @@ public class OrderManagerImpl implements OrderManager {
 
     @Autowired
     private AppOrdersMapper appOrdersMapper;
+    @Autowired
+    private AppOrderCardMapper appOrderCardMapper;
+    @Autowired
+    private AppConsumeMapper appConsumeMapper;
 
     /**
      * 添加订单信息
@@ -65,29 +74,6 @@ public class OrderManagerImpl implements OrderManager {
         return pageInfo;
     }
 
-
-	/**
-	 * 改变订单状态
-	 * 0 未支付
-	 * 1 已支付
-	 * 2 正在审核
-	 * 3 审核通过
-	 * 4 退款成功
-	 */
-	@Override
-	public void updateOrderState(String orderId, int operationType) {
-		int orderState =1;
-		if(operationType == 0){//退款申请 
-			orderState = 2;
-		}else if(operationType == 1){//审核通过
-			orderState = 3;
-		}else if(operationType == 2){//审核不通过
-			orderState = 1;
-		}else if(operationType == 3){//退款
-			orderState = 4;
-		}
-	}
-
     /**
      * 更新订单信息付款
      *
@@ -120,5 +106,59 @@ public class OrderManagerImpl implements OrderManager {
     public boolean addOrderMailInfo(AppInvoice appInvoice) {
         return false;
     }
+
+    /**
+     * 更新订单状态
+     * 0 未支付
+	 * 1 已支付
+	 * 2 正在审核
+	 * 3 审核通过
+	 * 4 退款成功
+     */
+	@Override
+	public int updateOrderStateByOrderId(String orderId, int operationType) {
+		// TODO Auto-generated method stub
+		
+		int orderState =1;
+		if(operationType == 0){//退款申请 
+			orderState = 2;
+		}else if(operationType == 1){//审核通过
+			orderState = 3;
+		}else if(operationType == 2){//审核不通过
+			orderState = 1;
+		}else if(operationType == 3){//退款
+			orderState = 4;
+		}
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("orderState", orderState);
+		params.put("orderId", orderId);
+		
+		return appOrdersMapper.updateOrderState(params);
+		
+	}
+
+
+	/**
+	 * 根据订单号返回用户vip卡可退金额
+	 */
+	@Override
+	public float remainMoney(String orderId) {
+		float remainMoney = 0;
+		//1、app_order_card表中返回卡号，用户初始金额
+		AppOrderCard appOrderCard = appOrderCardMapper.getAppOrderCard(orderId);
+		if(appOrderCard!= null){
+			//2、app_consume表中返回vip消费次数
+			int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
+			//3、计算用户vip卡剩余金额
+			remainMoney = (float) ((appOrderCard.getInitMoney()-count*200)*0.8);
+			
+		}
+		System.out.println("float remainMoney="+remainMoney);
+		return remainMoney;
+	}
+
+
+	
+	
 
 }

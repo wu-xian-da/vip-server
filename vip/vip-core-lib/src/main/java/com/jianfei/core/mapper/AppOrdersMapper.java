@@ -12,6 +12,11 @@ public interface AppOrdersMapper{
 	//分页查询
 	List<OrderShowInfoDto> get(Map<String, Object> params);
 	
+	//更新订单状态
+	int updateOrderState(Map<String,Object> params);
+	
+	
+	
 	int deleteByPrimaryKey(String orderId);
 
     int insert(AppOrders record);

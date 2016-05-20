@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jianfei.core.mapper.AppOrderCardMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppOrderCard" >
+    <result column="card_id" property="cardNo"/>
+    <result column="init_money" property="initMoney"/>
+  </resultMap>
+  
+  
+  <!--订单列表信息展示  -->
+  <select id="getAppOrderCard" resultMap="BaseResultMap" parameterType="java.lang.String">
+  		select card_id,init_money from  app_order_card where order_id=#{orderId}
+  </select>
+  
+  
+</mapper>

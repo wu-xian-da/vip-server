@@ -62,6 +62,17 @@ public class OrderMapperTest {
 		System.out.println("a="+pageinfo.getTotal());
 	}
 	
+	//更新订单状态
+	@Test
+	public void testUpdate(){
+		orderManagerImpl.updateOrderStateByOrderId("dd1001", 1);
+	}
+	
+	//vip卡初始金额
+	@Test
+	public void testInitVipMoney(){
+		orderManagerImpl.remainMoney("dd10056");
+	}
 	
 
 }

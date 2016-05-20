@@ -96,31 +96,31 @@
        	<div class="easy-window-item">
             <div class="easy-window-radio-tab">
                 <div class="radio-tab-head">
-                    <label><input type="radio" name="card-radio" checked id="">微信转账</label>
-                    <label><input type="radio" name="card-radio" id="">支付宝转账</label>
-                    <label><input type="radio" name="card-radio" id="">银行卡转账</label>
+                    <label><input type="radio" name="card-radio" checked id="0">微信转账</label>
+                    <label><input type="radio" name="card-radio" id="1">支付宝转账</label>
+                    <label><input type="radio" name="card-radio" id="2">银行卡转账</label>
                 </div>
 
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
-                        <label>输入微信号:</label><input type="text">
+                        <label>输入微信号:</label><input type="text" id="backCardNo0">
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入支付宝账号:</label><input type="text">
+                        <label>输入支付宝账号:</label><input type="text" id="backCardNo1">
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入银行卡号:</label><input type="text">
+                        <label>输入银行卡号:</label><input type="text" id="backCardNo2">
                     </div>
                 </div>
 
                 <div class="raido-tab-refund-price">
-                    <label>可退金额: ￥<span>111222</span></label>
+                    <label>可退金额: ￥<span id="remainMoney">1.00</span></label>
                 </div>
 
                 <div class="easyui-window-footer">
-                    <button>退款</button>
+                    <button id="writerUserInfo">退款确认</button>
                     <button id="cancleBt">取消</button>
                 </div>
             </div>
@@ -157,24 +157,61 @@
             }
         }
 
-
+		//审核通过时，输入用户的账户信息
         function onRefund(args){
-        	$("#w").window('open')
+        	$("#w").window('open');
+        	$(".remainMoney").text(args);
         }
+		
+		//将用户填写的信息写入到退卡流水表中
+		$("#writerUserInfo").click(function(){
+			var backCardNo = "";
+			var remainMoney = $("#remainMoney").text();
+			var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
+			//sconsole.log(payMethod);s
+			if(payMethod==0){
+				backCardNo = $("#backCardNo0").val();
+			}else if(payMethod == 1){
+				backCardNo = $("#backCardNo1").val();
+			}else if(payMethod ==2){
+				backCardNo = $("#backCardNo2").val();
+			}
+			alert(11)
+			$.ajax({
+				type:"POST",
+				url:"onRefund",
+				send_data:{"backCardNo":backCardNo,"remainMoney":remainMoney,"payMethod":payMethod},
+				dataType:"json",
+				success:function(data){
+					alert("nihll="+data.data)
+				}
+				
+			})
+			
+		})
         
        //退单申请
-        function onRefundApplication(args, elem){
-    	   window.alert("1111");
-            $.get( 'applyBackCard',function(_d){
-            	alert(_d);
-            	var obj = eval('(' + _d + ')');
-                if(obj.result == 1){
-                    $(elem).after($(obj.data));
-                    $(elem).parent().parent().prev().find("div").text("11");
+        function onRefundApplication(arg, elem){
+            $.get('applyBackCard',function(_d){
+                if(_d.result == 1){
+                    $(elem).after($(_d.data));
+                    $(elem).parent().parent().prev().find("div").text(_d.orderStateName);
                   	$(elem).remove();
-/*                     (function(){
-                        alert("成功-回调操作")
-                    })() */
+                 
+                }
+            })
+        }
+       
+      //审核不通过
+        function onError(args,elem){
+        	$.get('applyBackCardaAudit',function(_d){
+        		alert(JSON.stringify(_d));
+                if(_d.result == 1){
+                    $(elem).after($(_d.data));
+                    var $_tdwrap = $(elem).parent();
+                    $(elem).parent().parent().prev().find("div").text(_d.orderStateName);
+                    $_tdwrap.find("div.appling").remove();
+                 
                 }
             })
         }
@@ -187,14 +224,8 @@
                 $(elem).parent().parent().prev().find("div").text("11");
             })()
         }
-
-        function onError(args){
-            alert(args);
-
-            (function(){
-                alert("失败-回调操作")
-            })()
-        }
+		
+        
 
 
 

@@ -39,6 +39,7 @@ public interface OrderManager {
     boolean checkOrderPay(String orderId);
 
     /**
+     * guojian
      * queryPage(分页查询)
      *
      * @param pageNo
@@ -52,15 +53,25 @@ public interface OrderManager {
                                    Map<String, Object> params);
     
     /**
-     * 
-     * 改变订单状态
-     * @param orderId 订单编号
-     * @param operationType 操作类型
-     *void
+     * guojian
+     * updateOrderStateByOrderId(更新订单状态)
+     * @param params
+     * @return
+     * int
      * @version  1.0.0
      */
-    public void updateOrderState(String orderId,int operationType);
-
+    int updateOrderStateByOrderId(String orderId,int optype);
+    
+    /**
+     * guojian
+     * remainMoney(根据订单号返回用户vip卡剩余金额)
+     * @param orderId
+     * @return
+     *float
+     * @version  1.0.0
+     */
+    float remainMoney(String orderId);
+    
     /**
      * 订单发票信息
      * @param appInvoice 发票信息

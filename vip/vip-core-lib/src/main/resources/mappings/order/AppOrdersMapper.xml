@@ -83,6 +83,10 @@
   	 where ord.id=agent.id and ord.customer_id = customer.customer_id and ord.airport_id = ap.airport_id
   </select>
   
+  <!--更新订单状态  -->
+  <update id="updateOrderState" parameterType="java.util.Map">
+  	update app_orders set order_state=#{orderState} where order_id = #{orderId}
+  </update>
   
   
   
