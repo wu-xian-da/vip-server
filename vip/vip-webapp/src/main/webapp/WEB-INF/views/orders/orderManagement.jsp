@@ -116,7 +116,7 @@
                 </div>
 
                 <div class="raido-tab-refund-price">
-                    <label>可退金额: ￥<span id="remainMoney">1.00</span></label>
+                    <label>可退金额: ￥<span id="remainMoney">0.00</span></label>
                 </div>
 
                 <div class="easyui-window-footer">
