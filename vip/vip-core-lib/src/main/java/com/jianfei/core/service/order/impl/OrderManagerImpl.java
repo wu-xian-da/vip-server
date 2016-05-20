@@ -3,6 +3,7 @@ package com.jianfei.core.service.order.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.AppInvoice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,5 +63,38 @@ public class OrderManagerImpl implements OrderManager {
         List<OrderShowInfoDto> list = appOrdersMapper.get(params);
         PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
         return pageInfo;
+    }
+
+    /**
+     * 更新订单信息付款
+     *
+     * @param addInfoDto
+     * @return
+     */
+    @Override
+    public boolean updateOrderPayInfo(AppOrders addInfoDto) {
+        return false;
+    }
+
+    /**
+     * 查询订单是否付款
+     *
+     * @param orderId 订单ID
+     * @return
+     */
+    @Override
+    public boolean checkOrderPay(String orderId) {
+        return false;
+    }
+
+    /**
+     * 订单发票信息
+     *
+     * @param appInvoice 发票信息
+     * @return
+     */
+    @Override
+    public boolean addOrderMailInfo(AppInvoice appInvoice) {
+        return false;
     }
 }
