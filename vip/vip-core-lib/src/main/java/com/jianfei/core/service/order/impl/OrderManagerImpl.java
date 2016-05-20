@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.common.utils.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -121,4 +122,27 @@ public class OrderManagerImpl implements OrderManager {
         return false;
     }
 
+    /**
+     * 获取销售某天开卡详细数据
+     *
+     * @param userId 销售Id
+     * @param date   日期
+     * @return
+     */
+    @Override
+    public List<AppOrders> getOrdersBySaleId(String userId, String date) {
+        return null;
+    }
+
+    /**
+     * 查询某个销售销售卡退卡分页
+     *
+     * @param userId  销售ID
+     * @param pageDto 分页数据
+     * @return
+     */
+    @Override
+    public PageInfo<AppOrders> pageReturnOrderBySaleId(String userId, PageDto pageDto) {
+        return null;
+    }
 }

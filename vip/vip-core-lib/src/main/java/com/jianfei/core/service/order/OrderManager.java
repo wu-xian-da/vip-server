@@ -1,10 +1,12 @@
 package com.jianfei.core.service.order;
 
+import java.util.List;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.dto.OrderShowInfoDto;
 
@@ -67,5 +69,22 @@ public interface OrderManager {
      * @return
      */
     boolean addOrderMailInfo(AppInvoice appInvoice);
+
+
+    /**
+     * 获取销售某天开卡详细数据
+     * @param userId 销售Id
+     * @param date 日期
+     * @return
+     */
+    List<AppOrders> getOrdersBySaleId(String userId,String date);
+
+    /**
+     * 查询某个销售销售卡退卡分页
+     * @param userId 销售ID
+     * @param pageDto 分页数据
+     * @return
+     */
+    PageInfo<AppOrders> pageReturnOrderBySaleId(String userId, PageDto pageDto);
 
 }
