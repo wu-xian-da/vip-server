@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.AppInvoice;
+<<<<<<< HEAD
 import com.jianfei.core.bean.AppOrderCard;
 
+=======
+import com.jianfei.core.common.utils.PageDto;
+>>>>>>> 9e2b0ade970ebbc0b98a556fa6a21fa520ee4b17
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -108,6 +112,7 @@ public class OrderManagerImpl implements OrderManager {
     }
 
     /**
+<<<<<<< HEAD
      * 更新订单状态
      * 0 未支付
 	 * 1 已支付
@@ -161,4 +166,28 @@ public class OrderManagerImpl implements OrderManager {
 	
 	
 
+=======
+     * 获取销售某天开卡详细数据
+     *
+     * @param userId 销售Id
+     * @param date   日期
+     * @return
+     */
+    @Override
+    public List<AppOrders> getOrdersBySaleId(String userId, String date) {
+        return null;
+    }
+
+    /**
+     * 查询某个销售销售卡退卡分页
+     *
+     * @param userId  销售ID
+     * @param pageDto 分页数据
+     * @return
+     */
+    @Override
+    public PageInfo<AppOrders> pageReturnOrderBySaleId(String userId, PageDto pageDto) {
+        return null;
+    }
+>>>>>>> 9e2b0ade970ebbc0b98a556fa6a21fa520ee4b17
 }
