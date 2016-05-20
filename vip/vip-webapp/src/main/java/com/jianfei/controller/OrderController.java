@@ -97,30 +97,36 @@ public class OrderController {
 		//1、改变订单状态
 		//2、发送验证码
 		String smsCode = msgInfoManagerImpl.sendAndGetValidateCode(phone, MsgType.BACK_CARD);
-		return "";
+		return "{\"result\":\"1\",\"data\":\"<input type='text' value='214' /> <button class='btn btn-confirm' onClick='onSuccess(1,this)'>✓</button><button class='btn btn-close' onClick='onError(2)'>✕</button>\"}";
 	}
 	
 	/*
 	 * 审核通过
 	 */
 	@RequestMapping(value="/auditPass")
-	public String auditPass(){
-		return "";
+	public String auditPass(String orderId,String opType){
+		if (opType.equals("1"))
+			return "{'result':'1','data':'<button class='btn'>查看</button><button class='btn btn-refund' onclick='onRefund(2)'>退款</button>'}";
+		else if (opType.equals("0"))
+			return "";
+		else
+			return "";
 	}
 	
 	/*
-	 * 审核不通过
+	 * 核算退卡金额
 	 */
-	@RequestMapping(value="/auditNotPass")
-	public String auditNotPass(){
-		return "";
+	@RequestMapping(value="/onRefund")
+	public String onRefund(){
+		return "{'result':'1','data':'120'}";
 	}
 	
 	/*
 	 * 退款
 	 */
 	@RequestMapping(value="/refundMoney")
-	public String refundMoney(){
-		return "";
+	public String refundMoney(String orderId,String type,String account,String money){
+		//写退款流水
+		return "{'result':'1','data':'<button class='btn'>查看</button>'}";
 	}
 }	

@@ -14,7 +14,7 @@ package com.jianfei.core.service.stat;
  * @date: 2016年5月19日 上午10:49:24 
  * 
  * @version 1.0.0
- *
+ * 
  */
 public interface StatManager {
 

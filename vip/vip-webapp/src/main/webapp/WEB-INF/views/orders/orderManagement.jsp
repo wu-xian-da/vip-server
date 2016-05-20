@@ -164,20 +164,27 @@
         
        //退单申请
         function onRefundApplication(args, elem){
-    	   window.alert("1111")
-            $.get('./on-refund-application.json',function(_d){
-                if(_d.data != null){
-                    $(elem).after($(_d.data));
-                    $(elem).remove();
+    	   window.alert("1111");
+            $.get( 'applyBackCard',function(_d){
+            	alert(_d);
+            	var obj = eval('(' + _d + ')');
+                if(obj.result == 1){
+                    $(elem).after($(obj.data));
+                    $(elem).parent().parent().prev().find("div").text("11");
+                  	$(elem).remove();
+/*                     (function(){
+                        alert("成功-回调操作")
+                    })() */
                 }
             })
         }
 
-        function onSuccess(args){
+        function onSuccess(args,elem){
             alert(args);
 
             (function(){
                 alert("成功-回调操作")
+                $(elem).parent().parent().prev().find("div").text("11");
             })()
         }
 
