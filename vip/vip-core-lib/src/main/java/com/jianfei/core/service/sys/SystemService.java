@@ -50,20 +50,13 @@ import com.jianfei.core.mapper.UserMapper;
 @Service
 @Transactional
 public class SystemService {
+
 	/**
-	 * 日志对象
+	 * getCurrentMenus(获取当前左侧菜单)
+	 * 
+	 * @return List<Menu>
+	 * @version 1.0.0
 	 */
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-
-	public static final String CURRENT_MENU = "currentMenus";
-	@Autowired
-	private UserMapper userMapper;
-	@Autowired
-	private RoleMapper roleMapper;
-	@Autowired
-	private ResourceMapper resourceMapper;
-	
-
 	public List<Menu> getCurrentMenus() {
 		List<Resource> resources = resourceMapper
 				.findResourceByUserId(StringUtils.toLong(ShiroUtils
@@ -111,8 +104,8 @@ public class SystemService {
 	 * @return MessageDto
 	 * @version 1.0.0
 	 */
-	public MessageDto updateRoleResource(Long id, String ids) {
-		MessageDto dto = new MessageDto();
+	public MessageDto<String> updateRoleResource(Long id, String ids) {
+		MessageDto<String> dto = new MessageDto<String>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
 			roleMapper.deleteByResourceFromRole(id);
@@ -136,8 +129,8 @@ public class SystemService {
 	 * 
 	 * @version 1.0.0
 	 */
-	public MessageDto batchUpdateUserRoles(Long id, String ids) {
-		MessageDto dto = new MessageDto();
+	public MessageDto<User> batchUpdateUserRoles(Long id, String ids) {
+		MessageDto<User> dto = new MessageDto<User>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
 			userMapper.deleteRolesFromUser(id);
@@ -157,7 +150,7 @@ public class SystemService {
 		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
-	public MessageDto saveResourc(Resource resource) {
+	public MessageDto<String> saveResourc(Resource resource) {
 		MessageDto dto = new MessageDto();
 		try {
 			resourceMapper.save(resource);
@@ -191,19 +184,13 @@ public class SystemService {
 		return userMapper;
 	}
 
-	
 	public RoleMapper getRoleMapper() {
 		return roleMapper;
 	}
 
-
-
 	public ResourceMapper getResourceMapper() {
 		return resourceMapper;
 	}
-
-
-	ObjectMapper mapper = new ObjectMapper();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Grid bindUserGridData(PageInfo<User> pageInfo) {
@@ -218,5 +205,20 @@ public class SystemService {
 		grid.setTotal(pageInfo.getTotal());
 		return grid;
 	}
+
+	/**
+	 * 日志对象
+	 */
+	protected Logger logger = LoggerFactory.getLogger(getClass());
+
+	public static final String CURRENT_MENU = "currentMenus";
+	@Autowired
+	private UserMapper userMapper;
+	@Autowired
+	private RoleMapper roleMapper;
+	@Autowired
+	private ResourceMapper resourceMapper;
+
+	public ObjectMapper mapper = new ObjectMapper();
 
 }

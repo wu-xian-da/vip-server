@@ -519,5 +519,6 @@
 	<modules>
 		<module>vip-core-lib</module>
 		<module>vip-webapp</module>
+		<module>vip-app-server</module>
 	</modules>
 </project>

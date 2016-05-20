@@ -20,7 +20,7 @@ import com.alibaba.fastjson.JSONObject;
  * @version 1.0.0
  *
  */
-public class MessageDto implements Serializable {
+public class MessageDto<T> implements Serializable {
 
 	/**
 	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）
@@ -34,12 +34,13 @@ public class MessageDto implements Serializable {
 
 	private String msgBody;
 
+	private T data;
+
 	public boolean isOk() {
 		return isOk;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public MessageDto setOk(boolean isOk) {
+	public MessageDto<T> setOk(boolean isOk) {
 		this.isOk = isOk;
 		return this;
 	}
@@ -48,9 +49,28 @@ public class MessageDto implements Serializable {
 		return msgBody;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public MessageDto setMsgBody(String msgBody) {
+	public MessageDto<T> setMsgBody(String msgBody) {
 		this.msgBody = msgBody;
+		return this;
+	}
+
+	/**
+	 * data
+	 *
+	 * @return the data
+	 * @version 1.0.0
+	 */
+
+	public T getData() {
+		return data;
+	}
+
+	/**
+	 * @param data
+	 *            the data to set
+	 */
+	public MessageDto<T> setData(T data) {
+		this.data = data;
 		return this;
 	}
 
@@ -68,6 +88,9 @@ public class MessageDto implements Serializable {
 
 		public static final String SUCCESS = "操作陈功...";
 		public static final String ERROR = "操作失败,请稍后重试...";
+
+		public static final String OK = "true";
+		public static final String FAIL = "error";
 
 	}
 }

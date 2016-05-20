@@ -7,6 +7,9 @@
  */
 package com.jianfei.core.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.common.persistence.MyBatisDao;
 
@@ -22,6 +25,10 @@ import com.jianfei.core.common.persistence.MyBatisDao;
 @MyBatisDao
 public interface AriPortMapper extends BaseMapper<AriPort> {
 
-	public void delete(String id);
+	public void deleteAriport(Long userId);
+
+	void batchInsertUserAriport(List<Map<String, Object>> list);
+
+	List<AriPort> selectAriportByUserId(Long id);
 
 }

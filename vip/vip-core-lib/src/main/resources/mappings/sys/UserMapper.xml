@@ -43,10 +43,10 @@
 				and sex = #{sex}
 			</if>
 			<if test="start!=null">
-				and create_time &gt; #{start}
+				<![CDATA[and create_time >= #{start}]]>
 			</if>
 			<if test="ends!=null">
-				and create_time &lt; #{ends}
+				<![CDATA[and create_time <= #{ends}]]>
 			</if>
 		</where>
 		<if test="sort!=null">

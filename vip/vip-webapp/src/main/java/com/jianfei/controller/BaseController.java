@@ -30,14 +30,6 @@ import com.jianfei.core.common.utils.MessageDto;
  */
 public class BaseController {
 
-	public MessageDto buildDtoMsg(boolean isOk) {
-		MessageDto dto = new MessageDto();
-		if (isOk) {
-			dto.setOk(true);
-		}
-		return dto;
-	}
-
 	public <T> Grid<T> bindDataGrid(PageInfo<T> pageInfo) {
 		Grid<T> grid = new Grid<T>();
 		grid.setRows(pageInfo.getList());
