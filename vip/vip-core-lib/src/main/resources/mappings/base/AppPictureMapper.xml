@@ -103,4 +103,26 @@
       dtflag = #{dtflag,jdbcType=INTEGER}
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </update>
+<!--查询条件-->
+  <select id="getPicture" resultMap="BaseResultMap" parameterType="com.jianfei.core.bean.AppPicture" >
+    select
+    <include refid="Base_Column_List" />
+    from app_picture
+    where 1l=1
+    <if test="viproomId != null" >
+      AND viproom_id = #{viproomId,jdbcType=VARCHAR},
+    </if>
+    <if test="pictureUrl != null" >
+      AND picture_url = #{pictureUrl,jdbcType=VARCHAR},
+    </if>
+    <if test="clickUrl != null" >
+      AND click_url = #{clickUrl,jdbcType=VARCHAR},
+    </if>
+    <if test="priority != null" >
+      AND priority = #{priority,jdbcType=INTEGER},
+    </if>
+    <if test="dtflag != null" >
+      AND dtflag = #{dtflag,jdbcType=INTEGER},
+    </if>
+  </select>
 </mapper>
