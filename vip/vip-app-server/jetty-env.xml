@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure id='wac' class="org.mortbay.jetty.webapp.WebAppContext">
+	<New id="YZT" class="org.mortbay.jetty.plus.naming.Resource">
+		<Arg>jdbc/yztdb</Arg>
+		<Arg>
+			<!--开发环境 -->
+			<!-- <New class="oracle.jdbc.pool.OracleConnectionPoolDataSource"> -->
+			<!-- <Set name="URL">jdbc:oracle:thin:@192.168.11.171:1521:iflytek</Set> -->
+			<!-- <Set name="User">workflow_dev</Set> -->
+			<!-- <Set name="Password">123456</Set> -->
+			<!-- </New> -->
+			<New class="oracle.jdbc.pool.OracleConnectionPoolDataSource">
+				<Set name="URL">jdbc:oracle:thin:@192.168.59.95:1521:hfsgy</Set>
+				<Set name="User">yzt_product</Set>
+				<Set name="Password">123456</Set>
+				 <!-- <Set name="URL">jdbc:oracle:thin:@192.168.58.132:1521:sgy</Set>
+				 <Set name="User">yzt_dev_test</Set>
+				 <Set name="Password">123456</Set> -->
+			</New>
+		</Arg>
+	</New>
+</Configure>
