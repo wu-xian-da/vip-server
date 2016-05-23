@@ -1,6 +1,3 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- */
 package com.jianfei.core.common.shrio;
 
 import javax.servlet.ServletRequest;
@@ -12,6 +9,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Service;
@@ -38,6 +36,7 @@ public class FormAuthenticationFilter extends
 	public static final String DEFAULT_MESSAGE_PARAM = "message";
 
 	public static final String DEFAULT_ERROR_MESSAGE = "shrio_error_message";
+	public static final String CAPTCHA_ERROR_MESSAGE = "captcha_error_message";
 
 	private String captchaParam = DEFAULT_CAPTCHA_PARAM;
 	private String mobileLoginParam = DEFAULT_MOBILE_PARAM;
@@ -52,9 +51,20 @@ public class FormAuthenticationFilter extends
 		if (password == null) {
 			password = "";
 		}
+		HttpServletRequest servletRequest = (HttpServletRequest) request;
 		boolean rememberMe = isRememberMe(request);
-		String host = StringUtils.getRemoteAddr((HttpServletRequest) request);
+		String host = StringUtils.getRemoteAddr(servletRequest);
 		String captcha = getCaptcha(request);
+		// 校验登录验证码
+		Session session = ShiroUtils.getSession();
+		session.setAttribute(CAPTCHA_ERROR_MESSAGE, "");
+		String code = (String) session
+				.getAttribute(FormAuthenticationFilter.DEFAULT_CAPTCHA_PARAM);
+		code = code == null ? "" : code;
+		if (captcha == null || !code.equalsIgnoreCase(captcha)) {
+
+			session.setAttribute(CAPTCHA_ERROR_MESSAGE, "randomCodeError");
+		}
 		boolean mobile = isMobileLogin(request);
 		return new UsernamePasswordToken(username, password.toCharArray(),
 				rememberMe, host, captcha, mobile);
@@ -115,28 +125,38 @@ public class FormAuthenticationFilter extends
 		return super.onLoginSuccess(token, subject, request, response);
 	}
 
-	/**
-	 * 登录失败调用事件
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.shiro.web.filter.authc.FormAuthenticationFilter#onLoginFailure
+	 * (org.apache.shiro.authc.AuthenticationToken,
+	 * org.apache.shiro.authc.AuthenticationException,
+	 * javax.servlet.ServletRequest, javax.servlet.ServletResponse)
 	 */
+
 	@Override
 	protected boolean onLoginFailure(AuthenticationToken token,
 			AuthenticationException e, ServletRequest request,
 			ServletResponse response) {
+		String errorCode = (String) ShiroUtils.getSession().getAttribute(
+				CAPTCHA_ERROR_MESSAGE);
 		String className = e.getClass().getName(), message = "";
-		if (IncorrectCredentialsException.class.getName().equals(className)
+		if (!StringUtils.isEmpty(errorCode)) {
+			message = "验证码错误...";
+			className = "ErrorCaptcha";
+		} else if (IncorrectCredentialsException.class.getName().equals(
+				className)
 				|| UnknownAccountException.class.getName().equals(className)) {
-			message = ShiroUtils.getSessionAttribute(DEFAULT_ERROR_MESSAGE)
-					.toString();
+			message = "用户或密码错误, 请重试.";
 		} else if (e.getMessage() != null
 				&& StringUtils.startsWith(e.getMessage(), "msg:")) {
 			message = StringUtils.replace(e.getMessage(), "msg:", "");
 		} else {
 			message = "系统出现点问题，请稍后再试！";
-			e.printStackTrace(); // 输出到控制台
 		}
 		request.setAttribute(getFailureKeyAttribute(), className);
-		request.setAttribute(getMessageParam(), message);
+		request.setAttribute(DEFAULT_ERROR_MESSAGE, message);
 		return true;
 	}
-
 }

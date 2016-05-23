@@ -84,5 +84,6 @@ if (StringUtils.indexOfIgnoreCase(User_Agent, "MSIE") > -1 && (StringUtils.index
 <script src="<%=contextPath%>/jslib/syExtJavascript.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
 <script src="<%=contextPath%>/jslib/areaSelect/data.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
 <script src="<%=contextPath%>/jslib/areaSelect/areaselect.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
+<script src="<%=contextPath%>/jslib/Framework.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
 
 

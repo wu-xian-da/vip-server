@@ -28,10 +28,15 @@ import com.jianfei.core.common.utils.MessageDto;
 
 public interface AriPortService<T extends Serializable> extends BaseService<T> {
 
-	MessageDto<String> batchInsertUserAriport(String formJson, Long uid,
-			Integer dtflag, Integer userType);
+	MessageDto<String> batchInsertUserAriport(String id,String name,String loginName,String ids);
 
 	MessageDto<List<AriPort>> selectAriportByUserId(Long id);
 
 	List<Map<String, Object>> datePermissionData(Long id);
+
+	/**
+	 * 获取机场的省份列表
+	 * @return
+     */
+	List<String> getAriPortProvince();
 }

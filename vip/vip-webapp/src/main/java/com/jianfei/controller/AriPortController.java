@@ -115,11 +115,10 @@ public class AriPortController extends BaseController {
 		return ariPortService.datePermissionData(id);
 	}
 
-	@RequestMapping(value = "/datapermission/update")
+	@RequestMapping(value = "/datapermission/update", method = RequestMethod.POST)
 	@ResponseBody
-	public MessageDto<String> saveDataPermissionu(String formJson, Long userId) {
-		return ariPortService.batchInsertUserAriport(formJson, userId,
-				GloabConfig.FORBIT, GloabConfig.SYSTEM_USER);
+	public MessageDto<String> saveDataPermissionu(String id,String name,String loginName,String ids) {
+		 return ariPortService.batchInsertUserAriport(id,name,loginName, ids);
 
 	}
 
