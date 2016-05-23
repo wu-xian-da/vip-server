@@ -17,8 +17,38 @@
   
   <!--分页查询  -->
   <select id="pageList" resultMap="BaseResultMap" parameterType="java.util.Map">
-  	select * from app_vipcard
+  	<!-- select * from app_vipcard where dtflag = 0 -->
+  	
+  	<![CDATA[
+			select * from app_vipcard
+		]]>
+		<where>
+			<if test="cardState!=null">
+				card_state =#{cardState}
+			</if>
+			<if test="cardNo!=null">
+				and card_no=#{cardNo}
+			</if>
+			and dtflag=0
+		</where>
   </select>
+  
+  <!--根据卡号逻辑删除vip卡信息  -->
+  <update id="delVipCard" parameterType="java.lang.String">
+  	update app_vipcard set dtflag =1 where card_no =#{cardNo}
+  </update>
+  
+  <!--将excel表格中的数据导入到数据中 -->
+  <insert id="importExcelToDB" parameterType="com.jianfei.core.bean.AppVipcard" >
+    insert into app_vipcard (card_no, nfc_id, import_time,dtflag,card_state)
+   		 values (#{cardNo},#{nfcId},#{importTime},#{dtflag},#{cardState})
+  </insert>
+  
+  <!-- 将数据导入到excel表格中 -->
+  <select id="selAllVipCard" resultMap="BaseResultMap">
+      select * from app_vipcard
+  </select>
+  
   
   
   

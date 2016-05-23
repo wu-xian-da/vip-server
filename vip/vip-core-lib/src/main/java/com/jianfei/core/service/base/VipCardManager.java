@@ -66,5 +66,33 @@ public interface VipCardManager {
      */
     PageInfo<AppVipcard> showCardListPage(int pageNo, int pageSize,
             Map<String, Object> params);
-
+    
+    /**
+     * 根据vip卡逻辑删除vip卡信息
+     * deleteVipCardByCardNo
+     * @param cardNo
+     * @return
+     * int
+     * @version  1.0.0
+     */
+    int deleteVipCardByCardNo(String cardNo);
+    
+    /**
+     * 导入excel表格数据到数据表中
+     * importExcelData
+     * @param appVipcard
+     * @return
+     * int
+     * @version  1.0.0
+     */
+    int importExcelData(String filePath);
+    
+    /**
+     * 导出数据到excel表格中
+     * exportDataToExcel
+     * @return
+     *List<AppVipcard>
+     * @version  1.0.0
+     */
+    int exportDataToExcel(String filePath);
 }
