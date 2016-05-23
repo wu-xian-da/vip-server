@@ -38,24 +38,25 @@
 
             <div class="order-condition-item">
                 <select name="" id="">
-                    <option value="">选择定票状态</option>
-                    <option value="">已支付</option>
-                    <option value="">未支付</option>
-                    <option value="">已审核</option>
-                    <option value="">未审核</option>
+                    <option value="5">选择定票状态</option>
+                    <option value="0">未支付</option>
+                    <option value="1">已支付</option>
+                    <option value="2">正在审核</option>
+                    <option value="3">审核通过</option>
+                    <option value="4">已退款</option>
                 </select>
             </div>
 
             <div class="order-condition-item">
                 <select name="" id="">
                     <option value="">选择发票状态</option>
-                    <option value="">已开</option>
-                    <option value="">未开</option>
+                    <option value="1">已开</option>
+                    <option value="0">未开</option>
                 </select>
             </div>
 
             <div class="order-condition-item">
-                <input type="text" placeholder="输入用户手机号码/姓名">
+                <input type="text" placeholder="用户手机号码/姓名">
                 <button>搜索</button>
             </div>
         </div>
@@ -69,7 +70,7 @@
                                 pagination="true">
             <thead>
                 <tr>
-                    <th data-options="align:'center', field:'orderId',width:100">订单编号</th>
+                <th data-options="align:'center', field:'orderId',width:100">订单编号</th>
                 <th data-options="align:'center', field:'orderTime',width:100">日期</th>
                 
                 <th data-options="align:'center', field:'airportName',width:150">场站</th>
@@ -78,7 +79,7 @@
                 <th data-options="align:'center', field:'customerName',width:100">用户名称</th>
                 <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
                 
-                <th data-options="align:'center', field:'invoiceFlag',width:100">发票</th>
+                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票</th>
                 <th data-options="align:'center', field:'orderStateName',width:100">状态</th>
                 <th data-options="align:'center', field:'operation',width:210">操作</th>
                 </tr>
@@ -101,7 +102,7 @@
 
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
-                    	<input type="text" value="" id="hideOrderId"/>
+                    	<input type="hidden" value="" id="hideOrderId"/>
                         <label>输入微信号:</label><input type="text" id="backCardNo0">
                     </div>
 
@@ -135,17 +136,18 @@
             <div class="easy-window-radio-tab">
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
-                        <label>输入微信号:</label><input type="text" id="backCardNo0">
+                    	<input type="hidden" value="" id="backCardOrderId"/>
+                        <label id="backMethod">输入微信号:</label><input type="text" id="payBackCardNo" readonly="readonly"/>
                     </div>
 
                 </div>
 
                 <div class="raido-tab-refund-price">
-                    <label>可退金额: ￥<span id="remainMoney">0.00</span></label>
+                    <label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
                 </div>
 
                 <div class="easyui-window-footer">
-                    <button id="">退款确认</button>
+                    <button id="finalBackMoneyToUserBt">退款确认</button>
                     <button id="refundCloseWindow">取消</button>
                 </div>
             </div>
@@ -186,9 +188,34 @@
 		*/
         //1、打开最终退款页面
         function finalBackMoneyToUser(args){
+			var backMethod = "";
+			if(args.backType == 0){
+				backMethod="微信账号";
+			}else if(args.backType ==1){
+				backMethod = '支付宝账号';
+			}else if(args.backType == 2){
+				backMethod = '银行卡号';
+			}
+			
+			$("#backCardOrderId").val(args.orderId);
+			$("#backMethod").text(backMethod);
+			$("#payBackCardNo").val(args.backMoneyCard);
+			$("#remainMoney2").text(args.remainMoney);
+			
         	$("#refund").window('open');
         }
-        //2、关闭最终退款页面
+		//2、财务人员进行退款操作
+		$("#finalBackMoneyToUserBt").click(function(){
+			var orderId = $("#backCardOrderId").val();
+			var url = "finalRefundMoney?orderId="+orderId+"&opr="+4;
+			$.get(url,function(_d){
+				if(_d.result==1){
+					$("#refund").window('close');
+					 window.location.reload();
+				}
+			})
+		})
+        //3、关闭最终退款页面
         $("#refundCloseWindow").click(function(){
         	$("#refund").window('close');
         })
@@ -199,17 +226,29 @@
         */
 		//1、审核通过时，输入用户的账户信息（已完成）
         function onRefund(args){
-        	$("#w").window('open');
-        	$(".remainMoney").text(args.remainMoney);
+        	$("#remainMoney").text(args.remainMoney);
         	$("#hideOrderId").val(args.orderId);
+        	$("#w").window('open');
         }
-        //2、取消录入页面（已完成）
+        //2、审核不通过
+        function onError(args,elem){
+        	var url = "applyBackCardaAudit?orderId="+args.orderId+"&opType="+2+"&phone="+args.phone;
+        	$.get(url,function(_d){
+        		if(_d.result == 1){
+                	$(elem).parent().parent().prev().find("div").text(_d.orderStateName);
+                	var $_tdwrap = $(elem).parent();
+                	$_tdwrap.empty();
+                   	$_tdwrap.append($(_d.data));
+                 }
+            })
+        }
+        //3、取消录入页面（已完成）
         $("#cancleBt").click(function(){
         	$("#w").window('close');
         })
 		
 		//3、将用户填写的信息写入到退卡流水表中
-		$("#writerUserInfo").click(function(){
+		$("#writerUserInfo").click(function(elem){
 			var backCardNo = "";
 			var remainMoney = $("#remainMoney").text();
 			var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
@@ -222,10 +261,15 @@
 			}else if(payMethod ==2){
 				backCardNo = $("#backCardNo2").val();
 			}
-			alert(backCardNo)
 			var url = "onRefund?orderId="+orderId+"&backCardNo="+backCardNo+"&remainMoney="+remainMoney+"&payMethod="+payMethod+"&opr="+3;
-			$.get(url,function(data){
-				alert("1111")
+			$.get(url,function(_d){
+				if(_d.result == 1){
+					/* $(elem).after($(_d.data));
+                    $(elem).parent().parent().prev().find("div").text(_d.orderStateName);
+                  	$(elem).remove(); */
+					$("#w").window('close');
+					window.location.reload();
+				}
 			})
 			
 			
@@ -248,30 +292,7 @@
             })
         }
        
-       //审核不通过
-        function onError(args,elem){
-        	$.get('applyBackCardaAudit',function(_d){
-        		alert(JSON.stringify(_d));
-                if(_d.result == 1){
-                    $(elem).after($(_d.data));
-                    var $_tdwrap = $(elem).parent();
-                    $(elem).parent().parent().prev().find("div").text(_d.orderStateName);
-                    $_tdwrap.find("div.appling").remove();
-                 
-                }
-            })
-        }
-
-        function onSuccess(args,elem){
-            alert(args);
-
-            (function(){
-                alert("成功-回调操作")
-                $(elem).parent().parent().prev().find("div").text("11");
-            })()
-        }
-		
-         $(".radio-tab-head label").on({
+      	$(".radio-tab-head label").on({
             "click":function(){
                 var _index = $(this).index(".radio-tab-head label");
                 $(".radio-tab-content .raidp-tab-content-item").eq(_index).css("display","block").siblings().css("display","none")

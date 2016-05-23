@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
 
 import com.jianfei.core.bean.AppOrderCard;
@@ -16,7 +17,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.dto.OrderAddInfoDto;
+import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.mapper.AppCardBackMapper;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
@@ -39,6 +42,8 @@ public class OrderManagerImpl implements OrderManager {
     private AppOrderCardMapper appOrderCardMapper;
     @Autowired
     private AppConsumeMapper appConsumeMapper;
+    @Autowired
+    private AppCardBackMapper appCardBackMapper;
 
     /**
      * 添加订单信息
@@ -58,7 +63,7 @@ public class OrderManagerImpl implements OrderManager {
 
 
     /**
-     * queryPage(分页查询)
+     * queryPage(订单列表分页查询)
      *
      * @param pageNo
      * @param pageSize
@@ -126,10 +131,12 @@ public class OrderManagerImpl implements OrderManager {
 		if(operationType == 0){//退款申请 
 			orderState = 2;
 		}else if(operationType == 1){//审核通过
-			orderState = 3;
+			orderState = 2;
 		}else if(operationType == 2){//审核不通过
 			orderState = 1;
-		}else if(operationType == 3){//退款
+		}else if(operationType == 3){//录入退卡人账号
+			orderState = 3;
+		}else if(operationType == 4){//最终退款
 			orderState = 4;
 		}
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -186,5 +193,59 @@ public class OrderManagerImpl implements OrderManager {
     public PageInfo<AppOrders> pageReturnOrderBySaleId(String userId, PageDto pageDto) {
         return null;
     }
+
+
+	/**
+	 * 记录退卡流水号
+	 */
+	@Override
+	public int insertBackCardInfo(AppCardBack appCardBack) {
+		// TODO Auto-generated method stub
+		appCardBackMapper.insertBackCard(appCardBack);
+		return 0;
+	}
+
+
+
+	/**
+	 *  通过订单号在流水表中查询用户的退款账户
+	 */
+	@Override
+	public AppCardBack selCustomerCard(String orderId) {
+		// TODO Auto-generated method stub
+		return appCardBackMapper.seleConsumeCardId(orderId);
+	}
+
+
+	/**
+	 * 更新退卡流水号
+	 */
+	@Override
+	public int updateBackCardByOrderId(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return appCardBackMapper.updateBackCard(map);
+	}
+
+
+	/**
+	 * 根据订单编号返回订单详细信息
+	 */
+	@Override
+	public OrderDetailInfo returnOrderDetailInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.selOrderDetailInfo(orderId);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.jianfei.core.service.order.OrderManager#backCardPage(int, int, java.util.Map)
+	 */
+	@Override
+	public PageInfo<OrderShowInfoDto> backCardPage(int pageNo, int pageSize, Map<String, Object> params) {
+		PageHelper.startPage(pageNo, pageSize);
+        List<OrderShowInfoDto> list = appOrdersMapper.page(params);
+        PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
+        return pageInfo;
+	}
 
 }

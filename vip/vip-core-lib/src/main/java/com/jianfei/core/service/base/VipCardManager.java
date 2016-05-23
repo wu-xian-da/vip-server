@@ -3,8 +3,10 @@ package com.jianfei.core.service.base;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.dto.OrderShowInfoDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Vip使用记录
@@ -50,5 +52,19 @@ public interface VipCardManager {
      * @return  List<AppCustomer>
      */
     List<AppCustomer> listAllVipUse( String vipCardNo );
+    
+    
+    /**
+     * 分页显示vip卡列表信息
+     * showCardListPage
+     * @param pageNo
+     * @param pageSize
+     * @param params
+     * @return
+     *PageInfo<OrderShowInfoDto>
+     * @version  1.0.0
+     */
+    PageInfo<AppVipcard> showCardListPage(int pageNo, int pageSize,
+            Map<String, Object> params);
 
 }

@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.OrderAddInfoDto;
+import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 
 /**
@@ -41,8 +43,8 @@ public interface OrderManager {
     boolean checkOrderPay(String orderId);
 
     /**
-     * guojian
-     * queryPage(分页查询)
+     * guo.jian
+     * queryPage(订单列表分页查询)
      *
      * @param pageNo
      * @param pageSize
@@ -55,7 +57,20 @@ public interface OrderManager {
                                    Map<String, Object> params);
     
     /**
-     * guojian
+     * guo.jian
+     * queryPage(退款列表分页查询)
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param params
+     *            封装查询参数
+     * @return Page<Role>
+     * @version 1.0.0
+     */
+    PageInfo<OrderShowInfoDto> backCardPage(int pageNo, int pageSize,
+                                   Map<String, Object> params);
+    /**
+     * guo.jian
      * updateOrderStateByOrderId(更新订单状态)
      * @param params
      * @return
@@ -65,7 +80,7 @@ public interface OrderManager {
     int updateOrderStateByOrderId(String orderId,int optype);
     
     /**
-     * guojian
+     * guo.jian
      * remainMoney(根据订单号返回用户vip卡剩余金额)
      * @param orderId
      * @return
@@ -74,6 +89,36 @@ public interface OrderManager {
      */
     float remainMoney(String orderId);
     
+    /**
+     * guo.jian
+     * insertBackCardInfo(记录退卡流水号)
+     * @param appCardBack
+     * @return
+     *int
+     * @version  1.0.0
+     */
+    int insertBackCardInfo(AppCardBack appCardBack);
+    
+    /**
+     * 通过订单号在流水表中查询用户的退款账户和退款方式
+     */
+    AppCardBack selCustomerCard(String orderId);
+    
+    /**
+     * guo.jian
+     * 更新退卡流水号
+     */
+    int updateBackCardByOrderId(Map<String,Object> map);
+    
+    /**
+     * guo.jian
+     * returnOrderDetailInfoByOrderId(根据订单编号返回订单详细信息)
+     * @param order
+     * @return
+     *OrderDetailInfo
+     * @version  1.0.0
+     */
+    OrderDetailInfo returnOrderDetailInfoByOrderId(String order);
     /**
      * 订单发票信息
      * @param appInvoice 发票信息

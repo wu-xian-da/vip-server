@@ -18,6 +18,24 @@
     <result column="bank_name" property="bankName"/>
   </resultMap>
   
+  <!-- 插入退卡流水号 -->
+  <insert id="insertBackCard" parameterType="com.jianfei.core.bean.AppCardBack" >
+  	insert into app_card_back values
+  		(#{backId},#{createTime},#{backType},#{customerName},#{customerCard},#{dtflag},#{money}
+  		,#{finishTime},#{orderId},#{createrId},#{checkId},#{agreementUrl},#{cardNo},#{bankName})
+  </insert>
+  
+  <!--通过卡号查询用户退款账户 和退款方式-->
+  <select id="seleConsumeCardId" resultType="com.jianfei.core.bean.AppCardBack" parameterType="java.lang.String">
+  	select * from app_card_back where order_id=#{orderId}
+  </select>
+  
+  <!-- 更新流水号（最终审核时间和审核人）-->
+  <update id="updateBackCard" parameterType="java.util.Map">
+  	update app_card_back set finish_time = #{finishTime},check_id=#{checkId} 
+  		where order_id = #{orderId}
+  </update>
+  
   
   
   
