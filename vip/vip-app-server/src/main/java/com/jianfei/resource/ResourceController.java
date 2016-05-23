@@ -1,6 +1,7 @@
 package com.jianfei.resource;
 
 import com.jianfei.common.BaseController;
+import com.jianfei.common.BaseMsgInfo;
 import com.jianfei.core.service.base.impl.AriPortServiceImpl;
 import com.jianfei.dto.AirportVo;
 import com.jianfei.dto.VipRoomVo;
@@ -33,8 +34,9 @@ public class ResourceController extends BaseController {
 	 */
 	@RequestMapping(value = "getAirportProvince", method = RequestMethod.GET)
 	@ResponseBody
-	public List<String> airportProvince(	) {
-		return ariPortService.getAriPortProvince();
+	public BaseMsgInfo airportProvince(	) {
+		List<String> stringList=ariPortService.getAriPortProvince();
+		return BaseMsgInfo.success(stringList);
 	}
 
 
