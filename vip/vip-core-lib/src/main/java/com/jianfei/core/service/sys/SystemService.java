@@ -12,11 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
@@ -27,6 +29,7 @@ import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.cache.CacheUtils;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
@@ -58,9 +61,13 @@ public class SystemService {
 	 * @version 1.0.0
 	 */
 	public List<Menu> getCurrentMenus() {
-		List<Resource> resources = resourceMapper
-				.findResourceByUserId(StringUtils.toLong(ShiroUtils
-						.getPrincipal().getId()));
+		List<Resource> resources = null;
+		if (ShiroUtils.getPrincipal().getUserType() == 2) {
+			resources = resourceMapper.get(new MapUtils.Builder().build());
+		} else {
+			resources = resourceMapper.findResourceByUserId(StringUtils
+					.toLong(ShiroUtils.getPrincipal().getId()));
+		}
 		List<Menu> menus = Menu.getSecondMenu(resources);
 		return menus;
 	}
@@ -104,21 +111,47 @@ public class SystemService {
 	 * @return MessageDto
 	 * @version 1.0.0
 	 */
-	public MessageDto<String> updateRoleResource(Long id, String ids) {
+	public MessageDto<String> updateRoleResource(Long id, String name,
+			String description, String ids) {
 		MessageDto<String> dto = new MessageDto<String>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
-			roleMapper.deleteByResourceFromRole(id);
-			String[] strings = ids.split(",");
-			for (String str : strings) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("roleId", id);
-				map.put("resourceId", str);
-				list.add(map);
+			if (StringUtils.isEmpty(ids) || StringUtils.isEmpty(name)) {
+				return dto.setMsgBody("操作失败，请稍后重试...");
 			}
-			roleMapper.batchInsertRoleResource(list);
+			if (null == id || id == 0) {
+				//查询角色名是否已经存在
+				List<Role> exRoles = roleMapper.get(new MapUtils.Builder()
+						.setKeyValue("notLikeName", name).build());
+				if(!CollectionUtils.isEmpty(exRoles)){
+					return dto.setMsgBody("角色名已经存在，请更换...");
+				}
+				// 保存操作
+				Role role = new Role();
+				role.setName(name);
+				role.setDescription(description);
+				role.setDtflag(GloabConfig.OPEN);
+				roleMapper.save(role);
+				List<Role> roles = roleMapper.get(new MapUtils.Builder()
+						.setKeyValue("notLikeName", role.getName()).build());
+				if (!CollectionUtils.isEmpty(roles)) {
+					id = roles.get(0).getId();
+				}
+			}
+			// 更新角色权限
+			if (id != null && 0 != id) {
+				roleMapper.deleteByResourceFromRole(id);
+				String[] strings = ids.split(",");
+				for (String str : strings) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("roleId", id);
+					map.put("resourceId", str);
+					list.add(map);
+				}
+				roleMapper.batchInsertRoleResource(list);
+			}
 		} catch (Exception e) {
-			logger.error("更新用户角色:{}", e.getMessage());
+			logger.error("添加，更新角色信息并授权:{}", e.getMessage());
 			return dto.setMsgBody("操作失败，请稍后重试...");
 		}
 		return dto.setOk(true).setMsgBody("更新成功...");

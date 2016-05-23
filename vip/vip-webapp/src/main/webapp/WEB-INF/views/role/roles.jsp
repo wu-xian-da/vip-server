@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ page import="com.jianfei.core.common.security.shiro.HasAnyPermissionsTag"%>
 <%@ include file="/WEB-INF/include/taglib.jsp"%>
+<%
+	HasAnyPermissionsTag anyPermissionsTag = new HasAnyPermissionsTag();
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,7 +17,9 @@
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
+			<shiro:hasPermission name="system:role:add">
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
+			</shiro:hasPermission>
 				<td><div class="datagrid-btn-separator"></div></td>
 				<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索角色名称'"></input></td>
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">清空查询</a></td>
@@ -38,16 +44,10 @@
 			} ]
 		});
 	};
-	var showFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '查看角色信息',
-			url : sy.contextPath + '/securityJsp/base/SyroleForm.jsp?id=' + id
-		});
-	};
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
 			title : '编辑角色信息',
-			url : sy.contextPath + '/securityJsp/base/SyroleForm.jsp?id=' + id,
+			url : sy.contextPath + '/role/form?id=' + id,
 			buttons : [ {
 				text : '编辑',
 				handler : function() {
@@ -59,24 +59,12 @@
 	var removeFun = function(id) {
 		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
 			if (r) {
-				$.post(sy.contextPath + '/base/syrole!delete.sy', {
+				$.post(sy.contextPath + '/role/delete', {
 					id : id
 				}, function() {
 					grid.datagrid('reload');
 				}, 'json');
 			}
-		});
-	};
-	var grantFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '角色授权',
-			url : sy.contextPath + '/role/grantForm?id=' + id,
-			buttons : [ {
-				text : '授权',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
 		});
 	};
 	$(function() {
@@ -96,21 +84,36 @@
 				field : 'name',
 				sortable : true
 			} ] ],
-			columns : [ [ {
-				width : '300',
+			columns : [ [{
+				width : '600',
+				title : '角色权限',
+				field : 'resources',
+				formatter : function(value, row){
+					var obj= value;
+					var str = "";
+					for(var i=0;i<obj.length;i++){
+						str=str+obj[i].name+" ";
+					}
+					
+					return str;
+				}
+			},  {
+				width : '100',
 				title : '角色描述',
 				field : 'description'
 			}, {
 				title : '操作',
 				field : 'action',
-				width : '300',
+				width : '100',
 				formatter : function(value, row) {
 					var str = '';
-						str += sy.formatString('<img class="iconImg ext-icon-note" title="查看" onclick="showFun(\'{0}\');"/>', row.id);
+					<%if (anyPermissionsTag.showTagBody("system:role:update")) {%>
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-key" title="授权" onclick="grantFun(\'{0}\');"/>', row.id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:role:delete")) {%>
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
-					return str;
+					<%}%>
+						return str;
 				}
 			} ] ],
 			toolbar : '#toolbar',

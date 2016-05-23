@@ -70,8 +70,8 @@ public class GloabConfig {
 	 */
 	public static final String USERFILES_BASE_URL = "/uploadPath/";
 
-	public static final int FORBIT = 0;
-	public static final int OPEN = 1;
+	public static final int FORBIT = 1;
+	public static final int OPEN = 0;
 
 	//系统用户
 	public static final Integer SYSTEM_USER = 1;

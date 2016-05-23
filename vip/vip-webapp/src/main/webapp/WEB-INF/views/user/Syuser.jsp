@@ -12,15 +12,11 @@
 <script type="text/javascript">
 	var grid;
 	var addFun = function() {
-		var dialog = parent.sy.modalDialog({
+		parent.$.customerFrame({
+			height : '500px',
+			wight : '700px',
 			title : '添加用户信息',
 			url : sy.contextPath + '/user/form',
-			buttons : [ {
-				text : '添加',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
 		});
 	};
 	var showFun = function(id) {
@@ -69,15 +65,9 @@
 		});
 	};
 	var grantOrganizationFun = function(id) {
-		   layer.open({
-			      type: 2,
-			      title: '授数据权限。',
-			      shadeClose: true,
-			      shade: false,
-			      maxmin: true, //开启最大化最小化按钮
-			      area: ['590px', '460px'],
-			      content: sy.contextPath + '/user/datePermission?id='+id
-			    });
+		parent.$.customerFrame({
+			url: sy.contextPath + '/user/datePermission?id='+id
+		});
 	};
 	$(function() {
 		grid = $('#grid').datagrid({
