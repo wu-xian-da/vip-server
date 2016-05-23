@@ -23,6 +23,8 @@
 		</collection>
 	</resultMap>
 
+
+
 	<select id="get" resultMap="airportRs" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT 
@@ -176,6 +178,14 @@
 	
 	<select id="selectAriportByUserId" resultMap="airportRs" parameterType="Long">
 		<![CDATA[	SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=#{id} 	]]>
+	</select>
+
+	<resultMap type="java.lang.String" id="province">
+		<result property="province" column="province" />
+	</resultMap>
+
+	<select id="getAriPortProvince" resultMap="province" >
+		<![CDATA[	SELECT  DISTINCT (a.province) FROM sys_airport a 	]]>
 	</select>
 
 </mapper>

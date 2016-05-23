@@ -1,8 +1,10 @@
 package com.jianfei.resource;
 
 import com.jianfei.common.BaseController;
+import com.jianfei.core.service.base.impl.AriPortServiceImpl;
 import com.jianfei.dto.AirportVo;
 import com.jianfei.dto.VipRoomVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,20 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "resource")
 public class ResourceController extends BaseController {
+
+	@Autowired
+	private AriPortServiceImpl ariPortService;
+	/**
+	 * 获取支持的省份列表
+	 * @param
+	 * @return List<AirportVo>
+	 */
+	@RequestMapping(value = "getAirportProvince", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> airportProvince(	) {
+		return ariPortService.getAriPortProvince();
+	}
+
 
 	/**
 	 * 根据省份ID获取机场列表
@@ -63,7 +79,7 @@ public class ResourceController extends BaseController {
 	 * @param coordinate 坐标
 	 * @return VipRoomList
 	 */
-	@RequestMapping(value = "/getVipRoomList", method = RequestMethod.POST)
+	@RequestMapping(value = "/getVipRoomInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public VipRoomVo vipRoomInfo(@RequestParam(value = "vipRoomId", required = false) String vipRoomId,
 								 @RequestParam(value = "coordinate", required = false) String coordinate

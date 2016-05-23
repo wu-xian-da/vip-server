@@ -10,10 +10,10 @@
 			<!-- <Set name="User">workflow_dev</Set> -->
 			<!-- <Set name="Password">123456</Set> -->
 			<!-- </New> -->
-			<New class="oracle.jdbc.pool.OracleConnectionPoolDataSource">
-				<Set name="URL">jdbc:oracle:thin:@192.168.59.95:1521:hfsgy</Set>
-				<Set name="User">yzt_product</Set>
-				<Set name="Password">123456</Set>
+			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
+				<Set name="URL">jdbc:mysql://192.168.110.9/app_server</Set>
+				<Set name="User">root</Set>
+				<Set name="Password">jfFlzx3kc</Set>
 				 <!-- <Set name="URL">jdbc:oracle:thin:@192.168.58.132:1521:sgy</Set>
 				 <Set name="User">yzt_dev_test</Set>
 				 <Set name="Password">123456</Set> -->

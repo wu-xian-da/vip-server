@@ -7,7 +7,6 @@
  */
 package com.jianfei.core.service.base.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
@@ -235,4 +231,14 @@ public class AriPortServiceImpl implements AriPortService<AriPort> {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	/**
+	 * 获取机场的省份列表
+	 *
+	 * @return
+	 */
+	@Override
+	public List<String> getAriPortProvince() {
+		return ariPortMapper.getAriPortProvince();
+	}
 }
