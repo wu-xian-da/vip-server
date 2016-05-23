@@ -31,7 +31,7 @@ public class SysViproom {
 
     private Integer dtflag;
 
-    private byte[] latitude;
+    private String latitude;
 
     public String getViproomId() {
         return viproomId;
@@ -145,11 +145,11 @@ public class SysViproom {
         this.dtflag = dtflag;
     }
 
-    public byte[] getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(byte[] latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 }

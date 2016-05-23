@@ -1,7 +1,11 @@
 package com.jianfei.core.mapper;
 
+import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.common.persistence.MyBatisDao;
+import com.sun.tools.javac.util.List;
 
+@MyBatisDao
 public interface SysViproomMapper {
     int deleteByPrimaryKey(String viproomId);
 
@@ -16,4 +20,6 @@ public interface SysViproomMapper {
     int updateByPrimaryKeyWithBLOBs(SysViproom record);
 
     int updateByPrimaryKey(SysViproom record);
+
+    List<SysViproom> getVipRoomList(SysAirport airport);
 }
