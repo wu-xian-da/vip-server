@@ -54,11 +54,23 @@ public class VipCardManagerImplTest {
 	@Test
 	public void pageListTest(){
 		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("cardState", 1);
 		PageInfo<AppVipcard> pageinfo = vipCardManagerImpl.showCardListPage(1, 2, params);
 		System.out.println("总的条数："+pageinfo.getTotal());
 		List<AppVipcard> list = pageinfo.getList();
 		for(AppVipcard vipcard : list){
 			System.out.println(vipcard);
 		}
+	}
+	//导入excel表格数据
+	@Test
+	public void importTest(){
+		vipCardManagerImpl.importExcelData("f://test.xlsx");
+	}
+	
+	@Test
+	public void export(){
+		String filePath = "f://";
+		vipCardManagerImpl.exportDataToExcel(filePath);
 	}
 }

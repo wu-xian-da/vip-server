@@ -130,9 +130,14 @@ public class AppVipcard {
 	public String toString() {
 		return "AppVipcard [cardNo=" + cardNo + ", customerId=" + customerId + ", initMoney=" + initMoney
 				+ ", remainMoney=" + remainMoney + ", cardType=" + cardType + ", cardState=" + cardState
-				+ ", valideTime=" + valideTime + ", activeTime=" + activeTime + ", nfcId=" + nfcId + ", dtflag="
-				+ dtflag + "]";
+				+ ", valideTime=" + valideTime + ", activeTime=" + activeTime + ", importTime=" + importTime
+				+ ", nfcId=" + nfcId + ", dtflag=" + dtflag + "]";
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	
     
     
 }
