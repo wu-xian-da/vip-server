@@ -1,5 +1,8 @@
 package com.jianfei.core.bean;
 
+/**
+ * 发票信息
+ */
 public class AppInvoice {
     private String invoiceId;
 

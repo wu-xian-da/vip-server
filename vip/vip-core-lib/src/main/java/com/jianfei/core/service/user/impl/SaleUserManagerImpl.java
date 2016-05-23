@@ -1,7 +1,7 @@
 package com.jianfei.core.service.user.impl;
 
 import com.jianfei.core.bean.User;
-import com.jianfei.core.service.user.SalerUserManager;
+import com.jianfei.core.service.user.SaleUserManager;
 
 /**
  * TODO
@@ -11,7 +11,7 @@ import com.jianfei.core.service.user.SalerUserManager;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/18 15:48
  */
-public class SalerUserManagerImpl implements SalerUserManager {
+public class SaleUserManagerImpl implements SaleUserManager {
     /**
      * 验证用户密码
      *
@@ -31,7 +31,7 @@ public class SalerUserManagerImpl implements SalerUserManager {
      * @return
      */
     @Override
-    public User getSalerUser(String userNo) {
+    public User getSaleUser(String userNo) {
         return null;
     }
 

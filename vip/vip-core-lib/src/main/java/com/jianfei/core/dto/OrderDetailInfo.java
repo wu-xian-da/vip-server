@@ -38,7 +38,7 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	private String customerIdent;//用户身份证号
 	private int sex;//用户性别
 	private String address;//常驻地址
-	private String emailAddress;//邮寄地址
+	private String email;//邮箱地址
 	private int invoiceType;//发票类型
 	private String invoiceTitle;//发票抬头
 	
@@ -210,15 +210,7 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	 * @version   1.0.0
 	*/
 	
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-	/**
-	 * @param emailAddress the emailAddress to set
-	 */
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
+	
 	/**
 	 * invoiceType
 	 *
@@ -228,6 +220,22 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	
 	public int getInvoiceType() {
 		return invoiceType;
+	}
+	/**
+	 * email
+	 *
+	 * @return  the email
+	 * @version   1.0.0
+	*/
+	
+	public String getEmail() {
+		return email;
+	}
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	/**
 	 * @param invoiceType the invoiceType to set
@@ -259,9 +267,9 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 		return "OrderDetailInfo [agentPhone=" + agentPhone + ", vipCardNo=" + vipCardNo + ", cardType=" + cardType
 				+ ", initMoney=" + initMoney + ", payMethod=" + payMethod + ", payTime=" + payTime + ", activatTime="
 				+ activatTime + ", customerIdent=" + customerIdent + ", sex=" + sex + ", address=" + address
-				+ ", emailAddress=" + emailAddress + ", invoiceType=" + invoiceType + ", invoiceTitle=" + invoiceTitle
-				+ "]";
+				+ ", email=" + email + ", invoiceType=" + invoiceType + ", invoiceTitle=" + invoiceTitle + "]";
 	}
+	
 	
 	
 	

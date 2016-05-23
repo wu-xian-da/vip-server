@@ -10,9 +10,18 @@
     <result column="card_state" property="cardState" jdbcType="INTEGER" />
     <result column="valide_time" property="valideTime" jdbcType="INTEGER" />
     <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="import_time" property="importTime"/>
     <result column="nfc_id" property="nfcId" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
   </resultMap>
+  
+  <!--分页查询  -->
+  <select id="pageList" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select * from app_vipcard
+  </select>
+  
+  
+  
   <sql id="Base_Column_List" >
     card_no, customer_id, init_money, remain_money, card_type, card_state, valide_time, 
     active_time, nfc_id, dtflag

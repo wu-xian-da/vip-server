@@ -1,5 +1,7 @@
 package com.jianfei.core.service.thirdpart.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.service.thirdpart.MsgInfoManager;
 
@@ -11,6 +13,7 @@ import com.jianfei.core.service.thirdpart.MsgInfoManager;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/18 17:31
  */
+@Service
 public class MsgInfoManagerImpl implements MsgInfoManager {
     /**
      * KEY前缀

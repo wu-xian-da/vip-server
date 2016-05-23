@@ -18,6 +18,7 @@ public class AppVipcard {
     private Integer valideTime;
 
     private Date activeTime;
+    private Date importTime;
 
     private String nfcId;
 
@@ -102,4 +103,36 @@ public class AppVipcard {
     public void setDtflag(Integer dtflag) {
         this.dtflag = dtflag;
     }
+    
+
+	/**
+	 * importTime
+	 *
+	 * @return  the importTime
+	 * @version   1.0.0
+	*/
+	
+	public Date getImportTime() {
+		return importTime;
+	}
+
+	/**
+	 * @param importTime the importTime to set
+	 */
+	public void setImportTime(Date importTime) {
+		this.importTime = importTime;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AppVipcard [cardNo=" + cardNo + ", customerId=" + customerId + ", initMoney=" + initMoney
+				+ ", remainMoney=" + remainMoney + ", cardType=" + cardType + ", cardState=" + cardState
+				+ ", valideTime=" + valideTime + ", activeTime=" + activeTime + ", nfcId=" + nfcId + ", dtflag="
+				+ dtflag + "]";
+	}
+    
+    
 }

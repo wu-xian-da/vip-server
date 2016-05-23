@@ -10,7 +10,7 @@ import com.jianfei.core.bean.User;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/18 10:47
  */
-public interface SalerUserManager {
+public interface SaleUserManager {
 
     /**
      * 验证用户密码
@@ -25,7 +25,7 @@ public interface SalerUserManager {
      * @param userNo
      * @return
      */
-    User getSalerUser(String userNo);
+    User getSaleUser(String userNo);
 
     /**
      * 更新用户密码

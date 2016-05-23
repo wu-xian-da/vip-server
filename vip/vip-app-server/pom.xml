@@ -316,7 +316,7 @@
 
 	</dependencies>
 	<build>
-
+			<finalName>vip-app-server</finalName>
 			<plugins>	<!-- 读取配置文件属性 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>

@@ -9,6 +9,13 @@
     <result column="viproom_name" property="viproomName" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
   </resultMap>
+  
+  <!--根据卡号统计消费次数  -->
+  <select id="getCountCosume" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	select count(*) from app_consume where card_no = #{cardNo}
+  </select>
+  
+  
   <sql id="Base_Column_List" >
     consume_id, card_no, consume_money, consume_time, viproom_name, dtflag
   </sql>
