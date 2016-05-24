@@ -2,6 +2,7 @@
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.apache.commons.lang3.StringUtils"%>
+<%@ page import="com.jianfei.core.common.utils.GloabConfig"%>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -30,6 +31,7 @@ sy.contextPath = '<%=contextPath%>';
 sy.basePath = '<%=basePath%>';
 sy.version = '<%=version%>';
 sy.pixel_0 = '<%=contextPath%>/style/images/pixel_0.gif';//0像素的背景，一般用于占位
+sy.staticServer = '<%=GloabConfig.getConfig("static.resource.server.address")%>';
 </script>
 
 <%-- 引入my97日期时间控件 --%>

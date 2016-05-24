@@ -28,10 +28,13 @@ import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 
 /**
- * plUpload上传工具
+ *
+ * @Description: plUpload上传工具
+ * @author: li.binbin@jianfeitech.com
+ * @date: 2016年5月24日 上午12:49:40
  * 
- * @author 孙宇
- * 
+ * @version 1.0.0
+ *
  */
 public class PlUploadServlet extends HttpServlet {
 
@@ -60,8 +63,7 @@ public class PlUploadServlet extends HttpServlet {
 		String realPath = GloabConfig.getInstance()
 				.getConfig("upload.home.dir") + fileFolder + datefolder;// 文件上传到服务器的真实路径
 		// System.out.println(realPath);
-		String path = GloabConfig.getConfig("relative.path.to.server")
-				+ fileFolder + datefolder;// 文件在服务器的相对路径
+		String path = fileFolder + datefolder;// 文件在服务器的相对路径
 		// System.out.println(path);
 		if (request.getSession() == null || false) {// 如果用户没有登录，则不允许上传
 			Map<String, Object> m = new HashMap<String, Object>();

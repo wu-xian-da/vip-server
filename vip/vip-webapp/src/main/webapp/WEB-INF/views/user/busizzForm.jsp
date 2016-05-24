@@ -7,21 +7,14 @@
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
 	var submitNow = function($dialog, $grid, $pjq) {
-		var url= sy.contextPath + '/user/save';
+		var url=sy.contextPath + '/busizz/save';
 		var arids = '';
 		$("#area input:checkbox").each(function(){
 			if(this.checked){
 				arids=arids+$(this).val()+",";
 			}
 		});
-		var nodes = $('#tree').tree('getChecked',
-				[ 'checked', 'indeterminate' ]);
 		$("#arids").val(arids);
-		var ids = [];
-		for (var i = 0; i < nodes.length; i++) {
-			ids.push(nodes[i].id);
-		}
-		$("#roleids").val(ids.join(','));
 		$.post(url, sy.serializeObject($('form')), function(result) {
 			if (result.ok) {
 				$pjq.messager.alert('提示', result.msgBody, 'info');
@@ -51,38 +44,6 @@
 				$("#area input:checkbox").checkCbx();
 			});
 		});
-		parent.$.messager.progress({
-			text : '数据加载中....'
-		});
-		$('#tree').tree(
-				{
-					url : sy.contextPath + '/role/tree',
-					parentField : 'pid',
-					checkbox : true,
-					formatter : function(node) {
-						return node.name;
-					},
-					onLoadSuccess : function(node, data) {
-						$.get(sy.contextPath + '/role/selectroles/'+ $(':input[name="id"]').val(), function(
-								result) {
-							if (result) {
-								for (var i = 0; i < result.length; i++) {
-									var node = $('#tree').tree('find',
-											result[i].id);
-									if (node) {
-										var isLeaf = $('#tree').tree('isLeaf',
-												node.target);
-										if (isLeaf) {
-											$('#tree').tree('check',
-													node.target);
-										}
-									}
-								}
-							}
-							parent.$.messager.progress('close');
-						}, 'json');
-					}
-				});
 	});
 </script>
 </head>
@@ -95,18 +56,26 @@
 			<legend>用户基本信息</legend>
 			<table class="table" style="width: 100%;">
 				<tr>
+					<th>职位</th>
+					<td><input name="job" value="${user.job }" class="easyui-validatebox" data-options="required:true" /></td>
 					<th>姓名</th>
 					<td><input name="name" value="${user.name }" class="easyui-validatebox" data-options="required:true" /></td>
-					<th>登陆名称</th>
-					<td><input name="loginName" value="${user.loginName }" class="easyui-validatebox" data-options="required:true" /></td>
 				</tr>
 				<tr>
-					<td colspan="4">
-						<fieldset>
-							<legend>所属角色</legend>
-							<ul id="tree"></ul>
-						</fieldset>
-					</td>
+					<th>工号</th>
+					<td><input name="code" value="${user.code }" /></td>
+					<th>性别</th>
+					<td><select class="easyui-combobox" name="sex" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+							<option value="1" <c:if test="${user.sex==1 }">selected="selected"</c:if> >男</option>
+							<option value="0" <c:if test="${user.sex==0 }">selected="selected"</c:if> >女</option>
+					</select></td>
+				</tr>
+				<tr>
+					<th>手机号</th>
+					<td><input name="phone" value="${user.phone }" /></td>
+					<th>状态</th>
+					<td>	<label class="no-width"><input type="radio" v-model="status" value="active">在职</label>
+					<label class="no-width"><input type="radio" v-model="status" value="dimission">离职</label></td>
 				</tr>
 				<tr>
 					<td colspan="4">

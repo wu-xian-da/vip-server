@@ -13,21 +13,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.Menu;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.cache.CacheUtils;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
@@ -40,6 +40,7 @@ import com.jianfei.core.common.utils.TreeNodeUtil;
 import com.jianfei.core.mapper.ResourceMapper;
 import com.jianfei.core.mapper.RoleMapper;
 import com.jianfei.core.mapper.UserMapper;
+import com.jianfei.core.service.base.AriPortService;
 
 /**
  *
@@ -120,10 +121,10 @@ public class SystemService {
 				return dto.setMsgBody("操作失败，请稍后重试...");
 			}
 			if (null == id || id == 0) {
-				//查询角色名是否已经存在
+				// 查询角色名是否已经存在
 				List<Role> exRoles = roleMapper.get(new MapUtils.Builder()
 						.setKeyValue("notLikeName", name).build());
-				if(!CollectionUtils.isEmpty(exRoles)){
+				if (!CollectionUtils.isEmpty(exRoles)) {
 					return dto.setMsgBody("角色名已经存在，请更换...");
 				}
 				// 保存操作
@@ -158,12 +159,12 @@ public class SystemService {
 	}
 
 	/**
-	 * batchUpdateUserRoles(这里用一句话描述这个方法的作用) void
+	 * batchUpdateUserRoles(批量更新用户角色) void
 	 * 
 	 * @version 1.0.0
 	 */
-	public MessageDto<User> batchUpdateUserRoles(Long id, String ids) {
-		MessageDto<User> dto = new MessageDto<User>();
+	public MessageDto<String> batchUpdateUserRoles(Long id, String ids) {
+		MessageDto<String> dto = new MessageDto<String>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
 			userMapper.deleteRolesFromUser(id);
@@ -174,24 +175,31 @@ public class SystemService {
 				map.put("roleId", str);
 				list.add(map);
 			}
-			CacheUtils.remove(CacheUtils.BROKER_CACHE, CURRENT_MENU);
+			userMapper.batchInsertUserRole(list);
 		} catch (Exception e) {
 			logger.error("更新用户角色:{}", e.getMessage());
 			return dto.setMsgBody(MessageDto.MsgFlag.ERROR);
 		}
-		userMapper.batchInsertUserRole(list);
+
 		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
+	/**
+	 * saveResourc(保存资源)
+	 * 
+	 * @param resource
+	 * @return MessageDto<String>
+	 * @version 1.0.0
+	 */
 	public MessageDto<String> saveResourc(Resource resource) {
-		MessageDto dto = new MessageDto();
+		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
 			resourceMapper.save(resource);
 		} catch (Exception e) {
 			logger.error("保存资源:{}", e.getMessage());
-			return dto.setMsgBody(MessageDto.MsgFlag.ERROR);
+			return messageDto.setMsgBody(MessageDto.MsgFlag.ERROR);
 		}
-		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
 	/**
@@ -240,6 +248,60 @@ public class SystemService {
 	}
 
 	/**
+	 * saveUser(保存用户)
+	 * 
+	 * @param user
+	 * @param arids
+	 * @param roleids
+	 * @return MessageDto<String>
+	 * @version 1.0.0
+	 */
+	public MessageDto<String> saveUser(User user, String arids, String roleids) {
+		MessageDto<String> messageDto = new MessageDto<String>();
+		SimpleHash simpleHash = new SimpleHash("md5",
+				GloabConfig.getConfig("defalut.passwd"), user.getSalt());
+		user.setPassword(simpleHash.toString());
+		Long id = 0l;
+		if (!StringUtils.isEmpty(user.getLoginName())) {
+			User u = userMapper.getUserByName(StringUtils.trim(user
+					.getLoginName()));
+			// 保存操作,用户名已经存在
+			if (null != u && 0 == user.getId()) {
+				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
+			} else if (null == u && 0 == user.getId()) {
+				// 保存用户
+				userMapper.save(user);
+				User u2 = userMapper.getUserByName(user.getLoginName());
+				id = u2.getId();
+			} else if (u != null && user.getId() != u.getId()) {
+				// 更新操作
+				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
+			} else {
+				userMapper.update(user);
+				id = user.getId();
+			}
+		}
+		// 更新用户角色
+		if (!StringUtils.isEmpty(roleids)) {
+			MessageDto<String> dto = batchUpdateUserRoles(id, roleids);
+			if (!dto.isOk()) {
+				return dto;
+			}
+		}
+
+		// 批量更新用户数据权限
+		if (!StringUtils.isEmpty(arids)) {
+			MessageDto<String> dto2 = ariPortService.batchInsertUserAriport(id,
+					arids);
+			if (!dto2.isOk()) {
+				return dto2;
+			}
+		}
+		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+
+	}
+
+	/**
 	 * 日志对象
 	 */
 	protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -251,6 +313,8 @@ public class SystemService {
 	private RoleMapper roleMapper;
 	@Autowired
 	private ResourceMapper resourceMapper;
+	@Autowired
+	private AriPortService<AriPort> ariPortService;
 
 	public ObjectMapper mapper = new ObjectMapper();
 

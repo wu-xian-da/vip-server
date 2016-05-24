@@ -108,18 +108,4 @@ public class AriPortController extends BaseController {
 		return "airport/airPortForm";
 	}
 
-	@RequestMapping(value = "/datePermission/data", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Map<String, Object>> datePermissionData(Long id) {
-
-		return ariPortService.datePermissionData(id);
-	}
-
-	@RequestMapping(value = "/datapermission/update", method = RequestMethod.POST)
-	@ResponseBody
-	public MessageDto<String> saveDataPermissionu(String id,String name,String loginName,String ids) {
-		 return ariPortService.batchInsertUserAriport(id,name,loginName, ids);
-
-	}
-
 }

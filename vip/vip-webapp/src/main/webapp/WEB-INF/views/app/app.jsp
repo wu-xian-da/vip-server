@@ -14,13 +14,19 @@
 	var addFun = function() {
 		var dialog = parent.sy.modalDialog({
 			title : '添加用户信息',
-			url : sy.contextPath + '/user/form',
+			url : sy.contextPath + '/app/form',
 			buttons : [ {
 				text : '添加',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
 			} ]
+		});
+	};
+	var showFun = function(id) {
+		var dialog = parent.sy.modalDialog({
+			title : '查看用户信息',
+			url : sy.contextPath + '/securityJsp/base/SyuserForm.jsp?id=' + id
 		});
 	};
 	var editFun = function(id) {
@@ -36,9 +42,9 @@
 		});
 	};
 	var removeFun = function(id) {
-		parent.$.messager.confirm('询问', '您确定要禁用该用户？', function(r) {
+		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
 			if (r) {
-				$.post(sy.contextPath + '/user/delete', {
+				$.post(sy.contextPath + '/app/delete', {
 					id : id
 				}, function(dataObj) {
 					if(!dataObj.ok){
@@ -50,49 +56,48 @@
 			}
 		});
 	};
+	
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
-			url : sy.contextPath + '/user/list',
+			url : sy.contextPath + '/app/list',
 			striped : true,
 			rownumbers : true,
 			pagination : true,
 			singleSelect : true,
-			idField : 'id',
-			sortName : 'createdatetime',
-			sortOrder : 'desc',
+			idField : 'pictureId',
 			pageSize : 10,
 			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			frozenColumns : [ [ {
-				width : '100',
-				title : '登录名',
-				field : 'loginName',
-				sortable : true
-			}, {
+		
+			columns : [ [ {
 				width : '80',
-				title : '姓名',
-				field : 'name',
-				sortable : true
-			} ] ],
-			columns : [ [  {
-				width : '350',
-				title : '区域',
-				field : 'ariPortNames'
-			}, {
-				width : '350',
-				title : '角色',
-				field : 'roelNames'
+				title : '描述',
+				field : 'descr'
 			},{
-				width : '50',
-				title : '状态',
-				field : 'dtflag',
-				sortable : true,
+				width : '150',
+				title : '链接',
+				field : 'clickUrl'
+			},{
+				width : '150',
+				title : '类型',
+				field : 'imagetype',
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
-						return '启用';
+						return '业务APP轮播图';
 					case 1:
-						return '禁用';
+						return '用户APP轮播图';
+					case 2:
+						return '用户APP合作按钮';
+					}
+				}
+			},{
+				width : '150',
+				title : '图片',
+				field : 'pictureUrl',
+				formatter : function(value, row) {
+					if(value){
+						return sy.formatString('<img src="{0}" style="width: 70px;height:80px;">', sy.staticServer +value);
 					}
 				}
 			}, {
@@ -102,10 +107,10 @@
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.pictureId);
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.pictureId);
 					<%}%>
 						return str;
 				}
@@ -129,38 +134,13 @@
 		<table>
 			<tr>
 				<td>
-					<form id="searchForm">
-						<table>
-							<tr>
-								<td>登录名</td>
-								<td><input name="_loginName" style="width: 80px;" /></td>
-								<td>姓名</td>
-								<td><input name="_name" style="width: 80px;" /></td>
-								<!-- 
-								<td>创建时间</td>
-								<td><input name="_start"  id="d4311" class="Wdate" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'d4312\')}'})" readonly="readonly" style="width: 120px;" />
-								-<input id="d4312" name="_end" class="Wdate" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'d4311\')}'})" readonly="readonly" style="width: 120px;" /></td> -->
-								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>
-							
-							</tr>
-						</table>
-					</form>
-				</td>
-			</tr>
-			<tr>
-				<td>
 					<table>
 						<tr>
 						<shiro:hasPermission name="system:user:add">
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
 						</shiro:hasPermission>
-							<shiro:hasPermission name="system:user:import">
-							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_add',plain:true" onclick="">导入</a></td>
-							</shiro:hasPermission>
-								<shiro:hasPermission name="system:user:output">
-							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_go',plain:true" onclick="">导出</a></td>
-							</shiro:hasPermission>
+						
 						</tr>
 					</table>
 				</td>

@@ -8,12 +8,10 @@
 package com.jianfei.core.bean;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 
 /**
  *
@@ -48,7 +46,15 @@ public class User extends BaseEntity {
 
 	private String phone;
 
-	private List<Role> roles = Lists.newArrayList();
+	private String roleIds;
+
+	private String roelNames;
+	private String ariPortIds;
+	private String ariPortNames;
+
+	private String job;
+
+	private String code;
 
 	/**
 	 * state
@@ -67,6 +73,120 @@ public class User extends BaseEntity {
 	 */
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	/**
+	 * code
+	 *
+	 * @return the code
+	 * @version 1.0.0
+	 */
+
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * @param code
+	 *            the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	/**
+	 * roleIds
+	 *
+	 * @return the roleIds
+	 * @version 1.0.0
+	 */
+
+	public String getRoleIds() {
+		return roleIds;
+	}
+
+	/**
+	 * @param roleIds
+	 *            the roleIds to set
+	 */
+	public void setRoleIds(String roleIds) {
+		this.roleIds = roleIds;
+	}
+
+	/**
+	 * roelNames
+	 *
+	 * @return the roelNames
+	 * @version 1.0.0
+	 */
+
+	public String getRoelNames() {
+		return roelNames;
+	}
+
+	/**
+	 * @param roelNames
+	 *            the roelNames to set
+	 */
+	public void setRoelNames(String roelNames) {
+		this.roelNames = roelNames;
+	}
+
+	/**
+	 * job
+	 *
+	 * @return the job
+	 * @version 1.0.0
+	 */
+
+	public String getJob() {
+		return job;
+	}
+
+	/**
+	 * @param job
+	 *            the job to set
+	 */
+	public void setJob(String job) {
+		this.job = job;
+	}
+
+	/**
+	 * ariPortIds
+	 *
+	 * @return the ariPortIds
+	 * @version 1.0.0
+	 */
+
+	public String getAriPortIds() {
+		return ariPortIds;
+	}
+
+	/**
+	 * @param ariPortIds
+	 *            the ariPortIds to set
+	 */
+	public void setAriPortIds(String ariPortIds) {
+		this.ariPortIds = ariPortIds;
+	}
+
+	/**
+	 * ariPortNames
+	 *
+	 * @return the ariPortNames
+	 * @version 1.0.0
+	 */
+
+	public String getAriPortNames() {
+		return ariPortNames;
+	}
+
+	/**
+	 * @param ariPortNames
+	 *            the ariPortNames to set
+	 */
+	public void setAriPortNames(String ariPortNames) {
+		this.ariPortNames = ariPortNames;
 	}
 
 	/**
@@ -219,25 +339,6 @@ public class User extends BaseEntity {
 	 */
 	public void setLogin(boolean isLogin) {
 		this.isLogin = isLogin;
-	}
-
-	/**
-	 * roles
-	 *
-	 * @return the roles
-	 * @version 1.0.0
-	 */
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * @param roles
-	 *            the roles to set
-	 */
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
 	}
 
 	/**
