@@ -10,6 +10,7 @@
     <result column="open_time" property="openTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="country" property="country" jdbcType="VARCHAR" />
@@ -20,6 +21,7 @@
     <result column="header_phone" property="headerPhone"/>
     <result column="header_name" property="headerName"/>
   </resultMap>
+<<<<<<< HEAD:vip/vip-core-lib/src/main/resources/mappings/base/SysViproomMapper.xml
   
   <!-- 分页显示场站信息 -->
   <select id="page" resultMap="BaseResultMap" parameterType="java.util.Map">
@@ -38,6 +40,9 @@
   <resultMap id="ResultMapWithBLOBs" type="com.jianfei.core.bean.SysViproom" extends="BaseResultMap" >
     <result column="Latitude" property="latitude" jdbcType="VARBINARY" />
   </resultMap>
+=======
+
+>>>>>>> c36f3a432751506b266d46a2efd62fa5b30a95cf:vip/vip-core-lib/src/main/resources/mappings/base/SysViproomMapper.xml
   <sql id="Base_Column_List" >
     viproom_id, airport_id, viproom_name, singleconsume_money, room_num, open_time, end_time, 
     longitude, province, city, country, address, remark1, dtflag
@@ -45,7 +50,19 @@
   <sql id="Blob_Column_List" >
     Latitude
   </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+
+  <select id="getVipRoomList" resultMap="BaseResultMap" parameterType="com.jianfei.core.bean.SysAirport">
+
+    <where>
+      <if test="id!=null">
+        and t1.airport_id =#{id}
+      </if>
+
+
+    </where>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     ,

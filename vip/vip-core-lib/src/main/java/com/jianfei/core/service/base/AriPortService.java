@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.common.persistence.BaseService;
 import com.jianfei.core.common.utils.MessageDto;
 
@@ -39,4 +40,11 @@ public interface AriPortService<T extends Serializable> extends BaseService<T> {
 	 * @return
      */
 	List<String> getAriPortProvince();
+
+	/**
+	 *  根据省份获取机场信息
+	 * @param provinceId
+	 * @return
+     */
+	List<SysAirport> getAirPortByProvince(String provinceId);
 }

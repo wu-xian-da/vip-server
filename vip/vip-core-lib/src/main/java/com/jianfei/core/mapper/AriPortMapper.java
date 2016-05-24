@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.common.persistence.MyBatisDao;
 
 /**
@@ -35,4 +36,11 @@ public interface AriPortMapper extends BaseMapper<AriPort> {
 	 * @return
 	 */
 	List<String> getAriPortProvince();
+
+	/**
+	 *  根据省份获取机场信息
+	 * @param province
+	 * @return
+	 */
+	List<SysAirport> getAirPortByProvince(String province);
 }

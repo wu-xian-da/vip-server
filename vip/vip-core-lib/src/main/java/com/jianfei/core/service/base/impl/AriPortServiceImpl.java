@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.SysAirport;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -240,5 +241,16 @@ public class AriPortServiceImpl implements AriPortService<AriPort> {
 	@Override
 	public List<String> getAriPortProvince() {
 		return ariPortMapper.getAriPortProvince();
+	}
+
+	/**
+	 * 根据省份获取机场信息
+	 *
+	 * @param provinceId
+	 * @return
+	 */
+	@Override
+	public List<SysAirport> getAirPortByProvince(String provinceId) {
+		return ariPortMapper.getAirPortByProvince(provinceId);
 	}
 }
