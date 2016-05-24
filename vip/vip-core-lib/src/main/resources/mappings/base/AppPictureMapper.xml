@@ -108,21 +108,26 @@
     select
     <include refid="Base_Column_List" />
     from app_picture
-    where 1l=1
+    <where>
     <if test="viproomId != null" >
-      AND viproom_id = #{viproomId,jdbcType=VARCHAR},
+      AND viproom_id = #{viproomId,jdbcType=VARCHAR}
     </if>
     <if test="pictureUrl != null" >
-      AND picture_url = #{pictureUrl,jdbcType=VARCHAR},
+      AND picture_url = #{pictureUrl,jdbcType=VARCHAR}
     </if>
     <if test="clickUrl != null" >
-      AND click_url = #{clickUrl,jdbcType=VARCHAR},
+      AND click_url = #{clickUrl,jdbcType=VARCHAR}
     </if>
     <if test="priority != null" >
-      AND priority = #{priority,jdbcType=INTEGER},
+      AND priority = #{priority,jdbcType=INTEGER}
     </if>
     <if test="dtflag != null" >
-      AND dtflag = #{dtflag,jdbcType=INTEGER},
+      AND dtflag = #{dtflag,jdbcType=INTEGER}
     </if>
+      <if test="imagetype != null">
+        AND imagetype = #{imagetype,jdbcType=INTEGER}
+      </if>
+
+    </where>
   </select>
 </mapper>

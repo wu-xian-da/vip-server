@@ -11,24 +11,27 @@ package com.jianfei.core.common.enu;
 public enum PictureType {
 
     /**
-     *VIP app首页
+     * 业务APP轮播图
      */
-    VIP_APP_HOME("001"),
-    /**
-     *
-     */
-    SALE_APP_HOME("002"),
-    /**
-     * 退卡
-     */
-    VIP_ROOM("003");
-    private String name;
+    SALE_APP_HOME(0),
 
-    public String getName(){
+    /**
+     *VIP app首页轮播图
+     */
+    VIP_APP_HOME(1),
+
+    /**
+     *  VIP APP合作按钮
+     */
+    VIP_APP_HOME_MODULE(2);
+
+    private int name;
+
+    public int getName(){
         return this.name;
     }
 
-    private PictureType(String name){
+    private PictureType(int name){
         this.name = name;
     }
 

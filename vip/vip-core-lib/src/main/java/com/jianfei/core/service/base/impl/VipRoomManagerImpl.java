@@ -141,5 +141,14 @@ public class VipRoomManagerImpl implements VipRoomManager {
 		return pageVipRoom(pageDto,airport);
 	}
 
-
+	/**
+	 * 获取VIP室信息
+	 *
+	 * @param vipRoomId
+	 * @return
+	 */
+	@Override
+	public SysViproom getVipRoomInfo(String vipRoomId) {
+		return sysViproomMapper.selectByPrimaryKey(vipRoomId);
+	}
 }

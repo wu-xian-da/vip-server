@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.MessageDto;
 
 /**
@@ -33,5 +34,12 @@ public interface AppPictureService {
 	MessageDto<List<AppPicture>> get(Map<String, Object> map);
 
 	MessageDto<AppPicture> selectByPrimaryKey(Integer pictureId);
+
+	/**
+	 * 查询某个类型下的轮播图数据
+	 * @param pictureType
+	 * @return
+	 */
+	List<AppPicture> getPicture(PictureType pictureType);
 
 }

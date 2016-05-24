@@ -10,6 +10,7 @@ package com.jianfei.core.service.base.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.common.enu.PictureType;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,4 +142,16 @@ public class AppPictureServiceImpl implements AppPictureService {
 		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
+	/**
+	 * 查询某个类型下的轮播图数据
+	 *
+	 * @param pictureType
+	 * @return
+	 */
+	@Override
+	public List<AppPicture> getPicture(PictureType pictureType) {
+		AppPicture appPicture=new AppPicture();
+		appPicture.setImagetype(pictureType.getName());
+		return appPictureMapper.getPicture(appPicture);
+	}
 }

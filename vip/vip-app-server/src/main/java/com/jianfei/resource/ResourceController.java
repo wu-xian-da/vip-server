@@ -3,15 +3,16 @@ package com.jianfei.resource;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.common.BaseController;
 import com.jianfei.common.BaseMsgInfo;
-import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.service.base.impl.AppPictureServiceImpl;
 import com.jianfei.core.service.base.impl.AriPortServiceImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
-import com.jianfei.dto.AirportVo;
-import com.jianfei.dto.VipRoomVo;
+import com.jianfei.dto.VipCardInfoVo;
+import com.jianfei.dto.VipRightInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +38,12 @@ public class ResourceController extends BaseController {
 
 	@Autowired
 	private VipRoomManagerImpl vipRoomManager;
+
+	@Autowired
+	private AppPictureServiceImpl appPictureService;
 	/**
 	 * 获取支持的省份列表
 	 * @param
-	 * @return List<AirportVo>
 	 */
 	@RequestMapping(value = "getAirportProvince", method = RequestMethod.GET)
 	@ResponseBody
@@ -53,7 +56,6 @@ public class ResourceController extends BaseController {
 	/**
 	 * 根据省份ID获取机场列表
 	 * @param province 省份
-	 * @return List<AirportVo>
      */
 	@RequestMapping(value = "/getAirportList", method = RequestMethod.GET)
 	@ResponseBody
@@ -85,10 +87,58 @@ public class ResourceController extends BaseController {
 	 */
 	@RequestMapping(value = "/getVipRoomInfo", method = RequestMethod.GET)
 	@ResponseBody
-	public BaseMsgInfo vipRoomInfo(@RequestParam(value = "vipRoomId", required = false) String vipRoomId
+	public BaseMsgInfo vipRoomInfo(@RequestParam(value = "vipRoomId", required = true) String vipRoomId
 	) {
-  		 return new BaseMsgInfo();
+		 SysViproom vipRoom=vipRoomManager.getVipRoomInfo(vipRoomId);
+  		 return BaseMsgInfo.success(vipRoom);
+	}
 
+
+	/**
+	 * VIPAPP首页轮播图
+	 */
+	@RequestMapping(value = "/getVipHomeImages", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo vipHomeImages() {
+		List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME);
+		return BaseMsgInfo.success(list);
+	}
+
+	/**
+	 * VIPAPP首页模块信息
+	 */
+	@RequestMapping(value = "/getVipHomeModules", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo vipHomeModules() {
+		List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME_MODULE);
+		return BaseMsgInfo.success(list);
+	}
+
+	/**
+	 * 销售 APP首页模块信息
+	 */
+	@RequestMapping(value = "/getSaleHomeImages", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo saleHomeModules() {
+		List<AppPicture> list=appPictureService.getPicture(PictureType.SALE_APP_HOME);
+		return BaseMsgInfo.success(list);
+	}
+
+	/**
+	 * VIP卡权益信息
+	 */
+	@RequestMapping(value = "/getVipCardRight", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo getVipCardRight() {
+		List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME);
+		List<VipRightInfoVo> vipRightInfoVos=new ArrayList<>();
+		vipRightInfoVos.add(new VipRightInfoVo(1,"1.Vip室使用权益","可能因座位限制入内"));
+		vipRightInfoVos.add(new VipRightInfoVo(2,"2.全年保险","可能因座位限制入内"));
+		vipRightInfoVos.add(new VipRightInfoVo(3,"3.赠送哈哈哈","可能因座位限制入内"));
+		VipCardInfoVo vipCardInfoVo=new VipCardInfoVo();
+		vipCardInfoVo.setRight(vipRightInfoVos);
+		vipCardInfoVo.setImages(list);
+		return BaseMsgInfo.success(vipCardInfoVo);
 	}
 
 }
