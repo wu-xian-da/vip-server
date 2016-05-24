@@ -24,7 +24,7 @@ import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.service.base.impl.VipRoomManagerImp;
+import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 
 /**
  *
@@ -39,7 +39,7 @@ import com.jianfei.core.service.base.impl.VipRoomManagerImp;
 @RequestMapping("viproom")
 public class VipRoomController extends BaseController {
 	@Autowired
-	private VipRoomManagerImp vipRoomManagerImp;
+	private VipRoomManagerImpl vipRoomManagerImp;
 	
 	@RequestMapping("/gotoVipRoomView")
 	public String test(){
@@ -86,4 +86,6 @@ public class VipRoomController extends BaseController {
 		return new MessageDto<AppVipcard>().setOk(true).setMsgBody(
 				MessageDto.MsgFlag.SUCCESS);
 	}
+	
+	
 }

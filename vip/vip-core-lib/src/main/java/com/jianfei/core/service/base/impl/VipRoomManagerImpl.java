@@ -34,7 +34,7 @@ import com.jianfei.core.service.base.VipRoomManager;
  *
  */
 @Service
-public class VipRoomManagerImp implements VipRoomManager {
+public class VipRoomManagerImpl implements VipRoomManager {
 	@Autowired
 	private SysViproomMapper sysViproomMapper;
 	/**

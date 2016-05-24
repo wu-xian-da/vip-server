@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.SysViproom;
-import com.jianfei.core.service.base.impl.VipRoomManagerImp;
+import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 
 
 
@@ -49,7 +49,7 @@ import com.jianfei.core.service.base.impl.VipRoomManagerImp;
 @Transactional
 public class VipRoomManagerImpTest {
 	@Autowired
-	private VipRoomManagerImp vipRoomManagerImp;
+	private VipRoomManagerImpl vipRoomManagerImp;
 	
 	//分页测试
 	@Test
