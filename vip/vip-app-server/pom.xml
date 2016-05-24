@@ -339,7 +339,7 @@
 
 						<scanIntervalSeconds>0</scanIntervalSeconds>
 						<webDefaultXml>src/main/resources/webdefault.xml</webDefaultXml>
-						<contextPath>/app_server</contextPath>
+						<contextPath>/vip-app-server</contextPath>
 						<webDefaultXml>jetty.xml</webDefaultXml>
 						<connectors>
 							<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
