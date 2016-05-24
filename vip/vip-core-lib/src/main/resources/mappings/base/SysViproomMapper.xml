@@ -21,7 +21,6 @@
     <result column="header_phone" property="headerPhone"/>
     <result column="header_name" property="headerName"/>
   </resultMap>
-<<<<<<< HEAD:vip/vip-core-lib/src/main/resources/mappings/base/SysViproomMapper.xml
   
   <!-- 分页显示场站信息 -->
   <select id="page" resultMap="BaseResultMap" parameterType="java.util.Map">
@@ -40,9 +39,7 @@
   <resultMap id="ResultMapWithBLOBs" type="com.jianfei.core.bean.SysViproom" extends="BaseResultMap" >
     <result column="Latitude" property="latitude" jdbcType="VARBINARY" />
   </resultMap>
-=======
 
->>>>>>> c36f3a432751506b266d46a2efd62fa5b30a95cf:vip/vip-core-lib/src/main/resources/mappings/base/SysViproomMapper.xml
   <sql id="Base_Column_List" >
     viproom_id, airport_id, viproom_name, singleconsume_money, room_num, open_time, end_time, 
     longitude, province, city, country, address, remark1, dtflag

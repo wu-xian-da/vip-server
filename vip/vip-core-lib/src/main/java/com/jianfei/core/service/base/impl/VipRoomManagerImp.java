@@ -17,9 +17,11 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
+import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.mapper.SysViproomMapper;
 import com.jianfei.core.service.base.VipRoomManager;
 
@@ -93,6 +95,24 @@ public class VipRoomManagerImp implements VipRoomManager {
 	public void updateVipRoom() {
 		// TODO Auto-generated method stub
 
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jianfei.core.service.base.VipRoomManager#pageVipRoom(com.jianfei.core.common.utils.PageDto, com.jianfei.core.bean.SysAirport, java.lang.String)
+	 */
+	@Override
+	public PageInfo<SysViproom> pageVipRoom(PageDto pageDto, SysAirport airport, String coordinate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jianfei.core.service.base.VipRoomManager#pageVipRoom(com.jianfei.core.common.utils.PageDto, com.jianfei.core.bean.SysAirport)
+	 */
+	@Override
+	public PageInfo<SysViproom> pageVipRoom(PageDto pageDto, SysAirport airport) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

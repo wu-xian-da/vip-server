@@ -223,8 +223,10 @@ public class SysViproom {
 				+ ", singleconsumeMoney=" + singleconsumeMoney + ", roomNum=" + roomNum + ", openTime=" + openTime
 				+ ", endTime=" + endTime + ", longitude=" + longitude + ", province=" + province + ", city=" + city
 				+ ", country=" + country + ", address=" + address + ", remark1=" + remark1 + ", dtflag=" + dtflag
-				+ ", latitude=" + Arrays.toString(latitude) + "]";
+				+ ", latitude=" + latitude + "]";
 	}
+
+	
 
 	
 

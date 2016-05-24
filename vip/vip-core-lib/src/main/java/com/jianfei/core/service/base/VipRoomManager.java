@@ -12,14 +12,9 @@ package com.jianfei.core.service.base;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
-<<<<<<< HEAD
 import com.jianfei.core.bean.SysViproom;
-=======
 import com.jianfei.core.bean.SysAirport;
-import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.utils.PageDto;
->>>>>>> c36f3a432751506b266d46a2efd62fa5b30a95cf
-import com.jianfei.core.dto.OrderShowInfoDto;
 
 /**
  *
@@ -42,14 +37,6 @@ public interface VipRoomManager {
 	
 	//编辑vip室信息
 	public void updateVipRoom();
-	
-<<<<<<< HEAD
-	
-	
-	
-=======
-	//删除vip室信息
-	public void delVipRoom();
 
 	/**
 	 * 分页获取Vip室信息
@@ -67,5 +54,4 @@ public interface VipRoomManager {
      * @return
      */
 	PageInfo<SysViproom> pageVipRoom(PageDto pageDto, SysAirport airport);
->>>>>>> c36f3a432751506b266d46a2efd62fa5b30a95cf
 }
