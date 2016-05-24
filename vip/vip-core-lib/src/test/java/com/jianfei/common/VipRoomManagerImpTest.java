@@ -29,7 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppVipcard;
-import com.jianfei.core.service.base.impl.VipCardManagerImpl;
+import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.service.base.impl.VipRoomManagerImp;
 
 
 
@@ -46,31 +47,27 @@ import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml" })
 @Transactional
-public class VipCardManagerImplTest {
+public class VipRoomManagerImpTest {
 	@Autowired
-	private VipCardManagerImpl vipCardManagerImpl;
+	private VipRoomManagerImp vipRoomManagerImp;
 	
 	//分页测试
 	@Test
 	public void pageListTest(){
 		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("cardState", 1);
-		PageInfo<AppVipcard> pageinfo = vipCardManagerImpl.showCardListPage(1, 2, params);
+		
+		PageInfo<SysViproom> pageinfo = vipRoomManagerImp.simplePage(1, 2, params);
 		System.out.println("总的条数："+pageinfo.getTotal());
-		List<AppVipcard> list = pageinfo.getList();
-		for(AppVipcard vipcard : list){
-			System.out.println(vipcard);
+		List<SysViproom> list = pageinfo.getList();
+		for(SysViproom SysViproom : list){
+			System.out.println(SysViproom);
 		}
 	}
-	//导入excel表格数据
+	
+	//逻辑删除vip室信息
 	@Test
-	public void importTest(){
-		vipCardManagerImpl.importExcelData("f://test.xlsx");
+	public void delVipRoom(){
+		vipRoomManagerImp.delVipRoom("1001");
 	}
 	
-	@Test
-	public void export(){
-		String filePath = "f://";
-		vipCardManagerImpl.exportDataToExcel(filePath);
-	}
 }

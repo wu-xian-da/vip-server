@@ -421,7 +421,7 @@
 				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
 				<jdbc.version>5.1.37</jdbc.version>
 				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-				<jdbc.url>jdbc:mysql://120.27.116.141/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.url>jdbc:mysql://120.27.116.141/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>refineli</jdbc.password>
 				<jdbc.pool.init>10</jdbc.pool.init>
@@ -449,7 +449,7 @@
 				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
 				<jdbc.version>5.1.13</jdbc.version>
 				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-				<jdbc.url>jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.url>jdbc:mysql://192.168.110.9/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>refineli</jdbc.password>
 				<jdbc.pool.init>10</jdbc.pool.init>

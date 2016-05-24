@@ -36,11 +36,13 @@
 			} ]
 		});
 	};
-	var removeFun = function(id) {
+	
+	//逻辑删除vip室
+	var removeFun = function(viproomId) {
 		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
 			if (r) {
-				$.post(sy.contextPath + '/user/delete', {
-					id : id
+				$.post(sy.contextPath + '/viproom/delVipRoomById', {
+					viproomId : viproomId
 				}, function(dataObj) {
 					if(!dataObj.ok){
 			    		$.messager.alert('msg',dataObj.msgBody,'error');
@@ -80,50 +82,40 @@
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
-			url : sy.contextPath + '/user/list',
+			url : sy.contextPath + '/viproom/showVipRoomList',
 			striped : true,
 			rownumbers : true,
 			pagination : true,
 			singleSelect : true,
-			idField : 'id',
-			sortName : 'createdatetime',
-			sortOrder : 'desc',
+			
 			pageSize : 10,
 			pageList : [5, 10, 20, 30, 40, 50],
 			frozenColumns : [ [ {
-				width : '80',
-				title : '序号',
-				field : 'loginName',
+				width : '100',
+				title : 'vip室编号',
+				field : 'viproomId',
 				sortable : true
-			}, {
+			},{
 				width : '100',
 				title : '所属场站',
-				field : 'name',
+				field : 'airportName',
 				sortable : true
 			} ] ],
 			columns : [ [ {
 				width : '150',
 				title : 'vip室名称',
-				field : 'updatedatetime',
-				sortable : true
+				field : 'viproomName',
+				
 			}, {
 				width : '150',
 				title : '场站负责人',
-				field : 'updatedatetime',
-				sortable : true
+				field : 'headerName',
+				
 			}, {
 				width : '150',
 				title : '负责人电话',
-				field : 'sex',
-				sortable : true,
-				formatter : function(value, row, index) {
-					switch (value) {
-					case 0:
-						return '女';
-					case 1:
-						return '男';
-					}
-				}
+				field : 'headerPhone',
+				
 			},{
 				title : '操作',
 				field : 'action',
@@ -131,7 +123,7 @@
 				formatter : function(value, row) {
 					var str = '';
 					str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.viproomId);
 					return str;
 				}
 			} ] ],
@@ -153,6 +145,7 @@
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
+				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加VIP室</a></td>
 				<td>
 					<!-- 搜索条件框 -->
 					<form id="searchForm">

@@ -96,6 +96,14 @@
 			<param-value>6</param-value>
 		</init-param>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ImportExcelServlet</display-name>
+		<servlet-name>ImportExcelServlet</servlet-name>
+		<servlet-class>com.jianfei.common.ImportExcelServlet</servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>ValidateCodeServlet</servlet-name>
 		<url-pattern>/validate/code</url-pattern>
@@ -105,4 +113,9 @@
 		<servlet-name>springDispatcherServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImportExcelServlet</servlet-name>
+		<url-pattern>/ImportExcelServlet</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

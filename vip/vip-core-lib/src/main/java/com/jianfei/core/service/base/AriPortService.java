@@ -44,7 +44,6 @@ public interface AriPortService<T extends Serializable> extends BaseService<T> {
 	MessageDto<List<AriPort>> selectAriportByUserId(Long id);
 
 	List<Map<String, Object>> datePermissionData(Long id);
-	
 	/**
 	 * 获取机场的省份列表
 	 * @return

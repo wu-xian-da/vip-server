@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.SysAirport;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,4 +192,25 @@ public class AriPortServiceImpl implements AriPortService<AriPort> {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	/**
+	 * 获取机场的省份列表
+	 *
+	 * @return
+	 */
+	@Override
+	public List<String> getAriPortProvince() {
+		return ariPortMapper.getAriPortProvince();
+	}
+
+	/**
+	 * 根据省份获取机场信息
+	 *
+	 * @param provinceId
+	 * @return
+	 */
+	@Override
+	public List<SysAirport> getAirPortByProvince(String provinceId) {
+		return ariPortMapper.getAirPortByProvince(provinceId);
+	}
 }
