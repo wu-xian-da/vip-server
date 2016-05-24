@@ -36,8 +36,14 @@
   </update>
   
   
-  <resultMap id="ResultMapWithBLOBs" type="com.jianfei.core.bean.SysViproom" extends="BaseResultMap" >
-    <result column="Latitude" property="latitude" jdbcType="VARBINARY" />
+  <resultMap id="ResultMapWithPic" type="com.jianfei.core.bean.SysViproom" extends="BaseResultMap" >
+    <collection property="pictures" column="id" javaType="com.jianfei.core.bean.AppPicture">
+    <id column="picture_id" property="pictureId" jdbcType="INTEGER" />
+    <result column="viproom_id" property="viproomId" jdbcType="VARCHAR" />
+    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="click_url" property="clickUrl" jdbcType="VARCHAR" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    </collection>
   </resultMap>
 
   <sql id="Base_Column_List" >
