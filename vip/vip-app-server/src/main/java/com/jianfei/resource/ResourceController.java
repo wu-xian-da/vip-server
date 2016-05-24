@@ -9,7 +9,7 @@ import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.impl.AriPortServiceImpl;
-import com.jianfei.core.service.base.impl.VipRoomManager;
+import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 import com.jianfei.dto.AirportVo;
 import com.jianfei.dto.VipRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class ResourceController extends BaseController {
 	private AriPortServiceImpl ariPortService;
 
 	@Autowired
-	private VipRoomManager vipRoomManager;
+	private VipRoomManagerImpl vipRoomManager;
 	/**
 	 * 获取支持的省份列表
 	 * @param
