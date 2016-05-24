@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -51,9 +52,17 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		Principal principal = (Principal) getAvailablePrincipal(principals);
 		// 创建简单的授权模块
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+
+		if (principal.getUserType() == 2) {
+			authorizationInfo.addStringPermission("*");
+			authorizationInfo.addRole("*");
+			return authorizationInfo;
+		}
+
+		Set<String> roles = new HashSet<String>();
 		List<Role> roleList = systemService.getRoleMapper().selectRoleByUserId(
 				StringUtils.toLong(principal.getId()));
-		Set<String> roles = new HashSet<String>();
+
 		// 添加用户角色
 		for (Role role : roleList) {
 			if (!StringUtils.isEmpty(role.getName())) {
@@ -86,45 +95,44 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken token) throws AuthenticationException {
 		// token中储存着输入的用户名和密码
-		try {
-			UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
 
-			// 校验登录验证码
-			Session session = ShiroUtils.getSession();
-			String code = (String) session
-					.getAttribute(FormAuthenticationFilter.DEFAULT_CAPTCHA_PARAM);
-			if (authcToken.getCaptcha() == null
-					|| !authcToken.getCaptcha().equalsIgnoreCase(code)) {
-				ShiroUtils.getSession().setAttribute(
-						FormAuthenticationFilter.DEFAULT_ERROR_MESSAGE,
-						"验证码错误, 请重试.");
-				throw new AuthenticationException("msg:验证码错误, 请重试.");
-			}
+		UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
 
-			// 校验用户名密码
-			User user = systemService.getUserMapper().getUserByName(
-					authcToken.getUsername());
-
-			if (null == user) {
-				ShiroUtils.getSession().setAttribute(
-						FormAuthenticationFilter.DEFAULT_ERROR_MESSAGE,
-						"验证码错误, 请重试.");
-				return null;
-			}
-			// 判断是否有后台的登入权限
-			if (1 == user.getUserType()) {
-				return new SimpleAuthenticationInfo(new Principal(user, false),
-						user.getPassword(), ByteSource.Util.bytes(user
-								.getSalt()), getName());
-			}
-			ShiroUtils.getSession()
-					.setAttribute(
-							FormAuthenticationFilter.DEFAULT_ERROR_MESSAGE,
-							"没有后台登入权限。");
-			throw new AuthenticationException("msg:验证码错误, 请重试.");
-		} catch (Exception e) {
+		// 校验登录验证码
+		Session session = ShiroUtils.getSession();
+		String codeMsg = (String) session
+				.getAttribute(FormAuthenticationFilter.CAPTCHA_ERROR_MESSAGE);
+		if (!StringUtils.isEmpty(codeMsg)) {
+			return null;
 		}
-		return null;
+		// 校验用户名密码
+		User user = systemService.getUserMapper().getUserByName(
+				authcToken.getUsername());
+
+		if (null == user) {
+			return null;
+		}
+		// 判断是否有后台的登入权限
+		if (1 == user.getUserType() || 2 == user.getUserType()) {
+			return new SimpleAuthenticationInfo(new Principal(user, false),
+					user.getPassword(), ByteSource.Util.bytes(user.getSalt()),
+					getName());
+		}
+		ShiroUtils.getSession().setAttribute(
+				FormAuthenticationFilter.DEFAULT_ERROR_MESSAGE, "没有后台登入权限。");
+		throw new AuthenticationException("msg:验证码错误, 请重试.");
+
+	}
+
+	/**
+	 * cleanCache(清除缓存) void
+	 * 
+	 * @version 1.0.0
+	 */
+	public void cleanCache() {
+		PrincipalCollection principalCollection = SecurityUtils.getSubject()
+				.getPrincipals();
+		super.clearCache(principalCollection);
 	}
 
 	/**
@@ -139,13 +147,14 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		private String name; // 姓名
 		private boolean mobileLogin; // 是否手机登录
 
-		// private Map<String, Object> cacheMap;
+		private int userType;
 
 		public Principal(User user, boolean mobileLogin) {
 			this.id = String.valueOf(user.getId());
 			this.loginName = user.getLoginName();
 			this.name = user.getName();
 			this.mobileLogin = mobileLogin;
+			this.userType = user.getUserType();
 		}
 
 		public String getId() {
@@ -162,6 +171,25 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 		public boolean isMobileLogin() {
 			return mobileLogin;
+		}
+
+		/**
+		 * userType
+		 *
+		 * @return the userType
+		 * @version 1.0.0
+		 */
+
+		public int getUserType() {
+			return userType;
+		}
+
+		/**
+		 * @param userType
+		 *            the userType to set
+		 */
+		public void setUserType(int userType) {
+			this.userType = userType;
 		}
 
 		/**

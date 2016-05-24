@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
+import com.jianfei.core.common.utils.MapUtils;
+import com.jianfei.core.service.sys.SystemService;
 
 /**
  *
@@ -45,6 +47,9 @@ public class RoleMapperTest {
 
 	@Autowired
 	private RoleMapper roleMapper;
+	
+	@Autowired
+	private SystemService systemService;
 
 	/**
 	 * Test method for
@@ -95,14 +100,13 @@ public class RoleMapperTest {
 	 */
 	@Test
 	public void testGet() {
-		PageHelper.startPage(1, 2);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", 31);
-		List<Role> list = roleMapper.get(map);
-		for (Role role : list) {
-			System.out.println(role.getName() + "   " + role.getId() + "  "
-					+ role.getResources().get(0).getId());
+		PageHelper.startPage(1, 3);
+		List<Role> roles = systemService.getRoleMapper().get(
+				new MapUtils.Builder().setKeyValue("name", "").build());
+		for(Role role:roles){
+			System.out.println(role.getName());
 		}
+		System.out.println(JSONObject.toJSONString(roles));
 	}
 
 }

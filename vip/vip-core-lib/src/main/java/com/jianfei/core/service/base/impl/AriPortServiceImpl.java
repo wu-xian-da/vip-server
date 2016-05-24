@@ -12,19 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.SysAirport;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.AriPortMapper;
+import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.base.AriPortService;
 
 /**
@@ -107,61 +108,29 @@ public class AriPortServiceImpl implements AriPortService<AriPort> {
 	 * .util.List)
 	 */
 	@Override
-	public MessageDto<String> batchInsertUserAriport(String formJson, Long uid,
-			Integer dtflag, Integer userType) {
-		List<Map<String, Object>> mapList = handBatchInsert(formJson, uid,
-				dtflag, userType);
+	public MessageDto<String> batchInsertUserAriport(Long id, String arids) {
 		MessageDto<String> dto = new MessageDto<String>();
-		try {
-			ariPortMapper.deleteAriport(uid);
-			ariPortMapper.batchInsertUserAriport(mapList);
-			dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
-		} catch (Exception e) {
-			logger.error("添加机场信息:{}", e.getMessage());
-			dto.setOk(false).setMsgBody(MessageDto.MsgFlag.ERROR);
-		}
-		return dto;
-
-	}
-
-	/**
-	 * handBatchInsert(这里用一句话描述这个方法的作用)
-	 * 
-	 * @param formJson
-	 *            void
-	 * @version 1.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> handBatchInsert(String formJson, Long uid,
-			Integer dtflag, Integer userType) {
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
-		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			Map<String, Object> map = objectMapper.readValue(formJson,
-					Map.class);
-			Object object = map.get("air_port_data");
-			if (object != null && !StringUtils.isEmpty(object.toString())) {
-				List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-				String jsonRs = objectMapper.writeValueAsString(object);
-				list = objectMapper.readValue(jsonRs, list.getClass());
-				for (Map<String, Object> map2 : list) {
+			String[] idds = arids.split(",");
+			for (String aid : idds) {
+				if (!StringUtils.isEmpty(aid)) {
 					Map<String, Object> m = new HashMap<String, Object>();
-					if (null != map2.get("id")
-							&& !StringUtils.isEmpty(map2.get("id").toString())
-							&& Boolean.valueOf(map2.get("checked").toString())) {
-						m.put("aid", map2.get("id"));
-						m.put("uid", uid);
-						m.put("dtflag", dtflag);
-						m.put("userType", userType);
-						mapList.add(m);
-					}
+					m.put("aid", aid);
+					m.put("uid", id);
+					m.put("dtflag", 0);
+					m.put("userType", 0);
+					mapList.add(m);
 				}
 			}
+			ariPortMapper.deleteAriport(id);
+			ariPortMapper.batchInsertUserAriport(mapList);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("批量更新用的数据权限:{}", e.getMessage());
 		}
+		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 
-		return mapList;
 	}
 
 	/*
@@ -218,7 +187,30 @@ public class AriPortServiceImpl implements AriPortService<AriPort> {
 			}
 			list.add(map);
 		}
-
 		return list;
+	}
+
+	@Autowired
+	private UserMapper userMapper;
+
+	/**
+	 * 获取机场的省份列表
+	 *
+	 * @return
+	 */
+	@Override
+	public List<String> getAriPortProvince() {
+		return ariPortMapper.getAriPortProvince();
+	}
+
+	/**
+	 * 根据省份获取机场信息
+	 *
+	 * @param provinceId
+	 * @return
+	 */
+	@Override
+	public List<SysAirport> getAirPortByProvince(String provinceId) {
+		return ariPortMapper.getAirPortByProvince(provinceId);
 	}
 }

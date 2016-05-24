@@ -11,6 +11,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.service.base.AriPortService;
+import com.jianfei.core.service.thirdpart.PreCreateResult;
+import com.jianfei.core.service.thirdpart.ThirdPayManager;
 
 /**
  *
@@ -38,36 +42,16 @@ import com.jianfei.core.service.base.AriPortService;
 public class AliPayManagerImplTest {
 
 	@Autowired
-	private AriPortService<AriPort> ariPortService;
+	private ThirdPayManager aliPayManager;
 
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.service.base.impl.AriPortServiceImpl#save(com.jianfei.core.bean.AriPort)}
-	 * .
-	 */
+
+
+
 	@Test
-	public void testSave() {
+	public void testTradePrecreate() {
+		PreCreateResult result = aliPayManager.tradePrecreate();
+		Assert.assertEquals("120", result.getTradeNo());
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.service.base.impl.AriPortServiceImpl#update(com.jianfei.core.bean.AriPort)}
-	 * .
-	 */
-	@Test
-	public void testUpdate() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.service.base.impl.AriPortServiceImpl#get(java.util.Map)}
-	 * .
-	 */
-	@Test
-	public void testGet() {
-		MessageDto<List<AriPort>> messageDto = ariPortService
-				.get(new MapUtils.Builder().setKeyValue("id", "1111").build());
-	}
 
 }

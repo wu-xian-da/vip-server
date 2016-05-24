@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jianfei.core.mapper.AppVipcardMapper" >
+  <resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppVipcard" >
+    <id column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+    <result column="init_money" property="initMoney" jdbcType="REAL" />
+    <result column="remain_money" property="remainMoney" jdbcType="REAL" />
+    <result column="card_type" property="cardType" jdbcType="INTEGER" />
+    <result column="card_state" property="cardState" jdbcType="INTEGER" />
+    <result column="valide_time" property="valideTime" jdbcType="INTEGER" />
+    <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="import_time" property="importTime"/>
+    <result column="nfc_id" property="nfcId" jdbcType="VARCHAR" />
+    <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <!--分页查询  -->
+  <select id="pageList" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	<!-- select * from app_vipcard where dtflag = 0 -->
+  	
+  	<![CDATA[
+			select * from app_vipcard
+		]]>
+		<where>
+			<if test="cardState!=null">
+				card_state =#{cardState}
+			</if>
+			<if test="cardNo!=null">
+				and card_no=#{cardNo}
+			</if>
+			and dtflag=0
+		</where>
+  </select>
+  
+  <!--根据卡号逻辑删除vip卡信息  -->
+  <update id="delVipCard" parameterType="java.lang.String">
+  	update app_vipcard set dtflag =1 where card_no =#{cardNo}
+  </update>
+  
+  <!--将excel表格中的数据导入到数据中 -->
+  <insert id="importExcelToDB" parameterType="com.jianfei.core.bean.AppVipcard" >
+    insert into app_vipcard (card_no, nfc_id, import_time,dtflag,card_state)
+   		 values (#{cardNo},#{nfcId},#{importTime},#{dtflag},#{cardState})
+  </insert>
+  
+  <!-- 将数据导入到excel表格中 -->
+  <select id="selAllVipCard" resultMap="BaseResultMap">
+      select * from app_vipcard
+  </select>
+  
+  
+  
+  
+  <sql id="Base_Column_List" >
+    card_no, customer_id, init_money, remain_money, card_type, card_state, valide_time, 
+    active_time, nfc_id, dtflag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_vipcard
+    where card_no = #{cardNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from app_vipcard
+    where card_no = #{cardNo,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jianfei.core.bean.AppVipcard" >
+    insert into app_vipcard (card_no, customer_id, init_money, 
+      remain_money, card_type, card_state, 
+      valide_time, active_time, nfc_id, 
+      dtflag)
+    values (#{cardNo,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, #{initMoney,jdbcType=REAL}, 
+      #{remainMoney,jdbcType=REAL}, #{cardType,jdbcType=INTEGER}, #{cardState,jdbcType=INTEGER}, 
+      #{valideTime,jdbcType=INTEGER}, #{activeTime,jdbcType=TIMESTAMP}, #{nfcId,jdbcType=VARCHAR}, 
+      #{dtflag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jianfei.core.bean.AppVipcard" >
+    insert into app_vipcard
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cardNo != null" >
+        card_no,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="initMoney != null" >
+        init_money,
+      </if>
+      <if test="remainMoney != null" >
+        remain_money,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="cardState != null" >
+        card_state,
+      </if>
+      <if test="valideTime != null" >
+        valide_time,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="nfcId != null" >
+        nfc_id,
+      </if>
+      <if test="dtflag != null" >
+        dtflag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="initMoney != null" >
+        #{initMoney,jdbcType=REAL},
+      </if>
+      <if test="remainMoney != null" >
+        #{remainMoney,jdbcType=REAL},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="cardState != null" >
+        #{cardState,jdbcType=INTEGER},
+      </if>
+      <if test="valideTime != null" >
+        #{valideTime,jdbcType=INTEGER},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nfcId != null" >
+        #{nfcId,jdbcType=VARCHAR},
+      </if>
+      <if test="dtflag != null" >
+        #{dtflag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppVipcard" >
+    update app_vipcard
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="initMoney != null" >
+        init_money = #{initMoney,jdbcType=REAL},
+      </if>
+      <if test="remainMoney != null" >
+        remain_money = #{remainMoney,jdbcType=REAL},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="cardState != null" >
+        card_state = #{cardState,jdbcType=INTEGER},
+      </if>
+      <if test="valideTime != null" >
+        valide_time = #{valideTime,jdbcType=INTEGER},
+      </if>
+      <if test="activeTime != null" >
+        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nfcId != null" >
+        nfc_id = #{nfcId,jdbcType=VARCHAR},
+      </if>
+      <if test="dtflag != null" >
+        dtflag = #{dtflag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where card_no = #{cardNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jianfei.core.bean.AppVipcard" >
+    update app_vipcard
+    set customer_id = #{customerId,jdbcType=VARCHAR},
+      init_money = #{initMoney,jdbcType=REAL},
+      remain_money = #{remainMoney,jdbcType=REAL},
+      card_type = #{cardType,jdbcType=INTEGER},
+      card_state = #{cardState,jdbcType=INTEGER},
+      valide_time = #{valideTime,jdbcType=INTEGER},
+      active_time = #{activeTime,jdbcType=TIMESTAMP},
+      nfc_id = #{nfcId,jdbcType=VARCHAR},
+      dtflag = #{dtflag,jdbcType=INTEGER}
+    where card_no = #{cardNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

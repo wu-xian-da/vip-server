@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.demo.trade.config.Configs;
@@ -30,13 +31,14 @@ import com.jianfei.core.service.thirdpart.ThirdPayManager;
 /**
  *
  * @Description: TODO
- * @author: li.binbin@jianfeitech.com 
+ * @author: liu.lei@jianfeitech.com 
  * @date: 2016年5月23日 下午5:16:02 
  * 
  * @version 1.0.0
  *
  */
-public class AliPayManagerImpl<T> extends ThirdPayManager<T> {
+@Service
+public class AliPayManagerImpl<T> extends ThirdPayManager {
 	private static Log log = LogFactory.getLog(AliPayManagerImpl.class);
 	private static AlipayTradeService tradeService;
 	
@@ -46,7 +48,7 @@ public class AliPayManagerImpl<T> extends ThirdPayManager<T> {
 	}
 	
 	@Override
-	public PreCreateResult tradePrecreate(T requestBuilder) {
+	public PreCreateResult tradePrecreate() {
 		
 		PreCreateResult tradeResult = new PreCreateResult();
 		
@@ -59,7 +61,7 @@ public class AliPayManagerImpl<T> extends ThirdPayManager<T> {
 
         // (必填) 订单总金额，单位为元，不能超过1亿元
         // 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
-        String totalAmount = "0.01";
+        String totalAmount = "1000";
 
         // (可选) 订单不可打折金额，可以配合商家平台配置折扣活动，如果酒水不参与打折，则将对应金额填写至此字段
         // 如果该值未传入,但传入了【订单总金额】,【打折金额】,则该值默认为【订单总金额】-【打折金额】
@@ -67,7 +69,7 @@ public class AliPayManagerImpl<T> extends ThirdPayManager<T> {
 
         // 卖家支付宝账号ID，用于支持一个签约账号下支持打款到不同的收款账号，(打款到sellerId对应的支付宝账号)
         // 如果该字段为空，则默认为与支付宝签约的商户的PID，也就是appid对应的PID
-        String sellerId = "";
+        String sellerId = "13966727871";
 
         // 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
         String body = "购买商品2件共15.00元";
@@ -88,13 +90,9 @@ public class AliPayManagerImpl<T> extends ThirdPayManager<T> {
         // 商品明细列表，需填写购买商品详细信息，
         List<GoodsDetail> goodsDetailList = new ArrayList<GoodsDetail>();
         // 创建一个商品信息，参数含义分别为商品id（使用国标）、名称、单价（单位为分）、数量，如果需要添加商品类别，详见GoodsDetail
-        GoodsDetail goods1 = GoodsDetail.newInstance("goods_id001", "全麦小面包", 1500, 1);
+        GoodsDetail goods1 = GoodsDetail.newInstance("goods_id001", "空港vipcard", 1500, 1);
         // 创建好一个商品后添加至商品明细列表
         goodsDetailList.add(goods1);
-
-        // 继续创建并添加第一条商品信息，用户购买的产品为“黑人牙刷”，单价为5.05元，购买了两件
-        GoodsDetail goods2 = GoodsDetail.newInstance("goods_id002", "黑人牙刷", 505, 2);
-        goodsDetailList.add(goods2);
 
         AlipayTradePrecreateContentBuilder builder = new AlipayTradePrecreateContentBuilder()
                 .setSubject(subject)
@@ -117,7 +115,7 @@ public class AliPayManagerImpl<T> extends ThirdPayManager<T> {
                 AlipayTradePrecreateResponse response = result.getResponse();
                 //dumpResponse(response);
                 // 需要修改为运行机器上的路径
-                String filePath = String.format("/Users/liuyangkly/qr-%s.png", response.getOutTradeNo());
+                String filePath = String.format("/Users/leoliu/qr-%s.png", response.getOutTradeNo());
                 log.info("filePath:" + filePath);
                 ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
                 tradeResult.setQrImageUrl(filePath);
@@ -135,9 +133,6 @@ public class AliPayManagerImpl<T> extends ThirdPayManager<T> {
                 log.error("不支持的交易状态，交易返回异常!!!");
                 break;
         }
-        
-        
-        
         
 		return tradeResult;
 	}

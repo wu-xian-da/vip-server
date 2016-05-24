@@ -217,6 +217,11 @@
 			<artifactId>pagehelper</artifactId>
 			<version>4.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>0.9.5</version>
+		</dependency>
 
 		<!-- CKFinder begin -->
 		<dependency>
@@ -262,6 +267,7 @@
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
+		<!-- alipay相关包，需要将jar包事先手工导入本地maven库 -->
 		<dependency>
 			<groupId>com.alipay.demo</groupId>
 			<artifactId>trade</artifactId>
@@ -271,6 +277,18 @@
 			<groupId>com.alipay</groupId>
 			<artifactId>api</artifactId>
 			<version>1.0</version>
+		</dependency>
+		<!-- excel表格操作jar包 -->
+		<dependency>
+    		<groupId>org.apache.poi</groupId>
+    		<artifactId>poi-ooxml</artifactId>
+    		<version>3.10-FINAL</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
 		</dependency>
 	</dependencies>
 	<build>

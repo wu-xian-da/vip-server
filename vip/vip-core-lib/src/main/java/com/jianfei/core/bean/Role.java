@@ -29,6 +29,7 @@ public class Role extends BaseEntity {
 
 	private List<Resource> resources = Lists.newArrayList(); // 拥有菜单列表
 
+
 	public List<Resource> getResources() {
 		return resources;
 	}
@@ -44,6 +45,8 @@ public class Role extends BaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	
 
 	/*
 	 * (non-Javadoc)

@@ -67,43 +67,68 @@ public class RoleController extends BaseController {
 		PageHelper.startPage(page, rows);
 		List<Role> roles = systemService.getRoleMapper().get(
 				new MapUtils.Builder().setKeyValue("name", name).build());
+		for (Role role : roles) {
+			System.out.println(role.getName());
+		}
 		System.out.println(JSONObject.toJSONString(roles));
 		PageInfo<Role> pageInfo = new PageInfo<Role>(roles);
 		return bindDataGrid(pageInfo);
 	}
 
 	@RequestMapping(value = "form")
-	public String form() {
+	public String form(String id, Model model) {
+		List<Role> list = systemService.getRoleMapper().get(
+				new MapUtils.Builder().setKeyValue("id", id).build());
+		if (!CollectionUtils.isEmpty(list)) {
+			model.addAttribute("role", list.get(0));
+		}
 		return "role/SyroleForm";
 	}
 
-	@RequestMapping(value = "save")
+	/**
+	 * delete(删除角色)
+	 * 
+	 * @param id
+	 *            主键
+	 * @return MessageDto<String>
+	 * @version 1.0.0
+	 */
+	@RequestMapping(value = "delete")
 	@ResponseBody
-	public MessageDto<String> save(Role role) {
-		List<Role> list = systemService.getRoleMapper().get(
-				new MapUtils.Builder().setKeyValue("name", role.getName())
-						.build());
+	public MessageDto<String> delete(Role t) {
 		MessageDto<String> dto = new MessageDto<String>();
-		if (CollectionUtils.isEmpty(list)) {
-			return dto.setMsgBody("同名的角色已经存在，请更换名字...");
+		try {
+			t.setDtflag(1);
+			systemService.getRoleMapper().update(t);
+		} catch (Exception e) {
+			return dto.setMsgBody(MessageDto.MsgFlag.ERROR);
 		}
-		systemService.getRoleMapper().save(role);
 		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
-	@RequestMapping(value = "grantForm")
-	public String grantFrom(Role role, Model model) {
-		model.addAttribute("id", role.getId());
-		return "role/SyroleGrant";
-	}
-
-	@RequestMapping(value = "grant", method = RequestMethod.POST)
+	/**
+	 * save(保存角色信息)
+	 * 
+	 * @param role
+	 * @return MessageDto<String>
+	 * @version 1.0.0
+	 */
+	@RequestMapping(value = "saveAndgrant")
 	@ResponseBody
-	public MessageDto<String> grant(@RequestParam(value = "id") Long id,
+	public MessageDto<String> save(@RequestParam(value = "id",required=false) Long id,
+			@RequestParam(value = "name") String name,
+			@RequestParam(value = "description",required=false) String description,
 			@RequestParam(value = "ids") String ids) {
-		return systemService.updateRoleResource(id, ids);
+		return systemService.updateRoleResource(id, name, description, ids);
 	}
 
+
+	/**
+	 * tree(角色授权-加载树形资源树)
+	 * 
+	 * @return List<JsonTreeData>
+	 * @version 1.0.0
+	 */
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
 	@ResponseBody
 	public List<JsonTreeData> tree() {

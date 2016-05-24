@@ -16,13 +16,12 @@ package com.jianfei.core.service.thirdpart;
  * @version 1.0.0
  *
  */
-public abstract class ThirdPayManager<T> {
+public abstract class ThirdPayManager {
 	static {
 		System.out.print("abc");
 	}
 	
 	public String tradeNo;
-	T requestBuilder;
 	/**
 	 * 
 	 * tradePrecreate(第一步：调用交易预创建接口，返回二维码url)
@@ -31,7 +30,7 @@ public abstract class ThirdPayManager<T> {
 	 *PreCreateResult
 	 * @version  1.0.0
 	 */
-	public abstract PreCreateResult tradePrecreate(T requestBuilder);
+	public abstract PreCreateResult tradePrecreate();
 	
 	/**
 	 * 

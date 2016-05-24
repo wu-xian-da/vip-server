@@ -1,13 +1,19 @@
 package com.jianfei.core.bean;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class SysViproom {
-    private String viproomId;
+    private String viproomId;//编号
 
-    private String airportId;
+    private String airportId;//场站编号
+    
+    private String airportName;//场站名称
+    
+    private String headerPhone;//负责人电话号码
+    private String headerName;//场站负责人
 
-    private String viproomName;
+    private String viproomName;//名称
 
     private Float singleconsumeMoney;
 
@@ -31,7 +37,7 @@ public class SysViproom {
 
     private Integer dtflag;
 
-    private byte[] latitude;
+    private String latitude;
 
     public String getViproomId() {
         return viproomId;
@@ -145,11 +151,85 @@ public class SysViproom {
         this.dtflag = dtflag;
     }
 
-    public byte[] getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(byte[] latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
+
+	/**
+	 * airportName
+	 *
+	 * @return  the airportName
+	 * @version   1.0.0
+	*/
+	
+	public String getAirportName() {
+		return airportName;
+	}
+
+	/**
+	 * @param airportName the airportName to set
+	 */
+	public void setAirportName(String airportName) {
+		this.airportName = airportName;
+	}
+
+	/**
+	 * headerPhone
+	 *
+	 * @return  the headerPhone
+	 * @version   1.0.0
+	*/
+	
+	public String getHeaderPhone() {
+		return headerPhone;
+	}
+
+	/**
+	 * @param headerPhone the headerPhone to set
+	 */
+	public void setHeaderPhone(String headerPhone) {
+		this.headerPhone = headerPhone;
+	}
+
+	/**
+	 * headerName
+	 *
+	 * @return  the headerName
+	 * @version   1.0.0
+	*/
+	
+	public String getHeaderName() {
+		return headerName;
+	}
+
+	/**
+	 * @param headerName the headerName to set
+	 */
+	public void setHeaderName(String headerName) {
+		this.headerName = headerName;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "SysViproom [viproomId=" + viproomId + ", airportId=" + airportId + ", airportName=" + airportName
+				+ ", headerPhone=" + headerPhone + ", headerName=" + headerName + ", viproomName=" + viproomName
+				+ ", singleconsumeMoney=" + singleconsumeMoney + ", roomNum=" + roomNum + ", openTime=" + openTime
+				+ ", endTime=" + endTime + ", longitude=" + longitude + ", province=" + province + ", city=" + city
+				+ ", country=" + country + ", address=" + address + ", remark1=" + remark1 + ", dtflag=" + dtflag
+				+ ", latitude=" + latitude + "]";
+	}
+
+	
+
+	
+
+	
+
 }

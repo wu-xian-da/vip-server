@@ -336,12 +336,11 @@
 							</systemProperty>
 						</systemProperties>
 						<webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
-						<reload>automatic</reload>
+
 						<scanIntervalSeconds>0</scanIntervalSeconds>
 						<webDefaultXml>src/main/resources/webdefault.xml</webDefaultXml>
-						<contextPath>/app</contextPath>
+						<contextPath>/app_server</contextPath>
 						<webDefaultXml>jetty.xml</webDefaultXml>
-						<jettyEnvXml>jetty-env.xml</jettyEnvXml>
 						<connectors>
 							<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
 								<port>8090</port>

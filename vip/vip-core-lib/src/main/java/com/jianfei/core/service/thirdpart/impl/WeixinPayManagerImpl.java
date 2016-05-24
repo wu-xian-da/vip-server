@@ -19,13 +19,13 @@ import com.jianfei.core.service.thirdpart.ThirdPayManager;
  * @version 1.0.0
  *
  */
-public class WeixinPayManagerImpl<T> extends ThirdPayManager<T> {
+public class WeixinPayManagerImpl extends ThirdPayManager {
 	static {
 		
 	}
 
 	@Override
-	public PreCreateResult tradePrecreate(T requestBuilder) {
+	public PreCreateResult tradePrecreate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

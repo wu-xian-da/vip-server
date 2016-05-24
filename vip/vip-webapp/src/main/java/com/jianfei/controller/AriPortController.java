@@ -108,19 +108,4 @@ public class AriPortController extends BaseController {
 		return "airport/airPortForm";
 	}
 
-	@RequestMapping(value = "/datePermission/data", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Map<String, Object>> datePermissionData(Long id) {
-
-		return ariPortService.datePermissionData(id);
-	}
-
-	@RequestMapping(value = "/datapermission/update")
-	@ResponseBody
-	public MessageDto<String> saveDataPermissionu(String formJson, Long userId) {
-		return ariPortService.batchInsertUserAriport(formJson, userId,
-				GloabConfig.FORBIT, GloabConfig.SYSTEM_USER);
-
-	}
-
 }

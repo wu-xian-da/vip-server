@@ -23,12 +23,6 @@
 			} ]
 		});
 	};
-	var showFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '查看用户信息',
-			url : sy.contextPath + '/securityJsp/base/SyuserForm.jsp?id=' + id
-		});
-	};
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
 			title : '编辑用户信息',
@@ -42,7 +36,7 @@
 		});
 	};
 	var removeFun = function(id) {
-		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
+		parent.$.messager.confirm('询问', '您确定要禁用该用户？', function(r) {
 			if (r) {
 				$.post(sy.contextPath + '/user/delete', {
 					id : id
@@ -55,29 +49,6 @@
 				}, 'json');
 			}
 		});
-	};
-	var grantRoleFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '修改角色',
-			url : sy.contextPath + '/user/grant?id=' + id,
-			buttons : [ {
-				text : '修改',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
-		});
-	};
-	var grantOrganizationFun = function(id) {
-		   layer.open({
-			      type: 2,
-			      title: '授数据权限。',
-			      shadeClose: true,
-			      shade: false,
-			      maxmin: true, //开启最大化最小化按钮
-			      area: ['590px', '460px'],
-			      content: sy.contextPath + '/user/datePermission?id='+id
-			    });
 	};
 	$(function() {
 		grid = $('#grid').datagrid({
@@ -103,36 +74,25 @@
 				field : 'name',
 				sortable : true
 			} ] ],
-			columns : [ [ {
-				width : '150',
-				title : '创建时间',
-				field : 'createdatetime',
-				sortable : true
+			columns : [ [  {
+				width : '350',
+				title : '区域',
+				field : 'ariPortNames'
 			}, {
-				width : '150',
-				title : '修改时间',
-				field : 'updatedatetime',
-				sortable : true
-			}, {
+				width : '350',
+				title : '角色',
+				field : 'roelNames'
+			},{
 				width : '50',
-				title : '性别',
-				field : 'sex',
+				title : '状态',
+				field : 'dtflag',
 				sortable : true,
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
-						return '女';
+						return '启用';
 					case 1:
-						return '男';
-					}
-				}
-			}, {
-				width : '150',
-				title : '照片',
-				field : 'photo',
-				formatter : function(value, row) {
-					if(value){
-						return sy.formatString('<img src="{0}" style="width: 70px;height:80px;">', sy.contextPath +value);
+						return '禁用';
 					}
 				}
 			}, {
@@ -141,17 +101,8 @@
 				width : '90',
 				formatter : function(value, row) {
 					var str = '';
-					<%if (anyPermissionsTag.showTagBody("system:user:look")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note" title="查看" onclick="showFun(\'{0}\');"/>', row.id);
-					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
-					<%}%>
-					<%if (anyPermissionsTag.showTagBody("system:user:auth")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-user" title="用户角色" onclick="grantRoleFun(\'{0}\');"/>', row.id);
-					<%}%>
-					<%if (anyPermissionsTag.showTagBody("system:user:dataPermission")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-group" title="用户机构" onclick="grantOrganizationFun(\'{0}\');"/>', row.id);
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
@@ -185,14 +136,12 @@
 								<td><input name="_loginName" style="width: 80px;" /></td>
 								<td>姓名</td>
 								<td><input name="_name" style="width: 80px;" /></td>
-								<td>性别</td>
-								<td><select name="_sex" class="easyui-combobox" data-options="panelHeight:'auto',editable:false"><option value="">请选择</option>
-										<option value="1">男</option>
-										<option value="0">女</option></select></td>
+								<!-- 
 								<td>创建时间</td>
 								<td><input name="_start"  id="d4311" class="Wdate" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'d4312\')}'})" readonly="readonly" style="width: 120px;" />
-								-<input id="d4312" name="_end" class="Wdate" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'d4311\')}'})" readonly="readonly" style="width: 120px;" /></td>
+								-<input id="d4312" name="_end" class="Wdate" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'d4311\')}'})" readonly="readonly" style="width: 120px;" /></td> -->
 								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>
+							
 							</tr>
 						</table>
 					</form>
