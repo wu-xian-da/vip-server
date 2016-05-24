@@ -55,12 +55,13 @@
   </sql>
 
   <select id="getVipRoomList" resultMap="BaseResultMap" parameterType="com.jianfei.core.bean.SysAirport">
-
+    select vr.viproom_id,vr.viproom_name,ap.airport_name,ap.header_name,ap.header_phone
+    from sys_viproom vr JOIN  sys_airport ap
+    ON vr.airport_id = ap.airport_id
     <where>
-      <if test="id!=null">
-        and t1.airport_id =#{id}
+      <if test="airportId!=null">
+        and vr.airport_id =#{airportId}
       </if>
-
 
     </where>
   </select>

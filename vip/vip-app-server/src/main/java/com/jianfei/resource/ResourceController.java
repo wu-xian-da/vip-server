@@ -81,18 +81,14 @@ public class ResourceController extends BaseController {
 	/**
 	 * 根据用户坐标或省份或机场信息获取VipRoom列表
 	 * @param vipRoomId vip室信息
-	 * @param coordinate 坐标
 	 * @return VipRoomList
 	 */
-	@RequestMapping(value = "/getVipRoomInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/getVipRoomInfo", method = RequestMethod.GET)
 	@ResponseBody
-	public VipRoomVo vipRoomInfo(@RequestParam(value = "vipRoomId", required = false) String vipRoomId,
-								 @RequestParam(value = "coordinate", required = false) String coordinate
+	public BaseMsgInfo vipRoomInfo(@RequestParam(value = "vipRoomId", required = false) String vipRoomId
 	) {
-		//TODO 首先根据坐标查 转换坐标
-		List<AirportVo> list=new ArrayList<>();
-		list.add(new AirportVo());
-		return new VipRoomVo();
+  		 return new BaseMsgInfo();
+
 	}
 
 }
