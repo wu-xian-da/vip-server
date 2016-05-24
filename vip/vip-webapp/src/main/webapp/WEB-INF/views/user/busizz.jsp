@@ -14,7 +14,7 @@
 	var addFun = function() {
 		var dialog = parent.sy.modalDialog({
 			title : '添加用户信息',
-			url : sy.contextPath + '/user/form',
+			url : sy.contextPath + '/busizz/form',
 			buttons : [ {
 				text : '添加',
 				handler : function() {
@@ -26,7 +26,7 @@
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
 			title : '编辑用户信息',
-			url : sy.contextPath + '/user/form?id=' + id,
+			url : sy.contextPath + '/busizz/form?id=' + id,
 			buttons : [ {
 				text : '编辑',
 				handler : function() {
@@ -38,7 +38,7 @@
 	var removeFun = function(id) {
 		parent.$.messager.confirm('询问', '您确定要禁用该用户？', function(r) {
 			if (r) {
-				$.post(sy.contextPath + '/user/delete', {
+				$.post(sy.contextPath + '/busizz/delete', {
 					id : id
 				}, function(dataObj) {
 					if(!dataObj.ok){
@@ -53,7 +53,7 @@
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
-			url : sy.contextPath + '/user/list',
+			url : sy.contextPath + '/busizz/list',
 			striped : true,
 			rownumbers : true,
 			pagination : true,
@@ -65,34 +65,47 @@
 			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 			frozenColumns : [ [ {
 				width : '100',
-				title : '登录名',
-				field : 'loginName',
-				sortable : true
+				title : '工号',
+				field : 'code'
 			}, {
 				width : '80',
 				title : '姓名',
-				field : 'name',
-				sortable : true
+				field : 'name'
 			} ] ],
 			columns : [ [  {
 				width : '350',
-				title : '区域',
+				title : '所属场站',
 				field : 'ariPortNames'
 			}, {
-				width : '350',
-				title : '角色',
-				field : 'roelNames'
+				width : '80',
+				title : '手机号码',
+				field : 'phone'
+			}, {
+				width : '80',
+				title : '上月开卡数',
+				field : 'phone',
+				sortable : true
+			}, {
+				width : '80',
+				title : '本月开卡数',
+				field : 'phone',
+				sortable : true
+			}, {
+				width : '80',
+				title : '开卡总量',
+				field : 'phone',
+				sortable : true
 			},{
 				width : '50',
 				title : '状态',
-				field : 'dtflag',
+				field : 'state',
 				sortable : true,
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
-						return '启用';
+						return '在职';
 					case 1:
-						return '禁用';
+						return '离职';
 					}
 				}
 			}, {
@@ -103,9 +116,6 @@
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
-					<%}%>
-					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
 					<%}%>
 						return str;
 				}
@@ -132,8 +142,6 @@
 					<form id="searchForm">
 						<table>
 							<tr>
-								<td>登录名</td>
-								<td><input name="_loginName" style="width: 80px;" /></td>
 								<td>姓名</td>
 								<td><input name="_name" style="width: 80px;" /></td>
 								<!-- 
@@ -155,12 +163,6 @@
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
 						</shiro:hasPermission>
-							<shiro:hasPermission name="system:user:import">
-							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_add',plain:true" onclick="">导入</a></td>
-							</shiro:hasPermission>
-								<shiro:hasPermission name="system:user:output">
-							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_go',plain:true" onclick="">导出</a></td>
-							</shiro:hasPermission>
 						</tr>
 					</table>
 				</td>

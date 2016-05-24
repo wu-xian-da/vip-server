@@ -1,63 +1,122 @@
 package com.jianfei.core.bean;
 
-public class AppPicture {
-    private Integer pictureId;
+import java.io.Serializable;
 
-    private String viproomId;
+import com.alibaba.fastjson.JSONObject;
 
-    private String pictureUrl;
+public class AppPicture implements Serializable {
 
-    private String clickUrl;
+	private static final long serialVersionUID = 4565447710159407307L;
 
-    private Integer priority;
+	private Integer pictureId;
 
-    private Integer dtflag;
+	private String viproomId;
 
-    public Integer getPictureId() {
-        return pictureId;
-    }
+	private String pictureUrl;
 
-    public void setPictureId(Integer pictureId) {
-        this.pictureId = pictureId;
-    }
+	private String clickUrl;
 
-    public String getViproomId() {
-        return viproomId;
-    }
+	private Integer priority;
 
-    public void setViproomId(String viproomId) {
-        this.viproomId = viproomId == null ? null : viproomId.trim();
-    }
+	private Integer dtflag;
 
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
+	private Integer imagetype;
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl == null ? null : pictureUrl.trim();
-    }
+	private String descr;
 
-    public String getClickUrl() {
-        return clickUrl;
-    }
+	public Integer getPictureId() {
+		return pictureId;
+	}
 
-    public void setClickUrl(String clickUrl) {
-        this.clickUrl = clickUrl == null ? null : clickUrl.trim();
-    }
+	public void setPictureId(Integer pictureId) {
+		this.pictureId = pictureId;
+	}
 
-    public Integer getPriority() {
-        return priority;
-    }
+	public String getViproomId() {
+		return viproomId;
+	}
 
-    public void setPriority(Integer priority) {
-        this.priority = priority;
-    }
+	public void setViproomId(String viproomId) {
+		this.viproomId = viproomId == null ? null : viproomId.trim();
+	}
 
-    public Integer getDtflag() {
-        return dtflag;
-    }
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
 
-    public void setDtflag(Integer dtflag) {
-        this.dtflag = dtflag;
-    }
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl == null ? null : pictureUrl.trim();
+	}
+
+	public String getClickUrl() {
+		return clickUrl;
+	}
+
+	public void setClickUrl(String clickUrl) {
+		this.clickUrl = clickUrl == null ? null : clickUrl.trim();
+	}
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+
+	public Integer getDtflag() {
+		return dtflag;
+	}
+
+	public void setDtflag(Integer dtflag) {
+		this.dtflag = dtflag;
+	}
+
+	/**
+	 * imagetype
+	 *
+	 * @return the imagetype
+	 * @version 1.0.0
+	 */
+
+	public Integer getImagetype() {
+		return imagetype;
+	}
+
+	/**
+	 * @param imagetype
+	 *            the imagetype to set
+	 */
+	public void setImagetype(Integer imagetype) {
+		this.imagetype = imagetype;
+	}
+
+	/**
+	 * descr
+	 *
+	 * @return the descr
+	 * @version 1.0.0
+	 */
+
+	public String getDescr() {
+		return descr;
+	}
+
+	/**
+	 * @param descr
+	 *            the descr to set
+	 */
+	public void setDescr(String descr) {
+		this.descr = descr;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return JSONObject.toJSONString(this);
+	}
 }

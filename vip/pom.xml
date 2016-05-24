@@ -429,9 +429,9 @@
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
 
 				<!-- updload config -->
-				<upload.home.dir>E:\workspace\money\vip\vip-webapp\src\main\webapp\uploadPath</upload.home.dir>
-				<static.resource.server.address>http://127.0.0.1:8080/vip</static.resource.server.address>
-				<relative.path.to.server>/uploadPath</relative.path.to.server>
+				<upload.home.dir>D:\uploadPath</upload.home.dir>
+				<static.resource.server.address>http://127.0.0.1:8083</static.resource.server.address>
+				
 			</properties>
 		</profile>
 

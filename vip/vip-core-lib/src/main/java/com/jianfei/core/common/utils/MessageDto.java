@@ -86,7 +86,7 @@ public class MessageDto<T> implements Serializable {
 
 	public static interface MsgFlag {
 
-		public static final String SUCCESS = "操作陈功...";
+		public static final String SUCCESS = "操作成功...";
 		public static final String ERROR = "操作失败,请稍后重试...";
 
 		public static final String OK = "true";

@@ -1,12 +1,13 @@
 /**
  * @项目名:vip
  * @版本信息:1.0
- * @date:2016年5月13日-上午2:02:32
+ * @date:2016年5月23日-下午3:58:31
  * Copyright (c) 2016建飞科联公司-版权所有
  *
  */
 package com.jianfei.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,23 +34,23 @@ import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.AriPortService;
-import com.jianfei.core.service.sys.SystemService;
+import com.jianfei.core.service.base.BusizzService;
 
 /**
  *
- * @Description: 用户管理
+ * @Description: 业务员控制器
  * @author: li.binbin@jianfeitech.com
- * @date: 2016年5月13日 上午2:02:32
+ * @date: 2016年5月23日 下午3:58:31
  * 
  * @version 1.0.0
  *
  */
 @Controller
-@RequestMapping(value = "user")
-public class UserController extends BaseController {
+@RequestMapping(value = "busizz")
+public class BusizzController extends BaseController {
 
 	@Autowired
-	private SystemService systemService;
+	private BusizzService<User> busizzService;
 
 	@Autowired
 	private AriPortService<AriPort> ariPortService;
@@ -57,7 +58,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "home")
 	public String home() {
 
-		return "user/Syuser";
+		return "user/busizz";
 	}
 
 	/**
@@ -81,9 +82,25 @@ public class UserController extends BaseController {
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
 		PageHelper.startPage(pageNo, pageSize);
-		List<User> list = systemService.getUserMapper().get(searchParams);
-		PageInfo<User> pageInfo = new PageInfo<User>(list);
-		return systemService.bindUserGridData(pageInfo);
+		MessageDto<List<User>> messageDto = busizzService
+				.get(searchParams);
+		PageInfo<User> pageInfo = new PageInfo<User>(messageDto.getData());
+		return bindUserGridData(pageInfo);
+	}
+
+	/**
+	 * save(保存业务员信息)
+	 * 
+	 * @param user
+	 * @return MessageDto<User>
+	 * @version 1.0.0
+	 */
+	@RequestMapping(value = "save", method = RequestMethod.POST)
+	@ResponseBody
+	public MessageDto<String> save(User user, String arids, String roleids) {
+		user.setUserType(GloabConfig.BUSSNISS_USER);
+		return busizzService.saveUser(user, arids, roleids);
+
 	}
 
 	/**
@@ -99,63 +116,18 @@ public class UserController extends BaseController {
 		if (0 != user.getId()) {
 			Map<String, Object> searchParams = new HashMap<String, Object>();
 			searchParams.put("id", user.getId());
-			List<User> list = systemService.getUserMapper().get(searchParams);
-			if (!CollectionUtils.isEmpty(list)) {
-				model.addAttribute("user", list.get(0));
+			MessageDto<List<User>> messageDto = busizzService
+					.get(new MapUtils.Builder().setKeyValue("id", user.getId())
+							.build());
+			if (messageDto.isOk()
+					|| CollectionUtils.isEmpty(messageDto.getData())) {
+				model.addAttribute("user", messageDto.getData().get(0));
 			}
 		}
 		List<Map<String, Object>> list = ariPortService
 				.datePermissionData(StringUtils.toLong(user.getId()));
 		model.addAttribute("datas", list);
-		model.addAttribute(
-				"roles",
-				systemService.getRoleMapper().get(
-						new MapUtils.Builder().build()));
-		return "user/SyuserForm";
-	}
-
-	/**
-	 * save(保存用户信息)
-	 * 
-	 * @param user
-	 * @return MessageDto<User>
-	 * @version 1.0.0
-	 */
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	@ResponseBody
-	public MessageDto<String> save(User user, String arids, String roleids) {
-		user.setUserType(GloabConfig.SYSTEM_USER);
-		return systemService.saveUser(user, arids, roleids);
-
-	}
-
-	/**
-	 * delete(删除用户信息)
-	 * 
-	 * @param user
-	 * @return MessageDto<User>
-	 * @version 1.0.0
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public MessageDto<User> delete(User user) {
-		systemService.getUserMapper().delete(user.getId());
-		return new MessageDto<User>().setOk(true).setMsgBody(
-				MessageDto.MsgFlag.SUCCESS);
-	}
-
-	/**
-	 * grantRole(授权)
-	 * 
-	 * @param user
-	 * @param model
-	 * @return String
-	 * @version 1.0.0
-	 */
-	@RequestMapping(value = "grant")
-	public String grantRole(User user, Model model) {
-		model.addAttribute("user", user);
-		return "user/userRoleGrant";
+		return "user/busizzForm";
 	}
 
 	/**
@@ -183,17 +155,31 @@ public class UserController extends BaseController {
 	}
 
 	/**
-	 * datePermission(为用户授权数据权限视图)
+	 * delete(删除用户信息)
 	 * 
-	 * @param id
-	 * @param model
-	 * @return String
+	 * @param user
+	 * @return MessageDto<User>
 	 * @version 1.0.0
 	 */
-	@RequestMapping(value = "/datePermission")
-	public String datePermission(Long id, Model model) {
-		model.addAttribute("id", id);
-		return "user/permission";
+	@RequestMapping(value = "delete")
+	@ResponseBody
+	public MessageDto<String> delete(User user) {
+		busizzService.delete(user.getId());
+		return busizzService.delete(user.getId());
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Grid bindUserGridData(PageInfo<User> pageInfo) {
+		List<User> list = pageInfo.getList();
+		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+		for (User user : list) {
+			Map<String, Object> map = MapUtils.<User> entityInitMap(user);
+			maps.add(map);
+		}
+		Grid grid = new Grid();
+		grid.setRows(maps);
+		grid.setTotal(pageInfo.getTotal());
+		return grid;
 	}
 
 }
