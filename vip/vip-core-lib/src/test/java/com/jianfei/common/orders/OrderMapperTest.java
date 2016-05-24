@@ -60,7 +60,12 @@ public class OrderMapperTest {
 	public void testGet() {
 		PageHelper.startPage(1, 2);
 		Map<String, Object> map = new HashMap<String, Object>();
-	
+		//map.put("endTime", "");
+		map.put("airportId", "0");
+		map.put("orderState", "5");
+		
+		map.put("invoiceState", 0);
+		//map.put("phoneOrUserName","");
 		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(1, 2, map);
 		System.out.println("a="+pageinfo.getTotal());
 	}

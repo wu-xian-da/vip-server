@@ -87,5 +87,15 @@ public class VipRoomController extends BaseController {
 				MessageDto.MsgFlag.SUCCESS);
 	}
 	
-	
+	/**
+	 * 跳转到vip室添加页面
+	 * gotoAddVipRoomView
+	 * @return
+	 * String
+	 * @version  1.0.0
+	 */
+	@RequestMapping("gotoAddVipRoomView")
+	public String gotoAddVipRoomView(){
+		return "viproom/vipRoomForm";
+	}
 }

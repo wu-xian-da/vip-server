@@ -8,22 +8,13 @@
 	var grid;
 	var addFun = function() {
 		var dialog = parent.sy.modalDialog({
-			title : '添加用户信息',
-			url : sy.contextPath + '/user/form',
-			buttons : [ {
-				text : '添加',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
+			title : '添加vip室信息',
+			url : sy.contextPath + '/viproom/gotoAddVipRoomView',
+			
 		});
 	};
-	var showFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '查看用户信息',
-			url : sy.contextPath + '/securityJsp/base/SyuserForm.jsp?id=' + id
-		});
-	};
+	
+	
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
 			title : '编辑用户信息',

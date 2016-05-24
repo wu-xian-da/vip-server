@@ -16,6 +16,10 @@
 				<td><input type="text" name="viproomName"/></td>
 			</tr>
 			<tr>
+				<td>vip室单价</td>
+				<td><input type="text" name="singleconsumeMoney" value="200￥" readonly="readonly"/></td>
+			</tr>
+			<tr>
 				<td>场站名称</td>
 				<td><select name="airportId">
 						<option value="0">请选择场站</option>
@@ -26,11 +30,10 @@
 			</tr>
 			<tr>
 				<td>vip室信息编辑</td>
-				<td><textarea cols="20" rows="50"></textarea></td>
+				<td><textarea cols="50" rows="20"></textarea></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="保存"/></td>
-				<td><input type="reset" value="取消"/></td>
+				<td align="center" colspan="2"><input type="submit" value="保存"/>&nbsp;&nbsp;<input type="reset" value="取消"/></td>
 			</tr>
 		</table>
 	</form>
