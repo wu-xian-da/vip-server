@@ -11,7 +11,6 @@ package com.jianfei.core.service.base.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,9 +57,9 @@ public class VipRoomManagerImp implements VipRoomManager {
 	public void delVipRoom(String viproomId) {
 		sysViproomMapper.deleteByVipRommId(viproomId);
 	}
-
+	
 	/**
-	 * 将vip卡列表信息转换成Grid格式 bindVipCardGridData
+	 * 将vip室信息转换成Grid格式 bindVipCardGridData
 	 * 
 	 * @param pageInfo
 	 * @return Grid
@@ -78,6 +77,9 @@ public class VipRoomManagerImp implements VipRoomManager {
 		grid.setTotal(pageInfo.getTotal());
 		return grid;
 	}
+	
+	
+	
 
 	/* (non-Javadoc)
 	 * @see com.jianfei.core.service.base.VipRoomManager#addVipRoom()
