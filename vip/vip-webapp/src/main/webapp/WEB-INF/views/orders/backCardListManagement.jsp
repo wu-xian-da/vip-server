@@ -140,17 +140,9 @@
         	var orderState = $("#orderStateSelect option:selected").val();
         	
         	var url = "backCardList?backType="+backType+"&applyType="+applyType+"&orderState="+orderState;
-			$.get(url,function(_d){
-				if(_d.result==1){
-					$('#tt').datagrid();
-				}
-			})
+        	$('#tt').datagrid({url:url});
         	
         })
-        function search(){
-        	
-        	
-        }
         
 		/*
 		*==================最终退款页面===============

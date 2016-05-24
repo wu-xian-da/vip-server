@@ -87,8 +87,33 @@ public class OrderController {
 	 */
 	@RequestMapping("orderList")
 	@ResponseBody
-	public Map<Object,Object> list(@RequestParam(value="page",defaultValue="1") Integer pageNo,@RequestParam(value="rows",defaultValue="10") Integer pageSize){
+	public Map<Object,Object> list(@RequestParam(value="page",defaultValue="1") Integer pageNo,
+			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
+			@RequestParam(value="startTime",defaultValue="") String startTime,
+			@RequestParam(value="endTime",defaultValue="") String endTime,
+			@RequestParam(value="airportId",required=false,defaultValue="0") String airportId,
+			@RequestParam(value="orderState",required=false,defaultValue="5") Integer orderState,
+			@RequestParam(value="invoiceState",required=false,defaultValue="3") Integer invoiceState,
+			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
+		
+		
+		
+		//设置刷选条件
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
+		if(!startTime.equals("")){
+			paramsMap.put("startTime",startTime);
+		}
+		if(!endTime.equals("")){
+			paramsMap.put("endTime", endTime);
+		}
+		if(!phoneOrUserName.equals("")){
+			paramsMap.put("phoneOrUserName",phoneOrUserName );
+		}
+		paramsMap.put("airportId",airportId);
+		paramsMap.put("orderState",orderState);
+		paramsMap.put("invoiceState", invoiceState);
+		
+		
 		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(pageNo, pageSize, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
 		List<OrderShowInfoDto> list = pageinfo.getList();

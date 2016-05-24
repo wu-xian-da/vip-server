@@ -18,27 +18,27 @@
 	 <div id="order-container">
         <div id="order-container-calac">
             <label>日期：</label>
-            <input class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" style="width:180px;height:26px">
+            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:180px;height:26px">
 
             <label>-</label>
-            <input class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" style="width:180px;height:26px">
+            <input class="easyui-datebox" id="endTime" data-options="formatter:myformatter,parser:myparser" style="width:180px;height:26px">
 
         </div>
 
         <div id="order-condition-box">
             <div class="order-condition-item">
-                <select name="" id="">
-                    <option value="">选择机场</option>
-                    <option value="">广州机场</option>
-                    <option value="">虹桥机场</option>
-                    <option value="">广州机场</option>
-                    <option value="">虹桥机场</option>
+                <select id="airportIdSelect">
+                    <option value="0">选择机场</option>
+                    <option value="1">广州机场</option>
+                    <option value="2">虹桥机场</option>
+                    <option value="3">广州机场</option>
+                    <option value="4">虹桥机场</option>
                 </select>
             </div>
 
             <div class="order-condition-item">
-                <select name="" id="">
-                    <option value="5">选择定票状态</option>
+                <select id="orderStateSelect">
+                    <option value="5">选择订单状态</option>
                     <option value="0">未支付</option>
                     <option value="1">已支付</option>
                     <option value="2">正在审核</option>
@@ -48,16 +48,17 @@
             </div>
 
             <div class="order-condition-item">
-                <select name="" id="">
-                    <option value="">选择发票状态</option>
-                    <option value="1">已开</option>
+                <select id="invoiceSelect">
+                    <option value="3">选择发票状态</option>
                     <option value="0">未开</option>
+                    <option value="1">已开</option>
+                  
                 </select>
             </div>
 
             <div class="order-condition-item">
-                <input type="text" placeholder="用户手机号码/姓名">
-                <button>搜索</button>
+                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
+                <button id="searchBt">搜索</button>
             </div>
         </div>
         
@@ -298,6 +299,27 @@
                 $(".radio-tab-content .raidp-tab-content-item").eq(_index).css("display","block").siblings().css("display","none")
             }
             
+        })
+        
+        //搜索
+        $("#searchBt").click(function(){
+        	//开始时间
+        	var startTime = $("#startTime").datebox('getValue');
+        	//结束时间
+        	var endTime = $("#endTime").datebox('getValue');
+        	//机场编号
+        	var airportId = $("#airportIdSelect option:selected").val(); 
+        	//订单状态
+        	var orderState = $("#orderStateSelect option:selected").val();
+        	//发票状态
+        	var invoiceState = $("#invoiceSelect option:selected").val();
+        	//手机号后置用户姓名
+        	var phoneOrUserName = $("#phoneOrUserName").val();
+        	
+        	var url = "orderList?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
+        			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
+        	$('#tt').datagrid({url:url});
+        	
         })
 	</script>
 	
