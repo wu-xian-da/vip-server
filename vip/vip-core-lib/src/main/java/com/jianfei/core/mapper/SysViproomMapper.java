@@ -1,9 +1,18 @@
 package com.jianfei.core.mapper;
 
-import com.jianfei.core.bean.SysViproom;
+import java.util.List;
+import java.util.Map;
 
+import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.common.persistence.MyBatisDao;
+
+@MyBatisDao
 public interface SysViproomMapper {
-    int deleteByPrimaryKey(String viproomId);
+	//分页显示vip室信息
+	List<SysViproom> page(Map<String,Object> params);
+	
+	//逻辑删除vip室信息
+	int deleteByVipRommId(String viproomId);
 
     int insert(SysViproom record);
 

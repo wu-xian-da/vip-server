@@ -19,6 +19,7 @@ import javax.xml.transform.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -158,35 +159,52 @@ public class OrderController {
 	 */
 	@RequestMapping("backCardList")
 	@ResponseBody
-	public Map<Object,Object> backCardlist(@RequestParam(value="page",defaultValue="1") Integer pageNo,@RequestParam(value="rows",defaultValue="10") Integer pageSize){
+	public Map<Object,Object> backCardlist(@RequestParam(value="page",defaultValue="1") Integer pageNo,
+			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
+			@RequestParam(value="backType",defaultValue="4") Integer backType,
+			@RequestParam(value="applyType",defaultValue="3")Integer applyType,
+			@RequestParam(value="orderState",defaultValue="10") Integer orderState){
+		
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
+		//退款方式
+		paramsMap.put("backType", backType);
+		//申请方式
+		paramsMap.put("applyType", applyType);
+		//订单状态
+		paramsMap.put("orderState", orderState);
+		
 		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.backCardPage(pageNo, pageSize, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
 		List<OrderShowInfoDto> list = pageinfo.getList();
 		String orderId = null;
-		for(OrderShowInfoDto appOrder : list){
-			if(appOrder.getOrderState() ==3){
-				//退款
-				JSONObject outData = new JSONObject(); 
-				orderId = appOrder.getOrderId();
-				float remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
-				AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
-				outData.put("remainMoney", remainMoney);
-				outData.put("orderId", orderId);//订单号
-				outData.put("backMoneyCard",appCardBack.getCustomerCard());
-				outData.put("backType", appCardBack.getBackType());
-				outData.put("phone", appOrder.getCustomerPhone());
-				appOrder.setOrderStateName("审核通过");
-				appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
-			
-			}else if(appOrder.getOrderState() ==4){
-				//退款成功
-				orderId = appOrder.getOrderId();
-				appOrder.setOrderStateName("已退款");
-				appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+		if(list != null && list.size() >0){
+			for(OrderShowInfoDto appOrder : list){
+				if(appOrder.getOrderState() ==3){
+					//退款
+					JSONObject outData = new JSONObject(); 
+					orderId = appOrder.getOrderId();
+					float remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
+					AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
+					outData.put("remainMoney", remainMoney);
+					outData.put("orderId", orderId);//订单号
+					outData.put("backMoneyCard",appCardBack.getCustomerCard());
+					outData.put("backType", appCardBack.getBackType());
+					outData.put("phone", appOrder.getCustomerPhone());
+					appOrder.setOrderStateName("审核通过");
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+				
+				}else if(appOrder.getOrderState() ==4){
+					//退款成功
+					orderId = appOrder.getOrderId();
+					appOrder.setOrderStateName("已退款");
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+				}
 			}
+			map.put("total", pageinfo.getTotal());
+		}else{
+			map.put("total", 0);
 		}
-		map.put("total", pageinfo.getTotal());
+		
 		map.put("rows", list);
 		return map;
 		

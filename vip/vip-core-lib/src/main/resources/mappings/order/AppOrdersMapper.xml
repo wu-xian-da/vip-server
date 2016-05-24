@@ -91,7 +91,17 @@
     	acb.back_type,acb.money
   	 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer,app_card_back acb
      		where ord.id=agent.id and ord.customer_id = customer.customer_id and 
-    			 ord.airport_id = ap.airport_id and ord.order_id = acb.order_id
+    			 ord.airport_id = ap.airport_id and ord.order_id = acb.order_id 
+    			 <if test="backType != 4">
+    			 	 and acb.back_type = #{backType}
+    			 </if>
+    			<if test="applyType !=3">
+    				and ord.apply_type = #{applyType}
+    			</if>
+    			 <if test="orderState != 10">
+    			  and ord.order_state = #{orderState}
+    			 </if>
+    			
   </select>
   
   <!--更新订单状态  -->

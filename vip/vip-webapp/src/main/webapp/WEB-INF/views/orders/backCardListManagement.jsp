@@ -19,7 +19,7 @@
 	<div id="order-container">
 		<div id="order-condition-box">
 			<div class="order-condition-item">
-				<select name="" id="">
+				<select name="" id="backTypeSelect">
 					<option value="4">请选择退款方式</option>
 					<option value="0">微信</option>
 					<option value="1">支付宝</option>
@@ -29,7 +29,7 @@
 			</div>
 
 			<div class="order-condition-item">
-				<select name="" id="">
+				<select name="" id="applyTypeSelect">
 					<option value="3">请选择申请途径</option>
 					<option value="0">客服</option>
 					<option value="1">现场</option>
@@ -38,15 +38,15 @@
 			</div>
 
 			<div class="order-condition-item">
-				<select name="" id="">
-					<option value="">选择退款状态</option>
-					<option value="1">已退</option>
-					<option value="0">未退</option>
+				<select name="" id="orderStateSelect">
+					<option value="10">选择退款状态</option>
+					<option value="3">未退</option>
+					<option value="4">已退</option>
 				</select>
 			</div>
 
 			<div class="order-condition-item" style="text-align: left">
-				<button>搜索</button>
+				<button id="searchBt">搜索</button>
 			</div>
 		</div>
 
@@ -129,6 +129,27 @@
             } else {
                 return new Date();
             }
+        }
+        //搜索
+        $("#searchBt").click(function(){
+        	//退款方式
+        	var backType=$("#backTypeSelect option:selected").val();
+        	//申请途径
+        	var applyType = $("#applyTypeSelect option:selected").val();
+        	//退款状态
+        	var orderState = $("#orderStateSelect option:selected").val();
+        	
+        	var url = "backCardList?backType="+backType+"&applyType="+applyType+"&orderState="+orderState;
+			$.get(url,function(_d){
+				if(_d.result==1){
+					$('#tt').datagrid();
+				}
+			})
+        	
+        })
+        function search(){
+        	
+        	
         }
         
 		/*

@@ -16,7 +16,25 @@
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="remark1" property="remark1" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+    <result column="airport_name" property="airportName"/>
+    <result column="header_phone" property="headerPhone"/>
+    <result column="header_name" property="headerName"/>
   </resultMap>
+  
+  <!-- 分页显示场站信息 -->
+  <select id="page" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select vr.viproom_id,vr.viproom_name,ap.airport_name,ap.header_name,ap.header_phone 
+  		from sys_viproom vr,sys_airport ap 
+  		where vr.airport_id = ap.airport_id 
+  		and vr.dtflag=0
+  </select>
+  
+  <!--逻辑删除vip室信息  -->
+  <update id="deleteByVipRommId" parameterType="java.lang.String">
+  	update sys_viproom set dtflag = 1 where viproom_id = #{viproomId}
+  </update>
+  
+  
   <resultMap id="ResultMapWithBLOBs" type="com.jianfei.core.bean.SysViproom" extends="BaseResultMap" >
     <result column="Latitude" property="latitude" jdbcType="VARBINARY" />
   </resultMap>

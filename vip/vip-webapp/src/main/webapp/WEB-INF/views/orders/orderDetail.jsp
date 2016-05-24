@@ -59,13 +59,17 @@
 				<li>常驻城市：${orderDetailInfo.address }</li>
 				<li>邮箱地址：${orderDetailInfo.email}</li>
 			</ul>
-
-			<div class="order-list-title">发票信息</div>
-			<ul>
+			
+			
+			<div class="order-list-title" onclick="showInVoiceINfo('${orderDetailInfo.orderId}',${orderDetailInfo.invoiceFlag})">发票信息（${orderDetailInfo.invoiceFlag ==0 ? '未开' : '已开' }）</div>
+			<div style="display:none">
+				<ul>
 				<li>邮寄地址：北京市朝阳区海航大厦</li>
 				<li>发票类型：</li>
 				<li>发票抬头：</li>
-			</ul>
+				</ul>
+			</div>
+			
 
 			<div class="order-list-title">
 				退款信息 <span class="order-tips-red">（已退款）</span>
@@ -79,6 +83,19 @@
 		</div>
 
 	</div>
-
+	
+<script type="text/javascript">
+	function showInVoiceINfo(orderId,invoiceFlag){
+		alert("invoiceFlag="+invoiceFlag)
+		if(invoiceFlag == 1){//有发票
+			var url = "";
+			$.get(url,function(_d){
+				if(_d.res ==1){
+					
+				}
+			})
+		}
+	}
+</script>
 </body>
 </html>

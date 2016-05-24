@@ -12,6 +12,7 @@ package com.jianfei.core.service.base;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.dto.OrderShowInfoDto;
 
 /**
@@ -25,7 +26,10 @@ import com.jianfei.core.dto.OrderShowInfoDto;
  */
 public interface VipRoomManager {
 	//分页查询vip室信息
-    PageInfo<OrderShowInfoDto> simplePage(int pageNo, int pageSize,Map<String, Object> params);
+    PageInfo<SysViproom> simplePage(int pageNo, int pageSize,Map<String, Object> params);
+    
+    //逻辑删除vip室信息
+  	public void delVipRoom(String viproomId);
     
 	//添加vip室信息
 	public void addVipRoom();
@@ -33,8 +37,7 @@ public interface VipRoomManager {
 	//编辑vip室信息
 	public void updateVipRoom();
 	
-	//删除vip室信息
-	public void delVipRoom();
+	
 	
 	
 }
