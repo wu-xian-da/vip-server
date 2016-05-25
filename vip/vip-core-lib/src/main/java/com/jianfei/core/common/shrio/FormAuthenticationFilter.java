@@ -12,14 +12,15 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.shrio.ShiroDbRealm.Principal;
 import com.jianfei.core.common.utils.GloabConfig;
-import com.jianfei.core.common.utils.SpringContextHolder;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.service.sys.SystemService;
+import com.jianfei.core.service.sys.UserManaer;
 
 /**
  * 表单验证（包含验证码）过滤类
@@ -41,8 +42,9 @@ public class FormAuthenticationFilter extends
 	private String captchaParam = DEFAULT_CAPTCHA_PARAM;
 	private String mobileLoginParam = DEFAULT_MOBILE_PARAM;
 	private String messageParam = DEFAULT_MESSAGE_PARAM;
-	public SystemService systemService = SpringContextHolder
-			.getBean(SystemService.class);
+
+	@Autowired
+	private UserManaer<User> userManaer;
 
 	protected AuthenticationToken createToken(ServletRequest request,
 			ServletResponse response) {
@@ -118,10 +120,8 @@ public class FormAuthenticationFilter extends
 			throws Exception {
 		Principal principal = (Principal) SecurityUtils.getSubject()
 				.getPrincipal();
-		ShiroUtils.getSession().setAttribute(
-				GloabConfig.SESSION_USER,
-				systemService.getUserMapper().getUserByName(
-						principal.getLoginName()));
+		ShiroUtils.getSession().setAttribute(GloabConfig.SESSION_USER,
+				userManaer.getUserByName(principal.getLoginName()));
 		return super.onLoginSuccess(token, subject, request, response);
 	}
 

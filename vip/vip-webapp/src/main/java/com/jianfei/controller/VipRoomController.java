@@ -28,7 +28,7 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.service.base.AriPortService;
+import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 
 /**
@@ -46,7 +46,7 @@ public class VipRoomController extends BaseController {
 	@Autowired
 	private VipRoomManagerImpl vipRoomManagerImp;
 	@Autowired
-	private AriPortService ariPortService;
+	private AriPortManager ariPortService;
 	
 	@RequestMapping("/gotoVipRoomView")
 	public String test(){

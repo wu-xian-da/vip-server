@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jianfei.core.mapper.AppUserFeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppUserFeedback" >
+    <id column="id" property="id"/>
+    
+    <result column="user_id" property="userId"/>
+    <result column="feedback_time" property="feedbacTime"/>
+    <result column="feedback_state" property="feedbackState"/>
+    <result column="customer_name" property="customerName"/>
+    <result column="customer_phone" property="customerPhone"/>
+    <result column="handle_time" property="handleTime"/>
+    <result column="handleuser_id" property="handleuserId"/>
+    <result column="dtflag" property="dtflag"/>
+  </resultMap>
+  
+  <!--分页查询  -->
+  <select id="pageList" resultMap="BaseResultMap" parameterType="java.util.Map">
+  		select * from app_user_feedback auf,app_customer ac
+  		<where>
+  			auf.user_id = ac.customer_id
+			<if test="feedbackState !=2">
+				and auf.feedback_state = #{feedbackState}
+			</if>
+			
+			and auf.dtflag=0
+		</where>
+  		
+  </select>
+  
+  <!-- 删除反馈信息-逻辑删除 -->
+  <update id="delFeedbackInfoById" parameterType="java.lang.String">
+  	update app_user_feedback set dtflag =1 where id = #{id}
+  </update>
+  
+  <!--更新反馈状态  -->
+  <update id="updateFeedbackInfoById" parameterType="java.lang.String">
+  	update app_user_feedback set feedback_state=1 and id=#{id}
+  </update>
+  
+</mapper>

@@ -16,14 +16,17 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
-import com.jianfei.core.common.utils.SpringContextHolder;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.service.sys.SystemService;
+import com.jianfei.core.service.sys.ResourceManager;
+import com.jianfei.core.service.sys.RoleManager;
+import com.jianfei.core.service.sys.UserManaer;
 
 /**
  *
@@ -34,10 +37,17 @@ import com.jianfei.core.service.sys.SystemService;
  * @version 1.0.0
  *
  */
+@Service
 public class ShiroDbRealm extends AuthorizingRealm {
 
-	public SystemService systemService = SpringContextHolder
-			.getBean(SystemService.class);
+	@Autowired
+	private RoleManager roelManager;
+
+	@Autowired
+	private ResourceManager resourceManager;
+
+	@Autowired
+	private UserManaer<User> userManaer;
 
 	/*
 	 * (non-Javadoc)
@@ -60,8 +70,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		}
 
 		Set<String> roles = new HashSet<String>();
-		List<Role> roleList = systemService.getRoleMapper().selectRoleByUserId(
-				StringUtils.toLong(principal.getId()));
+		List<Role> roleList = roelManager.selectRoleByUserId(StringUtils
+				.toLong(principal.getId()));
 
 		// 添加用户角色
 		for (Role role : roleList) {
@@ -72,8 +82,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		authorizationInfo.setRoles(roles);
 
 		// 获取资源菜单
-		List<Resource> resources = systemService.getResourceMapper()
-				.findResourceByUserId(Long.valueOf(principal.getId()));
+		List<Resource> resources = resourceManager.findResourceByUserId(Long
+				.valueOf(principal.getId()));
 
 		// 添加资源访问权限
 		for (Resource resource : resources) {
@@ -106,17 +116,16 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			return null;
 		}
 		// 校验用户名密码
-		User user = systemService.getUserMapper().getUserByName(
-				authcToken.getUsername());
+		User user = userManaer.getUserByName(authcToken.getUsername());
 
 		if (null == user) {
 			return null;
 		}
 		// 判断是否有后台的登入权限
 		if (1 == user.getUserType() || 2 == user.getUserType()) {
-			return new SimpleAuthenticationInfo(new Principal(user, false),
-					user.getPassword(), ByteSource.Util.bytes(user.getSalt()),
-					getName());
+			return new SimpleAuthenticationInfo(new Principal(user, false,
+					user.getUserType()), user.getPassword(),
+					ByteSource.Util.bytes(user.getSalt()), getName());
 		}
 		ShiroUtils.getSession().setAttribute(
 				FormAuthenticationFilter.DEFAULT_ERROR_MESSAGE, "没有后台登入权限。");
@@ -149,7 +158,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 		private int userType;
 
-		public Principal(User user, boolean mobileLogin) {
+		public Principal(User user, boolean mobileLogin, int type) {
 			this.id = String.valueOf(user.getId());
 			this.loginName = user.getLoginName();
 			this.name = user.getName();

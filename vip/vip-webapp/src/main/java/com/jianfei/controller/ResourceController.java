@@ -18,9 +18,9 @@ import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.TreeGrid;
-import com.jianfei.core.service.sys.SystemService;
+import com.jianfei.core.service.sys.ResourceManager;
+
 /**
  *
  * @Description: 系统信息控制器
@@ -35,7 +35,7 @@ import com.jianfei.core.service.sys.SystemService;
 public class ResourceController extends BaseController {
 
 	@Autowired
-	private SystemService systemService;
+	private ResourceManager resourceManager;
 
 	@RequestMapping(value = "home")
 	public String home() {
@@ -52,7 +52,7 @@ public class ResourceController extends BaseController {
 	@RequestMapping(value = "/menus", method = RequestMethod.POST)
 	@ResponseBody
 	public List<Menu> menuTree() {
-		return systemService.getCurrentMenus();
+		return resourceManager.getCurrentMenus();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class ResourceController extends BaseController {
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
 	@ResponseBody
 	public List<JsonTreeData> tree() {
-		return systemService.buildResourceTreeNode();
+		return resourceManager.buildResourceTreeNode();
 	}
 
 	/**
@@ -76,15 +76,16 @@ public class ResourceController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public TreeGrid<Map<String, Object>> treeGrid() {
-		return systemService.buildResourceTreeGrid();
+		return resourceManager.buildResourceTreeGrid();
 	}
 
 	@RequestMapping(value = "form")
 	public String form(Resource resource, Model model) {
 		if (0 != resource.getId()) {
-			resource = systemService.getResourceMapper().findEntityById(
-					resource.getId());
-			model.addAttribute("resource", resource);
+			MessageDto<Resource> messageDto = resourceManager
+					.findEntityById(resource.getId());
+			if (messageDto.isOk())
+				model.addAttribute("resource", messageDto.getData());
 		}
 		return "resource/SyresourceForm";
 	}
@@ -100,25 +101,18 @@ public class ResourceController extends BaseController {
 	@ResponseBody
 	public MessageDto<String> save(Resource resource) {
 		MessageDto<String> dto = new MessageDto<String>();
-		List<Resource> list = systemService.getResourceMapper().get(
-				MapUtils.<Resource> entityInitMap(resource));
+		List<Resource> list = resourceManager.get(MapUtils
+				.<Resource> entityInitMap(resource));
 		if (!CollectionUtils.isEmpty(list)) {
 			return dto.setMsgBody("资源名称已经存在...");
 		}
-		systemService.getResourceMapper().save(resource);
-		return dto.setOk(true).setData(MsgFlag.SUCCESS);
+		return resourceManager.save(resource);
 	}
 
 	@RequestMapping(value = "update")
 	@ResponseBody
 	public MessageDto<String> update(Resource resource) {
-		MessageDto<String> dto = new MessageDto<String>();
-		try {
-			systemService.getResourceMapper().update(resource);
-		} catch (Exception e) {
-			dto.setMsgBody(MessageDto.MsgFlag.ERROR);
-		}
-		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+		return resourceManager.update(resource);
 	}
 
 	/**
@@ -131,20 +125,12 @@ public class ResourceController extends BaseController {
 	@RequestMapping(value = "/delete/{id}")
 	@ResponseBody
 	public MessageDto<String> delete(@PathVariable("id") Long id) {
-		MessageDto<String> dto = new MessageDto<String>();
-		try {
-			systemService.getResourceMapper().delete(id);
-		} catch (Exception e) {
-			dto.setMsgBody(MessageDto.MsgFlag.ERROR);
-		}
-
-		return dto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
+		return resourceManager.delete(id);
 	}
 
 	@RequestMapping(value = "roleResources")
 	@ResponseBody
 	public List<Resource> roleResource(Role role) {
-		return systemService.getResourceMapper().findResourceByRoleId(
-				role.getId());
+		return resourceManager.findResourceByRoleId(role.getId());
 	}
 }
