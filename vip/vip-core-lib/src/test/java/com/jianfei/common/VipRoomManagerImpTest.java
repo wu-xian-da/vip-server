@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import javax.swing.plaf.synth.SynthSeparatorUI;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class VipRoomManagerImpTest {
 	@Test
 	public void pageListTest(){
 		Map<String,Object> params = new HashMap<String,Object>();
-		
+		params.put("searchContent", "北京机场11");
 		PageInfo<SysViproom> pageinfo = vipRoomManagerImp.simplePage(1, 2, params);
 		System.out.println("总的条数："+pageinfo.getTotal());
 		List<SysViproom> list = pageinfo.getList();
@@ -68,6 +69,25 @@ public class VipRoomManagerImpTest {
 	@Test
 	public void delVipRoom(){
 		vipRoomManagerImp.delVipRoom("1001");
+	}
+	//添加vip室信息
+	@Test
+	public void addvipRoom(){
+		SysViproom room = new SysViproom();
+		room.setViproomId("2852ejeafafd-ajfafyhhua");
+		room.setViproomName("test贵宾室");
+		room.setSingleconsumeMoney(200f);
+		room.setProvince("1001");
+		room.setAirportId("100002002");
+		room.setRemark1("免费水果");
+		int flag = vipRoomManagerImp.addVipRoom(room);
+		System.out.println("flag="+flag);
+	}
+	
+	//返回vip室信息
+	@Test
+	public void selroomTest(){
+		System.out.println(vipRoomManagerImp.selVipRoomById("1001"));
 	}
 	
 }
