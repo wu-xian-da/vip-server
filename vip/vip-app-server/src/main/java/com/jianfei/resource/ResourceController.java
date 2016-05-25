@@ -3,6 +3,8 @@ package com.jianfei.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
+import com.jianfei.core.service.base.impl.AriPortManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,13 +38,13 @@ import com.jianfei.dto.VipRightInfoVo;
 public class ResourceController extends BaseController {
 
 	@Autowired
-	private AriPortServiceImpl ariPortService;
+	private AriPortManagerImpl ariPortService;
 
 	@Autowired
 	private VipRoomManagerImpl vipRoomManager;
 
 	@Autowired
-	private AppPictureServiceImpl appPictureService;
+	private AppPictureManagerImpl appPictureService;
 	/**
 	 * 获取支持的省份列表
 	 * @param
