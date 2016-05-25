@@ -27,6 +27,8 @@ import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.AriPortMapper;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.base.AriPortManager;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  *
@@ -41,6 +43,8 @@ import com.jianfei.core.service.base.AriPortManager;
 @Transactional
 public class AriPortManagerImpl implements AriPortManager<AriPort> {
 
+	@Autowired
+	private JedisPool jedisPool;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -200,6 +204,7 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	 */
 	@Override
 	public List<String> getAriPortProvince() {
+		Jedis jedis = jedisPool.getResource();
 		return ariPortMapper.getAriPortProvince();
 	}
 

@@ -431,7 +431,12 @@
 				<!-- updload config -->
 				<upload.home.dir>D:\uploadPath</upload.home.dir>
 				<static.resource.server.address>http://127.0.0.1:8083</static.resource.server.address>
-				
+				<!-- redis config -->
+				<redis.pool.maxTotal>8</redis.pool.maxTotal>
+				<redis.pool.maxIdle>8</redis.pool.maxIdle>
+				<redis.pool.minIdle>0</redis.pool.minIdle>
+				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
+				<redis.address>192.168.110.8:6379</redis.address>
 			</properties>
 		</profile>
 
