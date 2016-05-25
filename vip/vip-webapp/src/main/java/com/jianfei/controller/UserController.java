@@ -32,7 +32,7 @@ import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.service.base.AriPortService;
+import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.sys.SystemService;
 
 /**
@@ -52,7 +52,7 @@ public class UserController extends BaseController {
 	private SystemService systemService;
 
 	@Autowired
-	private AriPortService<AriPort> ariPortService;
+	private AriPortManager<AriPort> ariPortService;
 
 	@RequestMapping(value = "home")
 	public String home() {

@@ -1,18 +1,14 @@
 package com.jianfei.user;
 
-import com.jianfei.common.BaseMsgInfo;
-import com.jianfei.core.bean.AppCustomer;
-import com.jianfei.core.bean.SysViproom;
-import com.jianfei.core.service.base.impl.AriPortServiceImpl;
-import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
-import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jianfei.common.BaseMsgInfo;
+import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 
 /**
  * Vip用户Controller

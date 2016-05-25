@@ -27,7 +27,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.service.base.AriPortService;
+import com.jianfei.core.service.base.AriPortManager;
 
 /**
  *
@@ -43,7 +43,7 @@ import com.jianfei.core.service.base.AriPortService;
 public class AriPortController extends BaseController {
 
 	@Autowired
-	private AriPortService<AriPort> ariPortService;
+	private AriPortManager<AriPort> ariPortManager;
 
 	@RequestMapping(value = { "", "/home" })
 	public String home() {
@@ -58,7 +58,7 @@ public class AriPortController extends BaseController {
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			@RequestParam(value = "name", required = false) String name) {
 		PageHelper.startPage(page, rows);
-		MessageDto<List<AriPort>> messageDto = ariPortService
+		MessageDto<List<AriPort>> messageDto = ariPortManager
 				.get(new MapUtils.Builder().setKeyValue("name", name).build());
 		PageInfo<AriPort> pageInfo = new PageInfo<AriPort>();
 		if (messageDto.isOk()) {
@@ -71,19 +71,19 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "save")
 	@ResponseBody
 	public MessageDto<AriPort> save(AriPort ariPort) {
-		MessageDto<List<AriPort>> messageDto = ariPortService
+		MessageDto<List<AriPort>> messageDto = ariPortManager
 				.get(new MapUtils.Builder().setKeyValue("name",
 						ariPort.getName()).build());
 		if (messageDto.isOk() && !CollectionUtils.isEmpty(messageDto.getData())) {
 			return new MessageDto<AriPort>().setMsgBody("场站已经存在...");
 		}
-		return ariPortService.save(ariPort);
+		return ariPortManager.save(ariPort);
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<AriPort> update(AriPort ariPort) {
-		MessageDto<AriPort> messageDto = ariPortService.update(ariPort);
+		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;
 	}
 
@@ -91,14 +91,14 @@ public class AriPortController extends BaseController {
 	@ResponseBody
 	public MessageDto<AriPort> delete(AriPort ariPort) {
 		ariPort.setState(GloabConfig.FORBIT);
-		MessageDto<AriPort> messageDto = ariPortService.update(ariPort);
+		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;
 	}
 
 	@RequestMapping(value = "form")
 	public String form(String id, Model model) {
 		if (!StringUtils.isEmpty(id)) {
-			MessageDto<List<AriPort>> messageDto = ariPortService
+			MessageDto<List<AriPort>> messageDto = ariPortManager
 					.get(new MapUtils.Builder().setKeyValue("id", id).build());
 			if (messageDto.isOk()
 					&& !CollectionUtils.isEmpty(messageDto.getData())) {

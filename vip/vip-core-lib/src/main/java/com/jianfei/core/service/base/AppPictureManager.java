@@ -23,7 +23,7 @@ import com.jianfei.core.common.utils.MessageDto;
  * @version 1.0.0
  *
  */
-public interface AppPictureService {
+public interface AppPictureManager {
 
 	MessageDto<String> save(AppPicture appPicture);
 
@@ -35,11 +35,5 @@ public interface AppPictureService {
 
 	MessageDto<AppPicture> selectByPrimaryKey(Integer pictureId);
 
-	/**
-	 * 查询某个类型下的轮播图数据
-	 * @param pictureType
-	 * @return
-	 */
 	List<AppPicture> getPicture(PictureType pictureType);
-
 }

@@ -33,8 +33,8 @@ import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.service.base.AriPortService;
-import com.jianfei.core.service.base.BusizzService;
+import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.base.BusizzManager;
 
 /**
  *
@@ -50,10 +50,10 @@ import com.jianfei.core.service.base.BusizzService;
 public class BusizzController extends BaseController {
 
 	@Autowired
-	private BusizzService<User> busizzService;
+	private BusizzManager<User> busizzManager;
 
 	@Autowired
-	private AriPortService<AriPort> ariPortService;
+	private AriPortManager<AriPort> ariPortManager;
 
 	@RequestMapping(value = "home")
 	public String home() {
@@ -82,7 +82,7 @@ public class BusizzController extends BaseController {
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
 		PageHelper.startPage(pageNo, pageSize);
-		MessageDto<List<User>> messageDto = busizzService
+		MessageDto<List<User>> messageDto = busizzManager
 				.get(searchParams);
 		PageInfo<User> pageInfo = new PageInfo<User>(messageDto.getData());
 		return bindUserGridData(pageInfo);
@@ -99,7 +99,7 @@ public class BusizzController extends BaseController {
 	@ResponseBody
 	public MessageDto<String> save(User user, String arids, String roleids) {
 		user.setUserType(GloabConfig.BUSSNISS_USER);
-		return busizzService.saveUser(user, arids, roleids);
+		return busizzManager.saveUser(user, arids, roleids);
 
 	}
 
@@ -116,7 +116,7 @@ public class BusizzController extends BaseController {
 		if (0 != user.getId()) {
 			Map<String, Object> searchParams = new HashMap<String, Object>();
 			searchParams.put("id", user.getId());
-			MessageDto<List<User>> messageDto = busizzService
+			MessageDto<List<User>> messageDto = busizzManager
 					.get(new MapUtils.Builder().setKeyValue("id", user.getId())
 							.build());
 			if (messageDto.isOk()
@@ -124,7 +124,7 @@ public class BusizzController extends BaseController {
 				model.addAttribute("user", messageDto.getData().get(0));
 			}
 		}
-		List<Map<String, Object>> list = ariPortService
+		List<Map<String, Object>> list = ariPortManager
 				.datePermissionData(StringUtils.toLong(user.getId()));
 		model.addAttribute("datas", list);
 		return "user/busizzForm";
@@ -164,8 +164,8 @@ public class BusizzController extends BaseController {
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public MessageDto<String> delete(User user) {
-		busizzService.delete(user.getId());
-		return busizzService.delete(user.getId());
+		busizzManager.delete(user.getId());
+		return busizzManager.delete(user.getId());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

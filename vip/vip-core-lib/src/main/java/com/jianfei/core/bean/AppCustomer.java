@@ -1,143 +1,211 @@
 package com.jianfei.core.bean;
 
-public class AppCustomer {
-    private String customerId;
+import java.io.Serializable;
+import java.util.Date;
 
-    private String customerName;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-    private String customerIdenti;
+public class AppCustomer implements Serializable {
+	/**
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）
+	 *
+	 * @version 1.0.0
+	 */
 
-    private String phone;
+	private static final long serialVersionUID = 1590028943359497362L;
 
-    private Integer sex;
+	private String customerId;
 
-    private String email;
+	private String customerName;
 
-    private String address;
+	private String customerIdenti;
 
-    private String password;
+	private String phone;
 
-    private Integer useType;
+	private Integer sex;
 
-    private String remark1;
+	private String email;
 
-    private Integer dtflag;
+	private String address;
 
-    private String province;
+	private String password;
 
-    private String city;
+	private Integer useType;
 
-    private String country;
+	private String remark1;
 
-    public String getCustomerId() {
-        return customerId;
-    }
+	private Integer dtflag;
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId == null ? null : customerId.trim();
-    }
+	private String province;
 
-    public String getCustomerName() {
-        return customerName;
-    }
+	private String city;
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName == null ? null : customerName.trim();
-    }
+	private String country;
 
-    public String getCustomerIdenti() {
-        return customerIdenti;
-    }
+	private Integer orderStatu;
 
-    public void setCustomerIdenti(String customerIdenti) {
-        this.customerIdenti = customerIdenti == null ? null : customerIdenti.trim();
-    }
+	private Date createTime;
 
-    public String getPhone() {
-        return phone;
-    }
+	/**
+	 * createTime
+	 *
+	 * @return the createTime
+	 * @version 1.0.0
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
+	/**
+	 * @param createTime
+	 *            the createTime to set
+	 */
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public Integer getSex() {
-        return sex;
-    }
+	public String getCustomerId() {
+		return customerId;
+	}
 
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId == null ? null : customerId.trim();
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getCustomerName() {
+		return customerName;
+	}
 
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName == null ? null : customerName.trim();
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public String getCustomerIdenti() {
+		return customerIdenti;
+	}
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
+	public void setCustomerIdenti(String customerIdenti) {
+		this.customerIdenti = customerIdenti == null ? null : customerIdenti
+				.trim();
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
+	public void setPhone(String phone) {
+		this.phone = phone == null ? null : phone.trim();
+	}
 
-    public Integer getUseType() {
-        return useType;
-    }
+	public Integer getSex() {
+		return sex;
+	}
 
-    public void setUseType(Integer useType) {
-        this.useType = useType;
-    }
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
 
-    public String getRemark1() {
-        return remark1;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setRemark1(String remark1) {
-        this.remark1 = remark1 == null ? null : remark1.trim();
-    }
+	public void setEmail(String email) {
+		this.email = email == null ? null : email.trim();
+	}
 
-    public Integer getDtflag() {
-        return dtflag;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public void setDtflag(Integer dtflag) {
-        this.dtflag = dtflag;
-    }
+	public void setAddress(String address) {
+		this.address = address == null ? null : address.trim();
+	}
 
-    public String getProvince() {
-        return province;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
-    }
+	public void setPassword(String password) {
+		this.password = password == null ? null : password.trim();
+	}
 
-    public String getCity() {
-        return city;
-    }
+	public Integer getUseType() {
+		return useType;
+	}
 
-    public void setCity(String city) {
-        this.city = city == null ? null : city.trim();
-    }
+	public void setUseType(Integer useType) {
+		this.useType = useType;
+	}
 
-    public String getCountry() {
-        return country;
-    }
+	public String getRemark1() {
+		return remark1;
+	}
 
-    public void setCountry(String country) {
-        this.country = country == null ? null : country.trim();
-    }
+	public void setRemark1(String remark1) {
+		this.remark1 = remark1 == null ? null : remark1.trim();
+	}
+
+	public Integer getDtflag() {
+		return dtflag;
+	}
+
+	public void setDtflag(Integer dtflag) {
+		this.dtflag = dtflag;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province == null ? null : province.trim();
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city == null ? null : city.trim();
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country == null ? null : country.trim();
+	}
+
+	/**
+	 * orderStatu
+	 *
+	 * @return the orderStatu
+	 * @version 1.0.0
+	 */
+
+	public Integer getOrderStatu() {
+		return orderStatu;
+	}
+
+	/**
+	 * @param orderStatu
+	 *            the orderStatu to set
+	 */
+	public void setOrderStatu(Integer orderStatu) {
+		this.orderStatu = orderStatu;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return JSONObject.toJSONString(this);
+	}
+
 }

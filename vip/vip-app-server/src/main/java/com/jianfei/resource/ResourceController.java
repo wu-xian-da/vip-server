@@ -1,5 +1,15 @@
 package com.jianfei.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.github.pagehelper.PageInfo;
 import com.jianfei.common.BaseController;
 import com.jianfei.common.BaseMsgInfo;
@@ -8,17 +18,9 @@ import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.service.base.impl.AppPictureServiceImpl;
-import com.jianfei.core.service.base.impl.AriPortServiceImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 import com.jianfei.dto.VipCardInfoVo;
 import com.jianfei.dto.VipRightInfoVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 资源查询接口

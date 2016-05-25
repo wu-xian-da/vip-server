@@ -22,7 +22,7 @@ import com.jianfei.core.common.utils.MessageDto;
  * @version 1.0.0
  *
  */
-public interface BusizzService<T extends Serializable> extends BaseService<T> {
+public interface BusizzManager<T extends Serializable> extends BaseService<T> {
 
 	MessageDto<String> saveUser(User user, String arids, String roleids);
 

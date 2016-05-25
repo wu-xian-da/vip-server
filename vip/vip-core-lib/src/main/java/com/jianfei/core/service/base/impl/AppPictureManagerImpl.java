@@ -10,7 +10,6 @@ package com.jianfei.core.service.base.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.jianfei.core.common.enu.PictureType;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.mapper.AppPictureMapper;
-import com.jianfei.core.service.base.AppPictureService;
+import com.jianfei.core.service.base.AppPictureManager;
 
 /**
  *
@@ -35,7 +35,7 @@ import com.jianfei.core.service.base.AppPictureService;
  */
 @Service
 @Transactional
-public class AppPictureServiceImpl implements AppPictureService {
+public class AppPictureManagerImpl implements AppPictureManager {
 
 	@Autowired
 	private AppPictureMapper appPictureMapper;

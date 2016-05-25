@@ -40,7 +40,7 @@ import com.jianfei.core.common.utils.TreeNodeUtil;
 import com.jianfei.core.mapper.ResourceMapper;
 import com.jianfei.core.mapper.RoleMapper;
 import com.jianfei.core.mapper.UserMapper;
-import com.jianfei.core.service.base.AriPortService;
+import com.jianfei.core.service.base.AriPortManager;
 
 /**
  *
@@ -314,7 +314,7 @@ public class SystemService {
 	@Autowired
 	private ResourceMapper resourceMapper;
 	@Autowired
-	private AriPortService<AriPort> ariPortService;
+	private AriPortManager<AriPort> ariPortService;
 
 	public ObjectMapper mapper = new ObjectMapper();
 
