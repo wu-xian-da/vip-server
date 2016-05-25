@@ -103,16 +103,5 @@
 		<property name="configLocation" value="classpath:ehcache/ehcache-local.xml" />
 	</bean>
 
-	<!--Redis连接池-->
-	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<property name="maxTotal" value="${redis.pool.maxTotal}" />
-		<property name="maxIdle" value="${redis.pool.maxIdle}" />
-		<property name="minIdle" value="${redis.pool.minIdle}" />
-		<property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}" />
-	</bean>
-	<bean id="jedisPool" class="com.jianfei.core.common.cache.redis.JedisPoolFactoryBean">
-		<property name="config" ref="jedisPoolConfig" />
-		<property name="redisAddress" value="${redis.address}" />
-	</bean>
 
 </beans>

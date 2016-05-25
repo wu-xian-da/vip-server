@@ -43,8 +43,7 @@ import redis.clients.jedis.JedisPool;
 @Transactional
 public class AriPortManagerImpl implements AriPortManager<AriPort> {
 
-	@Autowired
-	private JedisPool jedisPool;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -204,7 +203,6 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	 */
 	@Override
 	public List<String> getAriPortProvince() {
-		Jedis jedis = jedisPool.getResource();
 		return ariPortMapper.getAriPortProvince();
 	}
 
