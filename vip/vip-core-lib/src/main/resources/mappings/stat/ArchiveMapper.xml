@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jianfei.core.mapper.ArchiveMapper">
+	<!-- 全国总的开卡数 -->
+	<select id="masterTotal" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		<![CDATA[SELECT SUM(a.`order_num`) AS total FROM app_order_archive a ]]>
+		<where>
+			<if test="start!=null">
+				<![CDATA[a.`file_time`>=#{start} ]]>
+			</if>
+			<if test="end">
+				<![CDATA[and  a.`file_time`<=#{end} ]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 开卡数前top3的省份 -->
+	<select id="masterTop" resultType="java.util.Map" parameterType="java.util.Map">
+		<![CDATA[SELECT A.*,B.bname,B.total FROM  (SELECT 
+			  archie.`province`,SUM(archie.`order_num`) AS order_sum
+			FROM
+			  `app_order_archive` archie
+			 ]]>
+		<where>
+			<if test="start!=null">
+				<![CDATA[archie.`file_time`>=#{start} ]]>
+			</if>
+			<if test="end">
+				<![CDATA[and  archie.`file_time`<=#{end} ]]>
+			</if>
+		</where>
+		<![CDATA[ GROUP BY archie.`province`	 LIMIT 0,3) A
+			 INNER JOIN 
+			 (SELECT MAX(a.`order_num`) AS total ,a.bname,a.`province` FROM app_order_archive a]]>
+		<where>	<if test="start!=null">
+				<![CDATA[a.`file_time`>=#{start} ]]>
+		</if>
+		<if test="end">
+				<![CDATA[and  a.`file_time`<=#{end} ]]>
+		</if></where>
+		 GROUP BY a.`bname`,a.`province` ) B
+		ON A.province=B.province
+	</select>
+
+	<!-- 为经理角色绘图 -->
+	<select id="masterDraw" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		<![CDATA[	
+			SELECT
+				archie.`province`,SUM(archie.`num`)
+			FROM
+			`app_server`.archie]]>
+		<where>
+			<if test="start!=null">
+				<![CDATA[archie.`file_time`>=#{start} ]]>
+			</if>
+			<if test="end">
+				<![CDATA[and  archie.`file_time`<=#{end} ]]>
+			</if>
+		</where>
+		GROUP BY archie.`province`
+	</select>
+</mapper>

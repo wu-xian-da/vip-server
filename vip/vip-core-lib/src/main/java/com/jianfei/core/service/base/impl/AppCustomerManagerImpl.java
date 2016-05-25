@@ -176,11 +176,11 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 		}
 		List<Map<String, Object>> postInfo = postInfo(id);
 		if (!CollectionUtils.isEmpty(postInfo)) {
-			model.addAttribute("postInfo", postInfo.get(0));
+			model.addAttribute("postInfo", postInfo);
 		}
 		List<Map<String, Object>> backMoneyInfo = postInfo(id);
 		if (!CollectionUtils.isEmpty(backMoneyInfo)) {
-			model.addAttribute("backMoneyInfo", backMoneyInfo.get(0));
+			model.addAttribute("backMoneyInfo", backMoneyInfo);
 		}
 		List<Map<String, Object>> vipCardRescordInfo = postInfo(id);
 		if (!CollectionUtils.isEmpty(vipCardRescordInfo)) {
