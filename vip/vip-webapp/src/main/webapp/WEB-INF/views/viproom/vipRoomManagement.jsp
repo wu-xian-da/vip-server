@@ -6,14 +6,6 @@
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
 	var grid;
-	var addFun = function() {
-		var dialog = parent.sy.modalDialog({
-			title : '添加vip室信息',
-			url : sy.contextPath + '/viproom/gotoAddVipRoomView',
-			
-		});
-	};
-	
 	
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
@@ -81,8 +73,8 @@
 			
 			pageSize : 10,
 			pageList : [5, 10, 20, 30, 40, 50],
-			frozenColumns : [ [ {
-				width : '100',
+			columns : [ [ {
+				width : '200',
 				title : 'vip室编号',
 				field : 'viproomId',
 				sortable : true
@@ -91,8 +83,7 @@
 				title : '所属场站',
 				field : 'airportName',
 				sortable : true
-			} ] ],
-			columns : [ [ {
+			} ,{
 				width : '150',
 				title : 'vip室名称',
 				field : 'viproomName',
@@ -113,7 +104,7 @@
 				width : '90',
 				formatter : function(value, row) {
 					var str = '';
-					str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+					str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/></a>";
 						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.viproomId);
 					return str;
 				}
@@ -136,14 +127,16 @@
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
-				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加VIP室</a></td>
+				<!-- <td><button><a href="gotoAddVipRoomView">添加VIP室</a></button></td> -->
+				
+				<td><a href="gotoAddVipRoomView" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true">添加VIP室</a></td>
 				<td>
 					<!-- 搜索条件框 -->
 					<form id="searchForm">
 						<table>
 							<tr>
 								<td>输入搜索关键字</td>
-								<td><input name="_loginName" style="width: 80px;" /></td>
+								<td><input name="_searchContent" style="width: 80px;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>
 							</tr>
 						</table>

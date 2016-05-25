@@ -39,6 +39,12 @@ public interface VipRoomManager {
 	public void updateVipRoom();
 
 	/**
+	 * 获取VIP室信息
+	 * @return
+     */
+	SysViproom getVipRoomInfo(String vipRoomId);
+
+	/**
 	 * 分页获取Vip室信息
 	 * @param pageDto 分页信息
 	 * @param airport 查询相关条件
