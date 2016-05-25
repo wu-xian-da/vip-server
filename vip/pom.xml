@@ -431,7 +431,8 @@
 				<!-- updload config -->
 				<upload.home.dir>D:\uploadPath</upload.home.dir>
 				<static.resource.server.address>http://127.0.0.1:8083</static.resource.server.address>
-				
+				<redis.host>192.168.110.8</redis.host>
+				<redis.port>6379</redis.port>
 			</properties>
 		</profile>
 
@@ -455,6 +456,13 @@
 				<jdbc.pool.init>10</jdbc.pool.init>
 				<jdbc.pool.minIdle>15</jdbc.pool.minIdle>
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
+
+
+				<!-- updload config -->
+				<upload.home.dir>D:\uploadPath</upload.home.dir>
+				<static.resource.server.address>http://127.0.0.1:8083</static.resource.server.address>
+				<redis.host>192.168.110.8</redis.host>
+				<redis.port>6379</redis.port>
 			</properties>
 			<build>
 				<plugins>
