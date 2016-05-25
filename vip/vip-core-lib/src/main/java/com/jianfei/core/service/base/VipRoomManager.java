@@ -33,10 +33,13 @@ public interface VipRoomManager {
   	public void delVipRoom(String viproomId);
     
 	//添加vip室信息
-	public void addVipRoom();
+  	public int addVipRoom(SysViproom viproom);
 	
 	//编辑vip室信息
-	public void updateVipRoom();
+  	public void updateVipRoom(SysViproom viproom);
+  	
+  	//根据vip室id号返回vip室信息
+  	public SysViproom selVipRoomById(String viproomId);
 
 	/**
 	 * 获取VIP室信息

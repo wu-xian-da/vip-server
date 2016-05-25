@@ -22,13 +22,18 @@
     <result column="header_name" property="headerName"/>
   </resultMap>
   
-  <!-- 分页显示场站信息 -->
+  <!-- 分页显示vip室信息 -->
   <select id="page" resultMap="BaseResultMap" parameterType="java.util.Map">
   	select vr.viproom_id,vr.viproom_name,ap.airport_name,ap.header_name,ap.header_phone 
   		from sys_viproom vr,sys_airport ap 
   		where vr.airport_id = ap.airport_id 
   		and vr.dtflag=0
+  		<!-- 搜索条件 -->
+  	    <if test="searchContent != null">
+  	    	and concat(vr.viproom_id,vr.viproom_name,ap.header_name,ap.header_phone,ap.airport_name) like CONCAT('%','${searchContent}','%' )
+  	    </if>
   </select>
+  
   
   <!--逻辑删除vip室信息  -->
   <update id="deleteByVipRommId" parameterType="java.lang.String">
@@ -65,7 +70,8 @@
 
     </where>
   </select>
-
+	
+  <!-- 根据vip室id号返回vip室信息 -->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -78,6 +84,8 @@
     delete from sys_viproom
     where viproom_id = #{viproomId,jdbcType=VARCHAR}
   </delete>
+  
+  <!--添加vip室信息  -->
   <insert id="insert" parameterType="com.jianfei.core.bean.SysViproom" >
     insert into sys_viproom (viproom_id, airport_id, viproom_name, 
       singleconsume_money, room_num, open_time, 
@@ -189,6 +197,8 @@
       </if>
     </trim>
   </insert>
+  
+   <!-- 更新vip室信息  -->
   <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.SysViproom" >
     update sys_viproom
     <set >

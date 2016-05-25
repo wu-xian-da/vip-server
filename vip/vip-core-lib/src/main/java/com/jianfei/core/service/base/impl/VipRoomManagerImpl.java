@@ -83,22 +83,32 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	
 	
 
-	/* (non-Javadoc)
-	 * @see com.jianfei.core.service.base.VipRoomManager#addVipRoom()
+	/**
+	 * 添加vip室信息
 	 */
 	@Override
-	public void addVipRoom() {
-		// TODO Auto-generated method stub
-
+	public int addVipRoom(SysViproom viproom) {
+		int insertFlag = 0;
+		try {
+			sysViproomMapper.insert(viproom);
+		} catch (Exception e) {
+			insertFlag = 1;
+		}
+		return insertFlag;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jianfei.core.service.base.VipRoomManager#updateVipRoom()
+	/**
+	 * 编辑vip室信息
 	 */
 	@Override
-	public void updateVipRoom() {
-		// TODO Auto-generated method stub
-
+	public void updateVipRoom(SysViproom viproom) {
+		int updateFlag =0;
+		try {
+			sysViproomMapper.updateByPrimaryKey(viproom);
+		} catch (Exception e) {
+			e.printStackTrace();
+			updateFlag = 1;
+		}
 	}
 
 	/**
@@ -150,5 +160,13 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	@Override
 	public SysViproom getVipRoomInfo(String vipRoomId) {
 		return sysViproomMapper.selectByPrimaryKey(vipRoomId);
+	}
+	
+	/**
+	 * 根据vip室id号返回vip室信息
+	 */
+	@Override
+	public SysViproom selVipRoomById(String viproomId) {
+		return sysViproomMapper.selectByPrimaryKey(viproomId);
 	}
 }
