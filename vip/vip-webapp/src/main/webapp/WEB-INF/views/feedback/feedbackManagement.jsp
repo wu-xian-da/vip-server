@@ -20,9 +20,9 @@
 		<!--搜索条件框  -->
 		<div id="order-condition-box">
 			<div class="order-condition-item">
-				<select name="" id="backTypeSelect">
+				<select name="" id="feedbackStateSelect">
 					<option value="2">请选择处理状态</option>
-					<option value="0">为处理</option>
+					<option value="0">未处理</option>
 					<option value="1">已处理</option>
 				</select>
 			</div>
@@ -43,8 +43,9 @@
 					<th data-options="align:'center', field:'id',width:100">序号</th>
 					<th data-options="align:'center', field:'customerName',width:100">用户名</th>
 					<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-					<th data-options="align:'center', field:'feedbacTime',width:100">日期</th>
-					<th data-options="align:'center', field:'operation',width:210">操作</th>
+					<th data-options="align:'center', field:'formatFeedbackTime',width:100">日期</th>
+					<th data-options="align:'center', field:'feedbackStateName',width:100">是否已处理</th>
+					<th data-options="align:'center', field:'opr',width:210">操作</th>
 				</tr>
 			</thead>
 
@@ -79,17 +80,27 @@
         }
         //搜索
         $("#searchBt").click(function(){
-        	//退款方式
-        	var backType=$("#backTypeSelect option:selected").val();
-        	//申请途径
-        	var applyType = $("#applyTypeSelect option:selected").val();
-        	//退款状态
-        	var orderState = $("#orderStateSelect option:selected").val();
-        	
-        	var url = "backCardList?backType="+backType+"&applyType="+applyType+"&orderState="+orderState;
+        	//处理状态
+        	var feedbackState = $("#feedbackStateSelect option:selected").val();
+        	var url = "feedbackList?feedbackState="+feedbackState;
         	$('#tt').datagrid({url:url});
         	
         })
+        
+        //删除用户反馈信息
+        function delFeedBackInfo(id){
+        	$.messager.confirm('提示框', '确定要删除吗?',function(data){
+        		if(data){
+        			url = "delFeedBackInfo?id="+id
+                	$.get(url,function(_d){
+                		if(_d.result == 1){
+                			$('#tt').datagrid('reload');
+                		}
+                	})
+        		}
+        		
+        	})
+         }
         
 		
 	</script>

@@ -62,6 +62,7 @@
 								width : '100',
 								title : '卡号',
 								field : 'cardNo',
+								align : 'center',
 								sortable : true
 							} ] ],
 							columns : [ [
@@ -69,18 +70,21 @@
 										width : '150',
 										title : 'NFC号',
 										field : 'nfcId',
+										align : 'center',
 										sortable : true
 									},
 									{
 										width : '150',
 										title : '导入时间',
 										field : 'importTime',
+										align : 'center',
 										sortable : true
 									},
 									{
 										width : '150',
 										title : '状态',
 										field : 'cardState',
+										align : 'center',
 										sortable : true,
 										formatter : function(value, row, index) {
 											switch (value) {
@@ -97,6 +101,7 @@
 										title : '操作',
 										field : 'action',
 										width : '90',
+										align : 'center',
 										formatter : function(value, row) {
 											var str = '';
 											str += sy

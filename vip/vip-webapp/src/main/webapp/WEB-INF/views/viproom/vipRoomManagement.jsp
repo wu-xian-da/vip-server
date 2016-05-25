@@ -77,31 +77,37 @@
 				width : '200',
 				title : 'vip室编号',
 				field : 'viproomId',
+				align : 'center',
 				sortable : true
 			},{
 				width : '100',
 				title : '所属场站',
 				field : 'airportName',
+				align : 'center',
 				sortable : true
 			} ,{
 				width : '150',
 				title : 'vip室名称',
+				align : 'center',
 				field : 'viproomName',
 				
 			}, {
 				width : '150',
 				title : '场站负责人',
 				field : 'headerName',
+				align : 'center',
 				
 			}, {
 				width : '150',
 				title : '负责人电话',
 				field : 'headerPhone',
+				align : 'center',
 				
 			},{
 				title : '操作',
 				field : 'action',
 				width : '90',
+				align : 'center',
 				formatter : function(value, row) {
 					var str = '';
 					str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/></a>";
