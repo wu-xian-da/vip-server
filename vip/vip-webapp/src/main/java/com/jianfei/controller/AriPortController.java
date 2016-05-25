@@ -64,7 +64,7 @@ public class AriPortController extends BaseController {
 		if (messageDto.isOk()) {
 			pageInfo.setList(messageDto.getData());
 		}
-		return bindDataGrid(pageInfo);
+		return bindGridData(pageInfo);
 	}
 
 	@SuppressWarnings("unchecked")
