@@ -107,7 +107,6 @@
 				//$('#f1').append('<input type="hidden" name="fileName" value="'+file.name+'"/><br/>');
 				$(':input[name="pictureUrl"]').val(response.fileUrl);
 				$("#pictureUrl").attr('src',sy.staticServer +response.fileUrl);
-				alert($("#pictureUrl").attr('src'))
 			}
 		});
 		uploader.init();
@@ -122,7 +121,7 @@
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>排序</th>
-					<td><input class="easyui-numberspinner" name="priority"  value="${appPicture.priority } data-options="increment:1" style="width:120px;" ></td>
+					<td><input class="easyui-numberspinner" name="priority"   required="required"  value="${appPicture.priority } data-options="increment:1,min:1,editable:false" style="width:120px;" ></td>
 				</tr>
 				<tr>
 					<th>类型</th>
@@ -138,7 +137,7 @@
 				</tr>
 				<tr>
 					<th>链接地址</th>
-					<td><input name="clickUrl" value="${appPicture.clickUrl }" /></td>
+					<td><input name="clickUrl" value="${appPicture.clickUrl }" class="easyui-validatebox" data-options="required:true" /></td>
 				</tr>
 				<tr>
 					<th>照片上传</th>
@@ -149,7 +148,7 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td><input name="pictureUrl" value="${appPicture.pictureUrl }" readonly="readonly" style="display: none;" /> <img id="pictureUrl" src="" style="width: 200px; height: 200px;"></td>
+					<td><input name="pictureUrl" value="${appPicture.pictureUrl }" readonly="readonly" style="display: none;" /> <img id="pictureUrl" src="" style="width: 200px; height: 200px;display: none;"></td>
 				</tr>
 			</table>
 		</fieldset>

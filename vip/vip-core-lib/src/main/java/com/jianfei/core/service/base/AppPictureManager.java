@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.MessageDto;
 
 /**
@@ -22,7 +23,7 @@ import com.jianfei.core.common.utils.MessageDto;
  * @version 1.0.0
  *
  */
-public interface AppPictureService {
+public interface AppPictureManager {
 
 	MessageDto<String> save(AppPicture appPicture);
 
@@ -34,4 +35,5 @@ public interface AppPictureService {
 
 	MessageDto<AppPicture> selectByPrimaryKey(Integer pictureId);
 
+	List<AppPicture> getPicture(PictureType pictureType);
 }

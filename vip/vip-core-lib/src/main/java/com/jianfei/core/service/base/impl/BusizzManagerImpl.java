@@ -23,8 +23,8 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.BusizzMapper;
-import com.jianfei.core.service.base.AriPortService;
-import com.jianfei.core.service.base.BusizzService;
+import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.base.BusizzManager;
 
 /**
  *
@@ -37,13 +37,13 @@ import com.jianfei.core.service.base.BusizzService;
  */
 @Service
 @Transactional
-public class BusizzServiceImpl implements BusizzService<User> {
+public class BusizzManagerImpl implements BusizzManager<User> {
 
 	@Autowired
 	private BusizzMapper busizzMaapper;
 
 	@Autowired
-	private AriPortService<AriPort> ariPortService;
+	private AriPortManager<AriPort> ariPortService;
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 

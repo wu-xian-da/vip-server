@@ -19,9 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.mapper.AppPictureMapper;
-import com.jianfei.core.service.base.AppPictureService;
+import com.jianfei.core.service.base.AppPictureManager;
 
 /**
  *
@@ -34,7 +35,7 @@ import com.jianfei.core.service.base.AppPictureService;
  */
 @Service
 @Transactional
-public class AppPictureServiceImpl implements AppPictureService {
+public class AppPictureManagerImpl implements AppPictureManager {
 
 	@Autowired
 	private AppPictureMapper appPictureMapper;
@@ -141,4 +142,16 @@ public class AppPictureServiceImpl implements AppPictureService {
 		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
 
+	/**
+	 * 查询某个类型下的轮播图数据
+	 *
+	 * @param pictureType
+	 * @return
+	 */
+	@Override
+	public List<AppPicture> getPicture(PictureType pictureType) {
+		AppPicture appPicture=new AppPicture();
+		appPicture.setImagetype(pictureType.getName());
+		return appPictureMapper.getPicture(appPicture);
+	}
 }

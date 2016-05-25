@@ -11,70 +11,49 @@
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
 	var grid;
-	var addFun = function() {
-		var dialog = parent.sy.modalDialog({
-			title : '添加用户信息',
-			url : sy.contextPath + '/app/form',
-			buttons : [ {
-				text : '添加',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
-		});
+	var look = function(id) {
+		parent.$.customerFrame({
+			title:"查看VIP用户记录",
+			height : '600px',
+			wight : '700px',
+			url : sy.contextPath + '/app/look?id=' + id});
 	};
-	var editFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '编辑用户信息',
-			url : sy.contextPath + '/app/form?id=' + id,
-			buttons : [ {
-				text : '编辑',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
-		});
-	};
-	var removeFun = function(id) {
-		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
-			if (r) {
-				$.post(sy.contextPath + '/app/delete', {
-					id : id
-				}, function(dataObj) {
-					if(!dataObj.ok){
-			    		$.messager.alert('msg',dataObj.msgBody,'error');
-			    		return ;
-			    	};
-					grid.datagrid('reload');
-				}, 'json');
-			}
-		});
-	};
-	
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
-			url : sy.contextPath + '/app/list',
+			url : sy.contextPath + '/app/list/vip',
 			striped : true,
 			rownumbers : true,
 			pagination : true,
 			singleSelect : true,
-			idField : 'pictureId',
+			idField : 'customerId',
 			pageSize : 10,
 			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 		
 			columns : [ [ {
 				width : '80',
-				title : '描述',
-				field : 'descr'
+				title : '姓名',
+				field : 'customerName'
 			},{
 				width : '150',
-				title : '链接',
-				field : 'clickUrl'
+				title : '手机号',
+				field : 'phone'
 			},{
 				width : '150',
-				title : '类型',
-				field : 'imagetype',
+				title : '日期',
+				field : 'createTime'
+			},{
+				width : '150',
+				title : '常住地址',
+				field : 'address'
+			},{
+				width : '150',
+				title : '邮箱',
+				field : 'email'
+			},{
+				width : '150',
+				title : '用户状态',
+				field : 'orderStatu',
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
@@ -85,27 +64,13 @@
 						return '用户APP合作按钮';
 					}
 				}
-			},{
-				width : '150',
-				title : '图片',
-				field : 'pictureUrl',
-				formatter : function(value, row) {
-					if(value){
-						return sy.formatString('<img src="{0}" style="width: 70px;height:80px;">', sy.staticServer +value);
-					}
-				}
 			}, {
 				title : '操作',
 				field : 'action',
 				width : '90',
 				formatter : function(value, row) {
 					var str = '';
-					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.pictureId);
-					<%}%>
-					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.pictureId);
-					<%}%>
+						str += sy.formatString('<img class="iconImg ext-icon-note" title="删除" onclick="look(\'{0}\');"/>', row.customerId);
 						return str;
 				}
 			} ] ],

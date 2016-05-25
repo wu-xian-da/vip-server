@@ -3,6 +3,7 @@ package com.jianfei.core.service.user.impl;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.service.user.VipUserManager;
+import org.springframework.stereotype.Service;
 
 /**
  * TODO
@@ -12,6 +13,7 @@ import com.jianfei.core.service.user.VipUserManager;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/18 15:50
  */
+@Service
 public class VipUserManagerImpl implements VipUserManager {
 
     /**

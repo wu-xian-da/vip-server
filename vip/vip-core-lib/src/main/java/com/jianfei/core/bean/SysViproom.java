@@ -1,7 +1,10 @@
 package com.jianfei.core.bean;
 
+import com.google.common.collect.Lists;
+
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class SysViproom {
     private String viproomId;//编号
@@ -38,6 +41,8 @@ public class SysViproom {
     private Integer dtflag;
 
     private String latitude;
+
+    private List<AppPicture> pictures= Lists.newArrayList();
 
     public String getViproomId() {
         return viproomId;
@@ -226,10 +231,11 @@ public class SysViproom {
 				+ ", latitude=" + latitude + "]";
 	}
 
-	
+    public List<AppPicture> getPictures() {
+        return pictures;
+    }
 
-	
-
-	
-
+    public void setPictures(List<AppPicture> pictures) {
+        this.pictures = pictures;
+    }
 }
