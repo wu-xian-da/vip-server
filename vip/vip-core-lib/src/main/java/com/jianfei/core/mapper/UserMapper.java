@@ -31,4 +31,19 @@ public interface UserMapper extends BaseMapper<User> {
 
 
 	void batchInsertUserRole(List<Map<String, Object>> list);
+
+	/**
+	 * 根据工号获得用户信息
+	 * @param uno
+	 * @return
+     */
+	User getUserByUno(String uno);
+
+	/**
+	 * 修改用户密码
+	 * @param uno
+	 * @param password
+	 * @param newPassword
+     */
+	int updatePasswordByUno(String uno,String password,String newPassword);
 }
