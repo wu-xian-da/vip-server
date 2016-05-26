@@ -5,6 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  *
@@ -112,31 +116,33 @@ public class DateUtil {
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
 	}
-	
+
 	/**
-	 * timeCompareTime(进行比较的时间与开始时间和结束时间进行比较，
-	 * 小于开始时间返回0，
-	 * 大于结束时间返回2，
+	 * timeCompareTime(进行比较的时间与开始时间和结束时间进行比较， 小于开始时间返回0， 大于结束时间返回2，
 	 * 处于开始时间和结束时间之间返回1。)
-	 * @param startTime 开始时间
-	 * @param endTime 结束时间
-	 * @param compareTime 进行比较的时间
-	 * @return
-	 *Integer
-	 * @version  1.0.0
-	*/
-	public static Integer timeCompareTime(Date startTime,Date endTime,Date compareTime){
-		Integer result=0;
-		long start=startTime.getTime();
-		long end=endTime.getTime();
-		long compare=compareTime.getTime();
-		if(compare>end){
-			result=2;
-		}else if(compare<=end&&compare>=start){
-			result=1;
+	 * 
+	 * @param startTime
+	 *            开始时间
+	 * @param endTime
+	 *            结束时间
+	 * @param compareTime
+	 *            进行比较的时间
+	 * @return Integer
+	 * @version 1.0.0
+	 */
+	public static Integer timeCompareTime(Date startTime, Date endTime,
+			Date compareTime) {
+		Integer result = 0;
+		long start = startTime.getTime();
+		long end = endTime.getTime();
+		long compare = compareTime.getTime();
+		if (compare > end) {
+			result = 2;
+		} else if (compare <= end && compare >= start) {
+			result = 1;
 		}
 		return result;
-	} 
+	}
 
 	/**
 	 * 日期转字符串
@@ -165,4 +171,21 @@ public class DateUtil {
 		return dateToString(date, "yyyy-MM-dd hh:mm:ss");
 	}
 
+	public static Map<String, Object> getDelayDate(int putoff) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(cal.getTime());
+		cal.add(Calendar.MONTH, -putoff);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("year", sdf.format(cal.getTime()));
+		map.put("month", sdf2.format(cal.getTime()));
+		return map;
+	}
+
+	public static void main(String[] args) {
+		Map<String, Object> map = getDelayDate(5);
+		System.out.println(JSONObject.toJSONString(map));
+	}
 }
