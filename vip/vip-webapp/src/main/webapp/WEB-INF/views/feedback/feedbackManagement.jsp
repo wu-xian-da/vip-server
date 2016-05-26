@@ -27,7 +27,7 @@
 				</select>
 			</div>
 			<div class="order-condition-item" style="text-align: left">
-				<button id="searchBt">搜索</button>
+				<button id="searchBt" style="height: 20px">搜索</button>
 			</div>
 		</div>
 
@@ -43,7 +43,7 @@
 					<th data-options="align:'center', field:'id',width:100">序号</th>
 					<th data-options="align:'center', field:'customerName',width:100">用户名</th>
 					<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-					<th data-options="align:'center', field:'formatFeedbackTime',width:100">日期</th>
+					<th data-options="align:'center', field:'feedbacTime',width:100">反馈日期</th>
 					<th data-options="align:'center', field:'feedbackStateName',width:100">是否已处理</th>
 					<th data-options="align:'center', field:'opr',width:210">操作</th>
 				</tr>

@@ -108,7 +108,7 @@
 			
 			<div class="order-list-title">用户反馈信息</div>
 			<ul>
-				<li>${feedbackContent }</li>
+				<li>${feedbackContent}</li>
 			</ul>
 			
 
@@ -116,7 +116,7 @@
 		
 		<!-- 处理按钮 -->
 		<form action="updateFeedbackState" method="post">
-			<input type="text" name="id" value="${feedbackId }">
+			<input type="hidden" name="id" value="${feedbackId }">
 			<div id="clerk-footer">
 				<input type="submit" class="btn btn-save" value="处理"/>
 			</div>

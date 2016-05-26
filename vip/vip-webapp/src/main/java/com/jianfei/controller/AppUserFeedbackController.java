@@ -102,7 +102,6 @@ public class AppUserFeedbackController {
 		//设置操作选项
 		List<AppUserFeedback> feedbackList = page.getList();
 		for(AppUserFeedback appUserFeedback : feedbackList){
-			appUserFeedback.setFormatFeedbackTime(formatDate(appUserFeedback.getFeedbacTime()));
 			if(appUserFeedback.getFeedbackState() == 0){//反馈信息未处理
 				appUserFeedback.setFeedbackStateName("未处理");
 				appUserFeedback.setOpr("<button class='btn'><a href='goHandFeedbackView?userId="+appUserFeedback.getUserId()+"&feedbackId="+appUserFeedback.getId()+"&feedbackContent="+appUserFeedback.getFeedbackContent()+"'>处理</a></button>");
@@ -142,12 +141,6 @@ public class AppUserFeedbackController {
 		appUserFeedbackImpl.updateFeedbackInfoById(appUserFeedback.getId()+"");
 		return "redirect:goFeedbackView";
 	}
-	
-	
-	//时间格式化
-	public String formatDate(Date date){
-		 SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 return sFormat.format(date);
-	}
+
 	
 }

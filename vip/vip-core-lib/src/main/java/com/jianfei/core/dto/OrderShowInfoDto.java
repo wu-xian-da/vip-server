@@ -10,6 +10,8 @@ package com.jianfei.core.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 订单列表页面展示的订单信息
  * @Description: TODO
@@ -129,7 +131,7 @@ public class OrderShowInfoDto implements Serializable {
 	 * @return  the orderTime
 	 * @version   1.0.0
 	*/
-	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public Date getOrderTime() {
 		return orderTime;
 	}

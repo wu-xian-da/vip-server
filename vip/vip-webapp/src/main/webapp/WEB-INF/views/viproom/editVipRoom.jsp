@@ -6,13 +6,13 @@
 <head>
 <title></title>
 
-<link rel="stylesheet" href="/vip/public/css/theme/default/easyui.css">
-<link rel="stylesheet" href="/vip/public/css/theme/icon.css">
-<link rel="stylesheet" href="/vip/public/css/site.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/public/css/theme/default/easyui.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/public/css/theme/icon.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/public/css/site.css">
 
-<script src="/vip/public/js/jquery.min.js"></script>
-<script src="/vip/public/js/jquery.easyui.min.js"></script>
-<script src="/vip/public/js/vue.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/jquery.easyui.min.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/vue.js"></script>
 		
 </head>
 <body>

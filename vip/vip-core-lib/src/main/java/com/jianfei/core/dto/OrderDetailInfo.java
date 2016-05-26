@@ -9,6 +9,8 @@ package com.jianfei.core.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 订单详细信息
  * @Description: TODO
@@ -129,7 +131,7 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	 * @return  the payTime
 	 * @version   1.0.0
 	*/
-	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public Date getPayTime() {
 		return payTime;
 	}
@@ -145,7 +147,7 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	 * @return  the activatTime
 	 * @version   1.0.0
 	*/
-	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public Date getActivatTime() {
 		return activatTime;
 	}

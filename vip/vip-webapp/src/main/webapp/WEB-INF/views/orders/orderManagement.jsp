@@ -62,7 +62,7 @@
             </div>
         </div>
         
-        <table id="tt" title="" style="width:1070px;height:600px" 
+        <table id="tt" title="" style="width:1120px;height:600px" 
                 data-options="singleSelect:true,collapsible:true,
                                 url:'orderList',
                                 method:'get',
@@ -72,7 +72,7 @@
             <thead>
                 <tr>
                 <th data-options="align:'center', field:'orderId',width:100">订单编号</th>
-                <th data-options="align:'center', field:'orderTime',width:100">日期</th>
+                <th data-options="align:'center', field:'orderTime',width:150">订单日期</th>
                 
                 <th data-options="align:'center', field:'airportName',width:150">场站</th>
                 <th data-options="align:'center', field:'agentName',width:100">业务员</th>

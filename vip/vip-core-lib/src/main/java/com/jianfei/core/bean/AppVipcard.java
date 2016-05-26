@@ -2,6 +2,8 @@ package com.jianfei.core.bean;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AppVipcard {
     private String cardNo;
 
@@ -111,7 +113,7 @@ public class AppVipcard {
 	 * @return  the importTime
 	 * @version   1.0.0
 	*/
-	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public Date getImportTime() {
 		return importTime;
 	}

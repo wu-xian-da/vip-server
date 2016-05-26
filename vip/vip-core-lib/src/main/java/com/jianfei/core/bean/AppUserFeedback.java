@@ -2,6 +2,8 @@ package com.jianfei.core.bean;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 用户反馈实体类
  * @author guojian
@@ -13,7 +15,6 @@ public class AppUserFeedback {
 	private String customerName;//用户姓名
 	private String customerPhone;//用户手机号码
 	private Date feedbacTime;//反馈时间
-	private String formatFeedbackTime;
 	private Integer feedbackState;//处理状态 0 为处理  1已处理
 	private String feedbackStateName;//处理状态的中文名称
 	private Date handleTime;//处理时间
@@ -49,6 +50,7 @@ public class AppUserFeedback {
 	/**
 	 * @return the feedbacTime
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public Date getFeedbacTime() {
 		return feedbacTime;
 	}
@@ -153,18 +155,7 @@ public class AppUserFeedback {
 	 * @see java.lang.Object#toString()
 	 */
 	
-	/**
-	 * @return the formatFeedbackTime
-	 */
-	public String getFormatFeedbackTime() {
-		return formatFeedbackTime;
-	}
-	/**
-	 * @param formatFeedbackTime the formatFeedbackTime to set
-	 */
-	public void setFormatFeedbackTime(String formatFeedbackTime) {
-		this.formatFeedbackTime = formatFeedbackTime;
-	}
+	
 	/**
 	 * @return the feedbackStateName
 	 */
@@ -195,11 +186,13 @@ public class AppUserFeedback {
 	@Override
 	public String toString() {
 		return "AppUserFeedback [id=" + id + ", userId=" + userId + ", customerName=" + customerName
-				+ ", customerPhone=" + customerPhone + ", feedbacTime=" + feedbacTime + ", formatFeedbackTime="
-				+ formatFeedbackTime + ", feedbackState=" + feedbackState + ", feedbackStateName=" + feedbackStateName
-				+ ", handleTime=" + handleTime + ", handleuserId=" + handleuserId + ", dtflag=" + dtflag + ", opr="
-				+ opr + ", feedbackContent=" + feedbackContent + "]";
+				+ ", customerPhone=" + customerPhone + ", feedbacTime=" + feedbacTime + ", feedbackState="
+				+ feedbackState + ", feedbackStateName=" + feedbackStateName + ", handleTime=" + handleTime
+				+ ", handleuserId=" + handleuserId + ", dtflag=" + dtflag + ", opr=" + opr + ", feedbackContent="
+				+ feedbackContent + "]";
 	}
+	
+	
 	
 	
 	
