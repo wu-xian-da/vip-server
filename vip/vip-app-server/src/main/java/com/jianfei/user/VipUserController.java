@@ -1,5 +1,6 @@
 package com.jianfei.user;
 
+import com.jianfei.core.service.order.impl.ConsumeManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,9 @@ public class VipUserController {
 
     @Autowired
     private VipUserManagerImpl vipUserManager;
+
+    @Autowired
+    private ConsumeManagerImpl consumeManager;
 
     /**
      * VIP 用户登录
@@ -63,6 +67,18 @@ public class VipUserController {
     public BaseMsgInfo updateUserInfo(AppCustomer appCustomer
     ) {
         return BaseMsgInfo.success(vipUserManager.updateUser(appCustomer));
+    }
+
+
+    /**
+     * VIP 使用记录查询
+     * @return
+     */
+    @RequestMapping(value = "/getVipCardUse")
+    @ResponseBody
+    public BaseMsgInfo getVipCardUse(@RequestParam(value = "phone", required = true) String phone
+    ) {
+        return BaseMsgInfo.success(consumeManager.listConsume(phone));
     }
 
 }

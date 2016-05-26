@@ -25,6 +25,14 @@
     from app_consume
     where consume_id = #{consumeId,jdbcType=VARCHAR}
   </select>
+
+  <select id="listConsumeByUserPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+      c.consume_id, c.card_no, c.consume_money, c.consume_time, c.viproom_name, c.dtflag
+    from app_consume  c JOIN app_vipcard v on c.card_no=v.card_no JOIN app_customer m on v.customer_id=m.customer_id
+    where m.customer_phone = #{phone,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from app_consume
     where consume_id = #{consumeId,jdbcType=VARCHAR}
