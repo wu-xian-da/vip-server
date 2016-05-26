@@ -26,7 +26,7 @@
 			
 			<div class="clerk-container-item">
 				<label>vip室单价：</label>
-				<input type="text" name="singleconsumeMoney" value="200">
+				<input type="text" name="singleconsumeMoney" value="200" readonly="readonly">
 			</div>
 
 			<div class="clerk-container-item">

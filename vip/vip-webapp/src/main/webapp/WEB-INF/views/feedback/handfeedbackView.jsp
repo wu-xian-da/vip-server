@@ -118,7 +118,7 @@
 		<form action="updateFeedbackState" method="post">
 			<input type="hidden" name="id" value="${feedbackId }">
 			<div id="clerk-footer">
-				<input type="submit" class="btn btn-save" value="处理"/>
+				<input type="submit" class="btn btn-submit" value="处理" style="background: #64A6E0"/>
 			</div>
 		</form>
 		
