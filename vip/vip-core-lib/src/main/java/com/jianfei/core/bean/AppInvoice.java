@@ -123,4 +123,17 @@ public class AppInvoice {
     public void setDtflag(Integer dtflag) {
         this.dtflag = dtflag;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AppInvoice [invoiceId=" + invoiceId + ", orderId=" + orderId + ", postcode=" + postcode
+				+ ", invoiceType=" + invoiceType + ", invoiceTitle=" + invoiceTitle + ", consigneeName=" + consigneeName
+				+ ", consigneePhone=" + consigneePhone + ", province=" + province + ", city=" + city + ", country="
+				+ country + ", address=" + address + ", dtflag=" + dtflag + "]";
+	}
+    
+    
 }

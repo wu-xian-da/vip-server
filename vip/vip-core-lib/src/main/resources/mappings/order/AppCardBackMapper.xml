@@ -25,7 +25,7 @@
   		,#{finishTime},#{orderId},#{createrId},#{checkId},#{agreementUrl},#{cardNo},#{bankName})
   </insert>
   
-  <!--通过卡号查询用户退款账户 和退款方式-->
+  <!--通过订单编号查询用户退款账户 和退款方式-->
   <select id="seleConsumeCardId" resultType="com.jianfei.core.bean.AppCardBack" parameterType="java.lang.String">
   	select * from app_card_back where order_id=#{orderId}
   </select>

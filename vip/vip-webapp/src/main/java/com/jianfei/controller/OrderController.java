@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,9 +26,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
+import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.service.base.AppInvoiceManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 
@@ -46,6 +49,8 @@ public class OrderController {
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
 	private MsgInfoManagerImpl msgInfoManagerImpl;
+	@Autowired
+	private AppInvoiceManager appInvoiceManagerImpl;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -73,9 +78,23 @@ public class OrderController {
 	 * 根据订单号查询订单详细信息
 	 */
 	@RequestMapping(value="/returnOrderDetailInfoByOrderId")
-	public ModelAndView returnOrderDetailInfoByOrderId(String orderId){
+	public String returnOrderDetailInfoByOrderId(String orderId,Model model){
+		//订单基本信息
 		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		return new ModelAndView("orders/orderDetail","orderDetailInfo",orderDetailInfo);
+		//发票信息
+		AppInvoice appInvoice = appInvoiceManagerImpl.selInvoiceInfoByOrderId(orderId);
+		//退卡余额信息
+		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
+		
+		model.addAttribute("orderDetailInfo", orderDetailInfo);
+		if(appInvoice !=null){
+			model.addAttribute("invoice", appInvoice);
+		}
+		if(appCardBack != null){
+			model.addAttribute("appCardBack", appCardBack);
+		}
+		return "orders/orderDetail";
+		//return new ModelAndView("orders/orderDetail","orderDetailInfo",orderDetailInfo);
 	}
 	
 	/*

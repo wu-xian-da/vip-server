@@ -15,6 +15,12 @@
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
   </resultMap>
+  
+  <!--根据订单号返回发票信息  -->
+  <select id="selectInvoiceInfoByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from app_invoice where order_id = #{orderId}
+  </select>
+  
   <sql id="Base_Column_List" >
     invoice_id, order_id, postcode, invoice_type, invoice_title, consignee_name, consignee_phone, 
     province, city, country, address, dtflag
