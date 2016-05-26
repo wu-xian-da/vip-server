@@ -6,11 +6,11 @@
 		parameterType="java.util.Map">
 		<![CDATA[SELECT SUM(a.`order_num`) AS total FROM app_order_archive a ]]>
 		<where>
-			<if test="start!=null">
-				<![CDATA[a.`file_time`>=#{start} ]]>
+			<if test="year!=null">
+				<![CDATA[a.`year`={year} ]]>
 			</if>
-			<if test="end">
-				<![CDATA[and  a.`file_time`<=#{end} ]]>
+			<if test="month!=null">
+				<![CDATA[and  a.`month`=#{month} ]]>
 			</if>
 		</where>
 	</select>
@@ -23,21 +23,21 @@
 			  `app_order_archive` archie
 			 ]]>
 		<where>
-			<if test="start!=null">
-				<![CDATA[archie.`file_time`>=#{start} ]]>
+			<if test="year!=null">
+				<![CDATA[archie.`year`=#{year} ]]>
 			</if>
-			<if test="end">
-				<![CDATA[and  archie.`file_time`<=#{end} ]]>
+			<if test="month!=null">
+				<![CDATA[and  archie.`month`=#{month} ]]>
 			</if>
 		</where>
 		<![CDATA[ GROUP BY archie.`province`	 LIMIT 0,3) A
 			 INNER JOIN 
 			 (SELECT MAX(a.`order_num`) AS total ,a.bname,a.`province` FROM app_order_archive a]]>
-		<where>	<if test="start!=null">
-				<![CDATA[a.`file_time`>=#{start} ]]>
+		<where>	<if test="year!=null">
+				<![CDATA[a.`year`=#{year} ]]>
 		</if>
-		<if test="end">
-				<![CDATA[and  a.`file_time`<=#{end} ]]>
+		<if test="month!=null">
+				<![CDATA[and  a.`month`=#{month} ]]>
 		</if></where>
 		 GROUP BY a.`bname`,a.`province` ) B
 		ON A.province=B.province
@@ -48,15 +48,15 @@
 		parameterType="java.util.Map">
 		<![CDATA[	
 			SELECT
-				archie.`province`,SUM(archie.`num`)
+				archie.`province`,SUM(archie.`order_num`) as order_num
 			FROM
-			`app_server`.archie]]>
+			`app_order_archive` archie]]>
 		<where>
-			<if test="start!=null">
-				<![CDATA[archie.`file_time`>=#{start} ]]>
+			<if test="year!=null">
+				<![CDATA[archie.`year`=#{year} ]]>
 			</if>
-			<if test="end">
-				<![CDATA[and  archie.`file_time`<=#{end} ]]>
+			<if test="month!=null">
+				<![CDATA[and  archie.`month`=#{month} ]]>
 			</if>
 		</where>
 		GROUP BY archie.`province`

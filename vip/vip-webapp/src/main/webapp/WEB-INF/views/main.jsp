@@ -188,7 +188,7 @@
 	<div data-options="region:'center'" style="overflow: hidden;">
 		<div id="mainTabs">
 			<div title="掌慧纵盈" data-options="">
-				<iframe src="${ctx }/index.jsp" allowTransparency="true" style="border: 0; width: 100%; height: 99%;" frameBorder="0"></iframe>
+				<iframe src="${ctx }/index" allowTransparency="true" style="border: 0; width: 100%; height: 99%;" frameBorder="0"></iframe>
 			</div>
 		</div>
 	</div>
