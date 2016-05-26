@@ -22,6 +22,25 @@
 			<id property="customerId" column="appOrders.customer_id" />
 		</collection>
 	</resultMap>
+	<resultMap id="BaseResultMap" type="com.jianfei.core.bean.SysAirport" >
+		<id column="airport_id" property="airportId" jdbcType="VARCHAR" />
+		<result column="airport_name" property="airportName" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="agent_num" property="agentNum" jdbcType="INTEGER" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="country" property="country" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="longitude" property="longitude" jdbcType="VARCHAR" />
+		<result column="latitude" property="latitude" jdbcType="VARCHAR" />
+		<result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+		<result column="header_name" property="headerName" jdbcType="VARCHAR" />
+		<result column="header_phone" property="headerPhone" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+		airport_id, airport_name, state, agent_num, province, city, country, address, longitude,
+		latitude, dtflag, header_name, header_phone
+	</sql>
 
 	<select id="get" resultMap="airportRs" parameterType="java.util.Map">
 		<![CDATA[
@@ -178,4 +197,22 @@
 		<![CDATA[	SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=#{id} 	]]>
 	</select>
 
+	<resultMap type="java.lang.String" id="province">
+		<result property="province" column="province" />
+	</resultMap>
+
+	<select id="getAriPortProvince" resultMap="province" >
+		<![CDATA[	SELECT  DISTINCT (a.province) FROM sys_airport a 	]]>
+	</select>
+
+	<select id="getAirPortByProvince" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_airport
+		<where>
+		<if test="province != null" >
+			and province= #{province,jdbcType=VARCHAR}
+		</if>
+		</where>
+	</select>
 </mapper>

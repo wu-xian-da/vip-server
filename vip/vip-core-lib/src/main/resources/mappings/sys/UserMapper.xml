@@ -18,43 +18,52 @@
 		<result property="createdatetime" column="create_time" />
 		<result property="updatedatetime" column="update_time" />
 		<result property="entryTime" column="entry_time" />
-		<collection property="roles" ofType="Role">
+		<result property="ariPortIds" column="ariPorts.id"/>
+		<result property="ariPortNames" column="ariPorts.name"/>
+		<result property="roleIds" column="roles.id"/>
+		<result property="roelNames" column="roles.name"/>
+	<!--  	<collection property="roles" ofType="Role">
 			<id property="id" column="roles.id" />
 			<id property="name" column="roles.name" />
-		</collection>
+		</collection>-->
 	</resultMap>
 
 	<select id="get" resultMap="userRs" parameterType="java.util.Map">
-		SELECT * from sys_users
+		SELECT u.* ,GROUP_CONCAT(r.`id`) AS 'roles.id' ,GROUP_CONCAT(r.`name`) AS 'roles.name',GROUP_CONCAT(ap.`airport_id`) AS 'ariPorts.id',GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name' FROM `sys_users` u 
+		   LEFT JOIN `sys_use_role` ur ON u.`id`=ur.`user_id`
+		   LEFT JOIN `sys_roles` r ON ur.`role_id`=r.`id`
+		   LEFT JOIN `sys_user_airport` ua ON ua.`sys_id`=u.`id`
+		   LEFT JOIN `sys_airport` ap ON ap.`airport_id`=ua.`airport_id`
 		<where>
 			<if test="1==1">
-				dtflag=0
+				and u.user_type=1
 			</if>
 			<if test="id!=null">
-				and id=#{id}
+				and u.id=#{id}
 			</if>
 			<if test="name!=null">
-				and name like CONCAT('%', #{name}, '%')
+				and u.name like CONCAT('%', #{name}, '%')
 			</if>
 			<if test="loginName!=null">
-				and login_name like CONCAT('%', #{loginName}, '%')
+				and u.login_name like CONCAT('%', #{loginName}, '%')
 			</if>
 			<if test="sex!=null">
-				and sex = #{sex}
+				and u.sex = #{sex}
 			</if>
 			<if test="start!=null">
-				<![CDATA[and create_time >= #{start}]]>
+				<![CDATA[and u.create_time >= #{start}]]>
 			</if>
 			<if test="ends!=null">
-				<![CDATA[and create_time <= #{ends}]]>
+				<![CDATA[and u.create_time <= #{ends}]]>
 			</if>
 		</where>
+		  GROUP BY u.`name`
 		<if test="sort!=null">
 			order by ${sort} ${order}
 		</if>
 	</select>
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where login_name =#{loginName}
+		SELECT * from sys_users where login_name =#{loginName} and (user_type=1 or user_type=2)
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -126,7 +135,7 @@
 
 	<delete id="delete" parameterType="Long">
 		<![CDATA[
-			update sys_users set dtflag =1 where id=#{id}
+			update sys_users set dtflag =1 where id=#{id} and user_type=0;
 		]]>
 	</delete>
 

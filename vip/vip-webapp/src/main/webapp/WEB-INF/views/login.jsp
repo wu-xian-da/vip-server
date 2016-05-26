@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>登入</title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
+<script type="text/javascript" src="${ctx }/jslib/jquery.validate.min.js"></script>
 <script language="JavaScript">
 function correctPNG()
 {
@@ -41,7 +42,7 @@ function correctPNG()
 <link href="${ctx}/style/login/skin.css" rel="stylesheet" type="text/css">
 </head>
 <body onload="correctPNG();">
-<form action="${ctx }/login" method="POST">
+<form action="${ctx }/login" method="POST" id="commentForm">
 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td height="42" valign="top"><table width="100%" height="42" border="0" cellpadding="0" cellspacing="0" class="login_top_bg">
@@ -97,7 +98,7 @@ function correctPNG()
             </tr>
              <tr>
               <td width="4%">&nbsp;</td>
-              <td width="96%" height="38" style="color: red;"><span>${message }</span></td>
+              <td width="96%" height="38" style="color: red;"><span>${shrio_error_message }</span></td>
             </tr>
             <tr>
               <td>&nbsp;</td>
@@ -106,22 +107,28 @@ function correctPNG()
                     <td height="164" colspan="2" align="middle"><form name="myform" action="index.html" method="post">
                         <table cellSpacing="0" cellPadding="0" width="100%" border="0" height="143" id="table212">
                           <tr>
-                            <td width="13%" height="38" class="top_hui_text"><span class="login_txt">管理员：&nbsp;&nbsp; </span></td>
-                            <td height="38" colspan="2" class="top_hui_text"><input name="loginName" class="editbox4" value="" size="20">                            </td>
+                            <td width="13%" height="38" class="top_hui_text"><span class="login_txt">用户名：&nbsp;&nbsp; </span></td>
+                            <td height="38" colspan="2" class="top_hui_text"><input name="loginName" class="editbox4" value="" size="20" required>                            </td>
                           </tr>
                           <tr>
                             <td width="13%" height="35" class="top_hui_text"><span class="login_txt"> 密 码： &nbsp;&nbsp; </span></td>
-                            <td height="35" colspan="2" class="top_hui_text"><input class="editbox6" type="password" size="20" name="password" value="">
+                            <td height="35" colspan="2" class="top_hui_text"><input class="editbox6" type="password" size="20" name="password" value="" required>
                               <img src="${ctx}/style/login/luck.gif" width="19" height="18"> </td>
                           </tr>
                           <tr>
                             <td width="13%" height="35" ><span class="login_txt">验证码：</span></td>
-                            <td height="35" colspan="2" class="top_hui_text"><input class=wenbenkuang name=validateCode type=text value="" maxLength=6 size=10>
-                            <div class="yzm-box">
-								<img src="${ctx }/validate/code" style="cursor: pointer;" onclick="changeImg(this);" title="点击更换验证码" />
-							</div>
+                            <td height="35" colspan="2" class="top_hui_text"><input class=wenbenkuang name=validateCode type=text value="" maxLength=6 size=10 required>
                               </td>
                           </tr>
+                          <tr>
+                          <td width="13%" height="35" ><span class="login_txt"></span></td>
+                          <td>
+                             	 <div class="yzm-box">
+									<img src="${ctx }/validate/code" style="cursor: pointer;" onclick="changeImg(this);" title="点击更换验证码" />
+								</div>
+                             </td>
+                          </tr>
+                          
                           <tr>
                             <td height="35" >&nbsp;</td>
                             <td width="20%" height="35" ><input name="Submit" type="submit" class="button" id="Submit" value="登 陆"> </td>
@@ -156,6 +163,12 @@ function correctPNG()
 	
 		$(obj).attr("src", '${ctx }/validate/code?'+new Date().getTime());
 	}
+	$().ready(function() {
+		jQuery.extend(jQuery.validator.messages, {
+	        required: "必填字段"
+		});
+	    $("#commentForm").validate();
+	});
 </script>
 
 </body>

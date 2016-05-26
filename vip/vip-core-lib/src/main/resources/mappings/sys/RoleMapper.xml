@@ -8,27 +8,32 @@
 		<result property="description" column="description" />
 		<result column="create_time" property="createdatetime" />
 		<result column="update_time" property="updatedatetime" />
+		<result column="dtflag" property="dtflag" />
+		<collection property="resources" ofType="Resource">
+			<id property="id" column="resources.id" />
+			<id property="name" column="resources.name" />
+		</collection>
 	</resultMap>
 
 	<select id="get" resultMap="roleResult" parameterType="java.util.Map">
 		<![CDATA[
-			SELECT role.* FROM `sys_roles`  role
+			SELECT role.*,GROUP_CONCAT(sa.id  ) AS 'resources.id',GROUP_CONCAT(sa.`name` ) AS 'resources.name' FROM `sys_roles` role 
+			LEFT JOIN `sys_role_author` sau ON sau.`role_id`=role.`id` 
+			LEFT JOIN `sys_author` sa ON sa.`id`=sau.`author_id`  where role.dtflag!=1
 		]]>
-		<where>
-			<if test="id!=null">
-				role.id =#{id}
-			</if>
-			<if test="notLikeName!=null">
-				and role.name=#{notLikeName}
-			</if>
-			<if test="name!=null">
-				and role.name like CONCAT('%', #{name}, '%')
-			</if>
-			<if test="description!=null">
-				and role.description like CONCAT('%', #{description},
-				'%')
-			</if>
-		</where>
+		<if test="id!=null">
+			and role.id =#{id}
+		</if>
+		<if test="notLikeName!=null">
+			and role.name=#{notLikeName}
+		</if>
+		<if test="name!=null">
+			and role.name like CONCAT('%', #{name}, '%')
+		</if>
+		<if test="description!=null">
+			and role.description like CONCAT('%', #{description},'%')
+		</if>
+		GROUP BY role.name
 	</select>
 
 	<insert id="save" parameterType="Role">
@@ -38,34 +43,38 @@
 				name,
 				description,
 				create_time,
-				update_time
+				update_time,
+				dtflag
 			)
 			VALUES
 			(
 				#{name},
 				#{description},
 				#{createdatetime},
-				#{updatedatetime}
+				#{updatedatetime},
+				#{dtflag}
 			)
 		]]>
 	</insert>
 
 	<update id="update" parameterType="Role">
-		<![CDATA[
-			UPDATE sys_roles
-			SET
-				name = name,
-				description = #{description},
-				update_time = #{updatedatetime}
-			WHERE id = #{id}
-		]]>
+		UPDATE sys_roles
+		SET
+		id=#{id}
+		<if test="dtflag!=null">
+			,dtflag=#{dtflag}
+		</if>
+		<if test="name!=null">
+			,name = #{name}
+		</if>
+		<if test="description!=null">
+			,description = #{description}
+		</if>
+		<if test="updatedatetime!=null">
+			,update_time = #{updatedatetime}
+		</if>
+		WHERE id = #{id}
 	</update>
-
-	<delete id="delete" parameterType="Long">
-		<![CDATA[
-			delete from sys_roles where id=#{id}
-		]]>
-	</delete>
 
 	<delete id="deleteByResourceFromRole" parameterType="Long">
 		<![CDATA[

@@ -21,5 +21,6 @@ public interface ResourceMapper extends BaseMapper<Resource> {
 	List<Resource> findResourceByRoleId(Long roleId);
 
 	List<Resource> findResourceByUserId(Long userId);
+	
 
 }

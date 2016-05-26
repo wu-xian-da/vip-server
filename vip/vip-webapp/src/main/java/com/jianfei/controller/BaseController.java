@@ -7,17 +7,23 @@
  */
 package com.jianfei.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
-import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.MapUtils;
 
 /**
  *
@@ -30,9 +36,19 @@ import com.jianfei.core.common.utils.MessageDto;
  */
 public class BaseController {
 
-	public <T> Grid<T> bindDataGrid(PageInfo<T> pageInfo) {
-		Grid<T> grid = new Grid<T>();
-		grid.setRows(pageInfo.getList());
+	@SuppressWarnings("rawtypes")
+	public <T> Grid bindGridData(PageInfo<T> pageInfo) {
+		List<T> list = pageInfo.getList();
+		if (CollectionUtils.isEmpty(list)) {
+			list = Lists.newArrayList();
+		}
+		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+		for (T user : list) {
+			Map<String, Object> map = MapUtils.<T> entityInitMap(user);
+			maps.add(map);
+		}
+		Grid<Map<String, Object>> grid = new Grid<Map<String, Object>>();
+		grid.setRows(maps);
 		grid.setTotal(pageInfo.getTotal());
 		return grid;
 	}

@@ -36,7 +36,7 @@
 				<property name="credentialsMatcher" ref="credentialsMatcher"></property>
 			</bean>
 		</property>
-		<property name="cacheManager" ref="cacheManagerShiro"></property>
+	<!--	<property name="cacheManager" ref="cacheManagerShiro"></property>-->
 	</bean>
 
 	<!-- cacheManager -->

@@ -1,13 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	String contextPath = request.getContextPath();
-%>
-<%
-	String id = request.getParameter("id");
-	if (id == null) {
-		id = "";
-	}
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,41 +7,62 @@
 <script type="text/javascript">
 	var submitForm = function($dialog, $grid, $pjq) {
 		if ($('form').form('validate')) {
+			var nodes = $('#tree').tree('getChecked', [ 'checked', 'indeterminate' ]);
+			var ids = [];
+			for (var i = 0; i < nodes.length; i++) {
+				ids.push(nodes[i].id);
+			}
+			$("#ids").val(ids);
 			var url;
-			if ($(':input[name="data.id"]').val().length > 0) {
-				url = sy.contextPath + '/role/update';
+			if ($(':input[name="id"]').val()!= '') {
+				url = sy.contextPath + '/role/saveAndgrant';
 			} else {
-				url = sy.contextPath + '/role/svae';
+				url = sy.contextPath + '/role/saveAndgrant';
 			}
 			$.post(url, sy.serializeObject($('form')), function(result) {
-				if (result.success) {
+				if (result.ok) {
 					$grid.datagrid('load');
 					$dialog.dialog('destroy');
 				} else {
-					$pjq.messager.alert('提示', result.msg, 'error');
+					$pjq.messager.alert('提示', result.msgBody, 'error');
 				}
 			}, 'json');
 		}
 	};
 	$(function() {
-		if ($(':input[name="data.id"]').val().length > 0) {
-			parent.$.messager.progress({
-				text : '数据加载中....'
-			});
-			$.post(sy.contextPath + '/base/syrole!getById.sy', {
-				id : $(':input[name="data.id"]').val()
-			}, function(result) {
-				if (result.id != undefined) {
-					$('form').form('load', {
-						'data.id' : result.id,
-						'data.name' : result.name,
-						'data.description' : result.description,
-						'data.seq' : result.seq
-					});
-				}
+		parent.$.messager.progress({
+			text : '数据加载中....'
+		});
+		
+		$('#tree').tree({
+			url : sy.contextPath + '/resource/tree',
+			parentField : 'pid',
+			checkbox : true,
+			formatter : function(node) {
+				return node.name;
+			},
+			onLoadSuccess : function(node, data) {
+				if($(':input[name="id"]').val()!=''){
+					$.post(sy.contextPath + '/resource/roleResources', {
+						id : $(':input[name="id"]').val()
+					}, function(result) {
+						if (result) {
+							for (var i = 0; i < result.length; i++) {
+								var node = $('#tree').tree('find', result[i].id);
+								if (node) {
+									var isLeaf = $('#tree').tree('isLeaf', node.target);
+									if (isLeaf) {
+										$('#tree').tree('check', node.target);
+									}
+								}
+							}
+						}
+						parent.$.messager.progress('close');
+					}, 'json');
+				}else
 				parent.$.messager.progress('close');
-			}, 'json');
-		}
+			}
+		});
 	});
 </script>
 </head>
@@ -58,18 +70,22 @@
 	<form method="post" class="form">
 		<fieldset>
 			<legend>角色基本信息</legend>
+			<input name="id" type="hidden" value="${role.id }" />
+			<input name="ids" type="hidden" id="ids" />
 			<table class="table" style="width: 100%;">
 				<tr>
-					<th>编号</th>
-					<td><input name="id" value="<%=id%>" readonly="readonly" /></td>
 					<th>角色名称</th>
-					<td><input name="name" class="easyui-validatebox" data-options="required:true" /></td>
+					<td><input name="name" class="easyui-validatebox" data-options="required:true" value="${role.name }"/></td>
+					<th>角色描述</th>
+					<td><textarea name="description" >${role.description }</textarea></td>
 				</tr>
 				<tr>
-					<th>顺序</th>
-					<td><input name="data.seq" class="easyui-numberspinner" data-options="required:true,min:0,max:100000,editable:false" style="width: 155px;" value="100" /></td>
-					<th>角色描述</th>
-					<td><textarea name="data.description"></textarea></td>
+					<td colspan="4">
+						<fieldset>
+							<legend>角色授权</legend>
+							<ul id="tree"></ul>
+						</fieldset>
+					</td>
 				</tr>
 			</table>
 		</fieldset>

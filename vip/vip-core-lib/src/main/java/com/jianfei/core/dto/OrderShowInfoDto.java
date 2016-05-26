@@ -38,7 +38,59 @@ public class OrderShowInfoDto implements Serializable {
 	private int invoiceFlag;//是否需要发票 0代表不需要
 	private String invoiceFlagName;//是否需要发票的中文提示
 	private String operation;//操作项
+	private int applyType;//申请方式
+	private int backType;//退卡方式
+	private float remainMoney;//余额
 	
+	
+	/**
+	 * applyType
+	 *
+	 * @return  the applyType
+	 * @version   1.0.0
+	*/
+	
+	public int getApplyType() {
+		return applyType;
+	}
+	/**
+	 * @param applyType the applyType to set
+	 */
+	public void setApplyType(int applyType) {
+		this.applyType = applyType;
+	}
+	/**
+	 * backType
+	 *
+	 * @return  the backType
+	 * @version   1.0.0
+	*/
+	
+	public int getBackType() {
+		return backType;
+	}
+	/**
+	 * @param backType the backType to set
+	 */
+	public void setBackType(int backType) {
+		this.backType = backType;
+	}
+	/**
+	 * remainMoney
+	 *
+	 * @return  the remainMoney
+	 * @version   1.0.0
+	*/
+	
+	public float getRemainMoney() {
+		return remainMoney;
+	}
+	/**
+	 * @param remainMoney the remainMoney to set
+	 */
+	public void setRemainMoney(float remainMoney) {
+		this.remainMoney = remainMoney;
+	}
 	/**
 	 * operation
 	 *

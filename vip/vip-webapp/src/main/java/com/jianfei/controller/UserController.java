@@ -13,8 +13,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +24,17 @@ import org.springframework.web.util.WebUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
+import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.service.sys.SystemService;
+import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.sys.RoleManager;
+import com.jianfei.core.service.sys.UserManaer;
 
 /**
  *
@@ -47,7 +50,13 @@ import com.jianfei.core.service.sys.SystemService;
 public class UserController extends BaseController {
 
 	@Autowired
-	private SystemService systemService;
+	private UserManaer<User> userManaer;
+
+	@Autowired
+	private RoleManager roelManager;
+
+	@Autowired
+	private AriPortManager<AriPort> ariPortService;
 
 	@RequestMapping(value = "home")
 	public String home() {
@@ -76,10 +85,12 @@ public class UserController extends BaseController {
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
 		PageHelper.startPage(pageNo, pageSize);
-		List<User> list = systemService.getUserMapper().get(searchParams);
-		PageInfo<User> pageInfo = new PageInfo<User>(list);
-		intiWebContentEnv();
-		return systemService.bindUserGridData(pageInfo);
+		MessageDto<List<User>> messageDto = userManaer.get(searchParams);
+		PageInfo<User> pageInfo = new PageInfo<User>();
+		if (messageDto.isOk()) {
+			pageInfo.setList(messageDto.getData());
+		}
+		return bindGridData(pageInfo);
 	}
 
 	/**
@@ -95,11 +106,20 @@ public class UserController extends BaseController {
 		if (0 != user.getId()) {
 			Map<String, Object> searchParams = new HashMap<String, Object>();
 			searchParams.put("id", user.getId());
-			List<User> list = systemService.getUserMapper().get(searchParams);
-			if (!CollectionUtils.isEmpty(list)) {
-				model.addAttribute("user", list.get(0));
+			MessageDto<List<User>> messageDto = userManaer.get(searchParams);
+			if (messageDto.isOk()) {
+				model.addAttribute("user", messageDto.getData().get(0));
 			}
 		}
+		List<Map<String, Object>> list = ariPortService
+				.datePermissionData(StringUtils.toLong(user.getId()));
+		model.addAttribute("datas", list);
+		MessageDto<List<Role>> messageDto = roelManager
+				.get(new MapUtils.Builder().build());
+		if (messageDto.isOk()) {
+			model.addAttribute("roles", messageDto.getData());
+		}
+
 		return "user/SyuserForm";
 	}
 
@@ -112,41 +132,10 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	@ResponseBody
-	public MessageDto<User> save(User user) {
-		SimpleHash simpleHash = new SimpleHash("md5",
-				GloabConfig.getConfig("defalut.passwd"), user.getSalt());
-		MessageDto<User> dto = new MessageDto<User>();
-		user.setPassword(simpleHash.toString());
-		if (!StringUtils.isEmpty(user.getLoginName())) {
-			User u = systemService.getUserMapper().getUserByName(
-					StringUtils.trim(user.getLoginName()));
-			if (null != u)
-				return dto.setMsgBody("用户名已经存在,请更换用户名...");
-		}
-		systemService.getUserMapper().save(user);
-		return dto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
-	}
+	public MessageDto<String> save(User user, String arids, String roleids) {
+		user.setUserType(GloabConfig.SYSTEM_USER);
+		return userManaer.saveUser(user, arids, roleids);
 
-	/**
-	 * update(更新用户信息)
-	 * 
-	 * @param user
-	 * @return MessageDto<User>
-	 * @version 1.0.0
-	 */
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	@ResponseBody
-	public MessageDto<User> update(User user) {
-		user.setLoginName(StringUtils.trim(user.getLoginName()));
-		MessageDto<User> dto = new MessageDto<User>();
-		if (!StringUtils.isEmpty(user.getLoginName())) {
-			User u = systemService.getUserMapper().getUserByName(
-					StringUtils.trim(user.getLoginName()));
-			if (null != u && user.getId() != u.getId())
-				return dto.setMsgBody("用户名已经存在,请更换用户名...");
-		}
-		systemService.getUserMapper().update(user);
-		return dto.setOk(true).setMsgBody("更新成功...");
 	}
 
 	/**
@@ -158,10 +147,8 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "delete")
 	@ResponseBody
-	public MessageDto<User> delete(User user) {
-		systemService.getUserMapper().delete(user.getId());
-		return new MessageDto<User>().setOk(true).setMsgBody(
-				MessageDto.MsgFlag.SUCCESS);
+	public MessageDto<String> delete(User user) {
+		return userManaer.delete(user.getId());
 	}
 
 	/**
@@ -176,20 +163,6 @@ public class UserController extends BaseController {
 	public String grantRole(User user, Model model) {
 		model.addAttribute("user", user);
 		return "user/userRoleGrant";
-	}
-
-	/**
-	 * grantRoles(获取用权限)
-	 * 
-	 * @param id
-	 * @param ids
-	 * @return MessageDto<User>
-	 * @version 1.0.0
-	 */
-	@RequestMapping(value = "grantRole")
-	@ResponseBody
-	public MessageDto<User> grantRoles(Long id, String ids) {
-		return systemService.batchUpdateUserRoles(id, ids);
 	}
 
 	/**

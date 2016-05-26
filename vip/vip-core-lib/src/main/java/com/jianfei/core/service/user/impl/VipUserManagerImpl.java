@@ -1,8 +1,13 @@
 package com.jianfei.core.service.user.impl;
 
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
+import com.jianfei.core.mapper.AppCustomerMapper;
+import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import com.jianfei.core.service.user.VipUserManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * TODO
@@ -12,8 +17,13 @@ import com.jianfei.core.service.user.VipUserManager;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/18 15:50
  */
+@Service
 public class VipUserManagerImpl implements VipUserManager {
 
+    @Autowired
+   private MsgInfoManagerImpl msgInfoManager;
+    @Autowired
+   private AppCustomerMapper customerMapper;
     /**
      * 添加Vip用户
      *
@@ -31,7 +41,8 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean updateUser(AppCustomer vipUser) {
-        return false;
+       //// TODO: 2016/5/26  UPDATE
+        return true;
     }
 
     /**
@@ -42,7 +53,8 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public AppCustomer getUser(String phone) {
-        return null;
+
+        return customerMapper.selectByPhone(phone);
     }
 
     /**
@@ -64,7 +76,7 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean validateLoginCode(String phone, String code) {
-        return false;
+        return  msgInfoManager.validateSendCode(phone, MsgType.LOGIN,code);
     }
 
     /**

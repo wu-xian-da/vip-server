@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianfei.core.mapper.BusizzMapper">
+
+	<resultMap id="userRs" type="User">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="state" column="state" />
+		<result property="phone" column="phone" />
+		<result property="password" column="password" />
+		<result property="loginName" column="login_name" />
+		<result property="salt" column="salt" />
+		<result property="locked" column="locked" />
+		<result property="userType" column="user_type" />
+		<result property="sex" column="sex" />
+		<result property="dtflag" column="dtflag" />
+		<result property="photo" column="photo" />
+		<result property="createdatetime" column="create_time" />
+		<result property="updatedatetime" column="update_time" />
+		<result property="entryTime" column="entry_time" />
+		<result property="ariPortIds" column="ariPorts.id" />
+		<result property="ariPortNames" column="ariPorts.name" />
+		<result property="job" column="job" />
+	</resultMap>
+
+	<select id="get" resultMap="userRs" parameterType="java.util.Map">
+		SELECT u.* ,GROUP_CONCAT(ap.`airport_id`) AS
+		'ariPorts.id',GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name' FROM
+		`sys_users` u
+		LEFT JOIN `sys_user_airport` ua ON ua.`sys_id`=u.`id`
+		LEFT JOIN `sys_airport` ap ON ap.`airport_id`=ua.`airport_id`
+		<where>
+			<if test="1==1">
+				and u.user_type=0
+			</if>
+			<if test="id!=null">
+				and u.id=#{id}
+			</if>
+			<if test="name!=null">
+				and u.name like CONCAT('%', #{name}, '%')
+			</if>
+			<if test="loginName!=null">
+				and u.login_name like CONCAT('%', #{loginName}, '%')
+			</if>
+			<if test="sex!=null">
+				and u.sex = #{sex}
+			</if>
+			<if test="start!=null">
+				<![CDATA[and u.create_time >= #{start}]]>
+			</if>
+			<if test="ends!=null">
+				<![CDATA[and u.create_time <= #{ends}]]>
+			</if>
+		</where>
+		GROUP BY u.`name`
+		<if test="sort!=null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	<select id="getUserByName" resultMap="userRs" parameterType="String">
+		SELECT * from sys_users where name =#{name} and user_type=0;
+	</select>
+
+	<insert id="save" parameterType="User">
+		<![CDATA[
+			INSERT INTO  sys_users (
+				  `name`,
+				  `phone`,
+				  `state`,
+				  `entry_time`,
+				  `password`,
+				  `sex`,
+				  `user_type`,
+				  `login_name`,
+				  `create_time`,
+				  `update_time`,
+				  `salt`,
+				  `dtflag`,
+				  job,
+				  code
+				) 
+				VALUES
+				  (
+				    #{name},
+				    #{phone},
+				    #{state},
+				    #{entryTime},
+				    #{password},
+				    #{sex},
+				    #{userType},
+				    #{loginName},
+				    #{createdatetime},
+				    #{updatedatetime},
+				    #{salt},
+				    #{dtflag},
+				    #{job},
+				    #{code}
+				  )
+			   ]]>
+	</insert>
+
+	<update id="update" parameterType="User">
+		<if test="id!=0">
+			update sys_users set update_time=#{updatedatetime}
+			<if test="name!=null">
+				,name=#{name}
+			</if>
+			<if test="password!=null">
+				,password=#{password}
+			</if>
+			<if test="entryTime!=null">
+				,entryTime=#{entryTime}
+			</if>
+			<if test="state!=null">
+				,state=#{state}
+			</if>
+			<if test="phone!=null">
+				,phone=#{phone}
+			</if>
+			<if test="photo!=null">
+				,photo=#{photo}
+			</if>
+			<if test="userType!=null">
+				,sex=#{userType}
+			</if>
+			<if test="loginName!=null">
+				,login_name=#{loginName}
+			</if>
+			,sex=#{sex},dtflag=#{dtflag} where id=#{id}
+		</if>
+	</update>
+
+	<delete id="delete" parameterType="Long">
+		<![CDATA[
+			update sys_users set dtflag =1 where id=#{id} and user_type=0;
+		]]>
+	</delete>
+
+</mapper>
