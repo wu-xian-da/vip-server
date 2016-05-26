@@ -12,6 +12,8 @@ public interface AppCustomerMapper {
 
 	AppCustomer selectByPrimaryKey(String customerId);
 
+	AppCustomer selectByPhone(String phone);
+
 	List<AppCustomer> get(Map<String, Object> map);
 
 	/**

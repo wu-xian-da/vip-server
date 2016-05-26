@@ -46,6 +46,15 @@
 		from app_customer
 		where customer_id = #{customerId,jdbcType=VARCHAR}
 	</select>
+
+	<select id="selectByPhone" resultMap="BaseResultMap"
+			parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from app_customer
+		where customer_phone = #{phone,jdbcType=VARCHAR}
+	</select>
+
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		update
 		app_customer set dtflag=1
