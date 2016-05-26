@@ -108,7 +108,8 @@
      	 </if>
      	<!-- 用户名或者手机号码 -->
     	<if test="phoneOrUserName != null">
-    		and INSTR(customer.customer_name,#{phoneOrUserName})>0
+    		<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
+    		and concat(customer.customer_name,customer.customer_phone) like CONCAT('%','${phoneOrUserName}','%' )
     	</if>
      	
     	
