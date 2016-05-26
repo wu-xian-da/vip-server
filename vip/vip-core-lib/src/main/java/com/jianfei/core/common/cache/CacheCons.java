@@ -18,10 +18,36 @@ package com.jianfei.core.common.cache;
  */
 public class CacheCons {
 
-	public interface Sys{
+	public interface Sys {
 		public final static String SYS_USER_LIST = "sys_user_list";
 		public static final String SYS_ROLE_LIST = "sys_role_list";
 		public static final String SYS_RESOURCE_LIST = "sys_resource_list";
+
+		/**
+		 * last_1_month:TODO（按照省统计上个月开卡数，月底清空）
+		 *
+		 * @version 1.0.0
+		 */
+		public static final String LAST_1_MONTH = "last_1_month";
+		/**
+		 * LAST_2_MONTH:TODO（按照省统计上上个月开卡数，月底清空）
+		 *
+		 * @version 1.0.0
+		 */
+		public static final String LAST_2_MONTH = "last_2_month";
+		/**
+		 * LAST_3_MONTH:TODO（按照省统计上上上个月开卡数，月底清空）
+		 *
+		 * @version 1.0.0
+		 */
+		public static final String LAST_3_MONTH = "last_3_month";
+		/**
+		 * LAST_MONTH_TOP:TODO（全国前三个省份，售卡统计,月底清空）
+		 *
+		 * @version 1.0.0
+		 */
+		public static final String LAST_MONTH_TOP3 = "last_month_top3";
+
 	}
 
 }

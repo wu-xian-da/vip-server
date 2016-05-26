@@ -8,10 +8,13 @@
 package com.jianfei.core.bean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 
 /**
  *
@@ -54,7 +57,11 @@ public class User extends BaseEntity {
 
 	private String job;
 
-	private String code;
+	private String code;// 角色
+	// 角色集合
+	private List<Role> roles = Lists.newArrayList();
+	// 数据权限
+	private List<AriPort> aripors = Lists.newArrayList();
 
 	/**
 	 * state
@@ -358,6 +365,44 @@ public class User extends BaseEntity {
 	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	/**
+	 * roles
+	 *
+	 * @return the roles
+	 * @version 1.0.0
+	 */
+	@JsonIgnore
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @param roles
+	 *            the roles to set
+	 */
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	/**
+	 * aripors
+	 *
+	 * @return the aripors
+	 * @version 1.0.0
+	 */
+	@JsonIgnore
+	public List<AriPort> getAripors() {
+		return aripors;
+	}
+
+	/**
+	 * @param aripors
+	 *            the aripors to set
+	 */
+	public void setAripors(List<AriPort> aripors) {
+		this.aripors = aripors;
 	}
 
 	/*

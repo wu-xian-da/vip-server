@@ -93,11 +93,16 @@ public class RoleManagerImpl implements RoleManager {
 	 */
 	@Override
 	public MessageDto<String> updateRoleResource(Long id, String name,
-			String description, String ids) {
+			String description, String ids, String url) {
 		MessageDto<String> dto = new MessageDto<String>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
-			if (StringUtils.isEmpty(ids) || StringUtils.isEmpty(name)) {
+			Role role = new Role();
+			role.setName(name);
+			role.setDescription(description);
+			role.setDtflag(GloabConfig.OPEN);
+			role.setUrl(url);
+			if (StringUtils.isEmpty(name)) {
 				return dto.setMsgBody("操作失败，请稍后重试...");
 			}
 			if (null == id || id == 0) {
@@ -108,10 +113,6 @@ public class RoleManagerImpl implements RoleManager {
 					return dto.setMsgBody("角色名已经存在，请更换...");
 				}
 				// 保存操作
-				Role role = new Role();
-				role.setName(name);
-				role.setDescription(description);
-				role.setDtflag(GloabConfig.OPEN);
 				roleMapper.save(role);
 				List<Role> roles = roleMapper.get(new MapUtils.Builder()
 						.setKeyValue("notLikeName", role.getName()).build());
@@ -121,7 +122,11 @@ public class RoleManagerImpl implements RoleManager {
 			}
 			// 更新角色权限
 			if (id != null && 0 != id) {
+				role.setId(id);
+				roleMapper.update(role);
 				roleMapper.deleteByResourceFromRole(id);
+			}
+			if (id != null && 0 != id && !StringUtils.isEmpty(ids)) {
 				String[] strings = ids.split(",");
 				for (String str : strings) {
 					Map<String, Object> map = new HashMap<String, Object>();

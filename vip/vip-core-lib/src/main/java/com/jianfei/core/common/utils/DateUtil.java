@@ -181,6 +181,7 @@ public class DateUtil {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("year", sdf.format(cal.getTime()));
 		map.put("month", sdf2.format(cal.getTime()));
+		map.put("dataStr", map.get("year") + "年" + map.get("month") + "月");
 		return map;
 	}
 

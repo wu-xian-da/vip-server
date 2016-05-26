@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.jianfei.core.bean.Role;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.MapUtils;
 
@@ -40,6 +42,8 @@ public class UserMapperTest {
 
 	@Autowired
 	private UserMapper userMapper;
+	@Autowired
+	private RoleMapper roelMapper;
 
 	/**
 	 * Test method for
@@ -58,7 +62,10 @@ public class UserMapperTest {
 	 */
 	@Test
 	public void testDeleteRolesFromUser() {
-		fail("Not yet implemented");
+		List<Role> roles = roelMapper.selectRoleByUserId(50l);
+		if (!CollectionUtils.isEmpty(roles)) {
+			System.out.println(roles.get(0).getUrl());
+		}
 	}
 
 	/**

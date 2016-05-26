@@ -99,8 +99,8 @@
 				}
 			},  {
 				width : '100',
-				title : '角色描述',
-				field : 'description'
+				title : '首页地址',
+				field : 'url'
 			}, {
 				title : '操作',
 				field : 'action',

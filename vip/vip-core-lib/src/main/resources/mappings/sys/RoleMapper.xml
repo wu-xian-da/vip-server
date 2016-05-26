@@ -5,6 +5,7 @@
 	<resultMap id="roleResult" type="Role">
 		<id property="id" column="id" />
 		<result property="name" column="name" />
+		<result property="url" column="url" />
 		<result property="description" column="description" />
 		<result column="create_time" property="createdatetime" />
 		<result column="update_time" property="updatedatetime" />
@@ -44,7 +45,8 @@
 				description,
 				create_time,
 				update_time,
-				dtflag
+				dtflag,
+				url
 			)
 			VALUES
 			(
@@ -52,7 +54,8 @@
 				#{description},
 				#{createdatetime},
 				#{updatedatetime},
-				#{dtflag}
+				#{dtflag},
+				#{url}
 			)
 		]]>
 	</insert>
@@ -72,6 +75,9 @@
 		</if>
 		<if test="updatedatetime!=null">
 			,update_time = #{updatedatetime}
+		</if>
+		<if test="url!=null">
+			,url=#{url}
 		</if>
 		WHERE id = #{id}
 	</update>
