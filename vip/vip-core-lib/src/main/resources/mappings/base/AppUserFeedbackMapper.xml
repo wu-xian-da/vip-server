@@ -12,6 +12,7 @@
     <result column="handle_time" property="handleTime"/>
     <result column="handleuser_id" property="handleuserId"/>
     <result column="dtflag" property="dtflag"/>
+    <result column="feedback_content" property="feedbackContent"/>
   </resultMap>
   
   <!--分页查询  -->
@@ -35,7 +36,7 @@
   
   <!--更新反馈状态  -->
   <update id="updateFeedbackInfoById" parameterType="java.lang.String">
-  	update app_user_feedback set feedback_state=1 and id=#{id}
+  	update app_user_feedback set feedback_state=1 where id=#{id}
   </update>
   
 </mapper>

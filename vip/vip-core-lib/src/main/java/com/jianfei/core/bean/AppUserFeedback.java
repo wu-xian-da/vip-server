@@ -20,6 +20,7 @@ public class AppUserFeedback {
 	private String handleuserId;//处理人编号
 	private Integer dtflag;//0未删除 1已删除
 	private String opr;//操作选项
+	private String feedbackContent;//反馈详情
 	
 	/**
 	 * @return the id
@@ -176,6 +177,18 @@ public class AppUserFeedback {
 	public void setFeedbackStateName(String feedbackStateName) {
 		this.feedbackStateName = feedbackStateName;
 	}
+	/**
+	 * @return the feedbackContent
+	 */
+	public String getFeedbackContent() {
+		return feedbackContent;
+	}
+	/**
+	 * @param feedbackContent the feedbackContent to set
+	 */
+	public void setFeedbackContent(String feedbackContent) {
+		this.feedbackContent = feedbackContent;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -185,8 +198,9 @@ public class AppUserFeedback {
 				+ ", customerPhone=" + customerPhone + ", feedbacTime=" + feedbacTime + ", formatFeedbackTime="
 				+ formatFeedbackTime + ", feedbackState=" + feedbackState + ", feedbackStateName=" + feedbackStateName
 				+ ", handleTime=" + handleTime + ", handleuserId=" + handleuserId + ", dtflag=" + dtflag + ", opr="
-				+ opr + "]";
+				+ opr + ", feedbackContent=" + feedbackContent + "]";
 	}
+	
 	
 	
 	

@@ -47,7 +47,7 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
     public boolean validateSendCode(String phone, MsgType msgType, String code) {
         //TODO Redis里面获取相关验证码
 
-        return false;
+        return true;
     }
 
     /**
