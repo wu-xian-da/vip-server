@@ -5,6 +5,7 @@ import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.dto.OrderShowInfoDto;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -85,7 +86,7 @@ public interface VipCardManager {
      * int
      * @version  1.0.0
      */
-    int importExcelData(String filePath);
+    int importExcelData(InputStream in);
     
     /**
      * 导出数据到excel表格中

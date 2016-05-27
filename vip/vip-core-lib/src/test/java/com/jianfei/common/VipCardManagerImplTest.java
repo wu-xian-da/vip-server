@@ -65,7 +65,7 @@ public class VipCardManagerImplTest {
 	//导入excel表格数据
 	@Test
 	public void importTest(){
-		vipCardManagerImpl.importExcelData("f://test.xlsx");
+		//vipCardManagerImpl.importExcelData("f://test.xlsx");
 	}
 	
 	@Test

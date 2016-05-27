@@ -1,6 +1,7 @@
 package com.jianfei.controller;
 
 
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 
 /**
@@ -97,19 +98,18 @@ public class VipCardController extends BaseController {
 	
 	/**
 	 * 将excel表格数据导入到数据库
-	 * importExcel
-	 * @param filePath
+	 * @param file
+	 * @param request
+	 * @param response
 	 * @return
-	 * MessageDto<AppVipcard>
-	 * @version  1.0.0
+	 * @throws Exception
 	 */
-	@RequestMapping(value="importExcel",method=RequestMethod.POST)
-	@ResponseBody
-	public MessageDto<AppVipcard> importExcel(String filePath){
-		vipCardManagerImpl.importExcelData(filePath);
-		return new MessageDto<AppVipcard>().setOk(true).setMsgBody(
-				MessageDto.MsgFlag.SUCCESS);
-		
+	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+	public String importExcel(@RequestParam("filename") MultipartFile file, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		InputStream in = file.getInputStream();
+		vipCardManagerImpl.importExcelData(in);
+		return "redirect:goVipCardManageView";
 	}
 	
 	/**
@@ -141,5 +141,5 @@ public class VipCardController extends BaseController {
 	public String vipCardRightsView(){
 		return "vipcard/vipCardRights";
 	}
-	
+
 }

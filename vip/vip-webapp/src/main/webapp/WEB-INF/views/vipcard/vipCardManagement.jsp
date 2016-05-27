@@ -8,23 +8,23 @@
 <script type="text/javascript">
 	var grid;
 	//导入vip卡
-	var importExcelDate = function(){
+	var importExcelDate = function() {
 		alert($("#filePath").val())
-		$.post(sy.contextPath + '/vipCard/importExcel',{filePath:$("#filePath").val()},function(dataObj){
+		$.post(sy.contextPath + '/vipCard/importExcel', {
+			filePath : $("#filePath").val()
+		}, function(dataObj) {
 			if (!dataObj.ok) {
 				$.messager.alert('msg', dataObj.msgBody, 'error');
 				return;
-			}else{
+			} else {
 				$.messager.alert('msg', "数据导入成功", 'success');
 				grid.datagrid('reload');
 			}
 			;
-			
-		},'json');
+
+		}, 'json');
 	}
-	
-	
-	
+
 	//删除vip卡
 	var removeFun = function(id) {
 		alert("id=" + id)
@@ -39,7 +39,7 @@
 					}
 					;
 					grid.datagrid('reload');
-					
+
 				}, 'json');
 			}
 		});
@@ -122,54 +122,57 @@
 								parent.$.messager.progress('close');
 							}
 						});
-		
+
 		//导出数据到excel表格中
-		$("#exportBt").click(function(){
-			$.post(sy.contextPath + '/vipCard/exportExcel', {
-				
-			}, function(dataObj) {
-				if (!dataObj.ok) {
-					$.messager.alert('msg', dataObj.msgBody, 'error');
-					return;
-				}else{
-					$.messager.alert('msg', "数据导出成功,位置：F://vipCard.xlsx", 'success');
-				}
-				
-			}, 'json');
-		})
-		
+		$("#exportBt").click(
+				function() {
+					$.post(sy.contextPath + '/vipCard/exportExcel', {
+
+					}, function(dataObj) {
+						if (!dataObj.ok) {
+							$.messager.alert('msg', dataObj.msgBody, 'error');
+							return;
+						} else {
+							$.messager.alert('msg',
+									"数据导出成功,位置：F://vipCard.xlsx", 'success');
+						}
+
+					}, 'json');
+				})
+
 		//输入框效果
-		$("#filePath").focus(function(){
+		$("#filePath").focus(function() {
 			var filePath = $("#filePath").val();
-			if(filePath!=""){
+			if (filePath != "") {
 				$("#filePath").val("");
 			}
 		})
-		
-		$("#filePath").blur(function(){
+
+		$("#filePath").blur(function() {
 			var filePath = $("#filePath").val();
-			if(filePath ==""){
+			if (filePath == "") {
 				$("#filePath").val(this.defaultValue);
 			}
 		})
-		
-		
+
 	});
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
+
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
 				<td>
-					<table>
-						<tr>
-							<td><input type="text" value="请输入文件的路径" id="filePath"></td>
-							<td><button onclick="importExcelDate()">导入vip卡</button></td>
-						</tr>
-					</table>
+					<form name="excelImportForm"
+						action="${pageContext.request.contextPath}/vipCard/importExcel"
+						method="post" enctype="multipart/form-data">
+						<input class="btn btn-default" id="excel_file" type="file"	name="filename" accept="xls" /> 
+						<input class="easyui-linkbutton" id="excel_button" type="submit" value="导入vip卡号" />
+					</form> 
+					
 				</td>
-				<td><button id="exportBt">导出vip卡</button></td>
+				<td><button id="exportBt">导出vip卡号</button></td>
 
 				<!-- 搜索条件框 -->
 				<td>
