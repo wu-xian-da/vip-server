@@ -1,5 +1,7 @@
 package com.jianfei.core.service.thirdpart.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
@@ -10,6 +12,7 @@ import com.tencent.protocol.native_protocol.NativePayReqData;
 import com.tencent.protocol.native_protocol.NativePayResData;
 import com.tencent.protocol.native_query_protocol.NativePayQueryResData;
 
+@Service("WechatiPayManager")
 public class WechatPayManagerImpl extends ThirdPayManager {
 	static {
 		
