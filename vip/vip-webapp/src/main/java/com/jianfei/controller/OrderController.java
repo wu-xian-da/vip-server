@@ -115,8 +115,8 @@ public class OrderController extends BaseController {
 		//用户可以看到机场列表
 		User user = getCurrentUser();
 		String userId = user.getId()+"";
-		System.out.println("userId="+userId);
 		List<AriPort> airportIdList = user.getAripors();
+		
 
 		//设置刷选条件
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
@@ -312,7 +312,13 @@ public class OrderController extends BaseController {
 		System.out.println("orderId="+orderId+" backCardNo="+backCardNo);
 		//1、将订单状态有'正在审核'变成'审核通过'
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
+		
 		//2、将退款信息录入到流水表中
+		
+		User user = getCurrentUser();
+		//****操作员id
+		String userId = user.getId()+"";
+		
 		AppCardBack appCardBack = new AppCardBack();
 		appCardBack.setBackId(UUID.randomUUID().toString());
 		appCardBack.setCreateTime(new Date());
