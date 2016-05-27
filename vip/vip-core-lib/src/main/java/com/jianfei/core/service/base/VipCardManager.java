@@ -96,4 +96,11 @@ public interface VipCardManager {
      * @version  1.0.0
      */
     int exportDataToExcel(String filePath);
+
+    /**
+     * 根据vip card no 获取VIP卡片信息
+     * @param vipCardNo VIP卡号
+     * @return
+     */
+    AppVipcard getVipCardByNo(String vipCardNo);
 }

@@ -6,7 +6,6 @@ import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,28 +27,27 @@ public class MsgInfoController {
 
     /**
      * 给用户发送登录验证码
-     * @return VipRoomList
+     *
      */
     @RequestMapping(value = "/sendTelCode")
     @ResponseBody
     public BaseMsgInfo sendTelCode(@RequestParam(value = "phone", required = true) String phone,
                                    @RequestParam(value = "type", required = true) String type
     ) {
-        MsgType msgType=null;
-        if (MsgType.REGISTER.getName().equals(type)){
-            msgType=MsgType.REGISTER;
-        }else if (MsgType.LOGIN.getName().equals(type)){
-            msgType=MsgType.LOGIN;
-        }else if (MsgType.BACK_CARD.getName().equals(type)){
-            msgType=MsgType.BACK_CARD;
+        MsgType msgType = null;
+        if (MsgType.REGISTER.getName().equals(type)) {
+            msgType = MsgType.REGISTER;
+        } else if (MsgType.LOGIN.getName().equals(type)) {
+            msgType = MsgType.LOGIN;
+        } else if (MsgType.BACK_CARD.getName().equals(type)) {
+            msgType = MsgType.BACK_CARD;
         }
-        if (msgType==null)
+        if (msgType == null)
             return BaseMsgInfo.fail("");
 
-       boolean flag=  msgInfoManager.sendValidateCode(phone,msgType);
+        boolean flag = msgInfoManager.sendValidateCode(phone, msgType);
         return BaseMsgInfo.success(flag);
     }
-
 
 
 }

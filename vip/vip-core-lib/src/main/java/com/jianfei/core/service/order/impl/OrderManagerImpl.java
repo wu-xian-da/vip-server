@@ -1,21 +1,23 @@
 package com.jianfei.core.service.order.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jianfei.core.bean.AppCardBack;
-import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.*;
 
-import com.jianfei.core.bean.AppOrderCard;
-
+import com.jianfei.core.common.utils.BeanUtils;
+import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
+import com.jianfei.core.service.base.impl.VipCardManagerImpl;
+import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
@@ -44,7 +46,12 @@ public class OrderManagerImpl implements OrderManager {
     private AppConsumeMapper appConsumeMapper;
     @Autowired
     private AppCardBackMapper appCardBackMapper;
-
+	@Autowired
+	private VipUserManagerImpl vipUserManager;
+	@Autowired
+	private VipCardManagerImpl vipCardManager;
+	@Autowired
+	private AppInvoiceManagerImpl invoiceManager;
     /**
      * 添加订单信息
      *
@@ -53,12 +60,33 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public boolean addOrderAndUserInfo(OrderAddInfoDto addInfoDto) {
-        //TODO 1、添加用户信息
 
-        //TODO 2、根据查询VIP号查询卡片信息
+		try {
+			//1、添加用户信息
+			AppCustomer customer= new AppCustomer();
+			BeanUtils.copyProperties(customer,addInfoDto);
+			vipUserManager.addUser(customer);
+			//2、根据查询VIP号查询卡片信息
+			AppVipcard vipCard=vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
+			vipCard.setCustomerId(customer.getCustomerId());
+			vipCardManager.updateVipCard(vipCard);
+			//3、添加订单信息 TODO 待优化
+			AppOrders orders=new AppOrders();
+			BeanUtils.copyProperties(orders,addInfoDto);
+			orders.setCustomerId(customer.getCustomerId());
+			orders.setPayMoney(vipCard.getInitMoney());
+			orders.setOrderId(IdGen.uuid());
+			appOrdersMapper.insert(orders);
+			addInfoDto.setOrderId(orders.getOrderId());
+			addInfoDto.setMoney(vipCard.getInitMoney());
+			return true;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 
-        //TODO 3、添加订单信息
-        return false;
+		}
+		return false;
     }
 
 
@@ -111,7 +139,9 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public boolean addOrderMailInfo(AppInvoice appInvoice) {
-        return false;
+		//TODO 更新订单为已开发票
+		invoiceManager.insert(appInvoice);
+        return true;
     }
 
     /**

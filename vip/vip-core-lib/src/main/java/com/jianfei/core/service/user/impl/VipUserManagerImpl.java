@@ -3,11 +3,14 @@ package com.jianfei.core.service.user.impl;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
+import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.mapper.AppCustomerMapper;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * TODO
@@ -31,7 +34,9 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean addUser(AppCustomer vipUser) {
-        return false;
+        vipUser.setCustomerId(IdGen.uuid());
+        int num = customerMapper.insertSelective(vipUser);
+        return num == 1 ? true : false;
     }
 
     /**
