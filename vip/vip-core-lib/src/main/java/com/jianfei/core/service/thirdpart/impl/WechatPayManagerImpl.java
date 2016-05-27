@@ -11,7 +11,13 @@ import com.tencent.protocol.native_protocol.NativePayResData;
 import com.tencent.protocol.native_query_protocol.NativePayQueryResData;
 
 public class WechatPayManagerImpl extends ThirdPayManager {
-
+	static {
+		
+		//微信环境初始化
+		//WXPay.initSDKConfiguration(key, appID, mchID, sdbMchID, certLocalPath, certPassword);
+		
+	}
+	
 	/**
 	 * 预下单接口（微信扫码支付）
 	 */
