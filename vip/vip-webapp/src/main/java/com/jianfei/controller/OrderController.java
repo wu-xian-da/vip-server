@@ -316,7 +316,7 @@ public class OrderController extends BaseController {
 		//2、将退款信息录入到流水表中
 		
 		User user = getCurrentUser();
-		//****操作员id
+		//****审批人员id
 		String userId = user.getId()+"";
 		
 		AppCardBack appCardBack = new AppCardBack();
@@ -326,6 +326,7 @@ public class OrderController extends BaseController {
 		appCardBack.setCustomerCard(backCardNo);
 		appCardBack.setMoney(Float.parseFloat(remainMoney));
 		appCardBack.setBackType(Integer.parseInt(payMethod));
+		appCardBack.setCreaterId(userId);
 		orderManagerImpl.insertBackCardInfo(appCardBack);
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();
@@ -345,9 +346,15 @@ public class OrderController extends BaseController {
 		//1、更新订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
 		//写退款流水
+
+		User user = getCurrentUser();
+		//****审核员id
+		String userId = user.getId()+"";
+		
 		Map<String,Object> parMap = new HashMap<String,Object>();
 		parMap.put("finishTime", new Date());
 		parMap.put("orderId", orderId);
+		parMap.put("checkId", userId);
 		orderManagerImpl.updateBackCardByOrderId(parMap);
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();

@@ -16,7 +16,6 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
-import com.jianfei.core.service.thirdpart.impl.ThirdPayManagerImpl;
 import com.tencent.protocol.native_protocol.NativePayReqData;
 
 /**

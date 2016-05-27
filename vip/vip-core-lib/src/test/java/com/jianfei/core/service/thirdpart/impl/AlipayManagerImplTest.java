@@ -46,13 +46,13 @@ import com.jianfei.core.common.pay.PreCreateResult;
 @Transactional
 public class AlipayManagerImplTest {
 
-	@Autowired
+	/*@Autowired
 	private ThirdPayManagerImpl alipayManagerImpl;
 
 	@Test
 	public void testGet() {
 		alipayManagerImpl.tradeQuery("");;
 		//assertEquals("0", result.getCode());
-	}
+	}*/
 
 }
