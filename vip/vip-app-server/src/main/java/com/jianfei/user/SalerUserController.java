@@ -63,11 +63,11 @@ public class SalerUserController {
      * 修改密码
      * @return
      */
-    @RequestMapping(value = "changePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "changePassword")
     @ResponseBody
     public BaseMsgInfo update(@RequestParam(value = "uno", required = false) String uno,
                              @RequestParam(value = "password", required = false) String password,
-                             @RequestParam(value = "newpassword", required = false) String newPassword) {
+                             @RequestParam(value = "newPassword", required = false) String newPassword) {
         boolean flag = saleUserManager.updatePassword(uno, password, newPassword);
         return BaseMsgInfo.success(flag);
     }

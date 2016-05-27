@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import org.apache.ibatis.annotations.Param;
 
 /**
  *
@@ -45,5 +46,5 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @param password
 	 * @param newPassword
      */
-	int updatePasswordByUno(String uno,String password,String newPassword);
+	int updatePasswordByUno(@Param(value = "uno")String uno, @Param(value = "password")String password, @Param(value = "newPassword")String newPassword);
 }

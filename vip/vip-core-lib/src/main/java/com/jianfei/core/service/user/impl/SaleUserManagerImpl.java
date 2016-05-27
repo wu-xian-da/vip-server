@@ -41,7 +41,7 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public User getSaleUser(String userNo) {
-        return userMapper.getUserByName(userNo);
+        return userMapper.getUserByUno(userNo);
     }
 
     /**
@@ -54,8 +54,9 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public boolean updatePassword(String userNo, String password, String newPassword) {
-        userMapper.updatePasswordByUno(userNo, password, newPassword);
-        return false;
+        //TODO newPassword需要加密
+       int num= userMapper.updatePasswordByUno(userNo, password, newPassword);
+        return num == 1 ? true : false;
     }
 
     /**
