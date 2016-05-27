@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
@@ -44,7 +47,7 @@ import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
  *
  */
 @Controller
-public class OrderController {
+public class OrderController extends BaseController {
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
@@ -111,8 +114,12 @@ public class OrderController {
 			@RequestParam(value="invoiceState",required=false,defaultValue="3") Integer invoiceState,
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
 		
-		
-		
+		//用户可以看到机场列表
+		User user = getCurrentUser();
+		String userId = user.getId()+"";
+		System.out.println("userId="+userId);
+		List<AriPort> airportIdList = user.getAripors();
+
 		//设置刷选条件
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
 		if(!startTime.equals("")){

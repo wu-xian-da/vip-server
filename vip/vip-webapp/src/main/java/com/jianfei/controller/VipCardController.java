@@ -130,6 +130,7 @@ public class VipCardController extends BaseController {
 		return new MessageDto<AppVipcard>().setOk(true).setMsgBody(
 				MessageDto.MsgFlag.SUCCESS);
 	}
+	
 	/**
 	 * vip卡权益
 	 * vipCardRightsView

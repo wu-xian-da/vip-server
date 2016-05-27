@@ -5,6 +5,26 @@
 <head>
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
+<style type="text/css">
+		.btn{
+			padding: 0 8px;
+			background: #D6DDE4;
+			border-radius: 5px;
+    		border: none;
+    		border:1px solid #ccc;
+    		box-shadow: 1px 1px 2px #DED7D7;
+		}
+		
+		.btn-default{
+			display: inline-block;
+		    vertical-align: top;
+		    width: auto;
+		    line-height: 22px;
+		    font-size: 12px;
+			margin: 0 4px;
+		}
+</style>
+	
 <script type="text/javascript">
 	var grid;
 	//导入vip卡
@@ -161,18 +181,19 @@
 <body class="easyui-layout" data-options="fit:true,border:false">
 
 	<div id="toolbar" style="display: none;">
+	
 		<table>
 			<tr>
 				<td>
 					<form name="excelImportForm"
 						action="${pageContext.request.contextPath}/vipCard/importExcel"
 						method="post" enctype="multipart/form-data">
-						<input class="btn btn-default" id="excel_file" type="file"	name="filename" accept="xls" /> 
-						<input class="easyui-linkbutton" id="excel_button" type="submit" value="导入vip卡号" />
+						<input id="excel_file" type="file"	name="filename" accept="xls" style="width: 175px"/> 
+						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="submit" value="导入vip卡号" />
 					</form> 
 					
 				</td>
-				<td><button id="exportBt">导出vip卡号</button></td>
+				<td><button id="exportBt" class="btn btn-default ">导出vip卡号</button></td>
 
 				<!-- 搜索条件框 -->
 				<td>
