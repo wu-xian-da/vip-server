@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.jianfei.core.common.security.shiro.HasAnyPermissionsTag"%>
+<%@ include file="/WEB-INF/include/taglib.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -122,7 +123,7 @@
                 </div>
 
                 <div class="easyui-window-footer">
-                    <button id="writerUserInfo">退款确认</button>
+                    <button id="writerUserInfo">录入信息确认</button>
                     <button id="cancleBt">取消</button>
                 </div>
             </div>
@@ -149,7 +150,9 @@
                 </div>
 
                 <div class="easyui-window-footer">
-                    <button id="finalBackMoneyToUserBt">退款确认</button>
+                	<shiro:hasPermission name="system:order:refundMoney">  
+                  		  <button id="finalBackMoneyToUserBt">退款确认</button>
+                    </shiro:hasPermission>
                     <button id="refundCloseWindow">取消</button>
                 </div>
             </div>

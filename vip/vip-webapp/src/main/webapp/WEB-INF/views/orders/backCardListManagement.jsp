@@ -61,6 +61,9 @@
 			pagination="true">
 			<thead>
 				<tr>
+				
+				
+
 					<th data-options="align:'center', field:'orderId',width:100">订单号</th>
 					<th data-options="align:'center', field:'customerName',width:100">用户名</th>
 					<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
