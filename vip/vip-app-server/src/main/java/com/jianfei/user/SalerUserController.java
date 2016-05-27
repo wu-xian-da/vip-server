@@ -1,14 +1,8 @@
 package com.jianfei.user;
 
-import com.jianfei.common.BaseController;
 import com.jianfei.common.BaseMsgInfo;
-import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.service.order.impl.ConsumeManagerImpl;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
-import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

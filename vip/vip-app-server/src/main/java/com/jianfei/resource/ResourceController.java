@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
-import com.jianfei.common.BaseController;
 import com.jianfei.common.BaseMsgInfo;
 import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.SysAirport;
@@ -35,7 +34,7 @@ import com.jianfei.dto.VipRightInfoVo;
  */
 @Controller
 @RequestMapping(value = "resource")
-public class ResourceController extends BaseController {
+public class ResourceController  {
 
 	@Autowired
 	private AriPortManagerImpl ariPortService;
