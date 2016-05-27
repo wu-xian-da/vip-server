@@ -78,8 +78,15 @@ public class RoleManagerImpl implements RoleManager {
 	public MessageDto<String> update(Role role) {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
+			List<Map<String, Object>> maps = roleMapper.selectUserByRoleId(role
+					.getId());
+			if (!CollectionUtils.isEmpty(maps)) {
+				return messageDto.setMsgBody("该角色已分配用户,不能删除");
+			}
 			roleMapper.update(role);
 			messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
+			JedisUtils.delObject(CacheCons.Sys.SYS_ROLE_LIST);
+			shiroDbRealm.cleanCache();
 		} catch (Exception e) {
 			logger.error("更新用户信息失败:{}", e.getMessage());
 			messageDto.setMsgBody(MsgFlag.ERROR);
@@ -96,7 +103,7 @@ public class RoleManagerImpl implements RoleManager {
 	 */
 	@Override
 	public MessageDto<String> updateRoleResource(Long id, String name,
-			String description, String ids, String url) {
+			String description, String ids, String url, Integer priority) {
 		MessageDto<String> dto = new MessageDto<String>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
@@ -105,6 +112,7 @@ public class RoleManagerImpl implements RoleManager {
 			role.setDescription(description);
 			role.setDtflag(GloabConfig.OPEN);
 			role.setUrl(url);
+			role.setPriority(priority == null ? 0 : priority);
 			if (StringUtils.isEmpty(name)) {
 				return dto.setMsgBody("操作失败，请稍后重试...");
 			}

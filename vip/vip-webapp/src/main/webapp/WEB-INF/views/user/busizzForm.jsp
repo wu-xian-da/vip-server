@@ -74,8 +74,10 @@
 					<th>手机号</th>
 					<td><input name="phone" value="${user.phone }" /></td>
 					<th>状态</th>
-					<td>	<label class="no-width"><input type="radio" v-model="status" value="active">在职</label>
-					<label class="no-width"><input type="radio" v-model="status" value="dimission">离职</label></td>
+					<td>
+						<input type="radio" name="state" value="0" <c:if test="${user.state==0 }"> checked="checked"</c:if> >在职
+					    <input type="radio" name="state" value="1" <c:if test="${user.state==1 }"> checked="checked"</c:if> >离职
+					</td>
 				</tr>
 				<tr>
 					<td colspan="4">

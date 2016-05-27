@@ -35,21 +35,6 @@
 			} ]
 		});
 	};
-	var removeFun = function(id) {
-		parent.$.messager.confirm('询问', '您确定要禁用该用户？', function(r) {
-			if (r) {
-				$.post(sy.contextPath + '/busizz/delete', {
-					id : id
-				}, function(dataObj) {
-					if(!dataObj.ok){
-			    		$.messager.alert('msg',dataObj.msgBody,'error');
-			    		return ;
-			    	};
-					grid.datagrid('reload');
-				}, 'json');
-			}
-		});
-	};
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',

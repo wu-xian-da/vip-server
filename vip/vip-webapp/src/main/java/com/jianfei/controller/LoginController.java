@@ -20,6 +20,7 @@ import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.CacheCons.Sys;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
+import com.jianfei.core.common.utils.SortListUtil;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.stat.ArchiveManager;
 
@@ -44,6 +45,8 @@ public class LoginController extends BaseController {
 		User user = getCurrentUser();
 		List<Role> roles = user.getRoles();
 		if (!CollectionUtils.isEmpty(roles)) {
+			// 查找优先级最大的角色和首页路径
+			SortListUtil.sort(roles, "priority", SortListUtil.DESC);
 			String url = roles.get(0).getUrl();
 			if (!StringUtils.isEmpty(url)) {
 				return "redirect:/" + url;
@@ -70,10 +73,11 @@ public class LoginController extends BaseController {
 		}
 		String airpordIds = StringUtils.join(list, ",");
 		lastMoth.put("ariportIds", airpordIds);
-//		Map<String, Object> map = archiveManager.zhuGuanTotal(lastMoth);
+		// Map<String, Object> map = archiveManager.zhuGuanTotal(lastMoth);
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
-//		model.addAttribute("total", map.get("total"));
-//		model.addAttribute("top", archiveManager.zhuGuanAllAirPort(lastMoth));
+		// model.addAttribute("total", map.get("total"));
+		// model.addAttribute("top",
+		// archiveManager.zhuGuanAllAirPort(lastMoth));
 		model.addAttribute(
 				"draw1",
 				handDraw(archiveManager.zhuGuanDraw(lastMoth,

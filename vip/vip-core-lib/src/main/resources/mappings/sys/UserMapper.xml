@@ -18,22 +18,23 @@
 		<result property="updatedatetime" column="update_time" />
 		<result property="entryTime" column="entry_time" />
 		<result property="code" column="code" />
-		<result property="ariPortIds" column="ariPorts.id"/>
-		<result property="ariPortNames" column="ariPorts.name"/>
-		<result property="roleIds" column="roles.id"/>
-		<result property="roelNames" column="roles.name"/>
-	<!--  	<collection property="roles" ofType="Role">
-			<id property="id" column="roles.id" />
-			<id property="name" column="roles.name" />
-		</collection>-->
+		<result property="ariPortIds" column="ariPorts.id" />
+		<result property="ariPortNames" column="ariPorts.name" />
+		<result property="roleIds" column="roles.id" />
+		<result property="roelNames" column="roles.name" />
+		<!-- <collection property="roles" ofType="Role"> <id property="id" column="roles.id" 
+			/> <id property="name" column="roles.name" /> </collection> -->
 	</resultMap>
 
 	<select id="get" resultMap="userRs" parameterType="java.util.Map">
-		SELECT u.* ,GROUP_CONCAT(r.`id`) AS 'roles.id' ,GROUP_CONCAT(r.`name`) AS 'roles.name',GROUP_CONCAT(ap.`airport_id`) AS 'ariPorts.id',GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name' FROM `sys_users` u 
-		   LEFT JOIN `sys_use_role` ur ON u.`id`=ur.`user_id`
-		   LEFT JOIN `sys_roles` r ON ur.`role_id`=r.`id`
-		   LEFT JOIN `sys_user_airport` ua ON ua.`sys_id`=u.`id`
-		   LEFT JOIN `sys_airport` ap ON ap.`airport_id`=ua.`airport_id`
+		SELECT u.* ,GROUP_CONCAT(r.`id`) AS 'roles.id' ,GROUP_CONCAT(r.`name`)
+		AS 'roles.name',GROUP_CONCAT(ap.`airport_id`) AS
+		'ariPorts.id',GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name' FROM
+		`sys_users` u
+		LEFT JOIN `sys_use_role` ur ON u.`id`=ur.`user_id`
+		LEFT JOIN `sys_roles` r ON ur.`role_id`=r.`id`
+		LEFT JOIN `sys_user_airport` ua ON ua.`sys_id`=u.`id`
+		LEFT JOIN `sys_airport` ap ON ap.`airport_id`=ua.`airport_id`
 		<where>
 			<if test="1==1">
 				and u.user_type=1
@@ -57,13 +58,14 @@
 				<![CDATA[and u.create_time <= #{ends}]]>
 			</if>
 		</where>
-		  GROUP BY u.`name`
+		GROUP BY u.`name`
 		<if test="sort!=null">
 			order by ${sort} ${order}
 		</if>
 	</select>
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where login_name =#{loginName} and (user_type=1 or user_type=2)
+		SELECT * from sys_users where login_name =#{loginName} and
+		(user_type=1 or user_type=2)
 	</select>
 
 	<select id="getUserByUno" resultMap="userRs" parameterType="String">
@@ -139,7 +141,7 @@
 
 	<delete id="delete" parameterType="Long">
 		<![CDATA[
-			update sys_users set dtflag =1 where id=#{id} and user_type=0;
+			update sys_users set dtflag =1 where id=#{id};
 		]]>
 	</delete>
 
@@ -159,6 +161,7 @@
 	</insert>
 
 	<update id="updatePasswordByUno" parameterType="String">
-			UPDATE sys_users SET `password`=#{newPassword} WHERE `code`=#{uno} and `password`=#{password}
+		UPDATE sys_users SET `password`=#{newPassword} WHERE `code`=#{uno} and
+		`password`=#{password}
 	</update>
 </mapper>

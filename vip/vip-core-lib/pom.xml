@@ -269,7 +269,7 @@
 		</dependency>
 
 		<dependency>
-			  <groupId>com.alibaba.demo</groupId>
+			  <groupId>com.alipay.demo</groupId>
 			  <artifactId>trade</artifactId>
 			  <version>1.0</version>
 		</dependency>

@@ -50,6 +50,7 @@ public class AriPortController extends BaseController {
 		return "airport/airportList";
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list")
 	@ResponseBody
 	public Grid<AriPort> list(
@@ -58,7 +59,8 @@ public class AriPortController extends BaseController {
 			@RequestParam(value = "name", required = false) String name) {
 		PageHelper.startPage(page, rows);
 		MessageDto<List<AriPort>> messageDto = ariPortManager
-				.get(new MapUtils.Builder().setKeyValue("name", name).build());
+				.get(new MapUtils.Builder().setKeyValue("name", name)
+						.setKeyValue("dtflag", GloabConfig.OPEN).build());
 		PageInfo<AriPort> pageInfo = new PageInfo<AriPort>();
 		if (messageDto.isOk()) {
 			pageInfo.setList(messageDto.getData());
@@ -66,7 +68,6 @@ public class AriPortController extends BaseController {
 		return bindGridData(pageInfo);
 	}
 
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "save")
 	@ResponseBody
 	public MessageDto<AriPort> save(AriPort ariPort) {
@@ -89,7 +90,7 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "delete", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<AriPort> delete(AriPort ariPort) {
-		ariPort.setState(GloabConfig.FORBIT);
+		ariPort.setDtflag(GloabConfig.FORBIT);
 		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;
 	}

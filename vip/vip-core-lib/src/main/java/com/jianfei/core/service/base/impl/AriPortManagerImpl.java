@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jianfei.core.bean.SysAirport;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +19,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.SysAirport;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.AriPortMapper;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.base.AriPortManager;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  *
@@ -43,7 +41,6 @@ import redis.clients.jedis.JedisPool;
 @Transactional
 public class AriPortManagerImpl implements AriPortManager<AriPort> {
 
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -53,6 +50,7 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	public MessageDto<AriPort> save(AriPort t) {
 		MessageDto<AriPort> dto = new MessageDto<AriPort>();
 		try {
+			t.setDtflag(GloabConfig.OPEN);
 			ariPortMapper.save(t);
 			dto.setOk(true).setMsgBody(MessageDto.MsgFlag.OK);
 		} catch (Exception e) {
