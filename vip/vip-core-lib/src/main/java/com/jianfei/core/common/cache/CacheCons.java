@@ -47,6 +47,12 @@ public class CacheCons {
 		 * @version 1.0.0
 		 */
 		public static final String LAST_MONTH_TOP3 = "last_month_top3";
+		/**
+		 * LAST_MONTH_TOTAL_ZHUGUAN:TODO(主管历史开卡总数，月底清除)
+		 *
+		 * @version 1.0.0
+		 */
+		public static final String LAST_MONTH_TOTAL_ZHUGUAN = "last_month_total_zhuguan";
 
 	}
 

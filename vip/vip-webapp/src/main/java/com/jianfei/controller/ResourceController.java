@@ -84,6 +84,7 @@ public class ResourceController extends BaseController {
 		if (0 != resource.getId()) {
 			MessageDto<Resource> messageDto = resourceManager
 					.findEntityById(resource.getId());
+			System.out.println(messageDto.isOk());
 			if (messageDto.isOk())
 				model.addAttribute("resource", messageDto.getData());
 		}

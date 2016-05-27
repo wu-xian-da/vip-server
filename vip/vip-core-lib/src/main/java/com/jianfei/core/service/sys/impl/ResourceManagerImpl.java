@@ -24,6 +24,7 @@ import com.jianfei.core.bean.Resource;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
+import com.jianfei.core.common.shrio.ShiroDbRealm;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
@@ -49,6 +50,7 @@ public class ResourceManagerImpl implements ResourceManager {
 
 	@Autowired
 	private ResourceMapper resourceMapper;
+	private ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
@@ -120,7 +122,7 @@ public class ResourceManagerImpl implements ResourceManager {
 		MessageDto<Resource> messageDto = new MessageDto<Resource>();
 		Resource resource = resourceMapper.findEntityById(id);
 		if (null != resource) {
-			messageDto.setData(resource);
+			messageDto.setData(resource).setOk(true);
 		}
 		return messageDto;
 
@@ -138,6 +140,8 @@ public class ResourceManagerImpl implements ResourceManager {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
 			resourceMapper.save(resource);
+			JedisUtils.delObject(CacheCons.Sys.SYS_RESOURCE_LIST);
+			shiroDbRealm.cleanCache();
 			messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
 		} catch (Exception e) {
 			logger.error("禁用用户信息：{}", e.getMessage());
@@ -158,6 +162,8 @@ public class ResourceManagerImpl implements ResourceManager {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
 			resourceMapper.update(resource);
+			JedisUtils.delObject(CacheCons.Sys.SYS_RESOURCE_LIST);
+			shiroDbRealm.cleanCache();
 			messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
 		} catch (Exception e) {
 			logger.error("保存用户信息：{}", e.getMessage());
@@ -176,7 +182,10 @@ public class ResourceManagerImpl implements ResourceManager {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
 			resourceMapper.delete(id);
+			JedisUtils.delObject(CacheCons.Sys.SYS_RESOURCE_LIST);
+			shiroDbRealm.cleanCache();
 			messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
+
 		} catch (Exception e) {
 			logger.error("保存用户信息：{}", e.getMessage());
 			messageDto.setMsgBody(MsgFlag.ERROR);

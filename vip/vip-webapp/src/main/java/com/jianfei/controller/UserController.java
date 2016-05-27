@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +59,7 @@ public class UserController extends BaseController {
 	@Autowired
 	private AriPortManager<AriPort> ariPortService;
 
+	@RequiresPermissions(value = "system:user:home")
 	@RequestMapping(value = "home")
 	public String home() {
 

@@ -94,10 +94,22 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * @see
 	 * com.jianfei.core.service.stat.ArchiveManager#zhuGuanTotal(java.util.Map)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> zhuGuanTotal(Map<String, Object> map,
 			String cacheKey) {
-		//TODO
+
+		Map<String, Object> rsMap = null;
+		Object object = JedisUtils
+				.getObject(CacheCons.Sys.LAST_MONTH_TOTAL_ZHUGUAN);
+		if (null != object) {
+			rsMap = (Map<String, Object>) JedisUtils
+					.getObject(CacheCons.Sys.LAST_MONTH_TOTAL_ZHUGUAN);
+		} else {
+			rsMap = archiveMapper.zhuGuanTotal(map);
+			JedisUtils.setObject(CacheCons.Sys.LAST_MONTH_TOTAL_ZHUGUAN, rsMap,
+					0);
+		}
 		return archiveMapper.zhuGuanTotal(map);
 	}
 
@@ -111,7 +123,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Override
 	public List<Map<String, Object>> zhuGuanAllAirPort(Map<String, Object> map,
 			String cacheKey) {
-		//TODO
+		// TODO
 		return archiveMapper.zhuGuanAllAirPort(map);
 	}
 
@@ -124,7 +136,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Override
 	public List<Map<String, Object>> zhuGuanDraw(Map<String, Object> map,
 			String cacheKey) {
-		//TODO
+		// TODO
 		return archiveMapper.zhuGuanDraw(map);
 	}
 

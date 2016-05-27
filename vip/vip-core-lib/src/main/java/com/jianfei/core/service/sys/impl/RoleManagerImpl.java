@@ -22,13 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.shrio.ShiroDbRealm;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.TreeNodeUtil;
-import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.mapper.RoleMapper;
 import com.jianfei.core.service.sys.RoleManager;
 
@@ -48,6 +49,8 @@ public class RoleManagerImpl implements RoleManager {
 	@Autowired
 	private RoleMapper roleMapper;
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+
+	private ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
 
 	/*
 	 * (non-Javadoc)
@@ -136,6 +139,8 @@ public class RoleManagerImpl implements RoleManager {
 				}
 				roleMapper.batchInsertRoleResource(list);
 			}
+			JedisUtils.delObject(CacheCons.Sys.SYS_ROLE_LIST);
+			shiroDbRealm.cleanCache();
 		} catch (Exception e) {
 			logger.error("添加，更新角色信息并授权:{}", e.getMessage());
 			return dto.setMsgBody("操作失败，请稍后重试...");
