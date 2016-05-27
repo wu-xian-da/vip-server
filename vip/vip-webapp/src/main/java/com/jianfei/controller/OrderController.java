@@ -15,8 +15,10 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,9 +27,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
+import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.service.base.AppInvoiceManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 
@@ -41,11 +47,13 @@ import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
  *
  */
 @Controller
-public class OrderController {
+public class OrderController extends BaseController {
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
 	private MsgInfoManagerImpl msgInfoManagerImpl;
+	@Autowired
+	private AppInvoiceManager appInvoiceManagerImpl;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -73,9 +81,23 @@ public class OrderController {
 	 * 根据订单号查询订单详细信息
 	 */
 	@RequestMapping(value="/returnOrderDetailInfoByOrderId")
-	public ModelAndView returnOrderDetailInfoByOrderId(String orderId){
+	public String returnOrderDetailInfoByOrderId(String orderId,Model model){
+		//订单基本信息
 		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		return new ModelAndView("orders/orderDetail","orderDetailInfo",orderDetailInfo);
+		//发票信息
+		AppInvoice appInvoice = appInvoiceManagerImpl.selInvoiceInfoByOrderId(orderId);
+		//退卡余额信息
+		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
+		
+		model.addAttribute("orderDetailInfo", orderDetailInfo);
+		if(appInvoice !=null){
+			model.addAttribute("invoice", appInvoice);
+		}
+		if(appCardBack != null){
+			model.addAttribute("appCardBack", appCardBack);
+		}
+		return "orders/orderDetail";
+		//return new ModelAndView("orders/orderDetail","orderDetailInfo",orderDetailInfo);
 	}
 	
 	/*
@@ -92,8 +114,12 @@ public class OrderController {
 			@RequestParam(value="invoiceState",required=false,defaultValue="3") Integer invoiceState,
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
 		
-		
-		
+		//用户可以看到机场列表
+		User user = getCurrentUser();
+		String userId = user.getId()+"";
+		System.out.println("userId="+userId);
+		List<AriPort> airportIdList = user.getAripors();
+
 		//设置刷选条件
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
 		if(!startTime.equals("")){

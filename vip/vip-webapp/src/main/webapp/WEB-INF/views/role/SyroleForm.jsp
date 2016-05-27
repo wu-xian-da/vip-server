@@ -80,6 +80,10 @@
 					<td><textarea name="description" >${role.description }</textarea></td>
 				</tr>
 				<tr>
+					<th>首页地址</th>
+					<td colspan="3"><input name="url" class="easyui-validatebox" data-options="required:true" value="${role.url }"/></td>
+				</tr>
+				<tr>
 					<td colspan="4">
 						<fieldset>
 							<legend>角色授权</legend>

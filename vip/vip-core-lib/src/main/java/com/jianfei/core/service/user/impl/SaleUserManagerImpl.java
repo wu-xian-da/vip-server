@@ -1,7 +1,10 @@
 package com.jianfei.core.service.user.impl;
 
 import com.jianfei.core.bean.User;
+import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.user.SaleUserManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * TODO
@@ -11,7 +14,12 @@ import com.jianfei.core.service.user.SaleUserManager;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/18 15:48
  */
+@Service
 public class SaleUserManagerImpl implements SaleUserManager {
+
+    @Autowired
+   private UserMapper userMapper;
+
     /**
      * 验证用户密码
      *
@@ -21,7 +29,8 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public boolean validatePassword(String userNo, String password) {
-        return false;
+        //TODO 数据库查询
+        return true;
     }
 
     /**
@@ -32,7 +41,7 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public User getSaleUser(String userNo) {
-        return null;
+        return userMapper.getUserByUno(userNo);
     }
 
     /**
@@ -45,7 +54,9 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public boolean updatePassword(String userNo, String password, String newPassword) {
-        return false;
+        //TODO newPassword需要加密
+       int num= userMapper.updatePasswordByUno(userNo, password, newPassword);
+        return num == 1 ? true : false;
     }
 
     /**

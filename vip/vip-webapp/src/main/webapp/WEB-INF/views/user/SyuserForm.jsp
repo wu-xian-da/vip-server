@@ -62,6 +62,9 @@
 					formatter : function(node) {
 						return node.name;
 					},
+					onCheck:function(node){
+
+					},
 					onLoadSuccess : function(node, data) {
 						$.get(sy.contextPath + '/role/selectroles/'+ $(':input[name="id"]').val(), function(
 								result) {

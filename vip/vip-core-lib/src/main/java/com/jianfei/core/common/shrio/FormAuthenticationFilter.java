@@ -1,5 +1,7 @@
 package com.jianfei.core.common.shrio;
 
+import java.util.List;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +17,15 @@ import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.shrio.ShiroDbRealm.Principal;
 import com.jianfei.core.common.utils.GloabConfig;
+import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.sys.RoleManager;
 import com.jianfei.core.service.sys.UserManaer;
 
 /**
@@ -45,6 +51,12 @@ public class FormAuthenticationFilter extends
 
 	@Autowired
 	private UserManaer<User> userManaer;
+
+	@Autowired
+	private RoleManager roleManager;
+
+	@Autowired
+	private AriPortManager<AriPort> ariPortManager;
 
 	protected AuthenticationToken createToken(ServletRequest request,
 			ServletResponse response) {
@@ -120,8 +132,16 @@ public class FormAuthenticationFilter extends
 			throws Exception {
 		Principal principal = (Principal) SecurityUtils.getSubject()
 				.getPrincipal();
-		ShiroUtils.getSession().setAttribute(GloabConfig.SESSION_USER,
-				userManaer.getUserByName(principal.getLoginName()));
+		User user = userManaer.getUserByName(principal.getLoginName());
+		// 存放角色
+		user.setRoles(roleManager.selectRoleByUserId(user.getId()));
+		// 存放机场
+		MessageDto<List<AriPort>> messageDto = ariPortManager
+				.selectAriportByUserId(user.getId());
+		if (messageDto.isOk()) {
+			user.setAripors(messageDto.getData());
+		}
+		ShiroUtils.getSession().setAttribute(GloabConfig.SESSION_USER, user);
 		return super.onLoginSuccess(token, subject, request, response);
 	}
 

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,9 +42,11 @@
 			<ul>
 				<li><label>有效期：</label>${orderDetailInfo.cardType}年</li>
 				<li><label>vip卡金额：</label>${orderDetailInfo.initMoney}￥</li>
-				<li><label>支付方式：</label>
+				<li><label>支付方式：
+				      
+					</label>
 				
-				${orderDetailInfo.payMethod}
+				
 				</li>
 				<li><label>支付时间：</label>${orderDetailInfo.payTime}</li>
 				<li><label>卡片激活短信发送时间：</label>${orderDetailInfo.activatTime}</li>
@@ -60,42 +62,48 @@
 				<li>邮箱地址：${orderDetailInfo.email}</li>
 			</ul>
 			
+			<!-- 发票信息 -->
+			<div class="order-list-title">发票信息（${orderDetailInfo.invoiceFlag ==0 ? '未开' : '已开' }）</div>
+			<c:if test="${orderDetailInfo.invoiceFlag ==1}">
+				<div>
+					<ul>
+						<li>邮寄地址：${invoice.address }</li>
+						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
+						<li>发票抬头：${invoice.invoiceTitle}</li>
+					</ul>
+				</div>
+			</c:if>
 			
-			<div class="order-list-title" onclick="showInVoiceINfo('${orderDetailInfo.orderId}',${orderDetailInfo.invoiceFlag})">发票信息（${orderDetailInfo.invoiceFlag ==0 ? '未开' : '已开' }）</div>
-			<div style="display:none">
-				<ul>
-				<li>邮寄地址：北京市朝阳区海航大厦</li>
-				<li>发票类型：</li>
-				<li>发票抬头：</li>
-				</ul>
-			</div>
 			
 
 			<div class="order-list-title">
-				退款信息 <span class="order-tips-red">（已退款）</span>
+				退款信息 <span class="order-tips-red">（${orderDetailInfo.orderState ==4 ?'已退款':'未退款'}）</span>
 			</div>
-			<ul>
-				<li>提款金额：500元</li>
-				<li>退款方式：支付宝</li>
-				<li>支付宝账号：</li>
-			</ul>
+			<c:if test="${orderDetailInfo.orderState ==4}">
+				<ul>
+					<li>退款金额：${appCardBack.money}元</li>
+					<li>退款方式：
+						<c:choose>
+							<c:when test="${appCardBack.backType ==0 }">
+								微信转账
+							</c:when>
+							<c:when test="${appCardBack.backType ==1 }">
+								支付宝转账
+							</c:when>
+							<c:otherwise>
+								银行转账
+							</c:otherwise>
+						</c:choose>
+					</li>
+					<li>转账账号：${appCardBack.customerCard}</li>
+				</ul>
+			</c:if>
+			
 
 		</div>
 
 	</div>
 	
-<script type="text/javascript">
-	function showInVoiceINfo(orderId,invoiceFlag){
-		alert("invoiceFlag="+invoiceFlag)
-		if(invoiceFlag == 1){//有发票
-			var url = "";
-			$.get(url,function(_d){
-				if(_d.res ==1){
-					
-				}
-			})
-		}
-	}
-</script>
+
 </body>
 </html>

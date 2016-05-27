@@ -33,14 +33,17 @@
 		<![CDATA[ GROUP BY archie.`province`	 LIMIT 0,3) A
 			 INNER JOIN 
 			 (SELECT MAX(a.`order_num`) AS total ,a.bname,a.`province` FROM app_order_archive a]]>
-		<where>	<if test="year!=null">
+		<where>
+			<if test="year!=null">
 				<![CDATA[a.`year`=#{year} ]]>
-		</if>
-		<if test="month!=null">
+			</if>
+			<if test="month!=null">
 				<![CDATA[and  a.`month`=#{month} ]]>
-		</if></where>
-		 GROUP BY a.`bname`,a.`province` ) B
-		ON A.province=B.province
+			</if>
+		</where>
+		GROUP BY a.`bname`,a.`province` ) B
+		ON A.province=B.province order by
+		B.total desc
 	</select>
 
 	<!-- 为经理角色绘图 -->
@@ -60,5 +63,49 @@
 			</if>
 		</where>
 		GROUP BY archie.`province`
+	</select>
+
+
+	<select id="zhuGuanTotal" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		<![CDATA[SELECT SUM(a.`order_num`) AS total FROM `app_order_archive` a WHERE a.`airport_id` IN (#{ariportIds}) AND a.`year`=#{year} and a.month=#{month}]]>
+	</select>
+	
+	<select id="zhuGuanAllAirPort" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		<![CDATA[	
+			SELECT 
+				a.`airport_id`,
+				a.`airportname`,
+				SUM(a.`order_num`) AS order_num 
+			FROM app_order_archive a
+			where 
+				a.`airport_id` IN (#{ariportIds}) 
+				AND a.`year`=#{year} 
+				and a.month=#{month}
+		 	GROUP BY a.`airportname`,a.`airport_id`	
+		]]>
+	</select>
+	<select id="zhuGuanDraw" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		<![CDATA[	
+			SELECT
+				a.`airport_id`,
+				a.`airportname`,
+				a.`bname`,
+				a.`id`,
+				SUM(a.`order_num`) AS order_num
+			FROM
+				app_order_archive a
+			where 
+				a.`airport_id` IN (#{ariportIds}) 
+				AND a.`year`=#{year} 
+				and a.month=#{month}
+			GROUP BY
+				a.airport_id,
+				a.`airportname`,
+				a.`bname`,
+				a.id		
+		]]>
 	</select>
 </mapper>

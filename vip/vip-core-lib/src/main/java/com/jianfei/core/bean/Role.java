@@ -27,8 +27,9 @@ public class Role extends BaseEntity {
 
 	private String description;
 
-	private List<Resource> resources = Lists.newArrayList(); // 拥有菜单列表
+	private String url;
 
+	private List<Resource> resources = Lists.newArrayList(); // 拥有菜单列表
 
 	public List<Resource> getResources() {
 		return resources;
@@ -46,7 +47,24 @@ public class Role extends BaseEntity {
 		this.description = description;
 	}
 
-	
+	/**
+	 * url
+	 *
+	 * @return the url
+	 * @version 1.0.0
+	 */
+
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url
+	 *            the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
 	/*
 	 * (non-Javadoc)

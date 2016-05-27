@@ -7,8 +7,6 @@
  */
 package com.jianfei.core.service.stat.impl;
 
-import static org.junit.Assert.*;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.service.stat.ArchiveManager;
 
@@ -63,9 +62,8 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testMasterTop() {
 		List<Map<String, Object>> map = archiveManager
-				.masterTop(new MapUtils.Builder()
-						.setKeyValue("start", new Date())
-						.build());
+				.masterTop(new MapUtils.Builder().setKeyValue("start",
+						new Date()).build());
 		System.out.println(JSONObject.toJSONString(map));
 	}
 
@@ -75,8 +73,7 @@ public class ArchiveManagerImplTest {
 	 * .
 	 */
 	@Test
-	public void testMasterDraw() {
-		fail("Not yet implemented");
+	public void testzhuGuanTotal() {
 	}
 
 }

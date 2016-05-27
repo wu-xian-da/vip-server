@@ -16,6 +16,7 @@ import jxl.write.WritableWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -152,10 +153,11 @@ public class VipCardManagerImpl implements VipCardManager {
 	 *            void
 	 * @version 1.0.0
 	 */
-	public int importExcelData(String filePath) {
+	public int importExcelData(InputStream in) {
 		try {
 			// 创建对Excel工作簿文件的引用
-			XSSFWorkbook wookbook = new XSSFWorkbook(new FileInputStream(filePath));
+			//XSSFWorkbook wookbook = new XSSFWorkbook(new FileInputStream(filePath));
+			XSSFWorkbook wookbook = new XSSFWorkbook(in);
 			// 在Excel文档中，第一张工作表的缺省索引是0
 			// 其语句为：HSSFSheet sheet = workbook.getSheetAt(0);
 			XSSFSheet sheet = wookbook.getSheet("Sheet1");

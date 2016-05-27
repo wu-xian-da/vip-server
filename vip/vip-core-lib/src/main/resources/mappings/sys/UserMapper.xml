@@ -7,7 +7,6 @@
 		<result property="name" column="name" />
 		<result property="state" column="state" />
 		<result property="phone" column="phone" />
-		<result property="password" column="password" />
 		<result property="loginName" column="login_name" />
 		<result property="salt" column="salt" />
 		<result property="locked" column="locked" />
@@ -18,6 +17,7 @@
 		<result property="createdatetime" column="create_time" />
 		<result property="updatedatetime" column="update_time" />
 		<result property="entryTime" column="entry_time" />
+		<result property="code" column="code" />
 		<result property="ariPortIds" column="ariPorts.id"/>
 		<result property="ariPortNames" column="ariPorts.name"/>
 		<result property="roleIds" column="roles.id"/>
@@ -64,6 +64,10 @@
 	</select>
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
 		SELECT * from sys_users where login_name =#{loginName} and (user_type=1 or user_type=2)
+	</select>
+
+	<select id="getUserByUno" resultMap="userRs" parameterType="String">
+		SELECT * from sys_users where code =#{uno}
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -154,4 +158,7 @@
 		</foreach>
 	</insert>
 
+	<update id="updatePasswordByUno" parameterType="String">
+			UPDATE sys_users SET `password`=#{newPassword} WHERE `code`=#{uno} and `password`=#{password}
+	</update>
 </mapper>

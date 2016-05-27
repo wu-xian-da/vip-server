@@ -27,9 +27,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppVipcard;
-import com.jianfei.core.service.base.impl.VipCardManagerImpl;
+import com.jianfei.core.service.base.AppInvoiceManager;
+import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
+import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 
 
 
@@ -46,31 +46,14 @@ import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml" })
 @Transactional
-public class VipCardManagerImplTest {
+public class AppInvoiceManagerImplTest {
 	@Autowired
-	private VipCardManagerImpl vipCardManagerImpl;
+	private AppInvoiceManager appInvoiceManagerImpl;
 	
-	//分页测试
+	//根据订单号返回发票信息
 	@Test
-	public void pageListTest(){
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("cardState", 1);
-		PageInfo<AppVipcard> pageinfo = vipCardManagerImpl.showCardListPage(1, 2, params);
-		System.out.println("总的条数："+pageinfo.getTotal());
-		List<AppVipcard> list = pageinfo.getList();
-		for(AppVipcard vipcard : list){
-			System.out.println(vipcard);
-		}
-	}
-	//导入excel表格数据
-	@Test
-	public void importTest(){
-		//vipCardManagerImpl.importExcelData("f://test.xlsx");
+	public void selTest(){
+		System.out.println(appInvoiceManagerImpl.selInvoiceInfoByOrderId("dd1001"));
 	}
 	
-	@Test
-	public void export(){
-		String filePath = "f://";
-		vipCardManagerImpl.exportDataToExcel(filePath);
-	}
 }
