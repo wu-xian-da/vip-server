@@ -77,9 +77,6 @@ public class OrderManagerImpl implements OrderManager {
                                           Map<String, Object> params) {
         PageHelper.startPage(pageNo, pageSize);
         List<OrderShowInfoDto> list = appOrdersMapper.get(params);
-        for(OrderShowInfoDto a :list){
-        	System.out.println("---"+a);
-        }
         PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
         return pageInfo;
     }

@@ -64,7 +64,7 @@
 					<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 					<th data-options="align:'center', field:'orderTime',width:100">申请日期</th>
 
-					<th data-options="align:'center', field:'airportName',width:150">申请途径</th>
+					<th data-options="align:'center', field:'applyType',width:150">申请途径</th>
 					<th data-options="align:'center', field:'backType',width:100">退卡方式</th>
 					<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
 					<th data-options="align:'center', field:'orderStateName',width:100">状态</th>
