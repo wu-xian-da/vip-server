@@ -52,7 +52,7 @@ public class UserMapperTest {
 	 */
 	@Test
 	public void testGetUserByName() {
-		fail("Not yet implemented");
+		userMapper.getUserByName("admin");
 	}
 
 	/**

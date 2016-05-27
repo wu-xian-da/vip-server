@@ -56,17 +56,6 @@
 			} ]
 		});
 	};
-	var removeFun = function(id) {
-		parent.$.messager.confirm('询问', '您确定要禁用此记录？', function(r) {
-			if (r) {
-				$.post(sy.contextPath + '/airport/delete', {
-					id : id
-				}, function() {
-					grid.datagrid('reload');
-				}, 'json');
-			}
-		});
-	};
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
@@ -126,7 +115,6 @@
 				formatter : function(value, row) {
 					var str = '';
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
 					return str;
 				}
 			} ] ],

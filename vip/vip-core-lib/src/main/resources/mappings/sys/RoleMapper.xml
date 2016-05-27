@@ -10,6 +10,7 @@
 		<result column="create_time" property="createdatetime" />
 		<result column="update_time" property="updatedatetime" />
 		<result column="dtflag" property="dtflag" />
+		<result column="priority" property="priority" />
 		<collection property="resources" ofType="Resource">
 			<id property="id" column="resources.id" />
 			<id property="name" column="resources.name" />
@@ -46,7 +47,8 @@
 				create_time,
 				update_time,
 				dtflag,
-				url
+				url,
+				priority
 			)
 			VALUES
 			(
@@ -55,7 +57,8 @@
 				#{createdatetime},
 				#{updatedatetime},
 				#{dtflag},
-				#{url}
+				#{url},
+				#{priority}
 			)
 		]]>
 	</insert>
@@ -79,6 +82,9 @@
 		<if test="url!=null">
 			,url=#{url}
 		</if>
+		<if test="priority!=null">
+			,priority=#{priority}
+		</if>
 		WHERE id = #{id}
 	</update>
 
@@ -96,6 +102,12 @@
 			(#{item.roleId}, #{item.resourceId})
 		</foreach>
 	</insert>
+	
+	<select id="selectUserByRoleId" parameterType="Long" resultType="java.util.Map">
+		<![CDATA[
+		SELECT u.* FROM `sys_users` u INNER JOIN `sys_use_role` r ON u.`id`=r.`user_id` WHERE  u.`dtflag`=0 AND r.`role_id`=#{id}
+		]]>
+	</select>
 
 	<select id="selectRoleByUserId" parameterType="Long" resultMap="roleResult">
 		<![CDATA[

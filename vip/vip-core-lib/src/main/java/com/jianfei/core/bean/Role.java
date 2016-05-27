@@ -28,6 +28,8 @@ public class Role extends BaseEntity {
 	private String description;
 
 	private String url;
+	
+	private Integer priority;
 
 	private List<Resource> resources = Lists.newArrayList(); // 拥有菜单列表
 
@@ -64,6 +66,24 @@ public class Role extends BaseEntity {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	/**
+	 * priority
+	 *
+	 * @return  the priority
+	 * @version   1.0.0
+	 */
+	
+	public Integer getPriority() {
+		return priority;
+	}
+
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(Integer priority) {
+		this.priority = priority;
 	}
 
 	/*

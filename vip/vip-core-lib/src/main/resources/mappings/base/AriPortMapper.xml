@@ -66,6 +66,9 @@
 			  LEFT JOIN app_orders t2 ON t1.airport_id=t2.airport_id 
 		]]>
 		<where>
+			<if test="dtflag!=null">
+				t1.dtflag=#{dtflag}
+			</if>
 			<if test="id!=null">
 				and t1.airport_id =#{id}
 			</if>

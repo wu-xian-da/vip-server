@@ -81,7 +81,9 @@
 				</tr>
 				<tr>
 					<th>首页地址</th>
-					<td colspan="3"><input name="url" class="easyui-validatebox" data-options="required:true" value="${role.url }"/></td>
+					<td><input name="url" class="easyui-validatebox" data-options="required:true" value="${role.url }"/></td>
+					<th>级别</th>
+					<td><input class="easyui-numberspinner" name="priority"   required="required"  value="${role.priority } data-options="increment:1,min:1,editable:false" style="width:120px;" ></td>
 				</tr>
 				<tr>
 					<td colspan="4">

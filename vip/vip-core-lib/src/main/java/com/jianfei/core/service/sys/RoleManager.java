@@ -54,7 +54,7 @@ public interface RoleManager {
 	 * @version 1.0.0
 	 */
 	MessageDto<String> updateRoleResource(Long id, String name,
-			String description, String ids, String url);
+			String description, String ids, String url,Integer priority);
 
 	/**
 	 * buildRoleTreeNode(构造树)

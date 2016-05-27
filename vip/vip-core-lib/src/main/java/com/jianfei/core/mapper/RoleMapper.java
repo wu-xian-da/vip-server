@@ -30,6 +30,24 @@ public interface RoleMapper extends BaseMapper<Role> {
 
 	void batchInsertRoleResource(List<Map<String, Object>> list);
 
+	/**
+	 * selectRoleByUserId(根据用户ID查找所有角色)
+	 * 
+	 * @param id
+	 *            用户ID
+	 * @return List<Role>
+	 * @version 1.0.0
+	 */
 	List<Role> selectRoleByUserId(Long id);
-	
+
+	/**
+	 * selectUserByRoleId(更具角色ID获取所有用户)
+	 * 
+	 * @param id
+	 *            角色ID
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> selectUserByRoleId(Long id);
+
 }

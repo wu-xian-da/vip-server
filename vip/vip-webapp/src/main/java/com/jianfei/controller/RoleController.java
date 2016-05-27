@@ -116,8 +116,10 @@ public class RoleController extends BaseController {
 			@RequestParam(value = "name") String name,
 			@RequestParam(value = "description", required = false) String description,
 			@RequestParam(value = "ids", required = false) String ids,
-			@RequestParam(value = "url") String url) {
-		return roelManager.updateRoleResource(id, name, description, ids,url);
+			@RequestParam(value = "url") String url,
+			@RequestParam(value = "priority") Integer priority) {
+		return roelManager.updateRoleResource(id, name, description, ids, url,
+				priority);
 	}
 
 	/**

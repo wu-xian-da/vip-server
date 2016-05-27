@@ -61,8 +61,12 @@
 			if (r) {
 				$.post(sy.contextPath + '/role/delete', {
 					id : id
-				}, function() {
-					grid.datagrid('reload');
+				}, function(result) {
+					if (!result.ok) {
+						layer.msg(result.msgBody,{icon: 2});
+					}else{
+						grid.datagrid('reload');
+					}
 				}, 'json');
 			}
 		});
@@ -101,6 +105,10 @@
 				width : '100',
 				title : '首页地址',
 				field : 'url'
+			},  {
+				width : '100',
+				title : '优先级',
+				field : 'priority'
 			}, {
 				title : '操作',
 				field : 'action',

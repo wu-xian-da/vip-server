@@ -76,7 +76,10 @@ public class UserManagerImpl implements UserManaer<User> {
 	public MessageDto<String> delete(Long id) {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
+			// 删除用户
 			userMapper.delete(id);
+			// 删除该用户对应的角色信息
+			userMapper.deleteRolesFromUser(id);
 			messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
 		} catch (Exception e) {
 			logger.error("禁用用户信息：{}", e.getMessage());

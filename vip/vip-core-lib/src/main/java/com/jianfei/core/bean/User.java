@@ -29,7 +29,7 @@ public class User extends BaseEntity {
 
 	private static final long serialVersionUID = -2817634594384609651L;
 
-	private int state; // 0:在职，1:不在职
+	private Integer state; // 0:在职，1:不在职
 
 	private Date entryTime;// 入职时间
 
@@ -70,7 +70,7 @@ public class User extends BaseEntity {
 	 * @version 1.0.0
 	 */
 
-	public int getState() {
+	public Integer getState() {
 		return state;
 	}
 
@@ -78,7 +78,7 @@ public class User extends BaseEntity {
 	 * @param state
 	 *            the state to set
 	 */
-	public void setState(int state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 
