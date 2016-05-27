@@ -23,7 +23,6 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.jianfei.core.common.pay.wechat.MD5;
 /**
 * 生成二维码
 *2015年7月7日
@@ -91,7 +90,7 @@ public class GenerateQrCodeUtil {
          return image;
     }    
     private static String generateFileName(String content) {
-        return MD5.MD5Encode(content);  //md5加密
+        return "md5";  //md5加密
     }
     
     /**

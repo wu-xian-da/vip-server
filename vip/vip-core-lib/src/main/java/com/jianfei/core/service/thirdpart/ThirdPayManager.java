@@ -7,7 +7,17 @@
  */
 package com.jianfei.core.service.thirdpart;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.alipay.demo.trade.config.Configs;
+import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
+import com.alipay.demo.trade.service.AlipayTradeService;
+import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
+import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.service.thirdpart.impl.ThirdPayManagerImpl;
+import com.tencent.protocol.native_protocol.NativePayReqData;
 
 /**
  *
@@ -19,22 +29,18 @@ import com.jianfei.core.common.pay.PreCreateResult;
  *
  */
 public abstract class ThirdPayManager {
-	static {
-		System.out.print("abc");
-	}
+
 	
-	public String tradeNo;
 	/**
-	 * 
-	 * tradePrecreate(第一步：调用交易预创建接口，返回二维码url)
-	 * @param requestBuilder
+	 * 预下单请求
+	 * tradePrecreate
+	 * @param aliParam 
 	 * @return
 	 *PreCreateResult
 	 * @version  1.0.0
 	 */
-	public abstract PreCreateResult tradePrecreate();
+	public abstract PreCreateResult tradePrecreate(Object payParam);
 	
-	public abstract PreCreateResult tradePrecreate(String appId);
 	
 	/**
 	 * 
@@ -42,7 +48,7 @@ public abstract class ThirdPayManager {
 	 *void
 	 * @version  1.0.0
 	 */
-	public abstract void tradeQuery(String tradeNo);
+	public abstract PayQueryResult tradeQuery(String tradeNo);
 	
 	/**
 	 * 

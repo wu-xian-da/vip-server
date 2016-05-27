@@ -2,7 +2,6 @@ package com.jianfei.user;
 
 import com.jianfei.core.service.order.impl.ConsumeManagerImpl;
 import com.jianfei.dto.VipTestVo;
-import com.sun.javafx.collections.MappingChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
