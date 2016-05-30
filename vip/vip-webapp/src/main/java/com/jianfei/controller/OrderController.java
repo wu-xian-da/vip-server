@@ -31,9 +31,11 @@ import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.base.AppInvoiceManager;
+import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 
@@ -54,6 +56,8 @@ public class OrderController extends BaseController {
 	private MsgInfoManagerImpl msgInfoManagerImpl;
 	@Autowired
 	private AppInvoiceManager appInvoiceManagerImpl;
+	@Autowired
+	private AriPortManager ariPortService;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -165,8 +169,15 @@ public class OrderController extends BaseController {
 				outData.put("orderId", orderId);
 				outData.put("opr", "0");
 				outData.put("phone", phone);
-				appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
-			
+				//是否有‘申请退款’权限
+				boolean flag = subject.isPermitted("system:order:applyBackMoney");
+				if(flag){
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
+				}else{
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+				}
+				
+				
 			}else if(appOrder.getOrderState() == 2){
 				appOrder.setInvoiceFlagName(appOrder.getInvoiceFlag() ==0 ?"未开":"已开");
 				appOrder.setOrderStateName("正在审核");
@@ -175,7 +186,14 @@ public class OrderController extends BaseController {
 				float remainMoney = orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", appOrder.getOrderId());
-				appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
+				//是否有审核的权限
+				boolean flag = subject.isPermitted("system:order:audit");
+				if(flag){
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
+				}else{
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+				}
+				
 			
 			}else if(appOrder.getOrderState() ==3){
 				//退款
@@ -188,9 +206,16 @@ public class OrderController extends BaseController {
 				outData.put("orderId", orderId);//订单号
 				outData.put("backMoneyCard",appCardBack.getCustomerCard());
 				outData.put("backType", appCardBack.getBackType());
-				
 				appOrder.setOrderStateName("审核通过");
-				appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+				
+				//是否有最终退款查看的权限
+				boolean flag = subject.isPermitted("system:order:refundsel");
+				if(flag){
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+				}else{
+					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+				}
+				
 			
 			}else if(appOrder.getOrderState() ==4){
 				//退款成功
@@ -251,7 +276,18 @@ public class OrderController extends BaseController {
 					outData.put("backType", appCardBack.getBackType());
 					outData.put("phone", appOrder.getCustomerPhone());
 					appOrder.setOrderStateName("审核通过");
-					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+					
+					
+					//权限校验
+					org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+					//是否有最终退款查看的权限
+					boolean flag = subject.isPermitted("system:order:refundsel");
+					if(flag){
+						appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+					}else{
+						appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+					}
+					
 				
 				}else if(appOrder.getOrderState() ==4){
 					//退款成功
@@ -292,7 +328,16 @@ public class OrderController extends BaseController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("result", "1");
 		map.put("orderStateName", "正在审核");
-		map.put("data", "<input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
+		//权限校验
+		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+		//是否有审核的权限
+		boolean flag = subject.isPermitted("system:order:audit");
+		if(flag){
+			map.put("data", "<input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
+		}else{
+			map.put("data", "");
+		}
+		
 		return map;
 	}
 	
@@ -312,7 +357,17 @@ public class OrderController extends BaseController {
 		outData.put("phone", phone);
 		
 		resMap.put("result", "1");
-		resMap.put("data", "<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
+		
+		//权限校验
+		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+		//是否有退款申请的权限
+		boolean flag = subject.isPermitted("system:order:applyBackMoney");
+		if(flag){
+			resMap.put("data", "<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
+		}else{
+			resMap.put("data", "<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+		}
+		
 		resMap.put("orderStateName", "已支付");
 		return resMap;	
 		
@@ -346,7 +401,17 @@ public class OrderController extends BaseController {
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		resMap.put("result", 1);//1代表成功
-		resMap.put("data","<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser(500)'>退款</button>");
+		
+		//权限校验
+		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+		//是否有退款查看的权限
+		boolean flag = subject.isPermitted("system:order:refundsel");
+		if(flag){
+			resMap.put("data","<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-refund' onclick='finalBackMoneyToUser(500)'>退款</button>");
+		}else{
+			resMap.put("data","<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+		}
+		
 		resMap.put("orderStateName", "审核通过");
 		
 		return resMap;
@@ -396,5 +461,21 @@ public class OrderController extends BaseController {
 		
 		return aiportIdList;
 		
+	}
+	
+	/**
+	 * 返回所有的机场列表
+	 * @return
+	 */
+	@RequestMapping("returnAirPortList")
+	@ResponseBody
+	public Map<String,Object> returnAirPortList(){
+		//返回所有的场站信息
+		MessageDto<List<AriPort>> list= ariPortService.get(null);
+		List<AriPort> airportList = list.getData();
+		Map<String , Object> resMap = new HashMap<String,Object>();
+		resMap.put("result", 1);
+		resMap.put("airportList", airportList);
+		return resMap;
 	}
 }	
