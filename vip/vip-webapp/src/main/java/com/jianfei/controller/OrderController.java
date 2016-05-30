@@ -17,6 +17,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,6 +63,7 @@ public class OrderController extends BaseController {
 	/*
 	 * 跳转到订单列表页面
 	 */
+	@RequiresPermissions(value="system:orderList:home")
 	@RequestMapping(value="/goOrderManagementView")
 	public String orderList(HttpServletResponse response){
 		response.setHeader("Cache-Control", "no-cache");
@@ -73,6 +75,7 @@ public class OrderController extends BaseController {
 	/*
 	 * 跳转到退卡列表页面
 	 */
+	@RequiresPermissions(value="system:backList:home")
 	@RequestMapping(value="/goBackCardListManagementView")
 	public String gotoBackCardList(HttpServletResponse response){
 		response.setHeader("Cache-Control", "no-cache");
