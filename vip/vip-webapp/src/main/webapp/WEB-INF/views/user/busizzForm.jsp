@@ -34,14 +34,16 @@
 		}
 	};
 	$(function() {
-		$.fn.checkCbx = function() {
+		$.fn.checkCbx = function(isChecked) {
 			return this.each(function() {
-				this.checked = !this.checked;
+				//this.checked = !this.checked;
+				$(this).prop("checked", isChecked);
 			});
 		};
 		$(function() {
 			$("#all").click(function() {
-				$("#area input:checkbox").checkCbx();
+				 var isChecked = $(this).prop("checked");
+				$("#area input:checkbox").checkCbx(isChecked);
 			});
 		});
 	});
@@ -88,7 +90,7 @@
 							<table border="0">
 							<tr>
 							<c:forEach var="data" items="${datas }" varStatus="i" >
-								<c:if test="${(i.index)%3==0 }">
+								<c:if test="${(i.index)%4==0 }">
 								</tr>
 								</c:if>
 								<td style="border: none;">

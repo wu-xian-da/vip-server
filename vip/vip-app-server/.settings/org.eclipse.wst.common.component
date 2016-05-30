@@ -14,3 +14,4 @@
         <property name="context-root" value="vip-app-server"/>
     </wb-module>
 </project-modules>
+

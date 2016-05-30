@@ -48,6 +48,7 @@ public class UserManagerImpl implements UserManaer<User> {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
 	private AriPortManager<AriPort> ariPortManager;
 
 	/*
@@ -95,12 +96,16 @@ public class UserManagerImpl implements UserManaer<User> {
 	 * com.jianfei.core.service.sys.UserManaer#saveUser(com.jianfei.core.bean
 	 * .User, java.lang.String, java.lang.String)
 	 */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.sys.UserManaer#saveUser(com.jianfei.core.bean
+	 * .User, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public MessageDto<String> saveUser(User user, String arids, String roleids) {
 		MessageDto<String> messageDto = new MessageDto<String>();
-		SimpleHash simpleHash = new SimpleHash("md5",
-				GloabConfig.getConfig("defalut.passwd"), user.getSalt());
-		user.setPassword(simpleHash.toString());
 		Long id = 0l;
 		if (!StringUtils.isEmpty(user.getLoginName())) {
 			User u = userMapper.getUserByName(StringUtils.trim(user
@@ -110,6 +115,10 @@ public class UserManagerImpl implements UserManaer<User> {
 				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
 			} else if (null == u && 0 == user.getId()) {
 				// 保存用户
+				// 设置密码
+				SimpleHash simpleHash = new SimpleHash("md5",
+						GloabConfig.getConfig("defalut.passwd"), user.getSalt());
+				user.setPassword(simpleHash.toString());
 				userMapper.save(user);
 				User u2 = userMapper.getUserByName(user.getLoginName());
 				id = u2.getId();

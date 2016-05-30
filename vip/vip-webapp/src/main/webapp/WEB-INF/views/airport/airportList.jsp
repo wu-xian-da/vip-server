@@ -91,9 +91,12 @@
 			},{
 				width : '100',
 				title : '开卡总量',
-				field : 'appOrders',
+				field : 'orderIds',
 				formatter : function(value, row) {
-					return value.length;
+					if(''==value||null==value){
+						return '0';
+					}
+					return value.split(',').length;
 				}
 			},{
 				width : '60',

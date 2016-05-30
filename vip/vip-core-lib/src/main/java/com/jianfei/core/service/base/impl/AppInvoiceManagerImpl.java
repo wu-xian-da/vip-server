@@ -1,5 +1,6 @@
 package com.jianfei.core.service.base.impl;
 
+import com.jianfei.core.common.utils.IdGen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +21,15 @@ public class AppInvoiceManagerImpl implements AppInvoiceManager{
 		return appInvoiceMapper.selectInvoiceInfoByOrderId(orderId);
 	}
 
+	/**
+	 * 添加发票信息
+	 *
+	 * @param appInvoice
+	 * @return
+	 */
+	@Override
+	public boolean insert(AppInvoice appInvoice) {
+		appInvoice.setInvoiceId(IdGen.uuid());
+		return appInvoiceMapper.insert(appInvoice) == 1 ? true : false;
+	}
 }

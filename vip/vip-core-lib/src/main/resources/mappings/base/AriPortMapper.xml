@@ -16,11 +16,7 @@
 		<result column="header_name" property="headerName" />
 		<result column="header_phone" property="headerPhone" />
 		<result column="dtflag" property="dtflag" />
-		<collection property="appOrders" ofType="AppOrders">
-			<id property="id" column="appOrders.id" />
-			<id property="orderId" column="appOrders.orderId" />
-			<id property="customerId" column="appOrders.customer_id" />
-		</collection>
+		<result column="orderIds" property="orderIds" />
 	</resultMap>
 	<resultMap id="BaseResultMap" type="com.jianfei.core.bean.SysAirport" >
 		<id column="airport_id" property="airportId" jdbcType="VARCHAR" />
@@ -58,9 +54,7 @@
 			  t1.dtflag,
 			  t1.header_name,
 			  t1.header_phone,
-			  t2.id as 'appOrders.id',
-			  t2.order_id as 'appOrders.orderId',
-			  t2.customer_id as 'appOrders.customerId'
+			 GROUP_CONCAT(t2.order_id) as orderIds
 			FROM
 			  sys_airport t1 
 			  LEFT JOIN app_orders t2 ON t1.airport_id=t2.airport_id 
@@ -97,6 +91,7 @@
 				and header_phone =#{headerPhone}
 			</if>
 		</where>
+		group by t1.airport_id
 	</select>
 
 	<insert id="save" parameterType="AriPort">
@@ -113,7 +108,8 @@
 			  longitude,
 			  latitude,
 			  header_name,
-			  header_phone
+			  header_phone,
+			  dtflag
 			) 
 			VALUES
 			  (
@@ -128,7 +124,8 @@
 			    #{longitude},
 			    #{latitude},
 			    #{headerName},
-			    #{headerPhone}
+			    #{headerPhone},
+			    #{dtflag}
 			  ) 
 		]]>
 	</insert>

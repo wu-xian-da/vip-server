@@ -61,12 +61,15 @@ public class OrderMapperTest {
 		PageHelper.startPage(1, 2);
 		Map<String, Object> map = new HashMap<String, Object>();
 		//map.put("endTime", "");
+		List<String> aiportIdList = new ArrayList<String>();
+		aiportIdList.add("366f38ca732e4b599d36edbb1a43018a");
+		map.put("aiportIdList",aiportIdList);
 		map.put("airportId", "0");
 		map.put("orderState", "5");
 		
-		map.put("invoiceState", 0);
+		map.put("invoiceState", 3);
 		//map.put("phoneOrUserName","");
-		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(1, 2, map);
+		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(1, 4, map);
 		System.out.println("a="+pageinfo.getTotal());
 	}
 	//退款列表
