@@ -32,7 +32,7 @@ import com.jianfei.core.service.thirdpart.ThirdPayManager;
  * @version 1.0.0
  *
  */
-@Service("aliPayManager")
+//@Service("aliPayManager")
 public class AlipayPayManagerImpl extends ThirdPayManager {
 	private static Log log = LogFactory.getLog(AlipayPayManagerImpl.class);
 	private static AlipayTradeService tradeService;

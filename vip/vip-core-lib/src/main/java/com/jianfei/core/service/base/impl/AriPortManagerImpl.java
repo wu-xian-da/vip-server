@@ -113,6 +113,9 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 		MessageDto<String> dto = new MessageDto<String>();
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 		try {
+			if (StringUtils.isEmpty(arids) || null == id) {
+				return dto;
+			}
 			String[] idds = arids.split(",");
 			for (String aid : idds) {
 				if (!StringUtils.isEmpty(aid)) {

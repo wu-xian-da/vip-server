@@ -140,4 +140,16 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		return archiveMapper.zhuGuanDraw(map);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.stat.ArchiveManager#baseDailyExtract(java.util
+	 * .Map)
+	 */
+	@Override
+	public void baseDailyExtract(Map<String, Object> map) {
+		archiveMapper.baseDailyExtract(map);
+	}
+
 }

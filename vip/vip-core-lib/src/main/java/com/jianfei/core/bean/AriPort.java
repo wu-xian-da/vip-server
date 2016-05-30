@@ -8,10 +8,8 @@
 package com.jianfei.core.bean;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.jianfei.core.common.utils.IdGen;
 
 /**
@@ -40,20 +38,22 @@ public class AriPort implements Serializable {
 	private String headerPhone;
 	private Integer dtflag;
 
-	private List<AppOrders> appOrders = Lists.newArrayList();
+	private String orderIds;// 该机场对应的订单编号
+
 	/**
 	 * id
 	 *
-	 * @return  the id
-	 * @version   1.0.0
+	 * @return the id
+	 * @version 1.0.0
 	 */
-	
+
 	public String getId() {
 		return id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -62,16 +62,17 @@ public class AriPort implements Serializable {
 	/**
 	 * name
 	 *
-	 * @return  the name
-	 * @version   1.0.0
+	 * @return the name
+	 * @version 1.0.0
 	 */
-	
+
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -80,16 +81,17 @@ public class AriPort implements Serializable {
 	/**
 	 * state
 	 *
-	 * @return  the state
-	 * @version   1.0.0
+	 * @return the state
+	 * @version 1.0.0
 	 */
-	
+
 	public Integer getState() {
 		return state;
 	}
 
 	/**
-	 * @param state the state to set
+	 * @param state
+	 *            the state to set
 	 */
 	public void setState(Integer state) {
 		this.state = state;
@@ -98,16 +100,25 @@ public class AriPort implements Serializable {
 	/**
 	 * agentNum
 	 *
-	 * @return  the agentNum
-	 * @version   1.0.0
+	 * @return the agentNum
+	 * @version 1.0.0
 	 */
-	
+
 	public Integer getAgentNum() {
 		return agentNum;
 	}
 
+	public String getOrderIds() {
+		return orderIds;
+	}
+
+	public void setOrderIds(String orderIds) {
+		this.orderIds = orderIds;
+	}
+
 	/**
-	 * @param agentNum the agentNum to set
+	 * @param agentNum
+	 *            the agentNum to set
 	 */
 	public void setAgentNum(Integer agentNum) {
 		this.agentNum = agentNum;
@@ -116,16 +127,17 @@ public class AriPort implements Serializable {
 	/**
 	 * province
 	 *
-	 * @return  the province
-	 * @version   1.0.0
+	 * @return the province
+	 * @version 1.0.0
 	 */
-	
+
 	public String getProvince() {
 		return province;
 	}
 
 	/**
-	 * @param province the province to set
+	 * @param province
+	 *            the province to set
 	 */
 	public void setProvince(String province) {
 		this.province = province;
@@ -134,16 +146,17 @@ public class AriPort implements Serializable {
 	/**
 	 * city
 	 *
-	 * @return  the city
-	 * @version   1.0.0
+	 * @return the city
+	 * @version 1.0.0
 	 */
-	
+
 	public String getCity() {
 		return city;
 	}
 
 	/**
-	 * @param city the city to set
+	 * @param city
+	 *            the city to set
 	 */
 	public void setCity(String city) {
 		this.city = city;
@@ -152,16 +165,17 @@ public class AriPort implements Serializable {
 	/**
 	 * country
 	 *
-	 * @return  the country
-	 * @version   1.0.0
+	 * @return the country
+	 * @version 1.0.0
 	 */
-	
+
 	public String getCountry() {
 		return country;
 	}
 
 	/**
-	 * @param country the country to set
+	 * @param country
+	 *            the country to set
 	 */
 	public void setCountry(String country) {
 		this.country = country;
@@ -170,16 +184,17 @@ public class AriPort implements Serializable {
 	/**
 	 * address
 	 *
-	 * @return  the address
-	 * @version   1.0.0
+	 * @return the address
+	 * @version 1.0.0
 	 */
-	
+
 	public String getAddress() {
 		return address;
 	}
 
 	/**
-	 * @param address the address to set
+	 * @param address
+	 *            the address to set
 	 */
 	public void setAddress(String address) {
 		this.address = address;
@@ -188,16 +203,17 @@ public class AriPort implements Serializable {
 	/**
 	 * longitude
 	 *
-	 * @return  the longitude
-	 * @version   1.0.0
+	 * @return the longitude
+	 * @version 1.0.0
 	 */
-	
+
 	public Integer getLongitude() {
 		return longitude;
 	}
 
 	/**
-	 * @param longitude the longitude to set
+	 * @param longitude
+	 *            the longitude to set
 	 */
 	public void setLongitude(Integer longitude) {
 		this.longitude = longitude;
@@ -206,16 +222,17 @@ public class AriPort implements Serializable {
 	/**
 	 * latitude
 	 *
-	 * @return  the latitude
-	 * @version   1.0.0
+	 * @return the latitude
+	 * @version 1.0.0
 	 */
-	
+
 	public Integer getLatitude() {
 		return latitude;
 	}
 
 	/**
-	 * @param latitude the latitude to set
+	 * @param latitude
+	 *            the latitude to set
 	 */
 	public void setLatitude(Integer latitude) {
 		this.latitude = latitude;
@@ -224,16 +241,17 @@ public class AriPort implements Serializable {
 	/**
 	 * headerName
 	 *
-	 * @return  the headerName
-	 * @version   1.0.0
+	 * @return the headerName
+	 * @version 1.0.0
 	 */
-	
+
 	public String getHeaderName() {
 		return headerName;
 	}
 
 	/**
-	 * @param headerName the headerName to set
+	 * @param headerName
+	 *            the headerName to set
 	 */
 	public void setHeaderName(String headerName) {
 		this.headerName = headerName;
@@ -242,16 +260,17 @@ public class AriPort implements Serializable {
 	/**
 	 * headerPhone
 	 *
-	 * @return  the headerPhone
-	 * @version   1.0.0
+	 * @return the headerPhone
+	 * @version 1.0.0
 	 */
-	
+
 	public String getHeaderPhone() {
 		return headerPhone;
 	}
 
 	/**
-	 * @param headerPhone the headerPhone to set
+	 * @param headerPhone
+	 *            the headerPhone to set
 	 */
 	public void setHeaderPhone(String headerPhone) {
 		this.headerPhone = headerPhone;
@@ -260,37 +279,20 @@ public class AriPort implements Serializable {
 	/**
 	 * dtflag
 	 *
-	 * @return  the dtflag
-	 * @version   1.0.0
+	 * @return the dtflag
+	 * @version 1.0.0
 	 */
-	
+
 	public Integer getDtflag() {
 		return dtflag;
 	}
 
 	/**
-	 * @param dtflag the dtflag to set
+	 * @param dtflag
+	 *            the dtflag to set
 	 */
 	public void setDtflag(Integer dtflag) {
 		this.dtflag = dtflag;
-	}
-
-	/**
-	 * appOrders
-	 *
-	 * @return  the appOrders
-	 * @version   1.0.0
-	 */
-	
-	public List<AppOrders> getAppOrders() {
-		return appOrders;
-	}
-
-	/**
-	 * @param appOrders the appOrders to set
-	 */
-	public void setAppOrders(List<AppOrders> appOrders) {
-		this.appOrders = appOrders;
 	}
 
 	/*
