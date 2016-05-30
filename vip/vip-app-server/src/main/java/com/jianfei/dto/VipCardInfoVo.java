@@ -13,7 +13,7 @@ import java.util.List;
 public class VipCardInfoVo {
 
     private List images;
-    private List right;
+    private String right;
 
     public List getImages() {
         return images;
@@ -23,11 +23,11 @@ public class VipCardInfoVo {
         this.images = images;
     }
 
-    public List getRight() {
+    public String getRight() {
         return right;
     }
 
-    public void setRight(List right) {
+    public void setRight(String right) {
         this.right = right;
     }
 }

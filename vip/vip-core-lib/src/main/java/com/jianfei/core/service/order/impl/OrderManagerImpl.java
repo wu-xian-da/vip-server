@@ -7,11 +7,14 @@ import java.util.Map;
 
 import com.jianfei.core.bean.*;
 
+import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.BeanUtils;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
+import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +55,8 @@ public class OrderManagerImpl implements OrderManager {
 	private VipCardManagerImpl vipCardManager;
 	@Autowired
 	private AppInvoiceManagerImpl invoiceManager;
+	@Autowired
+	private MsgInfoManagerImpl msgInfoManager;
     /**
      * 添加订单信息
      *
@@ -62,21 +67,25 @@ public class OrderManagerImpl implements OrderManager {
     public boolean addOrderAndUserInfo(OrderAddInfoDto addInfoDto) {
 
 		try {
-			//1、添加用户信息
+			//1、校验用户和手机验证码
+			boolean flag=msgInfoManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER,addInfoDto.getCode());
+			if (!flag){
+				return false;
+			}
+			//2、添加用户信息
 			AppCustomer customer= new AppCustomer();
 			BeanUtils.copyProperties(customer,addInfoDto);
 			vipUserManager.addUser(customer);
-			//2、根据查询VIP号查询卡片信息
+			//3、根据查询VIP号查询卡片信息
 			AppVipcard vipCard=vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
-			vipCard.setCustomerId(customer.getCustomerId());
-			vipCardManager.updateVipCard(vipCard);
-			//3、添加订单信息 TODO 待优化
+			//4、添加订单信息
 			AppOrders orders=new AppOrders();
 			BeanUtils.copyProperties(orders,addInfoDto);
 			orders.setCustomerId(customer.getCustomerId());
 			orders.setPayMoney(vipCard.getInitMoney());
 			orders.setOrderId(IdGen.uuid());
 			appOrdersMapper.insert(orders);
+            //5、TODO 订单卡表
 			addInfoDto.setOrderId(orders.getOrderId());
 			addInfoDto.setMoney(vipCard.getInitMoney());
 			return true;
@@ -278,4 +287,26 @@ public class OrderManagerImpl implements OrderManager {
         return pageInfo;
 	}
 
+	/**
+	 * 根据付款方式获取付款URL
+	 *
+	 * @param orderId 订单ID
+	 * @param payType 付款方式
+	 * @return
+	 */
+	@Override
+	public String getPayUrl(String orderId, PayType payType) {
+		return null;
+	}
+
+	/**
+	 * 根据订单ID获取订单金额
+	 *
+	 * @param orderId
+	 * @return
+	 */
+	@Override
+	public AppOrders getOrderInfo(String orderId) {
+		return appOrdersMapper.selectByPrimaryKey(orderId);
+	}
 }

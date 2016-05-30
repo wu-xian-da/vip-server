@@ -11,7 +11,6 @@ import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 import com.jianfei.dto.VipCardInfoVo;
-import com.jianfei.dto.VipRightInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -133,14 +131,20 @@ public class ResourceController  {
 	@ResponseBody
 	public BaseMsgInfo getVipCardRight() {
 		List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME);
-		List<VipRightInfoVo> vipRightInfoVos=new ArrayList<>();
-		vipRightInfoVos.add(new VipRightInfoVo(1,"1.Vip室使用权益","可能因座位限制入内"));
-		vipRightInfoVos.add(new VipRightInfoVo(2,"2.全年保险","可能因座位限制入内"));
-		vipRightInfoVos.add(new VipRightInfoVo(3,"3.赠送哈哈哈","可能因座位限制入内"));
+
 		VipCardInfoVo vipCardInfoVo=new VipCardInfoVo();
-		vipCardInfoVo.setRight(vipRightInfoVos);
+		vipCardInfoVo.setRight(" 1.Vip室使用权益\",\"可能因座位限制入内 2.全年保险\",\"可能因座位限制入内 3.赠送哈哈哈\",\"可能因座位限制入内");
 		vipCardInfoVo.setImages(list);
 		return BaseMsgInfo.success(vipCardInfoVo);
 	}
 
+	/**
+	 * VIP卡常见问题
+	 */
+	@RequestMapping(value = "/getVipCardQA", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo getVipCardQA() {
+		String string ="常见问题  ";
+		return BaseMsgInfo.success(string);
+	}
 }
