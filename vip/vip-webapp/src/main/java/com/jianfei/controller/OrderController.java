@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -139,6 +140,10 @@ public class OrderController extends BaseController {
 		List<OrderShowInfoDto> list = pageinfo.getList();
 		String orderId = null;
 		String phone = null;
+		
+		//权限校验
+		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+		
 		for(OrderShowInfoDto appOrder : list){
 			if(appOrder.getOrderState() ==0){
 				//未支付
@@ -157,7 +162,6 @@ public class OrderController extends BaseController {
 				outData.put("orderId", orderId);
 				outData.put("opr", "0");
 				outData.put("phone", phone);
-				
 				appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
 			
 			}else if(appOrder.getOrderState() == 2){

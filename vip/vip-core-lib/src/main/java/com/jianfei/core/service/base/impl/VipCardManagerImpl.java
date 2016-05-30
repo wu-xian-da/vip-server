@@ -275,4 +275,14 @@ public class VipCardManagerImpl implements VipCardManager {
 		return 0;
 	}
 
+	/**
+	 * 根据vip card no 获取VIP卡片信息
+	 *
+	 * @param vipCardNo VIP卡号
+	 * @return
+	 */
+	@Override
+	public AppVipcard getVipCardByNo(String vipCardNo) {
+		return appVipcardMapper.selectByPrimaryKey(vipCardNo);
+	}
 }
