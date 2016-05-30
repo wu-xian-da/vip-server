@@ -47,7 +47,6 @@
 
 	//删除vip卡
 	var removeFun = function(id) {
-		alert("id=" + id)
 		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
 			if (r) {
 				$.post(sy.contextPath + '/vipCard/delVipCard', {
@@ -154,7 +153,7 @@
 							return;
 						} else {
 							$.messager.alert('msg',
-									"数据导出成功,位置：F://vipCard.xlsx", 'success');
+									"数据导出成功,位置：D://vipCard.xlsx", 'success');
 						}
 
 					}, 'json');

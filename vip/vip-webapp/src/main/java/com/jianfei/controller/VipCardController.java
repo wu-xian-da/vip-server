@@ -124,7 +124,7 @@ public class VipCardController extends BaseController {
 	@RequestMapping(value="exportExcel")
 	@ResponseBody
 	public MessageDto<AppVipcard> exportExcel(String filePath,HttpServletResponse response){
-		filePath = "f://";
+		filePath = "D://";
 		String fileName = filePath +"vipCard.xlsx";
 		vipCardManagerImpl.exportDataToExcel(fileName);
 		return new MessageDto<AppVipcard>().setOk(true).setMsgBody(

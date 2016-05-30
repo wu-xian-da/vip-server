@@ -121,7 +121,7 @@
 
                 <div class="easyui-window-footer">
                     <button id="writerUserInfo">录入信息确认</button>
-                    <button id="cancleBt">取消</button>
+                    <button id="cancleBt">返回</button>
                 </div>
             </div>
         </div>            
@@ -150,7 +150,7 @@
                 	<shiro:hasPermission name="system:order:refundMoney">  
                   		  <button id="finalBackMoneyToUserBt">退款确认</button>
                     </shiro:hasPermission>
-                    <button id="refundCloseWindow">取消</button>
+                    <button id="refundCloseWindow">返回</button>
                 </div>
             </div>
         </div>            

@@ -13,6 +13,7 @@
 <script src="${pageContext.request.contextPath}/public/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/jquery.easyui.min.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/plugins/datagrid-scrollview.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
 
 </head>
 <body>

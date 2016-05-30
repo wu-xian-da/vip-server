@@ -35,4 +35,5 @@ public enum PayType {
     private PayType(String name){
         this.name = name;
     }
+    
 }
