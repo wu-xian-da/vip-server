@@ -111,6 +111,15 @@
     		<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
     		and concat(customer.customer_name,customer.customer_phone) like CONCAT('%','${phoneOrUserName}','%' )
     	</if>
+    	<!-- 机场列表 -->
+    	<if test="aiportIdList !=null">
+    		and ord.airport_id in
+    		<foreach item="item" index="index" collection="aiportIdList" 
+                         open="(" separator="," close=")">
+                        #{item}
+                </foreach>
+    		
+    	</if>
      	
     	
   </select>
@@ -133,6 +142,15 @@
     			 <if test="orderState != 10">
     			  and ord.order_state = #{orderState}
     			 </if>
+    			 <!-- 机场列表 -->
+    			<if test="aiportIdList !=null">
+    				and ord.airport_id in
+    				<foreach item="item" index="index" collection="aiportIdList" 
+                         open="(" separator="," close=")">
+                        #{item}
+               		 </foreach>
+    		
+    	</if>
     			
   </select>
   

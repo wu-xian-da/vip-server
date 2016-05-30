@@ -7,6 +7,7 @@
  */
 package com.jianfei.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -114,9 +115,8 @@ public class OrderController extends BaseController {
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
 		
 		//用户可以看到机场列表
-		User user = getCurrentUser();
-		String userId = user.getId()+"";
-		List<AriPort> airportIdList = user.getAripors();
+		
+		List<String> aiportIdList = returnAirportIdList();
 		
 
 		//设置刷选条件
@@ -129,6 +129,9 @@ public class OrderController extends BaseController {
 		}
 		if(!phoneOrUserName.equals("")){
 			paramsMap.put("phoneOrUserName",phoneOrUserName );
+		}
+		if(aiportIdList !=null && aiportIdList.size() >0){
+			paramsMap.put("aiportIdList", aiportIdList);
 		}
 		paramsMap.put("airportId",airportId);
 		paramsMap.put("orderState",orderState);
@@ -214,6 +217,10 @@ public class OrderController extends BaseController {
 			@RequestParam(value="applyType",defaultValue="3")Integer applyType,
 			@RequestParam(value="orderState",defaultValue="10") Integer orderState){
 		
+		//用户可以看到机场列表
+		
+		List<String> aiportIdList = returnAirportIdList();
+		
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
 		//退款方式
 		paramsMap.put("backType", backType);
@@ -221,6 +228,10 @@ public class OrderController extends BaseController {
 		paramsMap.put("applyType", applyType);
 		//订单状态
 		paramsMap.put("orderState", orderState);
+		//机场id列表
+		if(aiportIdList !=null && aiportIdList.size() >0){
+			paramsMap.put("aiportIdList", aiportIdList);
+		}
 		
 		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.backCardPage(pageNo, pageSize, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
@@ -366,6 +377,24 @@ public class OrderController extends BaseController {
 		resMap.put("data","<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
 		resMap.put("orderStateName", "已退款");
 		return resMap;
+		
+	}
+	
+	/**
+	 * 返回当前用户可以查看的机场列表
+	 * @return
+	 */
+	public List<String> returnAirportIdList() {
+		// 用户可以看到机场列表
+		User user = getCurrentUser();
+		List<AriPort> airportList = user.getAripors();
+		// 机场id列表
+		List<String> aiportIdList = new ArrayList<String>();
+		for(AriPort ariPort :airportList){
+			aiportIdList.add(ariPort.getId());
+		}
+		
+		return aiportIdList;
 		
 	}
 }	
