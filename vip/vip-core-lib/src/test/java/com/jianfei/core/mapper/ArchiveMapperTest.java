@@ -7,8 +7,6 @@
  */
 package com.jianfei.core.mapper;
 
-import static org.junit.Assert.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
@@ -35,7 +32,6 @@ import com.jianfei.core.common.utils.StringUtils;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml" })
-@Transactional
 public class ArchiveMapperTest {
 
 	@Autowired
@@ -77,5 +73,12 @@ public class ArchiveMapperTest {
 		System.out.println(draw1Province);
 		String draw1Num = StringUtils.join(draw1Map.values(), ",");
 		System.out.println(draw1Num);
+	}
+
+	@Test
+	public void testBaseDailyExtract() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("yesterday", "2016-05-29");
+		archiveMapper.baseDailyExtract(map);
 	}
 }

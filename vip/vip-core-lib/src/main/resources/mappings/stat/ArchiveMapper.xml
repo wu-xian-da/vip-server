@@ -70,7 +70,7 @@
 		parameterType="java.util.Map">
 		<![CDATA[SELECT SUM(a.`order_num`) AS total FROM `app_order_archive` a WHERE a.`airport_id` IN (#{ariportIds}) AND a.`year`=#{year} and a.month=#{month}]]>
 	</select>
-	
+
 	<select id="zhuGuanAllAirPort" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		<![CDATA[	
@@ -106,6 +106,42 @@
 				a.`airportname`,
 				a.`bname`,
 				a.id		
+		]]>
+	</select>
+
+	<select id="baseDailyExtract" parameterType="java.util.Map">
+		<![CDATA[
+			INSERT INTO app_order_archive (
+				`id`,
+				`file_time`,
+				`order_num`,
+				`dflag`,
+				`bname`,
+				`airportname`,
+				`airport_id`,
+				`year`,
+				`month`,
+				`day`,
+				`province`,
+				dayweek
+			) SELECT
+				u.id,
+				max(ao.order_time) AS file_time,
+				count(ao.order_id) AS order_num,
+				ao.dtflag,
+				u.`name` AS bname,
+				a.airport_name,
+				a.airport_id,
+				DATE_FORMAT(max(ao.order_time),'%Y') AS YEAR,
+				DATE_FORMAT(max(ao.order_time),'%m') AS MONTH,
+				DATE_FORMAT(max(ao.order_time),'%d') AS DAY,
+				a.province,
+				WEEKDAY(#{yesterday})+1
+			FROM
+				sys_users u
+			INNER JOIN app_orders ao ON ao.id = u.id
+			INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
+			INNER JOIN sys_airport a ON sua.airport_id = a.airport_id
 		]]>
 	</select>
 </mapper>

@@ -61,11 +61,10 @@ public class AriPortController extends BaseController {
 		MessageDto<List<AriPort>> messageDto = ariPortManager
 				.get(new MapUtils.Builder().setKeyValue("name", name)
 						.setKeyValue("dtflag", GloabConfig.OPEN).build());
-		PageInfo<AriPort> pageInfo = new PageInfo<AriPort>();
 		if (messageDto.isOk()) {
-			pageInfo.setList(messageDto.getData());
+			return bindGridData(new PageInfo<AriPort>(messageDto.getData()));
 		}
-		return bindGridData(pageInfo);
+		return bindGridData(new PageInfo<AriPort>());
 	}
 
 	@RequestMapping(value = "save")

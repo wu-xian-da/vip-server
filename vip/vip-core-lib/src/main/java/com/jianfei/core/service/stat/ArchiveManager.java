@@ -57,7 +57,7 @@ public interface ArchiveManager {
 	 * @return Map<String,Object>
 	 * @version 1.0.0
 	 */
-	Map<String, Object> zhuGuanTotal(Map<String, Object> map,String cacheKey);
+	Map<String, Object> zhuGuanTotal(Map<String, Object> map, String cacheKey);
 
 	/**
 	 * zhuGuanAllAirPort(主管查看管辖区销售情况)
@@ -66,7 +66,8 @@ public interface ArchiveManager {
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> zhuGuanAllAirPort(Map<String, Object> map,String cacheKey);
+	List<Map<String, Object>> zhuGuanAllAirPort(Map<String, Object> map,
+			String cacheKey);
 
 	/**
 	 * zhuGuanDraw(绘主管管辖区下的销售柱状图)
@@ -75,5 +76,16 @@ public interface ArchiveManager {
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> zhuGuanDraw(Map<String, Object> map,String cacheKey);
+	List<Map<String, Object>> zhuGuanDraw(Map<String, Object> map,
+			String cacheKey);
+
+	/**
+	 * baseDailyExtract(订单日基础表数据抽取)
+	 * 
+	 * @param map
+	 *            void
+	 * @version 1.0.0
+	 */
+	void baseDailyExtract(Map<String, Object> map);
+
 }

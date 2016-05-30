@@ -41,15 +41,15 @@
 		}
 	};
 	$(function() {
-		$.fn.checkCbx = function() {
+		$.fn.checkCbx = function(isChecked) {
 			return this.each(function() {
-				this.checked = !this.checked;
+				//this.checked = !this.checked;
+				$(this).prop("checked", isChecked);
 			});
 		};
-		$(function() {
-			$("#all").click(function() {
-				$("#area input:checkbox").checkCbx();
-			});
+		$("#all").click(function() {
+			 var isChecked = $(this).prop("checked");
+			$("#area input:checkbox").checkCbx(isChecked);
 		});
 		parent.$.messager.progress({
 			text : '数据加载中....'
@@ -120,7 +120,7 @@
 							<table border="0">
 							<tr>
 							<c:forEach var="data" items="${datas }" varStatus="i" >
-								<c:if test="${(i.index)%3==0 }">
+								<c:if test="${(i.index)%4==0 }">
 								</tr>
 								</c:if>
 								<td style="border: none;">

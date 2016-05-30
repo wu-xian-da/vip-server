@@ -79,4 +79,13 @@ public interface ArchiveMapper {
 	 */
 	List<Map<String, Object>> zhuGuanDraw(Map<String, Object> map);
 
+	/**
+	 * baseDailyExtract(订单日基础表数据抽取)
+	 * 
+	 * @param map
+	 *            void
+	 * @version 1.0.0
+	 */
+	void baseDailyExtract(Map<String, Object> map);
+
 }
