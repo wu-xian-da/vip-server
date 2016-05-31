@@ -27,7 +27,7 @@
 				card_state =#{cardState}
 			</if>
 			<if test="cardNo!=null">
-				and card_no=#{cardNo}
+				and card_no like CONCAT('%','${cardNo}','%' )
 			</if>
 			and dtflag=0
 		</where>

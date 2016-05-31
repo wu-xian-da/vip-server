@@ -27,24 +27,6 @@
 	
 <script type="text/javascript">
 	var grid;
-	//导入vip卡
-	var importExcelDate = function() {
-		alert($("#filePath").val())
-		$.post(sy.contextPath + '/vipCard/importExcel', {
-			filePath : $("#filePath").val()
-		}, function(dataObj) {
-			if (!dataObj.ok) {
-				$.messager.alert('msg', dataObj.msgBody, 'error');
-				return;
-			} else {
-				$.messager.alert('msg', "数据导入成功", 'success');
-				grid.datagrid('reload');
-			}
-			;
-
-		}, 'json');
-	}
-
 	//删除vip卡
 	var removeFun = function(id) {
 		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
