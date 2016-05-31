@@ -7,6 +7,9 @@
  */
 package com.jianfei.core.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.persistence.MyBatisDao;
 
@@ -22,4 +25,13 @@ import com.jianfei.core.common.persistence.MyBatisDao;
 @MyBatisDao
 public interface BusizzMapper extends BaseMapper<User> {
 	User getUserByName(String loginName);
+
+	/**
+	 * list(获取业务员信息)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> listMap(Map<String, Object> map);
 }

@@ -10,6 +10,7 @@ package com.jianfei.controller;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +45,7 @@ public class AriPortController extends BaseController {
 	@Autowired
 	private AriPortManager<AriPort> ariPortManager;
 
+	@RequiresPermissions(value = "system:station;home")
 	@RequestMapping(value = { "", "/home" })
 	public String home() {
 

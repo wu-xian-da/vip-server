@@ -53,6 +53,12 @@ public class CacheCons {
 		 * @version 1.0.0
 		 */
 		public static final String LAST_MONTH_TOTAL_ZHUGUAN = "last_month_total_zhuguan";
+		/**
+		 * LAST_MONTH_All_ZHUGUAN:TODO（主管查看上个月的订单统计）
+		 *
+		 * @version 1.0.0
+		 */
+		public static final String LAST_MONTH_All_ZHUGUAN = "last_month_all_zhuguan";
 
 	}
 

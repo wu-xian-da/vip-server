@@ -8,6 +8,7 @@
 package com.jianfei.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
@@ -81,11 +83,17 @@ public class BusizzController extends BaseController {
 				request, "_");
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
+		searchParams.put("today",
+				DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
+		searchParams.put("name", request.getParameter("name"));
+		Map<String, Object> map = DateUtil.getDelayDate(1);
+		searchParams.put("year", map.get("year"));
+		searchParams.put("month", map.get("month"));
 		PageHelper.startPage(pageNo, pageSize);
-		MessageDto<List<User>> messageDto = busizzManager
-				.get(searchParams);
-		PageInfo<User> pageInfo = new PageInfo<User>(messageDto.getData());
-		return bindUserGridData(pageInfo);
+		List<Map<String, Object>> list = busizzManager.listMap(searchParams);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(
+				list);
+		return bindGridData(pageInfo);
 	}
 
 	/**
@@ -166,20 +174,6 @@ public class BusizzController extends BaseController {
 	public MessageDto<String> delete(User user) {
 		busizzManager.delete(user.getId());
 		return busizzManager.delete(user.getId());
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Grid bindUserGridData(PageInfo<User> pageInfo) {
-		List<User> list = pageInfo.getList();
-		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
-		for (User user : list) {
-			Map<String, Object> map = MapUtils.<User> entityInitMap(user);
-			maps.add(map);
-		}
-		Grid grid = new Grid();
-		grid.setRows(maps);
-		grid.setTotal(pageInfo.getTotal());
-		return grid;
 	}
 
 }

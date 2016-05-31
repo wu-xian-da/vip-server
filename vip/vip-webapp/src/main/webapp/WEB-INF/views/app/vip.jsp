@@ -90,21 +90,6 @@
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<div id="toolbar" style="display: none;">
-		<table>
-			<tr>
-				<td>
-					<table>
-						<tr>
-						<shiro:hasPermission name="system:user:add">
-							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
-							<td><div class="datagrid-btn-separator"></div></td>
-						</shiro:hasPermission>
-						
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
 	</div>
 	<div data-options="region:'center',fit:true,border:false">
 		<table id="grid" data-options="fit:true,border:false"></table>

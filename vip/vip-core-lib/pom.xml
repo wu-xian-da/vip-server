@@ -269,22 +269,22 @@
 		</dependency>
 
 		<dependency>
-			  <groupId>com.alipay.demo</groupId>
-			  <artifactId>trade</artifactId>
-			  <version>1.0</version>
+			<groupId>com.alipay.demo</groupId>
+			<artifactId>trade</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alipay</groupId>
 			<artifactId>api</artifactId>
 			<version>1.0</version>
 		</dependency>
-		
+
 		<dependency>
-			  <groupId>com.google.zxing</groupId>
-			   <artifactId>core</artifactId>
-			   <version>2.1</version>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>2.1</version>
 		</dependency>
-			
+
 		<!-- excel表格操作jar包 -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -307,7 +307,13 @@
 			<groupId>com.tencent</groupId>
 			<artifactId>wxpay-scanpay-java-sdk</artifactId>
 			<version>1.0</version>
+		</dependency>	<!-- User Agent -->
+		<dependency>
+			<groupId>nl.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>1.2.4</version>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<resources>

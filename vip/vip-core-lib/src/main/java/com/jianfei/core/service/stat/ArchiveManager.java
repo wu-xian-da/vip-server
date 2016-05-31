@@ -10,6 +10,10 @@ package com.jianfei.core.service.stat;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ui.Model;
+
+import com.jianfei.core.bean.User;
+
 /**
  *
  * @Description: 订单归档，后台根据角色不同，首页展示不同的图表
@@ -87,5 +91,32 @@ public interface ArchiveManager {
 	 * @version 1.0.0
 	 */
 	void baseDailyExtract(Map<String, Object> map);
+
+	/**
+	 * selectOrderMaxDay(获取最大的订单日期)
+	 * 
+	 * @return Map<String,Object>
+	 * @version 1.0.0
+	 */
+	Map<String, Object> selectOrderMaxDay();
+
+	/**
+	 * masterHome(经理首页)
+	 * 
+	 * @param model
+	 *            void
+	 * @version 1.0.0
+	 */
+	void masterHome(Model model);
+
+	/**
+	 * chargeHome(主管首页)
+	 * 
+	 * @param model
+	 * @param user
+	 *            void
+	 * @version 1.0.0
+	 */
+	void chargeHome(Model model, User user);
 
 }

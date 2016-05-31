@@ -1,109 +1,69 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
-<%@ include file="/WEB-INF/include/taglib.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+response.setStatus(400);
+
+// 获取异常类
+Throwable ex = Exceptions.getThrowable(request);
+
+// 编译错误信息
+StringBuilder sb = new StringBuilder("错误信息：\n");
+if (ex != null) {
+	if (ex instanceof BindException) {
+		for (ObjectError e : ((BindException)ex).getGlobalErrors()){
+			sb.append("☆" + e.getDefaultMessage() + "(" + e.getObjectName() + ")\n");
+		}
+		for (FieldError e : ((BindException)ex).getFieldErrors()){
+			sb.append("☆" + e.getDefaultMessage() + "(" + e.getField() + ")\n");
+		}
+		LoggerFactory.getLogger("400.jsp").warn(ex.getMessage(), ex);
+	}else if (ex instanceof ConstraintViolationException) {
+		for (ConstraintViolation<?> v : ((ConstraintViolationException)ex).getConstraintViolations()) {
+			sb.append("☆" + v.getMessage() + "(" + v.getPropertyPath() + ")\n");
+		}
+	} else {
+		//sb.append(Exceptions.getStackTraceAsString(ex));
+		sb.append("☆" + ex.getMessage());
+	}
+} else {
+	sb.append("未知错误.\n\n");
+}
+
+// 如果是异步请求或是手机端，则直接返回信息
+if (Servlets.isAjaxRequest(request)) {
+	out.print(sb);
+}
+
+// 输出异常信息页面
+else {
+%>
+<%@page import="javax.validation.ConstraintViolation"%>
+<%@page import="javax.validation.ConstraintViolationException"%>
+<%@page import="org.springframework.validation.BindException"%>
+<%@page import="org.springframework.validation.ObjectError"%>
+<%@page import="org.springframework.validation.FieldError"%>
+<%@page import="org.slf4j.Logger,org.slf4j.LoggerFactory"%>
+<%@page import="com.thinkgem.jeesite.common.web.Servlets"%>
+<%@page import="com.thinkgem.jeesite.common.utils.Exceptions"%>
+<%@page import="com.thinkgem.jeesite.common.utils.StringUtils"%>
+<%@page contentType="text/html;charset=UTF-8" isErrorPage="true"%>
+<%@include file="/WEB-INF/views/include/taglib.jsp"%>
+<!DOCTYPE html>
 <html>
-<HEAD>
-<title>温馨提示:您要访问的页面不存在！</title>
-<META http-equiv=Content-Type content="text/html; charset=utf-8">
-<STYLE type=text/css>
-body {
-	margin: 0 auto;
-	background: #FFF;
-	text-align: center;
-}
-
-a:link {
-	text-decoration: none;
-	color: #03F;
-}
-
-a:visited {
-	text-decoration: none;
-	color: #F60;
-}
-
-a:hover {
-	text-decoration: underline;
-	color: #F60;
-}
-
-a:active {
-	text-decoration: none;
-	colorwhite;
-}
-
-.main {
-	margin: 0 auto;
-}
-
-.con {
-	margin: 0 auto;
-	width: 540px;
-}
-
-.errorPic {
-	margin: 0 auto;
-	width: 329px;
-	height: 211px;
-	padding: 10px;
-}
-
-.errorNotes {
-	
-}
-
-.errorNotes ul {
-	height: 30px;
-}
-
-.errorNotes li {
-	float: left;
-	width: 150px;
-	text-align: center;
-	line-height: 30px;
-	list-style: none;
-}
-
-.re {
-	margin: 0 auto;
-	width: 280px;
-	text-align: center;
-}
-
-.re .title {
-	text-align: center;
-	line-height: 30px;
-	font-size: 20px;
-	font-weight: bold;
-	color: #F00;
-}
-
-.re dt {
-	text-align: left;
-	line-height: 30px;
-}
-</STYLE>
-<BODY>
-	<div class="main">
-		<div class="con">
-			<div class="errorPic">
-				<img src="errordocs/images/error.gif">
-			</div>
-			<div class="errorNotes">
-				<div class="re">
-					<div class="title">抱歉，找不到您要的页面……</div>
-					<dl>
-						<dt>1、可能是您访问的内容不存在</dt>
-						<dt>2、可能是您访问的内容已过期</dt>
-						<dt>3、可能是您访问的网址有误</dt>
-					</dl>
-				</div>
-				<ul>
-					<li><a href="/">返回首页</a></li>
-					<li><a href="javascript:history.go(-1);">返回上一页</a></li>
-					<li><a href="http://www.qvdv.com" target="_blank">技术支持</a></li>
-				</ul>
-			</div>
+<head>
+	<title>400 - 请求出错</title>
+	<%@include file="/WEB-INF/views/include/head.jsp" %>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="page-header"><h1>参数有误,服务器无法解析.</h1></div>
+		<div class="errorMessage">
+			<%=StringUtils.toHtml(sb.toString())%> <br/>
 		</div>
+		<a href="javascript:" onclick="history.go(-1);" class="btn">返回上一页</a> &nbsp;
+		<br/> <br/>
+		<script>try{top.$.jBox.closeTip();}catch(e){}</script>
 	</div>
+</body>
+</html>
+<%
+} out = pageContext.pushBody();
+%>

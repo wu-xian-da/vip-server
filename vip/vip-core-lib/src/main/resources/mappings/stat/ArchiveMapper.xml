@@ -68,45 +68,108 @@
 
 	<select id="zhuGuanTotal" resultType="java.util.Map"
 		parameterType="java.util.Map">
-		<![CDATA[SELECT SUM(a.`order_num`) AS total FROM `app_order_archive` a WHERE a.`airport_id` IN (#{ariportIds}) AND a.`year`=#{year} and a.month=#{month}]]>
+		SELECT SUM(a.`order_num`) AS total FROM `app_order_archive` a WHERE
+		a.`year`=#{year} and a.`month`=#{month}
+		<if test="ariportIds!=null">
+			and a.`airport_id` in
+			<foreach item="item" index="index" collection="ariportIds"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
 	</select>
 
 	<select id="zhuGuanAllAirPort" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		<![CDATA[	
-			SELECT 
-				a.`airport_id`,
-				a.`airportname`,
-				SUM(a.`order_num`) AS order_num 
-			FROM app_order_archive a
-			where 
-				a.`airport_id` IN (#{ariportIds}) 
-				AND a.`year`=#{year} 
-				and a.month=#{month}
-		 	GROUP BY a.`airportname`,a.`airport_id`	
+			SELECT
+			a.`airport_id`,
+			a.`airportname`,
+			SUM(a.`order_num`) AS order_num,
+			b.bname,
+			b.maxOrder
+		FROM
+			app_order_archive a
+		INNER JOIN (
+			SELECT
+				max(a.order_num) AS maxOrder,
+				a.bname,
+				a.airport_id
+			FROM
+				app_order_archive a
+			WHERE
+					 a.`year` = #{year} 
+					AND a. MONTH = #{month}
+		]]>
+		<if test="ariportIds!=null">
+			and a.`airport_id` in
+			<foreach item="item" index="index" collection="ariportIds"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<![CDATA[GROUP BY
+						a.airport_id,
+						a.bname
+				) b ON b.airport_id = a.airport_id
+			WHERE
+				    a.`year` = #{year} 
+					AND a. MONTH = #{month}
+		]]>
+		<if test="ariportIds!=null">
+			and a.`airport_id` in
+			<foreach item="item" index="index" collection="ariportIds"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<![CDATA[	GROUP BY
+						a.`airportname`,
+						a.`airport_id`
 		]]>
 	</select>
 	<select id="zhuGuanDraw" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		<![CDATA[	
 			SELECT
-				a.`airport_id`,
-				a.`airportname`,
-				a.`bname`,
-				a.`id`,
-				SUM(a.`order_num`) AS order_num
+				A.airportname,
+				GROUP_CONCAT(A.bname) AS bnames,
+				GROUP_CONCAT(A.order_num) AS order_nums
 			FROM
-				app_order_archive a
-			where 
-				a.`airport_id` IN (#{ariportIds}) 
-				AND a.`year`=#{year} 
-				and a.month=#{month}
-			GROUP BY
-				a.airport_id,
-				a.`airportname`,
-				a.`bname`,
-				a.id		
+				(
+					SELECT
+						a.`airport_id`,
+						a.`airportname`,
+						a.`bname`,
+						a.`id`,
+						SUM(a.`order_num`) AS order_num
+					FROM
+						app_order_archive a
+					WHERE
+						    a.`year` = #{year} 
+							AND a. MONTH = #{month}
+			]]>
+		<if test="ariportIds!=null">
+			and a.`airport_id` in
+			<foreach item="item" index="index" collection="ariportIds"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		 <![CDATA[	GROUP BY
+								a.airport_id,
+								a.`airportname`,
+								a.`bname`,
+								a.id
+						) A
+					GROUP BY
+						A.airportname
 		]]>
+	</select>
+
+	<select id="selectOrderMaxDay" resultType="java.util.Map">
+		<![CDATA[SELECT DATE_FORMAT(MAX(order_time),'%Y-%m-%d') AS maxTime FROM app_orders;]]>
 	</select>
 
 	<select id="baseDailyExtract" parameterType="java.util.Map">
@@ -132,16 +195,17 @@
 				u.`name` AS bname,
 				a.airport_name,
 				a.airport_id,
-				DATE_FORMAT(max(ao.order_time),'%Y') AS YEAR,
-				DATE_FORMAT(max(ao.order_time),'%m') AS MONTH,
-				DATE_FORMAT(max(ao.order_time),'%d') AS DAY,
+				DATE_FORMAT(#{maxTime},'%Y') AS YEAR,
+				DATE_FORMAT(#{maxTime},'%m') AS MONTH,
+				DATE_FORMAT(#{maxTime},'%d') AS DAY,
 				a.province,
-				WEEKDAY(#{yesterday})+1
+				WEEKDAY(#{maxTime})+1
 			FROM
 				sys_users u
 			INNER JOIN app_orders ao ON ao.id = u.id
 			INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
 			INNER JOIN sys_airport a ON sua.airport_id = a.airport_id
+			WHERE DATE_FORMAT(ao.order_time, '%Y-%m-%m') =#{maxTime}
 		]]>
 	</select>
 </mapper>
