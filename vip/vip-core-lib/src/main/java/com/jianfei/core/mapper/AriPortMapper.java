@@ -31,16 +31,25 @@ public interface AriPortMapper extends BaseMapper<AriPort> {
 	void batchInsertUserAriport(List<Map<String, Object>> list);
 
 	List<AriPort> selectAriportByUserId(Long id);
+
 	/**
 	 * 获取机场的省份列表
+	 * 
 	 * @return
 	 */
 	List<String> getAriPortProvince();
 
 	/**
-	 *  根据省份获取机场信息
+	 * 根据省份获取机场信息
+	 * 
 	 * @param province
 	 * @return
 	 */
 	List<SysAirport> getAirPortByProvince(String province);
+
+	/**
+	 * @param 查找城市
+	 * @return
+	 */
+	List<Map<String, Object>> selectCityById(Map<String, Object> map);
 }

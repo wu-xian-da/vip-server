@@ -1,6 +1,7 @@
 package com.jianfei.core.service.base;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Test;
@@ -10,6 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -43,7 +46,14 @@ public class AriPortManagerTest {
 			PageInfo pageInfo = new PageInfo(messageDto.getData());
 			System.out.println(pageInfo.getTotal());
 		}
+	}
 
+	@Test
+	public void test5() {
+		List<Map<String, Object>> maps = ariPortManager
+				.selectCityById(new MapUtils.Builder().setKeyValue("pid", "0")
+						.build());
+		System.out.println(JSONObject.toJSONString(maps));
 	}
 
 }

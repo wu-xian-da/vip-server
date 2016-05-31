@@ -8,6 +8,7 @@
 package com.jianfei.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -109,4 +110,15 @@ public class AriPortController extends BaseController {
 		return "airport/airPortForm";
 	}
 
+	@RequestMapping(value = "selectCity")
+	@ResponseBody
+	public List<Map<String, Object>> selectCitys(String pid) {
+		return ariPortManager.selectCityById(new MapUtils.Builder()
+				.setKeyValue("pid", pid).build());
+	}
+
+	@RequestMapping(value = "ss")
+	public String sss(String pid) {
+		return "airport、master";
+	}
 }

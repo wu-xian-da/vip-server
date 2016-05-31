@@ -27,7 +27,7 @@ public class LoginController extends BaseController {
 		return "login";
 	}
 
-	@RequestMapping(value = { "/", "/main" })
+	@RequestMapping(value = { "/main" })
 	public String main() {
 		return "main";
 	}

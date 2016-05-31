@@ -18,7 +18,7 @@
 		<result column="dtflag" property="dtflag" />
 		<result column="orderIds" property="orderIds" />
 	</resultMap>
-	<resultMap id="BaseResultMap" type="com.jianfei.core.bean.SysAirport" >
+	<resultMap id="BaseResultMap" type="com.jianfei.core.bean.SysAirport">
 		<id column="airport_id" property="airportId" jdbcType="VARCHAR" />
 		<result column="airport_name" property="airportName" jdbcType="VARCHAR" />
 		<result column="state" property="state" jdbcType="INTEGER" />
@@ -33,9 +33,12 @@
 		<result column="header_name" property="headerName" jdbcType="VARCHAR" />
 		<result column="header_phone" property="headerPhone" jdbcType="VARCHAR" />
 	</resultMap>
-	<sql id="Base_Column_List" >
-		airport_id, airport_name, state, agent_num, province, city, country, address, longitude,
-		latitude, dtflag, header_name, header_phone
+	<sql id="Base_Column_List">
+		airport_id, airport_name, state,
+		agent_num, province, city,
+		country, address, longitude,
+		latitude,
+		dtflag, header_name, header_phone
 	</sql>
 
 	<select id="get" resultMap="airportRs" parameterType="java.util.Map">
@@ -169,9 +172,9 @@
 		</if>
 		WHERE airport_id = #{id}
 	</update>
-	
-	
-	
+
+
+
 	<update id="deleteAriport" parameterType="Long">
 	<![CDATA[	
 		delete from  
@@ -180,20 +183,21 @@
 		]]>
 	</update>
 	<insert id="batchInsertUserAriport" parameterType="ArrayList">
-		   INSERT INTO sys_user_airport (
-			  airport_id,
-			  sys_id,
-			  dtflag,
-			  user_type
-			) 
-			VALUES 
+		INSERT INTO sys_user_airport (
+		airport_id,
+		sys_id,
+		dtflag,
+		user_type
+		)
+		VALUES
 		<foreach collection="list" item="item" index="index"
 			separator=",">
 			(#{item.aid}, #{item.uid},#{item.dtflag},#{item.userType})
 		</foreach>
 	</insert>
-	
-	<select id="selectAriportByUserId" resultMap="airportRs" parameterType="Long">
+
+	<select id="selectAriportByUserId" resultMap="airportRs"
+		parameterType="Long">
 		<![CDATA[	SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=#{id} 	]]>
 	</select>
 
@@ -201,18 +205,40 @@
 		<result property="province" column="province" />
 	</resultMap>
 
-	<select id="getAriPortProvince" resultMap="province" >
+	<select id="getAriPortProvince" resultMap="province">
 		<![CDATA[	SELECT  DISTINCT (a.province) FROM sys_airport a 	]]>
 	</select>
 
-	<select id="getAirPortByProvince" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<select id="getAirPortByProvince" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
 		from sys_airport
 		<where>
-		<if test="province != null" >
-			and province= #{province,jdbcType=VARCHAR}
-		</if>
+			<if test="province != null">
+				and province= #{province,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectCityById" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		pid,
+		cid,
+		name
+		FROM
+		`sys_city`
+		<where>
+			<if test="pid!=null">
+				pid=#{pid}
+			</if>
+			<if test="cid!=null">
+				and cid=#{cid}
+			</if>
+			<if test="name!=null">
+				and name=#{name}
+			</if>
 		</where>
 	</select>
 </mapper>

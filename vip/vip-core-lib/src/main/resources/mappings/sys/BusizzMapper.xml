@@ -21,7 +21,7 @@
 		<result property="ariPortIds" column="ariPorts.id" />
 		<result property="ariPortNames" column="ariPorts.name" />
 		<result property="job" column="job" />
-		<result property="extra_passwd" column="extra_passwd" />
+		<result property="extraPasswd" column="extra_passwd" />
 	</resultMap>
 
 	<select id="listMap" parameterType="java.util.Map" resultType="java.util.Map">
@@ -116,7 +116,7 @@
 				    #{dtflag},
 				    #{job},
 				    #{code},
-				    #{extra_passwd}
+				    #{extraPasswd}
 				  )
 			   ]]>
 	</insert>
