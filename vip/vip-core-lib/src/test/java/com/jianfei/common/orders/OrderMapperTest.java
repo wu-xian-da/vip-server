@@ -64,7 +64,8 @@ public class OrderMapperTest {
 		List<String> aiportIdList = new ArrayList<String>();
 		aiportIdList.add("366f38ca732e4b599d36edbb1a43018a");
 		map.put("aiportIdList",aiportIdList);
-		map.put("airportId", "0");
+		//04aacc646a76491b9160541ccb4e7b11
+		map.put("airportId", "04aacc646a76491b9160541ccb4e7b11");
 		map.put("orderState", "5");
 		
 		map.put("invoiceState", 3);

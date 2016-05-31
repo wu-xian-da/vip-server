@@ -116,7 +116,7 @@ public class OrderController extends BaseController {
 			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
 			@RequestParam(value="startTime",defaultValue="") String startTime,
 			@RequestParam(value="endTime",defaultValue="") String endTime,
-			@RequestParam(value="airportId",required=false,defaultValue="0") String airportId,
+			@RequestParam(value="airportId",required=false,defaultValue="") String airportId,
 			@RequestParam(value="orderState",required=false,defaultValue="5") Integer orderState,
 			@RequestParam(value="invoiceState",required=false,defaultValue="3") Integer invoiceState,
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
@@ -140,7 +140,10 @@ public class OrderController extends BaseController {
 		if(aiportIdList !=null && aiportIdList.size() >0){
 			paramsMap.put("aiportIdList", aiportIdList);
 		}
-		paramsMap.put("airportId",airportId);
+		if(!airportId.equals("")){
+			paramsMap.put("airportId",airportId);
+		}
+		
 		paramsMap.put("orderState",orderState);
 		paramsMap.put("invoiceState", invoiceState);
 		

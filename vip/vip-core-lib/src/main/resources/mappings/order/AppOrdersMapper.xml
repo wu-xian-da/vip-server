@@ -94,7 +94,7 @@
          </if>
          
          <!-- 机场编号 -->
-    	 <if test="airportId !=  0">
+    	 <if test="airportId != null">
     		and ord.airport_id = #{airportId}
     	 </if>
     	 

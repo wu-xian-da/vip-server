@@ -14,6 +14,7 @@
 <script src="public/js/jquery.min.js"></script>
 <script src="public/js/jquery.easyui.min.js"></script>
 <script src="public/js/plugins/datagrid-scrollview.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
 
 </head>
 <body>
@@ -30,14 +31,14 @@
         <div id="order-condition-box">
             <div class="order-condition-item">
                 <select id="airportIdSelect">
-                    <option value="0">选择机场</option>
+                    <option value="">全部机场</option>
                     
                 </select>
             </div>
 
             <div class="order-condition-item">
                 <select id="orderStateSelect">
-                    <option value="5">选择订单状态</option>
+                    <option value="5">全部订单状态</option>
                     <option value="0">未支付</option>
                     <option value="1">已支付</option>
                     <option value="2">正在审核</option>
@@ -48,7 +49,7 @@
 
             <div class="order-condition-item">
                 <select id="invoiceSelect">
-                    <option value="3">选择发票状态</option>
+                    <option value="3">全部发票状态</option>
                     <option value="0">未开</option>
                     <option value="1">已开</option>
                   
