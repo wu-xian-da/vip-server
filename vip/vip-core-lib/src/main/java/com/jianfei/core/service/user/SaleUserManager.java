@@ -43,5 +43,7 @@ public interface SaleUserManager {
      * @return
      */
     boolean updatePhotoPath(String userNo,String photoPath);
+    
+    
 
 }
