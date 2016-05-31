@@ -9,13 +9,6 @@ import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.mapper.AppVipcardMapper;
 import com.jianfei.core.service.base.VipCardManager;
 
-import jxl.Workbook;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -213,68 +206,15 @@ public class VipCardManagerImpl implements VipCardManager {
 		return 0;
 
 	}
-
 	
-
 	/**
-	 * 导出数据到excel表格中
+	 * 获取数据表中所有的数据，用于导出excel表格
+	 * @return
 	 */
-	@Override
-	public int exportDataToExcel(String fileName) {
-		try {
-			WritableWorkbook wwb = null;
-			// 创建可写入的Excel工作簿
-			//filename=d://
-			
-			System.out.println("filenma="+fileName);
-			File file = new File(fileName);
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			// 以fileName为文件名来创建一个Workbook
-			wwb = Workbook.createWorkbook(file);
-			// 创建工作表
-			WritableSheet ws = wwb.createSheet("Sheet1", 0);
-			//设置表头
-			Label labelCradNo = new Label(0, 0, "卡号(cardNo)");
-			Label labelNfcId = new Label(1, 0, "nfc号(nfcId)");
-			Label labelOrderState = new Label(2, 0, "状态(cardState)");
-			ws.addCell(labelCradNo);
-			ws.addCell(labelNfcId);
-			ws.addCell(labelOrderState);
-			
-			// 查询数据库中所有的数据
-			List<AppVipcard> list=appVipcardMapper.selAllVipCard();
-			for (int i = 0; i < list.size(); i++) {
-				String stateName = "";//激活状态
-				Label labelId_i = new Label(0, i + 1, list.get(i).getCardNo());
-				Label labelName_i = new Label(1, i + 1, list.get(i).getNfcId());
-				if(list.get(i).getCardState() == 0){
-					stateName = "未激活";
-				}else if(list.get(i).getCardState() == 1){
-					stateName = "激活";
-				}else if(list.get(i).getCardState() == 2){
-					stateName = "退卡";
-				}
-				Label labelSex_i = new Label(2, i + 1, stateName);
-				ws.addCell(labelId_i);
-				ws.addCell(labelName_i);
-				ws.addCell(labelSex_i);
-			}
-			
-			// 写进文档
-			wwb.write();
-			// 关闭Excel工作簿对象
-			wwb.close();
-			
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		return 0;
+	public List<AppVipcard> getAllAppVipcardInfo(){
+		return appVipcardMapper.selAllVipCard();
 	}
-
+	
 	/**
 	 * 根据vip card no 获取VIP卡片信息
 	 *
@@ -285,4 +225,6 @@ public class VipCardManagerImpl implements VipCardManager {
 	public AppVipcard getVipCardByNo(String vipCardNo) {
 		return appVipcardMapper.selectByPrimaryKey(vipCardNo);
 	}
+	
+	
 }

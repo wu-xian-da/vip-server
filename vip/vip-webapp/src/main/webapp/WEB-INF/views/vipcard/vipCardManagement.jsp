@@ -142,22 +142,7 @@
 							}
 						});
 
-		//导出数据到excel表格中
-		$("#exportBt").click(
-				function() {
-					$.post(sy.contextPath + '/vipCard/exportExcel', {
-
-					}, function(dataObj) {
-						if (!dataObj.ok) {
-							$.messager.alert('msg', dataObj.msgBody, 'error');
-							return;
-						} else {
-							$.messager.alert('msg',
-									"数据导出成功,位置：D://vipCard.xlsx", 'success');
-						}
-
-					}, 'json');
-				})
+		
 
 		//输入框效果
 		$("#filePath").focus(function() {
@@ -192,7 +177,8 @@
 					</form> 
 					
 				</td>
-				<td><button id="exportBt" class="btn btn-default ">导出vip卡号</button></td>
+				
+				<td><a href="${pageContext.request.contextPath}/vipCard/exportExcel"><button class="btn btn-default ">导出vip卡号</button></a></td>
 
 				<!-- 搜索条件框 -->
 				<td>

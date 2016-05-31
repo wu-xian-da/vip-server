@@ -68,9 +68,5 @@ public class VipCardManagerImplTest {
 		//vipCardManagerImpl.importExcelData("f://test.xlsx");
 	}
 	
-	@Test
-	public void export(){
-		String filePath = "f://";
-		vipCardManagerImpl.exportDataToExcel(filePath);
-	}
+	
 }
