@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.dto.OrderDetailInfo;
@@ -142,5 +143,20 @@ public interface OrderManager {
      * @return
      */
     PageInfo<AppOrders> pageReturnOrderBySaleId(String userId, PageDto pageDto);
+
+    /**
+     * 根据付款方式获取付款URL
+     * @param orderId 订单ID
+     * @param payType 付款方式
+     * @return
+     */
+    String getPayUrl(String orderId, PayType payType);
+
+    /**
+     * 根据订单ID获取订单金额
+     * @param orderId
+     * @return
+     */
+    AppOrders getOrderInfo(String orderId);
 
 }

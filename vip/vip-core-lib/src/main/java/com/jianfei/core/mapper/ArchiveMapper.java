@@ -88,4 +88,12 @@ public interface ArchiveMapper {
 	 */
 	void baseDailyExtract(Map<String, Object> map);
 
+	/**
+	 * selectOrderMaxDay(获取最大的订单日期)
+	 * 
+	 * @return Map<String,Object>
+	 * @version 1.0.0
+	 */
+	Map<String, Object> selectOrderMaxDay();
+
 }

@@ -217,4 +217,9 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	public List<SysAirport> getAirPortByProvince(String provinceId) {
 		return ariPortMapper.getAirPortByProvince(provinceId);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectCityById(Map<String, Object> map) {
+		return ariPortMapper.selectCityById(map);
+	}
 }

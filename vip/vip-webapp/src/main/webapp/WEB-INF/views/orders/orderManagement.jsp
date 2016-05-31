@@ -31,10 +31,7 @@
             <div class="order-condition-item">
                 <select id="airportIdSelect">
                     <option value="0">选择机场</option>
-                    <option value="1">广州机场</option>
-                    <option value="2">虹桥机场</option>
-                    <option value="3">广州机场</option>
-                    <option value="4">虹桥机场</option>
+                    
                 </select>
             </div>
 
@@ -124,7 +121,7 @@
 
                 <div class="easyui-window-footer">
                     <button id="writerUserInfo">录入信息确认</button>
-                    <button id="cancleBt">取消</button>
+                    <button id="cancleBt">返回</button>
                 </div>
             </div>
         </div>            
@@ -153,7 +150,7 @@
                 	<shiro:hasPermission name="system:order:refundMoney">  
                   		  <button id="finalBackMoneyToUserBt">退款确认</button>
                     </shiro:hasPermission>
-                    <button id="refundCloseWindow">取消</button>
+                    <button id="refundCloseWindow">返回</button>
                 </div>
             </div>
         </div>            
@@ -164,6 +161,17 @@
     <script type="text/javascript">
         $(function(){
             $('#tt').datagrid();
+            //初始化机场下拉列表
+            var url = "returnAirPortList";
+            $.get(url,function(_d){
+            	if(_d.result ==1){
+            		var airport = _d.airportList;
+            		for(var index =0 ;index < airport.length;index ++){
+            			$("#airportIdSelect").append(" <option value='"+airport[index].id+"'>"+airport[index].name+"</option>");
+            		}
+            		
+            	}
+            })
         });
 
         function myformatter(date){

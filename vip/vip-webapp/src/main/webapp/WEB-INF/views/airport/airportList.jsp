@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ page import="com.jianfei.core.common.security.shiro.HasAnyPermissionsTag"%>
+<%@ include file="/WEB-INF/include/taglib.jsp"%>
+<%
+	HasAnyPermissionsTag anyPermissionsTag = new HasAnyPermissionsTag();
+%>
 <%@ include file="/WEB-INF/include/taglib.jsp"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,9 +18,11 @@
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
+			<shiro:hasPermission name="system:station:add">
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFuns();">添加</a></td>
 				<td><div class="datagrid-btn-separator"></div></td>
-				<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索角色名称'"></input></td>
+			</shiro:hasPermission>
+				<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索场站名称'"></input></td>
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">清空查询</a></td>
 			</tr>
 		</table>
@@ -117,7 +124,9 @@
 				width : '300',
 				formatter : function(value, row) {
 					var str = '';
+					<%if (anyPermissionsTag.showTagBody("system:station:update")) {%>
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+					<%}%>
 					return str;
 				}
 			} ] ],

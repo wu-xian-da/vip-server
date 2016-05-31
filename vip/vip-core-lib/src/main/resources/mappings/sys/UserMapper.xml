@@ -22,6 +22,7 @@
 		<result property="ariPortNames" column="ariPorts.name" />
 		<result property="roleIds" column="roles.id" />
 		<result property="roelNames" column="roles.name" />
+		<result property="extraPasswd" column="extra_passwd" />
 		<!-- <collection property="roles" ofType="Role"> <id property="id" column="roles.id" 
 			/> <id property="name" column="roles.name" /> </collection> -->
 	</resultMap>
@@ -87,7 +88,8 @@
 				  `create_time`,
 				  `update_time`,
 				  `salt`,
-				  `dtflag`
+				  `dtflag`,
+				  extra_passwd
 				) 
 				VALUES
 				  (
@@ -103,7 +105,8 @@
 				    #{createdatetime},
 				    #{updatedatetime},
 				    #{salt},
-				    #{dtflag}
+				    #{dtflag},
+				    #{extraPasswd}
 				  )
 			   ]]>
 	</insert>

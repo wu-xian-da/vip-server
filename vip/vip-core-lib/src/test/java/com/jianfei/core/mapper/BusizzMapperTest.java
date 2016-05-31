@@ -8,6 +8,7 @@
 package com.jianfei.core.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,9 +54,17 @@ public class BusizzMapperTest {
 	@Test
 	public void testGet() {
 		List<User> list = busizzMapper.get(new MapUtils.Builder().build());
-		for(User user:list){
+		for (User user : list) {
 			System.out.println(user.getName());
 		}
 	}
 
+	@Test
+	public void testBusizzMaapper() {
+		List<Map<String, Object>> list = busizzMapper
+				.listMap(new MapUtils.Builder()
+						.setKeyValue("today", "2016-09-02")
+						.setKeyValue("year", "2016").setKeyValue("month", "04")
+						.build());
+	}
 }

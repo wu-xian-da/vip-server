@@ -27,27 +27,8 @@
 	
 <script type="text/javascript">
 	var grid;
-	//导入vip卡
-	var importExcelDate = function() {
-		alert($("#filePath").val())
-		$.post(sy.contextPath + '/vipCard/importExcel', {
-			filePath : $("#filePath").val()
-		}, function(dataObj) {
-			if (!dataObj.ok) {
-				$.messager.alert('msg', dataObj.msgBody, 'error');
-				return;
-			} else {
-				$.messager.alert('msg', "数据导入成功", 'success');
-				grid.datagrid('reload');
-			}
-			;
-
-		}, 'json');
-	}
-
 	//删除vip卡
 	var removeFun = function(id) {
-		alert("id=" + id)
 		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
 			if (r) {
 				$.post(sy.contextPath + '/vipCard/delVipCard', {
@@ -143,22 +124,7 @@
 							}
 						});
 
-		//导出数据到excel表格中
-		$("#exportBt").click(
-				function() {
-					$.post(sy.contextPath + '/vipCard/exportExcel', {
-
-					}, function(dataObj) {
-						if (!dataObj.ok) {
-							$.messager.alert('msg', dataObj.msgBody, 'error');
-							return;
-						} else {
-							$.messager.alert('msg',
-									"数据导出成功,位置：F://vipCard.xlsx", 'success');
-						}
-
-					}, 'json');
-				})
+		
 
 		//输入框效果
 		$("#filePath").focus(function() {
@@ -193,7 +159,8 @@
 					</form> 
 					
 				</td>
-				<td><button id="exportBt" class="btn btn-default ">导出vip卡号</button></td>
+				
+				<td><a href="${pageContext.request.contextPath}/vipCard/exportExcel"><button class="btn btn-default ">导出vip卡号</button></a></td>
 
 				<!-- 搜索条件框 -->
 				<td>

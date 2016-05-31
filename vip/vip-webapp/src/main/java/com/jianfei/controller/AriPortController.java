@@ -8,8 +8,10 @@
 package com.jianfei.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +46,7 @@ public class AriPortController extends BaseController {
 	@Autowired
 	private AriPortManager<AriPort> ariPortManager;
 
+	@RequiresPermissions(value = "system:station;home")
 	@RequestMapping(value = { "", "/home" })
 	public String home() {
 
@@ -107,4 +110,15 @@ public class AriPortController extends BaseController {
 		return "airport/airPortForm";
 	}
 
+	@RequestMapping(value = "selectCity")
+	@ResponseBody
+	public List<Map<String, Object>> selectCitys(String pid) {
+		return ariPortManager.selectCityById(new MapUtils.Builder()
+				.setKeyValue("pid", pid).build());
+	}
+
+	@RequestMapping(value = "ss")
+	public String sss(String pid) {
+		return "airport、master";
+	}
 }

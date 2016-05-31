@@ -44,16 +44,25 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	MessageDto<List<AriPort>> selectAriportByUserId(Long id);
 
 	List<Map<String, Object>> datePermissionData(Long id);
+
 	/**
 	 * 获取机场的省份列表
+	 * 
 	 * @return
-     */
+	 */
 	List<String> getAriPortProvince();
 
 	/**
-	 *  根据省份获取机场信息
+	 * 根据省份获取机场信息
+	 * 
 	 * @param provinceId
 	 * @return
-     */
+	 */
 	List<SysAirport> getAirPortByProvince(String provinceId);
+
+	/**
+	 * @param 查找城市
+	 * @return
+	 */
+	List<Map<String, Object>> selectCityById(Map<String, Object> map);
 }

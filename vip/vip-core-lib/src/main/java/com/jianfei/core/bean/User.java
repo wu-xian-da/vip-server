@@ -63,6 +63,8 @@ public class User extends BaseEntity {
 	// 数据权限
 	private List<AriPort> aripors = Lists.newArrayList();
 
+	private String extraPasswd;// 没有加盐，md5加密后的密码
+
 	/**
 	 * state
 	 *
@@ -232,6 +234,14 @@ public class User extends BaseEntity {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getExtraPasswd() {
+		return extraPasswd;
+	}
+
+	public void setExtraPasswd(String extraPasswd) {
+		this.extraPasswd = extraPasswd;
 	}
 
 	/**

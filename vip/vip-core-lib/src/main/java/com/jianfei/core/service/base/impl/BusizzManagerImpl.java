@@ -117,6 +117,8 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 		SimpleHash simpleHash = new SimpleHash("md5",
 				GloabConfig.getConfig("defalut.passwd"), user.getSalt());
 		user.setPassword(simpleHash.toString());
+		user.setExtraPasswd(new SimpleHash("md5", GloabConfig
+				.getConfig("defalut.passwd")).toString());
 		Long id = 0l;
 		if (!StringUtils.isEmpty(user.getName())) {
 			User u = busizzMaapper.getUserByName(StringUtils.trim(user
@@ -163,5 +165,15 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 			return messageDto.setMsgBody(MessageDto.MsgFlag.ERROR);
 		}
 		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.core.service.base.BusizzManager#listMap(java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> listMap(Map<String, Object> map) {
+		return busizzMaapper.listMap(map);
 	}
 }

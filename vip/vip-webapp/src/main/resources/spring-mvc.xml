@@ -41,15 +41,10 @@
 	<mvc:annotation-driven></mvc:annotation-driven>
 	<mvc:resources mapping="/images/**" location="/images/" />
 	<aop:config proxy-target-class="true"></aop:config>
-	<!--	<bean
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="exceptionMappings">
-			<props>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-				<prop key="java.lang.Throwable">error/500</prop>
-			</props>
-		</property>
-	</bean>
--->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+	<!-- <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
+		<property name="exceptionMappings"> <props> <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop> 
+		<prop key="java.lang.Throwable">error/500</prop> </props> </property> </bean> -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+
 </beans>

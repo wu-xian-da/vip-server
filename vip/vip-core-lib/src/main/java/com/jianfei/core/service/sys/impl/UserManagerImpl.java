@@ -119,6 +119,8 @@ public class UserManagerImpl implements UserManaer<User> {
 				SimpleHash simpleHash = new SimpleHash("md5",
 						GloabConfig.getConfig("defalut.passwd"), user.getSalt());
 				user.setPassword(simpleHash.toString());
+				user.setExtraPasswd(new SimpleHash("md5", GloabConfig
+						.getConfig("defalut.passwd")).toString());
 				userMapper.save(user);
 				User u2 = userMapper.getUserByName(user.getLoginName());
 				id = u2.getId();

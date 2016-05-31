@@ -21,41 +21,61 @@
 		<result property="ariPortIds" column="ariPorts.id" />
 		<result property="ariPortNames" column="ariPorts.name" />
 		<result property="job" column="job" />
+		<result property="extraPasswd" column="extra_passwd" />
 	</resultMap>
 
-	<select id="get" resultMap="userRs" parameterType="java.util.Map">
-		SELECT u.* ,GROUP_CONCAT(ap.`airport_id`) AS
-		'ariPorts.id',GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name' FROM
-		`sys_users` u
-		LEFT JOIN `sys_user_airport` ua ON ua.`sys_id`=u.`id`
-		LEFT JOIN `sys_airport` ap ON ap.`airport_id`=ua.`airport_id`
-		<where>
-			<if test="1==1">
-				and u.user_type=0
-			</if>
-			<if test="id!=null">
-				and u.id=#{id}
-			</if>
-			<if test="name!=null">
-				and u.name like CONCAT('%', #{name}, '%')
-			</if>
-			<if test="loginName!=null">
-				and u.login_name like CONCAT('%', #{loginName}, '%')
-			</if>
-			<if test="sex!=null">
-				and u.sex = #{sex}
-			</if>
-			<if test="start!=null">
-				<![CDATA[and u.create_time >= #{start}]]>
-			</if>
-			<if test="ends!=null">
-				<![CDATA[and u.create_time <= #{ends}]]>
-			</if>
-		</where>
-		GROUP BY u.`name`
+	<select id="listMap" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from (
+		<![CDATA[
+			SELECT
+				u.id,
+				u.`code`,
+				u.`name`,
+				GROUP_CONCAT(ap.`airport_id`) AS 'ariPorts.id',
+				GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name',
+				u.phone,
+				count(ao.order_id) AS tmonth,
+				u.state,
+				lmonth,
+				(lamonth + count(ao.order_id)) AS total
+			FROM
+				`sys_users` u
+			INNER JOIN `sys_user_airport` ua ON ua.`sys_id` = u.`id`
+			INNER JOIN `sys_airport` ap ON ap.`airport_id` = ua.`airport_id`
+			LEFT JOIN app_orders ao ON ao.id = u.id
+			AND DATE_FORMAT(ao.order_time, '%Y-%m-%d') = #{today}
+			LEFT JOIN (
+				SELECT
+					sum(a.order_num) AS lamonth,
+					a.airport_id
+				FROM
+					app_order_archive a
+			) aoa ON aoa.airport_id = ua.airport_id
+			LEFT JOIN (
+				SELECT
+					sum(a.order_num) AS lmonth,
+					a.airport_id
+				FROM
+					app_order_archive a
+				WHERE
+					a.`year` =#{year}
+				AND a.`month` = #{month}
+			) aoa1 ON aoa1.airport_id = ua.airport_id
+			WHERE
+				u.user_type = 0]]>
+		<if test="name!=null">
+			and u.name like CONCAT('%', #{name}, '%')
+		</if>
+		<![CDATA[
+			GROUP BY
+			u.`name`
+			ORDER BY
+			create_time DESC]]>)
+		A
 		<if test="sort!=null">
 			order by ${sort} ${order}
 		</if>
+
 	</select>
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
 		SELECT * from sys_users where name =#{name} and user_type=0;
@@ -77,7 +97,8 @@
 				  `salt`,
 				  `dtflag`,
 				  job,
-				  code
+				  code,
+				 extra_passwd
 				) 
 				VALUES
 				  (
@@ -94,7 +115,8 @@
 				    #{salt},
 				    #{dtflag},
 				    #{job},
-				    #{code}
+				    #{code},
+				    #{extraPasswd}
 				  )
 			   ]]>
 	</insert>

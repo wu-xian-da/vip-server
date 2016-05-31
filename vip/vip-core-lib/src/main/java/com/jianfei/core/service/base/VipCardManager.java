@@ -87,15 +87,6 @@ public interface VipCardManager {
      * @version  1.0.0
      */
     int importExcelData(InputStream in);
-    
-    /**
-     * 导出数据到excel表格中
-     * exportDataToExcel
-     * @return
-     *List<AppVipcard>
-     * @version  1.0.0
-     */
-    int exportDataToExcel(String filePath);
 
     /**
      * 根据vip card no 获取VIP卡片信息

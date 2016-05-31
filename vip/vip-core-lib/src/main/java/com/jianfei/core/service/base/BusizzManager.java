@@ -8,6 +8,8 @@
 package com.jianfei.core.service.base;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.persistence.BaseService;
@@ -27,5 +29,14 @@ public interface BusizzManager<T extends Serializable> extends BaseService<T> {
 	MessageDto<String> saveUser(User user, String arids, String roleids);
 
 	MessageDto<String> delete(Long id);
+
+	/**
+	 * list(获取业务员信息)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> listMap(Map<String, Object> map);
 
 }

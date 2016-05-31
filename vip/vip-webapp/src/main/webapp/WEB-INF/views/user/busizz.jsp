@@ -24,6 +24,7 @@
 		});
 	};
 	var editFun = function(id) {
+		alert(id);
 		var dialog = parent.sy.modalDialog({
 			title : '编辑用户信息',
 			url : sy.contextPath + '/busizz/form?id=' + id,
@@ -44,7 +45,7 @@
 			pagination : true,
 			singleSelect : true,
 			idField : 'id',
-			sortName : 'createdatetime',
+			sortName : 'lmonth',
 			sortOrder : 'desc',
 			pageSize : 10,
 			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
@@ -68,17 +69,17 @@
 			}, {
 				width : '80',
 				title : '上月开卡数',
-				field : 'phone',
+				field : 'lmonth',
 				sortable : true
 			}, {
 				width : '80',
 				title : '本月开卡数',
-				field : 'phone',
+				field : 'tmonth',
 				sortable : true
 			}, {
 				width : '80',
 				title : '开卡总量',
-				field : 'phone',
+				field : 'total',
 				sortable : true
 			},{
 				width : '50',
@@ -128,12 +129,8 @@
 						<table>
 							<tr>
 								<td>姓名</td>
-								<td><input name="_name" style="width: 80px;" /></td>
-								<!-- 
-								<td>创建时间</td>
-								<td><input name="_start"  id="d4311" class="Wdate" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'d4312\')}'})" readonly="readonly" style="width: 120px;" />
-								-<input id="d4312" name="_end" class="Wdate" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'d4311\')}'})" readonly="readonly" style="width: 120px;" /></td> -->
-								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>
+										<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索姓名'"></input></td>
+										<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">清空查询</a></td>
 							
 							</tr>
 						</table>

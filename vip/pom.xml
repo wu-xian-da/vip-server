@@ -453,24 +453,29 @@
 			<id>prod</id>
 			<properties>
 				<!-- Database settings -->
-				<dbunit.dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dbunit.dataTypeFactoryName>
+				<hbm2ddl.drop>false</hbm2ddl.drop>
 				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
+				<dbunit.dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dbunit.dataTypeFactoryName>
 				<hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
 				<jdbc.groupId>mysql</jdbc.groupId>
 				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
-				<jdbc.version>5.1.13</jdbc.version>
+				<jdbc.version>5.1.37</jdbc.version>
 				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-				<jdbc.url>jdbc:mysql://192.168.110.9/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.url>jdbc:mysql://120.27.116.141/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>refineli</jdbc.password>
 				<jdbc.pool.init>10</jdbc.pool.init>
 				<jdbc.pool.minIdle>15</jdbc.pool.minIdle>
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
 
-
 				<!-- updload config -->
-				<upload.home.dir>D:\uploadPath</upload.home.dir>
-				<static.resource.server.address>http://127.0.0.1:8083</static.resource.server.address>
+				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
+				<static.resource.server.address>http://192.168.110.9:9010</static.resource.server.address>
+				<!-- redis config -->
+				<redis.pool.maxTotal>8</redis.pool.maxTotal>
+				<redis.pool.maxIdle>8</redis.pool.maxIdle>
+				<redis.pool.minIdle>0</redis.pool.minIdle>
+				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
 				<redis.host>192.168.110.8</redis.host>
 				<redis.port>6379</redis.port>
 			</properties>
