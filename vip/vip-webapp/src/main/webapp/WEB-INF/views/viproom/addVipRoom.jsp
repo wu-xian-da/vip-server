@@ -78,8 +78,9 @@
 		var url = "getAirPortList?provinceId="+provinceId
 		$.get(url,function(_d){
 			var size = _d.length;
+			console.log(_d)
 			for(var index =0 ;index < size;index ++){
-				$("#airportId").append("<option value='"+_d[index].id+"'>"+_d[index].name+"</option>");
+				$("#airportId").append("<option value='"+_d[index].airport_id+"'>"+_d[index].airport_name+"</option>");
 			}
 		})
 	}

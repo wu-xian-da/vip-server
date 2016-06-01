@@ -32,9 +32,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.service.base.AppPictureManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 
 /**
@@ -54,6 +56,17 @@ public class OrderMapperTest {
 
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
+	@Autowired
+	private AppPictureManager appPictureManager;
+	
+	
+	@Test
+	public void insertPictureTest(){
+		AppPicture appPicture =  new AppPicture();
+		appPicture.setViproomId("5ec93401-444a-40c1-b778-3dc9a10ecbb2");
+		appPicture.setPictureUrl("/viproomPhoto/夜晚.jpg");
+		appPictureManager.save(appPicture);
+	}
 
 	//订单列表分页测试
 	@Test

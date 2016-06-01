@@ -8,7 +8,6 @@
 package com.jianfei.controller;
 
 import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +26,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.SysViproom;
-import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.service.base.AriPortManager;
-import com.jianfei.core.service.base.impl.AriPortManagerImpl;
+import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 
 /**
@@ -55,7 +55,7 @@ public class VipRoomController extends BaseController {
 	@Autowired
 	private AriPortManager ariPortService;
 	@Autowired
-	private AriPortManagerImpl ariPortManagerImpl;
+	private AppPictureManagerImpl appPictureManagerImpl;
 	
 	@RequestMapping("/gotoVipRoomView")
 	public String test(){
@@ -112,12 +112,9 @@ public class VipRoomController extends BaseController {
 	 */
 	@RequestMapping("gotoAddVipRoomView")
 	public String gotoAddVipRoomView(Model model){
-		//返回所有的场站信息
-		MessageDto<List<AriPort>> list= ariPortService.get(null);
 		Map<String,Object> reqMap = new HashMap<String,Object>();
 		reqMap.put("pid", 0);
-		List<Map<String,Object>> provinceList = ariPortManagerImpl.selectCityById(reqMap);
-		//List<AriPort> airportList = list.getData();
+		List<Map<String,Object>> provinceList = ariPortService.selectCityById(reqMap);
 		model.addAttribute("provinceList", provinceList);
 		return "viproom/addVipRoom";
 	}
@@ -132,9 +129,11 @@ public class VipRoomController extends BaseController {
 	@RequestMapping(value="addVipRoomInfo",method=RequestMethod.POST)
 	public String addVipRoom(@RequestParam( value = "file", required = false) MultipartFile file,HttpServletRequest request,SysViproom room){
 		//文件上传
-        String path = request.getSession().getServletContext().getRealPath("upload");  
-        String fileName = file.getOriginalFilename(); 
-        File targetFile = new File(path, fileName);  
+        String path =  GloabConfig.getInstance().getConfig("upload.home.dir")+"//viproomPhoto";  
+        System.out.println("path="+path);
+        String fileName = file.getOriginalFilename();
+        String newFileName = UUIDUtils.returnNewFileName(fileName);
+        File targetFile = new File(path, newFileName);  
         if(!targetFile.exists()){  
             targetFile.mkdirs();  
         }  
@@ -143,11 +142,16 @@ public class VipRoomController extends BaseController {
         } catch (Exception e) {  
             e.printStackTrace();  
         }  
-        System.out.println("文件的相对路径："+request.getContextPath()+"/upload/"+fileName);
-		room.setViproomId(UUID.randomUUID().toString());
+        String relativePath = "/viproomPhoto/"+newFileName;
+        String viproomId = UUID.randomUUID().toString();
+		room.setViproomId(viproomId);
 		room.setDtflag(0);//0表示不删除
 		vipRoomManagerImp.addVipRoom(room);
 		//保存图片url
+		AppPicture appPicture =  new AppPicture();
+		appPicture.setViproomId(viproomId);
+		appPicture.setPictureUrl(relativePath);
+		appPictureManagerImpl.save(appPicture);
 		
 		return "redirect:gotoVipRoomView";
 	}
@@ -184,7 +188,9 @@ public class VipRoomController extends BaseController {
 	@RequestMapping(value="editVipRoomInfo",method=RequestMethod.POST)
 	public String editVipRoomById(SysViproom room){
 		room.setDtflag(0);
+		//更新vip室信息
 		vipRoomManagerImp.updateVipRoom(room);
+		//更新vip室图片信息
 		return "redirect:gotoVipRoomView";
 	}
 	
@@ -195,11 +201,10 @@ public class VipRoomController extends BaseController {
 	 */
 	@RequestMapping("getAirPortList")
 	@ResponseBody
-	public List<AriPort> getAirPortList(@RequestParam(value="provinceId") String provinceId){
+	public List<Map<String,Object>> getAirPortList(@RequestParam(value="provinceId") String provinceId){
 		Map<String,Object> reqMap = new HashMap<String,Object>();
 		reqMap.put("province", provinceId);
-		MessageDto<List<AriPort>> list= ariPortService.get(reqMap);
-		List<AriPort> airportList = list.getData();
-		return airportList;
+		List<Map<String, Object>> list= ariPortService.mapList(reqMap);
+		return list;
 	}
 }

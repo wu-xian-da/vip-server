@@ -29,7 +29,16 @@
 				<label>vip室单价：</label>
 				<input type="text" name="singleconsumeMoney" value="200" readonly="readonly">
 			</div>
-
+			
+			<div class="clerk-container-item">
+				<label>场站所属省会：</label>
+				<select name="provinceId" id="provinceSele" onchange="getAirPortList()">
+					<c:forEach items="${provinceList}" var="province">
+						<option value="${province.cid}">${province.name}</option>
+					</c:forEach>
+				</select>
+			</div>
+			
 			<div class="clerk-container-item">
 				<label>场站名称：</label> 
 				<select name="airportId" id="">
@@ -38,7 +47,17 @@
 					</c:forEach>
 				</select>
 			</div>
-
+			
+			<div class="clerk-container-item">
+				<label>场站位置：</label>
+				<input type="text" name="address" value="${viproom.address }"/>
+			</div>
+			
+			<div class="clerk-container-item">
+				<label>vip室图片：</label>
+				<input type="file" name="file" /> 
+			</div>
+			
 			<div class="clerk-container-item">
 				<label>vip室信息编辑：</label>
 				<textarea name="remark1">${viproom.remark1}</textarea>
