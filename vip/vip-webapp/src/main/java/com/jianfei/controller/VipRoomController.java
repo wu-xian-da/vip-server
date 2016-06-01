@@ -7,6 +7,9 @@
  */
 package com.jianfei.controller;
 
+import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,15 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.common.utils.DateUtil;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.base.impl.AriPortManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 
 /**
@@ -47,6 +54,8 @@ public class VipRoomController extends BaseController {
 	private VipRoomManagerImpl vipRoomManagerImp;
 	@Autowired
 	private AriPortManager ariPortService;
+	@Autowired
+	private AriPortManagerImpl ariPortManagerImpl;
 	
 	@RequestMapping("/gotoVipRoomView")
 	public String test(){
@@ -105,8 +114,11 @@ public class VipRoomController extends BaseController {
 	public String gotoAddVipRoomView(Model model){
 		//返回所有的场站信息
 		MessageDto<List<AriPort>> list= ariPortService.get(null);
-		List<AriPort> airportList = list.getData();
-		model.addAttribute("airportList", airportList);
+		Map<String,Object> reqMap = new HashMap<String,Object>();
+		reqMap.put("pid", 0);
+		List<Map<String,Object>> provinceList = ariPortManagerImpl.selectCityById(reqMap);
+		//List<AriPort> airportList = list.getData();
+		model.addAttribute("provinceList", provinceList);
 		return "viproom/addVipRoom";
 	}
 	
@@ -118,10 +130,25 @@ public class VipRoomController extends BaseController {
 	 * @version  1.0.0
 	 */
 	@RequestMapping(value="addVipRoomInfo",method=RequestMethod.POST)
-	public String addVipRoom(SysViproom room){
+	public String addVipRoom(@RequestParam( value = "file", required = false) MultipartFile file,HttpServletRequest request,SysViproom room){
+		//文件上传
+        String path = request.getSession().getServletContext().getRealPath("upload");  
+        String fileName = file.getOriginalFilename(); 
+        File targetFile = new File(path, fileName);  
+        if(!targetFile.exists()){  
+            targetFile.mkdirs();  
+        }  
+        try {  
+            file.transferTo(targetFile);  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+        System.out.println("文件的相对路径："+request.getContextPath()+"/upload/"+fileName);
 		room.setViproomId(UUID.randomUUID().toString());
 		room.setDtflag(0);//0表示不删除
 		vipRoomManagerImp.addVipRoom(room);
+		//保存图片url
+		
 		return "redirect:gotoVipRoomView";
 	}
 	
@@ -159,5 +186,20 @@ public class VipRoomController extends BaseController {
 		room.setDtflag(0);
 		vipRoomManagerImp.updateVipRoom(room);
 		return "redirect:gotoVipRoomView";
+	}
+	
+	/**
+	 * 根据省id获取所有的场站列表
+	 * @param provinceId
+	 * @return
+	 */
+	@RequestMapping("getAirPortList")
+	@ResponseBody
+	public List<AriPort> getAirPortList(@RequestParam(value="provinceId") String provinceId){
+		Map<String,Object> reqMap = new HashMap<String,Object>();
+		reqMap.put("province", provinceId);
+		MessageDto<List<AriPort>> list= ariPortService.get(reqMap);
+		List<AriPort> airportList = list.getData();
+		return airportList;
 	}
 }
