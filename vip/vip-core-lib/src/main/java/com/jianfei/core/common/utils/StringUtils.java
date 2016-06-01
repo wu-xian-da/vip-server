@@ -45,6 +45,12 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		}
 	}
 
+	public static String obj2String(Object obj) {
+		if (null == obj)
+			return "";
+		return obj.toString();
+	}
+
 	/**
 	 * 转换为字节数组
 	 * 

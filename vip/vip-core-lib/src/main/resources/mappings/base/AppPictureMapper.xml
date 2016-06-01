@@ -11,6 +11,11 @@
 		<result column="imagetype" property="imagetype" />
 		<result column="descr" property="descr" />
 	</resultMap>
+	<!--更新vip室图片信息  -->
+	<update id="updateByVipRoomId" parameterType="java.util.Map">
+		update app_picture set picture_url = #{pictureUrl} where viproom_id = #{viproomId}
+	</update>
+	
 	<select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -23,6 +28,19 @@
 				and imagetype=#{imagetype}
 			</if>
 		</where>
+	</select>
+	<select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+			SELECT
+			`picture_id`,
+			`viproom_id`,
+			`picture_url`,
+			`click_url`,
+			`priority`,
+			`dtflag`,
+			`imagetype`,
+			`descr`
+		FROM
+			`app_picture`
 	</select>
 
 	<sql id="Base_Column_List">

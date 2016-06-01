@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,20 +173,20 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	 */
 	@Override
 	public List<Map<String, Object>> datePermissionData(Long id) {
-		MessageDto<List<AriPort>> messageDto = get(new MapUtils.Builder()
+		List<Map<String, Object>> mapList = mapList(new MapUtils.Builder()
 				.build());
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		if (!messageDto.isOk()) {
+		if (CollectionUtils.isEmpty(mapList)) {
 			return list;
 		}
 		MessageDto<List<AriPort>> aList = selectAriportByUserId(id);
-		for (AriPort ariPort : messageDto.getData()) {
+		for (Map<String, Object> ariPort : mapList) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", ariPort.getId());
-			map.put("name", ariPort.getName());
+			map.put("id", ariPort.get("airport_id"));
+			map.put("name", ariPort.get("airport_name"));
 			map.put("checked", false);
 			for (AriPort port : aList.getData()) {
-				if (ariPort.getId().equals(port.getId())) {
+				if (ariPort.get("airport_id").equals(port.getId())) {
 					map.put("checked", true);
 				}
 			}

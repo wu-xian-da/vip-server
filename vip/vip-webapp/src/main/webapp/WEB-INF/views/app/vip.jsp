@@ -27,8 +27,8 @@
 			pagination : true,
 			singleSelect : true,
 			idField : 'customerId',
-			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+			pageSize : 20,
+			pageList : [20, 30, 40, 50, ],
 		
 			columns : [ [ {
 				width : '80',
@@ -57,11 +57,15 @@
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
-						return '业务APP轮播图';
+						return '未支付';
 					case 1:
-						return '用户APP轮播图';
+						return '已支付';
 					case 2:
-						return '用户APP合作按钮';
+						return '正在审核';
+					case 3:
+						return '审核通过';
+					case 4:
+						return '已退款';
 					}
 				}
 			}, {
@@ -86,10 +90,22 @@
 			}
 		});
 	});
+	
+	function exportVip(){
+	   window.open(sy.contextPath + '/app/download');
+	}
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<div id="toolbar" style="display: none;">
+	<table>
+			<tr>
+				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_go',plain:true" onclick="exportVip()">导出</a></td>
+				<td><div class="datagrid-btn-separator"></div></td>
+				<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索场站名称'"></input></td>
+				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">查询全部</a></td>
+			</tr>
+		</table>
 	</div>
 	<div data-options="region:'center',fit:true,border:false">
 		<table id="grid" data-options="fit:true,border:false"></table>

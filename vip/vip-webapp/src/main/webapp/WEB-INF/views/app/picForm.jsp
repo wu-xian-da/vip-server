@@ -120,11 +120,11 @@
 			<legend>用户基本信息</legend>
 			<table class="table" style="width: 100%;">
 				<tr>
-					<th>排序</th>
+					<th>排序:</th>
 					<td><input class="easyui-numberspinner" name="priority"   required="required"  value="${appPicture.priority } data-options="increment:1,min:1,editable:false" style="width:120px;" ></td>
 				</tr>
 				<tr>
-					<th>类型</th>
+					<th>类型:</th>
 					<td><select class="easyui-combobox" name=imagetype data-options="panelHeight:'auto',editable:false" style="width: 155px;">
 							<option value="0" <c:if test="${appPicture.imagetype==0 }">selected="selected"</c:if> >业务APP轮播图</option>
 							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >用户APP轮播图</option>
@@ -132,19 +132,19 @@
 					</select></td>
 				</tr>
 				<tr>
-					<th>描述</th>
-					<td><input name="descr" value="${appPicture.descr }" class="easyui-validatebox" data-options="required:true" /></td>
-				</tr>
-				<tr>
-					<th>链接地址</th>
+					<th>链接地址:</th>
 					<td><input name="clickUrl" value="${appPicture.clickUrl }" class="easyui-validatebox" data-options="required:true" /></td>
 				</tr>
 				<tr>
-					<th>照片上传</th>
+					<th>选择照片:</th>
 					<td><div id="container">
-							<a id="pickfiles" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom'">选择文件</a>
+							<a id="pickfiles" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom'">选择照片</a>
 							<div id="filelist">您的浏览器没有安装Flash插件，或不支持HTML5！</div>
 						</div></td>
+				</tr>
+				<tr>
+					<th>描述:</th>
+						<td><textarea name="descr" style="width: 350px;height: 200px;" data-options="required:true">${appPicture.descr }</textarea></td>
 				</tr>
 				<tr>
 					<th></th>

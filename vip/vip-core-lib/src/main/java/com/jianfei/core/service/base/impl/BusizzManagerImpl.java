@@ -88,25 +88,6 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jianfei.core.common.persistence.BaseService#get(java.util.Map)
-	 */
-	@Override
-	public MessageDto<List<User>> get(Map<String, Object> params) {
-		MessageDto<List<User>> messageDto = new MessageDto<List<User>>();
-
-		try {
-			List<User> list = busizzMaapper.get(params);
-			messageDto.setData(list);
-		} catch (Exception e) {
-			logger.error("添加业务员:{}", e.getMessage());
-			return messageDto.setMsgBody(MessageDto.MsgFlag.ERROR);
-		}
-		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * com.jianfei.core.service.base.BusizzService#saveUser(com.jianfei.core
 	 * .bean.User, java.lang.String, java.lang.String)
@@ -174,6 +155,7 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	 */
 	@Override
 	public List<Map<String, Object>> listMap(Map<String, Object> map) {
+
 		return busizzMaapper.listMap(map);
 	}
 }

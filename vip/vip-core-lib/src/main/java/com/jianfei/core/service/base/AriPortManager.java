@@ -53,18 +53,18 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	List<String> getAriPortProvince();
 
 	/**
+	 * @param 查找城市
+	 * @return
+	 */
+	List<Map<String, Object>> selectCityById(Map<String, Object> map);
+
+	/**
 	 * 根据省份获取机场信息
 	 * 
 	 * @param provinceId
 	 * @return
 	 */
 	List<SysAirport> getAirPortByProvince(String provinceId);
-
-	/**
-	 * @param 查找城市
-	 * @return
-	 */
-	List<Map<String, Object>> selectCityById(Map<String, Object> map);
 
 	/**
 	 * mapList(机场的map集合)

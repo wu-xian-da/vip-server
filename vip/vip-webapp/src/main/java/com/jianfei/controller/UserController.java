@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -111,7 +112,17 @@ public class UserController extends BaseController {
 			MessageDto<List<User>> messageDto = userManaer.get(searchParams);
 			if (messageDto.isOk()) {
 				model.addAttribute("user", messageDto.getData().get(0));
+				List<Role> roles = roelManager.selectRoleByUserId(messageDto
+						.getData().get(0).getId());
+				if (!CollectionUtils.isEmpty(roles)) {
+					model.addAttribute("selected", roles.get(0));
+				}
 			}
+		}
+		MessageDto<List<Role>> roleMessageDto = roelManager
+				.get(new MapUtils.Builder().build());
+		if (roleMessageDto.isOk()) {
+			model.addAttribute("roleSeclect", roleMessageDto.getData());
 		}
 		List<Map<String, Object>> list = ariPortService
 				.datePermissionData(StringUtils.toLong(user.getId()));

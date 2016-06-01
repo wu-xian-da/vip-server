@@ -8,10 +8,12 @@
 package com.jianfei.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.common.enu.VipOrderState;
+import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
@@ -188,4 +192,48 @@ public class AppPicController extends BaseController {
 		return "app/vipInfo";
 	}
 
+	@RequestMapping(value = "/download")
+	public void export(HttpServletRequest request, HttpServletResponse response) {
+		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
+				.get(new MapUtils.Builder().build());
+		if (messageDto.isOk()) {
+			List<ExportAip> dataset = new ArrayList<ExportAip>();
+			for (AppCustomer appCustomer : messageDto.getData()) {
+				ExportAip exportAip = new ExportAip(
+						StringUtils.obj2String(appCustomer.getCustomerName()),
+						StringUtils.obj2String(appCustomer.getPhone()),
+						StringUtils.obj2String(appCustomer.getCreateTime()),
+						StringUtils.obj2String(appCustomer.getAddress()),
+						StringUtils.obj2String(appCustomer.getEmail()),
+						returnPayState(StringUtils.obj2String(appCustomer
+								.getOrderStatu())));
+				dataset.add(exportAip);
+				System.out.println(appCustomer
+								.getOrderStatu());
+			}
+			download(response, new String[] { "姓名", "手机号", "日期", "常住地址", "邮箱",
+					"用户状态" }, dataset, "vip用户.xls");
+		}
+	}
+
+	/**
+	 * 支付状态
+	 * 
+	 * @param state
+	 * @return
+	 */
+	public String returnPayState(String state) {
+		if (VipOrderState.NOT_PAY.equals(state)) {
+			return "未支付";
+		} else if (VipOrderState.ALREADY_PAY.equals(state)) {
+			return "已支付";
+		} else if (VipOrderState.ALREADY_REFUND.equals(state)) {
+			return "已退款";
+		} else if (VipOrderState.AUDIT_PASS.equals(state)) {
+			return "审核通过";
+		} else if (VipOrderState.BEING_AUDITED.equals(state)) {
+			return "正在审核";
+		}
+		return "未支付";
+	}
 }
