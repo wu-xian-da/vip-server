@@ -403,6 +403,32 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		return paraMap;
 	}
 
+	public static Map<String, String> selectCity(String selectCitys) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (isEmpty(selectCitys)) {
+			map.put("provice", "");
+			map.put("city", "");
+			map.put("country", "");
+			return map;
+		}
+		String[] citys = selectCitys.split("-");
+		if (citys.length == 1) {
+			map.put("provice", citys[0]);
+			map.put("city", "");
+			map.put("country", "");
+		} else if (citys.length == 2) {
+			map.put("provice", citys[0]);
+			map.put("city", citys[1]);
+			map.put("country", "");
+		} else if (citys.length == 3) {
+			map.put("provice", citys[0]);
+			map.put("city", citys[1]);
+			map.put("country", citys[2]);
+		}
+
+		return map;
+	}
+
 	public static void main(String[] args) {
 		String ss = "1,2,3,4,5,r";
 		List<Long> list = stringArray2Long(ss, ",");

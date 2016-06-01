@@ -41,7 +41,7 @@
 		dtflag, header_name, header_phone
 	</sql>
 
-	<select id="get" resultMap="airportRs" parameterType="java.util.Map">
+	<select id="mapList" resultType="java.util.Map" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT 
 			  t1.airport_id,

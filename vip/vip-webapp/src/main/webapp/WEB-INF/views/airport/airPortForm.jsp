@@ -26,40 +26,41 @@
 		}
 	};
 </script>
+	<link rel="stylesheet" href="${ctx }/style/vip.css">
 </head>
 <body>
-	<form method="post" class="form">
+	<form method="post" class="form" >
 		<fieldset>
 			<legend>场站基本信息</legend>
-			<input name="id" type="hidden" value="${ariPort.id }" readonly="readonly" />
+			<input name="id" type="hidden" value="${ariPort.airport_id }" readonly="readonly" />
 			<table class="table" style="width: 100%;">
 				<tr style="padding-top: 5px;">
 					<th>场站名称:</th>
-					<td><input name="name"  value="${ariPort.name }" class="easyui-validatebox" data-options="required:true" /></td>
+					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox" data-options="required:true" style="text-align: left;"/></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>省市信息:</th>
 					<td>
 					
 						<div class="demo-wrap">
-							<div><input id="pr2" type="text" name="province" placeholder="省份" value="${ariPort.province }"  /></div>
-							<div><input id="ci2" type="text" name="city" placeholder="城市"   value="${ariPort.city }"/></div>
-							<div><input id="co2" type="text" name="country" placeholder="县级" value="${ariPort.country }" /></div>
+							<div id="selectbox">
+
+							</div>
 						</div>
 					</td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>场站负责人:</th>
-					<td><input name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.headerName }" /></td>
+					<td><input name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_name }" /></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>负责人联系方式:</th>
-					<td><input name="headerPhone" class="easyui-validatebox" data-options="required:true" value="${ariPort.headerPhone }" /></td>
+					<td><input name="headerPhone" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_phone }" /></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>业务员数量:</th>
 					<td>
-					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agentNum } data-options="increment:1" style="width:120px;" ></input>
+					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agent_num } data-options="increment:1" style="width:120px;" ></input>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>场站状态:</th>
@@ -75,10 +76,76 @@
 			</table>
 		</fieldset>
 	</form>
-	 <script type="text/javascript">
-            new locationCard({
-                ids: ['pr2', 'ci2', 'co2']
-            }).init();
-        </script>
+       <script>
+		$(function() {
+			function SelectedBox(args) {
+				var $_selectBox = $("#" + args.elem);
+				_selectboxHTMl = '<style type=\"text/css\">' + '#' + args.elem + ' select{ margin-right: 20px; }' + '</style>' + '<select name=\"\" id=\"province-select\">' + '<option value=\"\">请选择省份</option>' + '</select><br>'
+				+ '<select name=\"\" id=\"city-select\">' + '<option value=\"\">请选择城市</option>' + '</select><br>'
+				+ '<select name=\"\" id=\"region-select\">' + '<option value=\"\">请选择区域</option>' + '</select>'
+				+ '<input type=\"hidden\" value=\"\" name=\"province\" id=\"region-input-id\">';
+				$_selectBox.html($(_selectboxHTMl));
+				var $_regionInputId = $("body #region-input-id");
+				$.get(args.provinceUrl, function(_d) {
+					var _provinOption = '<option value=\"\">请选择省份</option>';
+					for (var i = 0; i < _d.length; i++) {
+						_provinOption += '<option value=\"' + _d[i].cid + '\">' + _d[i].name + '</option>';
+					}
+					$("body #province-select").html(_provinOption);
+				}, 'json');
+				$("body").on('change', '#province-select', function() {
+					var _pId = $(this).val();
+					if (_pId != "") {
+						$.get(args.cityUrl, {
+							pid: _pId
+						}, function(_d) {
+							var _cityOption = "<option value=\"\">请选择城市</option>";
+							for (var i = 0; i < _d.length; i++) {
+								_cityOption += '<option value=\"' + _d[i].cid + '\">' + _d[i].name + '</option>';
+							}
+							$("body #city-select").html(_cityOption);
+							$("body #region-select").html('<option value=\"\">请选择区域</option>')
+							$_regionInputId.val(_pId);
+						}, 'json')
+					}
+				});
+				$("body").on('change', '#city-select', function() {
+					var _cId = $(this).val();
+					if (_cId != "") {
+						$.get(args.regionUrl, {
+							pid: _cId
+						}, function(_d) {
+							var _regionOption = '<option value=\"\">请选择区域</option>';
+							for (var i = 0; i < _d.length; i++) {
+								_regionOption += '<option value=\"' + _d[i].cid + '\">' + _d[i].name + '</option>';
+							}
+							$("body #region-select").html(_regionOption);
+							var _regionInputId = $_regionInputId.val().split('-')
+							$_regionInputId.val(_regionInputId[0] + '-' + _cId);
+						}, 'json')
+					}
+				});
+				$("body").on("change", '#region-select', function() {
+					var _regionId = $(this).val();
+					if (_regionId != "") {
+						$_regionInputId.val($_regionInputId.val() + '-' + _regionId);
+					}
+				});
+			}
+			new SelectedBox({
+				elem: "selectbox",
+				provinceUrl: '${ctx}/airport/selectCity?pid=0',
+				cityUrl: '${ctx}/airport/selectCity',
+				regionUrl: '${ctx}/airport/selectCity'
+			});
+		})
+		
+		function returnFun(obj){
+			if(obj==''||null==obj){
+				return '0';
+			}
+			return obj;
+		}
+	</script>
 </body>
 </html>
