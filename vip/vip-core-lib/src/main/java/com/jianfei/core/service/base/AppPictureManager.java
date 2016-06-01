@@ -36,4 +36,6 @@ public interface AppPictureManager {
 	MessageDto<AppPicture> selectByPrimaryKey(Integer pictureId);
 
 	List<AppPicture> getPicture(PictureType pictureType);
+	//更新vip室图片信息
+	int updateByVipRoomId(Map<String,Object> map);
 }

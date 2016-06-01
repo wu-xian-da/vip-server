@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,6 +32,7 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.base.AppInvoiceManager;
@@ -319,7 +319,6 @@ public class OrderController extends BaseController {
 	@RequestMapping(value="/applyBackCard")
 	@ResponseBody
 	public Map<String,Object> applyBackCard(String orderId,Integer operationType,String phone){
-		System.out.println("orderId="+orderId+" operationType="+operationType+" phone="+phone);
 		//1、改变订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、发送验证码
@@ -396,7 +395,7 @@ public class OrderController extends BaseController {
 		String userId = user.getId()+"";
 		
 		AppCardBack appCardBack = new AppCardBack();
-		appCardBack.setBackId(UUID.randomUUID().toString());
+		appCardBack.setBackId(UUIDUtils.getPrimaryKey());
 		appCardBack.setCreateTime(new Date());
 		appCardBack.setOrderId(orderId);
 		appCardBack.setCustomerCard(backCardNo);

@@ -1,3 +1,4 @@
+
 /**
  * @项目名:vip
  * @版本信息:1.0
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.common.utils.GloabConfig;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.jianfei.core.bean.AppPicture;
-import com.jianfei.core.common.cache.CacheCons;
-import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.enu.PictureType;
-import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.mapper.AppPictureMapper;
 import com.jianfei.core.service.base.AppPictureManager;
+
+import static com.jianfei.core.common.utils.GloabConfig.getConfig;
 
 /**
  *
@@ -154,16 +155,15 @@ public class AppPictureManagerImpl implements AppPictureManager {
 	 */
 	@Override
 	public List<AppPicture> getPicture(PictureType pictureType) {
-		AppPicture appPicture = new AppPicture();
+		AppPicture appPicture=new AppPicture();
 		appPicture.setImagetype(pictureType.getName());
-		List<AppPicture> pictures = appPictureMapper.getPicture(appPicture);
-		if (pictures == null) {
+		List<AppPicture> pictures=appPictureMapper.getPicture(appPicture);
+		if (pictures==null){
 			return new ArrayList<>();
 		}
-		String staticIP = GloabConfig
-				.getConfig("static.resource.server.address");
-		for (AppPicture picture : pictures) {
-			picture.setPictureUrl(staticIP + picture.getPictureUrl());
+	   String staticIP=GloabConfig.getConfig("static.resource.server.address");
+		for (AppPicture picture:pictures){
+			picture.setPictureUrl(staticIP+picture.getPictureUrl());
 		}
 		return appPictureMapper.getPicture(appPicture);
 	}
