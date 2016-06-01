@@ -71,7 +71,7 @@
 			rownumbers : true,
 			pagination : true,
 			singleSelect : true,
-			idField : 'id',
+			idField : 'airport_id',
 			sortName : 'seq',
 			sortOrder : 'asc',
 			columns : [ [{
@@ -82,19 +82,19 @@
 			} , {
 				width : '150',
 				title : '场站名称',
-				field : 'name'
+				field : 'airport_name'
 			},{
 				width : '100',
 				title : '负责人',
-				field : 'headerName'
+				field : 'header_name'
 			},{
 				width : '100',
 				title : '负责人电话',
-				field : 'headerPhone'
+				field : 'header_phone'
 			},{
 				width : '100',
 				title : '业务员人数',
-				field : 'agentNum'
+				field : 'agent_num'
 			},{
 				width : '100',
 				title : '开卡总量',
@@ -125,7 +125,7 @@
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:station:update")) {%>
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.airport_id);
 					<%}%>
 					return str;
 				}

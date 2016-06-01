@@ -222,4 +222,14 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	public List<Map<String, Object>> selectCityById(Map<String, Object> map) {
 		return ariPortMapper.selectCityById(map);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.core.service.base.AriPortManager#mapList(java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> mapList(Map<String, Object> map) {
+		return ariPortMapper.mapList(map);
+	}
 }

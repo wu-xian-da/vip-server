@@ -65,4 +65,13 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	 * @return
 	 */
 	List<Map<String, Object>> selectCityById(Map<String, Object> map);
+
+	/**
+	 * mapList(机场的map集合)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> mapList(Map<String, Object> map);
 }
