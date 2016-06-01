@@ -13,6 +13,7 @@
 <script src="${pageContext.request.contextPath}/public/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/jquery.easyui.min.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/vue.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
 		
 </head>
 <body>
@@ -21,7 +22,7 @@
 		<form action="addVipRoomInfo" method="post"  enctype="multipart/form-data">
 			<div class="clerk-container-item">
 				<label>vip室名称：</label>
-				<input type="text" name="viproomName" value=""/>
+				<input class="easyui-validatebox" type="text" name="viproomName" value="" data-options="required:true"/>
 			</div>
 			
 			<div class="clerk-container-item">
@@ -52,7 +53,7 @@
 			
 			<div class="clerk-container-item">
 				<label>vip室图片：</label>
-				<input type="file" name="file" /> 
+				<input type="file" name="file"/> 
 			</div>
 				
 			<div class="clerk-container-item">

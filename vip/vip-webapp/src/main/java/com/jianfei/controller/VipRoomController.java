@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -144,7 +143,7 @@ public class VipRoomController extends BaseController {
             e.printStackTrace();  
         }  
         String relativePath = "/viproomPhoto/"+newFileName;
-        String viproomId = UUID.randomUUID().toString();
+        String viproomId = UUIDUtils.getPrimaryKey();
 		room.setViproomId(viproomId);
 		room.setDtflag(0);//0表示不删除
 		vipRoomManagerImp.addVipRoom(room);

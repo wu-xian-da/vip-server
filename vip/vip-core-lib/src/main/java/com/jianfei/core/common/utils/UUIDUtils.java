@@ -20,4 +20,14 @@ public class UUIDUtils {
 		String newFileName = UUID.randomUUID()+fileName.substring(beginIndex, fileName.length());
 		return newFileName;
 	}
+	
+	/**
+	 * 生成主键(32位)
+	 * @param fileName
+	 * @return
+	 */
+	public static String getPrimaryKey(){
+		String primaryKey = UUID.randomUUID().toString();
+		return primaryKey.replaceAll("-", "");
+	}
 }

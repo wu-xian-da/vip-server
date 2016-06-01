@@ -13,6 +13,7 @@
 <script src="${pageContext.request.contextPath}/public/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/jquery.easyui.min.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/vue.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
 		
 </head>
 <body>
@@ -22,7 +23,7 @@
 			<div class="clerk-container-item">
 				<label>vip室名称：</label>
 				<input type="hidden" name="viproomId" value="${viproom.viproomId}">
-				<input type="text" name="viproomName" value="${viproom.viproomName }"/>
+				<input class="easyui-validatebox" type="text" name="viproomName" value="${viproom.viproomName }" data-options="required:true"/>
 			</div>
 			
 			<div class="clerk-container-item">

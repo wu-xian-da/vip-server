@@ -104,15 +104,15 @@
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
                     	<input type="hidden" value="" id="hideOrderId"/>
-                        <label>输入微信号:</label><input type="text" id="backCardNo0">
+                        <label>输入微信号:</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入支付宝账号:</label><input type="text" id="backCardNo1">
+                        <label>输入支付宝账号:</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入银行卡号:</label><input type="text" id="backCardNo2">
+                        <label>输入银行卡号:</label><input class="easyui-validatebox" type="text" id="backCardNo2" data-options="required:true">
                     </div>
                 </div>
 
