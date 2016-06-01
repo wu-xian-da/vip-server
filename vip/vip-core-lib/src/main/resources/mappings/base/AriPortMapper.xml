@@ -201,12 +201,13 @@
 		<![CDATA[	SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=#{id} 	]]>
 	</select>
 
-	<resultMap type="java.lang.String" id="province">
-		<result property="province" column="province" />
+	<resultMap type="com.jianfei.core.dto.BaseDto" id="province">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
 	</resultMap>
 
-	<select id="getAriPortProvince" resultMap="province">
-		<![CDATA[	SELECT  DISTINCT (a.province) FROM sys_airport a 	]]>
+	<select id="getAriPortProvince" resultMap="province" >
+			SELECT c.CID as 'id',c.`name` as 'name' FROM  sys_city c JOIN (SELECT DISTINCT(a.province) FROM sys_airport a ) s ON s.province=c.CID;
 	</select>
 
 	<select id="getAirPortByProvince" resultMap="BaseResultMap"
@@ -216,7 +217,7 @@
 		from sys_airport
 		<where>
 			<if test="province != null">
-				and province= #{province,jdbcType=VARCHAR}
+				and province= #{province}
 			</if>
 		</where>
 	</select>

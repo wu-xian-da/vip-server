@@ -13,6 +13,8 @@ import java.util.Map;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import com.jianfei.core.dto.BaseDto;
+import org.apache.ibatis.annotations.Param;
 
 /**
  *
@@ -37,7 +39,7 @@ public interface AriPortMapper extends BaseMapper<AriPort> {
 	 * 
 	 * @return
 	 */
-	List<String> getAriPortProvince();
+	List<BaseDto> getAriPortProvince();
 
 	/**
 	 * 根据省份获取机场信息
@@ -45,7 +47,7 @@ public interface AriPortMapper extends BaseMapper<AriPort> {
 	 * @param province
 	 * @return
 	 */
-	List<SysAirport> getAirPortByProvince(String province);
+	List<SysAirport> getAirPortByProvince(@Param("province") String province);
 
 	/**
 	 * @param 查找城市

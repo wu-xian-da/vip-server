@@ -1,4 +1,4 @@
-package com.jianfei.common;
+package com.jianfei.core.dto;
 
 /**
  * TODO
@@ -10,7 +10,7 @@ package com.jianfei.common;
  */
 public class BaseMsgInfo {
     /**
-     * Code
+     * Code 0 成功 -1 失败 其他使用HTTP状态码
      */
     private int code;
 
@@ -20,12 +20,13 @@ public class BaseMsgInfo {
     private String msg;
 
     /**
-     * 失败
+     * 数据
      */
     private Object data;
 
     public BaseMsgInfo() {
     }
+
 
     public static BaseMsgInfo success(Object data) {
         BaseMsgInfo baseMsgInfo = new BaseMsgInfo();
@@ -47,23 +48,26 @@ public class BaseMsgInfo {
         return code;
     }
 
-    public void setCode(int code) {
+    public BaseMsgInfo setCode(int code) {
         this.code = code;
+        return this;
     }
 
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public BaseMsgInfo setMsg(String msg) {
         this.msg = msg;
+        return this;
     }
 
     public Object getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public BaseMsgInfo setData(Object data) {
         this.data = data;
+        return this;
     }
 }

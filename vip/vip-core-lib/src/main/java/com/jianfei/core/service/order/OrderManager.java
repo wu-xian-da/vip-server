@@ -9,6 +9,7 @@ import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
@@ -27,7 +28,7 @@ public interface OrderManager {
      *
      * @return
      */
-    boolean addOrderAndUserInfo(OrderAddInfoDto addInfoDto);
+    BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto);
 
     /**
      * 更新订单信息付款
@@ -159,4 +160,19 @@ public interface OrderManager {
      */
     AppOrders getOrderInfo(String orderId);
 
+    /**
+     *
+     * @param orderId
+     * @param payType
+     * @return
+     */
+    boolean checkThirdPay(String orderId, PayType payType);
+
+    /**
+     * 根据手机号查询用户VIP卡使用信息和订单详细信息
+     * @param phone 手机号
+     * @param code
+     * @return
+     */
+    BaseMsgInfo  getVipCardUseAndOrder(String phone,String code);
 }

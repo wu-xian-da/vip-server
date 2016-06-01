@@ -1,16 +1,14 @@
 package com.jianfei.order;
 
-import com.jianfei.common.BaseMsgInfo;
 import com.jianfei.core.bean.AppInvoice;
-import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.OrderAddInfoDto;
-import com.jianfei.core.service.order.PayManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
-import com.jianfei.core.service.order.impl.PayClass;
-import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -38,12 +36,7 @@ public class OrderController {
     @RequestMapping(value = "/addOrder")
     @ResponseBody
     public BaseMsgInfo addOrder(OrderAddInfoDto addInfoDto) {
-      boolean flag=  orderManager.addOrderAndUserInfo(addInfoDto);
-        if(flag){
-            return BaseMsgInfo.success(addInfoDto);
-        }else {
-            return BaseMsgInfo.fail(addInfoDto);
-        }
+     return orderManager.addOrderAndUserInfo(addInfoDto);
     }
 
 
@@ -53,13 +46,24 @@ public class OrderController {
      * @param payType  支付类型
      * @return
      */
-    @RequestMapping(value = "/getPayUrl")
+    @RequestMapping(value = "/payUrl", method = RequestMethod.GET)
     @ResponseBody
     public BaseMsgInfo getPayUrl(@RequestParam(value = "orderId", required = true) String orderId,
-                                 @RequestParam(value = "payType ", required = true) String payType
+                                 @RequestParam(value = "payType", required = true) String payType
     ) {
-       //TODO
-        return new BaseMsgInfo();
+        PayType type = null;
+        if (PayType.WXPAY.getName().equals(payType)) {
+            type = PayType.WXPAY;
+        } else if (PayType.ALIPAY.getName().equals(payType)) {
+            type = PayType.ALIPAY;
+        } else if (PayType.BANKPAY.getName().equals(payType)) {
+            type = PayType.BANKPAY;
+        }
+        if (type == null)
+        return BaseMsgInfo.fail("");
+       /* String url=  orderManager.getPayUrl(orderId,type);*/
+        String url="www.baidu.com";
+        return BaseMsgInfo.success(url);
     }
 
     /**
@@ -68,13 +72,24 @@ public class OrderController {
      * @param payType  支付类型
      * @return
      */
-    @RequestMapping(value = "/checkThirdPay")
+    @RequestMapping(value = "/thirdPayState")
     @ResponseBody
     public BaseMsgInfo checkThirdPay(@RequestParam(value = "orderId", required = true) String orderId,
-                                 @RequestParam(value = "payType ", required = true) String payType
+                                 @RequestParam(value = "payType", required = true) String payType
     ) {
-        //TODO
-        return new BaseMsgInfo();
+        PayType type = null;
+        if (PayType.WXPAY.getName().equals(payType)) {
+            type = PayType.WXPAY;
+        } else if (PayType.ALIPAY.getName().equals(payType)) {
+            type = PayType.ALIPAY;
+        } else if (PayType.BANKPAY.getName().equals(payType)) {
+            type = PayType.BANKPAY;
+        }
+        if (type == null)
+            return BaseMsgInfo.fail("");
+
+        boolean flag= orderManager.checkThirdPay(orderId,type);
+        return BaseMsgInfo.success(flag);
     }
 
     /**
@@ -83,13 +98,13 @@ public class OrderController {
      * @param payType  支付类型
      * @return
      */
-    @RequestMapping(value = "/checkBuyerPay")
+    @RequestMapping(value = "/payState")
     @ResponseBody
     public BaseMsgInfo checkBuyerPay(@RequestParam(value = "orderId", required = true) String orderId,
-                                     @RequestParam(value = "payType ", required = true) String payType
+                                     @RequestParam(value = "payType", required = true) String payType
     ) {
-        //TODO
-        return new BaseMsgInfo();
+        //TODO 保存付款方式及已付款
+        return BaseMsgInfo.success(true);
     }
 
     /**
@@ -97,7 +112,7 @@ public class OrderController {
      * @param appInvoice 邮寄信息
      * @return
      */
-    @RequestMapping(value = "/addOrderMail")
+    @RequestMapping(value = "/orderMail")
     @ResponseBody
     public BaseMsgInfo addOrderMail(AppInvoice appInvoice
     ) {
@@ -109,15 +124,18 @@ public class OrderController {
         }
     }
 
-
-    @RequestMapping(value = "/getVipReturnInfo")
+    /**
+     * 用户使用记录查询接口
+     * @param phone 手机号
+     * @param code  验证码
+     * @return
+     */
+    @RequestMapping(value = "/vipCardUse")
     @ResponseBody
-    public BaseMsgInfo getVipReturnInfo(@RequestParam(value = "phone", required = true) String phone,
-                                        @RequestParam(value = "code", required = true) String code
+    public BaseMsgInfo VipCardUseAndOrder (@RequestParam(value = "phone", required = true) String phone,
+                                     @RequestParam(value = "code", required = true) String code
     ) {
-      //TODO 验证 获取消费记录List
-        return BaseMsgInfo.success("");
-
+        return orderManager.getVipCardUseAndOrder(phone, code);
     }
 
 

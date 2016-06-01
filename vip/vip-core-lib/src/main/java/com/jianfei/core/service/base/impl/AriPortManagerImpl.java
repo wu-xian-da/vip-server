@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.dto.BaseDto;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -204,7 +205,7 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	 * @return
 	 */
 	@Override
-	public List<String> getAriPortProvince() {
+	public List<BaseDto> getAriPortProvince() {
 		return ariPortMapper.getAriPortProvince();
 	}
 

@@ -1,5 +1,7 @@
 package com.jianfei.core.service.order;
 
+import com.jianfei.core.bean.AppOrders;
+
 /**
  * 支付相关接口
  *
@@ -10,10 +12,8 @@ package com.jianfei.core.service.order;
  */
 public interface PayManager {
     /**
-     * 根据订单号和金额生成支付URL
-     * @param orderNo 订单号
-     * @param money 金额
+     * 根据订单信息生成支付URL
      * @return
      */
-    String getPayUrl(String orderNo,float money);
+    String getPayUrl(AppOrders appOrders);
 }
