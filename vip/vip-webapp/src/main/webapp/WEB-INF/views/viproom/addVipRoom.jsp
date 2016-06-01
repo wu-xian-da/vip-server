@@ -70,6 +70,17 @@
 </body>
 
 <script>
+	$(function(){
+		var provinceId = $("#provinceSele option:selected").val();
+		var url = "getAirPortList?provinceId="+provinceId
+		$.get(url,function(_d){
+			var size = _d.length;
+			console.log(_d)
+			for(var index =0 ;index < size;index ++){
+				$("#airportId").append("<option value='"+_d[index].airport_id+"'>"+_d[index].airport_name+"</option>");
+			}
+		})
+	})
 	//根据省id显示场站列表
 	function getAirPortList(){
 		//清空下拉列表内容

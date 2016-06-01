@@ -143,7 +143,7 @@
 							<tr>
 								<td>输入搜索关键字</td>
 								<td><input name="_searchContent" style="width: 80px;" /></td>
-								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">搜索</a></td>
+								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a></td>
 							</tr>
 						</table>
 					</form>

@@ -58,7 +58,7 @@
 
             <div class="order-condition-item">
                 <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
-                <button id="searchBt">搜索</button>
+                <button id="searchBt">检索</button>
             </div>
         </div>
         
@@ -120,7 +120,7 @@
                     <label>可退金额: ￥<span id="remainMoney">0.00</span></label>
                 </div>
 
-                <div class="easyui-window-footer">
+                <div class="easyui-window-footer" style="padding-left:50px">
                     <button id="writerUserInfo">录入信息确认</button>
                     <button id="cancleBt">返回</button>
                 </div>
@@ -147,7 +147,7 @@
                     <label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
                 </div>
 
-                <div class="easyui-window-footer">
+                <div class="easyui-window-footer" style="padding-left:32px">
                 	<shiro:hasPermission name="system:order:refundMoney">  
                   		  <button id="finalBackMoneyToUserBt">退款确认</button>
                     </shiro:hasPermission>

@@ -34,6 +34,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
+import com.jianfei.core.service.base.AppPictureManager;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
@@ -55,7 +56,7 @@ public class VipRoomController extends BaseController {
 	@Autowired
 	private AriPortManager ariPortService;
 	@Autowired
-	private AppPictureManagerImpl appPictureManagerImpl;
+	private AppPictureManager appPictureManager;
 	
 	@RequestMapping("/gotoVipRoomView")
 	public String test(){
@@ -127,7 +128,7 @@ public class VipRoomController extends BaseController {
 	 * @version  1.0.0
 	 */
 	@RequestMapping(value="addVipRoomInfo",method=RequestMethod.POST)
-	public String addVipRoom(@RequestParam( value = "file", required = false) MultipartFile file,HttpServletRequest request,SysViproom room){
+	public String addVipRoom(@RequestParam( value = "file", required = false) MultipartFile file,SysViproom room){
 		//文件上传
         String path =  GloabConfig.getInstance().getConfig("upload.home.dir")+"//viproomPhoto";  
         System.out.println("path="+path);
@@ -151,7 +152,7 @@ public class VipRoomController extends BaseController {
 		AppPicture appPicture =  new AppPicture();
 		appPicture.setViproomId(viproomId);
 		appPicture.setPictureUrl(relativePath);
-		appPictureManagerImpl.save(appPicture);
+		appPictureManager.save(appPicture);
 		
 		return "redirect:gotoVipRoomView";
 	}
@@ -166,11 +167,11 @@ public class VipRoomController extends BaseController {
 	 */
 	@RequestMapping("gotoUpdateVipRoomView")
 	public String gotoUpdateVipRoomView(@RequestParam(value="viproomId") String viproomId,Model model){
-		System.out.println("viproomId="+viproomId);
-		//返回所有的场站信息
-		MessageDto<List<AriPort>> list= ariPortService.get(null);
-		List<AriPort> airportList = list.getData();
-		model.addAttribute("airportList", airportList);
+		//返回所有的省列表
+		Map<String,Object> reqMap = new HashMap<String,Object>();
+		reqMap.put("pid", 0);
+		List<Map<String,Object>> provinceList = ariPortService.selectCityById(reqMap);
+		model.addAttribute("provinceList", provinceList);
 		//根据vip室编号返回vip室信息
 		SysViproom viproom = vipRoomManagerImp.selVipRoomById(viproomId);
 		model.addAttribute("viproom", viproom);
@@ -186,11 +187,31 @@ public class VipRoomController extends BaseController {
 	 * @version  1.0.0
 	 */
 	@RequestMapping(value="editVipRoomInfo",method=RequestMethod.POST)
-	public String editVipRoomById(SysViproom room){
+	public String editVipRoomById(@RequestParam( value = "file", required = false) MultipartFile file,SysViproom room){
+		//文件上传
+        String path =  GloabConfig.getInstance().getConfig("upload.home.dir")+"//viproomPhoto";  
+        System.out.println("path="+path);
+        String fileName = file.getOriginalFilename();
+        String newFileName = UUIDUtils.returnNewFileName(fileName);
+        File targetFile = new File(path, newFileName);  
+        if(!targetFile.exists()){  
+            targetFile.mkdirs();  
+        }  
+        try {  
+            file.transferTo(targetFile);  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+        String relativePath = "/viproomPhoto/"+newFileName;
+        
 		room.setDtflag(0);
 		//更新vip室信息
 		vipRoomManagerImp.updateVipRoom(room);
 		//更新vip室图片信息
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		resMap.put("viproomId", room.getViproomId());
+		resMap.put("pictureUrl", relativePath);
+		appPictureManager.updateByVipRoomId(resMap);
 		return "redirect:gotoVipRoomView";
 	}
 	

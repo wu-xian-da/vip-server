@@ -180,7 +180,7 @@
 								<td><input name="_cardNo" value="" style="width: 80px;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a
+									onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a><a
 									href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom_out',plain:true"
 									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>

@@ -49,7 +49,7 @@
 			</div>
 
 			<div class="order-condition-item" style="text-align: left">
-				<button id="searchBt" style="height: 20px">搜索</button>
+				<button id="searchBt" style="height: 20px">检索</button>
 			</div>
 		</div>
 
@@ -100,7 +100,7 @@
 					<label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
 				</div>
 
-				<div class="easyui-window-footer">
+				<div class="easyui-window-footer" style="padding-left:32px">
 					<!-- 该按钮只有财务有权限操作 -->
 					<shiro:hasPermission name="system:user:add">
 						<button id="finalBackMoneyToUserBt">退款确认</button>

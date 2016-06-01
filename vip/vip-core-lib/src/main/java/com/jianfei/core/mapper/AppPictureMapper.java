@@ -29,4 +29,6 @@ public interface AppPictureMapper {
 	int updateByPrimaryKey(AppPicture record);
 
 	List<AppPicture> get(Map<String, Object> map);
+	
+	int updateByVipRoomId(Map<String,Object> map);
 }

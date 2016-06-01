@@ -62,10 +62,10 @@ public class OrderMapperTest {
 	
 	@Test
 	public void insertPictureTest(){
-		AppPicture appPicture =  new AppPicture();
-		appPicture.setViproomId("5ec93401-444a-40c1-b778-3dc9a10ecbb2");
-		appPicture.setPictureUrl("/viproomPhoto/夜晚.jpg");
-		appPictureManager.save(appPicture);
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		resMap.put("viproomId", "1ae4d295-7678-4d4a-9a62-887fdb9cd78a");
+		resMap.put("pictureUrl", "111");
+		appPictureManager.updateByVipRoomId(resMap);
 	}
 
 	//订单列表分页测试

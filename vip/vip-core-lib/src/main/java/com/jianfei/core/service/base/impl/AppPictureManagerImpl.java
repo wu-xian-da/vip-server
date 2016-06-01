@@ -166,4 +166,13 @@ public class AppPictureManagerImpl implements AppPictureManager {
 		}
 		return appPictureMapper.getPicture(appPicture);
 	}
+	/**
+	 * 更新vip室图片信息
+	 */
+	@Override
+	public int updateByVipRoomId(Map<String,Object> map) {
+		// TODO Auto-generated method stub
+		appPictureMapper.updateByVipRoomId(map);
+		return 0;
+	}
 }

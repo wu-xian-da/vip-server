@@ -18,7 +18,7 @@
 <body>
 	<div id="clerk-wrap">
 		<div id="clerk-container" class="clerk-container-viproom">
-		<form action="editVipRoomInfo" method="post">
+		<form action="editVipRoomInfo" method="post" enctype="multipart/form-data">
 			<div class="clerk-container-item">
 				<label>vip室名称：</label>
 				<input type="hidden" name="viproomId" value="${viproom.viproomId}">
@@ -41,16 +41,14 @@
 			
 			<div class="clerk-container-item">
 				<label>场站名称：</label> 
-				<select name="airportId" id="">
-					<c:forEach items="${airportList}" var="airport">
-						<option value="${airport.id}">${airport.name}</option>
-					</c:forEach>
+				<select name="airportId" id="airportSele">
+					
 				</select>
 			</div>
 			
 			<div class="clerk-container-item">
 				<label>场站位置：</label>
-				<input type="text" name="address" value="${viproom.address }"/>
+				<input type="text" name="address" value="${viproom.address}"/>
 			</div>
 			
 			<div class="clerk-container-item">
@@ -71,5 +69,31 @@
 	</div>
 	</div>
 </body>
-
+<script type="text/javascript">
+	$(function() {
+		var provinceId = $("#provinceSele option:selected").val();
+		var url = "getAirPortList?provinceId=" + provinceId
+		$.get(url, function(_d) {
+			var size = _d.length;
+			console.log(_d)
+			for (var index = 0; index < size; index++) {
+				$("#airportSele").append("<option value='"+_d[index].airport_id+"'>"+ _d[index].airport_name + "</option>");
+			}
+		})
+	})
+	//根据省id显示场站列表
+	function getAirPortList() {
+		//清空下拉列表内容
+		$("#airportSele").empty();
+		var provinceId = $("#provinceSele option:selected").val();
+		var url = "getAirPortList?provinceId=" + provinceId
+		$.get(url, function(_d) {
+			var size = _d.length;
+			console.log(_d)
+			for (var index = 0; index < size; index++) {
+				$("#airportSele").append("<option value='"+_d[index].airport_id+"'>"+ _d[index].airport_name + "</option>");
+			}
+		})
+	}
+</script>
 </html>
