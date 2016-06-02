@@ -58,11 +58,6 @@ public class OrderAddInfoDto {
     private String email;
 
     /**
-     * 详细地址
-     */
-    private String address;
-
-    /**
      * 省份
      */
     private String province;
@@ -71,6 +66,11 @@ public class OrderAddInfoDto {
      * 市
      */
     private String city;
+
+    /**
+     * 机场ID
+     */
+    private String airportId;
 
     public String getUno() {
         return uno;
@@ -136,14 +136,6 @@ public class OrderAddInfoDto {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getProvince() {
         return province;
     }
@@ -174,5 +166,13 @@ public class OrderAddInfoDto {
 
     public void setMoney(float money) {
         this.money = money;
+    }
+
+    public String getAirportId() {
+        return airportId;
+    }
+
+    public void setAirportId(String airportId) {
+        this.airportId = airportId;
     }
 }

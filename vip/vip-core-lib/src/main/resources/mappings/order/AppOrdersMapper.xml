@@ -15,6 +15,8 @@
     <result column="remark1" property="remark1" jdbcType="VARCHAR" />
     <result column="remark2" property="remark2" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+      <result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
+      <result column="airport_id" property="airportId" jdbcType="VARCHAR" />
   </resultMap>
   
   <!--订单列表展示返回类型 -->
@@ -163,7 +165,7 @@
   
   <sql id="Base_Column_List" >
     order_id, id, customer_id, order_time, order_state, pay_type, serial_id, pay_money, 
-    invoice_flag, remark1, remark2, dtflag
+    invoice_flag, remark1, remark2, dtflag, sale_no,
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -179,12 +181,13 @@
     insert into app_orders (order_id, id, customer_id, 
       order_time, order_state, pay_type, 
       serial_id, pay_money, invoice_flag, 
-      remark1, remark2, dtflag
+      remark1, remark2, dtflag, sale_no, airport_id
       )
     values (#{orderId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, 
       #{orderTime,jdbcType=TIMESTAMP}, #{orderState,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER}, 
       #{serialId,jdbcType=VARCHAR}, #{payMoney,jdbcType=REAL}, #{invoiceFlag,jdbcType=INTEGER}, 
-      #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{dtflag,jdbcType=INTEGER}
+      #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{dtflag,jdbcType=INTEGER},
+       #{saleNo,jdbcType=VARCHAR}, #{airportId,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jianfei.core.bean.AppOrders" >
@@ -226,6 +229,13 @@
       <if test="dtflag != null" >
         dtflag,
       </if>
+        <if test="saleNo != null" >
+          sale_no,
+        </if>
+        <if test="airportId != null" >
+            airport_id,
+        </if>
+
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -264,6 +274,13 @@
       <if test="dtflag != null" >
         #{dtflag,jdbcType=INTEGER},
       </if>
+        <if test="saleNo != null" >
+            #{saleNo,jdbcType=VARCHAR},
+        </if>
+        <if test="airportId != null" >
+            #{airportId,jdbcType=VARCHAR},
+        </if>
+
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppOrders" >
@@ -302,6 +319,13 @@
       <if test="dtflag != null" >
         dtflag = #{dtflag,jdbcType=INTEGER},
       </if>
+        <if test="saleNo != null" >
+            sale_no= #{saleNo,jdbcType=VARCHAR},
+        </if>
+        <if test="airportId != null" >
+            airport_id= #{airportId,jdbcType=VARCHAR},
+        </if>
+
     </set>
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
@@ -317,7 +341,9 @@
       invoice_flag = #{invoiceFlag,jdbcType=INTEGER},
       remark1 = #{remark1,jdbcType=VARCHAR},
       remark2 = #{remark2,jdbcType=VARCHAR},
-      dtflag = #{dtflag,jdbcType=INTEGER}
+      dtflag = #{dtflag,jdbcType=INTEGER},
+      sale_no= #{saleNo,jdbcType=VARCHAR},
+      airport_id= #{airportId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>
