@@ -14,6 +14,11 @@
 <script src="${pageContext.request.contextPath}/public/js/jquery.easyui.min.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/vue.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/uedit/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/uedit/ueditor.all.js"></script>
 		
 </head>
 <body>
@@ -58,7 +63,11 @@
 				
 			<div class="clerk-container-item">
 				<label>vip室信息编辑：</label>
-				<textarea name="remark1"></textarea>
+				<!-- <textarea name="remark1"></textarea> -->
+				<!-- 加载编辑器的容器 -->
+    			<script id="container" name="remark1" type="text/plain">
+        		
+    			</script>
 			</div>
 
 		<div id="clerk-footer">
@@ -71,6 +80,9 @@
 </body>
 
 <script>
+	<!-- 实例化编辑器 -->
+	var editor = UE.getEditor('container');
+	
 	$(function(){
 		var provinceId = $("#provinceSele option:selected").val();
 		var url = "getAirPortList?provinceId="+provinceId
