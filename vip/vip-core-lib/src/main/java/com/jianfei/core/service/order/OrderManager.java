@@ -175,4 +175,13 @@ public interface OrderManager {
      * @return
      */
     BaseMsgInfo  getVipCardUseAndOrder(String phone,String code);
+    
+    /**
+	 * selectOrder(订单状态查询)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> selectOrder(Map<String, Object> map);
 }

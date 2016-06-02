@@ -15,7 +15,7 @@
 	</script>
 </head>
 <body>
-财务...
+上月入职新员工${come }人 &nbsp;&nbsp;离职${out }人
 
 </body>
 </html>

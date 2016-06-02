@@ -63,4 +63,13 @@ public interface BusizzManager<T> {
 	 * @version 1.0.0
 	 */
 	MessageDto<T> update(T t);
+
+	/**
+	 * selectMap(更具状态和入职日期查询员工)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> selectMap(Map<String, Object> map);
 }

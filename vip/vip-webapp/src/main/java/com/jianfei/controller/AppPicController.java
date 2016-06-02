@@ -221,15 +221,19 @@ public class AppPicController extends BaseController {
 	 */
 	public String returnPayState(String state) {
 		System.out.println(state);
-		if (VipOrderState.NOT_PAY.getName().equals(state)) {
+		if (String.valueOf(VipOrderState.NOT_PAY.getName()).equals(state)) {
 			return "未支付";
-		} else if (VipOrderState.ALREADY_PAY.getName().equals(state)) {
+		} else if (String.valueOf(VipOrderState.ALREADY_PAY.getName()).equals(
+				state)) {
 			return "已支付";
-		} else if (VipOrderState.ALREADY_REFUND.getName().equals(state)) {
+		} else if (String.valueOf(VipOrderState.ALREADY_REFUND.getName())
+				.equals(state)) {
 			return "已退款";
-		} else if (VipOrderState.AUDIT_PASS.getName().equals(state)) {
+		} else if (String.valueOf(VipOrderState.AUDIT_PASS.getName()).equals(
+				state)) {
 			return "审核通过";
-		} else if (VipOrderState.BEING_AUDITED.getName().equals(state)) {
+		} else if (String.valueOf(VipOrderState.BEING_AUDITED.getName())
+				.equals(state)) {
 			return "正在审核";
 		}
 		return "";

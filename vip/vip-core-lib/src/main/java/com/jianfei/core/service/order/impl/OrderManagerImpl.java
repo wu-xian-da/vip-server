@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.*;
-
 import com.jianfei.core.common.enu.*;
 import com.jianfei.core.common.utils.*;
 import com.jianfei.core.dto.*;
@@ -16,6 +15,7 @@ import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.PayManager;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -378,5 +378,14 @@ public class OrderManagerImpl implements OrderManager {
 		//TODO 可配置优惠信息多少
 		vipCardUseDetailInfo.setSaleRate("80%");
 		return BaseMsgInfo.success(vipCardUseDetailInfo);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.jianfei.core.service.order.OrderManager#selectOrder(java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> selectOrder(Map<String, Object> map) {
+		return appOrdersMapper.selectOrder(map);
 	}
 }

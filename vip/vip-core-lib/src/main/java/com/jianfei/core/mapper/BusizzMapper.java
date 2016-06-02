@@ -43,6 +43,14 @@ public interface BusizzMapper extends BaseMapper<User> {
 	 * @version 1.0.0
 	 */
 	void initpwd(Map<String, Object> map);
-	
-	
+
+	/**
+	 * selectMap(更具状态和入职日期查询员工)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> selectMap(Map<String, Object> map);
+
 }

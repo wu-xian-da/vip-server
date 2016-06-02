@@ -15,9 +15,8 @@
 	</script>
 </head>
 <body>
-财务...
-
+本月订单有${nowMonthOrder }条<br>
+未处理的订单申请有${unHandleOrder }条
 
 </body>
-<script src="${ctx }/jslib/echarts.min.js"></script>
 </html>

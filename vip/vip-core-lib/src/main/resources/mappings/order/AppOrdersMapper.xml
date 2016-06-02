@@ -346,4 +346,15 @@
       airport_id= #{airportId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
+    <select id="selectOrder" parameterType="java.util.Map" resultType="java.util.Map">
+  		SELECT * FROM app_orders ao 
+  		<where>
+  			<if test="orderState!=null and orderState!=''">
+  				order_state=#{orderState}
+  			</if>
+  			<if test="dateTime!=null and dateTime!=''">
+  				and DATE_FORMAT(order_time,'%Y-%m-%d')=#{dateTime}
+  			</if>
+  		</where>
+  </select>
 </mapper>

@@ -180,4 +180,14 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 		}
 		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.core.service.base.BusizzManager#selectMap(java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> selectMap(Map<String, Object> map) {
+		return busizzMaapper.selectMap(map);
+	}
 }
