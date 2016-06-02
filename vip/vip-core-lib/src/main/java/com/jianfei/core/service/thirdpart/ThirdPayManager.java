@@ -56,4 +56,6 @@ public abstract class ThirdPayManager {
 	 * @version  1.0.0
 	 */
 	public abstract void tradeRefund(String tradeNo);
+	
+	public abstract String notify(String objStr);
 }

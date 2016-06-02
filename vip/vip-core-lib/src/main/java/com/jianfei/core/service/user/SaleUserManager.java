@@ -44,6 +44,12 @@ public interface SaleUserManager {
      */
     boolean updatePhotoPath(String userNo,String photoPath);
     
-    
+    /**
+     * 易宝pos机登录（销售员）
+     * @param userNo
+     * @param password
+     * @return
+     */
+    public int yeepayLogin(String userNo,String password);
 
 }

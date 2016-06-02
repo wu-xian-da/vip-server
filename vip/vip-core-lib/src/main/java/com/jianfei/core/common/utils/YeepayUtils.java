@@ -10,7 +10,7 @@ public  class YeepayUtils {
 	 * 易宝支付签名算法
 	* @param srcXml 原 xml
 	* @param secKey 加密key
-	* @return 生成新的带hamc 节点的xml */
+	* @return 生成新的带hamc节点的xml */
 	public static String hmacSign(String srcXml, String secKey) {
 		// xml 文档开始与结束部分,此部分不进行加密处理,在拼接时使用
 		String xmlNodeStartString = "<?xml version=\"1.0\" encoding=\"UTF- 8\"?><COD-MS>";
@@ -34,6 +34,28 @@ public  class YeepayUtils {
 		}
 		return xmlNodeStartString + startStr + "<HMAC>" + md5token + "</HMAC>" +"</SessionHead>" + endStr + xmlNodeEndString;
 	}
+	
+	/**
+	 * 获取签名的内容
+	 * @param srcXml
+	 * @param secKey
+	 * @return
+	 */
+	public static String getSignField(String srcXml, String secKey) {
+		// 需要加密的字符串 String md5String = "";
+		// 本次传送 xml 的 md5
+		String md5token = "";
+		String md5String = srcXml.substring(srcXml.indexOf("<COD-MS>") + 8, srcXml.indexOf("</COD-MS>"));
+		// 把 hmac 节点过滤点
+		String hmac = srcXml.substring(srcXml.indexOf("<HMAC>"),srcXml.indexOf("</HMAC>") + 7);
+		md5String = md5String.replace(hmac, "");
+		md5String = filter(md5String);
+		Md5PasswordEncoder md5 = new Md5PasswordEncoder();
+		md5.setEncodeHashAsBase64(false);
+		md5token = md5.encodePassword(md5String + secKey, null);
+		return md5token;
+	}
+	
 	public static String filter(String content) {
 		Pattern p = Pattern.compile("\\s*|\t|\r|\n");
 		Matcher m = p.matcher(content);

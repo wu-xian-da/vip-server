@@ -323,7 +323,19 @@
 		    <artifactId>spring-security-core</artifactId>
 		    <version>3.2.5.RELEASE</version>
 		</dependency>
-
+       <!--  <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.7</version>
+            <scope>provided</scope>
+        </dependency>
+         -->
 	</dependencies>
 	<build>
 		<resources>
@@ -339,6 +351,13 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.p12</include>
 				</includes>
 			</resource>
 		</resources>

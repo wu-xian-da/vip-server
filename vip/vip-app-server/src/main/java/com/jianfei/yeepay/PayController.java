@@ -10,15 +10,23 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.utils.YeepayUtils;
+import com.jianfei.core.dto.OrderDetailInfo;
+import com.jianfei.core.service.order.OrderManager;
+import com.jianfei.core.service.thirdpart.impl.AlipayPayManagerImpl;
+import com.jianfei.core.service.thirdpart.impl.WechatPayManagerImpl;
+import com.jianfei.core.service.user.SaleUserManager;
 
 
 
@@ -40,9 +48,16 @@ sendxml:<?xml version="1.0" encoding="UTF-8"?><COD-MS><SessionHead><Version>V1.0
  *
  */
 @Controller
-@RequestMapping(value = "yeepay")
-public class YeepayController {
+@RequestMapping(value = "pay")
+public class PayController {
+	private static Log log = LogFactory.getLog(PayController.class);
 	
+    @Autowired
+    private SaleUserManager saleUserManager;
+    @Autowired
+    private OrderManager orderManager;
+    @Autowired
+    WechatPayManagerImpl wechatiPayManager;
     /**
      * 用户登录
      * @param xmlObj 请求格式如下
@@ -94,8 +109,8 @@ public class YeepayController {
 		  </SessionBody> 
 		</COD-MS>
      */
-    @RequestMapping(value = "/action")
-    public void yeepayLogin(HttpServletRequest request,HttpServletResponse response) {
+    @RequestMapping(value = "/yeepay")
+    public void yeepay(HttpServletRequest request,HttpServletResponse response) {
     	String send = "";//获取请求的报文
     	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     	ServletInputStream inStream;
@@ -115,7 +130,7 @@ public class YeepayController {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-	    
+	    log.info(send);
 	    
 	    try {
 			Document document = DocumentHelper.parseText(send);
@@ -123,24 +138,47 @@ public class YeepayController {
 			Element sessionHead = root.element("SessionHead");
 			Element sessionBody = root.element("SessionBody");
 			String serviceCode = sessionHead.elementText("ServiceCode");
-			String hmac = sessionHead.elementText("HMAC");
-			String hmacresult = YeepayUtils.hmacSign(send, "DFE23HLAW198820SQWE1224SDAQQ3319203945");
-	
+			String hmacSend = sessionHead.elementText("HMAC");
+			String hmacAuth = YeepayUtils.getSignField(send, "DFE23HLAW198820SQWE1224SDAQQ3319203945");
+			
 			
 			if (serviceCode.equals("COD201")){
-				String eid = sessionBody.elementText("Employee_ID");
-				String password = sessionBody.elementText("Password");
-				//数据库验证用户
-				result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, "2");
+				if (!hmacSend.equals(hmacAuth)){
+					result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, 4);
+				}else{
+					String eid = sessionBody.elementText("Employee_ID");
+					String password = sessionBody.elementText("Password");
+					//数据库验证用户
+					int resultCode = saleUserManager.yeepayLogin(eid, password);
+					result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, resultCode);
+				}
 				
-			}else if (serviceCode.equals("COD402")){
-				String orderNo = sessionBody.elementText("OrderNo");
+				
+			}else if (serviceCode.equals("COD402")){//订单查询
+				if (!hmacSend.equals(hmacAuth)){ //签名验证失败
+					result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, 4, 5, 
+							"", "", 0);
+				}else{
+					String orderNo = sessionBody.elementText("OrderNo");
+					OrderDetailInfo order = orderManager.returnOrderDetailInfoByOrderId(orderNo);
+					if (order == null)
+						result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, 3, 5, 
+								"", "", 0);
+					else
+						result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, 2, order.getOrderState(), 
+														order.getCustomerName(), order.getCustomerPhone(), order.getPayMoney());
+				}
 				//数据库获取订单
-				result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, "2", "20", "刘大大", "13988889999", "1980");
-			}else if (serviceCode.equals("COD403")){
-				String orderNo = sessionBody.elementText("OrderNo");
-				//数据库获取订单
-				result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, "2", "20", "刘大大", "13988889999", "1980");
+			
+			}else if (serviceCode.equals("COD403")){//易宝付款通知，数据库更新订单已付款
+				if (!hmacSend.equals(hmacAuth)){ //签名验证失败
+					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 3);
+				}else{
+					String orderNo = sessionBody.elementText("OrderNo");
+					orderManager.updateOrderStateByOrderIdEx(orderNo, 2);
+					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 2);
+				}
+				
 			}
 		} catch (DocumentException e1) {
 			e1.printStackTrace();
@@ -162,7 +200,7 @@ public class YeepayController {
     	public static final String hmac_key = "DFE23HLAW198820SQWE1224SDAQQ3319203945";
     	static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     	
-    	public static String buildLoginResponse(Element sessionHead,Element sessionBody,String resultCode){
+    	public static String buildLoginResponse(Element sessionHead,Element sessionBody,int resultCode){
     		
 			String eid = sessionBody.elementText("Employee_ID");
 			String transId = sessionHead.elementText("TransactionID");
@@ -183,9 +221,18 @@ public class YeepayController {
 	    	Element dstSysIDEle = headEle.addElement("DstSysID");
 	    	dstSysIDEle.setText(dstSysID);
 	    	Element resultCodeEle = headEle.addElement("Result_Code");
-	    	resultCodeEle.setText(resultCode);
+	    	resultCodeEle.setText(String.valueOf(resultCode));
 	    	Element resultMsgEle = headEle.addElement("Result_Msg");
-	    	resultMsgEle.setText("成功");
+	    	if (resultCode == 2)
+	    		resultMsgEle.setText("登录成功");
+	    	else if (resultCode == 10)
+	    		resultMsgEle.setText("用户名或密码错误");
+	    	else if (resultCode == 11)
+	    		resultMsgEle.setText("没有该用户");
+	    	else if (resultCode == 4)
+	    		resultMsgEle.setText("报文验证失败");
+	    	else
+	    		resultMsgEle.setText("位置错误");
 	    	Element respTimeEle = headEle.addElement("Resp_Time");
 	    	respTimeEle.setText(sdf.format(new Date()));
 	    	Element extendAttEle = headEle.addElement("ExtendAtt");
@@ -204,8 +251,8 @@ public class YeepayController {
 	    	return YeepayUtils.hmacSign(document.asXML(), hmac_key);
     	}
     	
-    	public static String buildOrderQueryResponse(Element sessionHead,Element sessionBody,String resultCode,
-    			String orderStatus,String receiverName,String receiverTel,String amout){
+    	public static String buildOrderQueryResponse(Element sessionHead,Element sessionBody,int resultCode,
+    			int orderStatus,String receiverName,String receiverTel,float amout){
 			String eid = sessionBody.elementText("EmployeeID");
 			String orderNo = sessionBody.elementText("OrderNo");
 			String transId = sessionHead.elementText("TransactionID");
@@ -226,9 +273,14 @@ public class YeepayController {
 	    	Element dstSysIDEle = headEle.addElement("DstSysID");
 	    	dstSysIDEle.setText(dstSysID);
 	    	Element resultCodeEle = headEle.addElement("Result_Code");
-	    	resultCodeEle.setText(resultCode);
+	    	resultCodeEle.setText(String.valueOf(resultCode));
 	    	Element resultMsgEle = headEle.addElement("Result_Msg");
-	    	resultMsgEle.setText("成功");
+	    	if (resultCode == 2)
+	    		resultMsgEle.setText("成功接收");
+	    	else if (resultCode == 4)
+	    		resultMsgEle.setText("报文验证失败");
+	    	else 
+	    		resultMsgEle.setText("位置错误");
 	    	Element respTimeEle = headEle.addElement("Resp_Time");
 	    	respTimeEle.setText(sdf.format(new Date()));
 	    
@@ -248,9 +300,25 @@ public class YeepayController {
 	    	Element rceiverTelEle = itemEle.addElement("RceiverTel");
 	    	rceiverTelEle.setText(receiverTel);
 	    	Element amoutEle = itemEle.addElement("Amount");
-	    	amoutEle.setText(amout);
+	    	amoutEle.setText(String.valueOf(amout));
 	    	Element orderStatusNoEle = itemEle.addElement("OrderStatus");
-	    	orderStatusNoEle.setText(orderStatus);
+	    	Element orderStatusMsgNoEle = itemEle.addElement("OrderStatusMsg");
+	    	if (orderStatus == 0){
+	    		orderStatusNoEle.setText("23");
+	    		orderStatusMsgNoEle.setText("未支付,未签收");
+	    	}
+	    	else if (orderStatus == 1){
+	    		orderStatusNoEle.setText("22");
+	    		orderStatusMsgNoEle.setText("已收款");
+	    	}
+	    	else if (orderStatus == 5){
+	    		orderStatusNoEle.setText("81");
+	    		orderStatusMsgNoEle.setText("查无此订单");
+	    	}
+	    	else {
+	    		orderStatusNoEle.setText("81");
+	    		orderStatusMsgNoEle.setText("订单处于退款状态");
+	    	}
 	    	
 	    	return YeepayUtils.hmacSign(document.asXML(), hmac_key);
     	}
@@ -259,8 +327,45 @@ public class YeepayController {
     		return "";
     	}
     	
-    	public static String buildPayResponse(Element sessionHead,Element sessionBody){
-    		return "";
+    	public static String buildPayResponse(Element sessionHead,Element sessionBody,int resultCode){
+			String referNo = sessionBody.elementText("ReferNo");
+			String orderNo = sessionBody.elementText("OrderNo");
+			String transId = sessionHead.elementText("TransactionID");
+			String srcSysID = sessionHead.elementText("SrcSysID");
+			String dstSysID = sessionHead.elementText("DstSysID");
+    		
+	    	Document   document   = DocumentHelper.createDocument(); 
+	    	Element codmsEle =  document.addElement("COD-MS");
+	    	Element headEle = codmsEle.addElement("SessionHead");
+	    	Element verEle = headEle.addElement("Version");
+	    	verEle.setText("V1.0");
+	    	Element serviceCodeEle = headEle.addElement("ServiceCode");
+	    	serviceCodeEle.setText("COD403");
+	    	Element tranIdEle = headEle.addElement("TransactionID");
+	    	tranIdEle.setText(transId);
+	    	Element srcSysIDEle = headEle.addElement("SrcSysID");
+	    	srcSysIDEle.setText(srcSysID);
+	    	Element dstSysIDEle = headEle.addElement("DstSysID");
+	    	dstSysIDEle.setText(dstSysID);
+	    	Element resultCodeEle = headEle.addElement("Result_Code");
+	    	resultCodeEle.setText(String.valueOf(resultCode));
+	    	Element resultMsgEle = headEle.addElement("Result_Msg");
+	    	if (resultCode == 2)
+	    		resultMsgEle.setText("成功接收");
+	    	else
+	    		resultMsgEle.setText("接收失败");
+	    	Element respTimeEle = headEle.addElement("Resp_Time");
+	    	respTimeEle.setText(sdf.format(new Date()));
+	    	Element hmacEle = headEle.addElement("HMAC");
+	    	hmacEle.setText("hmac");
+	    	
+	    	Element bodyEle = codmsEle.addElement("SessionBody");
+	    	Element orderNoEle = bodyEle.addElement("OrderNo");
+	    	orderNoEle.setText(orderNo);
+	    	Element referNoEle = bodyEle.addElement("ReferNo");
+	    	referNoEle.setText(referNo);
+	    	
+    		return YeepayUtils.hmacSign(document.asXML(), hmac_key);
     	}
     }
     
@@ -330,4 +435,38 @@ public class YeepayController {
 			  </SessionBody>
 			</COD-MS>
      */
+    
+    @RequestMapping(value = "/wechat_notify")
+    public void wechatNotify(HttpServletRequest request,HttpServletResponse response) {
+    	String send = "";//获取请求的报文
+    	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    	ServletInputStream inStream;
+    	String result = "";//商户返回给易宝的报文 
+    	try{
+		    inStream = request.getInputStream(); //int length = 0;
+	    	int len = -1;
+	    	byte[] buffer = new byte[1024]; 
+	    	while ((len = inStream.read(buffer)) != -1) {
+	    		outputStream.write(buffer, 0, len);
+    		}
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+	    try {
+		  send = new String(outputStream.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	    
+	    result = wechatiPayManager.notify(send);
+	    
+	    response.setContentType("text/xml; charset=utf-8");
+	    response.setCharacterEncoding("utf-8");
+	    try { 
+
+	    	response.getWriter().write(result);
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
+    }
 }

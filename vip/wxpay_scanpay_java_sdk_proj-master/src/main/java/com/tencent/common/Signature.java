@@ -68,6 +68,7 @@ public class Signature {
         return result;
     }
 
+    
     /**
      * 从API返回的XML数据里面重新计算一次签名
      * @param responseString API返回的XML数据

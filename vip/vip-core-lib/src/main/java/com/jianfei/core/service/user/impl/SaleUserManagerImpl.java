@@ -70,4 +70,17 @@ public class SaleUserManagerImpl implements SaleUserManager {
     public boolean updatePhotoPath(String userNo, String photoPath) {
         return false;
     }
+    
+    public int yeepayLogin(String userNo,String password){
+    	User user = userMapper.getYeepayUser(userNo);
+    	if (user == null)
+    		return 11;
+    	else{
+    		if (user.getExtraPasswd().equals(password))
+        		return 2;
+    		else 
+    			return 10;
+    	}
+    	
+    }
 }

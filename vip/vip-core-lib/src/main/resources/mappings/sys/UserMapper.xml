@@ -73,6 +73,11 @@
 		SELECT * from sys_users where code =#{uno}
 	</select>
 
+	<select id="getYeepayUser" resultMap="userRs" parameterType="String">
+		SELECT * from sys_users where login_name =#{loginName} and
+		(user_type=0)
+	</select>
+
 	<insert id="save" parameterType="User">
 		<![CDATA[
 			INSERT INTO  sys_users (

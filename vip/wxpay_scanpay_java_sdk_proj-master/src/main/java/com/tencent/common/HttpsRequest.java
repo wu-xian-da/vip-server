@@ -4,6 +4,7 @@ import com.tencent.service.IServiceRequest;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -18,9 +19,12 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
 
+
 import javax.net.ssl.SSLContext;
+
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
@@ -61,18 +65,30 @@ public class HttpsRequest implements IServiceRequest{
     public HttpsRequest() throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         init();
     }
+    
 
-    private void init() throws IOException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException {
+    private void init() throws IOException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException,FileNotFoundException {
+    	FileInputStream instream = null;
+    	KeyStore keyStore=null;
+    	try{
+	        keyStore = KeyStore.getInstance("PKCS12");
+	        String localPath = Configure.getCertLocalPath();
+	        File fff = new File(HttpsRequest.class.getClassLoader().getResource(localPath).getPath());
+	        instream = new FileInputStream(fff);//加载本地的证书进行https加密传输
 
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        FileInputStream instream = new FileInputStream(new File(Configure.getCertLocalPath()));//加载本地的证书进行https加密传输
-        try {
+//	        String curpath = HttpsRequest.class.getClassLoader().getResource("cert.properties").getPath();
+//	        String curpath2 = HttpsRequest.class.getClassLoader().getResource("").getPath();
+//	        String curpath3 = HttpsRequest.class.getResource("cert.properties").getPath();
+	        
             keyStore.load(instream, Configure.getCertPassword().toCharArray());//设置证书密码
         } catch (CertificateException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        } finally {
+        } catch (Exception e){
+        	e.printStackTrace();
+        }
+    	finally {
             instream.close();
         }
 
@@ -125,10 +141,22 @@ public class HttpsRequest implements IServiceRequest{
 
         //将要提交给API的数据对象转换成XML格式数据Post给API
         String postDataXML = xStreamForRequestPostData.toXML(xmlObj);
-
+        postDataXML = postDataXML.replace("com.tencent.protocol.native_protocol.NativePayReqData", "xml");
         Util.log("API，POST过去的数据是：");
         Util.log(postDataXML);
-
+//        postDataXML = "<xml>"+
+//						  "<appid>wxde0de2c3d9c40770</appid>"+
+//						  "<mch_id>1349068301</mch_id>"+
+//						  "<nonce_str>uxp2rs1l5unze38go0v9r9oq4naadc9m</nonce_str>"+
+//						  "<sign>42099B73F24058E8057C09BC0D2004B5</sign>"+
+//						  "<body>kongcard</body>"+
+//						  "<out_trade_no>ba00ecaaf5eb69e744692e9f0fded636</out_trade_no>"+
+//						  "<total_fee>198000</total_fee>"+
+//						  "<spbill_create_ip>192.168.199.200</spbill_create_ip>"+
+//						  "<notify_url>http://121.42.199.169</notify_url>"+
+//						  "<trade_type>NATIVE</trade_type>"+
+//						  "<product_id>1001</product_id>"+
+//					 "</xml>";
         //得指明使用UTF-8编码，否则到API服务器XML的中文不能被成功识别
         StringEntity postEntity = new StringEntity(postDataXML, "UTF-8");
         httpPost.addHeader("Content-Type", "text/xml");

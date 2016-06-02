@@ -99,9 +99,6 @@ public class NativePayReqData {
         //随机字符串，不长于32 位
         setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
 
-        //根据API给的签名规则进行签名
-        String sign = Signature.getSign(toMap());
-        setSign(sign);//把签名数据设置到Sign这个属性中
         
         setDetail(detail);
         setNotify_url(notifyUrl);
@@ -109,7 +106,12 @@ public class NativePayReqData {
         setProduct_id(productId);
         setLimit_pay(limitPay);
         setOpenid(openId);
-
+        
+        //根据API给的签名规则进行签名
+        System.out.println(this.toString());
+        String sign = Signature.getSign(toMap());
+        setSign(sign);//把签名数据设置到Sign这个属性中
+        
     }
 
     public String getAppid() {

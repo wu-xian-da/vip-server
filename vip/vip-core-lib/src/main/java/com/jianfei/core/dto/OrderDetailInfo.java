@@ -34,6 +34,7 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	private String vipCardNo;//vip卡号
 	private int cardType;//卡类型 1->1年卡
 	private float initMoney;//卡初始金额
+	private float payMoney;//订单金额
 	private int payMethod;//支付方式
 	private Date payTime;//支付时间
 	private Date activatTime;//激活时间
@@ -260,6 +261,14 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	 */
 	public void setInvoiceTitle(String invoiceTitle) {
 		this.invoiceTitle = invoiceTitle;
+	}
+	
+	
+	public float getPayMoney() {
+		return payMoney;
+	}
+	public void setPayMoney(float payMoney) {
+		this.payMoney = payMoney;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

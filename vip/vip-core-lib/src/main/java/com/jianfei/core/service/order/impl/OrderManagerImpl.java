@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.*;
-
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.BeanUtils;
@@ -16,6 +15,7 @@ import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -308,5 +308,15 @@ public class OrderManagerImpl implements OrderManager {
 	@Override
 	public AppOrders getOrderInfo(String orderId) {
 		return appOrdersMapper.selectByPrimaryKey(orderId);
+	}
+
+
+	@Override
+	public int updateOrderStateByOrderIdEx(String orderId, int orderState) {
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("orderState", orderState);
+		params.put("orderId", orderId);
+		
+		return appOrdersMapper.updateOrderState(params);
 	}
 }
