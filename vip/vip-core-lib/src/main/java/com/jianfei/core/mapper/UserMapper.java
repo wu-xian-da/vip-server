@@ -47,4 +47,6 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @param newPassword
      */
 	int updatePasswordByUno(@Param(value = "uno")String uno, @Param(value = "password")String password, @Param(value = "newPassword")String newPassword);
+	
+	public User getYeepayUser(String loginName);
 }

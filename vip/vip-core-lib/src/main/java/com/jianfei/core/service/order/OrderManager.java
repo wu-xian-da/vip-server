@@ -82,6 +82,14 @@ public interface OrderManager {
     int updateOrderStateByOrderId(String orderId,int optype);
     
     /**
+     * liu.lei@jianfeitech.com
+     * @param order
+     * @param orderState
+     * @return
+     */
+    int updateOrderStateByOrderIdEx(String orderId,int orderState);
+    
+    /**
      * guo.jian
      * remainMoney(根据订单号返回用户vip卡剩余金额)
      * @param orderId

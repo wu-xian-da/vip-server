@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.*;
+import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.common.utils.BeanUtils;
+import com.jianfei.core.common.utils.IdGen;
+import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.common.enu.*;
 import com.jianfei.core.common.utils.*;
 import com.jianfei.core.dto.*;
@@ -337,6 +342,15 @@ public class OrderManagerImpl implements OrderManager {
 		return appOrdersMapper.selectByPrimaryKey(orderId);
 	}
 
+
+	@Override
+	public int updateOrderStateByOrderIdEx(String orderId, int orderState) {
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("orderState", orderState);
+		params.put("orderId", orderId);
+		
+		return appOrdersMapper.updateOrderState(params);
+	}
 	/**
 	 * @param orderId
 	 * @param payType
