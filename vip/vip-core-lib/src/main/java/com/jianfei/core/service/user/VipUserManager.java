@@ -31,11 +31,6 @@ public interface VipUserManager {
      */
     AppCustomer getUser(String phone);
 
-    /**
-     * 更改用户状态
-     * @param sate
-     */
-    void addUserState(VipUserSate sate);
 
     /**
      * 验证用户登录验证码
@@ -45,14 +40,6 @@ public interface VipUserManager {
      */
     boolean validateLoginCode(String phone,String code);
 
-
-    /**
-     * 更新用户头像位置
-     * @param userNo 用户唯一标示
-     * @param photoPath 用户头像位置
-     * @return
-     */
-    boolean updatePhotoPath(String userNo,String photoPath);
 
     /**
      * 验证用户退卡验证码

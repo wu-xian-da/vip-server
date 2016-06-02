@@ -42,6 +42,7 @@ public class AppCustomer implements Serializable {
 
 	private String city;
 
+	@JsonIgnore
 	private String country;
 
 	private Integer orderStatu;
@@ -49,6 +50,10 @@ public class AppCustomer implements Serializable {
 	private Date createTime;
 
 	private String cardNo;
+
+	private Date cardActiveTime;
+
+	private String code;
 
 	/**
 	 * createTime
@@ -217,5 +222,28 @@ public class AppCustomer implements Serializable {
 
 	public void setCardNo(String cardNo) {
 		this.cardNo = cardNo;
+	}
+
+	/**
+	 * createTime
+	 *
+	 * @return the createTime
+	 * @version 1.0.0
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	public Date getCardActiveTime() {
+		return cardActiveTime;
+	}
+
+	public void setCardActiveTime(Date cardActiveTime) {
+		this.cardActiveTime = cardActiveTime;
+	}
+
+	public String getCode() {
+		return cardNo;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

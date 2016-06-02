@@ -46,7 +46,8 @@ public class VipCardManagerImpl implements VipCardManager {
 	 */
 	@Override
 	public boolean addVipCard(AppVipcard vipcard) {
-		return false;
+		int num = appVipcardMapper.insertSelective(vipcard);
+		return num == 1 ? true : false;
 	}
 
 	/**
@@ -57,7 +58,8 @@ public class VipCardManagerImpl implements VipCardManager {
 	 */
 	@Override
 	public boolean updateVipCard(AppVipcard vipcard) {
-		return false;
+		int num = appVipcardMapper.updateByPrimaryKeySelective(vipcard);
+		return num == 1 ? true : false;
 	}
 
 

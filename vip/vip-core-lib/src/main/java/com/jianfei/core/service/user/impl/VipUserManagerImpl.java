@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -49,8 +50,8 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean updateUser(AppCustomer vipUser) {
-       //// TODO: 2016/5/26  UPDATE
-        return true;
+        int num = customerMapper.updateByPrimaryKeySelective(vipUser);
+        return num == 1 ? true : false;
     }
 
     /**
@@ -61,18 +62,8 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public AppCustomer getUser(String phone) {
-
-        return customerMapper.selectByPhone(phone);
-    }
-
-    /**
-     * 更改用户状态
-     *
-     * @param sate
-     */
-    @Override
-    public void addUserState(VipUserSate sate) {
-
+        List<AppCustomer> list = customerMapper.selectByPhone(phone);
+        return list == null ? new AppCustomer() : list.get(0);
     }
 
     /**
@@ -87,17 +78,6 @@ public class VipUserManagerImpl implements VipUserManager {
         return  msgInfoManager.validateSendCode(phone, MsgType.LOGIN,code);
     }
 
-    /**
-     * 更新用户头像位置
-     *
-     * @param userNo    用户唯一标示
-     * @param photoPath 用户头像位置
-     * @return
-     */
-    @Override
-    public boolean updatePhotoPath(String userNo, String photoPath) {
-        return false;
-    }
 
     /**
      * 验证用户退卡验证码
