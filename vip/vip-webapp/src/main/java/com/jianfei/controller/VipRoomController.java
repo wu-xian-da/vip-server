@@ -28,6 +28,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.common.enu.DtFlagType;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
@@ -143,7 +144,7 @@ public class VipRoomController extends BaseController {
         String relativePath = "/viproomPhoto/"+newFileName;
         String viproomId = UUIDUtils.getPrimaryKey();
 		room.setViproomId(viproomId);
-		room.setDtflag(0);//0表示不删除
+		room.setDtflag(DtFlagType.NOT_DELETE.getName());
 		vipRoomManagerImp.addVipRoom(room);
 		//保存图片url
 		AppPicture appPicture =  new AppPicture();
@@ -201,7 +202,7 @@ public class VipRoomController extends BaseController {
         }  
         String relativePath = "/viproomPhoto/"+newFileName;
         
-		room.setDtflag(0);
+		room.setDtflag(DtFlagType.NOT_DELETE.getName());
 		//更新vip室信息
 		vipRoomManagerImp.updateVipRoom(room);
 		//更新vip室图片信息
