@@ -110,10 +110,10 @@
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:role:update")) {%>
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑', row.id);
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:role:delete")) {%>
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.id);
 					<%}%>
 						return str;
 				}

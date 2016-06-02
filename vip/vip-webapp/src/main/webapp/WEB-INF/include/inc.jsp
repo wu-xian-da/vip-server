@@ -18,7 +18,7 @@ if (null != cookies) {
 		cookieMap.put(cookie.getName(), cookie);
 	}
 }
-String easyuiTheme = "metro-green";//指定如果用户未选择样式，那么初始化一个默认样式
+String easyuiTheme = "metro-blue";//指定如果用户未选择样式，那么初始化一个默认样式
 if (cookieMap.containsKey("easyuiTheme")) {
 	Cookie cookie = (Cookie) cookieMap.get("easyuiTheme");
 	easyuiTheme = cookie.getValue();

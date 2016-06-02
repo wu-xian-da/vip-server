@@ -94,6 +94,13 @@
 	function exportVip(){
 	   window.open(sy.contextPath + '/app/download');
 	}
+	function blurClick(){
+		grid.datagrid('load',
+				{
+				'_orderState':$('#orderState').combobox('getValue'),
+				'_namephone':$("#searchBox").val()
+				});
+	}
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
@@ -102,8 +109,16 @@
 			<tr>
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_go',plain:true" onclick="exportVip()">导出</a></td>
 				<td><div class="datagrid-btn-separator"></div></td>
-				<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索场站名称'"></input></td>
-				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">查询全部</a></td>
+				<td><select id="orderState" class="easyui-combobox" name="orderState" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+							<option value="" >请选择用户状态</option>
+							<option value="0" >未支付</option>
+							<option value="1" >已支付</option>
+							<option value="2" >正在审核</option>
+							<option value="3" >审核通过</option>
+							<option value="4" >已退款</option>
+					</select></td>
+				<td><input id="searchBox" class="easyui-validatebox" style="width: 150px" placeholder='输入手机号/姓名'></input></td>
+				<td><a href="javascript:void(0);" onclick="blurClick();" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true">搜索</a></td>
 			</tr>
 		</table>
 	</div>

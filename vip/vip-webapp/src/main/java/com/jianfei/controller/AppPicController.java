@@ -8,7 +8,6 @@
 package com.jianfei.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,12 +83,12 @@ public class AppPicController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid list(
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
-		PageHelper.startPage(pageNo, pageSize);
+		PageHelper.startPage(page, rows);
 		MessageDto<List<AppPicture>> messageDto = appPictureManager
 				.get(searchParams);
 		PageInfo<AppPicture> pageInfo = new PageInfo<AppPicture>(
@@ -168,12 +167,12 @@ public class AppPicController extends BaseController {
 	@RequestMapping(value = "/list/vip", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid vipList(
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
-		PageHelper.startPage(pageNo, pageSize);
+		PageHelper.startPage(page, rows);
 		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
 				.get(searchParams);
 		PageInfo<AppCustomer> pageInfo = new PageInfo<AppCustomer>(
@@ -208,8 +207,6 @@ public class AppPicController extends BaseController {
 						returnPayState(StringUtils.obj2String(appCustomer
 								.getOrderStatu())));
 				dataset.add(exportAip);
-				System.out.println(appCustomer
-								.getOrderStatu());
 			}
 			download(response, new String[] { "姓名", "手机号", "日期", "常住地址", "邮箱",
 					"用户状态" }, dataset, "vip用户.xls");
@@ -223,17 +220,18 @@ public class AppPicController extends BaseController {
 	 * @return
 	 */
 	public String returnPayState(String state) {
-		if (VipOrderState.NOT_PAY.equals(state)) {
+		System.out.println(state);
+		if (VipOrderState.NOT_PAY.getName().equals(state)) {
 			return "未支付";
-		} else if (VipOrderState.ALREADY_PAY.equals(state)) {
+		} else if (VipOrderState.ALREADY_PAY.getName().equals(state)) {
 			return "已支付";
-		} else if (VipOrderState.ALREADY_REFUND.equals(state)) {
+		} else if (VipOrderState.ALREADY_REFUND.getName().equals(state)) {
 			return "已退款";
-		} else if (VipOrderState.AUDIT_PASS.equals(state)) {
+		} else if (VipOrderState.AUDIT_PASS.getName().equals(state)) {
 			return "审核通过";
-		} else if (VipOrderState.BEING_AUDITED.equals(state)) {
+		} else if (VipOrderState.BEING_AUDITED.getName().equals(state)) {
 			return "正在审核";
 		}
-		return "未支付";
+		return "";
 	}
 }

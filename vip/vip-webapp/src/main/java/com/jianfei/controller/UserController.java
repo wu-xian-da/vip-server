@@ -80,20 +80,19 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid list(
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
-		PageHelper.startPage(pageNo, pageSize);
+		PageHelper.startPage(page, rows);
 		MessageDto<List<User>> messageDto = userManaer.get(searchParams);
-		PageInfo<User> pageInfo = new PageInfo<User>();
 		if (messageDto.isOk()) {
-			pageInfo.setList(messageDto.getData());
+			return bindGridData(new PageInfo<User>(messageDto.getData()));
 		}
-		return bindGridData(pageInfo);
+		return bindGridData(new PageInfo<User>());
 	}
 
 	/**

@@ -86,7 +86,9 @@
 						<select id="cc" class="easyui-combobox" name="url" style="width:200px;">
 							<option value="/charge/home"  <c:if test="${role.url=='/charge/home' }">selected="selected" </c:if> >经理首页</option>
 							<option value="/master/home" <c:if test="${role.url=='/master/home' }">selected="selected" </c:if>>主管首页</option>
-							<option value="/common/home"  <c:if test="${role.url=='/common/home' }">selected="selected" </c:if>>通用首页</option>
+							<option value="/home/hr"  <c:if test="${role.url=='/home/hr' }">selected="selected" </c:if>>人力</option>
+							<option value="/service/home"  <c:if test="${role.url=='/service/home' }">selected="selected" </c:if>>客服</option>
+							<option value="/finance/home"  <c:if test="${role.url=='/finance/home' }">selected="selected" </c:if>>财务</option>
 						</select>
 					</td>
 					<th>初始密码:</th>

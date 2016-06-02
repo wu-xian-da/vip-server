@@ -38,6 +38,15 @@ public interface BusizzManager<T> {
 	List<Map<String, Object>> listMap(Map<String, Object> map);
 
 	/**
+	 * initpwd(初始密码)
+	 * 
+	 * @param map
+	 *            void
+	 * @version 1.0.0
+	 */
+	MessageDto<String> initpwd(Map<String, Object> map);
+
+	/**
 	 * save(保存机场信息)
 	 * 
 	 * @param t

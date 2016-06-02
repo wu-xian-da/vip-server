@@ -31,8 +31,8 @@
 				u.id,
 				u.`code`,
 				u.`name`,
-				GROUP_CONCAT(ap.`airport_id`) AS 'ariPorts.id',
-				GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name',
+				GROUP_CONCAT(DISTINCT ap.`airport_id`) AS 'ariPortsIds',
+				GROUP_CONCAT(DISTINCT ap.`airport_name`) AS 'ariPortsNames',
 				u.phone,
 				count(ao.order_id) AS tmonth,
 				u.state,
@@ -158,4 +158,7 @@
 		]]>
 	</delete>
 
+	<update id="initpwd" parameterType="java.util.Map">
+		  UPDATE sys_users u SET u.extra_passwd= #{pwd} where u.id=#{id}
+	</update>
 </mapper>

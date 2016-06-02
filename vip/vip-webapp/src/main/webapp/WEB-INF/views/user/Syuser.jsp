@@ -98,14 +98,14 @@
 			}, {
 				title : '操作',
 				field : 'action',
-				width : '90',
+				width : '150',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑&nbsp;', row.id);
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.id);
 					<%}%>
 						return str;
 				}

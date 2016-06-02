@@ -23,8 +23,29 @@
 			} ]
 		});
 	};
+	
+	var initPwd = function(id,code){
+		$.ajax({
+			  type: 'POST',
+			  url : sy.contextPath + '/busizz/initPwd',
+			  data: {id:id,code:code},
+			  success: function(result){
+				  if (result.ok) {
+					  layer.alert(result.msgBody, {
+							icon : 1,
+							skin : 'layer-ext-moon' 
+						});
+					}else{
+						layer.alert(result.msgBody, {
+							icon : 2,
+							skin : 'layer-ext-moon' 
+						});
+					}
+			  },
+			  dataType: 'json'
+			});
+	}
 	var editFun = function(id) {
-		alert(id);
 		var dialog = parent.sy.modalDialog({
 			title : '编辑用户信息',
 			url : sy.contextPath + '/busizz/form?id=' + id,
@@ -61,7 +82,7 @@
 			columns : [ [  {
 				width : '350',
 				title : '所属场站',
-				field : 'ariPortNames'
+				field : 'ariPortsNames'
 			}, {
 				width : '80',
 				title : '手机号码',
@@ -97,11 +118,14 @@
 			}, {
 				title : '操作',
 				field : 'action',
-				width : '90',
+				width : '150',
 				formatter : function(value, row) {
 					var str = '';
-					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+					<%if (anyPermissionsTag.showTagBody("system:busizz:update")) {%>
+						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑&nbsp;', row.id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:busizz:initPwd")) {%>
+					 str += sy.formatString('&nbsp;<img class="iconImg ext-icon-lock_edit" title="重置密码" onclick="initPwd(\'{0}\',\'{1}\');"/> 重置密码', row.id,row.code);
 					<%}%>
 						return str;
 				}
