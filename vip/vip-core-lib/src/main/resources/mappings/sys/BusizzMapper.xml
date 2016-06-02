@@ -169,7 +169,7 @@
 				dtflag=#{dtflag}
 			</if>
 			<if test="dateTime!=null and dateTime!=''">
-				and DATE_FORMAT(create_time,'%Y-%m-%d')=#{dateTime}
+				and DATE_FORMAT(create_time,'%Y-%m')=#{dateTime}
 			</if>
 		</where>
 	</select>

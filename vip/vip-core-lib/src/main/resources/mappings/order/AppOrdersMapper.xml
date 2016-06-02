@@ -46,6 +46,7 @@
   	<result column="pay_time" property="payTime"/>
   	<result column="activat_time" property="activatTime"/>
   	<result column="invoice_flag" property="invoiceFlag"/>
+  	<result column="pay_money" property="payMoney"/>
   	<!--2、 机场表 -->
   	<result column="airport_name" property="airportName"/>
   	<!--3、业务人员表 -->
@@ -67,7 +68,7 @@
   
   <!--根据订单号查询订单详细信息 -->
 	<select id="selOrderDetailInfo" resultMap="orderDetailInfo" parameterType="java.lang.String">
-		select ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,
+		select ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,ord.pay_money,
 			sa.airport_name,
     		agent.name,agent.phone,
     		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.address,cus.email,
@@ -353,7 +354,7 @@
   				order_state=#{orderState}
   			</if>
   			<if test="dateTime!=null and dateTime!=''">
-  				and DATE_FORMAT(order_time,'%Y-%m-%d')=#{dateTime}
+  				and DATE_FORMAT(order_time,'%Y-%m')=#{dateTime}
   			</if>
   		</where>
   </select>
