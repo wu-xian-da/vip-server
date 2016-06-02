@@ -9,6 +9,8 @@ package com.jianfei.core.mapper;
 
 import com.jianfei.core.bean.AppOrderCard;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import com.jianfei.core.dto.VipCardUseDetailInfo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  *
@@ -23,4 +25,11 @@ import com.jianfei.core.common.persistence.MyBatisDao;
 public interface AppOrderCardMapper {
 	//返回vip卡号和初始金额
 	AppOrderCard getAppOrderCard(String orderId);
+
+	/**
+	 * 根据用户手机号获取订单及VIP卡相关信息
+	 * @param customerPhone
+	 * @return
+     */
+	VipCardUseDetailInfo getVipCardUseDetailInfo(@Param("customerPhone") String customerPhone );
 }

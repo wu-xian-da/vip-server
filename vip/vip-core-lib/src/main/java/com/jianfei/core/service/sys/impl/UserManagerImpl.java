@@ -22,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.sys.RoleManager;
 import com.jianfei.core.service.sys.UserManaer;
 
 /**
@@ -50,6 +50,8 @@ public class UserManagerImpl implements UserManaer<User> {
 
 	@Autowired
 	private AriPortManager<AriPort> ariPortManager;
+	@Autowired
+	private RoleManager roelManager;
 
 	/*
 	 * (non-Javadoc)
@@ -104,7 +106,7 @@ public class UserManagerImpl implements UserManaer<User> {
 	 * .User, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public MessageDto<String> saveUser(User user, String arids, String roleids) {
+	public MessageDto<String> saveUser(User user, String arids, String roleid) {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		Long id = 0l;
 		if (!StringUtils.isEmpty(user.getLoginName())) {
@@ -116,14 +118,18 @@ public class UserManagerImpl implements UserManaer<User> {
 			} else if (null == u && 0 == user.getId()) {
 				// 保存用户
 				// 设置密码
-				SimpleHash simpleHash = new SimpleHash("md5",
-						GloabConfig.getConfig("defalut.passwd"), user.getSalt());
+				Map<String, Object> map = roelManager
+						.selectRoleById(StringUtils.toLong(roleid));
+
+				SimpleHash simpleHash = new SimpleHash("md5", map == null ? ""
+						: map.get("initPwd"), user.getSalt());
 				user.setPassword(simpleHash.toString());
-				user.setExtraPasswd(new SimpleHash("md5", GloabConfig
-						.getConfig("defalut.passwd")).toString());
+				user.setExtraPasswd(new SimpleHash("md5", map == null ? ""
+						: map.get("initPwd")).toString());
 				userMapper.save(user);
 				User u2 = userMapper.getUserByName(user.getLoginName());
 				id = u2.getId();
+
 			} else if (u != null && user.getId() != u.getId()) {
 				// 更新操作
 				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
@@ -132,9 +138,10 @@ public class UserManagerImpl implements UserManaer<User> {
 				id = user.getId();
 			}
 		}
+
 		// 更新用户角色
-		if (!StringUtils.isEmpty(roleids)) {
-			MessageDto<String> dto = batchUpdateUserRoles(id, roleids);
+		if (!StringUtils.isEmpty(roleid)) {
+			MessageDto<String> dto = batchUpdateUserRoles(id, roleid);
 			if (!dto.isOk()) {
 				return dto;
 			}

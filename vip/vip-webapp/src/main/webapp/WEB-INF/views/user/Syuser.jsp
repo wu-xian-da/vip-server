@@ -61,8 +61,8 @@
 			idField : 'id',
 			sortName : 'createdatetime',
 			sortOrder : 'desc',
-			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+			pageSize : 20,
+			pageList : [20, 30, 40, 50 ],
 			frozenColumns : [ [ {
 				width : '100',
 				title : '登录名',
@@ -130,16 +130,6 @@
 			<tr>
 				<td>
 					<form id="searchForm">
-						<table>
-							<tr>
-								<td>登录名</td>
-								<td><input name="_loginName" style="width: 80px;" /></td>
-								<td>姓名</td>
-								<td><input name="_name" style="width: 80px;" /></td>
-								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>
-							
-							</tr>
-						</table>
 					</form>
 				</td>
 			</tr>

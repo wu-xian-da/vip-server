@@ -2,10 +2,12 @@ package com.jianfei.core.service.base.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
+import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppVipcardMapper;
 import com.jianfei.core.service.base.VipCardManager;
 
@@ -58,44 +60,6 @@ public class VipCardManagerImpl implements VipCardManager {
 		return false;
 	}
 
-	/**
-	 * 添加VipCard使用记录
-	 *
-	 * @param customer
-	 * @return
-	 */
-	@Override
-	public boolean addVipUseInfo(AppCustomer customer) {
-		return false;
-	}
-
-	/**
-	 * 分页获取用户使用记录
-	 *
-	 * @param pageNo
-	 *            页数
-	 * @param pageSize
-	 *            每页大小
-	 * @param vipCardNo
-	 *            Vip卡号
-	 * @return
-	 */
-	@Override
-	public PageInfo<AppCustomer> pageVipUseInfo(int pageNo, int pageSize, String vipCardNo) {
-		return null;
-	}
-
-	/**
-	 * 根据vip卡No获取所有使用记录
-	 *
-	 * @param vipCardNo
-	 *            vipCardNo
-	 * @return List<AppCustomer>
-	 */
-	@Override
-	public List<AppCustomer> listAllVipUse(String vipCardNo) {
-		return null;
-	}
 
 	/**
 	 * 分页显示vip卡列表信息

@@ -7,12 +7,10 @@
  */
 package com.jianfei.core.service.base;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.persistence.BaseService;
 import com.jianfei.core.common.utils.MessageDto;
 
 /**
@@ -24,7 +22,7 @@ import com.jianfei.core.common.utils.MessageDto;
  * @version 1.0.0
  *
  */
-public interface BusizzManager<T extends Serializable> extends BaseService<T> {
+public interface BusizzManager<T> {
 
 	MessageDto<String> saveUser(User user, String arids, String roleids);
 
@@ -39,4 +37,21 @@ public interface BusizzManager<T extends Serializable> extends BaseService<T> {
 	 */
 	List<Map<String, Object>> listMap(Map<String, Object> map);
 
+	/**
+	 * save(保存机场信息)
+	 * 
+	 * @param t
+	 * @return MessageDto<T>
+	 * @version 1.0.0
+	 */
+	MessageDto<T> save(T t);
+
+	/**
+	 * update(更新机场信息)
+	 * 
+	 * @param t
+	 * @return MessageDto<T>
+	 * @version 1.0.0
+	 */
+	MessageDto<T> update(T t);
 }

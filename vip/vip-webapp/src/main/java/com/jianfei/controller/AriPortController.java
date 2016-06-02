@@ -65,7 +65,6 @@ public class AriPortController extends BaseController {
 		List<Map<String, Object>> maps = ariPortManager
 				.mapList(new MapUtils.Builder().setKeyValue("name", name)
 						.setKeyValue("dtflag", GloabConfig.OPEN).build());
-		System.out.println(JSONObject.toJSONString(maps));
 		if (!CollectionUtils.isEmpty(maps)) {
 			return bindGridData(new PageInfo<Map<String, Object>>(maps));
 		}

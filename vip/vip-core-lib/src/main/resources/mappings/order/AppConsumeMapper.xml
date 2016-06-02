@@ -7,7 +7,6 @@
     <result column="consume_money" property="consumeMoney" jdbcType="REAL" />
     <result column="consume_time" property="consumeTime" jdbcType="TIMESTAMP" />
     <result column="viproom_name" property="viproomName" jdbcType="VARCHAR" />
-    <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
   </resultMap>
   
   <!--根据卡号统计消费次数  -->
@@ -17,7 +16,7 @@
   
   
   <sql id="Base_Column_List" >
-    consume_id, card_no, consume_money, consume_time, viproom_name, dtflag
+    consume_id, card_no, consume_money, consume_time, viproom_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -26,12 +25,13 @@
     where consume_id = #{consumeId,jdbcType=VARCHAR}
   </select>
 
-  <select id="listConsumeByUserPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByVipCardNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-      c.consume_id, c.card_no, c.consume_money, c.consume_time, c.viproom_name, c.dtflag
-    from app_consume  c JOIN app_vipcard v on c.card_no=v.card_no JOIN app_customer m on v.customer_id=m.customer_id
-    where m.customer_phone = #{phone,jdbcType=VARCHAR}
+    <include refid="Base_Column_List" />
+    from app_consume
+    where card_no = #{vipCardNo,jdbcType=VARCHAR}
   </select>
+
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from app_consume

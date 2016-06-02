@@ -15,6 +15,7 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.common.persistence.BaseService;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.dto.BaseDto;
 
 /**
  *
@@ -50,7 +51,13 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	 * 
 	 * @return
 	 */
-	List<String> getAriPortProvince();
+	List<BaseDto> getAriPortProvince();
+
+	/**
+	 * @param 查找城市
+	 * @return
+	 */
+	List<Map<String, Object>> selectCityById(Map<String, Object> map);
 
 	/**
 	 * 根据省份获取机场信息
@@ -59,12 +66,6 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	 * @return
 	 */
 	List<SysAirport> getAirPortByProvince(String provinceId);
-
-	/**
-	 * @param 查找城市
-	 * @return
-	 */
-	List<Map<String, Object>> selectCityById(Map<String, Object> map);
 
 	/**
 	 * mapList(机场的map集合)

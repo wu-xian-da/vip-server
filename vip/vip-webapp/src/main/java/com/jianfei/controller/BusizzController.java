@@ -7,9 +7,7 @@
  */
 package com.jianfei.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -122,14 +120,11 @@ public class BusizzController extends BaseController {
 	@RequestMapping(value = "form")
 	public String from(User user, Model model) {
 		if (0 != user.getId()) {
-			Map<String, Object> searchParams = new HashMap<String, Object>();
-			searchParams.put("id", user.getId());
-			MessageDto<List<User>> messageDto = busizzManager
-					.get(new MapUtils.Builder().setKeyValue("id", user.getId())
-							.build());
-			if (messageDto.isOk()
-					|| CollectionUtils.isEmpty(messageDto.getData())) {
-				model.addAttribute("user", messageDto.getData().get(0));
+			List<Map<String, Object>> list = busizzManager
+					.listMap(new MapUtils.Builder().setKeyValue("id",
+							user.getId()).build());
+			if (!CollectionUtils.isEmpty(list)) {
+				model.addAttribute("user", list.get(0));
 			}
 		}
 		List<Map<String, Object>> list = ariPortManager

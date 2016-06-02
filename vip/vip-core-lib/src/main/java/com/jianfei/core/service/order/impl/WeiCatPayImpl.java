@@ -1,5 +1,6 @@
 package com.jianfei.core.service.order.impl;
 
+import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.service.order.PayManager;
 
 /**
@@ -12,14 +13,13 @@ import com.jianfei.core.service.order.PayManager;
  */
 public class WeiCatPayImpl implements PayManager {
     /**
-     * 根据订单号和金额生成支付URL
+     * 根据订单信息生成支付URL
      *
-     * @param orderNo 订单号
-     * @param money   金额
+     * @param appOrders
      * @return
      */
     @Override
-    public String getPayUrl(String orderNo, float money) {
+    public String getPayUrl(AppOrders appOrders) {
         return null;
     }
 }

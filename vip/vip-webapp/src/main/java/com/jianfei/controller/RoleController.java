@@ -30,7 +30,7 @@ import com.jianfei.core.service.sys.RoleManager;
 
 /**
  *
- * @Description: TODO
+ * @Description: 角色管理
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年5月12日 下午2:52:22
  * 
@@ -117,27 +117,9 @@ public class RoleController extends BaseController {
 			@RequestParam(value = "description", required = false) String description,
 			@RequestParam(value = "ids", required = false) String ids,
 			@RequestParam(value = "url") String url,
-			@RequestParam(value = "priority") Integer priority) {
+			@RequestParam(value = "initPwd") String initPwd) {
 		return roelManager.updateRoleResource(id, name, description, ids, url,
-				priority);
-	}
-
-	/**
-	 * tree(角色授权-加载树形资源树)
-	 * 
-	 * @return List<JsonTreeData>
-	 * @version 1.0.0
-	 */
-	@RequestMapping(value = "/tree", method = RequestMethod.POST)
-	@ResponseBody
-	public List<JsonTreeData> tree() {
-		return roelManager.buildRoleTreeNode();
-	}
-
-	@RequestMapping(value = "selectroles/{id}")
-	@ResponseBody
-	public List<Role> selectRolesByUserId(@PathVariable("id") Long id) {
-		return roelManager.selectRoleByUserId(id);
+				initPwd);
 	}
 
 }

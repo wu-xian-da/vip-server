@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/include/taglib.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,16 +75,22 @@
 			<input name="ids" type="hidden" id="ids" />
 			<table class="table" style="width: 100%;">
 				<tr>
-					<th>角色名称</th>
+					<th>角色名称:</th>
 					<td><input name="name" class="easyui-validatebox" data-options="required:true" value="${role.name }"/></td>
-					<th>角色描述</th>
+					<th>角色描述:</th>
 					<td><textarea name="description" >${role.description }</textarea></td>
 				</tr>
 				<tr>
-					<th>首页地址</th>
-					<td><input name="url" class="easyui-validatebox" data-options="required:true" value="${role.url }"/></td>
-					<th>级别</th>
-					<td><input class="easyui-numberspinner" name="priority"   required="required"  value="${role.priority } data-options="increment:1,min:1,editable:false" style="width:120px;" ></td>
+					<th>首页地址:</th>
+					<td>
+						<select id="cc" class="easyui-combobox" name="url" style="width:200px;">
+							<option value="/charge/home"  <c:if test="${role.url=='/charge/home' }">selected="selected" </c:if> >经理首页</option>
+							<option value="/master/home" <c:if test="${role.url=='/master/home' }">selected="selected" </c:if>>主管首页</option>
+							<option value="/common/home"  <c:if test="${role.url=='/common/home' }">selected="selected" </c:if>>通用首页</option>
+						</select>
+					</td>
+					<th>初始密码:</th>
+					<td><input name=initPwd class="easyui-validatebox" data-options="required:true" value="${role.initPwd }"/></td>	
 				</tr>
 				<tr>
 					<td colspan="4">

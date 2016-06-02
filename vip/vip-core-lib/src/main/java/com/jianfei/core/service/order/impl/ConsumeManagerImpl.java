@@ -1,12 +1,16 @@
 package com.jianfei.core.service.order.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConsume;
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.service.order.ConsumeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 消费记录查询
@@ -20,7 +24,7 @@ import java.util.List;
 public class ConsumeManagerImpl implements ConsumeManager {
 
     @Autowired
-     private AppConsumeMapper appConsumeMapper;
+     private AppConsumeMapper consumeMapper;
     /**
      * 添加消费记录
      *
@@ -32,14 +36,39 @@ public class ConsumeManagerImpl implements ConsumeManager {
         return false;
     }
 
-    /***
-     * 根据用户手机号获取消费记录
+
+    /**
+     * 分页获取用户使用记录
      *
-     * @param phone 手机号
+     * @param pageNo
+     *            页数
+     * @param pageSize
+     *            每页大小
+     * @param vipCardNo
+     *            Vip卡号
      * @return
      */
     @Override
-    public List<AppConsume> listConsume(String phone) {
-        return appConsumeMapper.listConsumeByUserPhone(phone);
+    public PageInfo<AppConsume> pageVipUseInfo(int pageNo, int pageSize, String vipCardNo) {
+        // 显示第几页
+        PageHelper.startPage(pageNo, pageSize);
+        // 查询条件
+        List<AppConsume> list =consumeMapper.selectByVipCardNo(vipCardNo);
+        PageInfo<AppConsume> pageInfo = new PageInfo(list);
+        return pageInfo;
     }
+
+    /**
+     * 根据vip卡No获取所有使用记录
+     *
+     * @param vipCardNo
+     *            vipCardNo
+     * @return List<AppCustomer>
+     */
+    @Override
+    public List<AppConsume> getConsumesByVipNo(String vipCardNo) {
+        return consumeMapper.selectByVipCardNo(vipCardNo);
+    }
+
+
 }

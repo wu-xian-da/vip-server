@@ -1,5 +1,6 @@
 package com.jianfei.core.service.order;
 
+import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConsume;
 
 import java.util.List;
@@ -20,10 +21,20 @@ public interface ConsumeManager {
      */
     boolean addConsume(AppConsume appConsume);
 
-    /***
-     * 根据用户手机号获取消费记录
-     * @param phone 手机号
+
+    /**
+     * 分页获取用户使用记录
+     * @param pageNo 页数
+     * @param pageSize 每页大小
+     * @param vipCardNo Vip卡号
      * @return
      */
-    List<AppConsume> listConsume(String phone);
+    PageInfo<AppConsume> pageVipUseInfo(int pageNo, int pageSize, String vipCardNo );
+
+    /**
+     * 根据vip卡No获取所有使用记录
+     * @param vipCardNo vipCardNo
+     * @return  List<AppCustomer>
+     */
+    List<AppConsume> getConsumesByVipNo( String vipCardNo );
 }

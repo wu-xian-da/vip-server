@@ -11,6 +11,7 @@
 		<result column="update_time" property="updatedatetime" />
 		<result column="dtflag" property="dtflag" />
 		<result column="priority" property="priority" />
+		<result column="initPwd" property="initPwd" />
 		<collection property="resources" ofType="Resource">
 			<id property="id" column="resources.id" />
 			<id property="name" column="resources.name" />
@@ -48,7 +49,8 @@
 				update_time,
 				dtflag,
 				url,
-				priority
+				priority,
+				initPwd
 			)
 			VALUES
 			(
@@ -58,7 +60,8 @@
 				#{updatedatetime},
 				#{dtflag},
 				#{url},
-				#{priority}
+				#{priority},
+				#{initPwd}
 			)
 		]]>
 	</insert>
@@ -85,6 +88,9 @@
 		<if test="priority!=null">
 			,priority=#{priority}
 		</if>
+		<if test="initPwd!=null">
+			,initPwd=#{initPwd}
+		</if>
 		WHERE id = #{id}
 	</update>
 
@@ -102,7 +108,7 @@
 			(#{item.roleId}, #{item.resourceId})
 		</foreach>
 	</insert>
-	
+
 	<select id="selectUserByRoleId" parameterType="Long" resultType="java.util.Map">
 		<![CDATA[
 		SELECT u.* FROM `sys_users` u INNER JOIN `sys_use_role` r ON u.`id`=r.`user_id` WHERE  u.`dtflag`=0 AND r.`role_id`=#{id}
@@ -112,6 +118,22 @@
 	<select id="selectRoleByUserId" parameterType="Long" resultMap="roleResult">
 		<![CDATA[
 			SELECT role.* FROM `sys_roles` role INNER JOIN `sys_use_role` sur ON role.`id`=sur.`role_id` WHERE sur.`user_id`=#{id}
+		]]>
+	</select>
+	
+	<select id="selectRoleById" parameterType="Long" resultType="java.util.Map" >
+		<![CDATA[
+			SELECT 
+			  `id`,
+			  `name`,
+			  `update_time`,
+			  `create_time`,
+			  `description`,
+			  `dtflag`,
+			  `url`,
+			  `priority`,
+			  `initPwd` 
+			 from sys_roles role where id=#{id}
 		]]>
 	</select>
 

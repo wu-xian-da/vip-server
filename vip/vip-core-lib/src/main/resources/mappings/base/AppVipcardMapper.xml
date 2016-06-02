@@ -12,6 +12,7 @@
     <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
     <result column="import_time" property="importTime"/>
     <result column="nfc_id" property="nfcId" jdbcType="VARCHAR" />
+    <result column="card_name" property="cardName" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
   </resultMap>
   
@@ -54,7 +55,7 @@
   
   <sql id="Base_Column_List" >
     card_no, customer_id, init_money, remain_money, card_type, card_state, valide_time, 
-    active_time, nfc_id, dtflag
+    active_time, nfc_id, dtflag, card_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -70,11 +71,11 @@
     insert into app_vipcard (card_no, customer_id, init_money, 
       remain_money, card_type, card_state, 
       valide_time, active_time, nfc_id, 
-      dtflag)
+      dtflag, card_name)
     values (#{cardNo,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, #{initMoney,jdbcType=REAL}, 
       #{remainMoney,jdbcType=REAL}, #{cardType,jdbcType=INTEGER}, #{cardState,jdbcType=INTEGER}, 
       #{valideTime,jdbcType=INTEGER}, #{activeTime,jdbcType=TIMESTAMP}, #{nfcId,jdbcType=VARCHAR}, 
-      #{dtflag,jdbcType=INTEGER})
+      #{dtflag,jdbcType=INTEGER},#{cardName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jianfei.core.bean.AppVipcard" >
     insert into app_vipcard

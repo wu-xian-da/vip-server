@@ -1,7 +1,7 @@
 package com.jianfei.user;
 
-import com.jianfei.common.BaseMsgInfo;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -28,14 +28,18 @@
 	</resultMap>
 
 	<select id="get" resultMap="userRs" parameterType="java.util.Map">
-		SELECT u.* ,GROUP_CONCAT(r.`id`) AS 'roles.id' ,GROUP_CONCAT(r.`name`)
-		AS 'roles.name',GROUP_CONCAT(ap.`airport_id`) AS
-		'ariPorts.id',GROUP_CONCAT(ap.`airport_name`) AS 'ariPorts.name' FROM
-		`sys_users` u
-		LEFT JOIN `sys_use_role` ur ON u.`id`=ur.`user_id`
-		LEFT JOIN `sys_roles` r ON ur.`role_id`=r.`id`
-		LEFT JOIN `sys_user_airport` ua ON ua.`sys_id`=u.`id`
-		LEFT JOIN `sys_airport` ap ON ap.`airport_id`=ua.`airport_id`
+	<![CDATA[
+		SELECT
+			u.*,
+			GROUP_CONCAT(distinct r.`name`) AS 'roles.name',
+			GROUP_CONCAT(distinct ap.`airport_name`) AS 'ariPorts.name'
+		FROM
+			`sys_users` u
+		LEFT JOIN `sys_use_role` ur ON u.`id` = ur.`user_id`
+		LEFT JOIN `sys_roles` r ON ur.`role_id` = r.`id`
+		LEFT JOIN `sys_user_airport` ua ON ua.`sys_id` = u.`id`
+		LEFT JOIN `sys_airport` ap ON ap.`airport_id` = ua.`airport_id`
+		 ]]>
 		<where>
 			<if test="1==1">
 				and u.user_type=1
