@@ -22,7 +22,7 @@
 		<div id="order-condition-box">
 			<div class="order-condition-item">
 				<select name="" id="feedbackStateSelect">
-					<option value="2">请选择处理状态</option>
+					<option value="2">全部处理状态</option>
 					<option value="0">未处理</option>
 					<option value="1">已处理</option>
 				</select>
@@ -32,7 +32,7 @@
 			</div>
 		</div>
 
-		<table id="tt" title="" style="width: 1070px; height: 600px"
+		<table id="tt" title="" style="width: 837px; height: 600px"
 			data-options="singleSelect:true,collapsible:true,
                                 url:'feedbackList',
                                 method:'get',
@@ -42,10 +42,10 @@
 			<thead>
 				<tr>
 					<th data-options="align:'center', field:'id',width:100">序号</th>
-					<th data-options="align:'center', field:'customerName',width:100">用户名</th>
+					<th data-options="align:'center', field:'customerName',width:120">用户名</th>
 					<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-					<th data-options="align:'center', field:'feedbacTime',width:100">反馈日期</th>
-					<th data-options="align:'center', field:'feedbackStateName',width:100">是否已处理</th>
+					<th data-options="align:'center', field:'feedbacTime',width:150">反馈日期</th>
+					<th data-options="align:'center', field:'feedbackStateName',width:150">是否已处理</th>
 					<th data-options="align:'center', field:'opr',width:210">操作</th>
 				</tr>
 			</thead>

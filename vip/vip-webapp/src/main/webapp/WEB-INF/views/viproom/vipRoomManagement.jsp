@@ -72,7 +72,7 @@
 			singleSelect : true,
 			
 			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50],
+			pageList : [10, 20, 30, 40, 50],
 			columns : [ [ {
 				width : '200',
 				title : 'vip室编号',
@@ -146,7 +146,7 @@
 								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a>
 									<a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom_out',plain:true"
-									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置检索</a>
+									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">显示全部</a>
 								</td>
 							</tr>
 						</table>

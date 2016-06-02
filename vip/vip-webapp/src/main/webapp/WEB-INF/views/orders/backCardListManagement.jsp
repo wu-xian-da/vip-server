@@ -23,7 +23,7 @@
 		<div id="order-condition-box">
 			<div class="order-condition-item">
 				<select name="" id="backTypeSelect">
-					<option value="4">请选择退款方式</option>
+					<option value="4">全部退款方式</option>
 					<option value="0">微信</option>
 					<option value="1">支付宝</option>
 					<option value="2">银行卡</option>
@@ -33,7 +33,7 @@
 
 			<div class="order-condition-item">
 				<select name="" id="applyTypeSelect">
-					<option value="3">请选择申请途径</option>
+					<option value="3">全部申请途径</option>
 					<option value="0">客服</option>
 					<option value="1">现场</option>
 					
@@ -42,7 +42,7 @@
 
 			<div class="order-condition-item">
 				<select name="" id="orderStateSelect">
-					<option value="10">选择退款状态</option>
+					<option value="10">全部退款状态</option>
 					<option value="3">未退</option>
 					<option value="4">已退</option>
 				</select>

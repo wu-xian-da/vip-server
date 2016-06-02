@@ -58,17 +58,17 @@
 							pagination : true,
 							singleSelect : true,
 							pageSize : 10,
-							pageList : [ 5, 10, 20, 30, 40, 50 ],
-							frozenColumns : [ [ {
-								width : '100',
-								title : '卡号',
-								field : 'cardNo',
-								align : 'center',
-								sortable : true
-							} ] ],
-							columns : [ [
+							pageList : [10, 20, 30, 40, 50 ],
+							columns : [ [{
+									width : '200',
+									title : '卡号1111',
+									field : 'cardNo',
+									align : 'center',
+									sortable : true
+									},
+							          
 									{
-										width : '150',
+										width : '200',
 										title : 'NFC号',
 										field : 'nfcId',
 										align : 'center',
@@ -170,7 +170,7 @@
 
 								<td><select name="_cardState" class="easyui-combobox"
 									data-options="panelHeight:'auto',editable:false">
-										<option value="3">选择状态</option>
+										<option value="3">全部vip卡状态</option>
 										<option value="0">未激活</option>
 										<option value="1">激活</option>
 										<option value="2">退卡</option>
@@ -183,7 +183,7 @@
 									onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a><a
 									href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom_out',plain:true"
-									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置检索</a></td>
+									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">显示全部</a></td>
 							</tr>
 						</table>
 					</form>

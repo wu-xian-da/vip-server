@@ -27,7 +27,6 @@ import org.springframework.web.util.WebUtils;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.AppVipcard;
-import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
@@ -35,7 +34,6 @@ import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.service.base.AppPictureManager;
 import com.jianfei.core.service.base.AriPortManager;
-import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 
 /**
