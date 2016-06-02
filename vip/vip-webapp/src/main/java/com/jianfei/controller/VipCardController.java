@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -107,12 +108,21 @@ public class VipCardController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-	public String importExcel(@RequestParam("filename") MultipartFile file, HttpServletRequest request,
+	public Map<String,Object> importExcel(@RequestParam("filename") MultipartFile file, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		InputStream in = file.getInputStream();
-		vipCardManagerImpl.importExcelData(in);
-		return "redirect:goVipCardManageView";
+		Map<String,Object> respMap = new HashMap<String,Object>();
+		int result =1;
+		try {
+			InputStream in = file.getInputStream();
+			vipCardManagerImpl.importExcelData(in);
+		} catch (Exception e) {
+			// TODO: handle exception
+			result = 0;
+		}
+		respMap.put("result", result);
+		return respMap;
 	}
 
 	/**
