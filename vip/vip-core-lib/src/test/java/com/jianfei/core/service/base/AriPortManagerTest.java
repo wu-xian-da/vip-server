@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -28,11 +27,13 @@ public class AriPortManagerTest {
 	@Autowired
 	private AriPortManager<AriPort> ariPortManager;
 
+	@Autowired
+	private AppPictureManager appPictureManager;
+
 	@Test
 	public void test1() {
-		System.out.println("sdwede");
-		SimpleHash simpleHash = new SimpleHash("md5", "好");
-		System.out.println(simpleHash.toString());
+		PageHelper.startPage(1, 10);
+		appPictureManager.get(new MapUtils.Builder().build());
 	}
 
 	@Test

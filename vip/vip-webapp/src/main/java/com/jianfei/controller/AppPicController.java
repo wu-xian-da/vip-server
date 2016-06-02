@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.common.enu.VipOrderState;
+import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
@@ -80,12 +83,12 @@ public class AppPicController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid list(
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
-		PageHelper.startPage(pageNo, pageSize);
+		PageHelper.startPage(page, rows);
 		MessageDto<List<AppPicture>> messageDto = appPictureManager
 				.get(searchParams);
 		PageInfo<AppPicture> pageInfo = new PageInfo<AppPicture>(
@@ -164,12 +167,12 @@ public class AppPicController extends BaseController {
 	@RequestMapping(value = "/list/vip", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid vipList(
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
-		PageHelper.startPage(pageNo, pageSize);
+		PageHelper.startPage(page, rows);
 		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
 				.get(searchParams);
 		PageInfo<AppCustomer> pageInfo = new PageInfo<AppCustomer>(
@@ -188,4 +191,51 @@ public class AppPicController extends BaseController {
 		return "app/vipInfo";
 	}
 
+	@RequestMapping(value = "/download")
+	public void export(HttpServletRequest request, HttpServletResponse response) {
+		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
+				.get(new MapUtils.Builder().build());
+		if (messageDto.isOk()) {
+			List<ExportAip> dataset = new ArrayList<ExportAip>();
+			for (AppCustomer appCustomer : messageDto.getData()) {
+				ExportAip exportAip = new ExportAip(
+						StringUtils.obj2String(appCustomer.getCustomerName()),
+						StringUtils.obj2String(appCustomer.getPhone()),
+						StringUtils.obj2String(appCustomer.getCreateTime()),
+						StringUtils.obj2String(appCustomer.getAddress()),
+						StringUtils.obj2String(appCustomer.getEmail()),
+						returnPayState(StringUtils.obj2String(appCustomer
+								.getOrderStatu())));
+				dataset.add(exportAip);
+			}
+			download(response, new String[] { "姓名", "手机号", "日期", "常住地址", "邮箱",
+					"用户状态" }, dataset, "vip用户.xls");
+		}
+	}
+
+	/**
+	 * 支付状态
+	 * 
+	 * @param state
+	 * @return
+	 */
+	public String returnPayState(String state) {
+		System.out.println(state);
+		if (String.valueOf(VipOrderState.NOT_PAY.getName()).equals(state)) {
+			return "未支付";
+		} else if (String.valueOf(VipOrderState.ALREADY_PAY.getName()).equals(
+				state)) {
+			return "已支付";
+		} else if (String.valueOf(VipOrderState.ALREADY_REFUND.getName())
+				.equals(state)) {
+			return "已退款";
+		} else if (String.valueOf(VipOrderState.AUDIT_PASS.getName()).equals(
+				state)) {
+			return "审核通过";
+		} else if (String.valueOf(VipOrderState.BEING_AUDITED.getName())
+				.equals(state)) {
+			return "正在审核";
+		}
+		return "";
+	}
 }

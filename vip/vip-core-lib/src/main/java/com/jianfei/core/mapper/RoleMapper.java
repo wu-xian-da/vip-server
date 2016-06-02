@@ -50,4 +50,13 @@ public interface RoleMapper extends BaseMapper<Role> {
 	 */
 	List<Map<String, Object>> selectUserByRoleId(Long id);
 
+	/**
+	 * selectRoleById(根据主键查找角色)
+	 * 
+	 * @param id
+	 * @return Map<String,Object>
+	 * @version 1.0.0
+	 */
+	Map<String, Object> selectRoleById(Long id);
+
 }

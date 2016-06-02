@@ -61,8 +61,8 @@
 			idField : 'id',
 			sortName : 'createdatetime',
 			sortOrder : 'desc',
-			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+			pageSize : 20,
+			pageList : [20, 30, 40, 50 ],
 			frozenColumns : [ [ {
 				width : '100',
 				title : '登录名',
@@ -98,14 +98,14 @@
 			}, {
 				title : '操作',
 				field : 'action',
-				width : '90',
+				width : '150',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑&nbsp;', row.id);
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.id);
 					<%}%>
 						return str;
 				}
@@ -130,16 +130,6 @@
 			<tr>
 				<td>
 					<form id="searchForm">
-						<table>
-							<tr>
-								<td>登录名</td>
-								<td><input name="_loginName" style="width: 80px;" /></td>
-								<td>姓名</td>
-								<td><input name="_name" style="width: 80px;" /></td>
-								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>
-							
-							</tr>
-						</table>
 					</form>
 				</td>
 			</tr>

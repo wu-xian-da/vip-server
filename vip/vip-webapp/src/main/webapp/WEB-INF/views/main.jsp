@@ -112,34 +112,6 @@
 			fit : true,
 			border : false,
 			tools : [ {
-				iconCls : 'ext-icon-arrow_up',
-				handler : function() {
-					mainTabs.tabs({
-						tabPosition : 'top'
-					});
-				}
-			}, {
-				iconCls : 'ext-icon-arrow_left',
-				handler : function() {
-					mainTabs.tabs({
-						tabPosition : 'left'
-					});
-				}
-			}, {
-				iconCls : 'ext-icon-arrow_down',
-				handler : function() {
-					mainTabs.tabs({
-						tabPosition : 'bottom'
-					});
-				}
-			}, {
-				iconCls : 'ext-icon-arrow_right',
-				handler : function() {
-					mainTabs.tabs({
-						tabPosition : 'right'
-					});
-				}
-			}, {
 				text : '刷新',
 				iconCls : 'ext-icon-arrow_refresh',
 				handler : function() {

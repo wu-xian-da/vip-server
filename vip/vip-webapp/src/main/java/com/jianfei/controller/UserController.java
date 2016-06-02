@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,20 +80,19 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid list(
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
-		PageHelper.startPage(pageNo, pageSize);
+		PageHelper.startPage(page, rows);
 		MessageDto<List<User>> messageDto = userManaer.get(searchParams);
-		PageInfo<User> pageInfo = new PageInfo<User>();
 		if (messageDto.isOk()) {
-			pageInfo.setList(messageDto.getData());
+			return bindGridData(new PageInfo<User>(messageDto.getData()));
 		}
-		return bindGridData(pageInfo);
+		return bindGridData(new PageInfo<User>());
 	}
 
 	/**
@@ -111,7 +111,17 @@ public class UserController extends BaseController {
 			MessageDto<List<User>> messageDto = userManaer.get(searchParams);
 			if (messageDto.isOk()) {
 				model.addAttribute("user", messageDto.getData().get(0));
+				List<Role> roles = roelManager.selectRoleByUserId(messageDto
+						.getData().get(0).getId());
+				if (!CollectionUtils.isEmpty(roles)) {
+					model.addAttribute("selected", roles.get(0));
+				}
 			}
+		}
+		MessageDto<List<Role>> roleMessageDto = roelManager
+				.get(new MapUtils.Builder().build());
+		if (roleMessageDto.isOk()) {
+			model.addAttribute("roleSeclect", roleMessageDto.getData());
 		}
 		List<Map<String, Object>> list = ariPortService
 				.datePermissionData(StringUtils.toLong(user.getId()));

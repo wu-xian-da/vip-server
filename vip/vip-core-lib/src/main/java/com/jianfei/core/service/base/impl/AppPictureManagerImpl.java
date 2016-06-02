@@ -1,3 +1,4 @@
+
 /**
  * @项目名:vip
  * @版本信息:1.0
@@ -165,5 +166,14 @@ public class AppPictureManagerImpl implements AppPictureManager {
 			picture.setPictureUrl(staticIP+picture.getPictureUrl());
 		}
 		return appPictureMapper.getPicture(appPicture);
+	}
+	/**
+	 * 更新vip室图片信息
+	 */
+	@Override
+	public int updateByVipRoomId(Map<String,Object> map) {
+		// TODO Auto-generated method stub
+		appPictureMapper.updateByVipRoomId(map);
+		return 0;
 	}
 }

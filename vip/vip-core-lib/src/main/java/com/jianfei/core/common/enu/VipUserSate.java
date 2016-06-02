@@ -12,24 +12,24 @@ public enum VipUserSate {
     /**
      * 初始化
      */
-    NOT_ACTIVE("0"),
+    NOT_ACTIVE(0),
     /**
      * 正常
      */
-    ACTIVE("1"),
+    ACTIVE(1),
     /**
      * 锁住
      */
-    LOCKED("2");
+    LOCKED(2);
 
 
-    private String name;
+    private int name;
 
-    public String getName(){
+    public int getName(){
         return this.name;
     }
 
-    private VipUserSate(String name){
+    private VipUserSate(int name){
         this.name = name;
     }
 }

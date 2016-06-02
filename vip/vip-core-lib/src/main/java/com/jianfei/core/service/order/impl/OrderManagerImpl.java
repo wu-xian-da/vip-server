@@ -1,6 +1,7 @@
 package com.jianfei.core.service.order.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +12,12 @@ import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.BeanUtils;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.common.enu.*;
+import com.jianfei.core.common.utils.*;
+import com.jianfei.core.dto.*;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
+import com.jianfei.core.service.order.PayManager;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 
@@ -21,9 +26,6 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.dto.OrderAddInfoDto;
-import com.jianfei.core.dto.OrderDetailInfo;
-import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.mapper.AppCardBackMapper;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
@@ -57,6 +59,8 @@ public class OrderManagerImpl implements OrderManager {
 	private AppInvoiceManagerImpl invoiceManager;
 	@Autowired
 	private MsgInfoManagerImpl msgInfoManager;
+	@Autowired
+	private ConsumeManagerImpl consumeManager;
     /**
      * 添加订单信息
      *
@@ -64,13 +68,13 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public boolean addOrderAndUserInfo(OrderAddInfoDto addInfoDto) {
+    public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) {
 
 		try {
 			//1、校验用户和手机验证码
 			boolean flag=msgInfoManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER,addInfoDto.getCode());
 			if (!flag){
-				return false;
+				return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
 			}
 			//2、添加用户信息
 			AppCustomer customer= new AppCustomer();
@@ -78,24 +82,42 @@ public class OrderManagerImpl implements OrderManager {
 			vipUserManager.addUser(customer);
 			//3、根据查询VIP号查询卡片信息
 			AppVipcard vipCard=vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
+			vipCard.setCustomerId(customer.getCustomerId());
+			vipCardManager.updateVipCard(vipCard);
+
 			//4、添加订单信息
 			AppOrders orders=new AppOrders();
 			BeanUtils.copyProperties(orders,addInfoDto);
+			orders.setSaleNo(addInfoDto.getUno());
 			orders.setCustomerId(customer.getCustomerId());
 			orders.setPayMoney(vipCard.getInitMoney());
 			orders.setOrderId(IdGen.uuid());
-			appOrdersMapper.insert(orders);
-            //5、TODO 订单卡表
+			orders.setOrderTime(new Date());
+			orders.setRemark1(vipCard.getCardName());
+			orders.setOrderState(VipOrderState.NOT_PAY.getName());
+			orders.setDtflag(StateType.EXIST.getName());
+			orders.setInvoiceFlag(0);
+			appOrdersMapper.insertSelective(orders);
+
+            //5、订单卡表
+			AppOrderCard appOrderCard=new AppOrderCard();
+			appOrderCard.setId(IdGen.uuid());
+			appOrderCard.setOrderId(orders.getOrderId());
+			appOrderCard.setCardNo(addInfoDto.getVipCardNo());
+			appOrderCard.setCardNum(1);
+			appOrderCard.setInitMoney(vipCard.getInitMoney());
+			appOrderCard.setCardType(vipCard.getCardType());
+			appOrderCardMapper.insert(appOrderCard);
 			addInfoDto.setOrderId(orders.getOrderId());
 			addInfoDto.setMoney(vipCard.getInitMoney());
-			return true;
+			return BaseMsgInfo.success(addInfoDto);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 
 		}
-		return false;
+		return new BaseMsgInfo().setCode(-1).setMsg("开卡失败");
     }
 
 
@@ -296,7 +318,17 @@ public class OrderManagerImpl implements OrderManager {
 	 */
 	@Override
 	public String getPayUrl(String orderId, PayType payType) {
-		return null;
+		AppOrders appOrders=getOrderInfo(orderId);
+		PayManager payManager=null;
+		//TODO 根据不同的支付方式 调研不同的支付封装接口
+		 if(PayType.WXPAY.equals(payType)){
+			 payManager= SpringContextHolder.getBean("");
+		 }else if (PayType.ALIPAY.equals(payType)){
+			 payManager= SpringContextHolder.getBean("");
+		 }
+	    String url=payManager.getPayUrl(appOrders);
+
+		return url;
 	}
 
 	/**
@@ -318,5 +350,56 @@ public class OrderManagerImpl implements OrderManager {
 		params.put("orderId", orderId);
 		
 		return appOrdersMapper.updateOrderState(params);
+	}
+	/**
+	 * @param orderId
+	 * @param payType
+	 * @return
+	 */
+	@Override
+	public boolean checkThirdPay(String orderId, PayType payType) {
+		return false;
+	}
+
+	/**
+	 * 根据手机号查询用户VIP卡使用信息和订单详细信息
+	 *
+	 * @param phone 手机号
+	 * @param code
+	 * @return
+	 */
+	@Override
+	public BaseMsgInfo getVipCardUseAndOrder(String phone, String code) {
+		//1、校验用户和手机验证码
+		boolean flag = msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD, code);
+		if (!flag)
+			return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
+		//2、查询用户信息和订单信息
+		VipCardUseDetailInfo vipCardUseDetailInfo = appOrderCardMapper.getVipCardUseDetailInfo(phone);
+		if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
+			return BaseMsgInfo.success(vipCardUseDetailInfo);
+		}
+
+		//3、查询VIP使用信息
+		List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
+		if (list == null)
+			return BaseMsgInfo.success(vipCardUseDetailInfo);
+		float usedMoney = 0;
+		for (AppConsume appConsume : list) {
+			usedMoney = usedMoney + appConsume.getConsumeMoney();
+		}
+		vipCardUseDetailInfo.setUsedMoney(usedMoney);
+		//TODO 可配置优惠信息多少
+		vipCardUseDetailInfo.setSaleRate("80%");
+		return BaseMsgInfo.success(vipCardUseDetailInfo);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.jianfei.core.service.order.OrderManager#selectOrder(java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> selectOrder(Map<String, Object> map) {
+		return appOrdersMapper.selectOrder(map);
 	}
 }

@@ -14,53 +14,69 @@
 <script src="public/js/jquery.min.js"></script>
 <script src="public/js/jquery.easyui.min.js"></script>
 <script src="public/js/plugins/datagrid-scrollview.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
 
 </head>
 <body>
 	 <div id="order-container">
-        <div id="order-container-calac">
-            <label>日期：</label>
-            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:180px;height:26px">
-
-            <label>-</label>
-            <input class="easyui-datebox" id="endTime" data-options="formatter:myformatter,parser:myparser" style="width:180px;height:26px">
-
-        </div>
-
-        <div id="order-condition-box">
-            <div class="order-condition-item">
-                <select id="airportIdSelect">
-                    <option value="0">选择机场</option>
-                    
-                </select>
-            </div>
-
-            <div class="order-condition-item">
-                <select id="orderStateSelect">
-                    <option value="5">选择订单状态</option>
-                    <option value="0">未支付</option>
-                    <option value="1">已支付</option>
-                    <option value="2">正在审核</option>
-                    <option value="3">审核通过</option>
-                    <option value="4">已退款</option>
-                </select>
-            </div>
-
-            <div class="order-condition-item">
-                <select id="invoiceSelect">
-                    <option value="3">选择发票状态</option>
-                    <option value="0">未开</option>
-                    <option value="1">已开</option>
-                  
-                </select>
-            </div>
-
-            <div class="order-condition-item">
-                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
-                <button id="searchBt">搜索</button>
-            </div>
-        </div>
-        
+	 	<style type="text/css">
+	 			#order-container-wrap{ overflow:hidden;}
+        		#order-container{width:auto;}
+        		#order-container-calac,#order-condition-box{float:left; padding-top:5px;}
+        		#order-container #order-condition-box{ padding-top:5px; margin-left:10px;}
+        		#order-container #order-condition-box select{height:26px;}
+        </style>
+        <div id="order-container-wrap">
+	        <div id="order-container-calac">
+	            <label>日期：</label>
+	            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:110px;height:26px">
+	
+	            <label>-</label>
+	            <input class="easyui-datebox" id="endTime" data-options="formatter:myformatter,parser:myparser" style="width:110px;height:26px">
+	
+	        </div>
+	
+	        <div id="order-condition-box">
+	        
+	        	
+	        	
+	            <div class="order-condition-item">
+	                <select id="airportIdSelect">
+	                	
+	                    <option value="">全部机场</option>
+	                    <c:forEach items="${airPostList}" var="airPort">
+	                    	<option value="${airPort.airport_id }">${airPort.airport_name }</option>
+	                    </c:forEach>
+	                    
+	                </select>
+	            </div>
+	
+	            <div class="order-condition-item">
+	                <select id="orderStateSelect">
+	                    <option value="5">全部订单状态</option>
+	                    <option value="0">未支付</option>
+	                    <option value="1">已支付</option>
+	                    <option value="2">正在审核</option>
+	                    <option value="3">审核通过</option>
+	                    <option value="4">已退款</option>
+	                </select>
+	            </div>
+	
+	            <div class="order-condition-item">
+	                <select id="invoiceSelect">
+	                    <option value="3">全部发票状态</option>
+	                    <option value="0">未开</option>
+	                    <option value="1">已开</option>
+	                  
+	                </select>
+	            </div>
+	
+	            <div class="order-condition-item">
+	                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
+	                <button id="searchBt">检索</button>
+	            </div>
+	        </div>
+		</div>        
         <table id="tt" title="" style="width:1120px;height:600px" 
                 data-options="singleSelect:true,collapsible:true,
                                 url:'orderList',
@@ -70,8 +86,8 @@
                                 pagination="true">
             <thead>
                 <tr>
-                <th data-options="align:'center', field:'orderId',width:100">订单编号</th>
-                <th data-options="align:'center', field:'orderTime',width:150">订单日期</th>
+                <th data-options="align:'center', field:'orderId',width:120">订单编号</th>
+                <th data-options="align:'center', field:'orderTime',width:130">订单日期</th>
                 
                 <th data-options="align:'center', field:'airportName',width:150">场站</th>
                 <th data-options="align:'center', field:'agentName',width:100">业务员</th>
@@ -103,15 +119,15 @@
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
                     	<input type="hidden" value="" id="hideOrderId"/>
-                        <label>输入微信号:</label><input type="text" id="backCardNo0">
+                        <label>输入微信号:</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入支付宝账号:</label><input type="text" id="backCardNo1">
+                        <label>输入支付宝账号:</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入银行卡号:</label><input type="text" id="backCardNo2">
+                        <label>输入银行卡号:</label><input class="easyui-validatebox" type="text" id="backCardNo2" data-options="required:true">
                     </div>
                 </div>
 
@@ -119,7 +135,7 @@
                     <label>可退金额: ￥<span id="remainMoney">0.00</span></label>
                 </div>
 
-                <div class="easyui-window-footer">
+                <div class="easyui-window-footer" style="padding-left:50px">
                     <button id="writerUserInfo">录入信息确认</button>
                     <button id="cancleBt">返回</button>
                 </div>
@@ -146,7 +162,7 @@
                     <label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
                 </div>
 
-                <div class="easyui-window-footer">
+                <div class="easyui-window-footer" style="padding-left:32px">
                 	<shiro:hasPermission name="system:order:refundMoney">  
                   		  <button id="finalBackMoneyToUserBt">退款确认</button>
                     </shiro:hasPermission>

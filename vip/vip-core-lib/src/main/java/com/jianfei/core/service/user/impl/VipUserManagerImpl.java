@@ -10,6 +10,7 @@ import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -35,6 +36,8 @@ public class VipUserManagerImpl implements VipUserManager {
     @Override
     public boolean addUser(AppCustomer vipUser) {
         vipUser.setCustomerId(IdGen.uuid());
+        vipUser.setCreateTime(new Date());
+        vipUser.setUseType(VipUserSate.NOT_ACTIVE.getName());
         int num = customerMapper.insertSelective(vipUser);
         return num == 1 ? true : false;
     }
@@ -105,6 +108,6 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean validateBackCardCode(String phone, String code) {
-        return false;
+        return  msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD,code);
     }
 }

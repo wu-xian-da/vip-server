@@ -12,39 +12,39 @@ public enum VipOrderState {
 	/**
 	 * 未支付
 	 */
-	NOT_PAY("0"),
+	NOT_PAY(0),
 	
 	/**
 	 * 已支付
 	 */
-	ALREADY_PAY("1"),
+	ALREADY_PAY(1),
 	
 	/**
 	 * 正在审核
 	 */
-	BEING_AUDITED("2"),
+	BEING_AUDITED(2),
 	
 	/**
 	 * 审核通过
 	 */
 	
-	AUDIT_PASS("3"),
+	AUDIT_PASS(3),
 	
 	/**
 	 * 已退款
 	 */
-	ALREADY_REFUND("4");
+	ALREADY_REFUND(4);
 	
-	private String name;
+	private int name;
 
-	private VipOrderState(String name){
+	private VipOrderState(int name){
 		this.name = name;
 	}
 
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public int getName() {
 		return name;
 	}
 }

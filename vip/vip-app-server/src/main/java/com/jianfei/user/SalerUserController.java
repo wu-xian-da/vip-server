@@ -1,7 +1,7 @@
 package com.jianfei.user;
 
-import com.jianfei.common.BaseMsgInfo;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
 import org.springframework.beans.factory.annotation.Autowired;

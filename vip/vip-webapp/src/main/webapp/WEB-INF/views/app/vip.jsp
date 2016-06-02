@@ -27,8 +27,8 @@
 			pagination : true,
 			singleSelect : true,
 			idField : 'customerId',
-			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+			pageSize : 20,
+			pageList : [20, 30, 40, 50, ],
 		
 			columns : [ [ {
 				width : '80',
@@ -57,11 +57,15 @@
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
-						return '业务APP轮播图';
+						return '未支付';
 					case 1:
-						return '用户APP轮播图';
+						return '已支付';
 					case 2:
-						return '用户APP合作按钮';
+						return '正在审核';
+					case 3:
+						return '审核通过';
+					case 4:
+						return '已退款';
 					}
 				}
 			}, {
@@ -86,10 +90,37 @@
 			}
 		});
 	});
+	
+	function exportVip(){
+	   window.open(sy.contextPath + '/app/download');
+	}
+	function blurClick(){
+		grid.datagrid('load',
+				{
+				'_orderState':$('#orderState').combobox('getValue'),
+				'_namephone':$("#searchBox").val()
+				});
+	}
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<div id="toolbar" style="display: none;">
+	<table>
+			<tr>
+				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_go',plain:true" onclick="exportVip()">导出</a></td>
+				<td><div class="datagrid-btn-separator"></div></td>
+				<td><select id="orderState" class="easyui-combobox" name="orderState" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+							<option value="" >请选择用户状态</option>
+							<option value="0" >未支付</option>
+							<option value="1" >已支付</option>
+							<option value="2" >正在审核</option>
+							<option value="3" >审核通过</option>
+							<option value="4" >已退款</option>
+					</select></td>
+				<td><input id="searchBox" class="easyui-validatebox" style="width: 150px" placeholder='输入手机号/姓名'></input></td>
+				<td><a href="javascript:void(0);" onclick="blurClick();" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true">搜索</a></td>
+			</tr>
+		</table>
 	</div>
 	<div data-options="region:'center',fit:true,border:false">
 		<table id="grid" data-options="fit:true,border:false"></table>

@@ -45,6 +45,12 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		}
 	}
 
+	public static String obj2String(Object obj) {
+		if (null == obj)
+			return "";
+		return obj.toString();
+	}
+
 	/**
 	 * 转换为字节数组
 	 * 
@@ -401,6 +407,32 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		Map<String, List<Long>> paraMap = new HashMap<String, List<Long>>();
 		paraMap.put("ids", StringUtils.stringArray2Long(arrayString, split));
 		return paraMap;
+	}
+
+	public static Map<String, String> selectCity(String selectCitys) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (isEmpty(selectCitys)) {
+			map.put("provice", "");
+			map.put("city", "");
+			map.put("country", "");
+			return map;
+		}
+		String[] citys = selectCitys.split("-");
+		if (citys.length == 1) {
+			map.put("provice", citys[0]);
+			map.put("city", "");
+			map.put("country", "");
+		} else if (citys.length == 2) {
+			map.put("provice", citys[0]);
+			map.put("city", citys[1]);
+			map.put("country", "");
+		} else if (citys.length == 3) {
+			map.put("provice", citys[0]);
+			map.put("city", citys[1]);
+			map.put("country", citys[2]);
+		}
+
+		return map;
 	}
 
 	public static void main(String[] args) {

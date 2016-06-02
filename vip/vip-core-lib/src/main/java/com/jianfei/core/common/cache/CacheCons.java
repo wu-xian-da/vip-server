@@ -19,7 +19,6 @@ package com.jianfei.core.common.cache;
 public class CacheCons {
 
 	public interface Sys {
-		public final static String SYS_USER_LIST = "sys_user_list";
 		public static final String SYS_ROLE_LIST = "sys_role_list";
 		public static final String SYS_RESOURCE_LIST = "sys_resource_list";
 

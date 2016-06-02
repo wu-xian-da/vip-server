@@ -1,6 +1,7 @@
 package com.jianfei.core.service.base;
 
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.dto.OrderShowInfoDto;
@@ -31,29 +32,6 @@ public interface VipCardManager {
      * @return
      */
     boolean updateVipCard(AppVipcard vipcard);
-
-    /**
-     * 添加VipCard使用记录
-     * @return
-     */
-    boolean addVipUseInfo(AppCustomer  customer);
-
-    /**
-     * 分页获取用户使用记录
-     * @param pageNo 页数
-     * @param pageSize 每页大小
-     * @param vipCardNo Vip卡号
-     * @return
-     */
-    PageInfo<AppCustomer> pageVipUseInfo(int pageNo, int pageSize, String vipCardNo );
-
-    /**
-     * 根据vip卡No获取所有使用记录
-     * @param vipCardNo vipCardNo
-     * @return  List<AppCustomer>
-     */
-    List<AppCustomer> listAllVipUse( String vipCardNo );
-    
     
     /**
      * 分页显示vip卡列表信息

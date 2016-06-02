@@ -51,41 +51,6 @@
 			 var isChecked = $(this).prop("checked");
 			$("#area input:checkbox").checkCbx(isChecked);
 		});
-		parent.$.messager.progress({
-			text : '数据加载中....'
-		});
-		$('#tree').tree(
-				{
-					url : sy.contextPath + '/role/tree',
-					parentField : 'pid',
-					checkbox : true,
-					formatter : function(node) {
-						return node.name;
-					},
-					onCheck:function(node){
-
-					},
-					onLoadSuccess : function(node, data) {
-						$.get(sy.contextPath + '/role/selectroles/'+ $(':input[name="id"]').val(), function(
-								result) {
-							if (result) {
-								for (var i = 0; i < result.length; i++) {
-									var node = $('#tree').tree('find',
-											result[i].id);
-									if (node) {
-										var isLeaf = $('#tree').tree('isLeaf',
-												node.target);
-										if (isLeaf) {
-											$('#tree').tree('check',
-													node.target);
-										}
-									}
-								}
-							}
-							parent.$.messager.progress('close');
-						}, 'json');
-					}
-				});
 	});
 </script>
 </head>
@@ -104,11 +69,13 @@
 					<td><input name="loginName" value="${user.loginName }" class="easyui-validatebox" data-options="required:true" /></td>
 				</tr>
 				<tr>
-					<td colspan="4">
-						<fieldset>
-							<legend>所属角色</legend>
-							<ul id="tree"></ul>
-						</fieldset>
+					<th>用户角色</th>
+					<td>
+						<select id="cc" class="easyui-combobox" name="roleids" style="width:200px;">
+							<c:forEach items="${roleSeclect }" var="role">
+								<option value="${role.id }" <c:if test="${!empty selected and role.id==selected.id }">selected="selected"</c:if> >${role.name }</option>
+							</c:forEach>
+						</select>
 					</td>
 				</tr>
 				<tr>

@@ -32,9 +32,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.service.base.AppPictureManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 
 /**
@@ -54,6 +56,17 @@ public class OrderMapperTest {
 
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
+	@Autowired
+	private AppPictureManager appPictureManager;
+	
+	
+	@Test
+	public void insertPictureTest(){
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		resMap.put("viproomId", "1ae4d295-7678-4d4a-9a62-887fdb9cd78a");
+		resMap.put("pictureUrl", "111");
+		appPictureManager.updateByVipRoomId(resMap);
+	}
 
 	//订单列表分页测试
 	@Test
@@ -64,7 +77,8 @@ public class OrderMapperTest {
 		List<String> aiportIdList = new ArrayList<String>();
 		aiportIdList.add("366f38ca732e4b599d36edbb1a43018a");
 		map.put("aiportIdList",aiportIdList);
-		map.put("airportId", "0");
+		//04aacc646a76491b9160541ccb4e7b11
+		map.put("airportId", "04aacc646a76491b9160541ccb4e7b11");
 		map.put("orderState", "5");
 		
 		map.put("invoiceState", 3);

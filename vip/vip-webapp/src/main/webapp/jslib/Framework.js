@@ -16,7 +16,7 @@ jQuery.extend({
 			title : '自定义弹出层',
 			height : '800px',
 			wight : '500px',
-			maxmin:true,
+			maxmin : true,
 			type : 2,
 			callback : function() {
 			}
@@ -28,11 +28,26 @@ jQuery.extend({
 			shadeClose : true,
 			shade : false,
 			maxmin : defaults.maxmin, // 开启最大化最小化按钮
-			area : [defaults.wight,defaults.height ],
+			area : [ defaults.wight, defaults.height ],
 			content : defaults.url,
 			end : function() {
 				defaults.callback;
 			}
 		});
+	}
+});
+jQuery.extend({
+	download : function(options, obj) {
+		var defaults = {
+			type : 'post',
+			callback : function() {
+			}
+		};
+		defaults = $.extend(defaults, options);
+		$.ajax({  
+			  type:defaults.type,      
+			  url:defaults.url,
+			  data:defaults.params
+		   });  
 	}
 });

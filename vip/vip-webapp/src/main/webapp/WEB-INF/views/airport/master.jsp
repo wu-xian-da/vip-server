@@ -20,8 +20,8 @@
 		$(function() {
 			function SelectedBox(args) {
 				var $_selectBox = $("#" + args.elem);
-				_selectboxHTMl = '<style type=\"text/css\">' + '#' + args.elem + ' select{ margin-right: 20px; }' + '</style>' + '<select name=\"\" id=\"province-select\">' + '<option value=\"\">请选择省份</option>' + '</select>'
-				+ '<select name=\"\" id=\"city-select\">' + '<option value=\"\">请选择城市</option>' + '</select>'
+				_selectboxHTMl = '<style type=\"text/css\">' + '#' + args.elem + ' select{ margin-right: 20px; }' + '</style>' + '<select name=\"\" id=\"province-select\">' + '<option value=\"\">请选择省份</option>' + '</select><br>'
+				+ '<select name=\"\" id=\"city-select\">' + '<option value=\"\">请选择城市</option>' + '</select><br>'
 				+ '<select name=\"\" id=\"region-select\">' + '<option value=\"\">请选择区域</option>' + '</select>'
 				+ '<input type=\"hidden\" value=\"\" id=\"region-input-id\">';
 				$_selectBox.html($(_selectboxHTMl));
@@ -53,7 +53,7 @@
 					var _cId = $(this).val();
 					if (_cId != "") {
 						$.get(args.regionUrl, {
-							cId: _cId
+							pid: _cId
 						}, function(_d) {
 							var _regionOption = '<option value=\"\">请选择区域</option>';
 							for (var i = 0; i < _d.length; i++) {

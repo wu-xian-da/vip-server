@@ -20,8 +20,8 @@
 			<value>
 				<!-- 对静态资源设置匿名访问 -->
 				/jslib/** = anon
-				/druid/** = anon				
-				/airport/** = anon				
+				/druid/** = anon
+				/airport/** = anon
 				/layout/** = anon
 				/uploadPath/** = anon
 				/style/** = anon
@@ -39,7 +39,7 @@
 				<property name="credentialsMatcher" ref="credentialsMatcher"></property>
 			</bean>
 		</property>
-	<!--	<property name="cacheManager" ref="cacheManagerShiro"></property>-->
+		<property name="cacheManager" ref="cacheManagerShiro"></property>
 	</bean>
 
 	<!-- cacheManager -->

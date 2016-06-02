@@ -21,8 +21,6 @@
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 			</shiro:hasPermission>
 				<td><div class="datagrid-btn-separator"></div></td>
-				<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索角色名称'"></input></td>
-				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">清空查询</a></td>
 			</tr>
 		</table>
 	</div>
@@ -89,7 +87,7 @@
 				sortable : true
 			} ] ],
 			columns : [ [{
-				width : '600',
+				width : '800',
 				title : '角色权限',
 				field : 'resources',
 				formatter : function(value, row){
@@ -105,21 +103,17 @@
 				width : '100',
 				title : '首页地址',
 				field : 'url'
-			},  {
-				width : '100',
-				title : '优先级',
-				field : 'priority'
-			}, {
+			},{
 				title : '操作',
 				field : 'action',
-				width : '100',
+				width : '130',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:role:update")) {%>
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑', row.id);
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:role:delete")) {%>
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.id);
 					<%}%>
 						return str;
 				}

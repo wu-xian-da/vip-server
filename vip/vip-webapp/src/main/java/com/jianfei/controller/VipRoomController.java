@@ -7,9 +7,10 @@
  */
 package com.jianfei.controller;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,14 +21,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.AppVipcard;
-import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.common.enu.DtFlagType;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.UUIDUtils;
+import com.jianfei.core.service.base.AppPictureManager;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 
@@ -47,6 +53,8 @@ public class VipRoomController extends BaseController {
 	private VipRoomManagerImpl vipRoomManagerImp;
 	@Autowired
 	private AriPortManager ariPortService;
+	@Autowired
+	private AppPictureManager appPictureManager;
 	
 	@RequestMapping("/gotoVipRoomView")
 	public String test(){
@@ -103,10 +111,10 @@ public class VipRoomController extends BaseController {
 	 */
 	@RequestMapping("gotoAddVipRoomView")
 	public String gotoAddVipRoomView(Model model){
-		//返回所有的场站信息
-		MessageDto<List<AriPort>> list= ariPortService.get(null);
-		List<AriPort> airportList = list.getData();
-		model.addAttribute("airportList", airportList);
+		Map<String,Object> reqMap = new HashMap<String,Object>();
+		reqMap.put("pid", 0);
+		List<Map<String,Object>> provinceList = ariPortService.selectCityById(reqMap);
+		model.addAttribute("provinceList", provinceList);
 		return "viproom/addVipRoom";
 	}
 	
@@ -118,10 +126,32 @@ public class VipRoomController extends BaseController {
 	 * @version  1.0.0
 	 */
 	@RequestMapping(value="addVipRoomInfo",method=RequestMethod.POST)
-	public String addVipRoom(SysViproom room){
-		room.setViproomId(UUID.randomUUID().toString());
-		room.setDtflag(0);//0表示不删除
+	public String addVipRoom(@RequestParam( value = "file", required = false) MultipartFile file,SysViproom room){
+		//文件上传
+        String path =  GloabConfig.getInstance().getConfig("upload.home.dir")+"//viproomPhoto";  
+        System.out.println("path="+path);
+        String fileName = file.getOriginalFilename();
+        String newFileName = UUIDUtils.returnNewFileName(fileName);
+        File targetFile = new File(path, newFileName);  
+        if(!targetFile.exists()){  
+            targetFile.mkdirs();  
+        }  
+        try {  
+            file.transferTo(targetFile);  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+        String relativePath = "/viproomPhoto/"+newFileName;
+        String viproomId = UUIDUtils.getPrimaryKey();
+		room.setViproomId(viproomId);
+		room.setDtflag(DtFlagType.NOT_DELETE.getName());
 		vipRoomManagerImp.addVipRoom(room);
+		//保存图片url
+		AppPicture appPicture =  new AppPicture();
+		appPicture.setViproomId(viproomId);
+		appPicture.setPictureUrl(relativePath);
+		appPictureManager.save(appPicture);
+		
 		return "redirect:gotoVipRoomView";
 	}
 	
@@ -135,11 +165,11 @@ public class VipRoomController extends BaseController {
 	 */
 	@RequestMapping("gotoUpdateVipRoomView")
 	public String gotoUpdateVipRoomView(@RequestParam(value="viproomId") String viproomId,Model model){
-		System.out.println("viproomId="+viproomId);
-		//返回所有的场站信息
-		MessageDto<List<AriPort>> list= ariPortService.get(null);
-		List<AriPort> airportList = list.getData();
-		model.addAttribute("airportList", airportList);
+		//返回所有的省列表
+		Map<String,Object> reqMap = new HashMap<String,Object>();
+		reqMap.put("pid", 0);
+		List<Map<String,Object>> provinceList = ariPortService.selectCityById(reqMap);
+		model.addAttribute("provinceList", provinceList);
 		//根据vip室编号返回vip室信息
 		SysViproom viproom = vipRoomManagerImp.selVipRoomById(viproomId);
 		model.addAttribute("viproom", viproom);
@@ -155,9 +185,45 @@ public class VipRoomController extends BaseController {
 	 * @version  1.0.0
 	 */
 	@RequestMapping(value="editVipRoomInfo",method=RequestMethod.POST)
-	public String editVipRoomById(SysViproom room){
-		room.setDtflag(0);
+	public String editVipRoomById(@RequestParam( value = "file", required = false) MultipartFile file,SysViproom room){
+		//文件上传
+        String path =  GloabConfig.getInstance().getConfig("upload.home.dir")+"//viproomPhoto";  
+        System.out.println("path="+path);
+        String fileName = file.getOriginalFilename();
+        String newFileName = UUIDUtils.returnNewFileName(fileName);
+        File targetFile = new File(path, newFileName);  
+        if(!targetFile.exists()){  
+            targetFile.mkdirs();  
+        }  
+        try {  
+            file.transferTo(targetFile);  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+        String relativePath = "/viproomPhoto/"+newFileName;
+        
+		room.setDtflag(DtFlagType.NOT_DELETE.getName());
+		//更新vip室信息
 		vipRoomManagerImp.updateVipRoom(room);
+		//更新vip室图片信息
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		resMap.put("viproomId", room.getViproomId());
+		resMap.put("pictureUrl", relativePath);
+		appPictureManager.updateByVipRoomId(resMap);
 		return "redirect:gotoVipRoomView";
+	}
+	
+	/**
+	 * 根据省id获取所有的场站列表
+	 * @param provinceId
+	 * @return
+	 */
+	@RequestMapping("getAirPortList")
+	@ResponseBody
+	public List<Map<String,Object>> getAirPortList(@RequestParam(value="provinceId") String provinceId){
+		Map<String,Object> reqMap = new HashMap<String,Object>();
+		reqMap.put("province", provinceId);
+		List<Map<String, Object>> list= ariPortService.mapList(reqMap);
+		return list;
 	}
 }

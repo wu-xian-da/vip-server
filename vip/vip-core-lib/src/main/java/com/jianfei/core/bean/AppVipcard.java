@@ -24,6 +24,8 @@ public class AppVipcard {
 
     private String nfcId;
 
+    private String cardName;
+
     private Integer dtflag;
 
     public String getCardNo() {
@@ -125,9 +127,17 @@ public class AppVipcard {
 		this.importTime = importTime;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
+    }
+
+    /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
 	@Override
 	public String toString() {
 		return "AppVipcard [cardNo=" + cardNo + ", customerId=" + customerId + ", initMoney=" + initMoney

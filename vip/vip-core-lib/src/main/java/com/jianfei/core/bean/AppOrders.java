@@ -37,7 +37,13 @@ public class AppOrders implements Serializable{
     private Integer dtflag;
     
     private String operation;
-    
+
+    private String saleNo;
+
+    /**
+     * 机场ID
+     */
+    private String airportId;
 
     /**
 	 * operation
@@ -151,5 +157,21 @@ public class AppOrders implements Serializable{
 
     public void setDtflag(Integer dtflag) {
         this.dtflag = dtflag;
+    }
+
+    public String getSaleNo() {
+        return saleNo;
+    }
+
+    public void setSaleNo(String saleNo) {
+        this.saleNo = saleNo;
+    }
+
+    public String getAirportId() {
+        return airportId;
+    }
+
+    public void setAirportId(String airportId) {
+        this.airportId = airportId;
     }
 }

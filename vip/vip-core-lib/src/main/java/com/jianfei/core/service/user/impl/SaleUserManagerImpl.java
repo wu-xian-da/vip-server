@@ -29,6 +29,9 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public boolean validatePassword(String userNo, String password) {
+        User user=userMapper.getUserByUno(userNo);
+        String md5Pass=password+user.getSalt();
+
         //TODO 数据库查询
         return true;
     }

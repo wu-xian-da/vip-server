@@ -72,7 +72,7 @@
 			singleSelect : true,
 			
 			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50],
+			pageList : [10, 20, 30, 40, 50],
 			columns : [ [ {
 				width : '200',
 				title : 'vip室编号',
@@ -142,8 +142,12 @@
 						<table>
 							<tr>
 								<td>输入搜索关键字</td>
-								<td><input name="_searchContent" style="width: 80px;" /></td>
-								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">过滤</a><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a></td>
+								<td><input name="_searchContent" style="width: 125px;" placeholder="场站名称/VIP室名称"/></td>
+								<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom',plain:true" onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a>
+									<a href="javascript:void(0);" class="easyui-linkbutton"
+									data-options="iconCls:'ext-icon-zoom_out',plain:true"
+									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">显示全部</a>
+								</td>
 							</tr>
 						</table>
 					</form>

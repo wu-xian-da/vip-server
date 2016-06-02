@@ -15,6 +15,7 @@
 <script src="public/js/jquery.min.js"></script>
 <script src="public/js/jquery.easyui.min.js"></script>
 <script src="public/js/plugins/datagrid-scrollview.js"></script>
+<script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
 
 </head>
 <body>
@@ -22,7 +23,7 @@
 		<div id="order-condition-box">
 			<div class="order-condition-item">
 				<select name="" id="backTypeSelect">
-					<option value="4">请选择退款方式</option>
+					<option value="4">全部退款方式</option>
 					<option value="0">微信</option>
 					<option value="1">支付宝</option>
 					<option value="2">银行卡</option>
@@ -32,7 +33,7 @@
 
 			<div class="order-condition-item">
 				<select name="" id="applyTypeSelect">
-					<option value="3">请选择申请途径</option>
+					<option value="3">全部申请途径</option>
 					<option value="0">客服</option>
 					<option value="1">现场</option>
 					
@@ -41,14 +42,14 @@
 
 			<div class="order-condition-item">
 				<select name="" id="orderStateSelect">
-					<option value="10">选择退款状态</option>
+					<option value="10">全部退款状态</option>
 					<option value="3">未退</option>
 					<option value="4">已退</option>
 				</select>
 			</div>
 
 			<div class="order-condition-item" style="text-align: left">
-				<button id="searchBt" style="height: 20px">搜索</button>
+				<button id="searchBt" style="height: 20px">检索</button>
 			</div>
 		</div>
 
@@ -99,7 +100,7 @@
 					<label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
 				</div>
 
-				<div class="easyui-window-footer">
+				<div class="easyui-window-footer" style="padding-left:32px">
 					<!-- 该按钮只有财务有权限操作 -->
 					<shiro:hasPermission name="system:user:add">
 						<button id="finalBackMoneyToUserBt">退款确认</button>

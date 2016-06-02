@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,6 +32,7 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.base.AppInvoiceManager;
@@ -65,10 +65,14 @@ public class OrderController extends BaseController {
 	 */
 	@RequiresPermissions(value="system:orderList:home")
 	@RequestMapping(value="/goOrderManagementView")
-	public String orderList(HttpServletResponse response){
+	public String orderList(HttpServletResponse response,Model model){
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("expires", -1);
+		//所有的机场列表
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		List<Map<String, Object>> list = ariPortService.mapList(resMap);
+		model.addAttribute("airPostList", list);
 		return "orders/orderManagement";
 	}
 	
@@ -116,7 +120,7 @@ public class OrderController extends BaseController {
 			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
 			@RequestParam(value="startTime",defaultValue="") String startTime,
 			@RequestParam(value="endTime",defaultValue="") String endTime,
-			@RequestParam(value="airportId",required=false,defaultValue="0") String airportId,
+			@RequestParam(value="airportId",required=false,defaultValue="") String airportId,
 			@RequestParam(value="orderState",required=false,defaultValue="5") Integer orderState,
 			@RequestParam(value="invoiceState",required=false,defaultValue="3") Integer invoiceState,
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
@@ -140,7 +144,10 @@ public class OrderController extends BaseController {
 		if(aiportIdList !=null && aiportIdList.size() >0){
 			paramsMap.put("aiportIdList", aiportIdList);
 		}
-		paramsMap.put("airportId",airportId);
+		if(!airportId.equals("")){
+			paramsMap.put("airportId",airportId);
+		}
+		
 		paramsMap.put("orderState",orderState);
 		paramsMap.put("invoiceState", invoiceState);
 		
@@ -316,7 +323,6 @@ public class OrderController extends BaseController {
 	@RequestMapping(value="/applyBackCard")
 	@ResponseBody
 	public Map<String,Object> applyBackCard(String orderId,Integer operationType,String phone){
-		System.out.println("orderId="+orderId+" operationType="+operationType+" phone="+phone);
 		//1、改变订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、发送验证码
@@ -393,7 +399,7 @@ public class OrderController extends BaseController {
 		String userId = user.getId()+"";
 		
 		AppCardBack appCardBack = new AppCardBack();
-		appCardBack.setBackId(UUID.randomUUID().toString());
+		appCardBack.setBackId(UUIDUtils.getPrimaryKey());
 		appCardBack.setCreateTime(new Date());
 		appCardBack.setOrderId(orderId);
 		appCardBack.setCustomerCard(backCardNo);

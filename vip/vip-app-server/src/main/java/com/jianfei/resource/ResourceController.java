@@ -1,12 +1,13 @@
 package com.jianfei.resource;
 
 import com.github.pagehelper.PageInfo;
-import com.jianfei.common.BaseMsgInfo;
 import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.BaseDto;
+import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
@@ -45,10 +46,10 @@ public class ResourceController  {
 	 * 获取支持的省份列表
 	 * @param
 	 */
-	@RequestMapping(value = "getAirportProvince", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAirportProvince", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo airportProvince(	) {
-		List<String> stringList=ariPortService.getAriPortProvince();
+		List<BaseDto> stringList=ariPortService.getAriPortProvince();
 		return BaseMsgInfo.success(stringList);
 	}
 

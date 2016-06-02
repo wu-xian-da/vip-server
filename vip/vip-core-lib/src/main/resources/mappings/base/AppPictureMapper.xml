@@ -11,6 +11,12 @@
 		<result column="imagetype" property="imagetype" />
 		<result column="descr" property="descr" />
 	</resultMap>
+	
+	<!--更新vip室图片信息  -->
+	<update id="updateByVipRoomId" parameterType="java.util.Map">
+		update app_picture set picture_url = #{pictureUrl} where viproom_id = #{viproomId}
+	</update>
+	
 	<select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />

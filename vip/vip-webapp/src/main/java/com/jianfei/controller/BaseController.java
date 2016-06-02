@@ -7,11 +7,16 @@
  */
 package com.jianfei.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,6 +26,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
+import com.jianfei.core.common.utils.ExportExclUtils;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
@@ -64,6 +70,26 @@ public class BaseController {
 		request.setAttribute("uploadRoot",
 				GloabConfig.getConfig("static.resource.server.address"));
 		request.setAttribute("webRoot", getBaseUrl(request));
+	}
+
+	public <T> void download(HttpServletResponse response, String[] headers,
+			List<T> dataset, String fileName) {
+		ExportExclUtils<T> exclUtils = new ExportExclUtils<T>();
+		// 1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
+		response.setContentType("application/x-download");// 设置response内容的类型
+		try {
+			fileName = fileName == null ? new Date().getTime() + "" : fileName;
+			// response.setHeader("Content-Disposition", "attachment;fileName="
+			// + fileName);
+			response.setHeader("Content-disposition", "attachment;filename="
+					+ URLEncoder.encode(fileName, "UTF-8"));// 设置头部信息
+			// 3.通过response获取ServletOutputStream对象(out)
+			OutputStream output = response.getOutputStream();
+			exclUtils.exportExcel(headers, dataset, output);
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

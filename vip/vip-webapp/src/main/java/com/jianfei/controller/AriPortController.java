@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AriPort;
@@ -56,23 +57,29 @@ public class AriPortController extends BaseController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	public Grid<AriPort> list(
+	public Grid<Map<String, Object>> list(
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			@RequestParam(value = "name", required = false) String name) {
 		PageHelper.startPage(page, rows);
-		MessageDto<List<AriPort>> messageDto = ariPortManager
-				.get(new MapUtils.Builder().setKeyValue("name", name)
+		List<Map<String, Object>> maps = ariPortManager
+				.mapList(new MapUtils.Builder().setKeyValue("name", name)
 						.setKeyValue("dtflag", GloabConfig.OPEN).build());
-		if (messageDto.isOk()) {
-			return bindGridData(new PageInfo<AriPort>(messageDto.getData()));
+		if (!CollectionUtils.isEmpty(maps)) {
+			return bindGridData(new PageInfo<Map<String, Object>>(maps));
 		}
-		return bindGridData(new PageInfo<AriPort>());
+		return bindGridData(new PageInfo<Map<String, Object>>());
 	}
 
 	@RequestMapping(value = "save")
 	@ResponseBody
 	public MessageDto<AriPort> save(AriPort ariPort) {
+		Map<String, String> map = com.jianfei.core.common.utils.StringUtils
+				.selectCity(ariPort.getProvince());
+		ariPort.setProvince(map.get("provice"));
+		ariPort.setCity(map.get("city"));
+		ariPort.setCountry(map.get("country"));
+		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<List<AriPort>> messageDto = ariPortManager
 				.get(new MapUtils.Builder().setKeyValue("name",
 						ariPort.getName()).build());
@@ -85,6 +92,12 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<AriPort> update(AriPort ariPort) {
+		Map<String, String> map = com.jianfei.core.common.utils.StringUtils
+				.selectCity(ariPort.getProvince());
+		ariPort.setProvince(map.get("provice"));
+		ariPort.setCity(map.get("city"));
+		ariPort.setCountry(map.get("country"));
+		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;
 	}
@@ -100,11 +113,11 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(String id, Model model) {
 		if (!StringUtils.isEmpty(id)) {
-			MessageDto<List<AriPort>> messageDto = ariPortManager
-					.get(new MapUtils.Builder().setKeyValue("id", id).build());
-			if (messageDto.isOk()
-					&& !CollectionUtils.isEmpty(messageDto.getData())) {
-				model.addAttribute("ariPort", messageDto.getData().get(0));
+			List<Map<String, Object>> list = ariPortManager
+					.mapList(new MapUtils.Builder().setKeyValue("id", id)
+							.build());
+			if (!CollectionUtils.isEmpty(list)) {
+				model.addAttribute("ariPort", list.get(0));
 			}
 		}
 		return "airport/airPortForm";
@@ -119,6 +132,6 @@ public class AriPortController extends BaseController {
 
 	@RequestMapping(value = "ss")
 	public String sss(String pid) {
-		return "airport、master";
+		return "airport/master";
 	}
 }

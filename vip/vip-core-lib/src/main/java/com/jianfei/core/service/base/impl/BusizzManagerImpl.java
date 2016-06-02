@@ -88,25 +88,6 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jianfei.core.common.persistence.BaseService#get(java.util.Map)
-	 */
-	@Override
-	public MessageDto<List<User>> get(Map<String, Object> params) {
-		MessageDto<List<User>> messageDto = new MessageDto<List<User>>();
-
-		try {
-			List<User> list = busizzMaapper.get(params);
-			messageDto.setData(list);
-		} catch (Exception e) {
-			logger.error("添加业务员:{}", e.getMessage());
-			return messageDto.setMsgBody(MessageDto.MsgFlag.ERROR);
-		}
-		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * com.jianfei.core.service.base.BusizzService#saveUser(com.jianfei.core
 	 * .bean.User, java.lang.String, java.lang.String)
@@ -174,6 +155,39 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	 */
 	@Override
 	public List<Map<String, Object>> listMap(Map<String, Object> map) {
+
 		return busizzMaapper.listMap(map);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.core.service.base.BusizzManager#initpwd(java.util.Map)
+	 */
+	@Override
+	public MessageDto<String> initpwd(Map<String, Object> map) {
+		MessageDto<String> messageDto = new MessageDto<String>();
+		try {
+			String pwd = map.get("code") == null ? "" : map.get("code")
+					.toString();
+			SimpleHash simpleHash = new SimpleHash("md5",
+					GloabConfig.getConfig("defalut.passwd"), pwd);
+			map.put("pwd", simpleHash.toString());
+			busizzMaapper.initpwd(map);
+		} catch (Exception e) {
+			logger.error("初始化业务员信息:{}", e.getMessage());
+			return messageDto.setMsgBody(MessageDto.MsgFlag.ERROR);
+		}
+		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.core.service.base.BusizzManager#selectMap(java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> selectMap(Map<String, Object> map) {
+		return busizzMaapper.selectMap(map);
 	}
 }
