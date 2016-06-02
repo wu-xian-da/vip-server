@@ -107,10 +107,10 @@
 							formatter : function(value, row) {
 								var str = '';
 								<%if (anyPermissionsTag.showTagBody("system:resource:update")) {%>
-									str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_edit" onclick="editFun(\'{0}\');"/>', row.id);
+									str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_edit" onclick="editFun(\'{0}\');"/> 编辑', row.id);
 								<%}%>
 								<%if (anyPermissionsTag.showTagBody("system:resource:delete")) {%>
-									str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_delete"  onclick="removeFun(\'{0}\');"/>', row.id);
+									str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_delete"  onclick="removeFun(\'{0}\');"/> 删除', row.id);
 								<%}%>
 								return str;
 							}

@@ -62,6 +62,45 @@ public class LoginController extends BaseController {
 	}
 
 	/**
+	 * 人力
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/hr/home")
+	public String hr(Model model) {
+		User user = getCurrentUser();
+		archiveManager.chargeHome(model, user);
+		return "home/hr";
+	}
+
+	/**
+	 * 客服
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/service/home")
+	public String servicer(Model model) {
+		User user = getCurrentUser();
+		archiveManager.chargeHome(model, user);
+		return "home/service";
+	}
+
+	/**
+	 * 财务
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/finance/home")
+	public String finance(Model model) {
+		User user = getCurrentUser();
+		archiveManager.chargeHome(model, user);
+		return "home/finance";
+	}
+
+	/**
 	 * master(经理)
 	 * 
 	 * @param model

@@ -41,8 +41,8 @@
 		LEFT JOIN `sys_airport` ap ON ap.`airport_id` = ua.`airport_id`
 		 ]]>
 		<where>
-			<if test="1==1">
-				and u.user_type=1
+			<if test="userType!=null and userType!=''">
+				and u.user_type=#{userType}
 			</if>
 			<if test="id!=null">
 				and u.id=#{id}

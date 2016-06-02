@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.StringUtils;
@@ -62,6 +63,7 @@ public class UserManagerImpl implements UserManaer<User> {
 	public MessageDto<List<User>> get(Map<String, Object> params) {
 		MessageDto<List<User>> messageDto = new MessageDto<List<User>>();
 		// 从缓存中获取
+		params.put("userType", GloabConfig.SYSTEM_USER);
 		List<User> list = userMapper.get(params);
 		if (!CollectionUtils.isEmpty(list)) {
 			messageDto.setData(list).setOk(true);

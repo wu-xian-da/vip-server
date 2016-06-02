@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AppCustomer implements Serializable {
 	/**
@@ -28,13 +29,13 @@ public class AppCustomer implements Serializable {
 	private String email;
 
 	private String address;
-
+	@JsonIgnore
 	private String password;
-
+	@JsonIgnore
 	private Integer useType;
 
 	private String remark1;
-
+	@JsonIgnore
 	private Integer dtflag;
 
 	private String province;
@@ -46,6 +47,8 @@ public class AppCustomer implements Serializable {
 	private Integer orderStatu;
 
 	private Date createTime;
+
+	private String cardNo;
 
 	/**
 	 * createTime
@@ -208,4 +211,11 @@ public class AppCustomer implements Serializable {
 		return JSONObject.toJSONString(this);
 	}
 
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
+	}
 }

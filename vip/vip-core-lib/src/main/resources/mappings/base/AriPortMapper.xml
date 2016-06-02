@@ -43,24 +43,25 @@
 
 	<select id="mapList" resultType="java.util.Map" parameterType="java.util.Map">
 		<![CDATA[
-			SELECT 
-			  t1.airport_id,
-			  t1.airport_name,
-			  t1.state,
-			  t1.agent_num,
-			  t1.province,
-			  t1.city,
-			  t1.country,
-			  t1.address,
-			  t1.longitude,
-			  t1.latitude,
-			  t1.dtflag,
-			  t1.header_name,
-			  t1.header_phone,
-			 GROUP_CONCAT(t2.order_id) as orderIds
+			SELECT
+				t1.airport_id,
+				t1.airport_name,
+				t1.state,
+				t1.agent_num,
+				ct.`name` AS province,
+				t1.city,
+				t1.country,
+				t1.address,
+				t1.longitude,
+				t1.latitude,
+				t1.dtflag,
+				t1.header_name,
+				t1.header_phone,
+				GROUP_CONCAT(t2.order_id) AS orderIds
 			FROM
-			  sys_airport t1 
-			  LEFT JOIN app_orders t2 ON t1.airport_id=t2.airport_id 
+				sys_airport t1
+			LEFT JOIN app_orders t2 ON t1.airport_id = t2.airport_id
+			LEFT JOIN sys_city ct ON ct.CID = t1.province
 		]]>
 		<where>
 			<if test="dtflag!=null">
@@ -167,8 +168,11 @@
 		<if test="headerName!=null">
 			, header_name =#{headerName}
 		</if>
-		<if test="address!=null">
+		<if test="headerPhone!=null">
 			, header_phone =#{headerPhone}
+		</if>
+		<if test="address!=null">
+			, address =#{address}
 		</if>
 		WHERE airport_id = #{id}
 	</update>

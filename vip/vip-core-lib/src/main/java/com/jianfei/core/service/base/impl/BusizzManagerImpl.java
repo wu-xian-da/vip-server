@@ -158,4 +158,26 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 
 		return busizzMaapper.listMap(map);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.core.service.base.BusizzManager#initpwd(java.util.Map)
+	 */
+	@Override
+	public MessageDto<String> initpwd(Map<String, Object> map) {
+		MessageDto<String> messageDto = new MessageDto<String>();
+		try {
+			String pwd = map.get("code") == null ? "" : map.get("code")
+					.toString();
+			SimpleHash simpleHash = new SimpleHash("md5",
+					GloabConfig.getConfig("defalut.passwd"), pwd);
+			map.put("pwd", simpleHash.toString());
+			busizzMaapper.initpwd(map);
+		} catch (Exception e) {
+			logger.error("初始化业务员信息:{}", e.getMessage());
+			return messageDto.setMsgBody(MessageDto.MsgFlag.ERROR);
+		}
+		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+	}
 }

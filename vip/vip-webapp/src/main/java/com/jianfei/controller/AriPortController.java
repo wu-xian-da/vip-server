@@ -79,7 +79,7 @@ public class AriPortController extends BaseController {
 		ariPort.setProvince(map.get("provice"));
 		ariPort.setCity(map.get("city"));
 		ariPort.setCountry(map.get("country"));
-		System.out.println(JSONObject.toJSONString(ariPort));
+		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<List<AriPort>> messageDto = ariPortManager
 				.get(new MapUtils.Builder().setKeyValue("name",
 						ariPort.getName()).build());
@@ -92,6 +92,12 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<AriPort> update(AriPort ariPort) {
+		Map<String, String> map = com.jianfei.core.common.utils.StringUtils
+				.selectCity(ariPort.getProvince());
+		ariPort.setProvince(map.get("provice"));
+		ariPort.setCity(map.get("city"));
+		ariPort.setCountry(map.get("country"));
+		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;
 	}

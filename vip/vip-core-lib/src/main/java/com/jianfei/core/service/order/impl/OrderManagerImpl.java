@@ -8,8 +8,7 @@ import java.util.Map;
 
 import com.jianfei.core.bean.*;
 
-import com.jianfei.core.common.enu.MsgType;
-import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.common.enu.*;
 import com.jianfei.core.common.utils.*;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
@@ -78,19 +77,35 @@ public class OrderManagerImpl implements OrderManager {
 			vipUserManager.addUser(customer);
 			//3、根据查询VIP号查询卡片信息
 			AppVipcard vipCard=vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
+			vipCard.setCustomerId(customer.getCustomerId());
+			vipCardManager.updateVipCard(vipCard);
+
 			//4、添加订单信息
 			AppOrders orders=new AppOrders();
 			BeanUtils.copyProperties(orders,addInfoDto);
+			orders.setSaleNo(addInfoDto.getUno());
 			orders.setCustomerId(customer.getCustomerId());
 			orders.setPayMoney(vipCard.getInitMoney());
 			orders.setOrderId(IdGen.uuid());
 			orders.setOrderTime(new Date());
 			orders.setRemark1(vipCard.getCardName());
-			appOrdersMapper.insert(orders);
-            //5、TODO 订单卡表
+			orders.setOrderState(VipOrderState.NOT_PAY.getName());
+			orders.setDtflag(StateType.EXIST.getName());
+			orders.setInvoiceFlag(0);
+			appOrdersMapper.insertSelective(orders);
+
+            //5、订单卡表
+			AppOrderCard appOrderCard=new AppOrderCard();
+			appOrderCard.setId(IdGen.uuid());
+			appOrderCard.setOrderId(orders.getOrderId());
+			appOrderCard.setCardNo(addInfoDto.getVipCardNo());
+			appOrderCard.setCardNum(1);
+			appOrderCard.setInitMoney(vipCard.getInitMoney());
+			appOrderCard.setCardType(vipCard.getCardType());
+			appOrderCardMapper.insert(appOrderCard);
 			addInfoDto.setOrderId(orders.getOrderId());
 			addInfoDto.setMoney(vipCard.getInitMoney());
-			return BaseMsgInfo.success(true);
+			return BaseMsgInfo.success(addInfoDto);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {

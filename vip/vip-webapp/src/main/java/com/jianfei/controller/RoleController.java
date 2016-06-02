@@ -12,9 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,7 +20,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.utils.Grid;
-import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
@@ -67,11 +64,10 @@ public class RoleController extends BaseController {
 		PageHelper.startPage(page, rows);
 		MessageDto<List<Role>> messageDto = roelManager
 				.get(new MapUtils.Builder().setKeyValue("name", name).build());
-		PageInfo<Role> pageInfo = new PageInfo<Role>();
 		if (messageDto.isOk()) {
-			pageInfo.setList(messageDto.getData());
+			return bindGridData(new PageInfo<Role>(messageDto.getData()));
 		}
-		return bindGridData(pageInfo);
+		return bindGridData(new PageInfo<Role>());
 	}
 
 	@RequestMapping(value = "form")

@@ -35,7 +35,12 @@
 			FROM `app_customer` customer LEFT JOIN `app_orders` o ON customer.`customer_id`=o.`customer_id`
 		 ]]>
 		<where>
-			<if test="queryStr"></if>
+			<if test="orderState!=null and orderState!=''">
+				order_state=#{orderState}
+			</if>
+			<if test="namephone!=null and namephone!=''">
+				and (customer_name like CONCAT('%', #{namephone}, '%') or customer_phone like CONCAT('%', #{namephone}, '%') )
+			</if>
 		</where>
 	</select>
 

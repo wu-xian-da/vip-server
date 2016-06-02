@@ -51,11 +51,11 @@
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>场站负责人:</th>
-					<td><input name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_name }" /></td>
+					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_name }" /></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>负责人联系方式:</th>
-					<td><input name="headerPhone" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_phone }" /></td>
+					<td><input style="text-align: left;" name="headerPhone" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_phone }" /></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>业务员数量:</th>

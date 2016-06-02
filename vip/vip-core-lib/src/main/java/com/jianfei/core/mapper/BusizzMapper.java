@@ -34,4 +34,15 @@ public interface BusizzMapper extends BaseMapper<User> {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> listMap(Map<String, Object> map);
+
+	/**
+	 * initpwd(初始密码)
+	 * 
+	 * @param map
+	 *            void
+	 * @version 1.0.0
+	 */
+	void initpwd(Map<String, Object> map);
+	
+	
 }

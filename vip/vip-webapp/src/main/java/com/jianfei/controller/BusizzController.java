@@ -74,8 +74,8 @@ public class BusizzController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid list(
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
@@ -87,7 +87,7 @@ public class BusizzController extends BaseController {
 		Map<String, Object> map = DateUtil.getDelayDate(1);
 		searchParams.put("year", map.get("year"));
 		searchParams.put("month", map.get("month"));
-		PageHelper.startPage(pageNo, pageSize);
+		PageHelper.startPage(page, rows);
 		List<Map<String, Object>> list = busizzManager.listMap(searchParams);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(
 				list);
@@ -169,6 +169,13 @@ public class BusizzController extends BaseController {
 	public MessageDto<String> delete(User user) {
 		busizzManager.delete(user.getId());
 		return busizzManager.delete(user.getId());
+	}
+
+	@RequestMapping(value = "initPwd")
+	@ResponseBody
+	public MessageDto<String> initPwd(String id, String code) {
+		return busizzManager.initpwd(new MapUtils.Builder()
+				.setKeyValue("id", id).setKeyValue("code", code).build());
 	}
 
 }

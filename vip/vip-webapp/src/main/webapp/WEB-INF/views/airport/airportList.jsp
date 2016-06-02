@@ -125,7 +125,7 @@
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:station:update")) {%>
-						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.airport_id);
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑', row.airport_id);
 					<%}%>
 					return str;
 				}
