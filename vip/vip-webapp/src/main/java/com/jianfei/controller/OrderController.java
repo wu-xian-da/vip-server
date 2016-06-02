@@ -65,10 +65,14 @@ public class OrderController extends BaseController {
 	 */
 	@RequiresPermissions(value="system:orderList:home")
 	@RequestMapping(value="/goOrderManagementView")
-	public String orderList(HttpServletResponse response){
+	public String orderList(HttpServletResponse response,Model model){
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("expires", -1);
+		//所有的机场列表
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		List<Map<String, Object>> list = ariPortService.mapList(resMap);
+		model.addAttribute("airPostList", list);
 		return "orders/orderManagement";
 	}
 	

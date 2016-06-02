@@ -83,6 +83,7 @@
 	var editor = UE.getEditor('container');
 	
 	$(function() {
+		//根据省份初始化场站下拉列表框
 		var provinceId = $("#provinceSele option:selected").val();
 		var url = "getAirPortList?provinceId=" + provinceId
 		$.get(url, function(_d) {
@@ -92,6 +93,7 @@
 				$("#airportSele").append("<option value='"+_d[index].airport_id+"'>"+ _d[index].airport_name + "</option>");
 			}
 		})
+		
 	})
 	//根据省id显示场站列表
 	function getAirPortList() {

@@ -42,7 +42,11 @@
 	        	
 	            <div class="order-condition-item">
 	                <select id="airportIdSelect">
+	                	
 	                    <option value="">全部机场</option>
+	                    <c:forEach items="${airPostList}" var="airPort">
+	                    	<option value="${airPort.airport_id }">${airPort.airport_name }</option>
+	                    </c:forEach>
 	                    
 	                </select>
 	            </div>
