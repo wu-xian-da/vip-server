@@ -62,10 +62,8 @@ public class OrderMapperTest {
 	
 	@Test
 	public void insertPictureTest(){
-		Map<String,Object> resMap = new HashMap<String,Object>();
-		resMap.put("viproomId", "1ae4d295-7678-4d4a-9a62-887fdb9cd78a");
-		resMap.put("pictureUrl", "111");
-		appPictureManager.updateByVipRoomId(resMap);
+		String viproomId = "261f47be25204aab9da048ad9cd032cb";
+		List<AppPicture> list = appPictureManager.selByVipRoomId(viproomId);
 	}
 
 	//订单列表分页测试
