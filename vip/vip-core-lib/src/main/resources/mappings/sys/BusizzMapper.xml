@@ -159,7 +159,8 @@
 	</delete>
 
 	<update id="initpwd" parameterType="java.util.Map">
-		  UPDATE sys_users u SET u.extra_passwd= #{pwd} where u.id=#{id}
+		  UPDATE sys_users u SET u.extra_passwd= #{pwd},u.password=#{password}
+		   where u.id=#{id}
 	</update>
 	
 	<select id="selectMap" parameterType="java.util.Map" resultType="java.util.Map">

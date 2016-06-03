@@ -55,10 +55,10 @@
 				text : '修改',
 				handler : function() {
 					if ($('#passwordDialog form').form('validate')) {
-						$.post(sy.contextPath + '/base/syuser!doNotNeedSecurity_updateCurrentPwd.sy', {
-							'data.pwd' : $('#pwd').val()
+						$.post(sy.contextPath + '/busizz/initUserPwd', {
+							'password' : $('#pwd').val()
 						}, function(result) {
-							if (result.success) {
+							if (result.ok) {
 								$.messager.alert('提示', '密码修改成功！', 'info');
 								$('#passwordDialog').dialog('close');
 							}

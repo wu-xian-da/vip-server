@@ -1,10 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript" charset="utf-8">
-	var lockWindowFun = function() {
-		$.post(sy.contextPath + '/base/syuser!doNotNeedSessionAndSecurity_logout.sy', function(result) {
-			$('#loginDialog').dialog('open');
-		}, 'json');
-	};
 	var logoutFun = function() {
 		 window.location.href=sy.contextPath + '/logout';
 	};
@@ -36,7 +31,5 @@
 </div>
 <div id="layout_north_kzmbMenu" style="width: 100px; display: none;">
 	<div data-options="iconCls:'ext-icon-user_edit'" onclick="$('#passwordDialog').dialog('open');">修改密码</div>
-	<div class="menu-sep"></div>
-	<div data-options="iconCls:'ext-icon-user'" onclick="showMyInfoFun();">我的信息</div>
 </div>
 </div>

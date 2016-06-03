@@ -170,9 +170,15 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 		try {
 			String pwd = map.get("code") == null ? "" : map.get("code")
 					.toString();
-			SimpleHash simpleHash = new SimpleHash("md5",
-					GloabConfig.getConfig("defalut.passwd"), pwd);
+			SimpleHash simpleHash = new SimpleHash("md5", pwd);
+			if (null == map.get("salt")) {
+				map.put("password", "");
+			} else {
+				SimpleHash hash = new SimpleHash("md5", pwd, map.get("salt"));
+				map.put("password", hash.toString());
+			}
 			map.put("pwd", simpleHash.toString());
+
 			busizzMaapper.initpwd(map);
 		} catch (Exception e) {
 			logger.error("初始化业务员信息:{}", e.getMessage());
