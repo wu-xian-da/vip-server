@@ -61,7 +61,7 @@
 							pageList : [10, 20, 30, 40, 50 ],
 							columns : [ [{
 									width : '200',
-									title : '卡号1111',
+									title : '卡号',
 									field : 'cardNo',
 									align : 'center',
 									sortable : true

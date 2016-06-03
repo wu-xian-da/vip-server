@@ -70,11 +70,11 @@
 			<c:if test="${!empty postInfo }">
 				<c:forEach items="${postInfo }" var="post">
 					<div class="order-list-title">发票信息</div>
-					<div style="display:none">
+					<div>
 						<ul>
 							<li></li>
 							<li>邮寄地址：${post.address }</li>
-							<li>发票类型：${post.invoice_type }</li>
+							<li>发票类型：${post.invoice_type == 1 ? '个人' :'公司'}</li>
 							<li>发票抬头：${post.invoice_title }</li>
 						</ul>
 					</div>
