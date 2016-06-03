@@ -435,6 +435,7 @@
 
 				<!-- updload config -->
 				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
+				<upload.home.dir>D:\uploadPath</upload.home.dir>
 				<static.resource.server.address>http://192.168.110.9:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>

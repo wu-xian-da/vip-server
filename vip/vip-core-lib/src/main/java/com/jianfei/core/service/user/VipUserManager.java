@@ -2,6 +2,7 @@ package com.jianfei.core.service.user;
 
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.VipUserSate;
+import com.jianfei.core.dto.BaseMsgInfo;
 
 /**
  * Vip用户管理
@@ -32,10 +33,12 @@ public interface VipUserManager {
     AppCustomer getUser(String phone);
 
     /**
-     * 更改用户状态
-     * @param sate
+     * 根据手机号获取用户信息
+     * @param phone 手机号
+     * @return
      */
-    void addUserState(VipUserSate sate);
+    AppCustomer getUserDetail(String phone);
+
 
     /**
      * 验证用户登录验证码
@@ -47,18 +50,18 @@ public interface VipUserManager {
 
 
     /**
-     * 更新用户头像位置
-     * @param userNo 用户唯一标示
-     * @param photoPath 用户头像位置
-     * @return
-     */
-    boolean updatePhotoPath(String userNo,String photoPath);
-
-    /**
      * 验证用户退卡验证码
      * @param phone 用户手机号
      * @param code 验证码
      * @return
      */
     boolean validateBackCardCode(String phone,String code);
+
+    /**
+     * VIP用户反馈
+     * @param phone 手机号
+     * @param content 反馈内容
+     * @return
+     */
+    BaseMsgInfo sendFeedBackInfo(String phone,String content);
 }

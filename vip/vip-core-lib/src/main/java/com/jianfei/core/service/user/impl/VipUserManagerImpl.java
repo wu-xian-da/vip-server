@@ -4,13 +4,16 @@ import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.IdGen;
+import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.mapper.AppCustomerMapper;
+import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,6 +31,8 @@ public class VipUserManagerImpl implements VipUserManager {
    private MsgInfoManagerImpl msgInfoManager;
     @Autowired
    private AppCustomerMapper customerMapper;
+    @Autowired
+    private AppUserFeedbackImpl userFeedback;
     /**
      * 添加Vip用户
      *
@@ -35,6 +40,7 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean addUser(AppCustomer vipUser) {
+        //TODO 用户ID 生成规则 城市ID前4位+1随机码+流水号+1随机码
         vipUser.setCustomerId(IdGen.uuid());
         vipUser.setCreateTime(new Date());
         vipUser.setUseType(VipUserSate.NOT_ACTIVE.getName());
@@ -49,8 +55,8 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean updateUser(AppCustomer vipUser) {
-       //// TODO: 2016/5/26  UPDATE
-        return true;
+        int num = customerMapper.updateByPrimaryKeySelective(vipUser);
+        return num == 1 ? true : false;
     }
 
     /**
@@ -61,18 +67,20 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public AppCustomer getUser(String phone) {
-
-        return customerMapper.selectByPhone(phone);
+        List<AppCustomer> list = customerMapper.selectByPhone(phone);
+        return list == null || list.isEmpty() ? new AppCustomer() : list.get(0);
     }
 
     /**
-     * 更改用户状态
+     * 根据手机号获取用户信息
      *
-     * @param sate
+     * @param phone 手机号
+     * @return
      */
     @Override
-    public void addUserState(VipUserSate sate) {
-
+    public AppCustomer getUserDetail(String phone) {
+        List<AppCustomer> list = customerMapper.selectCustomerDetailByPhone(phone);
+        return list == null || list.isEmpty() ? new AppCustomer() : list.get(0);
     }
 
     /**
@@ -87,17 +95,6 @@ public class VipUserManagerImpl implements VipUserManager {
         return  msgInfoManager.validateSendCode(phone, MsgType.LOGIN,code);
     }
 
-    /**
-     * 更新用户头像位置
-     *
-     * @param userNo    用户唯一标示
-     * @param photoPath 用户头像位置
-     * @return
-     */
-    @Override
-    public boolean updatePhotoPath(String userNo, String photoPath) {
-        return false;
-    }
 
     /**
      * 验证用户退卡验证码
@@ -109,5 +106,22 @@ public class VipUserManagerImpl implements VipUserManager {
     @Override
     public boolean validateBackCardCode(String phone, String code) {
         return  msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD,code);
+    }
+
+    /**
+     * VIP用户反馈
+     *
+     * @param phone   手机号
+     * @param content 反馈内容
+     * @return
+     */
+    @Override
+    public BaseMsgInfo sendFeedBackInfo(String phone, String content) {
+        AppCustomer customer=getUser(phone);
+        int num=userFeedback.addFeedbackInfo(customer,content);
+        if (num==1){
+            return BaseMsgInfo.success(true);
+        }
+        return new BaseMsgInfo().setCode(-1).setMsg("反馈内容提交失败");
     }
 }

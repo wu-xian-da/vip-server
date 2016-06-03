@@ -176,4 +176,13 @@ public class AppPictureManagerImpl implements AppPictureManager {
 		appPictureMapper.updateByVipRoomId(map);
 		return 0;
 	}
+	
+	/**
+	 * 根据viproomId查询是否有记录
+	 */
+	@Override
+	public List<AppPicture> selByVipRoomId(String viproomId) {
+		// TODO Auto-generated method stub
+		return appPictureMapper.selByVipRoomId(viproomId);
+	}
 }

@@ -3,6 +3,7 @@ package com.jianfei.core.service.base;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppUserFeedback;
 
 public interface AppUserFeedbackManager {
@@ -14,5 +15,13 @@ public interface AppUserFeedbackManager {
 		
 	//更新反馈状态
 	int updateFeedbackInfoById(String feedbackId);
+
+	/**
+	 *  插入反馈记录
+	 * @param customer
+	 * @param content
+     * @return
+     */
+	int addFeedbackInfo(AppCustomer customer,String content);
 
 }

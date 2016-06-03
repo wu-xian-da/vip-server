@@ -220,7 +220,7 @@
 		<include refid="Base_Column_List" />
 		from sys_airport
 		<where>
-			<if test="province != null">
+			<if test="province!= null">
 				and province= #{province}
 			</if>
 		</where>

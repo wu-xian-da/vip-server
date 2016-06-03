@@ -1,8 +1,11 @@
 package com.jianfei.core.service.base.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.common.enu.StateType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,4 +52,23 @@ public class AppUserFeedbackImpl implements AppUserFeedbackManager{
 		return appUserFeedbackMapper.updateFeedbackInfoById(feedbackId);
 	}
 
+	/**
+	 * 插入反馈记录
+	 *
+	 * @param customer
+	 * @param content
+	 * @return
+	 */
+	@Override
+	public int addFeedbackInfo(AppCustomer customer, String content) {
+		AppUserFeedback userFeedback=new AppUserFeedback();
+		userFeedback.setUserId(customer.getCustomerId());
+		userFeedback.setCustomerName(customer.getCustomerName());
+		userFeedback.setCustomerPhone(customer.getPhone());
+		userFeedback.setDtflag(StateType.EXIST.getName());
+		userFeedback.setFeedbackContent(content);
+		userFeedback.setFeedbackTime(new Date());
+		userFeedback.setFeedbackState(0);//// TODO: 2016/6/2 状态 ASK 郭建
+		return appUserFeedbackMapper.insertSelective(userFeedback);
+	}
 }
