@@ -7,8 +7,12 @@
  */
 package com.jianfei.core.service.thirdpart.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alipay.api.response.AlipayTradePrecreateResponse;
@@ -21,6 +25,7 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 
 /**
@@ -36,7 +41,9 @@ import com.jianfei.core.service.thirdpart.ThirdPayManager;
 public class AlipayPayManagerImpl extends ThirdPayManager {
 	private static Log log = LogFactory.getLog(AlipayPayManagerImpl.class);
 	private static AlipayTradeService tradeService;
-
+    @Autowired
+    private AppOrdersMapper appOrdersMapper;
+    
 	static {
 		// 支付宝环境初始化
 		Configs.init("zfbinfo.properties");
@@ -181,9 +188,12 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 	}
 
 	@Override
-	public String notify(String objStr) {
-		// TODO Auto-generated method stub
-		return null;
+	public String payNotify(String objStr) {
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("orderId", objStr);
+		params.put("orderState", "1");//已支付
+		appOrdersMapper.updateOrderState(params);
+		return "success";
 	}
 
 }

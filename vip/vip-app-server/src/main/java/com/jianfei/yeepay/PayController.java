@@ -24,6 +24,7 @@ import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.utils.YeepayUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.service.order.OrderManager;
+import com.jianfei.core.service.thirdpart.ThirdPayManager;
 import com.jianfei.core.service.thirdpart.impl.AlipayPayManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.WechatPayManagerImpl;
 import com.jianfei.core.service.user.SaleUserManager;
@@ -58,6 +59,9 @@ public class PayController {
     private OrderManager orderManager;
     @Autowired
     WechatPayManagerImpl wechatiPayManager;
+    @Autowired
+    ThirdPayManager aliPayManager;
+    
     /**
      * 用户登录
      * @param xmlObj 请求格式如下
@@ -153,7 +157,6 @@ public class PayController {
 					result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, resultCode);
 				}
 				
-				
 			}else if (serviceCode.equals("COD402")){//订单查询
 				if (!hmacSend.equals(hmacAuth)){ //签名验证失败
 					result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, 4, 5, 
@@ -168,7 +171,6 @@ public class PayController {
 						result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, 2, order.getOrderState(), 
 														order.getCustomerName(), order.getCustomerPhone(), order.getPayMoney());
 				}
-				//数据库获取订单
 			
 			}else if (serviceCode.equals("COD403")){//易宝付款通知，数据库更新订单已付款
 				if (!hmacSend.equals(hmacAuth)){ //签名验证失败
@@ -195,7 +197,11 @@ public class PayController {
 	    
     }
     
-    
+    /**
+     * 易宝支付响应参数构建类
+     * @author leoliu
+     *
+     */
     public static class YeePayResponseBuilder{
     	public static final String hmac_key = "DFE23HLAW198820SQWE1224SDAQQ3319203945";
     	static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -436,12 +442,18 @@ public class PayController {
 			</COD-MS>
      */
     
+    
+    /**
+     * 微信支付回调通知接口
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/wechat_notify")
     public void wechatNotify(HttpServletRequest request,HttpServletResponse response) {
     	String send = "";//获取请求的报文
     	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     	ServletInputStream inStream;
-    	String result = "";//商户返回给易宝的报文 
+    	String result = "";
     	try{
 		    inStream = request.getInputStream(); //int length = 0;
 	    	int len = -1;
@@ -458,7 +470,7 @@ public class PayController {
 			e.printStackTrace();
 		}
 	    
-	    result = wechatiPayManager.notify(send);
+	    result = wechatiPayManager.payNotify(send);
 	    
 	    response.setContentType("text/xml; charset=utf-8");
 	    response.setCharacterEncoding("utf-8");
@@ -468,5 +480,27 @@ public class PayController {
 	    } catch (IOException e) {
 	    	e.printStackTrace();
 	    }
+    }
+    
+    @RequestMapping(value = "/alipay_notify")
+    public void alipayNotify(HttpServletRequest request,HttpServletResponse response) {
+    	String send = "";//获取请求的报文
+    	String outTradeNo = request.getParameter("out_trade_no");
+    	String tradeStatus = request.getParameter("trade_status");
+    	String notifyId = request.getParameter("notify_id");
+    	String sign = request.getParameter("sign");
+    	
+	    //业务处理
+    	String result = aliPayManager.payNotify(outTradeNo);
+    	
+	    response.setContentType("text/xml; charset=utf-8");
+	    response.setCharacterEncoding("utf-8");
+	    try { 
+
+	    	response.getWriter().write(result);
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
+	    
     }
 }

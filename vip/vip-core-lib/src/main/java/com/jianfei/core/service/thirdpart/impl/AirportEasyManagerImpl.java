@@ -25,6 +25,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
      */
     @Override
     public boolean ativeVipCard(String vipCardNo, String userPhone, String userName) {
+    	
         return false;
     }
 

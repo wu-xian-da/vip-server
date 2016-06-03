@@ -57,5 +57,10 @@ public abstract class ThirdPayManager {
 	 */
 	public abstract void tradeRefund(String tradeNo);
 	
-	public abstract String notify(String objStr);
+	/**
+	 * 微信或支付宝回调通知
+	 * @param objStr
+	 * @return
+	 */
+	public abstract String payNotify(String objStr);
 }

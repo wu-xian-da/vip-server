@@ -119,7 +119,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 
 	}
 	@Override
-	public String notify(String objStr) {
+	public String payNotify(String objStr) {
 		NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(objStr, NativeNotifyReq.class);
 		String result="";
 		String signResult = Signature.getSign(req.toMap());
