@@ -151,7 +151,7 @@
 				return $(this).form('validate');
 			},
 			success: function(_d){
-				console.log("_d:"+_d)
+				console.log("_d:"+_d);
 				if (_d.result == 0){
 					$.messager.show({
 						title: 'Error',
@@ -174,6 +174,7 @@
 			<tr>
 				<td>
 					<form id="fm" name="excelImportForm"
+						action="${pageContext.request.contextPath}/vipCard/importExcel"
 						method="post" enctype="multipart/form-data">
 						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 175px" data-options="required:true"/> 
 						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="button" onclick="importExcel();" value="导入vip卡号" />

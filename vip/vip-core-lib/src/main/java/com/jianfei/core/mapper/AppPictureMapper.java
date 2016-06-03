@@ -31,4 +31,6 @@ public interface AppPictureMapper {
 	List<AppPicture> get(Map<String, Object> map);
 	
 	int updateByVipRoomId(Map<String,Object> map);
+	
+	List<AppPicture> selByVipRoomId(String viproomId);
 }
