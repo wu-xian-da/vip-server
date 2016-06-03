@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +25,6 @@ import org.springframework.web.util.WebUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.common.enu.VipOrderState;
@@ -91,9 +89,10 @@ public class AppPicController extends BaseController {
 		PageHelper.startPage(page, rows);
 		MessageDto<List<AppPicture>> messageDto = appPictureManager
 				.get(searchParams);
-		PageInfo<AppPicture> pageInfo = new PageInfo<AppPicture>(
-				messageDto.getData());
-		return bindUserGridData(pageInfo);
+		if (messageDto.isOk()) {
+			return bindGridData(new PageInfo<AppPicture>(messageDto.getData()));
+		}
+		return bindGridData(new PageInfo<AppPicture>());
 	}
 
 	@RequestMapping(value = "form")
@@ -138,22 +137,6 @@ public class AppPicController extends BaseController {
 		return appPictureManager.deleteByPrimaryKey(id);
 	}
 
-	public <T> Grid bindUserGridData(PageInfo<T> pageInfo) {
-		List<T> list = pageInfo.getList();
-		if (CollectionUtils.isEmpty(list)) {
-			list = Lists.newArrayList();
-		}
-		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
-		for (T user : list) {
-			Map<String, Object> map = MapUtils.<T> entityInitMap(user);
-			maps.add(map);
-		}
-		Grid<Map<String, Object>> grid = new Grid<Map<String, Object>>();
-		grid.setRows(maps);
-		grid.setTotal(pageInfo.getTotal());
-		return grid;
-	}
-
 	/**
 	 * list(展示用户列表的数据)
 	 * 
@@ -175,9 +158,10 @@ public class AppPicController extends BaseController {
 		PageHelper.startPage(page, rows);
 		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
 				.get(searchParams);
-		PageInfo<AppCustomer> pageInfo = new PageInfo<AppCustomer>(
-				messageDto.getData());
-		return bindUserGridData(pageInfo);
+		if (messageDto.isOk()) {
+			return bindGridData(new PageInfo<AppCustomer>(messageDto.getData()));
+		}
+		return bindGridData(new PageInfo<AppCustomer>());
 	}
 
 	@RequestMapping(value = "/look")

@@ -118,7 +118,7 @@
 			}, {
 				title : '操作',
 				field : 'action',
-				width : '150',
+				width : '200',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:busizz:update")) {%>

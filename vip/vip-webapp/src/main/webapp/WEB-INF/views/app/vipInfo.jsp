@@ -32,7 +32,7 @@
 						<ul>			
 							<li><label>有效期：</label>${card.valide_time }</li>
 							<li><label>vip卡金额：</label>${card.remain_money }</li>
-							<li><label>支付方式：</label>${card.pay_type }</li>
+							<li><label>支付方式：</label>${bbli:payType(card.pay_type) }</li>
 							<li><label>支付时间：</label>${card.pay_time }</li>
 							<li><label>卡片激活短信发送时间：</label>${card.activat_time }</li>
 						</ul>
@@ -58,17 +58,28 @@
 					<c:forEach items="${postInfo }" var="post">
 						<div>发票信息：${post.invoice_flag }</div>
 						<div>邮寄地址：${post.address }</div>
-						<div>发票类型：${post.invoice_type }</div>
+						<div>发票类型：${bbli:postType(post.invoice_type) }</div>
 						<div>发票抬头：${post.invoice_title }</div>
 					</c:forEach>
 				</c:if>
 
-				<div class="order-list-title">退款信息 <span class="order-tips-red">（已退款）</span></div>
-				<ul>
-					<li>提款金额：500元</li>
-					<li>退款方式：支付宝</li>
-					<li>支付宝账号：</li>
-				</ul>
+				<c:if test="${empty backMoneyInfo }">
+					<c:forEach items="${backMoneyInfo }" var="back">
+						<div class="order-list-title">退款信息</div>
+						<ul>
+							<li>提款金额：${back.money }元</li>
+							<li>退款方式：${bbli:payType(back.back_type) }</li>
+						</ul>
+					</c:forEach>
+				</c:if>
+				
+				<div class="order-list-title">VIP卡使用记录:</div>
+					<ul>
+						<c:forEach items="${vipCardRescordInfo }" var="vp" varStatus="status">
+							<li>记录${ status.index + 1}</li>
+							<li style="padding-left: 20px;">${vp.viproom_name }&nbsp; 单价${vp.consume_money } &nbsp; 时间:${vp.consume_time }</li>
+						</c:forEach>
+					</ul>
 			</div>
 		</div>
 	</body>

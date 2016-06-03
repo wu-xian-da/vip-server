@@ -434,8 +434,8 @@
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
 
 				<!-- updload config -->
-				<upload.home.dir>D:\uploadPath</upload.home.dir>
-				<static.resource.server.address>http://127.0.0.1:8083</static.resource.server.address>
+				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
+				<static.resource.server.address>http://192.168.110.9:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>

@@ -15,11 +15,11 @@
 		});
 	};
 </script>
-<div id="sessionInfoDiv" style="position: absolute; right: 10px; top: 5px;">
-北京掌慧纵盈欢迎你,${sessionInfo.name }
-</div>
 <div style="position: absolute; right: 0px; bottom: 0px;">
-	<a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_pfMenu',iconCls:'ext-icon-rainbow'">更换皮肤</a> <a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_kzmbMenu',iconCls:'ext-icon-cog'">控制面板</a> <a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_zxMenu',iconCls:'ext-icon-disconnect'">注销</a>
+	<span>北京掌慧纵盈欢迎你,${sessionInfo.name }</span>
+	<a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_pfMenu',iconCls:'ext-icon-rainbow'">更换皮肤</a>
+	<a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_kzmbMenu',iconCls:'ext-icon-cog'">控制面板</a> 
+	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'ext-icon-door_out'" onclick="logoutFun();" style="">注销</a>
 </div>
 <div id="layout_north_pfMenu" style="width: 120px; display: none;">
 	<div onclick="sy.changeTheme('default');" title="default">default</div>
@@ -38,10 +38,5 @@
 	<div data-options="iconCls:'ext-icon-user_edit'" onclick="$('#passwordDialog').dialog('open');">修改密码</div>
 	<div class="menu-sep"></div>
 	<div data-options="iconCls:'ext-icon-user'" onclick="showMyInfoFun();">我的信息</div>
-</div>
-<div id="layout_north_zxMenu" style="width: 100px; display: none;">
-	<div data-options="iconCls:'ext-icon-lock'" onclick="lockWindowFun();">锁定窗口</div>
-	<div class="menu-sep"></div>
-	<div data-options="iconCls:'ext-icon-door_out'" onclick="logoutFun();">退出系统</div>
 </div>
 </div>

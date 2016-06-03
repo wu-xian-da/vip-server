@@ -2,6 +2,6 @@
 <%
 	String contextPath = request.getContextPath();
 %>
-<div class="panel-header panel-title" style="text-align: center;">
-	版权所有@<a href="mailto:991278983@qq.com">北京掌慧纵盈</a>
+<div class="panel-header panel-title" style="text-align: center;font:12px/150% Arial,Hiragino Sans GB W3,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;">
+	版权所有@<a href="http://www.opsmarttech.com/index.html" style="color: #000000; text-decoration: none">北京掌慧纵盈</a>
 </div>

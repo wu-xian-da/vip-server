@@ -19,7 +19,7 @@ import com.tencent.protocol.native_protocol.NativePayReqData;
 import com.tencent.protocol.native_protocol.NativePayResData;
 import com.tencent.protocol.native_query_protocol.NativePayQueryResData;
 
-@Service("wechatiPayManager")
+//@Service("wechatiPayManager")
 public class WechatPayManagerImpl extends ThirdPayManager {
 	static {
 		

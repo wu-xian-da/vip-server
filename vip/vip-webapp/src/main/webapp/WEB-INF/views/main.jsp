@@ -153,7 +153,7 @@
 </script>
 </head>
 <body id="mainLayout" class="easyui-layout">
-	<div data-options="region:'north',href:'${ctx }/layout/north.jsp'" style="height: 70px; overflow: hidden;" class="logo"></div>
+	<div data-options="region:'north',href:'${ctx }/layout/north.jsp'" style="height: 35px; overflow: hidden;background-color: #FAFAFA" ></div>
 	<div data-options="region:'west',href:'',split:true" title="导航" style="width: 200px; padding: 10px;">
 		<ul id="mainMenu"></ul>
 	</div>
