@@ -389,6 +389,7 @@ public class OrderManagerImpl implements OrderManager {
 			usedMoney = usedMoney + appConsume.getConsumeMoney();
 		}
 		vipCardUseDetailInfo.setUsedMoney(usedMoney);
+		vipCardUseDetailInfo.setCardUseList(list);
 		//TODO 可配置优惠信息多少
 		vipCardUseDetailInfo.setSaleRate("80%");
 		return BaseMsgInfo.success(vipCardUseDetailInfo);

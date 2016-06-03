@@ -1,5 +1,7 @@
 package com.jianfei.core.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppCustomer;
 
 import java.util.Date;
@@ -51,7 +53,7 @@ public class VipCardUseDetailInfo {
     /**
      * VIP卡使用记录
      */
-    private List<AppCustomer> cardUseList;
+    private List<AppConsume> cardUseList;
 
     public String getVipCardNo() {
         return vipCardNo;
@@ -61,6 +63,13 @@ public class VipCardUseDetailInfo {
         this.vipCardNo = vipCardNo;
     }
 
+    /**
+     * createTime
+     *
+     * @return the createTime
+     * @version 1.0.0
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public Date getActiveTime() {
         return activeTime;
     }
@@ -117,11 +126,11 @@ public class VipCardUseDetailInfo {
         this.saleRate = saleRate;
     }
 
-    public List<AppCustomer> getCardUseList() {
+    public List<AppConsume> getCardUseList() {
         return cardUseList;
     }
 
-    public void setCardUseList(List<AppCustomer> cardUseList) {
+    public void setCardUseList(List<AppConsume> cardUseList) {
         this.cardUseList = cardUseList;
     }
 }
