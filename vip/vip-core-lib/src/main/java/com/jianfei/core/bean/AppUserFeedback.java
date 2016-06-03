@@ -14,7 +14,7 @@ public class AppUserFeedback {
 	private String userId;//用户编号
 	private String customerName;//用户姓名
 	private String customerPhone;//用户手机号码
-	private Date feedbacTime;//反馈时间
+	private Date feedbackTime;//反馈时间
 	private Integer feedbackState;//处理状态 0 为处理  1已处理
 	private String feedbackStateName;//处理状态的中文名称
 	private Date handleTime;//处理时间
@@ -48,17 +48,17 @@ public class AppUserFeedback {
 		this.userId = userId;
 	}
 	/**
-	 * @return the feedbacTime
+	 * @return the feedbackTime
 	 */
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	public Date getFeedbacTime() {
-		return feedbacTime;
+	public Date getFeedbackTime() {
+		return feedbackTime;
 	}
 	/**
-	 * @param feedbacTime the feedbacTime to set
+	 * @param feedbackTime the feedbackTime to set
 	 */
-	public void setFeedbacTime(Date feedbacTime) {
-		this.feedbacTime = feedbacTime;
+	public void setFeedbackTime(Date feedbackTime) {
+		this.feedbackTime = feedbackTime;
 	}
 	/**
 	 * @return the feedbackState
@@ -186,7 +186,7 @@ public class AppUserFeedback {
 	@Override
 	public String toString() {
 		return "AppUserFeedback [id=" + id + ", userId=" + userId + ", customerName=" + customerName
-				+ ", customerPhone=" + customerPhone + ", feedbacTime=" + feedbacTime + ", feedbackState="
+				+ ", customerPhone=" + customerPhone + ", feedbackTime=" + feedbackTime + ", feedbackState="
 				+ feedbackState + ", feedbackStateName=" + feedbackStateName + ", handleTime=" + handleTime
 				+ ", handleuserId=" + handleuserId + ", dtflag=" + dtflag + ", opr=" + opr + ", feedbackContent="
 				+ feedbackContent + "]";

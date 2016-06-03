@@ -39,6 +39,8 @@ public interface AppCustomerMapper {
 
 	AppCustomer selectByPrimaryKey(String customerId);
 
+	List<AppCustomer> selectCustomerDetailByPhone(String phone);
+
 	List<AppCustomer> selectByPhone(String phone);
 
 	List<AppCustomer> get(Map<String, Object> map);

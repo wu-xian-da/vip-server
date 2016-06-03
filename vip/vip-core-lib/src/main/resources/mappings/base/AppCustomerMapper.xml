@@ -54,11 +54,19 @@
 		where customer_id = #{customerId,jdbcType=VARCHAR}
 	</select>
 
-	<select id="selectByPhone" resultMap="BaseResultMap"
+	<select id="selectCustomerDetailByPhone" resultMap="BaseResultMap"
 			parameterType="java.lang.String">
 		SELECT c.customer_id,c.customer_name,c.customer_identi,c.customer_phone,c.sex,c.email,c.address,c.use_type,c.remark1,c.dtflag,c.province,c.city,c.country,v.active_time,
-	v.card_no FROM app_customer c JOIN app_vipcard v ON c.customer_id=v.customer_id
-		where c.customer_phone = #{phone,jdbcType=VARCHAR}
+		v.card_no FROM app_customer c JOIN app_vipcard v ON c.customer_id=v.customer_id
+		where c.customer_phone = #{phone,jdbcType=VARCHAR} AND  c.dtflag=0
+	</select>
+
+	<select id="selectByPhone" resultMap="BaseResultMap"
+			parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM app_customer
+		where customer_phone = #{phone,jdbcType=VARCHAR} AND dtflag=0
 	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
