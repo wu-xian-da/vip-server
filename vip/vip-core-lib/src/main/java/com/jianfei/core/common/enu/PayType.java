@@ -13,26 +13,26 @@ public enum PayType {
     /**
      * 微信支付
      */
-    WXPAY("1"),
+    WXPAY(1),
     /**
      * 支付宝
      */
-    ALIPAY("2"),
+    ALIPAY(2),
     /**
      * 银行卡刷卡
      */
-    BANKPAY("3"),
+    BANKPAY(3),
     /**
      * 现金支付
      */
-    CASHPAY("4");
-    private String name;
+    CASHPAY(4);
+    private int name;
 
-    public String getName(){
+    public int getName(){
         return this.name;
     }
 
-    private PayType(String name){
+    private PayType(int name){
         this.name = name;
     }
     
