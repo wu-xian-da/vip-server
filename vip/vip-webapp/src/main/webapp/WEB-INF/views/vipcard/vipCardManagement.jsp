@@ -142,6 +142,28 @@
 		})
 
 	});
+	
+	//导入vip卡
+	function importExcel(){
+		$('#fm').form('submit',{
+			url: sy.contextPath+"/vipCard/importExcel",
+			onSubmit: function(){
+				return $(this).form('validate');
+			},
+			success: function(_d){
+				console.log("_d:"+_d)
+				if (_d.result == 0){
+					$.messager.show({
+						title: 'Error',
+						msg:"数据格式出错"
+					});
+				} else {
+					// reload the user data
+					$('#grid').datagrid('reload');	
+				}
+			}
+		});
+	}
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
@@ -151,11 +173,10 @@
 		<table>
 			<tr>
 				<td>
-					<form name="excelImportForm"
-						action="${pageContext.request.contextPath}/vipCard/importExcel"
+					<form id="fm" name="excelImportForm"
 						method="post" enctype="multipart/form-data">
-						<input id="excel_file" type="file"	name="filename" accept="xls" style="width: 175px"/> 
-						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="submit" value="导入vip卡号" />
+						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 175px" data-options="required:true"/> 
+						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="button" onclick="importExcel();" value="导入vip卡号" />
 					</form> 
 					
 				</td>

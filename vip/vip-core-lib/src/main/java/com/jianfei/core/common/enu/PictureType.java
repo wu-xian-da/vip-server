@@ -35,5 +35,4 @@ public enum PictureType {
         this.name = name;
     }
 
-
 }

@@ -87,17 +87,17 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(value = "/hr/home")
 	public String hr(Model model) {
+		Map<String, Object> map = DateUtil.getDelayDate(1);
+		String dateTime = map.get("year") + "-" + map.get("month");
 		List<Map<String, Object>> maps = busizzManager
 				.selectMap(new MapUtils.Builder()
-						.setKeyValue("dateTime",
-								DateUtil.dateToString(new Date(), "yyyy-MM-dd"))
+						.setKeyValue("dateTime", dateTime)
 						.setKeyValue("dtflag", "0").build());
 		int come = maps == null ? 0 : maps.size();
 		model.addAttribute("come", come);
 		List<Map<String, Object>> mapsOut = busizzManager
 				.selectMap(new MapUtils.Builder()
-						.setKeyValue("dateTime",
-								DateUtil.dateToString(new Date(), "yyyy-MM-dd"))
+						.setKeyValue("dateTime", dateTime)
 						.setKeyValue("dtflag", "1").build());
 		int out = mapsOut == null ? 0 : mapsOut.size();
 		model.addAttribute("out", out);
@@ -137,7 +137,7 @@ public class LoginController extends BaseController {
 	public String finance(Model model) {
 		List<Map<String, Object>> maps = orderManager
 				.selectOrder(new MapUtils.Builder().setKeyValue("dateTime",
-						DateUtil.dateToString(new Date(), "yyyy-MM-dd"))
+						DateUtil.dateToString(new Date(), "yyyy-MM"))
 						.build());
 		if (!CollectionUtils.isEmpty(maps)) {
 			model.addAttribute("nowMonthOrder", maps.size());

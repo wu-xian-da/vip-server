@@ -10,6 +10,7 @@ package com.jianfei.core.service.base;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +22,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.ExportExclUtils;
 import com.jianfei.core.common.utils.MapUtils;
@@ -50,6 +53,16 @@ public class AppCustomerManagerTest {
 	private OrderManager orderManager;
 	@Autowired
 	private BusizzManager<User> busizzManager;
+
+	@Test
+	public void testsssssss() {
+		Map<String, Object> map = DateUtil.getDelayDate(1);
+		PageHelper.startPage(1, 10);
+		map.put("today",
+				DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
+		List<Map<String, Object>> list = busizzManager.listMap(map);
+		System.out.println(JSONObject.toJSONString(list));
+	}
 
 	@Test
 	public void testsssss() {
