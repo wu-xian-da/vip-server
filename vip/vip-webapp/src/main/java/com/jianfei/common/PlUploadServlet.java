@@ -54,17 +54,12 @@ public class PlUploadServlet extends HttpServlet {
 		if (StringUtils.isBlank(fileFolder)) {
 			fileFolder = "/temp";// 避免前台没有传递这个参数的时候会报错
 		}
-		System.out.println(GloabConfig
-				.getConfig("static.resource.server.address"));
-		System.out.println(GloabConfig.getConfig("upload.home.dir"));
 		String datefolder = "/" + DateUtil.dateToString(new Date(), "yyyy")
 				+ "/" + DateUtil.dateToString(new Date(), "MM") + "/"
 				+ DateUtil.dateToString(new Date(), "dd");// 日期命名的文件夹
 		String realPath = GloabConfig.getInstance()
 				.getConfig("upload.home.dir") + fileFolder + datefolder;// 文件上传到服务器的真实路径
-		// System.out.println(realPath);
 		String path = fileFolder + datefolder;// 文件在服务器的相对路径
-		// System.out.println(path);
 		if (request.getSession() == null || false) {// 如果用户没有登录，则不允许上传
 			Map<String, Object> m = new HashMap<String, Object>();
 			m.put("status", false);
