@@ -35,13 +35,12 @@
 			<input name="id" type="hidden" value="${ariPort.airport_id }" readonly="readonly" />
 			<table class="table" style="width: 100%;">
 				<tr style="padding-top: 5px;">
-					<th>场站名称:</th>
+					<th style="width: 20%;">场站名称:</th>
 					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox" data-options="required:true" style="text-align: left;"/></td>
 				</tr>
 				<tr style="padding-top: 5px;">
 					<th>省市信息:</th>
 					<td>
-					
 						<div class="demo-wrap">
 							<div id="selectbox">
 
@@ -49,20 +48,20 @@
 						</div>
 					</td>
 				</tr>
-				<tr style="padding-top: 5px;">
+				<tr>
 					<th>场站负责人:</th>
 					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_name }" /></td>
 				</tr>
-				<tr style="padding-top: 5px;">
+				<tr >
 					<th>负责人联系方式:</th>
 					<td><input style="text-align: left;" name="headerPhone" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_phone }" /></td>
 				</tr>
-				<tr style="padding-top: 5px;">
+				<tr >
 					<th>业务员数量:</th>
 					<td>
 					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agent_num } data-options="increment:1" style="width:120px;" ></input>
 				</tr>
-				<tr style="padding-top: 5px;">
+				<tr >
 					<th>场站状态:</th>
 					<c:choose>
 						<c:when test="${!empty ariPort and ariPort.state==1}">

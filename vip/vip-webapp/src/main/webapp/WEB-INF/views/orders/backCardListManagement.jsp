@@ -3,7 +3,7 @@
 <%@ page import="com.jianfei.core.common.security.shiro.HasAnyPermissionsTag"%>
 <%@ include file="/WEB-INF/include/taglib.jsp"%>
 <!DOCTYPE html>
-<html>
+<html id="iframe" style="height:99%; margin:0;">
 <head>
 <title></title>
 
@@ -18,67 +18,78 @@
 <script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
 
 </head>
-<body>
-	<div id="order-container">
-		<div id="order-condition-box">
-			<div class="order-condition-item">
-				<select name="" id="backTypeSelect">
-					<option value="4">全部退款方式</option>
-					<option value="0">微信</option>
-					<option value="1">支付宝</option>
-					<option value="2">银行卡</option>
-					<option value="3">现场</option>
-				</select>
+<body style="height:100%;margin:0;">
+	<div id="order-container"  style="height:99%;">
+		<div id="order-condition-box" style="height:10%; margin:0; padding:0;">
+			<div style="padding-top:20px; padding-left:20px;">
+				<div class="order-condition-item">
+					<select name="" id="backTypeSelect">
+						<option value="4">全部退款方式</option>
+						<option value="0">微信</option>
+						<option value="1">支付宝</option>
+						<option value="2">银行卡</option>
+						<option value="3">现场</option>
+					</select>
+				</div>
+	
+				<div class="order-condition-item">
+					<select name="" id="applyTypeSelect">
+						<option value="3">全部申请途径</option>
+						<option value="0">客服</option>
+						<option value="1">现场</option>
+						
+					</select>
+				</div>
+	
+				<div class="order-condition-item">
+					<select name="" id="orderStateSelect">
+						<option value="10">全部退款状态</option>
+						<option value="3">未退</option>
+						<option value="4">已退</option>
+					</select>
+				</div>
+	
+				<div class="order-condition-item" style="text-align: left">
+					<button id="searchBt" style="height: 20px">检索</button>
+				</div>
 			</div>
-
-			<div class="order-condition-item">
-				<select name="" id="applyTypeSelect">
-					<option value="3">全部申请途径</option>
-					<option value="0">客服</option>
-					<option value="1">现场</option>
-					
-				</select>
-			</div>
-
-			<div class="order-condition-item">
-				<select name="" id="orderStateSelect">
-					<option value="10">全部退款状态</option>
-					<option value="3">未退</option>
-					<option value="4">已退</option>
-				</select>
-			</div>
-
-			<div class="order-condition-item" style="text-align: left">
-				<button id="searchBt" style="height: 20px">检索</button>
-			</div>
+			
 		</div>
-
-		<table id="tt" title="" style="width: 1070px; height: 600px"
-			data-options="singleSelect:true,collapsible:true,
-                                url:'backCardList',
-                                method:'get',
-                                remoteSort:false,
-                                multiSort:true"
-			pagination="true">
-			<thead>
-				<tr>
-				
-				
-
-					<th data-options="align:'center', field:'orderId',width:100">订单号</th>
-					<th data-options="align:'center', field:'customerName',width:100">用户名</th>
-					<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-					<th data-options="align:'center', field:'orderTime',width:100">申请日期</th>
-
-					<th data-options="align:'center', field:'applyType',width:150">申请途径</th>
-					<th data-options="align:'center', field:'backType',width:100">退卡方式</th>
-					<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
-					<th data-options="align:'center', field:'orderStateName',width:100">状态</th>
-					<th data-options="align:'center', field:'operation',width:210">操作</th>
-				</tr>
-			</thead>
-
-		</table>
+		<style type="text/css">
+			.panel-body{ background:none;}
+			#order-container {
+				    width: auto;
+				}
+		</style>
+		<div style="clear:both; height:92%;" id="data-grid-wrap" data-options="region:'center',fit:true,border:false">
+				<table id="tt" data-options="singleSelect:true,collapsible:true,
+		                                url:'backCardList',
+		                                method:'get',
+		                                remoteSort:false,
+		                                fit:true,border:false,
+		                                multiSort:true,
+		                                pagination:true">
+					<thead>
+						<tr>
+						
+						
+		
+							<th data-options="align:'center', field:'orderId',width:100">订单号</th>
+							<th data-options="align:'center', field:'customerName',width:100">用户名</th>
+							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
+							<th data-options="align:'center', field:'orderTime',width:100">申请日期</th>
+		
+							<th data-options="align:'center', field:'applyType',width:150">申请途径</th>
+							<th data-options="align:'center', field:'backType',width:100">退卡方式</th>
+							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
+							<th data-options="align:'center', field:'orderStateName',width:100">状态</th>
+							<th data-options="align:'center', field:'operation',width:210">操作</th>
+						</tr>
+					</thead>
+		
+				</table>
+		</div>
+		
 	</div>
 
 	<!-- 退款确认 -->
@@ -197,6 +208,9 @@
             }
             
         })
+        
+        
+		
 	</script>
 
 </body>
