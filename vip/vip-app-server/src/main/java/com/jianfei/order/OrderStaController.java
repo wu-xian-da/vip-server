@@ -46,6 +46,20 @@ public class OrderStaController {
     }
 
 
+    /**
+     * 个人销售记录
+     * @param uno
+     * @param date
+     * @return
+     */
+    @RequestMapping(value = "/saleVipCardDetail")
+    @ResponseBody
+    public BaseMsgInfo listOrderByUserId(@RequestParam(value = "uno", required = true) String uno,
+                                         @RequestParam(value = "date", required = true) String date
+    ) {
+        return BaseMsgInfo.success(statManager.listOrderByUserId(uno,date));
+    }
+
 }
 
 

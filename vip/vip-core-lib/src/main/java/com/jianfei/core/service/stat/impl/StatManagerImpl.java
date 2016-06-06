@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppAirportArchive;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
@@ -29,33 +30,6 @@ public class StatManagerImpl implements StatManager {
     @Autowired
     private AppOrderArchiveMapper appOrderArchiveMapper;
 
-
-    /**
-     * 获得个人两个日期间每天的订单统计数据
-     *
-     * @param userId 用户标示
-     * @param begin  开始日期
-     * @param end    结束日期
-     * @return
-     */
-    @Override
-    public List<AppOrderArchive> getOrderStatByUserId(String userId, String begin, String end) {
-        return null;
-    }
-
-    /**
-     * 获得某省两个日期间每天订单的统计数据
-     *
-     * @param provinceId
-     * @param begin
-     * @param end
-     * @return
-     */
-    @Override
-    public List getOrderStatByProvinceId(String provinceId, String begin, String end) {
-        return null;
-    }
-
     /**
      * 分页获取个人每日开卡数据
      *
@@ -72,42 +46,14 @@ public class StatManagerImpl implements StatManager {
     }
 
     /**
-     * 获得某段时间区域每天开卡总数
+     * 获取某天某人的开卡记录
      *
-     * @param province 区域列表
-     * @param begin    开始时间
-     * @param end      结束时间
+     * @param userId
+     * @param date
      * @return
      */
     @Override
-    public List getOrderStatByProvince(List<String> province, String begin, String end) {
-        return null;
-    }
-
-    /**
-     * 获取机场一段时间内每个机场的开卡数
-     *
-     * @param airportIds 机场IDs
-     * @param begin      开始时间
-     * @param end        结束时间
-     * @return
-     */
-    @Override
-    public List<AppAirportArchive> getAirportOrderStat(List<String> airportIds, String begin, String end) {
-        return null;
-    }
-
-    /**
-     * 获取某段时间开卡人员分页列表
-     *
-     * @param pageDto
-     * @param begin
-     * @param end
-     * @param airportIds
-     * @return
-     */
-    @Override
-    public PageInfo<AppOrderArchive> pageOrderStat(PageDto pageDto, String begin, String end, List<String> airportIds) {
-        return null;
+    public List<OrderAppDetailInfo> listOrderByUserId(String userId, String date) {
+        return appOrderArchiveMapper.listOrderByUserId(userId, date);
     }
 }

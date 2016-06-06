@@ -2,6 +2,7 @@ package com.jianfei.core.mapper;
 
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import com.jianfei.core.dto.OrderAppDetailInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -56,4 +57,12 @@ public interface AppOrderArchiveMapper {
     int updateByPrimaryKey(AppOrderArchive record);
 
     List<AppOrderArchive> selectByUserId(@Param("userId")String userId);
+
+    /**
+     * 获取某天某人的开卡记录
+     * @param userId
+     * @param date
+     * @return
+     */
+    List<OrderAppDetailInfo> listOrderByUserId(@Param("userId")String userId,@Param("date") String date);
 }
