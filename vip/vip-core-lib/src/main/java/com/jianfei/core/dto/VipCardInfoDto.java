@@ -1,16 +1,16 @@
-package com.jianfei.dto;
+package com.jianfei.core.dto;
 
 import java.util.List;
 
 /**
- * VipCardInfoVo
+ * VipCardInfoDto
  *
  * @version 1.0.0
  * @Description:
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/17 14:50
  */
-public class VipCardInfoVo {
+public class VipCardInfoDto {
 
     private List images;
     private String right;
