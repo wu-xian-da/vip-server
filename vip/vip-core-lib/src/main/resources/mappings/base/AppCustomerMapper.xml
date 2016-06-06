@@ -302,9 +302,7 @@
 			<if test="country != null">
 				country = #{country,jdbcType=VARCHAR},
 			</if>
-			<if test="createtime != null">
-				createTime = #{createtime,jdbcType=DATE},
-			</if>
+
 		</set>
 		where customer_phone = #{phone,jdbcType=VARCHAR}
 	</update>
