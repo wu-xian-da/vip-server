@@ -2,6 +2,7 @@ package com.jianfei.resource;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.bean.AppVersion;
 import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
@@ -9,6 +10,7 @@ import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
+import com.jianfei.core.service.base.impl.AppVersionManagerImpl;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 import com.jianfei.dto.VipCardInfoVo;
@@ -42,6 +44,9 @@ public class ResourceController  {
 
 	@Autowired
 	private AppPictureManagerImpl appPictureService;
+
+	@Autowired
+	private AppVersionManagerImpl appVersionManager;
 	/**
 	 * 获取支持的省份列表
 	 * @param
@@ -149,4 +154,15 @@ public class ResourceController  {
 		String string ="常见问题  ";
 		return BaseMsgInfo.success(string);
 	}
+
+	/**
+	 *  VIP卡 版本更新接口
+	 */
+	@RequestMapping(value = "/lastAppVersion", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo getLastAppVersion(@RequestParam(value = "channel", required = true) String channel) {
+		AppVersion appVersion=appVersionManager.getLastVersion(channel);
+		return BaseMsgInfo.success(appVersion);
+	}
+
 }

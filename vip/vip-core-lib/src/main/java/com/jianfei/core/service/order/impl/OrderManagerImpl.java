@@ -82,6 +82,9 @@ public class OrderManagerImpl implements OrderManager {
 			vipUserManager.addUser(customer);
 			//3、根据查询VIP号查询卡片信息
 			AppVipcard vipCard=vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
+			if (vipCard == null) {
+				return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
+			}
 			vipCard.setCustomerId(customer.getCustomerId());
 			vipCardManager.updateVipCard(vipCard);
 
