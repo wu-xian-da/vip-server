@@ -15,7 +15,13 @@ public enum InvoiceState {
 	/**
 	 * 不需要发票
 	 */
-	NOT_NEED_INVOICE(0);
+	NOT_NEED_INVOICE(0),
+	/**
+	 * 发票已邮寄
+	 */
+	SEND_INVOICE(2),
+	;
+
 	private int name;
 
 	private InvoiceState(int name) {

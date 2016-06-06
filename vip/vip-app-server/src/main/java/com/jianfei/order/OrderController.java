@@ -1,5 +1,6 @@
 package com.jianfei.order;
 
+import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -49,14 +50,14 @@ public class OrderController {
     @RequestMapping(value = "/payUrl", method = RequestMethod.GET)
     @ResponseBody
     public BaseMsgInfo getPayUrl(@RequestParam(value = "orderId", required = true) String orderId,
-                                 @RequestParam(value = "payType", required = true) String payType
+                                 @RequestParam(value = "payType", required = true) int payType
     ) {
         PayType type = null;
-        if (PayType.WXPAY.getName().equals(payType)) {
+        if (PayType.WXPAY.getName()==payType) {
             type = PayType.WXPAY;
-        } else if (PayType.ALIPAY.getName().equals(payType)) {
+        } else if (PayType.ALIPAY.getName()==payType) {
             type = PayType.ALIPAY;
-        } else if (PayType.BANKPAY.getName().equals(payType)) {
+        } else if (PayType.BANKPAY.getName()==payType) {
             type = PayType.BANKPAY;
         }
         if (type == null)
@@ -75,14 +76,14 @@ public class OrderController {
     @RequestMapping(value = "/thirdPayState")
     @ResponseBody
     public BaseMsgInfo checkThirdPay(@RequestParam(value = "orderId", required = true) String orderId,
-                                 @RequestParam(value = "payType", required = true) String payType
+                                 @RequestParam(value = "payType", required = true) int payType
     ) {
         PayType type = null;
-        if (PayType.WXPAY.getName().equals(payType)) {
+        if (PayType.WXPAY.getName()==payType) {
             type = PayType.WXPAY;
-        } else if (PayType.ALIPAY.getName().equals(payType)) {
+        } else if (PayType.ALIPAY.getName()==payType) {
             type = PayType.ALIPAY;
-        } else if (PayType.BANKPAY.getName().equals(payType)) {
+        } else if (PayType.BANKPAY.getName()==payType) {
             type = PayType.BANKPAY;
         }
         if (type == null)
@@ -101,7 +102,7 @@ public class OrderController {
     @RequestMapping(value = "/payState")
     @ResponseBody
     public BaseMsgInfo checkBuyerPay(@RequestParam(value = "orderId", required = true) String orderId,
-                                     @RequestParam(value = "payType", required = true) String payType
+                                     @RequestParam(value = "payType", required = true) int payType
     ) {
         //TODO 保存付款方式及已付款
         return BaseMsgInfo.success(true);
@@ -139,4 +140,16 @@ public class OrderController {
     }
 
 
+    /**
+     * 保存用户退卡信息
+     * @param appCardBack
+     * @return
+     */
+    @RequestMapping(value = "/vipReturnInfo")
+    @ResponseBody
+    public BaseMsgInfo addVipReturnInfo (AppCardBack appCardBack
+    ) {
+        //// TODO: 2016/6/3 添加退卡信息
+        return BaseMsgInfo.success(true);
+    }
 }
