@@ -80,13 +80,12 @@
   </select>
 	
   <!-- 根据vip室id号返回vip室信息 -->
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithPic" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from sys_viproom
-    where viproom_id = #{viproomId,jdbcType=VARCHAR}
+    vr.viproom_id,vr.airport_id, vr.viproom_name,vr.singleconsume_money, vr.room_num, vr.open_time, vr.end_time,
+    vr.longitude, vr.province, vr.city, vr.country, vr.address, vr.remark1, pe.click_url,pe.picture_id,pe.picture_url,pe.priority
+    from sys_viproom vr LEFT JOIN app_picture  pe ON vr.viproom_id=pe.viproom_id
+    where vr.viproom_id = #{viproomId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from sys_viproom

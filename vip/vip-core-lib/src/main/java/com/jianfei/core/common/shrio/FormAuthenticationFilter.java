@@ -77,7 +77,7 @@ public class FormAuthenticationFilter extends
 		code = code == null ? "" : code;
 		if (captcha == null || !code.equalsIgnoreCase(captcha)) {
 
-			session.setAttribute(CAPTCHA_ERROR_MESSAGE, "randomCodeError");
+//			session.setAttribute(CAPTCHA_ERROR_MESSAGE, "randomCodeError");
 		}
 		boolean mobile = isMobileLogin(request);
 		return new UsernamePasswordToken(username, password.toCharArray(),

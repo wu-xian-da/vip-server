@@ -7,6 +7,7 @@ import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,20 @@ public class OrderStaController {
                                          @RequestParam(value = "date", required = true) String date
     ) {
         return BaseMsgInfo.success(statManager.listOrderByUserId(uno,date));
+    }
+
+    /**
+     * 分页获取退卡数据
+     * @param pageDto
+     * @param uno
+     * @return
+     */
+    @RequestMapping(value = "/pageReturnVipCards")
+    @ResponseBody
+    public BaseMsgInfo pageReturnVipCards(PageDto pageDto, @RequestParam(value = "uno", required = true) String uno
+    ) {
+        PageInfo<ReturnCardDto> pageInfo= statManager.pageReturnVipCardsByUserId(pageDto,uno);
+        return BaseMsgInfo.success(pageInfo);
     }
 
 }

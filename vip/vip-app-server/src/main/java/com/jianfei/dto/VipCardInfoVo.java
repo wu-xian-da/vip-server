@@ -14,6 +14,7 @@ public class VipCardInfoVo {
 
     private List images;
     private String right;
+    private String shareUrl;
 
     public List getImages() {
         return images;
@@ -29,5 +30,13 @@ public class VipCardInfoVo {
 
     public void setRight(String right) {
         this.right = right;
+    }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
     }
 }

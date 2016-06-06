@@ -136,6 +136,7 @@ public class ResourceController  {
 		VipCardInfoVo vipCardInfoVo=new VipCardInfoVo();
 		vipCardInfoVo.setRight(" 1.Vip室使用权益\",\"可能因座位限制入内 2.全年保险\",\"可能因座位限制入内 3.赠送哈哈哈\",\"可能因座位限制入内");
 		vipCardInfoVo.setImages(list);
+		vipCardInfoVo.setShareUrl("www.baidu.com");
 		return BaseMsgInfo.success(vipCardInfoVo);
 	}
 

@@ -13,6 +13,7 @@ import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.GraphDto;
 import com.jianfei.core.dto.OrderAppDetailInfo;
+import com.jianfei.core.dto.ReturnCardDto;
 
 import java.util.List;
 
@@ -44,4 +45,11 @@ public interface StatManager {
      */
     List<OrderAppDetailInfo> listOrderByUserId(String userId,String date);
 
+    /**
+     * 分页获取某个业务员退卡数量
+     * @param pageDto 分页数据
+     * @param userId 用户唯一标示
+     * @return
+     */
+    PageInfo<ReturnCardDto> pageReturnVipCardsByUserId(PageDto pageDto, String userId);
 }

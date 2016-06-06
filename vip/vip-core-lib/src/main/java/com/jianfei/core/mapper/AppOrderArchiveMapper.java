@@ -3,6 +3,7 @@ package com.jianfei.core.mapper;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.persistence.MyBatisDao;
 import com.jianfei.core.dto.OrderAppDetailInfo;
+import com.jianfei.core.dto.ReturnCardDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -65,4 +66,11 @@ public interface AppOrderArchiveMapper {
      * @return
      */
     List<OrderAppDetailInfo> listOrderByUserId(@Param("userId")String userId,@Param("date") String date);
+
+    /**
+     * 某人退卡记录
+     * @param userId
+     * @return
+     */
+    List<ReturnCardDto> selectReturnCardsByUserId(@Param("userId")String userId);
 }

@@ -72,6 +72,11 @@ public class OrderAddInfoDto {
      */
     private String airportId;
 
+    private String provinceName;
+
+    private String cityName;
+
+
     public String getUno() {
         return uno;
     }
@@ -174,5 +179,21 @@ public class OrderAddInfoDto {
 
     public void setAirportId(String airportId) {
         this.airportId = airportId;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }
