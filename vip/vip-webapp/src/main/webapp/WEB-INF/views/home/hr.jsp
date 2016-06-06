@@ -15,7 +15,16 @@
 	</script>
 </head>
 <body>
-上月入职新员工${come }人 &nbsp;&nbsp;离职${out }人
-
+	<style>
+				.bashboard-content{ text-align: center; padding: 20px 0 30px; font-size: 14px; font-family: "Microsoft YaHei"; color: #ff4242; }
+				.dashboard div img{ width: 100%; }
+			</style>
+			<div class="dashboard">
+				<div class="bashboard-top"><img src="${ctx }/style/images/dashboard-1.jpg" alt=""></div>
+				<div class="bashboard-content">
+					<p>上月入职新员工 <span>${come }</span> 人&nbsp;&nbsp;离职<span>${out }</span> 人</p>
+				</div>
+				<div class="bashboard-bottom"><img src="${ctx }/style/images/dashboard-2.jpg" alt=""></div>
+			</div>
 </body>
 </html>

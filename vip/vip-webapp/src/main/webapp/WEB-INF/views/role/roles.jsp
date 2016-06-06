@@ -106,7 +106,7 @@
 			},{
 				title : '操作',
 				field : 'action',
-				width : '130',
+				width : '150',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:role:update")) {%>

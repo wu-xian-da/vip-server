@@ -15,10 +15,18 @@
 	</script>
 </head>
 <body>
-未完成的退卡申请${unHandleOrder }条<br>
-为查看的用户反馈${unfeedBack }条
-
+			<style>
+				.bashboard-content{ text-align: center; padding: 20px 0 30px; font-size: 14px; font-family: "Microsoft YaHei"; color: #ff4242; }
+				.dashboard div img{ width: 100%; }
+			</style>
+			<div class="dashboard">
+				<div class="bashboard-top"><img src="${ctx }/style/images/dashboard-1.jpg" alt=""></div>
+				<div class="bashboard-content">
+					<p>未完成的退卡申请有 <span>${unHandleOrder }</span> 条</p>
+					<p>未查看的用户反馈有 <span>${unfeedBack }</span> 条</p>
+				</div>
+				<div class="bashboard-bottom"><img src="${ctx }/style/images/dashboard-2.jpg" alt=""></div>
+			</div>
 
 </body>
-<script src="${ctx }/jslib/echarts.min.js"></script>
 </html>
