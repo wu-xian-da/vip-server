@@ -7,6 +7,7 @@ import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
@@ -55,5 +56,20 @@ public class StatManagerImpl implements StatManager {
     @Override
     public List<OrderAppDetailInfo> listOrderByUserId(String userId, String date) {
         return appOrderArchiveMapper.listOrderByUserId(userId, date);
+    }
+
+    /**
+     * 分页获取某个业务员退卡数量
+     *
+     * @param pageDto 分页数据
+     * @param userId  用户唯一标示
+     * @return
+     */
+    @Override
+    public PageInfo<ReturnCardDto> pageReturnVipCardsByUserId(PageDto pageDto, String userId) {
+        PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize());
+        List<ReturnCardDto> list = appOrderArchiveMapper.selectReturnCardsByUserId(userId);
+        PageInfo<ReturnCardDto> pageInfo = new PageInfo(list);
+        return pageInfo;
     }
 }

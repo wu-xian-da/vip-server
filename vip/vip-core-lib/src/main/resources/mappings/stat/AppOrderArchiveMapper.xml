@@ -246,4 +246,16 @@ where file_id = #{fileId,jdbcType=INTEGER}
   <select id="listOrderByUserId" resultMap="OrderResultMap" parameterType="java.lang.String" >
     SELECT o.order_time ,c.customer_name,c.customer_phone,c.sex,o.invoice_flag FROM app_orders o JOIN app_customer c ON o.customer_id=c.customer_id WHERE o.sale_no=#{userId,jdbcType=VARCHAR} and DATE_FORMAT(o.order_time,'%Y%m%d')=#{date,jdbcType=VARCHAR}
   </select>
+
+
+  <resultMap id="ReturnResultMap" type="com.jianfei.core.dto.ReturnCardDto">
+    <id column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="customer_phone" jdbcType="VARCHAR" property="customerPhone" />
+    <result column="back_type" jdbcType="INTEGER" property="backType" />
+  </resultMap>
+
+  <select id="selectReturnCardsByUserId" resultMap="ReturnResultMap" parameterType="java.lang.String" >
+   SELECT o.order_time,c.customer_name,c.customer_phone,b.back_type FROM app_card_back b JOIN app_orders o ON b.order_id=o.order_id JOIN app_customer c ON o.customer_id=c.customer_id WHERE o.sale_no=#{userId,jdbcType=VARCHAR}
+  </select>
 </mapper>
