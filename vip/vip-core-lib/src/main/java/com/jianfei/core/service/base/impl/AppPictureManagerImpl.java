@@ -161,10 +161,6 @@ public class AppPictureManagerImpl implements AppPictureManager {
 		if (pictures==null){
 			return new ArrayList<>();
 		}
-	   String staticIP=GloabConfig.getConfig("static.resource.server.address");
-		for (AppPicture picture:pictures){
-			picture.setPictureUrl(staticIP+picture.getPictureUrl());
-		}
 		return appPictureMapper.getPicture(appPicture);
 	}
 	/**

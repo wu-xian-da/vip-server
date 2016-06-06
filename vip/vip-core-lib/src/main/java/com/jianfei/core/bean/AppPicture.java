@@ -3,6 +3,7 @@ package com.jianfei.core.bean;
 import java.io.Serializable;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.common.utils.GloabConfig;
 
 public class AppPicture implements Serializable {
 
@@ -41,7 +42,7 @@ public class AppPicture implements Serializable {
 	}
 
 	public String getPictureUrl() {
-		return pictureUrl;
+		return pictureUrl == null ? null : GloabConfig.getConfig("static.resource.server.address") + pictureUrl;
 	}
 
 	public void setPictureUrl(String pictureUrl) {
