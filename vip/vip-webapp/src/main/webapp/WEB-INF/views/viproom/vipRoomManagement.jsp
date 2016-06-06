@@ -73,13 +73,7 @@
 			
 			pageSize : 10,
 			pageList : [10, 20, 30, 40, 50],
-			columns : [ [ {
-				width : '200',
-				title : 'vip室编号',
-				field : 'viproomId',
-				align : 'center',
-				sortable : true
-			},{
+			columns : [ [{
 				width : '100',
 				title : '所属场站',
 				field : 'airportName',

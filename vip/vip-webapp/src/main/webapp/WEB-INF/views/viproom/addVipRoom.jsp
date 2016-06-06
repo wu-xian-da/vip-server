@@ -81,7 +81,10 @@
 
 <script>
 	<!-- 实例化编辑器 -->
-	var editor = UE.getEditor('container');
+	var editor = UE.getEditor('container',{
+		//最大500个字符
+		maximumWords:500
+	});
 	
 	$(function(){
 		var provinceId = $("#provinceSele option:selected").val();
