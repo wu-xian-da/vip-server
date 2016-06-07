@@ -125,9 +125,15 @@ public class AppUserFeedbackController {
 	@RequestMapping("delFeedBackInfo")
 	@ResponseBody
 	public Map<String,Object> delFeedBackInfo(@RequestParam(value="id",required=true) String feedbackId){
-		appUserFeedbackImpl.delFeedbackInfoById(feedbackId);
 		Map<String,Object> resMap = new HashMap<String,Object>();
-		resMap.put("result", 1);//1代表成功
+		try {
+			appUserFeedbackImpl.delFeedbackInfoById(feedbackId);
+			resMap.put("result", 1);//1代表成功
+		} catch (Exception e) {
+			// TODO: handle exception
+			resMap.put("result", 0);
+			e.printStackTrace();
+		}
 		return resMap;
 	}
 	
@@ -139,7 +145,13 @@ public class AppUserFeedbackController {
 	@RequestMapping(value="updateFeedbackState",method=RequestMethod.POST)
 	public String updateFeedbackState(AppUserFeedback appUserFeedback){
 		System.out.println("feedbackid="+appUserFeedback.getId());
-		appUserFeedbackImpl.updateFeedbackInfoById(appUserFeedback.getId()+"");
+		try {
+			appUserFeedbackImpl.updateFeedbackInfoById(appUserFeedback.getId()+"");
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
 		return "redirect:goFeedbackView";
 	}
 
