@@ -17,6 +17,14 @@ public class BaseDto {
      */
     private String name;
 
+    public BaseDto(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public BaseDto() {
+    }
+
     public String getId() {
         return id;
     }
