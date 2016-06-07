@@ -13,6 +13,8 @@ import com.jianfei.core.common.persistence.MyBatisDao;
  */
 @MyBatisDao
 public interface AppUserFeedbackMapper {
+	//根据反馈id号查询反馈信息
+	AppUserFeedback getFeedBackInfoById(String feedBackId);
 	//分页查询所有的反馈信息
 	List<AppUserFeedback> pageList(Map<String,Object> params);
 	

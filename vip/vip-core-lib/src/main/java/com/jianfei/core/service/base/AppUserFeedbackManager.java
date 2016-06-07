@@ -7,6 +7,9 @@ import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppUserFeedback;
 
 public interface AppUserFeedbackManager {
+	//根据反馈id号返回反馈信息
+	AppUserFeedback getFeedBackInfoById(String feedBackId);
+	
 	//分页查询所有的反馈信息
 	PageInfo<AppUserFeedback> pageList(int pageNo, int pageSize,Map<String,Object> params);
 		

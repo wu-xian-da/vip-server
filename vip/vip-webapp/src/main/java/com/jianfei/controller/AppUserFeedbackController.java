@@ -47,12 +47,15 @@ public class AppUserFeedbackController {
 	 * @return
 	 */
 	@RequestMapping("gotoFeedBackDetailView")
-	public String gotoFeedBackDetailView(String userId,Model model){
+	public String gotoFeedBackDetailView(@RequestParam(value="userId") String userId,@RequestParam(value="feedBackId") String feedBackId,Model model){
 		MessageDto<AppCustomer> messageDto = appCustomerManager
 				.selectByPrimaryKey(userId);
 		if (messageDto.isOk()) {
 			model.addAttribute("customer", messageDto.getData());
 		}
+		//根据反馈id号获取该条反馈信息
+		AppUserFeedback appUserFeedbackInfo = appUserFeedbackImpl.getFeedBackInfoById(feedBackId);
+		model.addAttribute("appUserFeedbackInfo", appUserFeedbackInfo);
 		appCustomerManager.batchDealMsg(userId, model);
 		return "feedback/feedBackDetail";
 	}
@@ -105,7 +108,7 @@ public class AppUserFeedbackController {
 				appUserFeedback.setOpr("<button class='btn'><a href='goHandFeedbackView?userId="+appUserFeedback.getUserId()+"&feedbackId="+appUserFeedback.getId()+"&feedbackContent="+appUserFeedback.getFeedbackContent()+"'>处理</a></button>");
 			}else if(appUserFeedback.getFeedbackState() == 1){//反馈信息已处理
 				appUserFeedback.setFeedbackStateName("已处理");
-				appUserFeedback.setOpr("<button class='btn'><a href='gotoFeedBackDetailView?userId="+appUserFeedback.getUserId()+"'>查看</a></button><button class='btn' style='background-color:red' onclick='delFeedBackInfo("+appUserFeedback.getId()+")'>删除</button>");
+				appUserFeedback.setOpr("<button class='btn'><a href='gotoFeedBackDetailView?userId="+appUserFeedback.getUserId()+"&feedBackId="+appUserFeedback.getId()+"'>查看</a></button><button class='btn' style='background-color:red' onclick='delFeedBackInfo("+appUserFeedback.getId()+")'>删除</button>");
 			}
 		}
 		resMap.put("total", page.getTotal());
