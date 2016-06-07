@@ -225,8 +225,49 @@
 		]]>
 	</select>
 	<!-- *******************************************************华丽的分割线****************************************************************** -->
-	
-		
-	
-	
+
+	<!--缓存:key-> date+pid -->
+	<select id="dateProvinceIdRedisCache" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<![CDATA[
+			SELECT
+				A.bid,A.pid,A.bsum, B.bsum,B.pcount,B.avgNum
+			FROM
+				(
+					SELECT
+						aoa.pid,
+						aoa.bid,
+						sum(aoa.order_num) as bsum
+					FROM
+						app_order_archive aoa
+						where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{maxDate}
+					GROUP BY
+						aoa.pid,
+						aoa.bid
+				) A
+			INNER JOIN (
+				SELECT
+					count(DISTINCT aoa.bid) AS pcount,
+					sum(aoa.order_num) AS bsum,
+					sum(aoa.order_num) / count(DISTINCT aoa.bid) AS avgNum,
+					aoa.pid
+				FROM
+					app_order_archive aoa
+					where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{maxDate}
+				GROUP BY
+					aoa.pid
+			) B ON A.pid = B.pid
+		]]>
+	</select>
+	<!--缓存 :key-> date+pid+airportId -->
+	<select id="dateProvinceIdApportIds" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<![CDATA[
+			select sum(aoa.order_num) from app_order_archive aoa 
+			where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{maxDate}
+			group by aoa.pid,aoa.airport_id 
+		]]>
+	</select>
+
+
 </mapper>

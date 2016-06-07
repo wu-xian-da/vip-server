@@ -119,4 +119,23 @@ public interface ArchiveManager {
 	 */
 	void chargeHome(Model model, User user);
 
+	/******************************************* 分割线 **********************************************************/
+	/**
+	 * dateProvinceIdRedisCache(缓存key:date+provinceId)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> dateProvinceIdRedisCache(Map<String, Object> map);
+
+	/**
+	 * dateProvinceIdApportIds(缓存key:date+省Id+场站Id)
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> dateProvinceIdApportIds(Map<String, Object> map);
+
 }

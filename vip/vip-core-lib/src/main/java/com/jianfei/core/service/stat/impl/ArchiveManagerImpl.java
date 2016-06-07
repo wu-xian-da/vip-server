@@ -276,4 +276,30 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		map.put("title", title == null ? "开卡数" : title.toString() + "开卡数");
 		return map;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.stat.ArchiveManager#dateProvinceIdRedisCache
+	 * (java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> dateProvinceIdRedisCache(
+			Map<String, Object> map) {
+		return archiveMapper.dateProvinceIdApportIds(map);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.stat.ArchiveManager#dateProvinceIdApportIds(
+	 * java.util.Map)
+	 */
+	@Override
+	public List<Map<String, Object>> dateProvinceIdApportIds(
+			Map<String, Object> map) {
+		return archiveMapper.dateProvinceIdApportIds(map);
+	}
 }

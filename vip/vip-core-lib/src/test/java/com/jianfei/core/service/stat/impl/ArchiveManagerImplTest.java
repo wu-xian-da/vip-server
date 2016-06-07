@@ -9,6 +9,7 @@ package com.jianfei.core.service.stat.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -124,13 +125,19 @@ public class ArchiveManagerImplTest {
 	}
 
 	@Test
-	public void testBaseDailyExtract() {
-		archiveManager.baseDailyExtract(archiveManager.selectOrderMaxDay());
+	public void testDateProvinceIdRedisCache() {
+		List<Map<String, Object>> maps = archiveManager
+				.dateProvinceIdRedisCache(archiveManager.selectOrderMaxDay());
+		for (Map<String, Object> map : maps) {
+			System.out.println(JSONObject.toJSONString(map));
+		}
 	}
 
 	@Test
 	public void testDailyOrderArchice() {
-		archiveManager.baseDailyExtract(archiveManager.selectOrderMaxDay());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("maxTime", DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
+		archiveManager.baseDailyExtract(map);
 	}
 
 }
