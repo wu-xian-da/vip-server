@@ -70,21 +70,20 @@
 			<c:if test="${!empty postInfo }">
 				<c:forEach items="${postInfo }" var="post">
 					<div class="order-list-title">发票信息</div>
-					<div>
-						<ul>
-							<li></li>
-							<li>邮寄地址：${post.address }</li>
-							<li>发票类型：${post.invoice_type == 1 ? '个人' :'公司'}</li>
-							<li>发票抬头：${post.invoice_title }</li>
-						</ul>
-					</div>
+
+					<ul>
+						<li><label>邮寄地址：</label>${post.address }</li>
+						<li><label>发票类型：</label>${post.invoice_type == 1 ? '个人' :'公司'}</li>
+						<li><label>发票抬头：</label>${post.invoice_title }</li>
+					</ul>
+
 				</c:forEach>
 			</c:if>
 			
 			<!-- 退款金额 -->
 			<c:if test="${!empty backMoneyInfo }">
 				<div class="order-list-title">
-					退款信息 <span class="order-tips-red"></span>
+					退款信息 
 				</div>
 				<c:forEach items="${backMoneyInfo }" var="backMoneyInfo">
 					<ul>
@@ -97,7 +96,9 @@
 			
 			<!-- vip卡使用记录 -->
 			<c:if test="${!empty vipCardRescordInfo }">
-				<div class="order-list-title">VIP卡使用记录</div>
+				<div class="order-list-title">
+					VIP卡使用记录
+				</div>
 				<ul>
 					<c:forEach items="${vipCardRescordInfo }" var="vip">
 						<li>${vip.viproom_name }&nbsp;&nbsp;${vip.consume_money }&nbsp;&nbsp;${vip.consume_time }</li>
@@ -107,11 +108,13 @@
 			</c:if>
 			
 			<!-- 反馈信息 -->
-			<div class="order-list-title">反馈信息</div>
-				<ul>
-					<li>反馈信息：${appUserFeedbackInfo.feedbackContent}</li>
-					<li>反馈状态：${appUserFeedbackInfo.feedbackState == 0 ? '未处理 ' : '已处理' }</li>
-				</ul>
+			<div class="order-list-title">
+				反馈信息
+			</div>
+			<ul>
+				<li><label>反馈信息：</label>${appUserFeedbackInfo.feedbackContent}</li>
+				<li><label>反馈状态：</label>${appUserFeedbackInfo.feedbackState == 0 ? '未处理 ' : '已处理' }</li>
+			</ul>
 			
 
 		</div>
