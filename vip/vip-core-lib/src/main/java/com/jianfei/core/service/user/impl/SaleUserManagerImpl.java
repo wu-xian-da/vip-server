@@ -1,10 +1,16 @@
 package com.jianfei.core.service.user.impl;
 
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.user.SaleUserManager;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * TODO
@@ -29,11 +35,15 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public boolean validatePassword(String userNo, String password) {
-        User user=userMapper.getUserByUno(userNo);
-        String md5Pass=password+user.getSalt();
-
-        //TODO 数据库查询
-        return true;
+        List<User> users=userMapper.getUserByUno(userNo);
+        if (users == null ||users.isEmpty()|| StringUtils.isBlank(users.get(0).getPassword())) {
+            return false;
+        }
+        if (users.get(0) == null || StringUtils.isBlank(users.get(0).getPassword())) {
+            return false;
+        }
+        SimpleHash simpleHash = new SimpleHash("md5", password, users.get(0).getSalt());
+        return users.get(0).getPassword().equals(simpleHash.toString());
     }
 
     /**
@@ -44,7 +54,10 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public User getSaleUser(String userNo) {
-        return userMapper.getUserByUno(userNo);
+        HashMap map = new HashMap();
+        map.put("uno", userNo);
+        List<User> list = userMapper.get(map);
+        return list == null || list.isEmpty() ? null : list.get(0);
     }
 
     /**
@@ -57,8 +70,13 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public boolean updatePassword(String userNo, String password, String newPassword) {
-        //TODO newPassword需要加密
-       int num= userMapper.updatePasswordByUno(userNo, password, newPassword);
+        List<User> users=userMapper.getUserByUno(userNo);
+        if (users == null ||users.isEmpty()|| StringUtils.isBlank(users.get(0).getPassword())) {
+            return false;
+        }
+        SimpleHash simpleHash = new SimpleHash("md5", password, users.get(0).getSalt());
+        SimpleHash nweHash = new SimpleHash("md5", newPassword, users.get(0).getSalt());
+       int num= userMapper.updatePasswordByUno(userNo, simpleHash.toString(), nweHash.toString());
         return num == 1 ? true : false;
     }
 
@@ -71,7 +89,8 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public boolean updatePhotoPath(String userNo, String photoPath) {
-        return false;
+        int num = userMapper.updatePhotoPath(userNo, photoPath);
+        return num == 1 ? true : false;
     }
     
     public int yeepayLogin(String userNo,String password){

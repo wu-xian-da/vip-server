@@ -42,7 +42,7 @@ public class SalerUserController {
                     "read write trust","bearer",43199);
             return BaseMsgInfo.success(vipTestVo);
         }else {
-            return BaseMsgInfo.fail("");
+            return new BaseMsgInfo().setCode(-1).setMsg("账号或密码错误");
         }
     }
 
@@ -70,6 +70,18 @@ public class SalerUserController {
         boolean flag = saleUserManager.updatePassword(uno, password, newPassword);
         return BaseMsgInfo.success(flag);
     }
+
+	/**
+	 * 修改头像
+	 * @return
+	 */
+	@RequestMapping(value = "/photoPath")
+	@ResponseBody
+	public BaseMsgInfo updatePhotoPath(@RequestParam(value = "uno", required = true) String uno,
+							  @RequestParam(value = "photoPath", required = true) String photoPath) {
+		boolean flag = saleUserManager.updatePhotoPath(uno,photoPath);
+		return BaseMsgInfo.success(flag);
+	}
 
     /**
      * 用户登录
