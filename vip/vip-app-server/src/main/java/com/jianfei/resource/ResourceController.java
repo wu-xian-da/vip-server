@@ -53,6 +53,7 @@ public class ResourceController  {
 	@ResponseBody
 	public BaseMsgInfo airportProvince(	) {
 		List<BaseDto> stringList=ariPortService.getAriPortProvince();
+		stringList.add(0,new BaseDto("","全国"));
 		return BaseMsgInfo.success(stringList);
 	}
 
