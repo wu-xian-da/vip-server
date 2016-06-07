@@ -31,7 +31,7 @@ public class Main {
             //--------------------------------------------------------------------
 
             //1）测试被扫支付API
-            //PayServiceTest.test();
+//            PayServiceTest.test();
 
             //2）测试被扫订单查询API
             //PayQueryServiceTest.test();

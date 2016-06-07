@@ -31,6 +31,7 @@
 	<![CDATA[
 		SELECT
 			u.*,
+			GROUP_CONCAT(distinct r.`id`) AS 'roles.id',
 			GROUP_CONCAT(distinct r.`name`) AS 'roles.name',
 			GROUP_CONCAT(distinct ap.`airport_name`) AS 'ariPorts.name'
 		FROM

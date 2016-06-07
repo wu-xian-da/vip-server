@@ -65,7 +65,7 @@
 		GROUP BY archie.`province`
 	</select>
 
-
+	<!-- 统计-主管首页统计的订单数 -->
 	<select id="zhuGuanTotal" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		SELECT SUM(a.`order_num`) AS total FROM `app_order_archive` a WHERE
@@ -79,7 +79,7 @@
 		</if>
 
 	</select>
-
+	<!-- 统计-主管首页统计的订单数和最优业务员统计 -->
 	<select id="zhuGuanAllAirPort" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		<![CDATA[	
@@ -129,6 +129,8 @@
 						a.`airport_id`
 		]]>
 	</select>
+
+	<!-- 统计-主管柱状图 -->
 	<select id="zhuGuanDraw" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		<![CDATA[	
@@ -161,36 +163,39 @@
 								a.airport_id,
 								a.`airportname`,
 								a.`bname`,
-								a.id
+								a.bid
 						) A
 					GROUP BY
 						A.airportname
 		]]>
 	</select>
-
+	<!-- 获取订单的最大日期 -->
 	<select id="selectOrderMaxDay" resultType="java.util.Map">
-		<![CDATA[SELECT DATE_FORMAT(MAX(order_time),'%Y-%m-%d') AS maxTime FROM app_orders;]]>
+		<![CDATA[SELECT DATE_FORMAT(MAX(order_time),'%Y-%m-%d') AS maxTime FROM app_orders]]>
 	</select>
-
+	<!-- 日归档表抽取 -->
 	<select id="baseDailyExtract" parameterType="java.util.Map">
 		<![CDATA[
-			INSERT INTO app_order_archive (
-				`id`,
-				`file_time`,
-				`order_num`,
-				`dflag`,
-				`bname`,
-				`airportname`,
-				`airport_id`,
-				`year`,
-				`month`,
-				`day`,
-				c.name as province,
-				dayweek
-			) SELECT
+			INSERT INTO `app_order_archive` (
+			  `bid`,
+			  `file_time`,
+			  `order_num`,
+			  `dflag`,
+			  `bname`,
+			  `airportname`,
+			  `airport_id`,
+			  `year`,
+			  `month`,
+			  `day`,
+			  `province`,
+			  `dayweek`,
+			  `sex`,
+			  `photo`,
+			  `pid`
+			)  SELECT
 				u.id,
 				max(ao.order_time) AS file_time,
-				count(ao.order_id) AS order_num,
+				sum(ao.order_id) AS order_num,
 				ao.dtflag,
 				u.`name` AS bname,
 				a.airport_name,
@@ -199,7 +204,10 @@
 				DATE_FORMAT(#{maxTime},'%m') AS MONTH,
 				DATE_FORMAT(#{maxTime},'%d') AS DAY,
 				a.province,
-				WEEKDAY(#{maxTime})+1
+				WEEKDAY(#{maxTime})+1,
+				u.sex,
+				u.photo,
+				c.CID as pid
 			FROM
 				sys_users u
 			INNER JOIN app_orders ao ON ao.id = u.id
@@ -207,6 +215,18 @@
 			INNER JOIN sys_airport a ON sua.airport_id = a.airport_id
 			inner join sys_city c on a.province=c.CID
 			WHERE DATE_FORMAT(ao.order_time, '%Y-%m-%m') =#{maxTime}
+			GROUP BY
+			u.id,
+			u.`name`,
+			a.airport_id,
+			a.airport_name,
+			c.CID,
+			c.`name`
 		]]>
 	</select>
+	<!-- *******************************************************华丽的分割线****************************************************************** -->
+	
+		
+	
+	
 </mapper>

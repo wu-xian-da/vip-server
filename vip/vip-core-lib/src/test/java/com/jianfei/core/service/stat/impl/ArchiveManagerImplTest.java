@@ -128,4 +128,9 @@ public class ArchiveManagerImplTest {
 		archiveManager.baseDailyExtract(archiveManager.selectOrderMaxDay());
 	}
 
+	@Test
+	public void testDailyOrderArchice() {
+		archiveManager.baseDailyExtract(archiveManager.selectOrderMaxDay());
+	}
+
 }

@@ -55,6 +55,14 @@ public class UserMapperTest {
 		userMapper.getUserByName("admin");
 	}
 
+	@Test
+	public void testGet() {
+		List<User> list = userMapper.get(new MapUtils.Builder().setKeyValue("id", 58).build());
+		for (User user : list) {
+			System.out.println(user.getRoleIds() + "  " + user.getRoelNames());
+		}
+	}
+
 	/**
 	 * Test method for
 	 * {@link com.jianfei.core.mapper.UserMapper#deleteRolesFromUser(java.lang.Long)}
