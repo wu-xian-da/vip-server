@@ -74,7 +74,7 @@
 				width : '90',
 				formatter : function(value, row) {
 					var str = '';
-						str += sy.formatString('<img class="iconImg ext-icon-note" title="删除" onclick="look(\'{0}\');"/>', row.customerId);
+						str += sy.formatString('<img class="iconImg ext-icon-note" title="查看详情" onclick="look(\'{0}\');"/> 查看', row.customerId);
 						return str;
 				}
 			} ] ],

@@ -2,16 +2,14 @@ package com.jianfei.resource;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.bean.AppVersion;
 import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
-import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
-import com.jianfei.core.service.base.impl.AriPortManagerImpl;
-import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
-import com.jianfei.dto.VipCardInfoVo;
+import com.jianfei.core.service.base.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +40,11 @@ public class ResourceController  {
 
 	@Autowired
 	private AppPictureManagerImpl appPictureService;
+
+	@Autowired
+	private AppVersionManagerImpl appVersionManager;
+	@Autowired
+	private AppConfigManagerImpl appConfigManager;
 	/**
 	 * 获取支持的省份列表
 	 * @param
@@ -50,6 +53,7 @@ public class ResourceController  {
 	@ResponseBody
 	public BaseMsgInfo airportProvince(	) {
 		List<BaseDto> stringList=ariPortService.getAriPortProvince();
+		stringList.add(0,new BaseDto("","全国"));
 		return BaseMsgInfo.success(stringList);
 	}
 
@@ -131,12 +135,7 @@ public class ResourceController  {
 	@RequestMapping(value = "/getVipCardRight", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo getVipCardRight() {
-		List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME);
-
-		VipCardInfoVo vipCardInfoVo=new VipCardInfoVo();
-		vipCardInfoVo.setRight(" 1.Vip室使用权益\",\"可能因座位限制入内 2.全年保险\",\"可能因座位限制入内 3.赠送哈哈哈\",\"可能因座位限制入内");
-		vipCardInfoVo.setImages(list);
-		return BaseMsgInfo.success(vipCardInfoVo);
+		return BaseMsgInfo.success(appConfigManager.getVipCardInfo());
 	}
 
 	/**
@@ -145,7 +144,17 @@ public class ResourceController  {
 	@RequestMapping(value = "/getVipCardQA", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo getVipCardQA() {
-		String string ="常见问题  ";
-		return BaseMsgInfo.success(string);
+    return BaseMsgInfo.success(appConfigManager.getQAInfo());
 	}
+
+	/**
+	 *  VIP卡 版本更新接口
+	 */
+	@RequestMapping(value = "/lastAppVersion", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo getLastAppVersion(@RequestParam(value = "channel", required = true) String channel) {
+		AppVersion appVersion=appVersionManager.getLastVersion(channel);
+		return BaseMsgInfo.success(appVersion);
+	}
+
 }

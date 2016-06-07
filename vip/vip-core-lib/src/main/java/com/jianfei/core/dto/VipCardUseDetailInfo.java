@@ -25,6 +25,10 @@ public class VipCardUseDetailInfo {
      */
    private Date activeTime;
     /**
+     * 订单ID
+     */
+    private String orderId;
+    /**
      * 订单时间
      */
    private float orderMoney;
@@ -54,6 +58,21 @@ public class VipCardUseDetailInfo {
      * VIP卡使用记录
      */
     private List<AppConsume> cardUseList;
+
+    /**
+     * 付款方式
+     */
+    private int payType;
+
+    /**
+     * 付款ID
+     */
+    private String payUserId;
+
+    /**
+     * 发票状态
+     */
+    private int InvoiceSate;
 
     public String getVipCardNo() {
         return vipCardNo;
@@ -132,5 +151,37 @@ public class VipCardUseDetailInfo {
 
     public void setCardUseList(List<AppConsume> cardUseList) {
         this.cardUseList = cardUseList;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getPayType() {
+        return payType;
+    }
+
+    public void setPayType(int payType) {
+        this.payType = payType;
+    }
+
+    public String getPayUserId() {
+        return payUserId;
+    }
+
+    public void setPayUserId(String payUserId) {
+        this.payUserId = payUserId;
+    }
+
+    public int getInvoiceSate() {
+        return InvoiceSate;
+    }
+
+    public void setInvoiceSate(int invoiceSate) {
+        InvoiceSate = invoiceSate;
     }
 }

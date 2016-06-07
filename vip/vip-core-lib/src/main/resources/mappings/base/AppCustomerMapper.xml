@@ -21,8 +21,9 @@
 		<result column="orderStatu" property="orderStatu" />
 		<result column="card_no" property="cardNo" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="active_time" property="cardActiveTime"
-			jdbcType="TIMESTAMP" />
+		<result column="active_time" property="cardActiveTime" jdbcType="TIMESTAMP" />
+		<result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		customer_id, customer_name, customer_identi,
@@ -30,7 +31,7 @@
 		email, address, password,
 		use_type, remark1,
 		dtflag, province, city,
-		country
+		country,province_name,city_name
 	</sql>
 	<select id="get" resultMap="BaseResultMap" parameterType="java.util.Map">
 		<![CDATA[
@@ -60,7 +61,7 @@
 		parameterType="java.lang.String">
 		SELECT
 		c.customer_id,c.customer_name,c.customer_identi,c.customer_phone,c.sex,c.email,c.address,c.use_type,c.remark1,c.dtflag,c.province,c.city,c.country,v.active_time,
-		v.card_no FROM app_customer c JOIN app_vipcard v ON
+		v.card_no,c.province_name,c.city_name FROM app_customer c  LEFT JOIN app_vipcard v ON
 		c.customer_id=v.customer_id
 		where c.customer_phone =
 		#{phone,jdbcType=VARCHAR} AND c.dtflag=0
@@ -205,8 +206,15 @@
 				country,
 			</if>
 			<if test="createTime != null">
-				createTime,
+				create_time,
 			</if>
+			<if test="provinceName != null">
+				province_name,
+			</if>
+			<if test="cityName != null">
+				city_name,
+			</if>
+
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="customerId != null">
@@ -253,6 +261,12 @@
 			</if>
 			<if test="createTime != null">
 				#{createTime,jdbcType=DATE},
+			</if>
+			<if test="provinceName != null">
+				#{provinceName,jdbcType=VARCHAR},
+			</if>
+			<if test="cityName != null">
+				#{cityName,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -302,9 +316,13 @@
 			<if test="country != null">
 				country = #{country,jdbcType=VARCHAR},
 			</if>
-			<if test="createtime != null">
-				createTime = #{createtime,jdbcType=DATE},
+			<if test="provinceName != null">
+				province_name = #{provinceName,jdbcType=VARCHAR},
 			</if>
+			<if test="cityName != null">
+				city_name = #{cityName,jdbcType=VARCHAR},
+			</if>
+
 		</set>
 		where customer_phone = #{phone,jdbcType=VARCHAR}
 	</update>

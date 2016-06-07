@@ -57,6 +57,8 @@
   	<result column="customer_identi" property="customerIdent"/>
   	<result column="customer_phone" property="customerPhone"/>
   	<result column="sex" property="sex"/>
+  	<result column="province_name" property="customerProvinceName"/>
+  	<result column="city_name" property="customerCityName"/>
   	<result column="address" property="address"/>
   	<result column="email" property="email"/>
   	<!-- 5、卡表 -->
@@ -71,7 +73,7 @@
 		select ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,ord.pay_money,
 			sa.airport_name,
     		agent.name,agent.phone,
-    		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.address,cus.email,
+    		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.province_name,cus.city_name,cus.address,cus.email,
     		aoc.card_id ,aoc.card_type,aoc.init_money
     			from app_orders ord,sys_airport sa,sys_users agent ,app_customer cus ,app_order_card aoc
    					where  ord.airport_id = sa.airport_id  and ord.sale_no = agent.id 

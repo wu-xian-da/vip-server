@@ -38,7 +38,7 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @param uno
 	 * @return
      */
-	User getUserByUno(String uno);
+	List<User> getUserByUno(String uno);
 
 	/**
 	 * 修改用户密码
@@ -49,4 +49,12 @@ public interface UserMapper extends BaseMapper<User> {
 	int updatePasswordByUno(@Param(value = "uno")String uno, @Param(value = "password")String password, @Param(value = "newPassword")String newPassword);
 	
 	public User getYeepayUser(String loginName);
+
+	/**
+	 * 根据用户工号更新用户头像
+	 * @param userNo
+	 * @param photoPath
+     * @return
+     */
+	int updatePhotoPath(@Param(value = "userNo") String userNo,@Param(value = "photoPath") String photoPath);
 }

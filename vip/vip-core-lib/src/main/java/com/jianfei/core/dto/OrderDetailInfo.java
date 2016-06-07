@@ -40,12 +40,38 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	private Date activatTime;//激活时间
 	private String customerIdent;//用户身份证号
 	private int sex;//用户性别
+	private String customerProvinceName;
+	private String customerCityName;
 	private String address;//常驻地址
 	private String email;//邮箱地址
 	private int invoiceType;//发票类型
 	private String invoiceTitle;//发票抬头
 	
 	
+	/**
+	 * @return the customerProvinceName
+	 */
+	public String getCustomerProvinceName() {
+		return customerProvinceName;
+	}
+	/**
+	 * @param customerProvinceName the customerProvinceName to set
+	 */
+	public void setCustomerProvinceName(String customerProvinceName) {
+		this.customerProvinceName = customerProvinceName;
+	}
+	/**
+	 * @return the customerCityName
+	 */
+	public String getCustomerCityName() {
+		return customerCityName;
+	}
+	/**
+	 * @param customerCityName the customerCityName to set
+	 */
+	public void setCustomerCityName(String customerCityName) {
+		this.customerCityName = customerCityName;
+	}
 	/**
 	 * agentPhone
 	 *

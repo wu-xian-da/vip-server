@@ -107,7 +107,7 @@
 											var str = '';
 											str += sy
 													.formatString(
-															'<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>',
+															'<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除',
 															row.cardNo);
 											return str;
 										}

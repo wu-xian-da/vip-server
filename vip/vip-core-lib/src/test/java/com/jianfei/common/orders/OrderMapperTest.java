@@ -37,6 +37,7 @@ import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.base.AppPictureManager;
+import com.jianfei.core.service.base.AppUserFeedbackManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 
 /**
@@ -58,6 +59,9 @@ public class OrderMapperTest {
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
 	private AppPictureManager appPictureManager;
+	
+	@Autowired
+	private AppUserFeedbackManager appUserFeedbackManager;
 	
 	
 	@Test
@@ -137,6 +141,12 @@ public class OrderMapperTest {
 	@Test
 	public void testSelDetailOrderInfo(){
 		System.out.println(orderManagerImpl.returnOrderDetailInfoByOrderId("dd1001"));
+	}
+	
+	//
+	@Test
+	public void testFeedBackInfoById(){
+		System.out.println(appUserFeedbackManager.getFeedBackInfoById("8"));
 	}
 	
 

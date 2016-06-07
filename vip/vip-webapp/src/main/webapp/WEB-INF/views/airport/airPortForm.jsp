@@ -25,6 +25,31 @@
 			}, 'json');
 		}
 	};
+	//自定义验证
+	  $.extend($.fn.validatebox.defaults.rules, {
+	  phoneRex: {
+	    validator: function(value){
+	    var rex=/^1[3-8]+\d{9}$/;
+	    //var rex=/^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
+	    //区号：前面一个0，后面跟2-3位数字 ： 0\d{2,3}
+	    //电话号码：7-8位数字： \d{7,8
+	    //分机号：一般都是3位数字： \d{3,}
+	     //这样连接起来就是验证电话的正则表达式了：/^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/		 
+	    var rex2=/^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
+	    if(rex.test(value)||rex2.test(value))
+	    {
+	      // alert('t'+value);
+	      return true;
+	    }else
+	    {
+	     //alert('false '+value);
+	       return false;
+	    }
+	      
+	    },
+	    message: '请输入正确电话或手机格式'
+	  }
+	});
 </script>
 	<link rel="stylesheet" href="${ctx }/style/vip.css">
 </head>
@@ -35,34 +60,27 @@
 			<input name="id" type="hidden" value="${ariPort.airport_id }" readonly="readonly" />
 			<table class="table" style="width: 100%;">
 				<tr style="padding-top: 5px;">
-					<th>场站名称:</th>
+					<th style="width: 20%;">场站名称:</th>
 					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox" data-options="required:true" style="text-align: left;"/></td>
+						<th>场站负责人:</th>
+					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_name }" /></td>
 				</tr>
-				<tr style="padding-top: 5px;">
+				<tr>
+					<th>负责人联系方式:</th>
+					<td><input style="text-align: left;" name="headerPhone" class="easyui-validatebox" data-options="validType:'phoneRex'" value="${ariPort.header_phone }" /></td>
+					<th>业务员数量:</th>
+					<td>
+					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agent_num } data-options="increment:1" style="width:120px;" ></input>
+				</tr>
+				<tr >
 					<th>省市信息:</th>
 					<td>
-					
 						<div class="demo-wrap">
 							<div id="selectbox">
 
 							</div>
 						</div>
 					</td>
-				</tr>
-				<tr style="padding-top: 5px;">
-					<th>场站负责人:</th>
-					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_name }" /></td>
-				</tr>
-				<tr style="padding-top: 5px;">
-					<th>负责人联系方式:</th>
-					<td><input style="text-align: left;" name="headerPhone" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_phone }" /></td>
-				</tr>
-				<tr style="padding-top: 5px;">
-					<th>业务员数量:</th>
-					<td>
-					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agent_num } data-options="increment:1" style="width:120px;" ></input>
-				</tr>
-				<tr style="padding-top: 5px;">
 					<th>场站状态:</th>
 					<c:choose>
 						<c:when test="${!empty ariPort and ariPort.state==1}">

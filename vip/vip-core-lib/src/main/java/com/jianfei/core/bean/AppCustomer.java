@@ -55,6 +55,10 @@ public class AppCustomer implements Serializable {
 
 	private String code;
 
+	private String provinceName;
+
+	private String cityName;
+
 	/**
 	 * createTime
 	 *
@@ -245,5 +249,21 @@ public class AppCustomer implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getProvinceName() {
+		return provinceName;
+	}
+
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
 	}
 }

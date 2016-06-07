@@ -4,6 +4,12 @@
 <head>
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
+<style type="text/css">
+	a{
+	text-decoration: none;
+	color:#404040
+	}
+</style>
 <script type="text/javascript">
 	var grid;
 	
@@ -73,20 +79,14 @@
 			
 			pageSize : 10,
 			pageList : [10, 20, 30, 40, 50],
-			columns : [ [ {
-				width : '200',
-				title : 'vip室编号',
-				field : 'viproomId',
-				align : 'center',
-				sortable : true
-			},{
-				width : '100',
+			columns : [ [{
+				width : '150',
 				title : '所属场站',
 				field : 'airportName',
 				align : 'center',
 				sortable : true
 			} ,{
-				width : '150',
+				width : '200',
 				title : 'vip室名称',
 				align : 'center',
 				field : 'viproomName',
@@ -106,12 +106,12 @@
 			},{
 				title : '操作',
 				field : 'action',
-				width : '90',
+				width : '150',
 				align : 'center',
 				formatter : function(value, row) {
 					var str = '';
-					str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/></a>";
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.viproomId);
+					str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/> 编辑&nbsp;</a>";
+						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.viproomId);
 					return str;
 				}
 			} ] ],

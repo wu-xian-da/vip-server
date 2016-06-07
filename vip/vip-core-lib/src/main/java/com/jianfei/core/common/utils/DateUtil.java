@@ -1,5 +1,7 @@
 package com.jianfei.core.common.utils;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,8 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.alibaba.fastjson.JSONObject;
+import java.util.TimeZone;
 
 /**
  *
@@ -200,10 +201,5 @@ public class DateUtil {
 		map.put("month", sdf2.format(cal.getTime()));
 		map.put("dataStr", map.get("year") + "年" + map.get("month") + "月");
 		return map;
-	}
-
-	public static void main(String[] args) {
-		Map<String, Object> map = getDelayDate(5);
-		System.out.println(JSONObject.toJSONString(map));
 	}
 }

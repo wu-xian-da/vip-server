@@ -15,6 +15,10 @@
     <result column="feedback_content" property="feedbackContent"/>
   </resultMap>
   
+  <!-- 根据id号查询反馈信息 -->
+  <select id="getFeedBackInfoById" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from app_user_feedback auf where auf.id=#{feedBackId}
+  </select>
   <!--分页查询  -->
   <select id="pageList" resultMap="BaseResultMap" parameterType="java.util.Map">
   		select * from app_user_feedback auf,app_customer ac

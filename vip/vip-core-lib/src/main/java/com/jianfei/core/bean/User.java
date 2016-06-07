@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.jianfei.core.common.utils.GloabConfig;
 
 /**
  *
@@ -33,6 +34,7 @@ public class User extends BaseEntity {
 
 	private Date entryTime;// 入职时间
 
+	@JsonIgnore
 	private String password;
 
 	private String loginName;
@@ -328,7 +330,7 @@ public class User extends BaseEntity {
 	 */
 
 	public String getPhoto() {
-		return photo;
+		return photo == null ? null : GloabConfig.getConfig("static.resource.server.address") + photo;
 	}
 
 	/**
@@ -383,7 +385,6 @@ public class User extends BaseEntity {
 	 * @return the roles
 	 * @version 1.0.0
 	 */
-	@JsonIgnore
 	public List<Role> getRoles() {
 		return roles;
 	}

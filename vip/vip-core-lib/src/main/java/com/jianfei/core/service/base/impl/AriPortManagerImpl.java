@@ -217,6 +217,9 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	 */
 	@Override
 	public List<SysAirport> getAirPortByProvince(String provinceId) {
+		if (StringUtils.isBlank(provinceId)){
+			provinceId=null;
+		}
 		return ariPortMapper.getAirPortByProvince(provinceId);
 	}
 

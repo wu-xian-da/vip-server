@@ -31,6 +31,7 @@
 	<![CDATA[
 		SELECT
 			u.*,
+			GROUP_CONCAT(distinct r.`id`) AS 'roles.id',
 			GROUP_CONCAT(distinct r.`name`) AS 'roles.name',
 			GROUP_CONCAT(distinct ap.`airport_name`) AS 'ariPorts.name'
 		FROM
@@ -62,6 +63,9 @@
 			<if test="ends!=null">
 				<![CDATA[and u.create_time <= #{ends}]]>
 			</if>
+			<if test="uno!=null">
+				<![CDATA[and u.code <= #{uno}]]>
+			</if>
 		</where>
 		GROUP BY u.`name`
 		<if test="sort!=null">
@@ -74,7 +78,7 @@
 	</select>
 
 	<select id="getUserByUno" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{uno}
+		SELECT * from sys_users where code =#{uno} AND state=0
 	</select>
 
 	<select id="getYeepayUser" resultMap="userRs" parameterType="String">
@@ -175,5 +179,9 @@
 	<update id="updatePasswordByUno" parameterType="String">
 		UPDATE sys_users SET `password`=#{newPassword} WHERE `code`=#{uno} and
 		`password`=#{password}
+	</update>
+
+	<update id="updatePhotoPath" parameterType="String">
+		UPDATE sys_users SET photo=#{photoPath} WHERE `code`=#{userNo} 
 	</update>
 </mapper>

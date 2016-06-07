@@ -1,12 +1,23 @@
 package com.jianfei.core.service.stat.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppAirportArchive;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.OrderAppDetailInfo;
+import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.mapper.AppOrderArchiveMapper;
+import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO
@@ -16,33 +27,10 @@ import java.util.List;
  * @author: liu.dongsong@jianfeitech.com
  * @date: 2016/5/20 16:11
  */
+@Service
 public class StatManagerImpl implements StatManager {
-
-    /**
-     * 获得个人两个日期间每天的订单统计数据
-     *
-     * @param userId 用户标示
-     * @param begin  开始日期
-     * @param end    结束日期
-     * @return
-     */
-    @Override
-    public List<AppOrderArchive> getOrderStatByUserId(String userId, String begin, String end) {
-        return null;
-    }
-
-    /**
-     * 获得某省两个日期间每天订单的统计数据
-     *
-     * @param provinceId
-     * @param begin
-     * @param end
-     * @return
-     */
-    @Override
-    public List getOrderStatByProvinceId(String provinceId, String begin, String end) {
-        return null;
-    }
+    @Autowired
+    private AppOrderArchiveMapper appOrderArchiveMapper;
 
     /**
      * 分页获取个人每日开卡数据
@@ -53,46 +41,54 @@ public class StatManagerImpl implements StatManager {
      */
     @Override
     public PageInfo<AppOrderArchive> pageOrderStatByUserId(PageDto pageDto, String userId) {
-        return null;
+        PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize());
+        List<AppOrderArchive> list = appOrderArchiveMapper.selectByUserId(userId);
+        PageInfo<AppOrderArchive> pageInfo = new PageInfo(list);
+        return pageInfo;
     }
 
     /**
-     * 获得某段时间区域每天开卡总数
+     * 获取某天某人的开卡记录
      *
-     * @param province 区域列表
-     * @param begin    开始时间
-     * @param end      结束时间
+     * @param userId
+     * @param date
      * @return
      */
     @Override
-    public List getOrderStatByProvince(List<String> province, String begin, String end) {
-        return null;
+    public List<OrderAppDetailInfo> listOrderByUserId(String userId, String date) {
+        return appOrderArchiveMapper.listOrderByUserId(userId, date);
     }
 
     /**
-     * 获取机场一段时间内每个机场的开卡数
+     * 分页获取某个业务员退卡数量
      *
-     * @param airportIds 机场IDs
-     * @param begin      开始时间
-     * @param end        结束时间
+     * @param pageDto 分页数据
+     * @param userId  用户唯一标示
      * @return
      */
     @Override
-    public List<AppAirportArchive> getAirportOrderStat(List<String> airportIds, String begin, String end) {
-        return null;
+    public PageInfo<ReturnCardDto> pageReturnVipCardsByUserId(PageDto pageDto, String userId) {
+        PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize());
+        List<ReturnCardDto> list = appOrderArchiveMapper.selectReturnCardsByUserId(userId);
+        PageInfo<ReturnCardDto> pageInfo = new PageInfo(list);
+        return pageInfo;
     }
-
+    
     /**
-     * 获取某段时间开卡人员分页列表
-     *
-     * @param pageDto
-     * @param begin
-     * @param end
-     * @param airportIds
-     * @return
+     * 销售榜单-详细图表接口
      */
-    @Override
-    public PageInfo<AppOrderArchive> pageOrderStat(PageDto pageDto, String begin, String end, List<String> airportIds) {
-        return null;
-    }
+	@Override
+	public List<Map<String, Object>> getSticCardData(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * 个人中心销售榜单获取接口
+	 */
+	@Override
+	public List<Map<String, Object>> getSaleCurveByUserId(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

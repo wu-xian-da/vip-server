@@ -98,10 +98,11 @@
 	<!-- MyBatis end -->
 	<!-- 加载SpringContextHolder -->
 	<bean class="com.jianfei.core.common.utils.SpringContextHolder" />
-	<bean id="cacheManager"
-		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:ehcache/ehcache-local.xml" />
-	</bean>
-
+	<!-- 
+		<bean id="cacheManager"
+			class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+			<property name="configLocation" value="classpath:ehcache/ehcache-local.xml" />
+		</bean>
+    -->
 
 </beans>

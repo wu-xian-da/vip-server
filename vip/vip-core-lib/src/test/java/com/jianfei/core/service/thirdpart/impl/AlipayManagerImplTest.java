@@ -7,20 +7,11 @@
  */
 package com.jianfei.core.service.thirdpart.impl;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,14 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.pagehelper.PageHelper;
-import com.jianfei.core.bean.Resource;
-import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.pay.PreCreateResult;
-import com.jianfei.core.service.stat.ArchiveManager;
 import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.tencent.protocol.native_protocol.NativePayReqData;

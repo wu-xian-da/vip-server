@@ -71,4 +71,12 @@ public class AppUserFeedbackImpl implements AppUserFeedbackManager{
 		userFeedback.setFeedbackState(0);//// TODO: 2016/6/2 状态 ASK 郭建
 		return appUserFeedbackMapper.insertSelective(userFeedback);
 	}
+	/**
+	 * 根据反馈id号返回反馈信息
+	 */
+	@Override
+	public AppUserFeedback getFeedBackInfoById(String feedBackId) {
+		// TODO Auto-generated method stub
+		return appUserFeedbackMapper.getFeedBackInfoById(feedBackId);
+	}
 }
