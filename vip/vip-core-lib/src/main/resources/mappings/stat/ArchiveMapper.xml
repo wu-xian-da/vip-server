@@ -185,7 +185,7 @@
 				`year`,
 				`month`,
 				`day`,
-				`province`,
+				c.name as province,
 				dayweek
 			) SELECT
 				u.id,
@@ -205,6 +205,7 @@
 			INNER JOIN app_orders ao ON ao.id = u.id
 			INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
 			INNER JOIN sys_airport a ON sua.airport_id = a.airport_id
+			inner join sys_city c on a.province=c.CID
 			WHERE DATE_FORMAT(ao.order_time, '%Y-%m-%m') =#{maxTime}
 		]]>
 	</select>

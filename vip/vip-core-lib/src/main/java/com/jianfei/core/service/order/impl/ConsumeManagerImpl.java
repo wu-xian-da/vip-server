@@ -33,7 +33,11 @@ public class ConsumeManagerImpl implements ConsumeManager {
      */
     @Override
     public boolean addConsume(AppConsume appConsume) {
-        return false;
+    	int re = consumeMapper.insert(appConsume);
+    	if (re>0)
+    		return true;
+    	else 
+    		return false;
     }
 
 

@@ -43,7 +43,20 @@
 				<li><label>有效期：</label>${orderDetailInfo.cardType}年</li>
 				<li><label>vip卡金额：</label>${orderDetailInfo.initMoney}￥</li>
 				<li><label>支付方式：
-				      
+				      <c:choose>
+				      	<c:when test="${orderDetailInfo.payMethod == 1}">
+				      		微信支付
+				      	</c:when>
+				      	<c:when test="${orderDetailInfo.payMethod == 2}">
+				      		支付宝支付
+				      	</c:when>
+				      	<c:when test="${orderDetailInfo.payMethod == 3}">
+				      		银行卡支付
+				      	</c:when>
+				      	<c:otherwise>
+				      		现金支付
+				      	</c:otherwise>
+				      </c:choose>
 					</label>
 				
 				
@@ -68,7 +81,7 @@
 				<div>
 					<ul>
 						<li>邮寄地址：${invoice.address }</li>
-						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
+						<li>发票类型：${invoice.invoiceType ==1? '个人':'公司' }</li>
 						<li>发票抬头：${invoice.invoiceTitle}</li>
 					</ul>
 				</div>

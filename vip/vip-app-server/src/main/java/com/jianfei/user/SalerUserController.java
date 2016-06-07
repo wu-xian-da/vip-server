@@ -1,14 +1,23 @@
 package com.jianfei.user;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.utils.GloabConfig;
+import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 销售人员Controller
@@ -136,5 +145,35 @@ public class SalerUserController {
             return BaseMsgInfo.fail("");
         }
     }
+    
+    @RequestMapping(value = "/photoUpdate")
+    @ResponseBody
+    public String salePhotoUpdate(@RequestParam(value = "file", required = false) MultipartFile file) {
+    	 if (!file.isEmpty()) {
+    		 String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "//salesPhoto";
+    		 String fileName = file.getOriginalFilename();
+    		 String newFileName = UUIDUtils.returnNewFileName(fileName);
+ 			 File targetFile = new File(path, newFileName);
+ 			 if (!targetFile.exists()) {
+ 				 targetFile.mkdirs();
+ 			 }
+
+        	 try {
+				file.transferTo(targetFile);
+			 } catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			 } catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			 }
+
+             return path + "/" + newFileName;
+
+         } else {
+             return "failed";
+         }
+    }
+    
 
 }

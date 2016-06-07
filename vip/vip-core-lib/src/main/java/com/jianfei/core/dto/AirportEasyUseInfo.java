@@ -1,5 +1,9 @@
 package com.jianfei.core.dto;
 
+import java.util.List;
+
+import com.jianfei.core.bean.AppConsume;
+
 /**
  * 空港易行VIp卡使用记录Info
  *
@@ -26,6 +30,8 @@ public class AirportEasyUseInfo {
      * 返回新核销的记录数
      */
     private  int  RecordNo;
+    
+    private List<AppConsume> consumeList;
 
     public String getBatchNo() {
         return BatchNo;
@@ -50,4 +56,15 @@ public class AirportEasyUseInfo {
     public void setRecordNo(int recordNo) {
         RecordNo = recordNo;
     }
+
+	public List<AppConsume> getConsumeList() {
+		return consumeList;
+	}
+
+	public void setConsumeList(List<AppConsume> consumeList) {
+		this.consumeList = consumeList;
+	}
+
+
+    
 }

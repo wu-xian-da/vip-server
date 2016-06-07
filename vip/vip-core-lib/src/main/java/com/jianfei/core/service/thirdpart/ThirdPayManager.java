@@ -1,10 +1,3 @@
-/**
- * @项目名:vip
- * @版本信息:1.0
- * @date:2016年5月23日-下午4:20:02
- * Copyright (c) 2016建飞科联公司-版权所有
- *
- */
 package com.jianfei.core.service.thirdpart;
 
 import org.apache.commons.logging.Log;

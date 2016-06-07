@@ -38,4 +38,7 @@ public interface AppPictureManager {
 	List<AppPicture> getPicture(PictureType pictureType);
 	//更新vip室图片信息
 	int updateByVipRoomId(Map<String,Object> map);
+	
+	//根据viproomId查询是否有记录
+	List<AppPicture> selByVipRoomId(String viproomId);
 }

@@ -48,11 +48,6 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 		// 支付宝环境初始化
 		Configs.init("zfbinfo.properties");
 		tradeService = new AlipayTradeServiceImpl.ClientBuilder().build();
-
-		// 微信环境初始化
-		// WXPay.initSDKConfiguration(key, appID, mchID, sdbMchID,
-		// certLocalPath, certPassword);
-
 	}
 
 	/**

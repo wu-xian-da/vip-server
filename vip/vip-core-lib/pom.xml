@@ -303,11 +303,7 @@
 			<version>2.5.1</version>
 		</dependency>
 		<!-- 微信支付SDK包 -->
-		<dependency>
-			<groupId>com.tencent</groupId>
-			<artifactId>wxpay-scanpay-java-sdk</artifactId>
-			<version>1.0</version>
-		</dependency>	<!-- User Agent -->
+		<!-- User Agent -->
 		<dependency>
 			<groupId>nl.bitwalker</groupId>
 			<artifactId>UserAgentUtils</artifactId>
@@ -321,7 +317,7 @@
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-core</artifactId>
-		    <version>3.2.5.RELEASE</version>
+		    <version>3.2.4.RELEASE</version>
 		</dependency>
        <!--  <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -336,6 +332,16 @@
             <scope>provided</scope>
         </dependency>
          -->
+       <dependency>
+       	<groupId>com.tencent</groupId>
+       	<artifactId>wxpay-scanpay-java-sdk</artifactId>
+       	<version>1.0</version>
+       </dependency>
+       <dependency>
+       	<groupId>com.alibaba.demo</groupId>
+       	<artifactId>trade</artifactId>
+       	<version>1.0</version>
+       </dependency>
 	</dependencies>
 	<build>
 		<resources>

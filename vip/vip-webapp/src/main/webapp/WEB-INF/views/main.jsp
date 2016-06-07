@@ -55,10 +55,10 @@
 				text : '修改',
 				handler : function() {
 					if ($('#passwordDialog form').form('validate')) {
-						$.post(sy.contextPath + '/base/syuser!doNotNeedSecurity_updateCurrentPwd.sy', {
-							'data.pwd' : $('#pwd').val()
+						$.post(sy.contextPath + '/busizz/initUserPwd', {
+							'password' : $('#pwd').val()
 						}, function(result) {
-							if (result.success) {
+							if (result.ok) {
 								$.messager.alert('提示', '密码修改成功！', 'info');
 								$('#passwordDialog').dialog('close');
 							}
@@ -153,7 +153,7 @@
 </script>
 </head>
 <body id="mainLayout" class="easyui-layout">
-	<div data-options="region:'north',href:'${ctx }/layout/north.jsp'" style="height: 70px; overflow: hidden;" class="logo"></div>
+	<div data-options="region:'north',href:'${ctx }/layout/north.jsp'" style="height: 35px; overflow: hidden;background-color: #FAFAFA" ></div>
 	<div data-options="region:'west',href:'',split:true" title="导航" style="width: 200px; padding: 10px;">
 		<ul id="mainMenu"></ul>
 	</div>

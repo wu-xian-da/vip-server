@@ -10,6 +10,11 @@ package com.jianfei.core.service.thirdpart.impl;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +36,9 @@ import com.github.pagehelper.PageHelper;
 import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.service.stat.ArchiveManager;
+import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
+import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.tencent.protocol.native_protocol.NativePayReqData;
 
 /**
@@ -52,6 +60,12 @@ public class AlipayManagerImplTest {
 	//private AlipayPayManagerImpl alipayManagerImpl;
 	@Autowired 
 	WechatPayManagerImpl wechatiPayManager;
+	@Autowired 
+	AirportEasyManager airportEasyManager;
+	@Autowired 
+	ArchiveManagerImpl archiveManagerImpl;
+	@Autowired
+	YeePayManagerImpl yeepayManager;
 	
 	@Test
 	public void testGet() {
@@ -69,6 +83,126 @@ public class AlipayManagerImplTest {
 		PreCreateResult result = wechatiPayManager.tradePrecreate(req);
 		result.toString();
 		//assertEquals("0", result.getCode());
+	}
+	
+	@Test
+	public void testKonggang_getcardcode(){
+		try {
+			airportEasyManager.getCardCode("1234231");
+		} catch (UnrecoverableKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testKonggang_activeCard(){
+		try {
+			airportEasyManager.activeVipCard("07919037739", "13900000000", "leo");
+		} catch (UnrecoverableKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testKonggang_disabledVipCard(){
+		try {
+			airportEasyManager.disabledVipCard("101100");
+		} catch (UnrecoverableKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testKonggang_getVipCardUseInfo(){
+		try {
+			airportEasyManager.getVipCardUseInfo();
+		} catch (UnrecoverableKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testKonggang_sendConfirmInfo(){
+		try {
+			airportEasyManager.sendConfirmInfo("121212");
+		} catch (UnrecoverableKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void test_konggang_schedule(){
+		archiveManagerImpl.checkinDataSchedule();
+	}
+	
+	@Test
+	public void test_yeepay_queryorder(){
+		yeepayManager.tradeQuery("10001");
 	}
 
 }

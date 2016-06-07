@@ -482,6 +482,11 @@ public class PayController {
 	    }
     }
     
+    /**
+     * 支付宝通知回调接口
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/alipay_notify")
     public void alipayNotify(HttpServletRequest request,HttpServletResponse response) {
     	String send = "";//获取请求的报文

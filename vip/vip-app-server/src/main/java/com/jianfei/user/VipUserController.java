@@ -59,7 +59,7 @@ public class VipUserController {
     @ResponseBody
     public BaseMsgInfo getUser(@RequestParam(value = "phone", required = true) String phone
     ) {
-        AppCustomer appCustomer = vipUserManager.getUser(phone);
+        AppCustomer appCustomer = vipUserManager.getUserDetail(phone);
         return BaseMsgInfo.success(appCustomer);
     }
 
@@ -88,4 +88,16 @@ public class VipUserController {
         return BaseMsgInfo.success(consumeManager.getConsumesByVipNo(vipCardNo));
     }
 
+    /**
+     * VIP 用户信息更新
+     *
+     * @return
+     */
+    @RequestMapping(value = "/userFeedbackInfo")
+    @ResponseBody
+    public BaseMsgInfo userFeedbackInfo(@RequestParam(value = "phone", required = true) String phone,
+                                        @RequestParam(value = "content", required = true) String content
+    ) {
+        return vipUserManager.sendFeedBackInfo(phone, content);
+    }
 }

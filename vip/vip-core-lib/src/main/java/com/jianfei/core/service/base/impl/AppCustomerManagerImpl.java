@@ -129,8 +129,7 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 	 */
 	@Override
 	public List<Map<String, Object>> postInfo(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return appCustomerMapper.postInfo(id);
 	}
 
 	/*
@@ -178,11 +177,11 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 		if (!CollectionUtils.isEmpty(postInfo)) {
 			model.addAttribute("postInfo", postInfo);
 		}
-		List<Map<String, Object>> backMoneyInfo = postInfo(id);
+		List<Map<String, Object>> backMoneyInfo = backMoneyInfo(id);
 		if (!CollectionUtils.isEmpty(backMoneyInfo)) {
 			model.addAttribute("backMoneyInfo", backMoneyInfo);
 		}
-		List<Map<String, Object>> vipCardRescordInfo = postInfo(id);
+		List<Map<String, Object>> vipCardRescordInfo = vipCardRescordInfo(id);
 		if (!CollectionUtils.isEmpty(vipCardRescordInfo)) {
 			model.addAttribute("vipCardRescordInfo", vipCardRescordInfo);
 		}

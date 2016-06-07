@@ -7,6 +7,11 @@
  */
 package com.jianfei.core.service.stat.impl;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.cache.CacheCons;
@@ -29,8 +35,11 @@ import com.jianfei.core.common.cache.CacheCons.Sys;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.dto.AirportEasyUseInfo;
 import com.jianfei.core.mapper.ArchiveMapper;
+import com.jianfei.core.service.order.ConsumeManager;
 import com.jianfei.core.service.stat.ArchiveManager;
+import com.jianfei.core.service.thirdpart.AirportEasyManager;
 
 /**
  *
@@ -47,6 +56,11 @@ public class ArchiveManagerImpl implements ArchiveManager {
 
 	@Autowired
 	private ArchiveMapper archiveMapper;
+	@Autowired
+	private AirportEasyManager airportEasyManager;
+	@Autowired
+	ConsumeManager consumeManager;
+	
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
@@ -275,5 +289,47 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		map.put("text", text);
 		map.put("title", title == null ? "开卡数" : title.toString() + "开卡数");
 		return map;
+	}
+
+	
+	/**
+	 * 定时获取空港的核销数据
+	 * 每小时获取一次
+	 */
+	@Scheduled(cron = "0 0 * * * *")
+	public void checkinDataSchedule() {
+		logger.info("<<<<<<获取空港核销数据>>>>>>");
+		try {
+			AirportEasyUseInfo aeInfo = airportEasyManager.getVipCardUseInfo();
+			if (aeInfo != null){
+				airportEasyManager.sendConfirmInfo(aeInfo.getBatchNo());
+				List<AppConsume> clist = aeInfo.getConsumeList();
+				if (clist != null){
+					int size = aeInfo.getConsumeList().size();
+					for (int i=0;i<size;i++){
+						AppConsume appConsume = clist.get(i);
+						consumeManager.addConsume(appConsume);
+					}
+				}
+				
+			}
+			
+		} catch (UnrecoverableKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

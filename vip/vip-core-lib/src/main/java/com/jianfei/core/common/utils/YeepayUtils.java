@@ -1,5 +1,8 @@
 package com.jianfei.core.common.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +16,7 @@ public  class YeepayUtils {
 	* @return 生成新的带hamc节点的xml */
 	public static String hmacSign(String srcXml, String secKey) {
 		// xml 文档开始与结束部分,此部分不进行加密处理,在拼接时使用
-		String xmlNodeStartString = "<?xml version=\"1.0\" encoding=\"UTF- 8\"?><COD-MS>";
+		String xmlNodeStartString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><COD-MS>";
 		String xmlNodeEndString = "</COD-MS>";
 		// 需要加密的字符串 String md5String = "";
 		// 本次传送 xml 的 md5
@@ -61,5 +64,26 @@ public  class YeepayUtils {
 		Matcher m = p.matcher(content);
 		return m.replaceAll("");
 	}
-
+	
+    /**
+     * 获取一定长度的随机字符串
+     * @param length 指定字符串长度
+     * @return 一定长度的字符串
+     */
+    public static String getRandomStringByLength(int length) {
+        String base = "0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
+    }
+    
+    public static String genTranctionId(){
+    	return "dddddddd"+"COD414"+sdf.format(new Date())+getRandomStringByLength(10);
+    }
+    
+    public static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");  
 }
