@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO
@@ -103,6 +106,64 @@ public class OrderStaController {
             return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
         }
 
+    }
+    
+    /**
+     * 个人中心销售榜单获取接口
+     * @param uno 用户编号
+     * @param begin 开始时间
+     * @param end 结束时间
+     * @return
+     */
+    @RequestMapping(value="getSaleCurveByUserId")
+    @ResponseBody
+    public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value="uno") String uno,
+    		@RequestParam(value="begin") String begin,
+    		@RequestParam(value="end") String end){
+    	try {
+    		//接口入参
+    		Map<String,Object> reqMap = new HashMap<String,Object>();
+    		reqMap.put("uno",uno);
+    		reqMap.put("begin",begin);
+    		reqMap.put("end",end);
+    		
+    		List<Map<String,Object>> list = statManager.getSaleCurveByUserId(reqMap);
+            return BaseMsgInfo.success(list);
+		} catch (Exception e) {
+			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
+		}
+    }
+    
+    /**
+     * 销售榜单-详细图表接口
+     * @param uno
+     * @param areaId
+     * @param begin
+     * @param end
+     * @param airportId
+     * @return
+     */
+    @RequestMapping(value="getSticCardData")
+    @ResponseBody
+    public BaseMsgInfo getSticCardData(@RequestParam(value="uno") String uno,
+    		@RequestParam(value="areaId") String areaId,
+    		@RequestParam(value="begin") String begin,
+    		@RequestParam(value="end") String end,
+    		@RequestParam(value="airportId") String airportId){
+    	
+    	Map<String,Object> reqMap = new HashMap<String,Object>();
+    	try {
+    		//接口入参
+    		reqMap.put("uno",uno);
+    		reqMap.put("begin",begin);
+    		reqMap.put("end",end);
+    		
+    		List<Map<String,Object>> list = statManager.getSticCardData(reqMap);
+    		return BaseMsgInfo.success(list);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
+		}
     }
 
 }

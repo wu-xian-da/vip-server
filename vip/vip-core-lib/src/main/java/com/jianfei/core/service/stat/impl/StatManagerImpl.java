@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO
@@ -72,4 +73,22 @@ public class StatManagerImpl implements StatManager {
         PageInfo<ReturnCardDto> pageInfo = new PageInfo(list);
         return pageInfo;
     }
+    
+    /**
+     * 销售榜单-详细图表接口
+     */
+	@Override
+	public List<Map<String, Object>> getSticCardData(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * 个人中心销售榜单获取接口
+	 */
+	@Override
+	public List<Map<String, Object>> getSaleCurveByUserId(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
