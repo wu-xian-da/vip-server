@@ -200,7 +200,9 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Scheduled(cron = "0 58 23 * * ? ")
 	public void dailyOrderArchice() {
 		logger.info("开始执行订单归档任务...");
-		baseDailyExtract(selectOrderMaxDay());
+		baseDailyExtract(DateUtil.getCurrentTime());
+		dateProvinceIdRedisCache(DateUtil.getCurrentTime());
+		dateProvinceIdApportIds(DateUtil.getCurrentTime());
 	}
 
 	/*

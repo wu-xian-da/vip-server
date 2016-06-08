@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  *
  * @Description: TODO
@@ -207,5 +209,9 @@ public class DateUtil {
 		map.put("month", sdf2.format(cal.getTime()));
 		map.put("dataStr", map.get("year") + "年" + map.get("month") + "月");
 		return map;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(JSONObject.toJSONString(getDelayDate(1)));
 	}
 }

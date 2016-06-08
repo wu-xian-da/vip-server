@@ -2,25 +2,23 @@ package com.jianfei.order;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrderArchive;
-import com.jianfei.core.bean.SysAirport;
-import com.jianfei.core.bean.SysViproom;
-import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.dto.SalesRankingDto;
+import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
-import com.jianfei.core.service.order.impl.OrderManagerImpl;
+import com.jianfei.core.service.base.impl.BusizzManagerImpl;
+import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
-import com.jianfei.yeepay.PayController;
+import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -46,6 +44,12 @@ public class OrderStaController {
     private StatManagerImpl statManager;
     @Autowired
     private AriPortManagerImpl ariPortService;
+    @Autowired
+    private ArchiveManagerImpl archiveManager;
+    @Autowired
+    private SaleUserManagerImpl saleUserManager;
+    @Autowired
+	private BusizzManagerImpl busizzManagerImpl;
 
     /**
      * 分页获取
@@ -111,6 +115,26 @@ public class OrderStaController {
     }
     
     /**
+     * 根据省份id查询该省份下所有的机场
+     * @param provinceId
+     * @return
+     */
+    @RequestMapping("getAriPortListByProvinceId")
+    @ResponseBody
+    public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",required=true)String provinceId){
+    	try {
+    		Map<String,Object> map = new HashMap<String,Object>();
+    		map.put("pids", provinceId);
+    		//用户选择全国时，省份id号格式如下："provinceId1,provinceId2"
+			List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
+			return BaseMsgInfo.success(airPortList);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("根据省份id号查询该省份下所有的机场 异常",e);
+            return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
+		}
+    }
+    /**
      * 个人中心销售榜单获取接口
      * @param uno 用户编号
      * @param begin 开始时间
@@ -119,17 +143,28 @@ public class OrderStaController {
      */
     @RequestMapping(value="getSaleCurveByUserId")
     @ResponseBody
-    public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value="uno") String uno,
-    		@RequestParam(value="begin") String begin,
-    		@RequestParam(value="end") String end){
+    public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value="uno",required=true) String uno,
+    		@RequestParam(value="begin",required=true) String begin,
+    		@RequestParam(value="end",required=true) String end){
+    	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
     	try {
-    		//接口入参
-    		Map<String,Object> reqMap = new HashMap<String,Object>();
-    		reqMap.put("uno",uno);
-    		reqMap.put("begin",begin);
-    		reqMap.put("end",end);
+    		//1、从归档表中查询该业务员某个时间段内的销售业绩
+    		Map<String,Object> paraMap = new HashMap<String,Object>();
+    		paraMap.put("saleNo", uno);
+    		paraMap.put("beginTime", begin);
+    		paraMap.put("endTime", end);
+    		List<AppOrderArchive> listBycustomer = statManager.selectCharDataByUserId(paraMap);
+    		Map<String,Object> customerMap = new HashMap<String,Object>();
+    		customerMap.put("customer", listBycustomer);
+    		list.add(customerMap);
     		
-    		List<Map<String,Object>> list = statManager.getSaleCurveByUserId(reqMap);
+    		//2、业务人员所属省份该时间段内的平均开卡人数
+    		//2.1根据销售人员id获取该用户所属的省份id
+    		List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+    		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
+    		Map<String,Object> provinceMap = new HashMap<String,Object>();
+    		provinceMap.put("province", provinceList);
+    		list.add(provinceMap);
             return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
@@ -147,19 +182,67 @@ public class OrderStaController {
      */
     @RequestMapping(value="getSticCardData")
     @ResponseBody
-    public BaseMsgInfo getSticCardData(@RequestParam(value="uno") String uno,
-    		@RequestParam(value="areaId") String areaId,
-    		@RequestParam(value="begin") String begin,
-    		@RequestParam(value="end") String end,
-    		@RequestParam(value="airportId") String airportId){
+    public BaseMsgInfo getSticCardData(@RequestParam(value="uno",required=true) String uno,
+    		@RequestParam(value="areaId",defaultValue="", required=false) String areaId,
+    		@RequestParam(value="begin",required=true) String begin,
+    		@RequestParam(value="end",required=true) String end,
+    		@RequestParam(value="airportId",required=false,defaultValue="") String airportId){
     	
-    	Map<String,Object> reqMap = new HashMap<String,Object>();
+    	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
     	try {
-    		//接口入参
-    		reqMap.put("uno",uno);
-    		reqMap.put("begin",begin);
-    		reqMap.put("end",end);
-    		List<Map<String,Object>> list = statManager.getSticCardData(null,begin,end);
+    		//1日期-所管辖的省份当日开卡总数
+    		//1.1省份列表
+    		List<UserProvince> userProvinceList=new ArrayList<UserProvince>();
+    		//全国
+    		if(!areaId.equals("")){
+    			UserProvince userProvince = new UserProvince();
+    			userProvince.setProvinceId(areaId);
+    			userProvince.setUserId(uno);
+    			userProvinceList.add(userProvince);
+    		}else{
+    			userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+    		}
+    		
+    		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
+    		Map<String,Object> provinceMap = new HashMap<String,Object>();
+    		provinceMap.put("province", provinceList);
+    		list.add(provinceMap);
+    		
+    		//2场站-当日开卡总数
+    		//2.1组装一个省份+场站id列表
+    		List<Map<String,Object>> proIdApIdList = new ArrayList<Map<String,Object>>();
+    		if(!airportId.equals("")){
+    			Map<String,Object> map = new HashMap<String,Object>();
+    			map.put("pid", areaId);
+    			map.put("airportId", airportId);
+    			proIdApIdList.add(provinceMap);
+    		}else{
+    			if(!areaId.equals("")){//某个省下的所有的机场
+    				Map<String,Object> map = new HashMap<String,Object>();
+    				map.put("pids", areaId);
+    				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
+    				for(Map<String,Object> maps : airPortList){
+    					Map<String,Object> mapItem = new HashMap<String,Object>();
+    					mapItem.put("pid", areaId);
+    					mapItem.put("airportId", maps.get("aids"));
+    	    			proIdApIdList.add(provinceMap);
+    				}
+    			}else{//该业务人员管辖下的省份所有的机场
+    				Map<String,Object> map = new HashMap<String,Object>();
+    				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
+    				for(Map<String,Object> maps : airPortList){
+    					Map<String,Object> mapItem = new HashMap<String,Object>();
+    					mapItem.put("pid",maps.get("pid") );
+    					mapItem.put("airportId", maps.get("aids"));
+    	    			proIdApIdList.add(provinceMap);
+    				}
+    			}
+    		}
+    		List<Map<String,Object>> airPortList = statManager.getSticCardData(proIdApIdList,begin,end);
+    		Map<String,Object> airPortMap = new HashMap<String,Object>();
+    		airPortMap.put("airPort", airPortList);
+    		list.add(airPortMap);
+    		
     		return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -179,7 +262,6 @@ public class OrderStaController {
     	List <SalesRankingDto> result = statManager.salesRanking(uno, pid, airportId, begin, end, pageNo, pageSize);
     	return BaseMsgInfo.success(result);
     }
-
 }
 
 

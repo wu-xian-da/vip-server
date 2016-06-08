@@ -25,7 +25,7 @@ import com.jianfei.core.dto.UserProvince;
  */
 @MyBatisDao
 public interface BusizzMapper extends BaseMapper<User> {
-	User getUserByName(String loginName);
+	User getUserByCode(String code);
 
 	/**
 	 * list(获取业务员信息)

@@ -66,10 +66,10 @@
 			pagination : true,
 			singleSelect : true,
 			idField : 'id',
-			sortName : 'lmonth',
+			sortName : 'total',
 			sortOrder : 'desc',
-			pageSize : 10,
-			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+			pageSize : 20,
+			pageList : [ 20, 30, 40, 50],
 			frozenColumns : [ [ {
 				width : '100',
 				title : '工号',

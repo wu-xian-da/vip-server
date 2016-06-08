@@ -38,8 +38,7 @@ public class ArchiveMapperTest {
 
 	@Autowired
 	private ArchiveMapper archiveMapper;
-	@Autowired
-	private StatManagerImpl statManagerImpl;
+	
 
 	/**
 	 * Test method for
@@ -86,15 +85,5 @@ public class ArchiveMapperTest {
 		archiveMapper.baseDailyExtract(map);
 	}
 	
-	@Test
-	public void testchardata(){
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("saleNo", "3");
-		map.put("begintime", "2016-02-02");
-		map.put("endTime", "2016-05-20");
-		List<AppOrderArchive> list = statManagerImpl.selectCharDataByUserId(map);
-		for(AppOrderArchive a :list){
-			System.out.println(a);
-		}
-	}
+	
 }

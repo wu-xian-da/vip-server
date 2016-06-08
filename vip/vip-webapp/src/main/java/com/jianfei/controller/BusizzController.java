@@ -120,8 +120,9 @@ public class BusizzController extends BaseController {
 	@RequestMapping(value = "form")
 	public String from(User user, Model model) {
 		if (0 != user.getId()) {
+
 			List<Map<String, Object>> list = busizzManager
-					.listMap(new MapUtils.Builder().setKeyValue("id",
+					.selectMap(new MapUtils.Builder().setKeyValue("id",
 							user.getId()).build());
 			if (!CollectionUtils.isEmpty(list)) {
 				model.addAttribute("user", list.get(0));
