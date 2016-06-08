@@ -189,6 +189,12 @@ public class DateUtil {
 		return dateToString(date, "yyyy-MM-dd hh:mm:ss");
 	}
 
+	public static Map<String, Object> getCurrentTime() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("currentTime", dateToString(new Date(), "yyyy-MM-dd"));
+		return map;
+	}
+
 	public static Map<String, Object> getDelayDate(int putoff) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(cal.getTime());
