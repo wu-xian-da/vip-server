@@ -231,25 +231,10 @@
 	<select id="dateProvinceIdRedisCache" parameterType="java.util.Map"
 		resultType="java.util.Map">
 		<![CDATA[
-			SELECT
-				concat(#{currentTime},'$',A.pid) as cacheKey,A.bid,A.bsum, B.bsum,B.pcount,B.avgNum
-			FROM
-				(
-					SELECT
-						aoa.pid,
-						aoa.bid,
-						sum(aoa.order_num) as bsum
-					FROM
-						app_order_archive aoa
-						where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
-					GROUP BY
-						aoa.pid,
-						aoa.bid
-				) A
-			INNER JOIN (
 				SELECT
+					concat(#{currentTime},'$',pid) as cacheKey,
 					count(DISTINCT aoa.bid) AS pcount,
-					sum(aoa.order_num) AS bsum,
+					sum(aoa.order_num) AS total,
 					sum(aoa.order_num) / count(DISTINCT aoa.bid) AS avgNum,
 					aoa.pid
 				FROM
@@ -257,7 +242,6 @@
 					where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
 				GROUP BY
 					aoa.pid
-			) B ON A.pid = B.pid
 		]]>
 	</select>
 	<!--缓存 :key-> date+pid+airportId -->

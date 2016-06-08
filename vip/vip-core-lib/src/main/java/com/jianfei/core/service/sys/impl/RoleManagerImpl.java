@@ -103,7 +103,8 @@ public class RoleManagerImpl implements RoleManager {
 	 */
 	@Override
 	public MessageDto<String> updateRoleResource(Long id, String name,
-			String description, String ids, String url, String initPwd) {
+			String description, String ids, String url, String initPwd,
+			String roleType) {
 		MessageDto<String> dto = new MessageDto<String>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
@@ -113,6 +114,7 @@ public class RoleManagerImpl implements RoleManager {
 			role.setDtflag(GloabConfig.OPEN);
 			role.setUrl(url);
 			role.setInitPwd(initPwd);
+			role.setRoleType(roleType);
 			if (StringUtils.isEmpty(name)) {
 				return dto.setMsgBody("操作失败，请稍后重试...");
 			}
@@ -188,8 +190,11 @@ public class RoleManagerImpl implements RoleManager {
 		return roleMapper.selectRoleByUserId(id);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jianfei.core.service.sys.RoleManager#selectRoleById(java.lang.Long)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.sys.RoleManager#selectRoleById(java.lang.Long)
 	 */
 	@Override
 	public Map<String, Object> selectRoleById(Long id) {

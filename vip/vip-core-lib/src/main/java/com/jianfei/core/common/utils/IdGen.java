@@ -57,7 +57,7 @@ public class IdGen implements SessionIdGenerator {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(IdGen.uuid());
+		System.out.println(new java.util.Random().nextInt(1000000));
 		System.out.println(IdGen.uuid().length());
 
 	}

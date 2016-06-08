@@ -160,7 +160,7 @@ public class SalerUserController {
     
     @RequestMapping(value = "/photoUpdate")
     @ResponseBody
-    public String salePhotoUpdate(@RequestParam(value = "file", required = false) MultipartFile file) {
+    public BaseMsgInfo salePhotoUpdate(@RequestParam(value = "file", required = false) MultipartFile file) {
     	 if (!file.isEmpty()) {
     		 String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "//salesPhoto";
     		 String fileName = file.getOriginalFilename();
@@ -180,10 +180,10 @@ public class SalerUserController {
 				e.printStackTrace();
 			 }
 
-             return path + "/" + newFileName;
+             return BaseMsgInfo.success( path + "/" + newFileName);
 
          } else {
-             return "failed";
+             return  BaseMsgInfo.fail("失败",false);
          }
     }
     

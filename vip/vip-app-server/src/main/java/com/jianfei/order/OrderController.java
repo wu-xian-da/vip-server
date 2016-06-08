@@ -64,8 +64,7 @@ public class OrderController {
 		}
 		if (type == null)
 			return BaseMsgInfo.fail("");
-		/* String url= orderManager.getPayUrl(orderId,type); */
-		String url = "www.baidu.com";
+		String url= orderManager.getPayUrl(orderId,type);
 		return BaseMsgInfo.success(url);
 	}
 

@@ -39,11 +39,18 @@ public class BaseMsgInfo {
     public static BaseMsgInfo fail(Object data){
         BaseMsgInfo baseMsgInfo=new BaseMsgInfo();
         baseMsgInfo.setCode(-1);
-        baseMsgInfo.setMsg("fail");
+        baseMsgInfo.setMsg("失败");
         baseMsgInfo.setData(data);
         return baseMsgInfo;
     }
 
+    public static BaseMsgInfo fail(String msg,Object data){
+        BaseMsgInfo baseMsgInfo=new BaseMsgInfo();
+        baseMsgInfo.setCode(-1);
+        baseMsgInfo.setMsg(msg);
+        baseMsgInfo.setData(data);
+        return baseMsgInfo;
+    }
     public int getCode() {
         return code;
     }
