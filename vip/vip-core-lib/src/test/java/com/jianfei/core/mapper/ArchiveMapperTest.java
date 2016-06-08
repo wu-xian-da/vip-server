@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.service.stat.impl.StatManagerImpl;
 
 /**
  *
@@ -36,6 +38,8 @@ public class ArchiveMapperTest {
 
 	@Autowired
 	private ArchiveMapper archiveMapper;
+	@Autowired
+	private StatManagerImpl statManagerImpl;
 
 	/**
 	 * Test method for
@@ -80,5 +84,17 @@ public class ArchiveMapperTest {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("yesterday", "2016-05-29");
 		archiveMapper.baseDailyExtract(map);
+	}
+	
+	@Test
+	public void testchardata(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("saleNo", "3");
+		map.put("begintime", "2016-02-02");
+		map.put("endTime", "2016-05-20");
+		List<AppOrderArchive> list = statManagerImpl.selectCharDataByUserId(map);
+		for(AppOrderArchive a :list){
+			System.out.println(a);
+		}
 	}
 }

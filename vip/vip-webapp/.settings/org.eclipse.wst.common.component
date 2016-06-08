@@ -9,6 +9,5 @@
         </dependent-module>
         <property name="context-root" value="vip"/>
         <property name="java-output-path" value="/vip-webapp/target/classes"/>
-        <property name="context-root" value="vip"/>
     </wb-module>
 </project-modules>

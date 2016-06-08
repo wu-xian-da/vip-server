@@ -16,6 +16,7 @@ import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class StatManagerImpl implements StatManager {
     /**
      * 销售榜单-详细图表接口
      */
-	public List<Map<String, Object>> getSticCardData(Map<String, Object> map) {
+	public List<Map<String, Object>> getSticCardData(String uno, String begin,String end) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -117,7 +118,7 @@ public class StatManagerImpl implements StatManager {
 				//将json字符串转换为CharDate对象
 				CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 				mapItem.put("avgCardNum", charData.getAvgNum()=="" ? 0 : charData.getAvgNum());
-				mapItem.put("sumCardNum", charData.getBsum()=="" ? 0 : charData.getBsum());
+				
 			}
 			list.add(mapItem);
 		}
@@ -171,6 +172,15 @@ public class StatManagerImpl implements StatManager {
             e.printStackTrace();
         }
 		return days;
+	}
+	
+	/**
+	 *  根据业务人员id号查询某个时间段内的销售情况
+	 */
+	@Override
+	public List<AppOrderArchive> selectCharDataByUserId(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return appOrderArchiveMapper.selectCharDataByUserId(map);
 	}
 	
 }

@@ -54,4 +54,11 @@ public interface StatManager {
      */
     PageInfo<ReturnCardDto> pageReturnVipCardsByUserId(PageDto pageDto, String userId);
     
+    /**
+     * 根据业务人员id号查询某个时间段内的销售情况
+     * @param map
+     * @return
+     */
+    List<AppOrderArchive> selectCharDataByUserId(Map<String,Object> map);
+    
 }

@@ -7,6 +7,7 @@ import com.jianfei.core.dto.ReturnCardDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 @MyBatisDao
 public interface AppOrderArchiveMapper {
     /**
@@ -73,4 +74,11 @@ public interface AppOrderArchiveMapper {
      * @return
      */
     List<ReturnCardDto> selectReturnCardsByUserId(@Param("userId")String userId);
+    
+    /**
+     * 根据业务人员id号查询某个时间段内的销售情况
+     * @param map
+     * @return
+     */
+    List<AppOrderArchive> selectCharDataByUserId(Map<String,Object> map);
 }

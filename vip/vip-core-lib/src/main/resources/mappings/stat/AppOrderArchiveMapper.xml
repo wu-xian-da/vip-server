@@ -258,4 +258,15 @@ where file_id = #{fileId,jdbcType=INTEGER}
   <select id="selectReturnCardsByUserId" resultMap="ReturnResultMap" parameterType="java.lang.String" >
    SELECT o.order_time,c.customer_name,c.customer_phone,b.back_type FROM app_card_back b JOIN app_orders o ON b.order_id=o.order_id JOIN app_customer c ON o.customer_id=c.customer_id WHERE o.sale_no=#{userId,jdbcType=VARCHAR}
   </select>
+  
+  <!--根据业务人员id号查询某个时间段内的销售情况 -->
+  <select id="selectCharDataByUserId" resultMap="ReturnResultMap" parameterType="java.util.Map">
+  	select order_num,file_time from app_order_archive aoa where aoa.bid=#{saleNo}
+  	<if test="begintime!=null">
+    	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')>=  DATE_FORMAT(#{begintime}, '%Y-%m-%d')]]>
+    </if>
+    <if test="endTime!=null">
+    	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+    </if>
+  </select>
 </mapper>

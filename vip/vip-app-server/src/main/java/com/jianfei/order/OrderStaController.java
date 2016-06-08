@@ -2,6 +2,7 @@ package com.jianfei.order;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrderArchive;
+import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -9,6 +10,8 @@ import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
 import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
+import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +44,10 @@ public class OrderStaController {
     private AriPortManagerImpl ariPortService;
     @Autowired
     private ArchiveManagerImpl archiveManager;
+    @Autowired
+    private SaleUserManagerImpl saleUserManager;
+    @Autowired
+    private StatManagerImpl statManagerImpl;
 
     /**
      * 分页获取
@@ -111,17 +119,15 @@ public class OrderStaController {
      */
     @RequestMapping("getAriPortListByProvinceId")
     @ResponseBody
-    public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",defaultValue="",required=false)String provinceId){
+    public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",required=true)String provinceId){
     	try {
     		Map<String,Object> map = new HashMap<String,Object>();
-    		if(!provinceId.equals("")){
-    			map.put("pids", provinceId);
-    		}
+    		//用户选择全国时，省份id号格式如下："provinceId1,provinceId2"
 			List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
 			return BaseMsgInfo.success(airPortList);
 		} catch (Exception e) {
 			// TODO: handle exception
-			log.error("根据工号查询某人能查询哪些省份的机场 异常",e);
+			log.error("根据省份id号查询该省份下所有的机场 异常",e);
             return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
 		}
     }
@@ -137,9 +143,21 @@ public class OrderStaController {
     public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value="uno",required=true) String uno,
     		@RequestParam(value="begin",required=true) String begin,
     		@RequestParam(value="end",required=true) String end){
-    	
+    	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
     	try {
-    		List<Map<String,Object>> list = statManager.getSaleCurveByUserId(uno,begin,end);
+    		//1、从归档表中查询该业务员某个时间段内的销售业绩
+    		Map<String,Object> paraMap = new HashMap<String,Object>();
+    		paraMap.put("saleNo", uno);
+    		paraMap.put("begintime", begin);
+    		paraMap.put("endTime", end);
+    		List<AppOrderArchive> listBycustomer = statManagerImpl.selectCharDataByUserId(paraMap);
+    		Map<String,Object> customerMap = new HashMap<String,Object>();
+    		customerMap.put("customer", listBycustomer);
+    		list.add(customerMap);
+    		
+    		//2、业务人员所属省份该时间段内的平均开卡人数
+    		//2.1根据销售人员id获取该用户所属的省份id
+    		List<Map<String,Object>> list2 = statManager.getSaleCurveByUserId(uno,begin,end);
             return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
@@ -163,15 +181,10 @@ public class OrderStaController {
     		@RequestParam(value="end") String end,
     		@RequestParam(value="airportId") String airportId){
     	
-    	//接口入参
-    	Map<String,Object> reqMap = new HashMap<String,Object>();
+    	//1、areaId为空的时候代表全国
     	try {
-    		
-    		reqMap.put("uno",uno);
-    		reqMap.put("begin",begin);
-    		reqMap.put("end",end);
-    		
-    		List<Map<String,Object>> list = statManager.getSticCardData(reqMap);
+    		//2、areaId不为空的时候
+    		List<Map<String,Object>> list = statManager.getSticCardData(areaId,begin,end);
     		return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			// TODO: handle exception
