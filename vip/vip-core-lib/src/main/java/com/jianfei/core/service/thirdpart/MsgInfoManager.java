@@ -41,4 +41,10 @@ public interface MsgInfoManager {
      */
     String sendAndGetValidateCode(String phone, MsgType msgType);
 
+    /**
+     * 获得发送的短信验证码
+     * @param phone
+     */
+    String getValidateCode(String phone, MsgType msgType);
+
 }

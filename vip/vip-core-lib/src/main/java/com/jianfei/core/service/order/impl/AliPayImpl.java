@@ -4,6 +4,7 @@ import com.alipay.demo.trade.model.GoodsDetail;
 import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.service.order.PayManager;
+import com.jianfei.core.service.thirdpart.ThirdPayManager;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -43,10 +43,34 @@ public class MsgInfoController {
             msgType = MsgType.BACK_CARD;
         }
         if (msgType == null)
-            return BaseMsgInfo.fail("");
+            return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
 
         boolean flag = msgInfoManager.sendValidateCode(phone, msgType);
         return BaseMsgInfo.success(flag);
+    }
+
+    /**
+     * 给用户发送登录验证码
+     *
+     */
+    @RequestMapping(value = "/getTelCode")
+    @ResponseBody
+    public BaseMsgInfo getTelCode(@RequestParam(value = "phone", required = true) String phone,
+                                   @RequestParam(value = "type", required = true) String type
+    ) {
+        MsgType msgType = null;
+        if (MsgType.REGISTER.getName().equals(type)) {
+            msgType = MsgType.REGISTER;
+        } else if (MsgType.LOGIN.getName().equals(type)) {
+            msgType = MsgType.LOGIN;
+        } else if (MsgType.BACK_CARD.getName().equals(type)) {
+            msgType = MsgType.BACK_CARD;
+        }
+        if (msgType == null)
+            return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
+
+        String code = msgInfoManager.getValidateCode(phone, msgType);
+        return BaseMsgInfo.success(code);
     }
 
 
