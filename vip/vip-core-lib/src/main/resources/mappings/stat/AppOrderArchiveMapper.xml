@@ -231,7 +231,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
     select
     <include refid="Base_Column_List" />
     from app_order_archive
-    where id = #{userId,jdbcType=VARCHAR} ORDER BY `year`,`month`,`day`
+    where bid = #{userId,jdbcType=VARCHAR} ORDER BY `year`,`month`,`day`
   </select>
 
 
@@ -258,4 +258,26 @@ where file_id = #{fileId,jdbcType=INTEGER}
   <select id="selectReturnCardsByUserId" resultMap="ReturnResultMap" parameterType="java.lang.String" >
    SELECT o.order_time,c.customer_name,c.customer_phone,b.back_type FROM app_card_back b JOIN app_orders o ON b.order_id=o.order_id JOIN app_customer c ON o.customer_id=c.customer_id WHERE o.sale_no=#{userId,jdbcType=VARCHAR}
   </select>
+  
+  
+  <resultMap id="SalesRankingMap" type="com.jianfei.core.dto.SalesRankingDto">
+    <id column="bid" jdbcType="VARCHAR" property="uno" />
+    <result column="photo" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="bname" jdbcType="VARCHAR" property="bname" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="order_num" jdbcType="INTEGER" property="amout" />
+  </resultMap>
+  <select id="salesRanking" resultMap="SalesRankingMap" parameterType="java.util.Map" >
+  	SELECT aoa.bid,aoa.photo,aoa.bname,aoa.sex,count(aoa.order_num) as order_num FROM app_order_archive aoa 
+	WHERE  <![CDATA[ aoa.file_time >= #{startTime} AND aoa.file_time <=  #{endTime} ]]>
+	<if test="pid != null">
+		AND aoa.pid = #{pid}
+	</if>
+	<if test="airport_id != null">
+		AND aoa.airport_id = #{airport_id}
+	</if>
+	GROUP BY aoa.bid
+	LIMIT #{pageStart},#{pageSize}
+  </select>
+  
 </mapper>

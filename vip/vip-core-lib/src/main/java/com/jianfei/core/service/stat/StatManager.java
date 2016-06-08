@@ -14,6 +14,7 @@ import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.GraphDto;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.SalesRankingDto;
 
 import java.util.List;
 import java.util.Map;
@@ -67,4 +68,16 @@ public interface StatManager {
      * @return
      */
     List<Map<String,Object>> getSaleCurveByUserId(Map<String,Object> map);
+    
+    /**
+     * 
+     * @param uno
+     * @param pid
+     * @param airportId
+     * @param begin
+     * @param end
+     * @param pageNo
+     * @param pageSize
+     */
+    public List<SalesRankingDto> salesRanking(String uno,String  pid,String airportId,String begin,String end,int pageNo,int pageSize);
 }

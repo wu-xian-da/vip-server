@@ -4,9 +4,12 @@ import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.persistence.MyBatisDao;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.SalesRankingDto;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 @MyBatisDao
 public interface AppOrderArchiveMapper {
     /**
@@ -73,4 +76,11 @@ public interface AppOrderArchiveMapper {
      * @return
      */
     List<ReturnCardDto> selectReturnCardsByUserId(@Param("userId")String userId);
+    
+    /**
+     * 销售榜单
+     * @param param
+     * @return
+     */
+    public List<SalesRankingDto> salesRanking(Map<String, Object> param);
 }

@@ -20,3 +20,4 @@ target/
 temp/data/
 *.csv
 *.txt
+/target/

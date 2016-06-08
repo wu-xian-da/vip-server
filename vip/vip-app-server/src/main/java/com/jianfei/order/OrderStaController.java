@@ -1,31 +1,26 @@
 package com.jianfei.order;
 
-import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppOrderArchive;
-import com.jianfei.core.bean.SysAirport;
-import com.jianfei.core.bean.SysViproom;
-import com.jianfei.core.common.enu.PayType;
-import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.dto.BaseDto;
-import com.jianfei.core.dto.BaseMsgInfo;
-import com.jianfei.core.dto.ReturnCardDto;
-import com.jianfei.core.service.base.impl.AriPortManagerImpl;
-import com.jianfei.core.service.order.impl.OrderManagerImpl;
-import com.jianfei.core.service.stat.impl.StatManagerImpl;
-import com.jianfei.yeepay.PayController;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppOrderArchive;
+import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.BaseDto;
+import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.SalesRankingDto;
+import com.jianfei.core.service.base.impl.AriPortManagerImpl;
+import com.jianfei.core.service.stat.impl.StatManagerImpl;
 
 /**
  * TODO
@@ -164,6 +159,19 @@ public class OrderStaController {
 			// TODO: handle exception
 			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
 		}
+    }
+    
+    @RequestMapping(value="salesRanking")
+    @ResponseBody
+    public BaseMsgInfo salesRanking(@RequestParam(value="uno") String uno,
+    		@RequestParam(value="pid") String pid,
+    		@RequestParam(value="begin") String begin,
+    		@RequestParam(value="end") String end,
+    		@RequestParam(value="airportId") String airportId,
+    		@RequestParam(value="pageNo") int pageNo,
+    		@RequestParam(value="pageSize") int pageSize){
+    	List <SalesRankingDto> result = statManager.salesRanking(uno, pid, airportId, begin, end, pageNo, pageSize);
+    	return BaseMsgInfo.success(result);
     }
 
 }

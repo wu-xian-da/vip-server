@@ -8,14 +8,17 @@ import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.SalesRankingDto;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,5 +93,22 @@ public class StatManagerImpl implements StatManager {
 	public List<Map<String, Object>> getSaleCurveByUserId(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<SalesRankingDto> salesRanking(String uno, String pid,
+			String airportId, String begin, String end, int pageNo, int pageSize) {
+		Map<String,Object> param = new HashMap<String, Object>();
+		
+		param.put("pageStart", pageNo * pageSize);
+		param.put("pageSize", pageSize);
+		param.put("startTime", begin);
+		param.put("endTime", end);
+		if (airportId != null)
+			param.put("airport_id", airportId);
+		if (pid != null)
+			param.put("pid", pid);
+		
+		return appOrderArchiveMapper.salesRanking(param);
 	}
 }

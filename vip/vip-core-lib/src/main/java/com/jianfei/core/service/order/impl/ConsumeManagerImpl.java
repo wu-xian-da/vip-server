@@ -31,13 +31,14 @@ public class ConsumeManagerImpl implements ConsumeManager {
      * @param appConsume
      * @return
      */
+    
     @Override
-    public boolean addConsume(AppConsume appConsume) {
-      int num=  consumeMapper.insertSelective(appConsume);
-      return num == 1 ? true : false;
+    public boolean addConsume(AppConsume appConsume){
+      int num = consumeMapper.insertSelective(appConsume);
+      return num==1?true:false;
     }
-
-
+    
+    
     /**
      * 分页获取用户使用记录
      *
