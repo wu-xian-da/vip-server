@@ -89,10 +89,34 @@ public class StatManagerImpl implements StatManager {
     
     /**
      * 销售榜单-详细图表接口
+     * @throws ParseException 
      */
-	public List<Map<String, Object>> getSticCardData(String uno, String begin,String end) {
+	public List<Map<String, Object>> getSticCardData(List<Map<String,Object>> proIdApIdList, String begin,String end) throws ParseException {
 		// TODO Auto-generated method stub
-		return null;
+		int days = returnDays(begin,end);
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for(int index =0;index <= days; index ++){
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(sf.parse(begin));
+			calendar.add(Calendar.DATE, index);
+			String date = sf.format(calendar.getTime());
+			Map<String,Object> mapItem = new HashMap<String,Object>();
+			mapItem.put("date", date);
+			
+			for(int i =0 ;i <proIdApIdList.size(); i ++){
+				Object obj = JedisUtils.getObject(date+"$"+proIdApIdList.get(i).get("pid")+"$"+proIdApIdList.get(i).get("airportId"));
+				if(obj == null){
+					mapItem.put("cardNum",0);
+				}else{
+					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
+					mapItem.put("total", charData.getTotal());
+				}
+				
+			}
+			list.add(mapItem);
+		}
+		return list;
 	}
 	
 	/**

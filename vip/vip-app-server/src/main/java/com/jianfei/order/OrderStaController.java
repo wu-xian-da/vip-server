@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -184,16 +185,29 @@ public class OrderStaController {
      */
     @RequestMapping(value="getSticCardData")
     @ResponseBody
-    public BaseMsgInfo getSticCardData(@RequestParam(value="uno") String uno,
-    		@RequestParam(value="areaId") String areaId,
-    		@RequestParam(value="begin") String begin,
-    		@RequestParam(value="end") String end,
-    		@RequestParam(value="airportId") String airportId){
+    public BaseMsgInfo getSticCardData(@RequestParam(value="uno",required=true) String uno,
+    		@RequestParam(value="areaId",required=false) String areaId,
+    		@RequestParam(value="begin",required=true) String begin,
+    		@RequestParam(value="end",required=true) String end,
+    		@RequestParam(value="airportId",required=false) String airportId){
     	
-    	//1、areaId为空的时候代表全国
+    	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
     	try {
-    		//2、areaId不为空的时候
-    		List<Map<String,Object>> list = statManager.getSticCardData(areaId,begin,end);
+    		//日期-所管辖的省份当日开卡总数
+    		List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+    		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
+    		Map<String,Object> provinceMap = new HashMap<String,Object>();
+    		provinceMap.put("province", provinceList);
+    		list.add(provinceMap);
+    		
+    		//场站-当日开卡总数
+    		//组装一个省份+场站id列表
+    		List<Map<String,Object>> proIdApIdList = null;
+    		List<Map<String,Object>> airPortList = statManager.getSticCardData(proIdApIdList,begin,end);
+    		Map<String,Object> airPortMap = new HashMap<String,Object>();
+    		airPortMap.put("airPort", airPortList);
+    		list.add(airPortMap);
+    		
     		return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			// TODO: handle exception
