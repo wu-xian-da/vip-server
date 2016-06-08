@@ -7,7 +7,9 @@ import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
+import com.jianfei.core.service.base.impl.BusizzManagerImpl;
 import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
@@ -48,6 +50,8 @@ public class OrderStaController {
     private SaleUserManagerImpl saleUserManager;
     @Autowired
     private StatManagerImpl statManagerImpl;
+    @Autowired
+	private BusizzManagerImpl busizzManagerImpl;
 
     /**
      * 分页获取
@@ -157,7 +161,12 @@ public class OrderStaController {
     		
     		//2、业务人员所属省份该时间段内的平均开卡人数
     		//2.1根据销售人员id获取该用户所属的省份id
-    		List<Map<String,Object>> list2 = statManager.getSaleCurveByUserId(uno,begin,end);
+    		//***？？有点问题*****
+    		List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+    		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
+    		Map<String,Object> provinceMap = new HashMap<String,Object>();
+    		provinceMap.put("province", provinceList);
+    		list.add(provinceMap);
             return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");

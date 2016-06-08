@@ -22,6 +22,7 @@ import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.mapper.BusizzMapper;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.BusizzManager;
@@ -195,5 +196,14 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	@Override
 	public List<Map<String, Object>> selectMap(Map<String, Object> map) {
 		return busizzMaapper.selectMap(map);
+	}
+	
+	/**
+	 * 根据业务人员id获取所属省份id
+	 */
+	@Override
+	public List<UserProvince> getProvinceIdByUserId(Integer uNo) {
+		// TODO Auto-generated method stub
+		return busizzMaapper.getProvinceIdByUserId(uNo);
 	}
 }

@@ -13,6 +13,7 @@ import com.jianfei.core.dto.CharData;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
@@ -95,10 +96,10 @@ public class StatManagerImpl implements StatManager {
 	}
 	
 	/**
-	 * 个人中心销售榜单获取接口
+	 * 个人中心销售榜单获取接口-key:日期+省份
 	 * @throws ParseException 
 	 */
-	public List<Map<String, Object>> getSaleCurveByUserId(String uno, String begin,String end) throws ParseException {
+	public List<Map<String, Object>> getSaleCurveByUserId(List<UserProvince> UserProvinceList, String begin,String end) throws ParseException {
 		// TODO Auto-generated method stub
 		int days = returnDays(begin,end);
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -108,18 +109,23 @@ public class StatManagerImpl implements StatManager {
 			calendar.setTime(sf.parse(begin));
 			calendar.add(Calendar.DATE, index);
 			String date = sf.format(calendar.getTime());
-			Object obj = JedisUtils.getObject(date+"$"+uno);
 			Map<String,Object> mapItem = new HashMap<String,Object>();
 			mapItem.put("date", date);
-			if(obj == null){
-				mapItem.put("avgCardNum", 0);
-				mapItem.put("sumCardNum", 0);
-			}else{
-				//将json字符串转换为CharDate对象
-				CharData charData = JSON.parseObject(obj.toString(), CharData.class);
-				mapItem.put("avgCardNum", charData.getAvgNum()=="" ? 0 : charData.getAvgNum());
-				
+			
+			float sum=0;
+			//计算多个省份某天的平均值
+			for(int i =0 ;i <UserProvinceList.size(); i ++){
+				Object obj = JedisUtils.getObject(date+"$"+UserProvinceList.get(i).getProvinceId());
+				if(obj == null){
+					sum +=0;
+				}else{
+					//将json字符串转换为CharDate对象
+					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
+					sum += Float.parseFloat(charData.getAvgNum());
+				}
 			}
+			//多个省份的平均开卡数
+			mapItem.put("avgNum", sum/UserProvinceList.size());
 			list.add(mapItem);
 		}
 		return list;
