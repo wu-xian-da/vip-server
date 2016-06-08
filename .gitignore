@@ -22,3 +22,4 @@ temp/data/
 *.iml
 .idea
 logs
+log4j.properties

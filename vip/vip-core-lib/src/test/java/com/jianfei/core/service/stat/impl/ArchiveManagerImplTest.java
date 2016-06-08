@@ -35,7 +35,8 @@ import com.jianfei.core.service.stat.ArchiveManager;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:persistence.xml" })
+@ContextConfiguration(locations = { "classpath:persistence.xml",
+		"classpath:spring-context-jedis.xml" })
 @Transactional
 public class ArchiveManagerImplTest {
 
@@ -119,18 +120,29 @@ public class ArchiveManagerImplTest {
 	}
 
 	@Test
-	public void testSelectOrderMaxDay() {
-		Map<String, Object> map = archiveManager.selectOrderMaxDay();
-		System.out.println(map.get("maxTime"));
-	}
-
-	@Test
 	public void testDateProvinceIdRedisCache() {
+		Map<String, Object> mapCon = new HashMap<String, Object>();
+		mapCon.put("currentTime", "2016-04-09");
 		List<Map<String, Object>> maps = archiveManager
-				.dateProvinceIdRedisCache(archiveManager.selectOrderMaxDay());
+				.dateProvinceIdRedisCache(mapCon);
 		for (Map<String, Object> map : maps) {
 			System.out.println(JSONObject.toJSONString(map));
 		}
+	}
+
+	@Test
+	public void testDateProvinceIdApportIds() {
+		Map<String, Object> mapCon = new HashMap<String, Object>();
+		mapCon.put("currentTime", "2016-04-09");
+		List<Map<String, Object>> maps = archiveManager
+				.dateProvinceIdApportIds(mapCon);
+	}
+
+	@Test
+	public void testSelectAirportByProvinceIds() {
+		List<Map<String, Object>> maps = archiveManager
+				.selectAirportByProvinceIds(new MapUtils.Builder().setKeyValue("pids", "110").build());
+		System.out.println(JSONObject.toJSONString(maps));
 	}
 
 	@Test

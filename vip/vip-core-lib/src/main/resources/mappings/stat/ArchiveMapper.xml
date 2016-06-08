@@ -226,12 +226,13 @@
 	</select>
 	<!-- *******************************************************华丽的分割线****************************************************************** -->
 
+
 	<!--缓存:key-> date+pid -->
 	<select id="dateProvinceIdRedisCache" parameterType="java.util.Map"
 		resultType="java.util.Map">
 		<![CDATA[
 			SELECT
-				A.bid,A.pid,A.bsum, B.bsum,B.pcount,B.avgNum
+				concat(#{currentTime},'$',A.pid) as cacheKey,A.bid,A.bsum, B.bsum,B.pcount,B.avgNum
 			FROM
 				(
 					SELECT
@@ -240,7 +241,7 @@
 						sum(aoa.order_num) as bsum
 					FROM
 						app_order_archive aoa
-						where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{maxDate}
+						where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
 					GROUP BY
 						aoa.pid,
 						aoa.bid
@@ -253,7 +254,7 @@
 					aoa.pid
 				FROM
 					app_order_archive aoa
-					where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{maxDate}
+					where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
 				GROUP BY
 					aoa.pid
 			) B ON A.pid = B.pid
@@ -263,9 +264,36 @@
 	<select id="dateProvinceIdApportIds" parameterType="java.util.Map"
 		resultType="java.util.Map">
 		<![CDATA[
-			select sum(aoa.order_num) from app_order_archive aoa 
-			where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{maxDate}
+			select concat(#{currentTime},"$",aoa.pid,'$',aoa.airport_id) as cacheKey, sum(aoa.order_num) as total from app_order_archive aoa 
+			where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
 			group by aoa.pid,aoa.airport_id 
+		]]>
+	</select>
+
+	<!-- 根据机场选择场站 -->
+	<select id="selectAirportByProvinceIds" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<![CDATA[
+			SELECT
+				city.CID as pid,
+				city.`name` as pname,
+				GROUP_CONCAT(DISTINCT sat.airport_id) as aids,
+				GROUP_CONCAT(distinct sat.airport_name) as anames
+			FROM sys_city city
+			inner join sys_airport sat on sat.province=city.CID
+			inner JOIN sys_user_airport sua on sat.airport_id=sua.airport_id
+			inner JOIN sys_users su on su.id=sua.sys_id 
+			where 1=1
+		]]>
+			<if test="pids!=null and pids!=''">
+				and city.CID in
+				<foreach item="item" index="index" collection="pids"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		<![CDATA[
+				group by city.CID,city.`name`
 		]]>
 	</select>
 

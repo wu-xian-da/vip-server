@@ -13,10 +13,12 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.cache.CacheCons.Sys;
 import com.jianfei.core.common.utils.DateUtil;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.AirportEasyUseInfo;
@@ -60,7 +63,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	private AirportEasyManager airportEasyManager;
 	@Autowired
 	ConsumeManager consumeManager;
-	
+
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
@@ -291,29 +294,27 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		return map;
 	}
 
-	
 	/**
-	 * 定时获取空港的核销数据
-	 * 每小时获取一次
+	 * 定时获取空港的核销数据 每小时获取一次
 	 */
 	@Scheduled(cron = "0 0 * * * *")
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
 		try {
 			AirportEasyUseInfo aeInfo = airportEasyManager.getVipCardUseInfo();
-			if (aeInfo != null){
+			if (aeInfo != null) {
 				airportEasyManager.sendConfirmInfo(aeInfo.getBatchNo());
 				List<AppConsume> clist = aeInfo.getConsumeList();
-				if (clist != null){
+				if (clist != null) {
 					int size = aeInfo.getConsumeList().size();
-					for (int i=0;i<size;i++){
+					for (int i = 0; i < size; i++) {
 						AppConsume appConsume = clist.get(i);
 						consumeManager.addConsume(appConsume);
 					}
 				}
-				
+
 			}
-			
+
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -330,8 +331,9 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -342,7 +344,20 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Override
 	public List<Map<String, Object>> dateProvinceIdRedisCache(
 			Map<String, Object> map) {
-		return archiveMapper.dateProvinceIdApportIds(map);
+
+		List<Map<String, Object>> maps = archiveMapper
+				.dateProvinceIdRedisCache(map);
+		if (CollectionUtils.isEmpty(maps)) {
+			logger.error(map.get("currentTime").toString() + ":按照省的归档数据为空。。。");
+			return maps;
+		}
+		for (Map<String, Object> m : maps) {
+			JedisUtils.setObject(m.get("cacheKey").toString(),
+					JSONObject.toJSONString(m), 0);
+			logger.info("按照省归档key:" + m.get("cacheKey").toString() + "  value:"
+					+ JSONObject.toJSONString(m));
+		}
+		return maps;
 	}
 
 	/*
@@ -355,6 +370,59 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Override
 	public List<Map<String, Object>> dateProvinceIdApportIds(
 			Map<String, Object> map) {
-		return archiveMapper.dateProvinceIdApportIds(map);
+		List<Map<String, Object>> maps = archiveMapper
+				.dateProvinceIdApportIds(map);
+
+		if (CollectionUtils.isEmpty(maps)) {
+			logger.error(map.get("currentTime").toString() + ":按照省和机场归档数据为空。。。");
+			return maps;
+		}
+		for (Map<String, Object> m : maps) {
+			JedisUtils.set(m.get("cacheKey").toString(),
+					JSONObject.toJSONString(m), 0);
+			logger.info("按照省和机场归档key:" + m.get("cacheKey").toString()
+					+ " value:" + JSONObject.toJSONString(m));
+		}
+		return maps;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAirportByProvinceIds(
+			Map<String, Object> map) {
+		Object pids = map.get("pids");
+		if (null != pids) {
+			List<String> list = Arrays.asList(StringUtils.split(
+					pids.toString(), GloabConfig.SPLIT));
+			map.put("pids", list);
+		}
+		List<Map<String, Object>> list = archiveMapper
+				.selectAirportByProvinceIds(map);
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> m : list) {
+			Map<String, Object> rsMap = new HashMap<String, Object>();
+			rsMap.put("pid", m.get("pid"));
+			rsMap.put("pname", m.get("pname"));
+			List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+			if (m.get("aids") == null || m.get("anames") == null) {
+				break;
+			}
+			String[] aidsArrays = StringUtils.split(m.get("aids").toString(),
+					GloabConfig.SPLIT);
+			String[] anamesArrays = StringUtils.split(m.get("anames")
+					.toString(), GloabConfig.SPLIT);
+			if (aidsArrays.length != anamesArrays.length) {
+				logger.error("根据省Id查询机场信息，机场ids和机场names数量不匹配...");
+			} else {
+				for (int i = 0; i < aidsArrays.length; i++) {
+					Map<String, Object> innerRsMap = new HashMap<String, Object>();
+					innerRsMap.put("aids", aidsArrays[i]);
+					innerRsMap.put("anames", anamesArrays[i]);
+					maps.add(innerRsMap);
+				}
+				rsMap.put("airPortList", maps);
+				result.add(rsMap);
+			}
+		}
+		return result;
 	}
 }

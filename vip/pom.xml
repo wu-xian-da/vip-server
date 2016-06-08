@@ -439,7 +439,7 @@
 				<!-- updload config -->
 				<upload.home.dir>D:\uploadPath</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>E:\mylogs\vip.log</log.home.dir>
+				<log.home.dir>E:\vip.log</log.home.dir>
 				<static.resource.server.address>http://192.168.110.9:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
