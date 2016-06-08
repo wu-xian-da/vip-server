@@ -9,10 +9,7 @@ import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.dto.BaseMsgInfo;
-import com.jianfei.core.dto.OrderAddInfoDto;
-import com.jianfei.core.dto.OrderDetailInfo;
-import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.dto.*;
 
 /**
  * 订单管理
@@ -159,7 +156,7 @@ public interface OrderManager {
      * @param payType 付款方式
      * @return
      */
-    String getPayUrl(String orderId, PayType payType);
+    BaseMsgInfo getPayUrl(String orderId, PayType payType);
 
     /**
      * 根据订单ID获取订单金额
