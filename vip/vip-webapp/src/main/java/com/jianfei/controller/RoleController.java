@@ -113,9 +113,10 @@ public class RoleController extends BaseController {
 			@RequestParam(value = "description", required = false) String description,
 			@RequestParam(value = "ids", required = false) String ids,
 			@RequestParam(value = "url") String url,
-			@RequestParam(value = "initPwd") String initPwd) {
+			@RequestParam(value = "initPwd") String initPwd,
+			@RequestParam(value = "roleType") String roleType) {
 		return roelManager.updateRoleResource(id, name, description, ids, url,
-				initPwd);
+				initPwd,roleType);
 	}
 
 }

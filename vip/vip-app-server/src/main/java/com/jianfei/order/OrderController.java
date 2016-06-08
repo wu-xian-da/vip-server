@@ -25,131 +25,140 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "order")
 public class OrderController {
 
-    @Autowired
-    private OrderManagerImpl orderManager;
+	@Autowired
+	private OrderManagerImpl orderManager;
 
+	/**
+	 * 添加订单信息
+	 * 
+	 * @param addInfoDto
+	 * @return
+	 */
+	@RequestMapping(value = "/addOrder")
+	@ResponseBody
+	public BaseMsgInfo addOrder(OrderAddInfoDto addInfoDto) {
+		return orderManager.addOrderAndUserInfo(addInfoDto);
+	}
 
-    /**
-     * 添加订单信息
-     * @param addInfoDto
-     * @return
-     */
-    @RequestMapping(value = "/addOrder")
-    @ResponseBody
-    public BaseMsgInfo addOrder(OrderAddInfoDto addInfoDto) {
-     return orderManager.addOrderAndUserInfo(addInfoDto);
-    }
+	/**
+	 * 生成支付URL接口 传入支付类型
+	 * 
+	 * @param orderId
+	 *            订单号
+	 * @param payType
+	 *            支付类型
+	 * @return
+	 */
+	@RequestMapping(value = "/payUrl", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo getPayUrl(
+			@RequestParam(value = "orderId", required = true) String orderId,
+			@RequestParam(value = "payType", required = true) int payType) {
+		PayType type = null;
+		if (PayType.WXPAY.getName() == payType) {
+			type = PayType.WXPAY;
+		} else if (PayType.ALIPAY.getName() == payType) {
+			type = PayType.ALIPAY;
+		} else if (PayType.BANKPAY.getName() == payType) {
+			type = PayType.BANKPAY;
+		}
+		if (type == null)
+			return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
+		return  orderManager.getPayUrl(orderId,type);
+	}
 
+	/**
+	 * 第三方支付确认收款接口
+	 * 
+	 * @param orderId
+	 *            订单号
+	 * @param payType
+	 *            支付类型
+	 * @return
+	 */
+	@RequestMapping(value = "/thirdPayState")
+	@ResponseBody
+	public BaseMsgInfo checkThirdPay(
+			@RequestParam(value = "orderId", required = true) String orderId,
+			@RequestParam(value = "payType", required = true) int payType) {
+		PayType type = null;
+		if (PayType.WXPAY.getName() == payType) {
+			type = PayType.WXPAY;
+		} else if (PayType.ALIPAY.getName() == payType) {
+			type = PayType.ALIPAY;
+		} else if (PayType.BANKPAY.getName() == payType) {
+			type = PayType.BANKPAY;
+		}
+		if (type == null)
+			return BaseMsgInfo.fail("");
 
-    /**
-     * 生成支付URL接口 传入支付类型
-     * @param orderId 订单号
-     * @param payType  支付类型
-     * @return
-     */
-    @RequestMapping(value = "/payUrl", method = RequestMethod.GET)
-    @ResponseBody
-    public BaseMsgInfo getPayUrl(@RequestParam(value = "orderId", required = true) String orderId,
-                                 @RequestParam(value = "payType", required = true) int payType
-    ) {
-        PayType type = null;
-        if (PayType.WXPAY.getName()==payType) {
-            type = PayType.WXPAY;
-        } else if (PayType.ALIPAY.getName()==payType) {
-            type = PayType.ALIPAY;
-        } else if (PayType.BANKPAY.getName()==payType) {
-            type = PayType.BANKPAY;
-        }
-        if (type == null)
-        return BaseMsgInfo.fail("");
-       /* String url=  orderManager.getPayUrl(orderId,type);*/
-        String url="www.baidu.com";
-        return BaseMsgInfo.success(url);
-    }
+		boolean flag = orderManager.checkThirdPay(orderId, type);
+		return BaseMsgInfo.success(flag);
+	}
 
-    /**
-     * 第三方支付确认收款接口
-     * @param orderId 订单号
-     * @param payType  支付类型
-     * @return
-     */
-    @RequestMapping(value = "/thirdPayState")
-    @ResponseBody
-    public BaseMsgInfo checkThirdPay(@RequestParam(value = "orderId", required = true) String orderId,
-                                 @RequestParam(value = "payType", required = true) int payType
-    ) {
-        PayType type = null;
-        if (PayType.WXPAY.getName()==payType) {
-            type = PayType.WXPAY;
-        } else if (PayType.ALIPAY.getName()==payType) {
-            type = PayType.ALIPAY;
-        } else if (PayType.BANKPAY.getName()==payType) {
-            type = PayType.BANKPAY;
-        }
-        if (type == null)
-            return BaseMsgInfo.fail("");
+	/**
+	 * 顾客现金刷卡确认接口
+	 * 
+	 * @param orderId
+	 *            订单号
+	 * @param payType
+	 *            支付类型
+	 * @return
+	 */
+	@RequestMapping(value = "/payState")
+	@ResponseBody
+	public BaseMsgInfo checkBuyerPay(
+			@RequestParam(value = "orderId", required = true) String orderId,
+			@RequestParam(value = "payType", required = true) int payType) {
+		// TODO 保存付款方式及已付款
+		return BaseMsgInfo.success(true);
+	}
 
-        boolean flag= orderManager.checkThirdPay(orderId,type);
-        return BaseMsgInfo.success(flag);
-    }
+	/**
+	 * 邮寄信息保存
+	 * 
+	 * @param appInvoice
+	 *            邮寄信息
+	 * @return
+	 */
+	@RequestMapping(value = "/orderMail")
+	@ResponseBody
+	public BaseMsgInfo addOrderMail(AppInvoice appInvoice) {
+		boolean flag = orderManager.addOrderMailInfo(appInvoice);
+		if (flag) {
+			return BaseMsgInfo.success(flag);
+		} else {
+			return BaseMsgInfo.fail(flag);
+		}
+	}
 
-    /**
-     * 顾客现金刷卡确认接口
-     * @param orderId 订单号
-     * @param payType  支付类型
-     * @return
-     */
-    @RequestMapping(value = "/payState")
-    @ResponseBody
-    public BaseMsgInfo checkBuyerPay(@RequestParam(value = "orderId", required = true) String orderId,
-                                     @RequestParam(value = "payType", required = true) int payType
-    ) {
-        //TODO 保存付款方式及已付款
-        return BaseMsgInfo.success(true);
-    }
+	/**
+	 * 用户使用记录查询接口
+	 * 
+	 * @param phone
+	 *            手机号
+	 * @param code
+	 *            验证码
+	 * @return
+	 */
+	@RequestMapping(value = "/vipCardUse")
+	@ResponseBody
+	public BaseMsgInfo VipCardUseAndOrder(
+			@RequestParam(value = "phone", required = true) String phone,
+			@RequestParam(value = "code", required = true) String code) {
+		return orderManager.getVipCardUseAndOrder(phone, code);
+	}
 
-    /**
-     * 邮寄信息保存
-     * @param appInvoice 邮寄信息
-     * @return
-     */
-    @RequestMapping(value = "/orderMail")
-    @ResponseBody
-    public BaseMsgInfo addOrderMail(AppInvoice appInvoice
-    ) {
-        boolean flag=  orderManager.addOrderMailInfo(appInvoice);
-        if(flag){
-            return BaseMsgInfo.success(flag);
-        }else {
-            return BaseMsgInfo.fail(flag);
-        }
-    }
-
-    /**
-     * 用户使用记录查询接口
-     * @param phone 手机号
-     * @param code  验证码
-     * @return
-     */
-    @RequestMapping(value = "/vipCardUse")
-    @ResponseBody
-    public BaseMsgInfo VipCardUseAndOrder (@RequestParam(value = "phone", required = true) String phone,
-                                     @RequestParam(value = "code", required = true) String code
-    ) {
-        return orderManager.getVipCardUseAndOrder(phone, code);
-    }
-
-
-    /**
-     * 保存用户退卡信息
-     * @param appCardBack
-     * @return
-     */
-    @RequestMapping(value = "/vipReturnInfo")
-    @ResponseBody
-    public BaseMsgInfo addVipReturnInfo (AppCardBack appCardBack
-    ) {
-        //// TODO: 2016/6/3 添加退卡信息
-        return BaseMsgInfo.success(true);
-    }
+	/**
+	 * 保存用户退卡信息
+	 * 
+	 * @param appCardBack
+	 * @return
+	 */
+	@RequestMapping(value = "/vipReturnInfo")
+	@ResponseBody
+	public BaseMsgInfo addVipReturnInfo(AppCardBack appCardBack) {
+		// // TODO: 2016/6/3 添加退卡信息
+		return BaseMsgInfo.success(true);
+	}
 }

@@ -118,6 +118,7 @@ public interface ArchiveManager {
 	 * @version 1.0.0
 	 */
 	void chargeHome(Model model, User user);
+
 	/******************************************* 分割线 **********************************************************/
 	/**
 	 * dateProvinceIdRedisCache(缓存key:date+provinceId)
@@ -136,5 +137,13 @@ public interface ArchiveManager {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> dateProvinceIdApportIds(Map<String, Object> map);
+
+	/**
+	 * 根据省份获取场站
+	 * 
+	 * @param map
+	 * @return
+	 */
+	List<Map<String, Object>> selectAirportByProvinceIds(Map<String, Object> map);
 
 }

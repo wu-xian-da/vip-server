@@ -57,7 +57,7 @@ public class JedisUtilsTest {
 	 */
 	@Test
 	public void testGetObject() {
-		fail("Not yet implemented");
+		System.out.println(JedisUtils.getObject("2016-04-09$1"));
 	}
 
 	/**

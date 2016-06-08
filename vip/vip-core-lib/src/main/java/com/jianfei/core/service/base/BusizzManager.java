@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.dto.UserProvince;
 
 /**
  *
@@ -72,4 +73,11 @@ public interface BusizzManager<T> {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> selectMap(Map<String, Object> map);
+	
+	/**
+	 * 根据用户id获取所属省份id
+	 * @param uNo
+	 * @return
+	 */
+	List<UserProvince> getProvinceIdByUserId(Integer uNo);
 }

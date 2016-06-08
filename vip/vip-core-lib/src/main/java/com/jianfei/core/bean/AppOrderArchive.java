@@ -418,4 +418,16 @@ public class AppOrderArchive {
     public void setDayweek(String dayweek) {
         this.dayweek = dayweek == null ? null : dayweek.trim();
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AppOrderArchive [fileId=" + fileId + ", bid=" + bid + ", fileTime=" + fileTime + ", orderNum="
+				+ orderNum + ", dflag=" + dflag + ", bname=" + bname + ", airportname=" + airportname + ", airportId="
+				+ airportId + ", year=" + year + ", month=" + month + ", day=" + day + ", province=" + province
+				+ ", dayweek=" + dayweek + "]";
+	}
+    
 }

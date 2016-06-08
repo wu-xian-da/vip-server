@@ -56,6 +56,7 @@ public class User extends BaseEntity {
 	private String roelNames;
 	private String ariPortIds;
 	private String ariPortNames;
+	private String roleTypes;
 
 	private String job;
 
@@ -322,6 +323,14 @@ public class User extends BaseEntity {
 		this.sex = sex;
 	}
 
+	public String getRoleTypes() {
+		return roleTypes;
+	}
+
+	public void setRoleTypes(String roleTypes) {
+		this.roleTypes = roleTypes;
+	}
+
 	/**
 	 * photo
 	 *
@@ -330,7 +339,8 @@ public class User extends BaseEntity {
 	 */
 
 	public String getPhoto() {
-		return photo == null ? null : GloabConfig.getConfig("static.resource.server.address") + photo;
+		return photo == null ? null : GloabConfig
+				.getConfig("static.resource.server.address") + photo;
 	}
 
 	/**

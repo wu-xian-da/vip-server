@@ -23,7 +23,13 @@
 		<result property="job" column="job" />
 		<result property="extraPasswd" column="extra_passwd" />
 	</resultMap>
-
+	
+	<!-- 业务人员id和所属省份id -->
+	<resultMap type="com.jianfei.core.dto.UserProvince" id="userProvinceMap">
+		<result property="id" column="userId" />
+		<result property="cid" column="provinceId" />
+	</resultMap>
+	
 	<select id="listMap" parameterType="java.util.Map" resultType="java.util.Map">
 		select * from (
 		<![CDATA[
@@ -159,10 +165,10 @@
 	</delete>
 
 	<update id="initpwd" parameterType="java.util.Map">
-		  UPDATE sys_users u SET u.extra_passwd= #{pwd},u.password=#{password}
-		   where u.id=#{id}
+		UPDATE sys_users u SET u.extra_passwd= #{pwd},u.password=#{password}
+		where u.id=#{id}
 	</update>
-	
+
 	<select id="selectMap" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT * FROM `sys_users` u
 		<where>
@@ -173,5 +179,17 @@
 				and DATE_FORMAT(create_time,'%Y-%m')=#{dateTime}
 			</if>
 		</where>
+	</select>
+
+	<!--根据业务人员id获取所属省份id -->
+	<select id="getProvinceIdByUserId" resultMap="userProvinceMap" parameterType="java.lang.Integer">
+		SELECT
+		city.cid,u.id
+		FROM
+		sys_users u
+		INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
+		INNER JOIN sys_airport sa ON sa.airport_id = sua.airport_id
+		INNER JOIN sys_city city ON city.CID = sa.province
+		where u.id=#{uNo}
 	</select>
 </mapper>

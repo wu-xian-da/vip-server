@@ -46,7 +46,7 @@ public class VipUserController {
                     "read write trust", "bearer", 43199);
             return BaseMsgInfo.success(vipTestVo);
         } else {
-            return BaseMsgInfo.fail("");
+            return new BaseMsgInfo().setCode(-1).setMsg("手机校验码错误");
         }
     }
 

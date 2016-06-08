@@ -53,10 +53,9 @@ public class ResourceController  {
 	@ResponseBody
 	public BaseMsgInfo airportProvince(	) {
 		List<BaseDto> stringList=ariPortService.getAriPortProvince();
-		stringList.add(0,new BaseDto("","全国"));
+		stringList.add(0,new BaseDto("","所有省份"));
 		return BaseMsgInfo.success(stringList);
 	}
-
 
 	/**
 	 * 根据省份ID获取机场列表

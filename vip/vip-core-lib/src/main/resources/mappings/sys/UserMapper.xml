@@ -22,6 +22,7 @@
 		<result property="ariPortNames" column="ariPorts.name" />
 		<result property="roleIds" column="roles.id" />
 		<result property="roelNames" column="roles.name" />
+		<result property="roleTypes" column="roles.roleType" />
 		<result property="extraPasswd" column="extra_passwd" />
 		<!-- <collection property="roles" ofType="Role"> <id property="id" column="roles.id" 
 			/> <id property="name" column="roles.name" /> </collection> -->
@@ -33,6 +34,7 @@
 			u.*,
 			GROUP_CONCAT(distinct r.`id`) AS 'roles.id',
 			GROUP_CONCAT(distinct r.`name`) AS 'roles.name',
+			GROUP_CONCAT(distinct r.`role_type`) AS 'roles.roleType',
 			GROUP_CONCAT(distinct ap.`airport_name`) AS 'ariPorts.name'
 		FROM
 			`sys_users` u

@@ -114,4 +114,12 @@ public interface ArchiveMapper {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> dateProvinceIdApportIds(Map<String, Object> map);
+
+	/**
+	 * 根据省份获取场站
+	 * 
+	 * @param map
+	 * @return
+	 */
+	List<Map<String, Object>> selectAirportByProvinceIds(Map<String, Object> map);
 }

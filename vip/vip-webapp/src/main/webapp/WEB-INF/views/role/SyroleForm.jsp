@@ -70,7 +70,7 @@
 <body>
 	<form method="post" class="form">
 		<fieldset>
-			<legend>角色基本信息</legend>
+			<legend>角色基本信息${role.roleType }</legend>
 			<input name="id" type="hidden" value="${role.id }" />
 			<input name="ids" type="hidden" id="ids" />
 			<table class="table" style="width: 100%;">
@@ -93,6 +93,18 @@
 					</td>
 					<th>初始密码:</th>
 					<td><input name=initPwd class="easyui-validatebox" data-options="required:true" value="${role.initPwd }"/></td>	
+				</tr>
+				<tr>
+					<th>角色标识:</th>
+					<td>
+						<select id="cc" class="easyui-combobox" name="roleType" style="width:200px;">
+							<option value="1"  <c:if test="${role.roleType=='1' }">selected="selected" </c:if> >经理</option>
+							<option value="2" <c:if test="${role.roleType=='2' }">selected="selected" </c:if>>主管</option>
+							<option value="3"  <c:if test="${role.roleType=='3' }">selected="selected" </c:if>>人力</option>
+							<option value="4"  <c:if test="${role.roleType=='4' }">selected="selected" </c:if>>客服</option>
+							<option value="5"  <c:if test="${role.roleType=='5' }">selected="selected" </c:if>>财务</option>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="4">

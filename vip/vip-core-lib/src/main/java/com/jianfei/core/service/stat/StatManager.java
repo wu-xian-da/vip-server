@@ -56,11 +56,11 @@ public interface StatManager {
     PageInfo<ReturnCardDto> pageReturnVipCardsByUserId(PageDto pageDto, String userId);
     
     /**
-     * 销售榜单-详细图表接口
+     * 根据业务人员id号查询某个时间段内的销售情况
      * @param map
      * @return
      */
-    List<Map<String,Object>> getSticCardData(Map<String,Object> map);
+    List<AppOrderArchive> selectCharDataByUserId(Map<String,Object> map);
     
     /**
      * 个人中心销售榜单获取接口

@@ -1,26 +1,33 @@
 package com.jianfei.order;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrderArchive;
+import com.jianfei.core.bean.SysAirport;
+import com.jianfei.core.bean.SysViproom;
+import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.dto.SalesRankingDto;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
+import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
+import com.jianfei.yeepay.PayController;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO

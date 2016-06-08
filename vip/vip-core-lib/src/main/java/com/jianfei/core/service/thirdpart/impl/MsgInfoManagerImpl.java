@@ -1,5 +1,7 @@
 package com.jianfei.core.service.thirdpart.impl;
 
+import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.jianfei.core.common.enu.MsgType;
@@ -18,7 +20,7 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
     /**
      * KEY前缀
      */
-    private static final String CODE="";
+    private static final String CODE="PHONE:";
 
     /**
      * 发送验证码
@@ -28,11 +30,14 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
      */
     @Override
     public boolean sendValidateCode(String phone, MsgType msgType) {
-        //TODO 1、根据配置规则生成验证码
+        // 1、根据配置规则生成验证码 6位
+        String code=String.valueOf(new java.util.Random().nextInt(1000000));
         //TODO 2、根据消息类型 查找相关模板
+
         //TODO 3、生成发送消息 发送
         //TODO 4、存储验证码 时间可配置
-        return false;
+        JedisUtils.setObject(CODE+phone+":"+msgType.getName(),code,5000000);
+        return true;
     }
 
     /**
@@ -45,9 +50,8 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
      */
     @Override
     public boolean validateSendCode(String phone, MsgType msgType, String code) {
-        //TODO Redis里面获取相关验证码
-
-        return true;
+      String validateCode =(String) JedisUtils.getObject(CODE+phone+":"+msgType.getName());
+        return code.equals(validateCode);
     }
 
     /**
@@ -70,6 +74,24 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
      */
     @Override
     public String sendAndGetValidateCode(String phone, MsgType msgType) {
-        return null;
+        // 1、根据配置规则生成验证码 6位
+        String code=String.valueOf(new java.util.Random().nextInt(1000000));
+        //TODO 2、根据消息类型 查找相关模板
+
+        //TODO 3、生成发送消息 发送
+        //TODO 4、存储验证码 时间可配置
+        JedisUtils.setObject(CODE+phone+":"+msgType.getName(),code,5000000);
+        return code;
+    }
+
+    /**
+     * 获得发送的短信验证码
+     *
+     * @param phone
+     * @param msgType
+     */
+    @Override
+    public String getValidateCode(String phone, MsgType msgType) {
+        return JedisUtils.getObject(CODE+phone+":"+msgType.getName()).toString();
     }
 }

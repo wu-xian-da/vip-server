@@ -12,6 +12,7 @@
 		<result column="dtflag" property="dtflag" />
 		<result column="priority" property="priority" />
 		<result column="initPwd" property="initPwd" />
+		<result column="role_type" property="roleType" />
 		<collection property="resources" ofType="Resource">
 			<id property="id" column="resources.id" />
 			<id property="name" column="resources.name" />
@@ -50,7 +51,8 @@
 				dtflag,
 				url,
 				priority,
-				initPwd
+				initPwd,
+				role_type
 			)
 			VALUES
 			(
@@ -61,7 +63,8 @@
 				#{dtflag},
 				#{url},
 				#{priority},
-				#{initPwd}
+				#{initPwd},
+				#{roleType}
 			)
 		]]>
 	</insert>
@@ -88,8 +91,11 @@
 		<if test="priority!=null">
 			,priority=#{priority}
 		</if>
-		<if test="initPwd!=null">
+		<if test="initPwd!=null and initPwd!=''">
 			,initPwd=#{initPwd}
+		</if>
+		<if test="roleType!=null and roleType!=''">
+			,role_type=#{roleType}
 		</if>
 		WHERE id = #{id}
 	</update>
