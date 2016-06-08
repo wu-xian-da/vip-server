@@ -63,9 +63,8 @@ public class OrderController {
 			type = PayType.BANKPAY;
 		}
 		if (type == null)
-			return BaseMsgInfo.fail("");
-		String url= orderManager.getPayUrl(orderId,type);
-		return BaseMsgInfo.success(url);
+			return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
+		return  orderManager.getPayUrl(orderId,type);
 	}
 
 	/**
