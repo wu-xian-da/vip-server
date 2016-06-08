@@ -7,6 +7,7 @@ import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
+import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +38,8 @@ public class OrderStaController {
     private StatManagerImpl statManager;
     @Autowired
     private AriPortManagerImpl ariPortService;
+    @Autowired
+    private ArchiveManagerImpl archiveManager;
 
     /**
      * 分页获取
@@ -101,6 +104,27 @@ public class OrderStaController {
 
     }
     
+    /**
+     * 根据省份id查询该省份下所有的机场
+     * @param provinceId
+     * @return
+     */
+    @RequestMapping("getAriPortListByProvinceId")
+    @ResponseBody
+    public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",defaultValue="",required=false)String provinceId){
+    	try {
+    		Map<String,Object> map = new HashMap<String,Object>();
+    		if(!provinceId.equals("")){
+    			map.put("pids", provinceId);
+    		}
+			List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
+			return BaseMsgInfo.success(airPortList);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("根据工号查询某人能查询哪些省份的机场 异常",e);
+            return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
+		}
+    }
     /**
      * 个人中心销售榜单获取接口
      * @param uno 用户编号
