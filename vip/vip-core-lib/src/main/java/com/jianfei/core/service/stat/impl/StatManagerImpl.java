@@ -13,11 +13,8 @@ import com.jianfei.core.dto.CharData;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.dto.ReturnCardDto;
-<<<<<<< HEAD
 import com.jianfei.core.dto.SalesRankingDto;
-=======
 import com.jianfei.core.dto.UserProvince;
->>>>>>> bb6826290772fad428a6773aac37bb3a6041ec38
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
@@ -27,14 +24,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
-=======
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
->>>>>>> bb6826290772fad428a6773aac37bb3a6041ec38
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -235,6 +229,13 @@ public class StatManagerImpl implements StatManager {
 			param.put("pid", pid);
 		
 		return appOrderArchiveMapper.salesRanking(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> getSaleCurveByUserId(
+			Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -24,7 +24,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 	static {
 		
 		//微信环境初始化
-		WXPay.initSDKConfiguration("5173af15bcd5ee99fb9ca5257ba4436a", "wxde0de2c3d9c40770", "1349068301", "", "apiclient_cert.p12", "1349068301");
+		WXPay.initSDKConfiguration("5173af15bcd5ee99fb9ca5257ba4436a", "wxde0de2c3d9c40770", "1349068301", "", "/Users/leoliu/Documents/apiclient_cert.p12", "1349068301");
 		
 	}
 	public WechatPayManagerImpl() {

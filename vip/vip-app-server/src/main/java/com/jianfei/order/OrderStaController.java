@@ -159,8 +159,7 @@ public class OrderStaController {
     		reqMap.put("uno",uno);
     		reqMap.put("begin",begin);
     		reqMap.put("end",end);
-    		
-    		List<Map<String,Object>> list = statManager.getSticCardData(reqMap);
+    		List<Map<String,Object>> list = statManager.getSticCardData(null,begin,end);
     		return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			// TODO: handle exception

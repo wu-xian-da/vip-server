@@ -73,13 +73,13 @@ public class HttpsRequest implements IServiceRequest{
     	try{
 	        keyStore = KeyStore.getInstance("PKCS12");
 	        String localPath = Configure.getCertLocalPath();
-	        File fff = new File(HttpsRequest.class.getClassLoader().getResource(localPath).getPath());
-	        instream = new FileInputStream(fff);//加载本地的证书进行https加密传输
+//	        File fff = new File(HttpsRequest.class.getClassLoader().getResource(localPath).getPath());
+//	        instream = new FileInputStream(fff);//加载本地的证书进行https加密传输
 
 //	        String curpath = HttpsRequest.class.getClassLoader().getResource("cert.properties").getPath();
 //	        String curpath2 = HttpsRequest.class.getClassLoader().getResource("").getPath();
 //	        String curpath3 = HttpsRequest.class.getResource("cert.properties").getPath();
-	        
+	        instream = new FileInputStream(new File(localPath));
             keyStore.load(instream, Configure.getCertPassword().toCharArray());//设置证书密码
         } catch (CertificateException e) {
             e.printStackTrace();
