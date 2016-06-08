@@ -2,27 +2,20 @@ package com.jianfei.order;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrderArchive;
-import com.jianfei.core.bean.SysAirport;
-import com.jianfei.core.bean.SysViproom;
-import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
-import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
-import com.jianfei.yeepay.PayController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,17 +110,12 @@ public class OrderStaController {
      */
     @RequestMapping(value="getSaleCurveByUserId")
     @ResponseBody
-    public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value="uno") String uno,
-    		@RequestParam(value="begin") String begin,
-    		@RequestParam(value="end") String end){
+    public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value="uno",required=true) String uno,
+    		@RequestParam(value="begin",required=true) String begin,
+    		@RequestParam(value="end",required=true) String end){
+    	
     	try {
-    		//接口入参
-    		Map<String,Object> reqMap = new HashMap<String,Object>();
-    		reqMap.put("uno",uno);
-    		reqMap.put("begin",begin);
-    		reqMap.put("end",end);
-    		
-    		List<Map<String,Object>> list = statManager.getSaleCurveByUserId(reqMap);
+    		List<Map<String,Object>> list = statManager.getSaleCurveByUserId(uno,begin,end);
             return BaseMsgInfo.success(list);
 		} catch (Exception e) {
 			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
@@ -151,9 +139,10 @@ public class OrderStaController {
     		@RequestParam(value="end") String end,
     		@RequestParam(value="airportId") String airportId){
     	
+    	//接口入参
     	Map<String,Object> reqMap = new HashMap<String,Object>();
     	try {
-    		//接口入参
+    		
     		reqMap.put("uno",uno);
     		reqMap.put("begin",begin);
     		reqMap.put("end",end);

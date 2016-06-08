@@ -319,7 +319,7 @@
 		    <artifactId>spring-security-core</artifactId>
 		    <version>3.2.4.RELEASE</version>
 		</dependency>
-       <!--  <dependency>
+       <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.3.5</version>
@@ -331,7 +331,7 @@
             <version>1.4.7</version>
             <scope>provided</scope>
         </dependency>
-         -->
+         
        <dependency>
        	<groupId>com.tencent</groupId>
        	<artifactId>wxpay-scanpay-java-sdk</artifactId>

@@ -11,6 +11,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath*:persistence.xml
+			classpath*:spring-context-jedis.xml
 		</param-value>
 	</context-param>
 
