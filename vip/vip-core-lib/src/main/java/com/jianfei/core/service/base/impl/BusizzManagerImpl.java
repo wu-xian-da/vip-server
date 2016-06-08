@@ -102,20 +102,21 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 		user.setExtraPasswd(new SimpleHash("md5", GloabConfig
 				.getConfig("defalut.passwd")).toString());
 		Long id = 0l;
-		if (!StringUtils.isEmpty(user.getName())) {
-			User u = busizzMaapper.getUserByName(StringUtils.trim(user
-					.getName()));
+		if (!StringUtils.isEmpty(user.getCode())) {
+			User u = busizzMaapper.getUserByCode(StringUtils.trim(user
+					.getCode()));
 			// 保存操作,用户名已经存在
 			if (null != u && 0 == user.getId()) {
-				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
+				return messageDto.setMsgBody("工号已经存在,请更换...");
 			} else if (null == u && 0 == user.getId()) {
 				// 保存用户
 				busizzMaapper.save(user);
-				User u2 = busizzMaapper.getUserByName(user.getName());
+				User u2 = busizzMaapper.getUserByCode(StringUtils.trim(user
+						.getCode()));
 				id = u2.getId();
 			} else if (u != null && user.getId() != u.getId()) {
 				// 更新操作
-				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
+				return messageDto.setMsgBody("工号已经存在,请更换...");
 			} else {
 				busizzMaapper.update(user);
 				id = user.getId();
