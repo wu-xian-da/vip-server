@@ -16,6 +16,12 @@
   <result column="province" jdbcType="VARCHAR" property="province" />
   <result column="dayweek" jdbcType="CHAR" property="dayweek" />
 </resultMap>
+
+<!--图表数据  -->
+<resultMap type="CharData" id="charDataMap">
+	<result column="order_num" property="total"/>
+	<result column="file_time" property="date"/>
+</resultMap>
 <sql id="Base_Column_List">
 <!--
   WARNING - @mbggenerated
@@ -260,10 +266,10 @@ where file_id = #{fileId,jdbcType=INTEGER}
   </select>
   
   <!--根据业务人员id号查询某个时间段内的销售情况 -->
-  <select id="selectCharDataByUserId" resultMap="ReturnResultMap" parameterType="java.util.Map">
+  <select id="selectCharDataByUserId" resultMap="charDataMap" parameterType="java.util.Map">
   	select order_num,file_time from app_order_archive aoa where aoa.bid=#{saleNo}
-  	<if test="begintime!=null">
-    	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')>=  DATE_FORMAT(#{begintime}, '%Y-%m-%d')]]>
+  	<if test="beginTime!=null">
+    	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')]]>
     </if>
     <if test="endTime!=null">
     	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>

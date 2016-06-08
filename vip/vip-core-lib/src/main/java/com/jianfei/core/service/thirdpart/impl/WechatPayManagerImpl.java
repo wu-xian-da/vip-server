@@ -14,7 +14,7 @@ import com.tencent.WXPay;
 import com.tencent.business.NativePayBusiness;
 import com.tencent.common.Signature;
 import com.tencent.common.Util;
-import com.tencent.protocol.native_protocol.NativeNotifyReq;
+//import com.tencent.protocol.native_protocol.NativeNotifyReq;
 import com.tencent.protocol.native_protocol.NativePayReqData;
 import com.tencent.protocol.native_protocol.NativePayResData;
 import com.tencent.protocol.native_query_protocol.NativePayQueryResData;
@@ -120,6 +120,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 	}
 	@Override
 	public String payNotify(String objStr) {
+		/*
 		NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(objStr, NativeNotifyReq.class);
 		String result="";
 		String signResult = Signature.getSign(req.toMap());
@@ -143,7 +144,8 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 			}
 		}else
 			result = buildResult("FAIL", "签名错误");
-		return result;
+		return result;*/
+		return "";
 	}
 	
 	public String buildResult(String returnCode,String returnMsg){

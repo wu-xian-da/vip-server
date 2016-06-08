@@ -21,7 +21,14 @@ import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.service.base.impl.BusizzManagerImpl;
-
+/**
+ * 业务人员
+ * @Description: TODO
+ * @author guo.jian   
+ * @Title: BusizzManagerImplTest.java
+ * @date 2016年6月8日 下午6:05:51 
+ * @Version 1.0.0
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml" })
 @Transactional

@@ -138,18 +138,23 @@ public class StatManagerImpl implements StatManager {
 			
 			float sum=0;
 			//计算多个省份某天的平均值
-			for(int i =0 ;i <UserProvinceList.size(); i ++){
-				Object obj = JedisUtils.getObject(date+"$"+UserProvinceList.get(i).getProvinceId());
-				if(obj == null){
-					sum +=0;
-				}else{
-					//将json字符串转换为CharDate对象
-					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
-					sum += Float.parseFloat(charData.getAvgNum());
+			if(UserProvinceList !=null && UserProvinceList.size()>1){
+				for(int i =0 ;i <UserProvinceList.size(); i ++){
+					Object obj = JedisUtils.getObject(date+"$"+UserProvinceList.get(i).getProvinceId());
+					if(obj == null){
+						sum +=0;
+					}else{
+						//将json字符串转换为CharDate对象
+						CharData charData = JSON.parseObject(obj.toString(), CharData.class);
+						sum += Float.parseFloat(charData.getAvgNum());
+					}
 				}
+				//多个省份的平均开卡数
+				mapItem.put("avgNum", sum/UserProvinceList.size());
+			}else{
+				mapItem.put("avgNum", 0);
 			}
-			//多个省份的平均开卡数
-			mapItem.put("avgNum", sum/UserProvinceList.size());
+			
 			list.add(mapItem);
 		}
 		return list;

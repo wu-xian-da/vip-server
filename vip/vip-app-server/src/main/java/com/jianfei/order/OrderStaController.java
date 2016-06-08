@@ -2,7 +2,6 @@ package com.jianfei.order;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrderArchive;
-import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -18,7 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,8 +47,6 @@ public class OrderStaController {
     private ArchiveManagerImpl archiveManager;
     @Autowired
     private SaleUserManagerImpl saleUserManager;
-    @Autowired
-    private StatManagerImpl statManagerImpl;
     @Autowired
 	private BusizzManagerImpl busizzManagerImpl;
 
@@ -127,6 +123,7 @@ public class OrderStaController {
     public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",required=true)String provinceId){
     	try {
     		Map<String,Object> map = new HashMap<String,Object>();
+    		map.put("pids", provinceId);
     		//用户选择全国时，省份id号格式如下："provinceId1,provinceId2"
 			List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
 			return BaseMsgInfo.success(airPortList);
@@ -153,16 +150,15 @@ public class OrderStaController {
     		//1、从归档表中查询该业务员某个时间段内的销售业绩
     		Map<String,Object> paraMap = new HashMap<String,Object>();
     		paraMap.put("saleNo", uno);
-    		paraMap.put("begintime", begin);
+    		paraMap.put("beginTime", begin);
     		paraMap.put("endTime", end);
-    		List<AppOrderArchive> listBycustomer = statManagerImpl.selectCharDataByUserId(paraMap);
+    		List<AppOrderArchive> listBycustomer = statManager.selectCharDataByUserId(paraMap);
     		Map<String,Object> customerMap = new HashMap<String,Object>();
     		customerMap.put("customer", listBycustomer);
     		list.add(customerMap);
     		
     		//2、业务人员所属省份该时间段内的平均开卡人数
     		//2.1根据销售人员id获取该用户所属的省份id
-    		//***？？有点问题*****
     		List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
     		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
     		Map<String,Object> provinceMap = new HashMap<String,Object>();
@@ -186,23 +182,61 @@ public class OrderStaController {
     @RequestMapping(value="getSticCardData")
     @ResponseBody
     public BaseMsgInfo getSticCardData(@RequestParam(value="uno",required=true) String uno,
-    		@RequestParam(value="areaId",required=false) String areaId,
+    		@RequestParam(value="areaId",defaultValue="", required=false) String areaId,
     		@RequestParam(value="begin",required=true) String begin,
     		@RequestParam(value="end",required=true) String end,
-    		@RequestParam(value="airportId",required=false) String airportId){
+    		@RequestParam(value="airportId",required=false,defaultValue="") String airportId){
     	
     	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
     	try {
-    		//日期-所管辖的省份当日开卡总数
-    		List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+    		//1日期-所管辖的省份当日开卡总数
+    		//1.1省份列表
+    		List<UserProvince> userProvinceList=new ArrayList<UserProvince>();
+    		//全国
+    		if(!areaId.equals("")){
+    			UserProvince userProvince = new UserProvince();
+    			userProvince.setProvinceId(areaId);
+    			userProvince.setUserId(uno);
+    			userProvinceList.add(userProvince);
+    		}else{
+    			userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+    		}
+    		
     		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
     		Map<String,Object> provinceMap = new HashMap<String,Object>();
     		provinceMap.put("province", provinceList);
     		list.add(provinceMap);
     		
-    		//场站-当日开卡总数
-    		//组装一个省份+场站id列表
-    		List<Map<String,Object>> proIdApIdList = null;
+    		//2场站-当日开卡总数
+    		//2.1组装一个省份+场站id列表
+    		List<Map<String,Object>> proIdApIdList = new ArrayList<Map<String,Object>>();
+    		if(!airportId.equals("")){
+    			Map<String,Object> map = new HashMap<String,Object>();
+    			map.put("pid", areaId);
+    			map.put("airportId", airportId);
+    			proIdApIdList.add(provinceMap);
+    		}else{
+    			if(!areaId.equals("")){//某个省下的所有的机场
+    				Map<String,Object> map = new HashMap<String,Object>();
+    				map.put("pids", areaId);
+    				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
+    				for(Map<String,Object> maps : airPortList){
+    					Map<String,Object> mapItem = new HashMap<String,Object>();
+    					mapItem.put("pid", areaId);
+    					mapItem.put("airportId", maps.get("aids"));
+    	    			proIdApIdList.add(provinceMap);
+    				}
+    			}else{//该业务人员管辖下的省份所有的机场
+    				Map<String,Object> map = new HashMap<String,Object>();
+    				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
+    				for(Map<String,Object> maps : airPortList){
+    					Map<String,Object> mapItem = new HashMap<String,Object>();
+    					mapItem.put("pid",maps.get("pid") );
+    					mapItem.put("airportId", maps.get("aids"));
+    	    			proIdApIdList.add(provinceMap);
+    				}
+    			}
+    		}
     		List<Map<String,Object>> airPortList = statManager.getSticCardData(proIdApIdList,begin,end);
     		Map<String,Object> airPortMap = new HashMap<String,Object>();
     		airPortMap.put("airPort", airPortList);

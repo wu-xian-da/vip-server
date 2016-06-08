@@ -25,9 +25,9 @@
 	</resultMap>
 	
 	<!-- 业务人员id和所属省份id -->
-	<resultMap type="com.jianfei.core.dto.UserProvince" id="userProvinceMap">
-		<result property="id" column="userId" />
-		<result property="cid" column="provinceId" />
+	<resultMap  id="userProvinceMap" type="UserProvince">
+		<result property="userId" column="id" />
+		<result property="provinceId" column="cid" />
 	</resultMap>
 	
 	<select id="listMap" parameterType="java.util.Map" resultType="java.util.Map">
@@ -42,6 +42,7 @@
 				u.phone,
 				count(ao.order_id) AS tmonth,
 				u.state,
+				u.job,
 				lmonth,
 				(lamonth + count(ao.order_id)) AS total
 			FROM
@@ -83,8 +84,8 @@
 		</if>
 
 	</select>
-	<select id="getUserByName" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where name =#{name} and user_type=0;
+	<select id="getUserByCode" resultMap="userRs" parameterType="String">
+		SELECT * from sys_users where code =#{code} and user_type=0;
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -170,17 +171,35 @@
 	</update>
 
 	<select id="selectMap" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT * FROM `sys_users` u
+		SELECT  `id`,
+			  `name`,
+			  `phone`,
+			  `state`,
+			  `entry_time` as entryTime ,
+			  `password`,
+			  `sex`,
+			  `photo`,
+			  `user_type` as userType,
+			  `login_name` as loginName,
+			  `create_time` as createdatetime,
+			  `update_time` as updatedatetime,
+			  `salt`,
+			  `dtflag`,
+			  `code`,
+			  `job`,
+			  `extra_passwd`  FROM `sys_users` u
 		<where>
+			<if test="id!=null and id!=''">
+				id=#{id}
+			</if>
 			<if test="dtflag!=null and dtflag!=''">
-				dtflag=#{dtflag}
+				and dtflag=#{dtflag}
 			</if>
 			<if test="dateTime!=null and dateTime!=''">
 				and DATE_FORMAT(create_time,'%Y-%m')=#{dateTime}
 			</if>
 		</where>
 	</select>
-
 	<!--根据业务人员id获取所属省份id -->
 	<select id="getProvinceIdByUserId" resultMap="userProvinceMap" parameterType="java.lang.Integer">
 		SELECT
