@@ -35,6 +35,8 @@ public class Role extends BaseEntity {
 
 	private List<Resource> resources = Lists.newArrayList(); // 拥有菜单列表
 
+	private String roleType;
+
 	public List<Resource> getResources() {
 		return resources;
 	}
@@ -95,6 +97,14 @@ public class Role extends BaseEntity {
 
 	public void setInitPwd(String initPwd) {
 		this.initPwd = initPwd;
+	}
+
+	public String getRoleType() {
+		return roleType;
+	}
+
+	public void setRoleType(String roleType) {
+		this.roleType = roleType;
 	}
 
 	/*
