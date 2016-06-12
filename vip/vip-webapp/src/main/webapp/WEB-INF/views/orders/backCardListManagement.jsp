@@ -34,7 +34,7 @@
 	
 				<div class="order-condition-item">
 					<select name="" id="applyTypeSelect">
-						<option value="3">全部申请途径</option>
+						<option value="">全部申请途径</option>
 						<option value="0">客服</option>
 						<option value="1">现场</option>
 						
@@ -79,8 +79,8 @@
 							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 							<th data-options="align:'center', field:'orderTime',width:100">申请日期</th>
 		
-							<th data-options="align:'center', field:'applyType',width:150">申请途径</th>
-							<th data-options="align:'center', field:'backType',width:100">退卡方式</th>
+							<th data-options="align:'center', field:'applyTypeName',width:150">申请途径</th>
+							<th data-options="align:'center', field:'backTypeName',width:100">退卡方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
 							<th data-options="align:'center', field:'orderStateName',width:100">状态</th>
 							<th data-options="align:'center', field:'operation',width:210">操作</th>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,7 @@
 					订单编号：<span>${order.order_id}</span>
 					</div>
 					<ul>
-						<li><label>日期：</label>${order.order_time}</li>
+						<li><label>开卡时间：</label><fmt:formatDate value="${order.order_time}" pattern="yyyy-MM-dd HH:mm:ss"/> </li>
 						<li><label>开卡场站：</label>${order.airport_name}</li>
 						<li><label>业务员：</label>${order.name}</li>
 						<li><label>业务员电话：</label>${order.phone}</li>
