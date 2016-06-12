@@ -158,7 +158,7 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public boolean updateOrderPayInfo(AppOrders addInfoDto) {
-        return false;
+		return appOrdersMapper.updateByPrimaryKeySelective(addInfoDto) < 0 ? false : true;
     }
 
     /**
@@ -364,7 +364,7 @@ public class OrderManagerImpl implements OrderManager {
 
 			 preCreateResult= aliPayManager.tradePrecreate(builder);
 		 }
-         if ("1".equals(preCreateResult.getCode())){
+         if ("0".equals(preCreateResult.getCode())){
 			 return BaseMsgInfo.success(preCreateResult.getQrUrl());
 		 }else {
 			 return new BaseMsgInfo().setCode(-1).setMsg(preCreateResult.getMsg());
