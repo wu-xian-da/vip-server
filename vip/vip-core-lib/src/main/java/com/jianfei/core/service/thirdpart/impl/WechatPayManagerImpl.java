@@ -97,10 +97,16 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 		payQueryResult.setTradeNo(tradeNo);
 		try {
 			String result = WXPay.requestNativePayQueryService(tradeNo);
-			NativePayQueryResData nativePayQueryResData = (NativePayQueryResData)Util.getObjectFromXML(result, NativePayResData.class);
+			NativePayQueryResData nativePayQueryResData = (NativePayQueryResData)Util.getObjectFromXML(result, NativePayQueryResData.class);
 			if (nativePayQueryResData.getReturn_code().equals("SUCCESS")){
-				payQueryResult.setCode("0");
-				payQueryResult.setMsg("SUCCESS");
+				if(nativePayQueryResData.getResult_code().equals("SUCCESS")){
+					payQueryResult.setCode("0");
+					payQueryResult.setMsg("SUCCESS");
+				}else{
+					payQueryResult.setCode("1");
+					payQueryResult.setMsg(nativePayQueryResData.getErr_code_des());
+				}
+
 			}else {
 				payQueryResult.setCode("1");
 				payQueryResult.setMsg("FAILED");
