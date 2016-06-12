@@ -102,7 +102,7 @@
 	                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 	                
 	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票</th>
-	                <th data-options="align:'center', field:'orderStateName',width:100">状态</th>
+	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 	                <th data-options="align:'center', field:'operation',width:210">操作</th>
 	                </tr>
 	            </thead>
@@ -226,11 +226,11 @@
         //1、打开最终退款页面
         function finalBackMoneyToUser(args){
 			var backMethod = "";
-			if(args.backType == 0){
+			if(args.backType == 1){
 				backMethod="微信账号:";
-			}else if(args.backType ==1){
+			}else if(args.backType ==2){
 				backMethod = '支付宝账号:';
-			}else if(args.backType == 2){
+			}else if(args.backType == 3){
 				backMethod = '银行卡号:';
 			}
 			
