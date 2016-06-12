@@ -6,6 +6,8 @@ import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "order")
 public class OrderController {
-
+	private static Log log = LogFactory.getLog(OrderController.class);
 	@Autowired
 	private OrderManagerImpl orderManager;
 
@@ -37,7 +39,12 @@ public class OrderController {
 	@RequestMapping(value = "/addOrder")
 	@ResponseBody
 	public BaseMsgInfo addOrder(OrderAddInfoDto addInfoDto) {
-		return orderManager.addOrderAndUserInfo(addInfoDto);
+		try {
+			return orderManager.addOrderAndUserInfo(addInfoDto);
+		}catch (Exception e){
+			log.error("添加订单信息失败",e);
+			return BaseMsgInfo.msgFail("订单信息添加失败");
+		}
 	}
 
 	/**
@@ -54,17 +61,22 @@ public class OrderController {
 	public BaseMsgInfo getPayUrl(
 			@RequestParam(value = "orderId", required = true) String orderId,
 			@RequestParam(value = "payType", required = true) int payType) {
-		PayType type = null;
-		if (PayType.WXPAY.getName() == payType) {
-			type = PayType.WXPAY;
-		} else if (PayType.ALIPAY.getName() == payType) {
-			type = PayType.ALIPAY;
-		} else if (PayType.BANKPAY.getName() == payType) {
-			type = PayType.BANKPAY;
+		try {
+			PayType type = null;
+			if (PayType.WXPAY.getName() == payType) {
+				type = PayType.WXPAY;
+			} else if (PayType.ALIPAY.getName() == payType) {
+				type = PayType.ALIPAY;
+			} else if (PayType.BANKPAY.getName() == payType) {
+				type = PayType.BANKPAY;
+			}
+			if (type == null)
+				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
+			return  orderManager.getPayUrl(orderId,type);
+		}catch (Exception e){
+			log.error("生成支付URL失败",e);
+			return BaseMsgInfo.msgFail("生成支付URL失败");
 		}
-		if (type == null)
-			return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
-		return  orderManager.getPayUrl(orderId,type);
 	}
 
 	/**
@@ -81,19 +93,24 @@ public class OrderController {
 	public BaseMsgInfo checkThirdPay(
 			@RequestParam(value = "orderId", required = true) String orderId,
 			@RequestParam(value = "payType", required = true) int payType) {
-		PayType type = null;
-		if (PayType.WXPAY.getName() == payType) {
-			type = PayType.WXPAY;
-		} else if (PayType.ALIPAY.getName() == payType) {
-			type = PayType.ALIPAY;
-		} else if (PayType.BANKPAY.getName() == payType) {
-			type = PayType.BANKPAY;
-		}
-		if (type == null)
-			return BaseMsgInfo.fail("");
+		try {
+			PayType type = null;
+			if (PayType.WXPAY.getName() == payType) {
+				type = PayType.WXPAY;
+			} else if (PayType.ALIPAY.getName() == payType) {
+				type = PayType.ALIPAY;
+			} else if (PayType.BANKPAY.getName() == payType) {
+				type = PayType.BANKPAY;
+			}
+			if (type == null)
+				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
 
-		boolean flag = orderManager.checkThirdPay(orderId, type);
-		return BaseMsgInfo.success(flag);
+			return orderManager.checkThirdPay(orderId, type);
+		}catch (Exception e){
+			log.error("第三方支付确认收款接口失败",e);
+			return BaseMsgInfo.msgFail("第三方支付确认收款接口失败");
+		}
+
 	}
 
 	/**
@@ -107,11 +124,25 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/payState")
 	@ResponseBody
-	public BaseMsgInfo checkBuyerPay(
+	public BaseMsgInfo updatePayState(
 			@RequestParam(value = "orderId", required = true) String orderId,
 			@RequestParam(value = "payType", required = true) int payType) {
-		// TODO 保存付款方式及已付款
-		return BaseMsgInfo.success(true);
+		try {
+			PayType type = null;
+			if (PayType.WXPAY.getName() == payType) {
+				type = PayType.WXPAY;
+			} else if (PayType.ALIPAY.getName() == payType) {
+				type = PayType.ALIPAY;
+			} else if (PayType.BANKPAY.getName() == payType) {
+				type = PayType.BANKPAY;
+			}
+			if (type == null)
+				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
+			return orderManager.updatePayState(orderId, type);
+		}catch (Exception e){
+			log.error("顾客现金刷卡确认接口失败",e);
+			return BaseMsgInfo.msgFail("顾客现金刷卡确认接口失败");
+		}
 	}
 
 	/**
@@ -124,11 +155,11 @@ public class OrderController {
 	@RequestMapping(value = "/orderMail")
 	@ResponseBody
 	public BaseMsgInfo addOrderMail(AppInvoice appInvoice) {
-		boolean flag = orderManager.addOrderMailInfo(appInvoice);
-		if (flag) {
-			return BaseMsgInfo.success(flag);
-		} else {
-			return BaseMsgInfo.fail(flag);
+		try {
+			return orderManager.addOrderMailInfo(appInvoice);
+		}catch (Exception e){
+			log.error("添加邮寄信息异常",e);
+			return BaseMsgInfo.msgFail("邮寄信息添加失败");
 		}
 	}
 
@@ -146,7 +177,13 @@ public class OrderController {
 	public BaseMsgInfo VipCardUseAndOrder(
 			@RequestParam(value = "phone", required = true) String phone,
 			@RequestParam(value = "code", required = true) String code) {
-		return orderManager.getVipCardUseAndOrder(phone, code);
+		try {
+			return orderManager.getVipCardUseAndOrder(phone, code);
+		}catch (Exception e){
+			log.error("用户使用记录查询接口异常",e);
+			return BaseMsgInfo.msgFail("用户使用记录查询失败");
+		}
+
 	}
 
 	/**
@@ -158,7 +195,7 @@ public class OrderController {
 	@RequestMapping(value = "/vipReturnInfo")
 	@ResponseBody
 	public BaseMsgInfo addVipReturnInfo(AppCardBack appCardBack) {
-		// // TODO: 2016/6/3 添加退卡信息
+
 		return BaseMsgInfo.success(true);
 	}
 }

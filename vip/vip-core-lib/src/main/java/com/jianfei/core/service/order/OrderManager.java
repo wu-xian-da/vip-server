@@ -131,7 +131,7 @@ public interface OrderManager {
      * @param appInvoice 发票信息
      * @return
      */
-    boolean addOrderMailInfo(AppInvoice appInvoice);
+    BaseMsgInfo addOrderMailInfo(AppInvoice appInvoice);
 
 
     /**
@@ -171,7 +171,7 @@ public interface OrderManager {
      * @param payType
      * @return
      */
-    boolean checkThirdPay(String orderId, PayType payType);
+    BaseMsgInfo checkThirdPay(String orderId, PayType payType);
 
     /**
      * 根据手机号查询用户VIP卡使用信息和订单详细信息
@@ -189,4 +189,12 @@ public interface OrderManager {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> selectOrder(Map<String, Object> map);
+
+    /**
+     * 更新用户付款状态
+     * @param orderId
+     * @param payType
+     * @return
+     */
+    BaseMsgInfo updatePayState(String orderId, PayType payType);
 }

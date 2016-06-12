@@ -8,6 +8,7 @@ import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
 import com.jianfei.core.bean.*;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.common.utils.BeanUtils;
 import com.jianfei.core.common.utils.IdGen;
@@ -171,18 +172,25 @@ public class OrderManagerImpl implements OrderManager {
         return false;
     }
 
-    /**
-     * 订单发票信息
-     *
-     * @param appInvoice 发票信息
-     * @return
-     */
-    @Override
-    public boolean addOrderMailInfo(AppInvoice appInvoice) {
-		//TODO 更新订单为已开发票
+	/**
+	 * 订单发票信息
+	 *
+	 * @param appInvoice 发票信息
+	 * @return
+	 */
+	@Override
+	public BaseMsgInfo addOrderMailInfo(AppInvoice appInvoice) {
+		AppOrders orders=appOrdersMapper.selectByPrimaryKey(appInvoice.getOrderId());
+		if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
+			return BaseMsgInfo.msgFail("订单不存在");
+		}
+		orders.setInvoiceFlag(InvoiceState.NEED_INVOICE.getName());
+		int flag = appOrdersMapper.updateByPrimaryKeySelective(orders);
+		if (flag < 0)
+			return BaseMsgInfo.msgFail("订单邮寄信息状态更新失败");
 		invoiceManager.insert(appInvoice);
-        return true;
-    }
+		return BaseMsgInfo.success(true);
+	}
 
     /**
 
@@ -389,9 +397,21 @@ public class OrderManagerImpl implements OrderManager {
 	 * @return
 	 */
 	@Override
-	public boolean checkThirdPay(String orderId, PayType payType) {
-		return false;
+	public BaseMsgInfo checkThirdPay(String orderId, PayType payType) {
+		PayQueryResult result=null;
+		if(PayType.WXPAY.equals(payType)){
+			result=wechatiPayManager.tradeQuery(orderId);
+		}
+		else if (PayType.ALIPAY.equals(payType)){
+			result=aliPayManager.tradeQuery(orderId);
+		}
+		if ("0".equals(result.getCode())){
+			return BaseMsgInfo.success(true);
+		}else {
+			return BaseMsgInfo.success(false);
+		}
 	}
+
 
 	/**
 	 * 根据手机号查询用户VIP卡使用信息和订单详细信息
@@ -434,5 +454,28 @@ public class OrderManagerImpl implements OrderManager {
 	@Override
 	public List<Map<String, Object>> selectOrder(Map<String, Object> map) {
 		return appOrdersMapper.selectOrder(map);
+	}
+
+	/**
+	 * 更新用户付款状态
+	 *
+	 * @param orderId
+	 * @param payType
+	 * @return
+	 */
+	@Override
+	public BaseMsgInfo updatePayState(String orderId, PayType payType) {
+		AppOrders orders = appOrdersMapper.selectByPrimaryKey(orderId);
+		if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
+			return BaseMsgInfo.msgFail("订单不存在");
+		}
+		orders.setPayType(payType.getName());
+		orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
+		int num = appOrdersMapper.updateByPrimaryKeySelective(orders);
+		if (num > 0) {
+			return BaseMsgInfo.success(true);
+		} else {
+			return BaseMsgInfo.msgFail("确认付款失败");
+		}
 	}
 }
