@@ -67,7 +67,7 @@ public class WXPay {
      */
 	public static String requestNativePayQueryService(String tradeNo) throws Exception{
 		
-		return new NativePayQueryService().request(new NativePayQueryReqData(tradeNo, null));
+		return new NativePayQueryService().request(new NativePayQueryReqData(null, tradeNo));
 	}
     /**
      * 请求支付服务

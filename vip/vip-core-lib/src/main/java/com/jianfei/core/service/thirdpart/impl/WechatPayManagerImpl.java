@@ -101,7 +101,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 			if (nativePayQueryResData.getReturn_code().equals("SUCCESS")){
 				if(nativePayQueryResData.getResult_code().equals("SUCCESS")){
 					payQueryResult.setCode("0");
-					payQueryResult.setMsg("SUCCESS");					
+					payQueryResult.setMsg(nativePayQueryResData.getTrade_state());					
 				}else{
 					payQueryResult.setCode("1");
 					payQueryResult.setMsg(nativePayQueryResData.getErr_code_des());		
