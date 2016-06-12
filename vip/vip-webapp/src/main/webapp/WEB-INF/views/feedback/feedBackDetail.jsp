@@ -68,9 +68,12 @@
 			</ul>
 			
 			<!-- 发票信息 -->
+			<c:if test="${empty postInfo }">
+				<div class="order-list-title">发票信息（未开）</div>
+			</c:if>
 			<c:if test="${!empty postInfo }">
 				<c:forEach items="${postInfo }" var="post">
-					<div class="order-list-title">发票信息</div>
+					<div class="order-list-title">发票信息（已开）</div>
 
 					<ul>
 						<li><label>邮寄地址：</label>${post.address }</li>
