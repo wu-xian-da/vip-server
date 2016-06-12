@@ -1,23 +1,20 @@
 package com.jianfei.user;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * 销售人员Controller

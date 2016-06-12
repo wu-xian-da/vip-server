@@ -34,12 +34,6 @@ public interface OrderManager {
      */
     boolean updateOrderPayInfo(AppOrders addInfoDto);
 
-    /**
-     * 查询订单是否付款
-     * @param orderId 订单ID
-     * @return
-     */
-    boolean checkOrderPay(String orderId);
 
     /**
      * guo.jian
@@ -197,4 +191,11 @@ public interface OrderManager {
      * @return
      */
     BaseMsgInfo updatePayState(String orderId, PayType payType);
+
+    /**
+     * APP端添加退卡信息
+     * @param appCardBack 退卡信息
+     * @return
+     */
+    BaseMsgInfo addBackCardInfo(AppCardBack appCardBack);
 }

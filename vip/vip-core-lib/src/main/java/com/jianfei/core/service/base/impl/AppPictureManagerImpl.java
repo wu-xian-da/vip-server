@@ -157,11 +157,12 @@ public class AppPictureManagerImpl implements AppPictureManager {
 	public List<AppPicture> getPicture(PictureType pictureType) {
 		AppPicture appPicture=new AppPicture();
 		appPicture.setImagetype(pictureType.getName());
+		appPicture.setDtflag(0);//存在的图片
 		List<AppPicture> pictures=appPictureMapper.getPicture(appPicture);
-		if (pictures==null){
+		if (pictures == null) {
 			return new ArrayList<>();
 		}
-		return appPictureMapper.getPicture(appPicture);
+		return pictures;
 	}
 	/**
 	 * 更新vip室图片信息
