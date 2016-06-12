@@ -65,22 +65,21 @@
 				<li>常驻城市：${customer.address }</li>
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
-			
+
 			<!-- 发票信息 -->
 			<c:if test="${!empty postInfo }">
 				<c:forEach items="${postInfo }" var="post">
 					<div class="order-list-title">发票信息</div>
-					<div style="display:none">
-						<ul>
-							<li></li>
-							<li>邮寄地址：${post.address }</li>
-							<li>发票类型：${post.invoice_type }</li>
-							<li>发票抬头：${post.invoice_title }</li>
-						</ul>
-					</div>
+					<ul>
+						<li></li>
+						<li>邮寄地址：${post.address }</li>
+						<li>发票类型：${post.invoice_type==1? '个人':'公司'}</li>
+						<li>发票抬头：${post.invoice_title }</li>
+					</ul>
+
 				</c:forEach>
 			</c:if>
-			
+
 			<!-- 退款金额 -->
 			<c:if test="${!empty backMoneyInfo }">
 				<div class="order-list-title">

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +30,7 @@
 				订单编号：<span>${orderDetailInfo.orderId}</span>
 			</div>
 			<ul>
-				<li><label>日期：</label>${orderDetailInfo.orderTime}</li>
+				<li><label>订单日期：</label><fmt:formatDate value="${orderDetailInfo.orderTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 				<li><label>开卡场站：</label>${orderDetailInfo.airportName}</li>
 				<li><label>业务员：</label>${orderDetailInfo.agentName}</li>
 				<li><label>业务员电话：</label>${orderDetailInfo.agentPhone}</li>
@@ -61,8 +62,8 @@
 				
 				
 				</li>
-				<li><label>支付时间：</label>${orderDetailInfo.payTime}</li>
-				<li><label>卡片激活短信发送时间：</label>${orderDetailInfo.activatTime}</li>
+				<li><label>支付时间：</label><fmt:formatDate value="${orderDetailInfo.payTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+				<li><label>卡片激活短信发送时间：</label><fmt:formatDate value="${orderDetailInfo.activatTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 			</ul>
 
 			<div class="order-list-title">个人资料</div>
