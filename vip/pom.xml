@@ -448,6 +448,8 @@
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
 				<redis.host>192.168.110.8</redis.host>
 				<redis.port>6379</redis.port>
+				<!-- p12 cert location -->
+				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>
 			</properties>
 		</profile>
 
@@ -485,6 +487,8 @@
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
 				<redis.host>192.168.110.8</redis.host>
 				<redis.port>6379</redis.port>
+				<!-- p12 cert location -->
+				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>
 			</properties>
 			<build>
 				<plugins>

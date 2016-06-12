@@ -227,11 +227,11 @@
         function finalBackMoneyToUser(args){
 			var backMethod = "";
 			if(args.backType == 0){
-				backMethod="微信账号";
+				backMethod="微信账号:";
 			}else if(args.backType ==1){
-				backMethod = '支付宝账号';
+				backMethod = '支付宝账号:';
 			}else if(args.backType == 2){
-				backMethod = '银行卡号';
+				backMethod = '银行卡号:';
 			}
 			
 			$("#backCardOrderId").val(args.orderId);
@@ -290,7 +290,6 @@
 			var remainMoney = $("#remainMoney").text();
 			var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
 			var orderId = $("#hideOrderId").val();
-			//sconsole.log(payMethod);s
 			if(payMethod==0){
 				backCardNo = $("#backCardNo0").val();
 			}else if(payMethod == 1){
