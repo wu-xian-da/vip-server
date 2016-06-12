@@ -10,6 +10,9 @@ import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.base.impl.*;
+import com.jianfei.order.OrderController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +34,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "resource")
 public class ResourceController  {
-
+	private static Log log = LogFactory.getLog(ResourceController.class);
 	@Autowired
 	private AriPortManagerImpl ariPortService;
 
@@ -52,9 +55,14 @@ public class ResourceController  {
 	@RequestMapping(value = "/getAirportProvince", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo airportProvince(	) {
-		List<BaseDto> stringList=ariPortService.getAriPortProvince();
-		stringList.add(0,new BaseDto("","所有省份"));
-		return BaseMsgInfo.success(stringList);
+		try {
+			List<BaseDto> stringList=ariPortService.getAriPortProvince();
+			stringList.add(0,new BaseDto("","所有省份"));
+			return BaseMsgInfo.success(stringList);
+		}catch (Exception e){
+			log.error("获取支持的省份列表失败",e);
+			return BaseMsgInfo.msgFail("获取支持的省份列表失败");
+		}
 	}
 
 	/**
@@ -64,9 +72,14 @@ public class ResourceController  {
 	@RequestMapping(value = "/getAirportList", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo airportList(	@RequestParam(value = "province", required = false) String province ) {
+		try {
+			List<SysAirport> list=ariPortService.getAirPortByProvince(province);
+			return BaseMsgInfo.success(list);
+		}catch (Exception e){
+			log.error("根据省份ID获取机场列表失败",e);
+			return BaseMsgInfo.msgFail("根据省份ID获取机场列表失败");
+		}
 
-		List<SysAirport> list=ariPortService.getAirPortByProvince(province);
-		return BaseMsgInfo.success(list);
 	}
 
 	/**
@@ -80,12 +93,17 @@ public class ResourceController  {
 	public BaseMsgInfo vipRoomList(PageDto pageDto,
 								   SysAirport airport, @RequestParam(value = "coordinate", required = false) String coordinate
 	) {
-		PageInfo<SysViproom> pageInfo = vipRoomManager.pageVipRoom(pageDto, airport, coordinate);
-		return BaseMsgInfo.success(pageInfo);
+		try {
+			PageInfo<SysViproom> pageInfo = vipRoomManager.pageVipRoom(pageDto, airport, coordinate);
+			return BaseMsgInfo.success(pageInfo);
+		}catch (Exception e){
+			log.error("根据用户坐标或省份或机场信息获取VipRoom列表失败",e);
+			return BaseMsgInfo.msgFail("获取Vip室列表失败");
+		}
 	}
 
 	/**
-	 * 根据用户坐标或省份或机场信息获取VipRoom列表
+	 * 根据VIP室ID获取VIP室详细信息
 	 * @param vipRoomId vip室信息
 	 * @return VipRoomList
 	 */
@@ -93,8 +111,13 @@ public class ResourceController  {
 	@ResponseBody
 	public BaseMsgInfo vipRoomInfo(@RequestParam(value = "vipRoomId", required = true) String vipRoomId
 	) {
-		 SysViproom vipRoom=vipRoomManager.getVipRoomInfo(vipRoomId);
-  		 return BaseMsgInfo.success(vipRoom);
+		try {
+			SysViproom vipRoom=vipRoomManager.getVipRoomInfo(vipRoomId);
+			return BaseMsgInfo.success(vipRoom);
+		}catch (Exception e){
+			log.error("根据VIP室ID获取VIP室详细信息失败",e);
+			return BaseMsgInfo.msgFail("获取VIP室详细信息失败");
+		}
 	}
 
 
@@ -104,8 +127,13 @@ public class ResourceController  {
 	@RequestMapping(value = "/getVipHomeImages", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo vipHomeImages() {
-		List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME);
-		return BaseMsgInfo.success(list);
+		try {
+			List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME);
+			return BaseMsgInfo.success(list);
+		}catch (Exception e){
+			log.error("获取VIP—APP首页轮播图失败",e);
+			return BaseMsgInfo.msgFail("获取APP首页轮播图失败");
+		}
 	}
 
 	/**
@@ -114,18 +142,28 @@ public class ResourceController  {
 	@RequestMapping(value = "/getVipHomeModules", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo vipHomeModules() {
-		List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME_MODULE);
-		return BaseMsgInfo.success(list);
+		try {
+			List<AppPicture> list=appPictureService.getPicture(PictureType.VIP_APP_HOME_MODULE);
+			return BaseMsgInfo.success(list);
+		}catch (Exception e){
+			log.error("获取VIP—APP首页模块信息失败",e);
+			return BaseMsgInfo.msgFail("获取APP首页模块信息失败");
+		}
 	}
 
 	/**
-	 * 销售 APP首页模块信息
+	 * 销售 APP首页轮播图
 	 */
 	@RequestMapping(value = "/getSaleHomeImages", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo saleHomeModules() {
-		List<AppPicture> list=appPictureService.getPicture(PictureType.SALE_APP_HOME);
-		return BaseMsgInfo.success(list);
+		try {
+			List<AppPicture> list=appPictureService.getPicture(PictureType.SALE_APP_HOME);
+			return BaseMsgInfo.success(list);
+		}catch (Exception e){
+			log.error("销售 APP首页轮播图失败",e);
+			return BaseMsgInfo.msgFail("获取APP首页轮播图失败");
+		}
 	}
 
 	/**
@@ -134,7 +172,12 @@ public class ResourceController  {
 	@RequestMapping(value = "/getVipCardRight", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo getVipCardRight() {
-		return BaseMsgInfo.success(appConfigManager.getVipCardInfo());
+		try {
+			return BaseMsgInfo.success(appConfigManager.getVipCardInfo());
+		}catch (Exception e){
+			log.error("获取VIP卡权益信息失败",e);
+			return BaseMsgInfo.msgFail("获取VIP卡权益信息失败");
+		}
 	}
 
 	/**
@@ -143,17 +186,27 @@ public class ResourceController  {
 	@RequestMapping(value = "/getVipCardQA", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo getVipCardQA() {
-    return BaseMsgInfo.success(appConfigManager.getQAInfo());
+		try {
+			return BaseMsgInfo.success(appConfigManager.getQAInfo());
+		}catch (Exception e){
+			log.error("获取VIP卡权益信息失败",e);
+			return BaseMsgInfo.msgFail("获取VIP卡权益信息失败");
+		}
 	}
 
 	/**
-	 *  VIP卡 版本更新接口
+	 *  APP版本更新接口
 	 */
 	@RequestMapping(value = "/lastAppVersion", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseMsgInfo getLastAppVersion(@RequestParam(value = "channel", required = true) String channel) {
-		AppVersion appVersion=appVersionManager.getLastVersion(channel);
-		return BaseMsgInfo.success(appVersion);
+		try {
+			AppVersion appVersion=appVersionManager.getLastVersion(channel);
+			return BaseMsgInfo.success(appVersion);
+		}catch (Exception e){
+			log.error("APP版本更新接口",e);
+			return BaseMsgInfo.msgFail("获取APP版本失败");
+		}
 	}
 
 }

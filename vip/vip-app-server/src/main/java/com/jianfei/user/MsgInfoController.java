@@ -1,8 +1,12 @@
 package com.jianfei.user;
 
+import com.jianfei.core.bean.AppVersion;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
+import com.jianfei.resource.ResourceController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "msg")
 public class MsgInfoController {
 
-
+    private static Log log = LogFactory.getLog(MsgInfoController.class);
     @Autowired
     private MsgInfoManagerImpl msgInfoManager;
 
@@ -34,19 +38,25 @@ public class MsgInfoController {
     public BaseMsgInfo sendTelCode(@RequestParam(value = "phone", required = true) String phone,
                                    @RequestParam(value = "type", required = true) String type
     ) {
-        MsgType msgType = null;
-        if (MsgType.REGISTER.getName().equals(type)) {
-            msgType = MsgType.REGISTER;
-        } else if (MsgType.LOGIN.getName().equals(type)) {
-            msgType = MsgType.LOGIN;
-        } else if (MsgType.BACK_CARD.getName().equals(type)) {
-            msgType = MsgType.BACK_CARD;
-        }
-        if (msgType == null)
-            return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
 
-        boolean flag = msgInfoManager.sendValidateCode(phone, msgType);
-        return BaseMsgInfo.success(flag);
+        try {
+            MsgType msgType = null;
+            if (MsgType.REGISTER.getName().equals(type)) {
+                msgType = MsgType.REGISTER;
+            } else if (MsgType.LOGIN.getName().equals(type)) {
+                msgType = MsgType.LOGIN;
+            } else if (MsgType.BACK_CARD.getName().equals(type)) {
+                msgType = MsgType.BACK_CARD;
+            }
+            if (msgType == null)
+                return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
+
+            boolean flag = msgInfoManager.sendValidateCode(phone, msgType);
+            return BaseMsgInfo.success(flag);
+        }catch (Exception e){
+            log.error("给用户发送登录验证码",e);
+            return BaseMsgInfo.msgFail("发送登录验证码失败");
+        }
     }
 
     /**
@@ -58,19 +68,25 @@ public class MsgInfoController {
     public BaseMsgInfo getTelCode(@RequestParam(value = "phone", required = true) String phone,
                                    @RequestParam(value = "type", required = true) String type
     ) {
-        MsgType msgType = null;
-        if (MsgType.REGISTER.getName().equals(type)) {
-            msgType = MsgType.REGISTER;
-        } else if (MsgType.LOGIN.getName().equals(type)) {
-            msgType = MsgType.LOGIN;
-        } else if (MsgType.BACK_CARD.getName().equals(type)) {
-            msgType = MsgType.BACK_CARD;
-        }
-        if (msgType == null)
-            return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
+        try {
+            MsgType msgType = null;
+            if (MsgType.REGISTER.getName().equals(type)) {
+                msgType = MsgType.REGISTER;
+            } else if (MsgType.LOGIN.getName().equals(type)) {
+                msgType = MsgType.LOGIN;
+            } else if (MsgType.BACK_CARD.getName().equals(type)) {
+                msgType = MsgType.BACK_CARD;
+            }
+            if (msgType == null)
+                return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
 
-        String code = msgInfoManager.getValidateCode(phone, msgType);
-        return BaseMsgInfo.success(code);
+            String code = msgInfoManager.getValidateCode(phone, msgType);
+            return BaseMsgInfo.success("手机号:"+phone+"的校验码为"+code+",请于5分钟内输入,请勿向任何人泄露。[亿出行]");
+        }catch (Exception e){
+            log.error("获取发送的验证码失败",e);
+            return BaseMsgInfo.msgFail("获取发送的验证码失败");
+        }
+
     }
 
 
