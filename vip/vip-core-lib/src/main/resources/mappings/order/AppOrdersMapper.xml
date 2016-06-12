@@ -142,7 +142,7 @@
     			 <if test="backType != 4">
     			 	 and acb.back_type = #{backType}
     			 </if>
-    			<if test="applyType !=3">
+    			<if test="applyType !=null">
     				and ord.apply_type = #{applyType}
     			</if>
     			 <if test="orderState != 10">

@@ -50,7 +50,7 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
      */
     @Override
     public boolean validateSendCode(String phone, MsgType msgType, String code) {
-      String validateCode =(String) JedisUtils.getObject(CODE+phone+":"+msgType.getName());
+        String validateCode = (String) JedisUtils.getObject(CODE + phone + ":" + msgType.getName());
         return code.equals(validateCode);
     }
 

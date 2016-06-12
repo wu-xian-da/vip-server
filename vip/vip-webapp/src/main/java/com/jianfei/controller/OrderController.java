@@ -249,7 +249,7 @@ public class OrderController extends BaseController {
 	public Map<Object,Object> backCardlist(@RequestParam(value="page",defaultValue="1") Integer pageNo,
 			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
 			@RequestParam(value="backType",defaultValue="4") Integer backType,
-			@RequestParam(value="applyType",defaultValue="3")Integer applyType,
+			@RequestParam(value="applyType",defaultValue="") String applyType,
 			@RequestParam(value="orderState",defaultValue="10") Integer orderState){
 		
 		//用户可以看到机场列表
@@ -260,7 +260,10 @@ public class OrderController extends BaseController {
 		//退款方式
 		paramsMap.put("backType", backType);
 		//申请方式
-		paramsMap.put("applyType", applyType);
+		if(!applyType.equals("")){
+			paramsMap.put("applyType", applyType);
+		}
+		
 		//订单状态
 		paramsMap.put("orderState", orderState);
 		//机场id列表
@@ -286,6 +289,24 @@ public class OrderController extends BaseController {
 					outData.put("backType", appCardBack.getBackType());
 					outData.put("phone", appOrder.getCustomerPhone());
 					appOrder.setOrderStateName("审核通过");
+					//申请方式
+					int applyTypes = appOrder.getApplyType();
+					if(applyTypes == 0){
+						appOrder.setApplyTypeName("客服");
+					}else{
+						appOrder.setApplyTypeName("现场");
+					}
+					//退卡方式
+					int backCardTypes = appOrder.getBackType();
+					if(backCardTypes == 0){
+						appOrder.setBackTypeName("微信");
+					}else if(backCardTypes == 1){
+						appOrder.setBackTypeName("支付宝");
+					}else if(backCardTypes == 2){
+						appOrder.setBackTypeName("银行卡");
+					}else{
+						appOrder.setBackTypeName("现场");
+					}
 					
 					
 					//权限校验
@@ -303,6 +324,24 @@ public class OrderController extends BaseController {
 					//退款成功
 					orderId = appOrder.getOrderId();
 					appOrder.setOrderStateName("已退款");
+					//申请方式
+					int applyTypes = appOrder.getApplyType();
+					if(applyTypes == 0){
+						appOrder.setApplyTypeName("客服");
+					}else{
+						appOrder.setApplyTypeName("现场");
+					}
+					//退卡方式
+					int backCardTypes = appOrder.getBackType();
+					if(backCardTypes == 0){
+						appOrder.setBackTypeName("微信");
+					}else if(backCardTypes == 1){
+						appOrder.setBackTypeName("支付宝");
+					}else if(backCardTypes == 2){
+						appOrder.setBackTypeName("银行卡");
+					}else{
+						appOrder.setBackTypeName("现场");
+					}
 					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
 				}
 			}

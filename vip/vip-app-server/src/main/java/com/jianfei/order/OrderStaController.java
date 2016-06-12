@@ -121,11 +121,12 @@ public class OrderStaController {
      */
     @RequestMapping("getAriPortListByProvinceId")
     @ResponseBody
-    public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",required=true)String provinceId){
+    public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",defaultValue="",required=false)String provinceId){
     	try {
     		Map<String,Object> map = new HashMap<String,Object>();
-    		map.put("pids", provinceId);
-    		//用户选择全国时，省份id号格式如下："provinceId1,provinceId2"
+    		if(!provinceId.equals("")){
+    			map.put("pids", provinceId);
+    		}
 			List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
 			return BaseMsgInfo.success(airPortList);
 		} catch (Exception e) {
@@ -203,7 +204,7 @@ public class OrderStaController {
     			userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
     		}
     		
-    		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
+    		List<Map<String,Object>> provinceList = statManager.getTotalSaleCurveByProvinceId(userProvinceList,begin,end);
     		Map<String,Object> provinceMap = new HashMap<String,Object>();
     		provinceMap.put("province", provinceList);
     		list.add(provinceMap);
@@ -223,18 +224,28 @@ public class OrderStaController {
     				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
     				for(Map<String,Object> maps : airPortList){
     					Map<String,Object> mapItem = new HashMap<String,Object>();
-    					mapItem.put("pid", areaId);
-    					mapItem.put("airportId", maps.get("aids"));
-    	    			proIdApIdList.add(provinceMap);
+    					//获取某个省份下所有的机场列表
+    					List<Map<String,Object>> airPortMaps = (List<Map<String, Object>>) maps.get("airPortList");
+    					for(Map<String,Object> airPortMap:airPortMaps){
+    						mapItem.put("pid", areaId);
+    						mapItem.put("anames", airPortMap.get("anames"));
+    						mapItem.put("airportId", airPortMap.get("aids"));
+    						proIdApIdList.add(mapItem);
+    					}
     				}
     			}else{//该业务人员管辖下的省份所有的机场
     				Map<String,Object> map = new HashMap<String,Object>();
     				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
     				for(Map<String,Object> maps : airPortList){
     					Map<String,Object> mapItem = new HashMap<String,Object>();
-    					mapItem.put("pid",maps.get("pid") );
-    					mapItem.put("airportId", maps.get("aids"));
-    	    			proIdApIdList.add(provinceMap);
+    					List<Map<String,Object>> airPortMaps = (List<Map<String, Object>>) maps.get("airPortList");
+    					for(Map<String,Object> airPortMap:airPortMaps){
+    						mapItem.put("pid", maps.get("pid"));
+    						mapItem.put("anames", airPortMap.get("anames"));
+    						mapItem.put("airportId", airPortMap.get("aids"));
+    						proIdApIdList.add(mapItem);
+    					}
+    	    			
     				}
     			}
     		}

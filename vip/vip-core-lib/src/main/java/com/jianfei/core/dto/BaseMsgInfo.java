@@ -44,6 +44,12 @@ public class BaseMsgInfo {
         return baseMsgInfo;
     }
 
+    public static BaseMsgInfo msgFail(String msg){
+        BaseMsgInfo baseMsgInfo=new BaseMsgInfo();
+        baseMsgInfo.setCode(-1);
+        baseMsgInfo.setMsg(msg);
+        return baseMsgInfo;
+    }
     public static BaseMsgInfo fail(String msg,Object data){
         BaseMsgInfo baseMsgInfo=new BaseMsgInfo();
         baseMsgInfo.setCode(-1);

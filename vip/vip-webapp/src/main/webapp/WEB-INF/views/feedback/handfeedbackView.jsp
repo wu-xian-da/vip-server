@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,7 @@
 					订单编号：<span>${order.order_id}</span>
 					</div>
 					<ul>
-						<li><label>日期：</label>${order.order_time}</li>
+						<li><label>开卡时间：</label><fmt:formatDate value="${order.order_time}" pattern="yyyy-MM-dd HH:mm:ss"/> </li>
 						<li><label>开卡场站：</label>${order.airport_name}</li>
 						<li><label>业务员：</label>${order.name}</li>
 						<li><label>业务员电话：</label>${order.phone}</li>
@@ -65,22 +66,21 @@
 				<li>常驻城市：${customer.address }</li>
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
-			
+
 			<!-- 发票信息 -->
 			<c:if test="${!empty postInfo }">
 				<c:forEach items="${postInfo }" var="post">
 					<div class="order-list-title">发票信息</div>
-					<div style="display:none">
-						<ul>
-							<li></li>
-							<li>邮寄地址：${post.address }</li>
-							<li>发票类型：${post.invoice_type }</li>
-							<li>发票抬头：${post.invoice_title }</li>
-						</ul>
-					</div>
+					<ul>
+						<li></li>
+						<li>邮寄地址：${post.address }</li>
+						<li>发票类型：${post.invoice_type==1? '个人':'公司'}</li>
+						<li>发票抬头：${post.invoice_title }</li>
+					</ul>
+
 				</c:forEach>
 			</c:if>
-			
+
 			<!-- 退款金额 -->
 			<c:if test="${!empty backMoneyInfo }">
 				<div class="order-list-title">
