@@ -119,9 +119,9 @@
        	<div class="easy-window-item">
             <div class="easy-window-radio-tab">
                 <div class="radio-tab-head">
-                    <label><input type="radio" name="card-radio" checked id="0">微信转账</label>
-                    <label><input type="radio" name="card-radio" id="1">支付宝转账</label>
-                    <label><input type="radio" name="card-radio" id="2">银行卡转账</label>
+                    <label><input type="radio" name="card-radio" checked id="1">微信转账</label>
+                    <label><input type="radio" name="card-radio" id="2">支付宝转账</label>
+                    <label><input type="radio" name="card-radio" id="3">银行卡转账</label>
                 </div>
 
                 <div class="radio-tab-content">

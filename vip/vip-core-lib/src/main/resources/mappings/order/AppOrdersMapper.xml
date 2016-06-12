@@ -169,7 +169,7 @@
   
   <sql id="Base_Column_List" >
     order_id, id, customer_id, order_time, order_state, pay_type, serial_id, pay_money, 
-    invoice_flag, remark1, remark2, dtflag, sale_no
+    invoice_flag, remark1, remark2, dtflag, sale_no,airport_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

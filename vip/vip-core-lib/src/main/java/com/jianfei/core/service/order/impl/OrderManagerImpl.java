@@ -350,7 +350,7 @@ public class OrderManagerImpl implements OrderManager {
 			  * @param timeExpire 订单失效时间，格式同上
 			  * @param goodsTag 商品标记，微信平台配置的商品标记，用于优惠券或者满减使用
 			  */
-			 NativePayReqData nativePayReqData=new NativePayReqData("",appOrders.getRemark1(),"",orderId,appOrders.getPayMoney().intValue()*100,
+			 NativePayReqData nativePayReqData=new NativePayReqData("",appOrders.getRemark1(),"",orderId,(int)(appOrders.getPayMoney()*100),
 					 "","192.168.199.200","","","", "","http://121.42.199.169/pay/wechat_notify","NATIVE",appOrders.getAirportId(),"","");
 			 preCreateResult=wechatiPayManager.tradePrecreate(nativePayReqData);
 		 }else if (PayType.ALIPAY.equals(payType)){

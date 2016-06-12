@@ -3,12 +3,12 @@ package com.jianfei.core.service.thirdpart.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jianfei.core.common.utils.GloabConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
-import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 import com.tencent.WXPay;
@@ -104,7 +104,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 					payQueryResult.setMsg(nativePayQueryResData.getTrade_state());					
 				}else{
 					payQueryResult.setCode("1");
-					payQueryResult.setMsg(nativePayQueryResData.getErr_code_des());		
+					payQueryResult.setMsg(nativePayQueryResData.getErr_code_des());
 				}
 
 			}else {
