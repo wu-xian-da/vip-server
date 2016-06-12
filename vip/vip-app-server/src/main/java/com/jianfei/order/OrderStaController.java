@@ -262,6 +262,28 @@ public class OrderStaController {
     	List <SalesRankingDto> result = statManager.salesRanking(uno, pid, airportId, begin, end, pageNo, pageSize);
     	return BaseMsgInfo.success(result);
     }
+    
+    /**
+     * 个人中心销售榜单获取接口
+     * @param uno 用户编号
+     * @param begin 开始时间
+     * @param end 结束时间
+     * @return
+     */
+    @RequestMapping(value="sticSaleCardByUserId")
+    @ResponseBody
+    public BaseMsgInfo sticSaleCardByUserId(@RequestParam(value="uno",required=true) String uno,
+    		@RequestParam(value="begin",required=true) String begin,
+    		@RequestParam(value="end",required=true) String end){
+    		Map<String,Object> paraMap = new HashMap<String,Object>();
+    		paraMap.put("saleNo", uno);
+    		paraMap.put("beginTime", begin);
+    		paraMap.put("endTime", end);
+    		List<AppOrderArchive> listBycustomer = statManager.selectCharDataByUserId(paraMap);
+    		return BaseMsgInfo.success(listBycustomer);
+    }
+    
+    
 }
 
 

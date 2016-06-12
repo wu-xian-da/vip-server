@@ -70,6 +70,11 @@ public class AlipayManagerImplTest {
 	}
 	
 	@Test
+	public void test_wechat_query(){
+		wechatiPayManager.tradeQuery("0465698721450400"); 
+	}
+	
+	@Test
 	public void testKonggang_getcardcode(){
 		try {
 			airportEasyManager.getCardCode("1234231");

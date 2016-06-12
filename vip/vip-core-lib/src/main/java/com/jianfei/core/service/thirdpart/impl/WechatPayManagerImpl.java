@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 import com.tencent.WXPay;
@@ -24,7 +25,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 	static {
 		
 		//微信环境初始化
-		WXPay.initSDKConfiguration("5173af15bcd5ee99fb9ca5257ba4436a", "wxde0de2c3d9c40770", "1349068301", "", "/Users/leoliu/Documents/apiclient_cert.p12", "1349068301");
+		WXPay.initSDKConfiguration("5173af15bcd5ee99fb9ca5257ba4436a", "wxde0de2c3d9c40770", "1349068301", "", GloabConfig.getConfig("wechat.cert.location"), "1349068301");
 		
 	}
 	public WechatPayManagerImpl() {
@@ -96,10 +97,16 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 		payQueryResult.setTradeNo(tradeNo);
 		try {
 			String result = WXPay.requestNativePayQueryService(tradeNo);
-			NativePayQueryResData nativePayQueryResData = (NativePayQueryResData)Util.getObjectFromXML(result, NativePayResData.class);
+			NativePayQueryResData nativePayQueryResData = (NativePayQueryResData)Util.getObjectFromXML(result, NativePayQueryResData.class);
 			if (nativePayQueryResData.getReturn_code().equals("SUCCESS")){
-				payQueryResult.setCode("0");
-				payQueryResult.setMsg("SUCCESS");
+				if(nativePayQueryResData.getResult_code().equals("SUCCESS")){
+					payQueryResult.setCode("0");
+					payQueryResult.setMsg("SUCCESS");					
+				}else{
+					payQueryResult.setCode("1");
+					payQueryResult.setMsg(nativePayQueryResData.getErr_code_des());		
+				}
+
 			}else {
 				payQueryResult.setCode("1");
 				payQueryResult.setMsg("FAILED");
