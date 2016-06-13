@@ -159,7 +159,7 @@ public class SalerUserController {
     @ResponseBody
     public BaseMsgInfo salePhotoUpdate(@RequestParam(value = "file", required = false) MultipartFile file) {
     	 if (!file.isEmpty()) {
-    		 String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "//salesPhoto";
+    		 String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "/salesPhoto";
     		 String fileName = file.getOriginalFilename();
     		 String newFileName = UUIDUtils.returnNewFileName(fileName);
  			 File targetFile = new File(path, newFileName);
@@ -177,7 +177,7 @@ public class SalerUserController {
 				e.printStackTrace();
 			 }
 
-             return BaseMsgInfo.success( path + "/" + newFileName);
+             return BaseMsgInfo.success( "/salesPhoto/" + newFileName);
 
          } else {
              return  BaseMsgInfo.fail("失败",false);
