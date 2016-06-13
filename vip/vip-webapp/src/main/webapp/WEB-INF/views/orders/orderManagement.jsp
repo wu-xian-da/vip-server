@@ -23,7 +23,7 @@
 	 			#order-container-wrap{ overflow:hidden;}
         		#order-container{width:auto;}
         		#order-container-calac,#order-condition-box{float:left; padding-top:5px;}
-        		#order-container #order-condition-box{ padding-top:5px; margin-left:10px;}
+        		#order-container #order-condition-box{ padding-top:5px; margin-left:20px;}
         		#order-container #order-condition-box select{height:26px;}
         		.panel-body{ background:none;}
         </style>
@@ -42,7 +42,7 @@
 			        
 			        	
 			        	
-			            <div class="order-condition-item">
+			            <div class="order-condition-item" style="width: 140px">
 			                <select id="airportIdSelect">
 			                	
 			                    <option value="">全部机场</option>
@@ -53,7 +53,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item">
+			            <div class="order-condition-item" style="width: 140px">
 			                <select id="orderStateSelect">
 			                    <option value="5">全部订单状态</option>
 			                    <option value="0">未支付</option>
@@ -64,7 +64,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item">
+			            <div class="order-condition-item" style="width: 140px">
 			                <select id="invoiceSelect">
 			                    <option value="3">全部发票状态</option>
 			                    <option value="0">未开</option>
@@ -73,7 +73,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item">
+			            <div class="order-condition-item" style="width: 190px">
 			                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
 			                <button id="searchBt">检索</button>
 			            </div>

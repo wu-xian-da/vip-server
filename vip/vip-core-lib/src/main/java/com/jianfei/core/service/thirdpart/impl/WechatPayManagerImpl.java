@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.jianfei.core.common.utils.GloabConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.mapper.AppOrdersMapper;
@@ -100,16 +102,28 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 			NativePayQueryResData nativePayQueryResData = (NativePayQueryResData)Util.getObjectFromXML(result, NativePayQueryResData.class);
 			if (nativePayQueryResData.getReturn_code().equals("SUCCESS")){
 				if(nativePayQueryResData.getResult_code().equals("SUCCESS")){
-					payQueryResult.setCode("0");
-					payQueryResult.setMsg(nativePayQueryResData.getTrade_state());					
+					if (nativePayQueryResData.getTrade_state().equals("SUCCESS")){
+						payQueryResult.setCode("0");
+						payQueryResult.setMsg("已支付");		
+					}else if (nativePayQueryResData.getTrade_state().equals("NOTPAY")){
+						payQueryResult.setCode("1");
+						payQueryResult.setMsg("未支付");	
+					}else if (nativePayQueryResData.getTrade_state().equals("CLOSED")){
+						payQueryResult.setCode("2");
+						payQueryResult.setMsg("交易关闭");
+					}else{
+						payQueryResult.setCode("3");
+						payQueryResult.setMsg(nativePayQueryResData.getTrade_state());
+					}
+								
 				}else{
-					payQueryResult.setCode("1");
+					payQueryResult.setCode("3");
 					payQueryResult.setMsg(nativePayQueryResData.getErr_code_des());
 				}
 
 			}else {
-				payQueryResult.setCode("1");
-				payQueryResult.setMsg("FAILED");
+				payQueryResult.setCode("3");
+				payQueryResult.setMsg(nativePayQueryResData.getReturn_msg());
 			}
 					
 		} catch (Exception e) {
@@ -126,23 +140,26 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 
 	}
 	@Override
-	public String payNotify(String objStr) {
-		NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(objStr, NativeNotifyReq.class);
+	public String payNotify(PayNotifyRequest req) {
 		String result="";
-		String signResult = Signature.getSign(req.toMap());
-		String resultCode = req.getResult_code();
-		String returnCode = req.getReturn_code();
-		String outTradeNo = req.getOut_trade_no();
-		String totalFee = req.getTotal_fee();
+		String resultCode = req.getResultCode();
+		String returnCode = req.getReturnCode();
 		String sign = req.getSign();
+		String signResult = req.getSignResult();
+		
+		
 		System.out.println(signResult+":"+sign);
 		if (sign.equals(signResult)){
 			if (returnCode.equals("SUCCESS")){
 				if (resultCode.equals("SUCCESS")){
 					Map<String,Object> params = new HashMap<String,Object>();
-					params.put("orderId", outTradeNo);
-					params.put("orderState", "1");//已支付
-					appOrdersMapper.updateOrderState(params);
+					params.put("orderId", req.getOutTradeNo());
+					params.put("orderState", 1);//已支付
+					params.put("payUserId", req.getPayUserId());
+					params.put("payTime", req.getPayTime());
+					params.put("tradeNo", req.getTradeNo());
+					params.put("payType", req.getPayType());
+					appOrdersMapper.payNotify(params);
 				}
 				result = buildResult("SUCCESS", "OK");
 			}else{

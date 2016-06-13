@@ -7,6 +7,7 @@ import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
+import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.tencent.protocol.native_protocol.NativePayReqData;
@@ -55,5 +56,5 @@ public abstract class ThirdPayManager {
 	 * @param objStr
 	 * @return
 	 */
-	public abstract String payNotify(String objStr);
+	public abstract String payNotify(PayNotifyRequest req);
 }

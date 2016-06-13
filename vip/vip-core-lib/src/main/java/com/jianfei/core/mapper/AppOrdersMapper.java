@@ -42,4 +42,12 @@ public interface AppOrdersMapper {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> selectOrder(Map<String, Object> map);
+	
+	/**
+	 * 支付宝回调通知
+	 * 参数类型见：com.jianfei.core.common.pay.PayNotifyRequest
+	 * @param params
+	 * @return
+	 */
+	int payNotify(Map<String, Object> params);
 }

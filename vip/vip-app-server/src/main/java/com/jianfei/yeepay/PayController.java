@@ -3,6 +3,7 @@ package com.jianfei.yeepay;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
@@ -20,7 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.VipOrderState;
+import com.jianfei.core.common.pay.PayNotifyRequest;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.YeepayUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.service.order.OrderManager;
@@ -28,6 +33,9 @@ import com.jianfei.core.service.thirdpart.ThirdPayManager;
 import com.jianfei.core.service.thirdpart.impl.AlipayPayManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.WechatPayManagerImpl;
 import com.jianfei.core.service.user.SaleUserManager;
+import com.tencent.common.Signature;
+import com.tencent.common.Util;
+import com.tencent.protocol.native_protocol.NativeNotifyReq;
 
 
 
@@ -470,8 +478,28 @@ public class PayController {
 			e.printStackTrace();
 		}
 	    
-	    result = wechatiPayManager.payNotify(send);
+	    NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(send, NativeNotifyReq.class);
 	    
+	    
+	    String signResult = Signature.getSign(req.toMap());
+		PayNotifyRequest param = new PayNotifyRequest();
+		param.setResultCode(req.getResult_code());
+		param.setReturnCode(req.getReturn_code());
+		param.setOutTradeNo(req.getOut_trade_no());
+		param.setTradeNo(req.getTransaction_id());
+		
+		param.setPayUserId(req.getOpenid());
+		param.setSign(req.getSign());
+		param.setSignResult(signResult);
+		param.setPayType(1);
+	    try {
+			Date payTime = DateUtils.parseDate(req.getTime_end(), "yyyyMMddHHmmss");
+			param.setPayTime(DateUtil.dateToString(payTime, "yyyy-MM-dd HH:mm:ss"));
+			
+		} catch (ParseException e2) {
+			e2.printStackTrace();
+		}
+	    result = wechatiPayManager.payNotify(param);
 	    response.setContentType("text/xml; charset=utf-8");
 	    response.setCharacterEncoding("utf-8");
 	    try { 
@@ -489,17 +517,27 @@ public class PayController {
      */
     @RequestMapping(value = "/alipay_notify")
     public void alipayNotify(HttpServletRequest request,HttpServletResponse response) {
-    	String send = "";//获取请求的报文
     	String outTradeNo = request.getParameter("out_trade_no");
+    	String tradeNo = request.getParameter("trade_no");
     	String tradeStatus = request.getParameter("trade_status");
-    	String notifyId = request.getParameter("notify_id");
+    	String payTime = request.getParameter("gmt_payment");//转换格式
+    	String payUserId = request.getParameter("buyer_logon_id");
     	String sign = request.getParameter("sign");
     	
+    	PayNotifyRequest param = new PayNotifyRequest();
+		param.setOutTradeNo(outTradeNo);
+		param.setTradeNo(tradeNo);
+		param.setPayTime(payTime);
+		param.setPayUserId(payUserId);
+		param.setSign(sign);
+		param.setSignResult(sign);
+		param.setResultCode(tradeStatus);
+    	param.setPayType(2);
 	    //业务处理
-    	String result = aliPayManager.payNotify(outTradeNo);
+    	String result = aliPayManager.payNotify(param);
     	
-	    response.setContentType("text/xml; charset=utf-8");
-	    response.setCharacterEncoding("utf-8");
+//	    response.setContentType("text/xml; charset=utf-8");
+//	    response.setCharacterEncoding("utf-8");
 	    try { 
 
 	    	response.getWriter().write(result);
