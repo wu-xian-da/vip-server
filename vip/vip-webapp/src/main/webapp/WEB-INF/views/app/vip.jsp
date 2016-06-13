@@ -118,7 +118,13 @@
 							<option value="4" >已退款</option>
 					</select></td>
 				<td><input id="searchBox" class="easyui-validatebox" style="width: 150px" placeholder='输入手机号/姓名'></input></td>
-				<td><a href="javascript:void(0);" onclick="blurClick();" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true">搜索</a></td>
+				<td>
+							<input type="button" value="查询" style="width: 60px;height: 20px;
+						    border: none;
+						    background: #698DC3;
+						    border-radius: 5px;
+						    text-align: center;
+						    color: #FFF;" onclick="blurClick();" /></td>
 			</tr>
 		</table>
 	</div>
