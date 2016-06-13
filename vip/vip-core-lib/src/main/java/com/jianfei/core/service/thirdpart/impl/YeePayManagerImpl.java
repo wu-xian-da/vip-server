@@ -1,14 +1,13 @@
 package com.jianfei.core.service.thirdpart.impl;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.stereotype.Service;
 
+import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.common.utils.YeepayUtils;
@@ -114,7 +113,7 @@ public class YeePayManagerImpl extends ThirdPayManager {
 	}
 
 	@Override
-	public String payNotify(String objStr) {
+	public String payNotify(PayNotifyRequest param) {
 		// TODO Auto-generated method stub
 		return null;
 	}

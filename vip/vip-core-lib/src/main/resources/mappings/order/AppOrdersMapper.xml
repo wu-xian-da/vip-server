@@ -165,7 +165,11 @@
   	update app_orders set order_state=#{orderState} where order_id = #{orderId}
   </update>
   
-  
+  <!--支付回调通知  -->
+  <update id="payNotify" parameterType="java.util.Map">
+  	update app_orders set order_state=#{orderState},pay_user_id=#{payUserId},pay_time=#{payTime},
+  		serial_id=#{tradeNo},pay_type=#{payType} where order_id = #{orderId}
+  </update>
   
   <sql id="Base_Column_List" >
     order_id, id, customer_id, order_time, order_state, pay_type, serial_id, pay_money, 
