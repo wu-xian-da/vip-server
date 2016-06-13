@@ -42,7 +42,7 @@
 			</div>
 			<ul>
 				<li><label>有效期：</label>${orderDetailInfo.cardType}年</li>
-				<li><label>vip卡金额：</label>${orderDetailInfo.initMoney}￥</li>
+				<li><label>vip卡金额：</label>${orderDetailInfo.initMoney}元</li>
 				<li><label>支付方式：
 				      <c:choose>
 				      	<c:when test="${orderDetailInfo.payMethod == 1}">
@@ -98,14 +98,17 @@
 					<li>退款金额：${appCardBack.money}元</li>
 					<li>退款方式：
 						<c:choose>
-							<c:when test="${appCardBack.backType ==0 }">
+							<c:when test="${appCardBack.backType ==1}">
 								微信转账
 							</c:when>
-							<c:when test="${appCardBack.backType ==1 }">
+							<c:when test="${appCardBack.backType ==2 }">
 								支付宝转账
 							</c:when>
+							<c:when test="${appCardBack.backType ==3 }">
+								银行卡转账
+							</c:when>
 							<c:otherwise>
-								银行转账
+								现金转账
 							</c:otherwise>
 						</c:choose>
 					</li>

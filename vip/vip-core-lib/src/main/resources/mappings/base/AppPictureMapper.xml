@@ -186,5 +186,6 @@
 			</if>
 
 		</where>
+		ORDER  BY priority ASC
 	</select>
 </mapper>

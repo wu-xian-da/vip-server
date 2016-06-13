@@ -37,7 +37,7 @@
 			
 			<div class="clerk-container-item">
 				<label>场站所属省会：</label>
-				<select name="provinceId" id="provinceSele" onchange="getAirPortList()">
+				<select name="province" id="provinceSele" onchange="getAirPortList()">
 					<c:forEach items="${provinceList}" var="province">
 						<option value="${province.cid}">${province.name}</option>
 					</c:forEach>
@@ -62,7 +62,7 @@
 			</div>
 				
 			<div class="clerk-container-item">
-				<label>vip室信息编辑：</label>
+				<label style="margin-bottom: 15px;">vip室信息编辑：</label>
 				<!-- <textarea name="remark1"></textarea> -->
 				<!-- 加载编辑器的容器 -->
     			<script id="container" name="remark1" type="text/plain">

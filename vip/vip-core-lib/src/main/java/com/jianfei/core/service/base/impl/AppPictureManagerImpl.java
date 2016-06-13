@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.GloabConfig;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -155,13 +156,21 @@ public class AppPictureManagerImpl implements AppPictureManager {
 	 */
 	@Override
 	public List<AppPicture> getPicture(PictureType pictureType) {
-		AppPicture appPicture=new AppPicture();
-		appPicture.setImagetype(pictureType.getName());
-		List<AppPicture> pictures=appPictureMapper.getPicture(appPicture);
-		if (pictures==null){
-			return new ArrayList<>();
+		//缓存KEY设计 APP_PICTURE_
+		//1、查询缓存是否存在
+		List<AppPicture> appPictures= (List<AppPicture>) (Object)JedisUtils.getObject("APP_PICTURE_"+pictureType.getName());
+
+		//2、不存在查询数据库
+		if (appPictures == null) {
+			AppPicture appPicture = new AppPicture();
+			appPicture.setImagetype(pictureType.getName());
+			appPicture.setDtflag(0);//存在的图片
+			appPictures = appPictureMapper.getPicture(appPicture);
+			AppPicture.getStaticAdderss(appPictures);
+			//3、查询结果放入缓存并返回
+			JedisUtils.setObject("APP_PICTURE_" + pictureType.getName(), appPictures, 0);
 		}
-		return appPictureMapper.getPicture(appPicture);
+		return appPictures;
 	}
 	/**
 	 * 更新vip室图片信息

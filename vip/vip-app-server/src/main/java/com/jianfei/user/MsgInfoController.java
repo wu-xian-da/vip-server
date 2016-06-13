@@ -1,10 +1,8 @@
 package com.jianfei.user;
 
-import com.jianfei.core.bean.AppVersion;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
-import com.jianfei.resource.ResourceController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;

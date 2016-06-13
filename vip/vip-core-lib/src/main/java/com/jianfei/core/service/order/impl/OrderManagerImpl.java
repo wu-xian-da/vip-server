@@ -161,16 +161,6 @@ public class OrderManagerImpl implements OrderManager {
 		return appOrdersMapper.updateByPrimaryKeySelective(addInfoDto) < 0 ? false : true;
     }
 
-    /**
-     * 查询订单是否付款
-     *
-     * @param orderId 订单ID
-     * @return
-     */
-    @Override
-    public boolean checkOrderPay(String orderId) {
-        return false;
-    }
 
 	/**
 	 * 订单发票信息
@@ -238,7 +228,7 @@ public class OrderManagerImpl implements OrderManager {
 			//2、app_consume表中返回vip消费次数
 			int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
 			//3、计算用户vip卡剩余金额
-			remainMoney = (float) ((appOrderCard.getInitMoney()-count*200)*0.8);
+			remainMoney = (float) (appOrderCard.getInitMoney()-count*200*0.8);
 			
 		}
 		System.out.println("float remainMoney="+remainMoney);
@@ -477,5 +467,24 @@ public class OrderManagerImpl implements OrderManager {
 		} else {
 			return BaseMsgInfo.msgFail("确认付款失败");
 		}
+	}
+
+	/**
+	 * APP端添加退卡信息
+	 *
+	 * @param appCardBack 退卡信息
+	 * @return
+	 */
+	@Override
+	public BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
+		//1、根据订单号查询订单信息
+		AppOrders orders = appOrdersMapper.selectByPrimaryKey(appCardBack.getOrderId());
+		if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
+			return BaseMsgInfo.msgFail("订单不存在");
+		}
+		//TODO 2、重新计算可退余额 校验是否正确
+		//TODO 3、插入数据库
+
+		return null;
 	}
 }

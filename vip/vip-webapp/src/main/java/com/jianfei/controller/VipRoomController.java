@@ -138,6 +138,7 @@ public class VipRoomController extends BaseController {
 				e.printStackTrace();
 			}
 			String relativePath = "/viproomPhoto/" + newFileName;
+			System.out.println("relativePath="+relativePath);
 			// 保存图片url
 			AppPicture appPicture = new AppPicture();
 			appPicture.setViproomId(viproomId);
@@ -160,14 +161,21 @@ public class VipRoomController extends BaseController {
 	 */
 	@RequestMapping("gotoUpdateVipRoomView")
 	public String gotoUpdateVipRoomView(@RequestParam(value = "viproomId") String viproomId, Model model) {
-		// 返回所有的省列表
+		//1、返回所有的省列表
 		Map<String, Object> reqMap = new HashMap<String, Object>();
 		reqMap.put("pid", 0);
 		List<Map<String, Object>> provinceList = ariPortService.selectCityById(reqMap);
 		model.addAttribute("provinceList", provinceList);
-		// 根据vip室编号返回vip室信息
+		
+		//2、根据vip室编号返回vip室信息
 		SysViproom viproom = vipRoomManagerImp.selVipRoomById(viproomId);
 		model.addAttribute("viproom", viproom);
+		
+		//3、根据vip所属省份id返回该省份下机场列表
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("province", viproom.getProvince());
+		List<Map<String, Object>> airPortlist = ariPortService.mapList(paramMap);
+		model.addAttribute("airPortlist",airPortlist);
 		return "viproom/editVipRoom";
 	}
 

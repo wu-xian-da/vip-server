@@ -24,11 +24,11 @@
 			<div style="padding-top:20px; padding-left:20px;">
 				<div class="order-condition-item">
 					<select name="" id="backTypeSelect">
-						<option value="4">全部退款方式</option>
-						<option value="0">微信</option>
-						<option value="1">支付宝</option>
-						<option value="2">银行卡</option>
-						<option value="3">现场</option>
+						<option value="">全部退款方式</option>
+						<option value="1">微信</option>
+						<option value="2">支付宝</option>
+						<option value="3">银行卡</option>
+						<option value="4">现场</option>
 					</select>
 				</div>
 	
@@ -44,8 +44,8 @@
 				<div class="order-condition-item">
 					<select name="" id="orderStateSelect">
 						<option value="10">全部退款状态</option>
-						<option value="3">未退</option>
-						<option value="4">已退</option>
+						<option value="3">审核通过</option>
+						<option value="4">已退款</option>
 					</select>
 				</div>
 	
@@ -82,7 +82,7 @@
 							<th data-options="align:'center', field:'applyTypeName',width:150">申请途径</th>
 							<th data-options="align:'center', field:'backTypeName',width:100">退卡方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
-							<th data-options="align:'center', field:'orderStateName',width:100">状态</th>
+							<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 							<th data-options="align:'center', field:'operation',width:210">操作</th>
 						</tr>
 					</thead>
@@ -101,14 +101,21 @@
 				<div class="radio-tab-content">
 					<div class="raidp-tab-content-item" style="display: block">
 						<input type="hidden" value="" id="backCardOrderId" /> <label
-							id="backMethod">输入微信号:</label><input type="text"
-							id="payBackCardNo" readonly="readonly" />
+							id="backMethod">输入微信号:</label>&nbsp;<span id="payBackCardNo"></span>
 					</div>
 
 				</div>
-
+				
+				<div id="banckName2div" class="radio-tab-content" style="display: none;">
+                    <label>开户行&nbsp; <span id="banckName2"></span></label>
+                </div>
+                
+                <div id="userName2div" class="radio-tab-content" style="display: none;">
+                    <label>用户姓名&nbsp; <span id="userName2"></span></label>
+                </div>
+                
 				<div class="raido-tab-refund-price">
-					<label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
+					<label>可退金额 <span id="remainMoney2">0.00</span>元</label>
 				</div>
 
 				<div class="easyui-window-footer" style="padding-left:32px">
@@ -170,17 +177,21 @@
         //1、打开最终退款页面
         function finalBackMoneyToUser(args){
 			var backMethod = "";
-			if(args.backType == 0){
+			if(args.backType == 1){
 				backMethod="微信账号";
-			}else if(args.backType ==1){
+			}else if(args.backType ==2){
 				backMethod = '支付宝账号';
-			}else if(args.backType == 2){
+			}else if(args.backType == 3){
 				backMethod = '银行卡号';
+				$("#banckName2div").show();
+				$("#banckName2").text(args.backName);
+				$("#userName2div").show();
+				$("#userName2").text(args.customerName);
 			}
 			
 			$("#backCardOrderId").val(args.orderId);
 			$("#backMethod").text(backMethod);
-			$("#payBackCardNo").val(args.backMoneyCard);
+			$("#payBackCardNo").text(args.backMoneyCard);
 			$("#remainMoney2").text(args.remainMoney);
 			
         	$("#refund").window('open');

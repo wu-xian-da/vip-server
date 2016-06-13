@@ -45,10 +45,13 @@
 		 ]]>
 		<where>
 			<if test="userType!=null and userType!=''">
-				and u.user_type=#{userType}
+				 u.user_type=#{userType}
 			</if>
 			<if test="id!=null">
 				and u.id=#{id}
+			</if>
+			<if test="dtflag!=null and dtflag!=''">
+				and u.dtflag=#{dtflag}
 			</if>
 			<if test="name!=null">
 				and u.name like CONCAT('%', #{name}, '%')
@@ -76,7 +79,7 @@
 	</select>
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
 		SELECT * from sys_users where login_name =#{loginName} and
-		(user_type=1 or user_type=2)
+		(user_type=1 or user_type=2) and dtflag=0
 	</select>
 
 	<select id="getUserByUno" resultMap="userRs" parameterType="String">
@@ -179,11 +182,13 @@
 	</insert>
 
 	<update id="updatePasswordByUno" parameterType="String">
-		UPDATE sys_users SET `password`=#{newPassword} WHERE `code`=#{uno} and
+		UPDATE sys_users
+		SET `password`=#{newPassword} WHERE `code`=#{uno} and
 		`password`=#{password}
 	</update>
 
 	<update id="updatePhotoPath" parameterType="String">
-		UPDATE sys_users SET photo=#{photoPath} WHERE `code`=#{userNo} 
+		UPDATE sys_users SET
+		photo=#{photoPath} WHERE `code`=#{userNo}
 	</update>
 </mapper>

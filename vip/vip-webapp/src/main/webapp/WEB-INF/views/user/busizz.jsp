@@ -16,7 +16,7 @@
 			title : '添加用户信息',
 			url : sy.contextPath + '/busizz/form',
 			buttons : [ {
-				text : '添加',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -50,7 +50,7 @@
 			title : '编辑用户信息',
 			url : sy.contextPath + '/busizz/form?id=' + id,
 			buttons : [ {
-				text : '编辑',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -142,24 +142,16 @@
 			}
 		});
 	});
+	function search(){
+		grid.datagrid('load',{'name':$("#name").val()});
+	};
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<div id="toolbar" style="display: none;">
 		<table>
 			<tr>
-				<td>
-					<form id="searchForm">
-						<table>
-							<tr>
-								<td>姓名</td>
-										<td><input id="searchBox" class="easyui-searchbox" style="width: 150px" data-options="searcher:function(value,name){grid.datagrid('load',{'name':value});},prompt:'搜索姓名'"></input></td>
-										<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom_out',plain:true" onclick="$('#searchBox').searchbox('setValue','');grid.datagrid('load',{});">清空查询</a></td>
-							
-							</tr>
-						</table>
-					</form>
-				</td>
+				
 			</tr>
 			<tr>
 				<td>
@@ -169,6 +161,23 @@
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
 						</shiro:hasPermission>
+						<td>
+							<form id="searchForm">
+								<table>
+									<tr>
+										<td>姓名</td>
+										<td><input id="name" style="width: 150px" placeholder='输入机场名字'></input></td>
+										<td>
+							<input type="button" value="查询" style="width: 60px;height: 20px;
+						    border: none;
+						    background: #698DC3;
+						    border-radius: 5px;
+						    text-align: center;
+						    color: #FFF;" onclick="search();" /></td>
+									</tr>
+								</table>
+							</form>
+						</td>
 						</tr>
 					</table>
 				</td>

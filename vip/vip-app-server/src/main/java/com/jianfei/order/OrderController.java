@@ -183,7 +183,6 @@ public class OrderController {
 			log.error("用户使用记录查询接口异常",e);
 			return BaseMsgInfo.msgFail("用户使用记录查询失败");
 		}
-
 	}
 
 	/**
@@ -195,7 +194,11 @@ public class OrderController {
 	@RequestMapping(value = "/vipReturnInfo")
 	@ResponseBody
 	public BaseMsgInfo addVipReturnInfo(AppCardBack appCardBack) {
-
-		return BaseMsgInfo.success(true);
+		try {
+			return orderManager.addBackCardInfo(appCardBack);
+		}catch (Exception e){
+			log.error("保存用户退卡信息异常",e);
+			return BaseMsgInfo.msgFail("保存用户退卡信息失败");
+		}
 	}
 }

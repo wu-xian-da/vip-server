@@ -20,6 +20,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -216,6 +217,8 @@ public class OrderController extends BaseController {
 				outData.put("orderId", orderId);//订单号
 				outData.put("backMoneyCard",appCardBack.getCustomerCard());
 				outData.put("backType", appCardBack.getBackType());
+				outData.put("backName", appCardBack.getBankName());
+				outData.put("customerName", appCardBack.getCustomerName());
 				appOrder.setOrderStateName("审核通过");
 				
 				//是否有最终退款查看的权限
@@ -248,7 +251,7 @@ public class OrderController extends BaseController {
 	@ResponseBody
 	public Map<Object,Object> backCardlist(@RequestParam(value="page",defaultValue="1") Integer pageNo,
 			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
-			@RequestParam(value="backType",defaultValue="4") Integer backType,
+			@RequestParam(value="backType",defaultValue="") String backType,
 			@RequestParam(value="applyType",defaultValue="") String applyType,
 			@RequestParam(value="orderState",defaultValue="10") Integer orderState){
 		
@@ -258,7 +261,9 @@ public class OrderController extends BaseController {
 		
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
 		//退款方式
-		paramsMap.put("backType", backType);
+		if(!backType.equals("")){
+			paramsMap.put("backType", backType);
+		}
 		//申请方式
 		if(!applyType.equals("")){
 			paramsMap.put("applyType", applyType);
@@ -289,6 +294,8 @@ public class OrderController extends BaseController {
 					outData.put("backType", appCardBack.getBackType());
 					outData.put("phone", appOrder.getCustomerPhone());
 					appOrder.setOrderStateName("审核通过");
+					outData.put("backName", appCardBack.getBankName());
+					outData.put("customerName", appCardBack.getCustomerName());
 					//申请方式
 					int applyTypes = appOrder.getApplyType();
 					if(applyTypes == 0){
@@ -298,11 +305,11 @@ public class OrderController extends BaseController {
 					}
 					//退卡方式
 					int backCardTypes = appOrder.getBackType();
-					if(backCardTypes == 0){
+					if(backCardTypes == 1){
 						appOrder.setBackTypeName("微信");
-					}else if(backCardTypes == 1){
-						appOrder.setBackTypeName("支付宝");
 					}else if(backCardTypes == 2){
+						appOrder.setBackTypeName("支付宝");
+					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
 						appOrder.setBackTypeName("现场");
@@ -333,11 +340,11 @@ public class OrderController extends BaseController {
 					}
 					//退卡方式
 					int backCardTypes = appOrder.getBackType();
-					if(backCardTypes == 0){
+					if(backCardTypes == 1){
 						appOrder.setBackTypeName("微信");
-					}else if(backCardTypes == 1){
-						appOrder.setBackTypeName("支付宝");
 					}else if(backCardTypes == 2){
+						appOrder.setBackTypeName("支付宝");
+					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
 						appOrder.setBackTypeName("现场");
@@ -426,7 +433,9 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value="/onRefund")
 	@ResponseBody
-	public Map<String,Object> onRefund(String orderId,String backCardNo,String remainMoney,String payMethod,Integer opr){
+	public Map<String,Object> onRefund(String orderId,String backCardNo,String remainMoney,String payMethod,Integer opr,
+			@RequestParam(value="userNames",defaultValue="",required=false) String userNames,
+			@RequestParam(value="banckName",defaultValue="",required=false) String banckName){
 		System.out.println("orderId="+orderId+" backCardNo="+backCardNo);
 		//1、将订单状态有'正在审核'变成'审核通过'
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
@@ -445,6 +454,8 @@ public class OrderController extends BaseController {
 		appCardBack.setMoney(Float.parseFloat(remainMoney));
 		appCardBack.setBackType(Integer.parseInt(payMethod));
 		appCardBack.setCreaterId(userId);
+		appCardBack.setBankName(banckName);//开户行
+		appCardBack.setCustomerName(userNames);//开户者姓名
 		orderManagerImpl.insertBackCardInfo(appCardBack);
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();

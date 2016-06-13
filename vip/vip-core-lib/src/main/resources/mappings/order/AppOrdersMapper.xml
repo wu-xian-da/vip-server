@@ -90,12 +90,12 @@
   					 where ord.sale_no=agent.id and ord.customer_id = customer.customer_id and ord.airport_id = ap.airport_id
   	 
      	<if test="startTime != null">
-    	    and ord.order_time <![CDATA[  > ]]> #{startTime}
+    	    and DATE_FORMAT(ord.order_time,'%Y-%m-%d') <![CDATA[  >=]]> #{startTime}
          </if>
          
          <!-- 结束时间 -->
          <if test="endTime != null">
-         	and ord.order_time <![CDATA[  < ]]> #{endTime}
+         	and DATE_FORMAT(ord.order_time,'%Y-%m-%d')  <![CDATA[  <= ]]> #{endTime}
          </if>
          
          <!-- 机场编号 -->
@@ -139,7 +139,7 @@
   	 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer,app_card_back acb
      		where ord.sale_no=agent.id and ord.customer_id = customer.customer_id and 
     			 ord.airport_id = ap.airport_id and ord.order_id = acb.order_id 
-    			 <if test="backType != 4">
+    			 <if test="backType != null">
     			 	 and acb.back_type = #{backType}
     			 </if>
     			<if test="applyType !=null">

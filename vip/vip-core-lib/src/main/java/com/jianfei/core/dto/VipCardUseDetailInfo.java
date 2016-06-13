@@ -45,6 +45,11 @@ public class VipCardUseDetailInfo {
      */
     private String customerIdNo;
     /**
+     * 用户性别
+     */
+    private int customerSex;
+
+    /**
      * 使用过的费用
      */
     private float  usedMoney;
@@ -183,5 +188,13 @@ public class VipCardUseDetailInfo {
 
     public void setInvoiceSate(int invoiceSate) {
         InvoiceSate = invoiceSate;
+    }
+
+    public int getCustomerSex() {
+        return customerSex;
+    }
+
+    public void setCustomerSex(int customerSex) {
+        this.customerSex = customerSex;
     }
 }

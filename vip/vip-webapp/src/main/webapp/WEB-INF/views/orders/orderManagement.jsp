@@ -30,7 +30,7 @@
         <div id="order-container-wrap" style="height:10%; margin:0; padding:0;">
 	        <div style="padding:20px 0 0 20px;">
 			        <div id="order-container-calac">
-			            <label>日期：</label>
+			            <label>订单日期：</label>
 			            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:110px;height:26px">
 			
 			            <label>-</label>
@@ -98,11 +98,11 @@
 	                <th data-options="align:'center', field:'airportName',width:150">场站</th>
 	                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
 	                
-	                <th data-options="align:'center', field:'customerName',width:100">用户名称</th>
+	                <th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 	                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 	                
-	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票</th>
-	                <th data-options="align:'center', field:'orderStateName',width:100">状态</th>
+	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
+	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 	                <th data-options="align:'center', field:'operation',width:210">操作</th>
 	                </tr>
 	            </thead>
@@ -115,7 +115,7 @@
     <!--用户账号信息录入 -->
 	<div id="w" class="easyui-window" title="退款" 
             data-options = "modal:'true',closed:'true'" 
-            style="width:500px;height:260px;padding:10px;">
+            style="width:500px;height:300px;padding:10px;">
        	<div class="easy-window-item">
             <div class="easy-window-radio-tab">
                 <div class="radio-tab-head">
@@ -127,20 +127,33 @@
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
                     	<input type="hidden" value="" id="hideOrderId"/>
-                        <label>输入微信号:</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="required:true"/>
+                        <label>输入微信号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入支付宝账号:</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="required:true"/>
+                        <label>输入支付宝账号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入银行卡号:</label><input class="easyui-validatebox" type="text" id="backCardNo2" data-options="required:true">
-                    </div>
+                    	<table>
+                    		<tr>
+                    			<td><label>输入开户行&nbsp;</label></td>
+                    			<td><input type="text" id="banckName"/></td>
+                    		</tr>
+                    		<tr>
+                    			<td> <label>输入银行卡账号&nbsp;</label></td>
+                    			<td><input type="text" id="backCardNo2"></td>
+                    		</tr>
+                    		<tr>
+                    			<td><label>输入持卡人姓名&nbsp;</label></td>
+                    			<td><input type="text" id="userNames"/></td>
+                    		</tr>
+                    	</table>
+                     </div>
                 </div>
 
                 <div class="raido-tab-refund-price">
-                    <label>可退金额: ￥<span id="remainMoney">0.00</span></label>
+                    <label>可退金额&nbsp;&nbsp;<span id="remainMoney">0.00</span>元</label>
                 </div>
 
                 <div class="easyui-window-footer" style="padding-left:50px">
@@ -161,13 +174,21 @@
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
                     	<input type="hidden" value="" id="backCardOrderId"/>
-                        <label id="backMethod">输入微信号:</label><input type="text" id="payBackCardNo" readonly="readonly"/>
+                        <label id="backMethod">输入微信号</label>&nbsp;<span id="payBackCardNo"></span>
                     </div>
 
                 </div>
-
+                
+				<div id="banckName2div" class="radio-tab-content" style="display: none;">
+                    <label>开户行&nbsp; <span id="banckName2"></span></label>
+                </div>
+                
+                <div id="userName2div" class="radio-tab-content" style="display: none;">
+                    <label>用户姓名&nbsp; <span id="userName2"></span></label>
+                </div>
+                
                 <div class="raido-tab-refund-price">
-                    <label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
+                    <label>可退金额 &nbsp; <span id="remainMoney2">0.00</span>元</label>
                 </div>
 
                 <div class="easyui-window-footer" style="padding-left:32px">
@@ -185,17 +206,6 @@
     <script type="text/javascript">
         $(function(){
             $('#tt').datagrid();
-            //初始化机场下拉列表
-            var url = "returnAirPortList";
-            $.get(url,function(_d){
-            	if(_d.result ==1){
-            		var airport = _d.airportList;
-            		for(var index =0 ;index < airport.length;index ++){
-            			$("#airportIdSelect").append(" <option value='"+airport[index].id+"'>"+airport[index].name+"</option>");
-            		}
-            		
-            	}
-            })
         });
 
         function myformatter(date){
@@ -226,17 +236,21 @@
         //1、打开最终退款页面
         function finalBackMoneyToUser(args){
 			var backMethod = "";
-			if(args.backType == 0){
-				backMethod="微信账号:";
-			}else if(args.backType ==1){
-				backMethod = '支付宝账号:';
-			}else if(args.backType == 2){
-				backMethod = '银行卡号:';
+			if(args.backType == 1){
+				backMethod="微信账号";
+			}else if(args.backType ==2){
+				backMethod = '支付宝账号';
+			}else if(args.backType == 3){
+				backMethod = '银行卡号';
+				$("#banckName2div").show();
+				$("#banckName2").text(args.backName);
+				$("#userName2div").show();
+				$("#userName2").text(args.customerName);
 			}
 			
 			$("#backCardOrderId").val(args.orderId);
 			$("#backMethod").text(backMethod);
-			$("#payBackCardNo").val(args.backMoneyCard);
+			$("#payBackCardNo").text(args.backMoneyCard);
 			$("#remainMoney2").text(args.remainMoney);
 			
         	$("#refund").window('open');
@@ -287,17 +301,21 @@
 		//3、将用户填写的信息写入到退卡流水表中
 		$("#writerUserInfo").click(function(elem){
 			var backCardNo = "";
+			var userNames = "";//开户名
+			var banckName = "";//开户行
 			var remainMoney = $("#remainMoney").text();
 			var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
 			var orderId = $("#hideOrderId").val();
-			if(payMethod==0){
+			if(payMethod==1){
 				backCardNo = $("#backCardNo0").val();
-			}else if(payMethod == 1){
+			}else if(payMethod == 2){
 				backCardNo = $("#backCardNo1").val();
-			}else if(payMethod ==2){
+			}else if(payMethod ==3){
 				backCardNo = $("#backCardNo2").val();
+				userNames = $("#userNames").val();
+				banckName = $("#banckName").val();
 			}
-			var url = "onRefund?orderId="+orderId+"&backCardNo="+backCardNo+"&remainMoney="+remainMoney+"&payMethod="+payMethod+"&opr="+3;
+			var url = "onRefund?orderId="+orderId+"&backCardNo="+backCardNo+"&remainMoney="+remainMoney+"&payMethod="+payMethod+"&opr="+3+"&userNames="+userNames+"&banckName="+banckName;
 			$.get(url,function(_d){
 				if(_d.result == 1){
 					/* $(elem).after($(_d.data));
