@@ -87,6 +87,7 @@ public class UserController extends BaseController {
 				request, "_");
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
+		searchParams.put("dtflag","0");
 		PageHelper.startPage(page, rows);
 		MessageDto<List<User>> messageDto = userManaer.get(searchParams);
 		if (messageDto.isOk()) {

@@ -38,9 +38,15 @@
 			
 			<div class="clerk-container-item">
 				<label>场站所属省会：</label>
-				<select name="provinceId" id="provinceSele" onchange="getAirPortList()">
+				<select name="province" id="provinceSele" onchange="getAirPortList()">
 					<c:forEach items="${provinceList}" var="province">
-						<option value="${province.cid}">${province.name}</option>
+						<c:if test="${province.cid ==viproom.province}">
+							<option value="${province.cid}" selected="selected">${province.name}</option>
+						</c:if>
+						<c:if test="${province.cid !=viproom.province}">
+							<option value="${province.cid}">${province.name}</option>
+						</c:if>
+						
 					</c:forEach>
 				</select>
 			</div>
@@ -48,7 +54,14 @@
 			<div class="clerk-container-item">
 				<label>场站名称：</label> 
 				<select name="airportId" id="airportSele">
-					
+					<c:forEach items="${airPortlist}" var="airPort">
+						<c:if test="${viproom.airportId == airPort.airport_id}">
+							<option value="${airPort.airport_id }" selected="selected">${airPort.airport_name }</option>
+						</c:if>
+						<c:if test="${viproom.airportId != airPort.airport_id}">
+							<option value="${airPort.airport_id }">${airPort.airport_name }</option>
+						</c:if>
+					</c:forEach>
 				</select>
 			</div>
 			
@@ -82,19 +95,6 @@
 	<!-- 实例化编辑器 -->
 	var editor = UE.getEditor('container');
 	
-	$(function() {
-		//根据省份初始化场站下拉列表框
-		var provinceId = $("#provinceSele option:selected").val();
-		var url = "getAirPortList?provinceId=" + provinceId
-		$.get(url, function(_d) {
-			var size = _d.length;
-			console.log(_d)
-			for (var index = 0; index < size; index++) {
-				$("#airportSele").append("<option value='"+_d[index].airport_id+"'>"+ _d[index].airport_name + "</option>");
-			}
-		})
-		
-	})
 	//根据省id显示场站列表
 	function getAirPortList() {
 		//清空下拉列表内容
