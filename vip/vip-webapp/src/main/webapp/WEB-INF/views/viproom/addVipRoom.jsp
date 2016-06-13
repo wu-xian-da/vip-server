@@ -62,7 +62,7 @@
 			</div>
 				
 			<div class="clerk-container-item">
-				<label>vip室信息编辑：</label>
+				<label style="margin-bottom: 15px;">vip室信息编辑：</label>
 				<!-- <textarea name="remark1"></textarea> -->
 				<!-- 加载编辑器的容器 -->
     			<script id="container" name="remark1" type="text/plain">

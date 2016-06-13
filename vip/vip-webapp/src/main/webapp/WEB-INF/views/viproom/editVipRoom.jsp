@@ -71,12 +71,12 @@
 			</div>
 			
 			<div class="clerk-container-item">
-				<label>vip室图片：</label>
+				<label>编辑vip室图片：</label>
 				<input type="file" name="file" /> 
 			</div>
 			
 			<div class="clerk-container-item">
-				<label>vip室信息编辑：</label>
+				<label style="margin-bottom: 15px;">vip室信息编辑：</label>
 				<%-- <textarea name="remark1">${viproom.remark1}</textarea> --%>
 				<script id="container" name="remark1" type="text/plain">
         			${viproom.remark1}
