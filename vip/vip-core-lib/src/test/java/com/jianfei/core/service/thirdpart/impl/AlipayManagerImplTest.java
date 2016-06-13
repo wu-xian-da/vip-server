@@ -12,7 +12,10 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.text.ParseException;
+import java.util.Date;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.tencent.protocol.native_protocol.NativePayReqData;
@@ -37,11 +42,10 @@ import com.tencent.protocol.native_protocol.NativePayReqData;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml" })
-@Transactional
 public class AlipayManagerImplTest {
 
-	//@Autowired
-	//private AlipayPayManagerImpl alipayManagerImpl;
+	@Autowired
+	private AlipayPayManagerImpl alipayManagerImpl;
 	@Autowired 
 	WechatPayManagerImpl wechatiPayManager;
 	@Autowired 
@@ -72,6 +76,23 @@ public class AlipayManagerImplTest {
 	@Test
 	public void test_wechat_query(){
 		wechatiPayManager.tradeQuery("0465698721450400"); 
+	}
+	
+	@Test
+	public void test_alipay_query(){
+		alipayManagerImpl.tradeQuery("abc123");
+	}
+	
+	@Test
+	public void test_alipay_notify(){
+		PayNotifyRequest req = new PayNotifyRequest();
+		req.setOutTradeNo("dd1001");
+		req.setPayTime("2016-05-06 06:06:06");
+		req.setPayType(2);
+		req.setPayUserId("13966662222");
+		req.setResultCode("TRADE_SUCCESS");
+		req.setTradeNo("2188909900");
+		alipayManagerImpl.payNotify(req);
 	}
 	
 	@Test

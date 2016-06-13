@@ -4,6 +4,10 @@ public class PayQueryResult {
 	/**
 	 * code
 	 * 0:已支付，其他非0值各个支付接口的含义不一样，具体可以参考各支付接口的返回代码
+	 * 1:未支付，
+	 * 2:交易关闭
+	 * 3:出现错误
+	 * 
 	 */
 	private String code;
 	/**

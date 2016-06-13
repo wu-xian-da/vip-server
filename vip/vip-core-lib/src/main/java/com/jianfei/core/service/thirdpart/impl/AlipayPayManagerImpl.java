@@ -23,6 +23,7 @@ import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.alipay.demo.trade.model.result.AlipayF2FQueryResult;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
+import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.mapper.AppOrdersMapper;
@@ -142,35 +143,36 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 		AlipayF2FQueryResult result = tradeService.queryTradeResult(tradeNo);
 		switch (result.getTradeStatus()) {
 		case SUCCESS:
-			log.info("查询返回该订单支付成功");
-
 			AlipayTradeQueryResponse response = result.getResponse();
-			// dumpResponse(response);
-			log.info(response.getTradeStatus());
-			// if (Utils.isListNotEmpty(response.getFundBillList())) {
-			// for (TradeFundBill bill : response.getFundBillList()) {
-			// log.info(bill.getFundChannel() + ":" + bill.getAmount());
-			// }
-			// }
-			payQueryResult.setCode("0");
-			payQueryResult.setMsg("ALIPAY_SUCCESS");
+			String tradeStatus = result.getResponse().getTradeStatus();
+			if (tradeStatus.equals("TRADE_SUCCESS")){
+				payQueryResult.setCode("0");
+				payQueryResult.setMsg("已支付");
+			}else if(tradeStatus.equals("WAIT_BUYER_PAY")){
+				payQueryResult.setCode("1");
+				payQueryResult.setMsg("未支付");
+			}else if(tradeStatus.equals("TRADE_CLOSED")){
+				payQueryResult.setCode("2");
+				payQueryResult.setMsg("交易关闭");
+			}
+
 			break;
 
 		case FAILED:
 			log.error("查询返回该订单支付失败或被关闭");
-			payQueryResult.setCode("1");
+			payQueryResult.setCode("3");
 			payQueryResult.setMsg("ALIPAY_查询返回该订单支付失败或被关闭");
 			break;
 
 		case UNKNOWN:
 			log.error("系统异常，订单支付状态未知!");
-			payQueryResult.setCode("2");
+			payQueryResult.setCode("3");
 			payQueryResult.setMsg("ALIPAY_系统异常，订单支付状态未知!");
 			break;
 
 		default:
 			log.error("不支持的交易状态，交易返回异常!");
-			payQueryResult.setCode("2");
+			payQueryResult.setCode("3");
 			payQueryResult.setMsg("ALIPAY_不支持的交易状态，交易返回异常!");
 			break;
 		}
@@ -183,12 +185,19 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 	}
 
 	@Override
-	public String payNotify(String objStr) {
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("orderId", objStr);
-		params.put("orderState", "1");//已支付
-		appOrdersMapper.updateOrderState(params);
-		return "success";
+	public String payNotify(PayNotifyRequest req) {
+		if (req.getResultCode().equals("TRADE_SUCCESS")){
+			Map<String,Object> params = new HashMap<String,Object>();
+			params.put("orderId", req.getOutTradeNo());
+			params.put("orderState", 1);//已支付
+			params.put("payUserId", req.getPayUserId());
+			params.put("payTime", req.getPayTime());
+			params.put("tradeNo", req.getTradeNo());
+			params.put("payType", req.getPayType());
+			appOrdersMapper.payNotify(params);
+			return "success";
+		}else
+			return "failed";
 	}
 
 }
