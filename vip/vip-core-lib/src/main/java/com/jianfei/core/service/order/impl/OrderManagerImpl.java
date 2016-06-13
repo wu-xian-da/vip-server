@@ -417,15 +417,18 @@ public class OrderManagerImpl implements OrderManager {
 		if (!flag)
 			return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
 		//2、查询用户信息和订单信息
-		VipCardUseDetailInfo vipCardUseDetailInfo = appOrderCardMapper.getVipCardUseDetailInfo(phone);
+		List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(phone);
+		VipCardUseDetailInfo vipCardUseDetailInfo = vipCardUseDetailInfoList == null || vipCardUseDetailInfoList.isEmpty() ? new VipCardUseDetailInfo()
+				: vipCardUseDetailInfoList.get(0);
 		if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
 			return BaseMsgInfo.success(vipCardUseDetailInfo);
 		}
 
 		//3、查询VIP使用信息
 		List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
-		if (list == null)
+		if (list == null|| list.isEmpty()){
 			return BaseMsgInfo.success(vipCardUseDetailInfo);
+		}
 		float usedMoney = 0;
 		for (AppConsume appConsume : list) {
 			usedMoney = usedMoney + appConsume.getConsumeMoney();
