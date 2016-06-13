@@ -57,7 +57,7 @@
     insert into app_card_back (back_id, card_no, back_time, 
       back_type, customer_id, agent_id, 
       dtflag)
-    values (#{backId,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, #{backTime,jdbcType=TIMESTAMP}, 
+    values (#{backId,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
       #{backType,jdbcType=INTEGER}, #{customerId,jdbcType=VARCHAR}, #{agentId,jdbcType=VARCHAR}, 
       #{dtflag,jdbcType=INTEGER})
   </insert>
@@ -70,7 +70,7 @@
       <if test="cardNo != null" >
         card_no,
       </if>
-      <if test="backTime != null" >
+      <if test="createTime != null" >
         back_time,
       </if>
       <if test="backType != null" >
@@ -93,8 +93,8 @@
       <if test="cardNo != null" >
         #{cardNo,jdbcType=VARCHAR},
       </if>
-      <if test="backTime != null" >
-        #{backTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="backType != null" >
         #{backType,jdbcType=INTEGER},
@@ -116,8 +116,8 @@
       <if test="cardNo != null" >
         card_no = #{cardNo,jdbcType=VARCHAR},
       </if>
-      <if test="backTime != null" >
-        back_time = #{backTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        back_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="backType != null" >
         back_type = #{backType,jdbcType=INTEGER},
@@ -137,7 +137,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jianfei.core.bean.AppCardBack" >
     update app_card_back
     set card_no = #{cardNo,jdbcType=VARCHAR},
-      back_time = #{backTime,jdbcType=TIMESTAMP},
+      back_time = #{createTime,jdbcType=TIMESTAMP},
       back_type = #{backType,jdbcType=INTEGER},
       customer_id = #{customerId,jdbcType=VARCHAR},
       agent_id = #{agentId,jdbcType=VARCHAR},
