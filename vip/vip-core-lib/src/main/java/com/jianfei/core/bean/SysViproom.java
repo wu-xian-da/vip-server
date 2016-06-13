@@ -232,6 +232,7 @@ public class SysViproom {
 	}
 
     public List<AppPicture> getPictures() {
+        AppPicture.getStaticAdderss(pictures);
         return pictures;
     }
 

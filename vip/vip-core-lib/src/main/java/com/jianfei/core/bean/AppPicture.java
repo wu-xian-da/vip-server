@@ -1,8 +1,10 @@
 package com.jianfei.core.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jianfei.core.common.utils.GloabConfig;
 
 public class AppPicture implements Serializable {
@@ -19,6 +21,7 @@ public class AppPicture implements Serializable {
 
 	private Integer priority;
 
+	@JsonIgnore
 	private Integer dtflag;
 
 	private Integer imagetype;
@@ -119,5 +122,17 @@ public class AppPicture implements Serializable {
 	@Override
 	public String toString() {
 		return JSONObject.toJSONString(this);
+	}
+
+	/**
+	 * 获取拼接URL
+	 * @param pictures
+     */
+	public static void getStaticAdderss(List<AppPicture> pictures){
+		if (pictures==null ||pictures.isEmpty())
+			return;
+		for (AppPicture picture : pictures) {
+			picture.setPictureUrl(GloabConfig.getConfig("static.resource.server.address") + picture.getPictureUrl());
+		}
 	}
 }
