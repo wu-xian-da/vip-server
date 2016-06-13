@@ -80,25 +80,25 @@
 			pageSize : 10,
 			pageList : [10, 20, 30, 40, 50],
 			columns : [ [{
-				width : '150',
+				width : '200',
 				title : '所属场站',
 				field : 'airportName',
 				align : 'center',
 				sortable : true
 			} ,{
-				width : '200',
+				width : '300',
 				title : 'vip室名称',
 				align : 'center',
 				field : 'viproomName',
 				
 			}, {
-				width : '150',
+				width : '180',
 				title : '场站负责人',
 				field : 'headerName',
 				align : 'center',
 				
 			}, {
-				width : '150',
+				width : '180',
 				title : '负责人电话',
 				field : 'headerPhone',
 				align : 'center',
@@ -106,7 +106,7 @@
 			},{
 				title : '操作',
 				field : 'action',
-				width : '150',
+				width : '180',
 				align : 'center',
 				formatter : function(value, row) {
 					var str = '';

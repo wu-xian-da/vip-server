@@ -30,7 +30,7 @@
         <div id="order-container-wrap" style="height:10%; margin:0; padding:0;">
 	        <div style="padding:20px 0 0 20px;">
 			        <div id="order-container-calac">
-			            <label>日期：</label>
+			            <label>订单日期：</label>
 			            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:110px;height:26px">
 			
 			            <label>-</label>
@@ -98,7 +98,7 @@
 	                <th data-options="align:'center', field:'airportName',width:150">场站</th>
 	                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
 	                
-	                <th data-options="align:'center', field:'customerName',width:100">用户名称</th>
+	                <th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 	                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 	                
 	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
