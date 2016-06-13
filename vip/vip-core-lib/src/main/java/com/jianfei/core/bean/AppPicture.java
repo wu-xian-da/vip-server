@@ -42,7 +42,7 @@ public class AppPicture implements Serializable {
 	}
 
 	public String getPictureUrl() {
-		return pictureUrl == null ? null : GloabConfig.getConfig("static.resource.server.address") + pictureUrl;
+		return pictureUrl;
 	}
 
 	public void setPictureUrl(String pictureUrl) {

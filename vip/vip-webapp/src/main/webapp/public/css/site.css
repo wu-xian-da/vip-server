@@ -14,3 +14,6 @@ body{font-size:12px/150% Arial,Hiragino Sans GB W3,Hiragino Sans GB,Microsoft Ya
 	height: 100px;
 }
 .btn-submit{background:#5886A7;margin-right:20px}
+.btn-cancel{
+	background-color: #987C7C;
+}

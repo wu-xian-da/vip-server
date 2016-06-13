@@ -138,10 +138,12 @@ public class VipRoomController extends BaseController {
 				e.printStackTrace();
 			}
 			String relativePath = "/viproomPhoto/" + newFileName;
+			System.out.println("relativePath="+relativePath);
 			// 保存图片url
 			AppPicture appPicture = new AppPicture();
 			appPicture.setViproomId(viproomId);
 			appPicture.setPictureUrl(relativePath);
+			System.out.println("aa="+appPicture);
 			appPictureManager.save(appPicture);
 		}
 		room.setViproomId(viproomId);
