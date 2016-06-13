@@ -248,7 +248,7 @@ public class OrderController extends BaseController {
 	@ResponseBody
 	public Map<Object,Object> backCardlist(@RequestParam(value="page",defaultValue="1") Integer pageNo,
 			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
-			@RequestParam(value="backType",defaultValue="4") Integer backType,
+			@RequestParam(value="backType",defaultValue="") String backType,
 			@RequestParam(value="applyType",defaultValue="") String applyType,
 			@RequestParam(value="orderState",defaultValue="10") Integer orderState){
 		
@@ -258,7 +258,9 @@ public class OrderController extends BaseController {
 		
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
 		//退款方式
-		paramsMap.put("backType", backType);
+		if(!backType.equals("")){
+			paramsMap.put("backType", backType);
+		}
 		//申请方式
 		if(!applyType.equals("")){
 			paramsMap.put("applyType", applyType);
@@ -298,11 +300,11 @@ public class OrderController extends BaseController {
 					}
 					//退卡方式
 					int backCardTypes = appOrder.getBackType();
-					if(backCardTypes == 0){
+					if(backCardTypes == 1){
 						appOrder.setBackTypeName("微信");
-					}else if(backCardTypes == 1){
-						appOrder.setBackTypeName("支付宝");
 					}else if(backCardTypes == 2){
+						appOrder.setBackTypeName("支付宝");
+					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
 						appOrder.setBackTypeName("现场");
@@ -333,11 +335,11 @@ public class OrderController extends BaseController {
 					}
 					//退卡方式
 					int backCardTypes = appOrder.getBackType();
-					if(backCardTypes == 0){
+					if(backCardTypes == 1){
 						appOrder.setBackTypeName("微信");
-					}else if(backCardTypes == 1){
-						appOrder.setBackTypeName("支付宝");
 					}else if(backCardTypes == 2){
+						appOrder.setBackTypeName("支付宝");
+					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
 						appOrder.setBackTypeName("现场");

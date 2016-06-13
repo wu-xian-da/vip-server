@@ -101,7 +101,7 @@
 	                <th data-options="align:'center', field:'customerName',width:100">用户名称</th>
 	                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 	                
-	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票</th>
+	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
 	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 	                <th data-options="align:'center', field:'operation',width:210">操作</th>
 	                </tr>
@@ -127,20 +127,20 @@
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
                     	<input type="hidden" value="" id="hideOrderId"/>
-                        <label>输入微信号:</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="required:true"/>
+                        <label>输入微信号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入支付宝账号:</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="required:true"/>
+                        <label>输入支付宝账号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="required:true"/>
                     </div>
 
                     <div class="raidp-tab-content-item">
-                        <label>输入银行卡号:</label><input class="easyui-validatebox" type="text" id="backCardNo2" data-options="required:true">
+                        <label>输入银行卡号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo2" data-options="required:true">
                     </div>
                 </div>
 
                 <div class="raido-tab-refund-price">
-                    <label>可退金额: ￥<span id="remainMoney">0.00</span></label>
+                    <label>可退金额&nbsp;&nbsp;<span id="remainMoney">0.00</span>￥</label>
                 </div>
 
                 <div class="easyui-window-footer" style="padding-left:50px">
@@ -167,7 +167,7 @@
                 </div>
 
                 <div class="raido-tab-refund-price">
-                    <label>可退金额: ￥<span id="remainMoney2">0.00</span></label>
+                    <label>可退金额 ￥<span id="remainMoney2">0.00</span></label>
                 </div>
 
                 <div class="easyui-window-footer" style="padding-left:32px">
@@ -227,11 +227,11 @@
         function finalBackMoneyToUser(args){
 			var backMethod = "";
 			if(args.backType == 1){
-				backMethod="微信账号:";
+				backMethod="微信账号";
 			}else if(args.backType ==2){
-				backMethod = '支付宝账号:';
+				backMethod = '支付宝账号';
 			}else if(args.backType == 3){
-				backMethod = '银行卡号:';
+				backMethod = '银行卡号';
 			}
 			
 			$("#backCardOrderId").val(args.orderId);
@@ -290,11 +290,11 @@
 			var remainMoney = $("#remainMoney").text();
 			var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
 			var orderId = $("#hideOrderId").val();
-			if(payMethod==0){
+			if(payMethod==1){
 				backCardNo = $("#backCardNo0").val();
-			}else if(payMethod == 1){
+			}else if(payMethod == 2){
 				backCardNo = $("#backCardNo1").val();
-			}else if(payMethod ==2){
+			}else if(payMethod ==3){
 				backCardNo = $("#backCardNo2").val();
 			}
 			var url = "onRefund?orderId="+orderId+"&backCardNo="+backCardNo+"&remainMoney="+remainMoney+"&payMethod="+payMethod+"&opr="+3;
