@@ -74,11 +74,6 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "save")
 	@ResponseBody
 	public MessageDto<AriPort> save(AriPort ariPort) {
-		Map<String, String> map = com.jianfei.core.common.utils.StringUtils
-				.selectCity(ariPort.getProvince());
-		ariPort.setProvince(map.get("provice"));
-		ariPort.setCity(map.get("city"));
-		ariPort.setCountry(map.get("country"));
 		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<List<AriPort>> messageDto = ariPortManager
 				.get(new MapUtils.Builder().setKeyValue("name",
@@ -92,11 +87,6 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<AriPort> update(AriPort ariPort) {
-		Map<String, String> map = com.jianfei.core.common.utils.StringUtils
-				.selectCity(ariPort.getProvince());
-		ariPort.setProvince(map.get("provice"));
-		ariPort.setCity(map.get("city"));
-		ariPort.setCountry(map.get("country"));
 		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;
@@ -119,6 +109,13 @@ public class AriPortController extends BaseController {
 			if (!CollectionUtils.isEmpty(list)) {
 				model.addAttribute("ariPort", list.get(0));
 			}
+
+		}
+		List<Map<String, Object>> maps = ariPortManager
+				.selectCityById(new MapUtils.Builder().setKeyValue("pid", "0")
+						.build());
+		if (!CollectionUtils.isEmpty(maps)) {
+			model.addAttribute("citys", maps);
 		}
 		return "airport/airPortForm";
 	}

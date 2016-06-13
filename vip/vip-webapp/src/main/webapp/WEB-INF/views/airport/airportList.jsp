@@ -48,7 +48,7 @@
 			title : '添加场站信息',
 			url : sy.contextPath + '/airport/form',
 			buttons : [ {
-				text : '添加',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -66,7 +66,7 @@
 			title : '编辑场站信息',
 			url : sy.contextPath + '/airport/form?id=' + id,
 			buttons : [ {
-				text : '编辑',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}

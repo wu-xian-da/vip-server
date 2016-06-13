@@ -85,6 +85,7 @@
 			}, {
 				title : '操作',
 				field : 'action',
+				align : 'center',
 				width : '150',
 				formatter : function(value, row) {
 					var str = '';

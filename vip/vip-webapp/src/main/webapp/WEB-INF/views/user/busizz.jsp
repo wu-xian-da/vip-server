@@ -75,16 +75,16 @@
 				title : '工号',
 				field : 'code'
 			}, {
-				width : '80',
+				width : '120',
 				title : '姓名',
 				field : 'name'
 			} ] ],
 			columns : [ [  {
-				width : '350',
+				width : '440',
 				title : '所属场站',
 				field : 'ariPortsNames'
 			}, {
-				width : '80',
+				width : '120',
 				title : '手机号码',
 				field : 'phone'
 			}, {
@@ -119,6 +119,7 @@
 				title : '操作',
 				field : 'action',
 				width : '200',
+				align : 'center',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:busizz:update")) {%>
@@ -166,7 +167,7 @@
 								<table>
 									<tr>
 										<td>姓名</td>
-										<td><input id="name" style="width: 150px" placeholder='输入机场名字'></input></td>
+										<td><input id="name" style="width: 150px" placeholder='输入业务员名字'></input></td>
 										<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;
 						    border: none;

@@ -75,13 +75,13 @@
 			<input name="ids" type="hidden" id="ids" />
 			<table class="table" style="width: 100%;">
 				<tr>
-					<th>角色名称:</th>
-					<td><input name="name" class="easyui-validatebox" data-options="required:true" value="${role.name }"/></td>
-					<th>角色描述:</th>
-					<td><textarea name="description" >${role.description }</textarea></td>
+					<th>角色名称</th>
+					<td><input name="name" class="easyui-validatebox" data-options="missingMessage:'不能为空',required:true" value="${role.name }"/></td>
+					<th>初始密码</th>
+					<td><input name=initPwd class="easyui-validatebox" data-options="missingMessage:'不能为空',required:true" value="${role.initPwd }"/></td>	
 				</tr>
 				<tr>
-					<th>首页地址:</th>
+					<th>首页地址</th>
 					<td>
 						<select id="cc" class="easyui-combobox" name="url" style="width:200px;">
 							<option value="/charge/home"  <c:if test="${role.url=='/charge/home' }">selected="selected" </c:if> >经理首页</option>
@@ -91,11 +91,11 @@
 							<option value="/finance/home"  <c:if test="${role.url=='/finance/home' }">selected="selected" </c:if>>财务</option>
 						</select>
 					</td>
-					<th>初始密码:</th>
-					<td><input name=initPwd class="easyui-validatebox" data-options="required:true" value="${role.initPwd }"/></td>	
+					<th>角色描述</th>
+					<td><textarea name="description" >${role.description }</textarea></td>
 				</tr>
 				<tr>
-					<th>角色标识:</th>
+					<th>角色标识</th>
 					<td>
 						<select id="cc" class="easyui-combobox" name="roleType" style="width:200px;">
 							<option value="1"  <c:if test="${role.roleType=='1' }">selected="selected" </c:if> >经理</option>
