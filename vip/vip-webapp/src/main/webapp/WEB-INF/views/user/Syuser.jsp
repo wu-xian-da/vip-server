@@ -16,7 +16,7 @@
 			title : '添加用户信息',
 			url : sy.contextPath + '/user/form',
 			buttons : [ {
-				text : '添加',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -28,7 +28,7 @@
 			title : '编辑用户信息',
 			url : sy.contextPath + '/user/form?id=' + id,
 			buttons : [ {
-				text : '编辑',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -36,7 +36,7 @@
 		});
 	};
 	var removeFun = function(id) {
-		parent.$.messager.confirm('询问', '您确定要禁用该用户？', function(r) {
+		parent.$.messager.confirm('询问', '您确定要删除该用户？', function(r) {
 			if (r) {
 				$.post(sy.contextPath + '/user/delete', {
 					id : id
@@ -82,19 +82,6 @@
 				width : '350',
 				title : '角色',
 				field : 'roelNames'
-			},{
-				width : '50',
-				title : '状态',
-				field : 'dtflag',
-				sortable : true,
-				formatter : function(value, row, index) {
-					switch (value) {
-					case 0:
-						return '启用';
-					case 1:
-						return '禁用';
-					}
-				}
 			}, {
 				title : '操作',
 				field : 'action',
