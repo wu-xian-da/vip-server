@@ -269,15 +269,6 @@
 			inner JOIN sys_users su on su.id=sua.sys_id 
 			where 1=1 and su.code=#{code}
 		]]>
-		<!-- 
-			<if test="pids!=null and pids!=''">
-				and city.CID in
-				<foreach item="item" index="index" collection="pids"
-					open="(" separator="," close=")">
-					#{item}
-				</foreach>
-			</if>
-		 -->
 		<![CDATA[
 				group by city.CID,city.`name`
 		]]>

@@ -141,7 +141,7 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testSelectAirportByProvinceIds() {
 		List<Map<String, Object>> maps = archiveManager
-				.selectAirportByProvinceIds(new MapUtils.Builder().setKeyValue("pids", "110").build());
+				.selectAirportByProvinceIds(new MapUtils.Builder().setKeyValue("code", "qqqq").build());
 		System.out.println(JSONObject.toJSONString(maps));
 	}
 
