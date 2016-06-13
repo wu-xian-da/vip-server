@@ -440,7 +440,7 @@
 				<upload.home.dir>/Users/leoliu/Documents</upload.home.dir>
 				<!-- log path -->
 				<log.home.dir>viplog</log.home.dir>
-				<static.resource.server.address>http://192.168.110.9:8020</static.resource.server.address>
+				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
@@ -488,7 +488,7 @@
 				<redis.host>192.168.110.8</redis.host>
 				<redis.port>6379</redis.port>
 				<!-- p12 cert location -->
-				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>
+				<wechat.cert.location>/home/jianfei/apiclient_cert.p12</wechat.cert.location>
 			</properties>
 			<build>
 				<plugins>
