@@ -86,7 +86,7 @@
 				align : 'center',
 				sortable : true
 			} ,{
-				width : '300',
+				width : '350',
 				title : 'vip室名称',
 				align : 'center',
 				field : 'viproomName',
