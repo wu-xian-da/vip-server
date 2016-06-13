@@ -62,7 +62,7 @@
   <select id="getVipRoomList" resultMap="ResultMapWithPic" parameterType="com.jianfei.core.bean.SysAirport">
     select vr.viproom_id,vr.viproom_name,ap.airport_name,ap.header_name,ap.header_phone,vr.singleconsume_money,
     pe.click_url,pe.picture_id,pe.picture_url,pe.priority
-    from sys_viproom vr JOIN  sys_airport ap
+    from sys_viproom vr LEFT JOIN  sys_airport ap
     ON vr.airport_id = ap.airport_id JOIN app_picture  pe ON vr.viproom_id=pe.viproom_id
     <where>
       <if test="province!=null">
