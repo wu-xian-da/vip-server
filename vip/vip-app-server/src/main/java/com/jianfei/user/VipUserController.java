@@ -100,4 +100,16 @@ public class VipUserController {
     ) {
         return vipUserManager.sendFeedBackInfo(phone, content);
     }
+
+    /**
+     * VIP 退出接口
+     *
+     * @return
+     */
+    @RequestMapping(value = "/loginOut")
+    @ResponseBody
+    public BaseMsgInfo loginOut(@RequestParam(value = "token ", required = false) String token
+    ) {
+        return BaseMsgInfo.success(true);
+    }
 }
