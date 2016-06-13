@@ -37,7 +37,7 @@
 			
 			<div class="clerk-container-item">
 				<label>场站所属省会：</label>
-				<select name="provinceId" id="provinceSele" onchange="getAirPortList()">
+				<select name="province" id="provinceSele" onchange="getAirPortList()">
 					<c:forEach items="${provinceList}" var="province">
 						<option value="${province.cid}">${province.name}</option>
 					</c:forEach>
