@@ -101,14 +101,21 @@
 				<div class="radio-tab-content">
 					<div class="raidp-tab-content-item" style="display: block">
 						<input type="hidden" value="" id="backCardOrderId" /> <label
-							id="backMethod">输入微信号:</label><input type="text"
-							id="payBackCardNo" readonly="readonly" />
+							id="backMethod">输入微信号:</label>&nbsp;<span id="payBackCardNo"></span>
 					</div>
 
 				</div>
-
+				
+				<div id="banckName2div" class="radio-tab-content" style="display: none;">
+                    <label>开户行&nbsp; <span id="banckName2"></span></label>
+                </div>
+                
+                <div id="userName2div" class="radio-tab-content" style="display: none;">
+                    <label>用户姓名&nbsp; <span id="userName2"></span></label>
+                </div>
+                
 				<div class="raido-tab-refund-price">
-					<label>可退金额 ￥<span id="remainMoney2">0.00</span></label>
+					<label>可退金额 <span id="remainMoney2">0.00</span>元</label>
 				</div>
 
 				<div class="easyui-window-footer" style="padding-left:32px">
@@ -176,11 +183,15 @@
 				backMethod = '支付宝账号';
 			}else if(args.backType == 3){
 				backMethod = '银行卡号';
+				$("#banckName2div").show();
+				$("#banckName2").text(args.backName);
+				$("#userName2div").show();
+				$("#userName2").text(args.customerName);
 			}
 			
 			$("#backCardOrderId").val(args.orderId);
 			$("#backMethod").text(backMethod);
-			$("#payBackCardNo").val(args.backMoneyCard);
+			$("#payBackCardNo").text(args.backMoneyCard);
 			$("#remainMoney2").text(args.remainMoney);
 			
         	$("#refund").window('open');
