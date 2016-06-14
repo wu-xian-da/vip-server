@@ -53,6 +53,13 @@
 </script>
 	<link rel="stylesheet" href="${ctx }/style/vip.css">
 </head>
+<style>
+<!--
+.combo-text validatebox-text{
+	text-align: left;
+}
+-->
+</style>
 <body>
 	<form method="post" class="form" >
 		<fieldset>
@@ -61,9 +68,9 @@
 			<table class="table" style="width: 100%;">
 				<tr style="padding-top: 5px;">
 					<th style="width: 20%;">场站名称:</th>
-					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox" data-options="required:true" style="text-align: left;"/></td>
+					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox" data-options="missingMessage:'不能为空',required:true" style="text-align: left;"/></td>
 						<th>场站负责人:</th>
-					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="required:true" value="${ariPort.header_name }" /></td>
+					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="missingMessage:'不能为空',required:true" value="${ariPort.header_name }" /></td>
 				</tr>
 				<tr>
 					<th>负责人联系方式:</th>
@@ -73,13 +80,13 @@
 					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agent_num } data-options="increment:1" style="width:120px;" ></input>
 				</tr>
 				<tr >
-					<th>省市信息:</th>
+					<th>所属省份</th>
 					<td>
-						<div class="demo-wrap">
-							<div id="selectbox">
-
-							</div>
-						</div>
+						<select id="cc" class="easyui-combobox" name="province" style="width:200px;text-align: left;">
+							<c:forEach items="${citys }" var="city">
+								<option style="text-align: left;"  value="${city.cid }" <c:if test="${!empty ariPort and ariPort.cid==city.cid }">selected="selected"</c:if> >${city.name }</option>
+							</c:forEach>
+						</select>
 					</td>
 					<th>场站状态:</th>
 					<c:choose>

@@ -83,7 +83,7 @@
 									},
 									{
 										width : '150',
-										title : '状态',
+										title : 'vip卡状态',
 										field : 'cardState',
 										align : 'center',
 										sortable : true,
@@ -192,7 +192,7 @@
 
 								<td><select name="_cardState" class="easyui-combobox"
 									data-options="panelHeight:'auto',editable:false">
-										<option value="3">全部vip卡状态</option>
+										<option value="">全部vip卡状态</option>
 										<option value="0">未激活</option>
 										<option value="1">激活</option>
 										<option value="2">退卡</option>
@@ -202,10 +202,7 @@
 								<td><input name="_cardNo" value="" style="width: 80px;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a><a
-									href="javascript:void(0);" class="easyui-linkbutton"
-									data-options="iconCls:'ext-icon-zoom_out',plain:true"
-									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">显示全部</a></td>
+									onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a></td>
 							</tr>
 						</table>
 					</form>

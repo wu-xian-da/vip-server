@@ -16,7 +16,7 @@
 			title : '添加资源信息',
 			url : sy.contextPath + '/resource/form',
 			buttons : [ {
-				text : '添加',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$, parent.mainMenu);
 				}
@@ -34,7 +34,7 @@
 			title : '编辑资源信息',
 			url : sy.contextPath + '/resource/form?id=' + id,
 			buttons : [ {
-				text : '编辑',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$, parent.mainMenu);
 				}
