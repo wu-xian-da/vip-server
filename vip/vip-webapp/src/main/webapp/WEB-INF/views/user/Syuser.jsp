@@ -64,22 +64,22 @@
 			pageSize : 20,
 			pageList : [20, 30, 40, 50 ],
 			frozenColumns : [ [ {
-				width : '100',
+				width : '120',
 				title : '登录名',
 				field : 'loginName',
 				sortable : true
 			}, {
-				width : '80',
+				width : '120',
 				title : '姓名',
 				field : 'name',
 				sortable : true
 			} ] ],
 			columns : [ [  {
-				width : '350',
+				width : '550',
 				title : '区域',
 				field : 'ariPortNames'
 			}, {
-				width : '350',
+				width : '300',
 				title : '角色',
 				field : 'roelNames'
 			}, {

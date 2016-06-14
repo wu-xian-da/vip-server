@@ -64,9 +64,9 @@
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>姓名</th>
-					<td><input name="name" value="${user.name }" class="easyui-validatebox" data-options="required:true" /></td>
-					<th>登陆名称</th>
-					<td><input name="loginName" value="${user.loginName }" class="easyui-validatebox" data-options="required:true" /></td>
+					<td><input name="name" value="${user.name }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
+					<th>登入名称</th>
+					<td><input name="loginName" value="${user.loginName }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
 				</tr>
 				<tr>
 					<th>用户角色</th>
@@ -87,7 +87,7 @@
 							<table border="0">
 							<tr>
 							<c:forEach var="data" items="${datas }" varStatus="i" >
-								<c:if test="${(i.index)%4==0 }">
+								<c:if test="${(i.index)%3==0 }">
 								</tr>
 								</c:if>
 								<td style="border: none;">

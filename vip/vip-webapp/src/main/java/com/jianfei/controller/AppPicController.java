@@ -28,6 +28,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.common.enu.VipOrderState;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
@@ -185,7 +186,7 @@ public class AppPicController extends BaseController {
 				ExportAip exportAip = new ExportAip(
 						StringUtils.obj2String(appCustomer.getCustomerName()),
 						StringUtils.obj2String(appCustomer.getPhone()),
-						StringUtils.obj2String(appCustomer.getCreateTime()),
+						StringUtils.obj2String(DateUtil.dateToString(appCustomer.getCreateTime(), "yyyy-MM-dd")),
 						StringUtils.obj2String(appCustomer.getAddress()),
 						StringUtils.obj2String(appCustomer.getEmail()),
 						returnPayState(StringUtils.obj2String(appCustomer

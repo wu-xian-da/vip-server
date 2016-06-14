@@ -47,15 +47,15 @@
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>资源名称</th>
-					<td><input name="name" class="easyui-validatebox" data-options="missingMessage:'不能为空',required:true" value="${resource.name }" /></td>
+					<td><input name="name" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" value="${resource.name }" /></td>
 					<th>权限标识</th>
-					<td><input class="easyui-validatebox" type="text" name="permission" data-options="missingMessage:'不能为空',required:true" value =${resource.permission } ></input></td>
+					<td><input class="easyui-validatebox" type="text" name="permission" data-options="missingMessage:'必填项',required:true" value =${resource.permission } ></input></td>
 				</tr>
 				<tr>
 					<th>资源路径</th>
 					<td><input name="url" value="${resource.url }"/></td>
 					<th>顺序</th>
-					<td><input name="seq"  value="${resource.seq }" class="easyui-numberspinner" data-options="missingMessage:'不能为空',required:true,min:0,max:100000,editable:false" style="width: 155px;" value="100" /></td>
+					<td><input name="seq"  value="${resource.seq }" class="easyui-numberspinner" data-options="missingMessage:'必填项',required:true,min:0,max:100000,editable:false" style="width: 155px;" value="100" /></td>
 				</tr>
 				<tr>
 					<th>上级资源</th>

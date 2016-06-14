@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AriPort;
@@ -120,15 +119,4 @@ public class AriPortController extends BaseController {
 		return "airport/airPortForm";
 	}
 
-	@RequestMapping(value = "selectCity")
-	@ResponseBody
-	public List<Map<String, Object>> selectCitys(String pid) {
-		return ariPortManager.selectCityById(new MapUtils.Builder()
-				.setKeyValue("pid", pid).build());
-	}
-
-	@RequestMapping(value = "ss")
-	public String sss(String pid) {
-		return "airport/master";
-	}
 }
