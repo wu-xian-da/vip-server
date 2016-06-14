@@ -127,13 +127,10 @@
 					<th>类型:</th>
 					<td><select class="easyui-combobox" name=imagetype data-options="panelHeight:'auto',editable:false" style="width: 155px;">
 							<option value="0" <c:if test="${appPicture.imagetype==0 }">selected="selected"</c:if> >业务APP轮播图</option>
-							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >用户APP轮播图</option>
+							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >VIP卡权益轮播</option>
 							<option value="2" <c:if test="${appPicture.imagetype==2 }">selected="selected"</c:if> >用户APP合作按钮</option>
+							<option value="3" <c:if test="${appPicture.imagetype==2 }">selected="selected"</c:if> >VIP卡权益类型</option>
 					</select></td>
-				</tr>
-				<tr>
-					<th>链接地址:</th>
-					<td><input name="clickUrl" value="${appPicture.clickUrl }" class="easyui-validatebox" data-options="required:true" /></td>
 				</tr>
 				<tr>
 					<th>选择照片:</th>
@@ -141,6 +138,10 @@
 							<a id="pickfiles" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-zoom'">选择照片</a>
 							<div id="filelist">您的浏览器没有安装Flash插件，或不支持HTML5！</div>
 						</div></td>
+				</tr>
+				<tr>
+					<th>链接地址:</th>
+					<td><input name="clickUrl" value="${appPicture.clickUrl }" class="easyui-validatebox"  style="width: 350px;"/></td>
 				</tr>
 				<tr>
 					<th>描述:</th>

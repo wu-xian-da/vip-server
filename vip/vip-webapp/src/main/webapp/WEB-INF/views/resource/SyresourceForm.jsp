@@ -43,18 +43,19 @@
 	<form method="post" class="form">
 		<fieldset>
 			<legend>资源基本信息</legend>
+			<input name="id"  readonly="readonly" value="${resource.id }" type="hidden"/>
 			<table class="table" style="width: 100%;">
 				<tr>
-					<th>编号</th>
-					<td><input name="id"  readonly="readonly" value="${resource.id }" /></td>
 					<th>资源名称</th>
-					<td><input name="name" class="easyui-validatebox" data-options="required:true" value="${resource.name }" /></td>
+					<td><input name="name" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" value="${resource.name }" /></td>
+					<th>权限标识</th>
+					<td><input class="easyui-validatebox" type="text" name="permission" data-options="missingMessage:'必填项',required:true" value =${resource.permission } ></input></td>
 				</tr>
 				<tr>
 					<th>资源路径</th>
 					<td><input name="url" value="${resource.url }"/></td>
 					<th>顺序</th>
-					<td><input name="seq"  value="${resource.seq }" class="easyui-numberspinner" data-options="required:true,min:0,max:100000,editable:false" style="width: 155px;" value="100" /></td>
+					<td><input name="seq"  value="${resource.seq }" class="easyui-numberspinner" data-options="missingMessage:'必填项',required:true,min:0,max:100000,editable:false" style="width: 155px;" value="100" /></td>
 				</tr>
 				<tr>
 					<th>上级资源</th>
@@ -64,9 +65,7 @@
 				</tr>
 				<tr>
 					<th>资源描述</th>
-					<td><textarea name="description" cols="30" rows="17" >${resource.description}</textarea></td>
-					<th>权限标识:</th>
-	    			<td><input class="easyui-textbox" type="text" name="permission" data-options="required:true" value =${resource.permission } ></input></td>
+					<td colspan="3"><textarea name="description" style="width: 416px;height: 260px;" >${resource.description}</textarea></td>
 				</tr>
 			</table>
 		</fieldset>

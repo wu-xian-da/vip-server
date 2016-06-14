@@ -35,7 +35,7 @@
 			title : '添加角色信息',
 			url : sy.contextPath + '/role/form',
 			buttons : [ {
-				text : '添加',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -47,7 +47,7 @@
 			title : '编辑角色信息',
 			url : sy.contextPath + '/role/form?id=' + id,
 			buttons : [ {
-				text : '编辑',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -87,7 +87,7 @@
 				sortable : true
 			} ] ],
 			columns : [ [{
-				width : '800',
+				width : '850',
 				title : '角色权限',
 				field : 'resources',
 				formatter : function(value, row){
@@ -100,7 +100,7 @@
 					return str;
 				}
 			},  {
-				width : '100',
+				width : '180',
 				title : '首页地址',
 				field : 'url'
 			},{

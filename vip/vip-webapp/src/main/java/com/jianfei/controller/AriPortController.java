@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AriPort;
@@ -74,11 +73,6 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "save")
 	@ResponseBody
 	public MessageDto<AriPort> save(AriPort ariPort) {
-		Map<String, String> map = com.jianfei.core.common.utils.StringUtils
-				.selectCity(ariPort.getProvince());
-		ariPort.setProvince(map.get("provice"));
-		ariPort.setCity(map.get("city"));
-		ariPort.setCountry(map.get("country"));
 		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<List<AriPort>> messageDto = ariPortManager
 				.get(new MapUtils.Builder().setKeyValue("name",
@@ -92,11 +86,6 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<AriPort> update(AriPort ariPort) {
-		Map<String, String> map = com.jianfei.core.common.utils.StringUtils
-				.selectCity(ariPort.getProvince());
-		ariPort.setProvince(map.get("provice"));
-		ariPort.setCity(map.get("city"));
-		ariPort.setCountry(map.get("country"));
 		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;
@@ -119,19 +108,15 @@ public class AriPortController extends BaseController {
 			if (!CollectionUtils.isEmpty(list)) {
 				model.addAttribute("ariPort", list.get(0));
 			}
+
+		}
+		List<Map<String, Object>> maps = ariPortManager
+				.selectCityById(new MapUtils.Builder().setKeyValue("pid", "0")
+						.build());
+		if (!CollectionUtils.isEmpty(maps)) {
+			model.addAttribute("citys", maps);
 		}
 		return "airport/airPortForm";
 	}
 
-	@RequestMapping(value = "selectCity")
-	@ResponseBody
-	public List<Map<String, Object>> selectCitys(String pid) {
-		return ariPortManager.selectCityById(new MapUtils.Builder()
-				.setKeyValue("pid", pid).build());
-	}
-
-	@RequestMapping(value = "ss")
-	public String sss(String pid) {
-		return "airport/master";
-	}
 }

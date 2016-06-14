@@ -84,13 +84,13 @@
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>职位</th>
-					<td><input name="job" value="${user.job }" class="easyui-validatebox" data-options="required:true" /></td>
+					<td><input name="job" value="${user.job }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
 					<th>姓名</th>
-					<td><input name="name" value="${user.name }" class="easyui-validatebox" data-options="required:true" /></td>
+					<td><input name="name" value="${user.name }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
 				</tr>
 				<tr>
 					<th>工号</th>
-					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="required:true"  /></td>
+					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true"  /></td>
 					<th>性别</th>
 					<td><select class="easyui-combobox" name="sex" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
 							<option value="1" <c:if test="${user.sex==1 }">selected="selected"</c:if> >男</option>

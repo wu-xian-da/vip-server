@@ -110,18 +110,16 @@ public class OrderStaController {
     }
     
     /**
-     * 根据省份id查询该省份下所有的机场
+     * 根据用户id查询所拥有省份的机场
      * @param provinceId
      * @return
      */
-    @RequestMapping("getAriPortListByProvinceId")
+    @RequestMapping("getAriPortListByUserNo")
     @ResponseBody
-    public BaseMsgInfo getAriPortListByProvinceId(@RequestParam(value="provinceId",defaultValue="",required=false)String provinceId){
+    public BaseMsgInfo getAriPortListByUserNo(@RequestParam(value="userNo",required=true)String userNo){
     	try {
     		Map<String,Object> map = new HashMap<String,Object>();
-    		if(!provinceId.equals("")){
-    			map.put("pids", provinceId);
-    		}
+    		map.put("code", userNo);
 			List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
 			return BaseMsgInfo.success(airPortList);
 		} catch (Exception e) {

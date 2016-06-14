@@ -51,15 +51,17 @@
 						<c:otherwise><li>用户性别：女</li></c:otherwise>
 					</c:choose>
 					
-					<li>常驻城市：${customer.address }</li>
+					<li>常住城市：${customer.address }</li>
 					<li>邮箱地址：${customer.email }</li>
 				</ul>
 				 <c:if test="${!empty postInfo }">
 					<c:forEach items="${postInfo }" var="post">
-						<div>发票信息：${post.invoice_flag }</div>
-						<div>邮寄地址：${post.address }</div>
-						<div>发票类型：${bbli:postType(post.invoice_type) }</div>
-						<div>发票抬头：${post.invoice_title }</div>
+						<div class="order-list-title">发票信息</div>
+							<ul>
+								<li>邮寄地址：${post.address }</li>
+								<li>发票类型：${bbli:postType(post.invoice_type) }</li>
+								<li>发票抬头：${post.invoice_title }</li>
+							</ul>
 					</c:forEach>
 				</c:if>
 
@@ -73,7 +75,7 @@
 					</c:forEach>
 				</c:if>
 				
-				<div class="order-list-title">VIP卡使用记录:</div>
+				<div class="order-list-title">VIP卡使用记录</div>
 					<ul>
 						<c:forEach items="${vipCardRescordInfo }" var="vp" varStatus="status">
 							<li>记录${ status.index + 1}</li>

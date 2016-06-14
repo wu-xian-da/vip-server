@@ -417,15 +417,18 @@ public class OrderManagerImpl implements OrderManager {
 		if (!flag)
 			return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
 		//2、查询用户信息和订单信息
-		VipCardUseDetailInfo vipCardUseDetailInfo = appOrderCardMapper.getVipCardUseDetailInfo(phone);
+		List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(phone);
+		VipCardUseDetailInfo vipCardUseDetailInfo = vipCardUseDetailInfoList == null || vipCardUseDetailInfoList.isEmpty() ? new VipCardUseDetailInfo()
+				: vipCardUseDetailInfoList.get(0);
 		if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
 			return BaseMsgInfo.success(vipCardUseDetailInfo);
 		}
 
 		//3、查询VIP使用信息
 		List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
-		if (list == null)
+		if (list == null|| list.isEmpty()){
 			return BaseMsgInfo.success(vipCardUseDetailInfo);
+		}
 		float usedMoney = 0;
 		for (AppConsume appConsume : list) {
 			usedMoney = usedMoney + appConsume.getConsumeMoney();
@@ -482,9 +485,14 @@ public class OrderManagerImpl implements OrderManager {
 		if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
 			return BaseMsgInfo.msgFail("订单不存在");
 		}
-		//TODO 2、重新计算可退余额 校验是否正确
-		//TODO 3、插入数据库
-
-		return null;
+		//添加订单状态为已退款
+		orders.setOrderState(VipOrderState.BEING_AUDITED.getName());
+		appOrdersMapper.updateByPrimaryKeySelective(orders);
+		// 2、TODO 重新计算可退余额 校验是否正确
+		//3、插入数据库
+		appCardBack.setBackId(IdGen.uuid());
+		appCardBack.setCreateTime(new Date());
+		int i=appCardBackMapper.insertBackCard(appCardBack);
+		return i > 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败") ;
 	}
 }

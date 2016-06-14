@@ -74,7 +74,7 @@ public class VipCardController extends BaseController {
 		System.out.println("");
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, "_");
 		if (searchParams != null) {
-			if (searchParams.get("cardState") != null && searchParams.get("cardState").equals(3)) {
+			if (searchParams.get("cardState") == null || searchParams.get("cardState").equals("")) {
 				searchParams.remove("cardState");
 			}
 		}

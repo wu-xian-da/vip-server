@@ -87,7 +87,7 @@
 	<select id="orderInfo" resultType="java.util.HashMap"
 		parameterType="String">
 		<![CDATA[
-			SELECT ao.`order_id`,ao.`order_time`,airport.`airport_name`,suser.`name`,suser.`phone` FROM `app_orders` ao 
+			SELECT ao.`order_id`,DATE_FORMAT(ao.`order_time`,'%Y-%m-%d %H:%i:%s') as order_time, airport.`airport_name`,suser.`name`,suser.`phone` FROM `app_orders` ao 
 			INNER JOIN `sys_airport` airport ON airport.`airport_id`=ao.`airport_id`
 			INNER JOIN `sys_users` suser ON suser.`id` = ao.sale_no
 			WHERE ao.`customer_id`=#{id}
@@ -97,7 +97,7 @@
 	<select id="vipCardInfo" resultType="java.util.HashMap"
 		parameterType="String">
 		<![CDATA[
-			SELECT card.`card_no`,card.`valide_time`,card.`remain_money`,card.`init_money` ,ao.`pay_type`,ao.`pay_time`,ao.`activat_time` 
+			SELECT card.`card_no`,card.`valide_time`,card.`remain_money`,card.`init_money` ,ao.`pay_type`,ao.`pay_time`,DATE_FORMAT(ao.`activat_time`,'%Y-%m-%d %H:%i:%s') as activat_time
 			FROM `app_vipcard` card
 			INNER JOIN `app_order_card` aoc ON card.`card_no`=aoc.`card_id`
 			INNER JOIN `app_orders` ao ON ao.`order_id`=aoc.`card_id`
@@ -127,7 +127,7 @@
 	<select id="vipCardRescordInfo" resultType="java.util.HashMap"
 		parameterType="String">
 		<![CDATA[
-			SELECT consume.`viproom_name`,consume.`consume_money`,consume.`consume_time` FROM `app_consume` consume 
+			SELECT consume.`viproom_name`,consume.`consume_money`,DATE_FORMAT(consume.`consume_time`,'%Y-%m-%d %H:%i:%s') as consume_time FROM `app_consume` consume 
 			INNER JOIN `app_vipcard` vip ON consume.`card_no`=vip.`card_no` 
 			WHERE vip.`customer_id`=#{id}
 		 ]]>

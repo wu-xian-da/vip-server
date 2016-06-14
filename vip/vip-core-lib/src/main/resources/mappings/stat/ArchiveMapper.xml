@@ -267,15 +267,15 @@
 			inner join sys_airport sat on sat.province=city.CID
 			inner JOIN sys_user_airport sua on sat.airport_id=sua.airport_id
 			inner JOIN sys_users su on su.id=sua.sys_id 
-			where 1=1
 		]]>
-			<if test="pids!=null and pids!=''">
-				and city.CID in
-				<foreach item="item" index="index" collection="pids"
-					open="(" separator="," close=")">
-					#{item}
-				</foreach>
+		<where>
+			<if test="code!=null and code!=''">
+				su.code=#{code}
 			</if>
+			<if test="cid!=null and cid!=''">
+				and cid=#{cid}
+			</if>
+		</where>
 		<![CDATA[
 				group by city.CID,city.`name`
 		]]>

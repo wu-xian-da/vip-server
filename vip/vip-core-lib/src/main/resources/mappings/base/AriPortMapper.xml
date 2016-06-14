@@ -57,6 +57,7 @@
 				t1.dtflag,
 				t1.header_name,
 				t1.header_phone,
+				ct.cid as cid,
 				GROUP_CONCAT(t2.order_id) AS orderIds
 			FROM
 				sys_airport t1
@@ -148,7 +149,7 @@
 			,agent_num = #{agentNum}
 		</if>
 		<if test="province!=null">
-			,province = 'province'
+			,province = #{province}
 		</if>
 		<if test="city!=null">
 			,city = #{city}
