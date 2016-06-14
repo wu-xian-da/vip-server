@@ -7,6 +7,8 @@
  */
 package com.jianfei.core.common.cache;
 
+import com.jianfei.core.common.enu.MsgType;
+
 /**
  *
  * @Description: 缓存常量
@@ -60,5 +62,25 @@ public class CacheCons {
 		public static final String LAST_MONTH_All_ZHUGUAN = "last_month_all_zhuguan";
 
 	}
+
+	/**
+	 * 获取手机验证码存储KEY
+	 * @param phone
+	 * @param msgType
+     * @return
+     */
+	public static String getVerifyPhoneKey(String phone, MsgType msgType){
+		return "PHONE:"+phone+":"+msgType.getName();
+	}
+
+	/**
+	 * 获取消息存储模板KEY
+	 * @param msgType
+	 * @return
+	 */
+	public static String getMsgTemplateKey( MsgType msgType){
+		return ""+msgType.getName();
+	}
+
 
 }
