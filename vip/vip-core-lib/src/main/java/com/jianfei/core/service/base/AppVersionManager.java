@@ -1,6 +1,7 @@
 package com.jianfei.core.service.base;
 
 import com.jianfei.core.bean.AppVersion;
+import com.jianfei.core.dto.BaseMsgInfo;
 
 /**
  * TODO
@@ -17,5 +18,12 @@ public interface AppVersionManager {
      * @return
      */
     AppVersion getLastVersion(String channel);
+
+    /**
+     * 根据Version更新
+     * @param version
+     * @return
+     */
+    BaseMsgInfo updateVersion(AppVersion version);
 
 }

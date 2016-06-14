@@ -9,8 +9,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 
 public class AppPicture implements Serializable {
 
-	private static final long serialVersionUID = 4565447710159407307L;
-
+	private static final long serialVersionUID = 8175410163784326481L;
 	private Integer pictureId;
 
 	private String viproomId;

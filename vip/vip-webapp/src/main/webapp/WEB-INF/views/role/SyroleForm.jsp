@@ -76,9 +76,9 @@
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>角色名称</th>
-					<td><input name="name" class="easyui-validatebox" data-options="missingMessage:'不能为空',required:true" value="${role.name }"/></td>
+					<td><input name="name" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" value="${role.name }"/></td>
 					<th>初始密码</th>
-					<td><input name=initPwd class="easyui-validatebox" data-options="missingMessage:'不能为空',required:true" value="${role.initPwd }"/></td>	
+					<td><input name=initPwd class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" value="${role.initPwd }"/></td>	
 				</tr>
 				<tr>
 					<th>首页地址</th>

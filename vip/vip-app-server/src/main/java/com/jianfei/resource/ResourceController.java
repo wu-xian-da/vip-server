@@ -208,4 +208,17 @@ public class ResourceController  {
 		}
 	}
 
+	/**
+	 *  APP版本修改接口
+	 */
+	@RequestMapping(value = "/appVersion")
+	@ResponseBody
+	public BaseMsgInfo updateAppVersion(AppVersion version) {
+		try {
+			return appVersionManager.updateVersion(version);
+		}catch (Exception e){
+			log.error("修改APP版本接口失败",e);
+			return BaseMsgInfo.msgFail("修改APP版本失败");
+		}
+	}
 }
