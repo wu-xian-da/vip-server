@@ -82,7 +82,7 @@ public  class YeepayUtils {
     }
     
     public static String genTranctionId(){
-    	return "dddddddd"+"COD414"+sdf.format(new Date())+getRandomStringByLength(10);
+    	return GloabConfig.getConfig("yeepay.transaction.id")+"COD414"+sdf.format(new Date())+getRandomStringByLength(10);
     }
     
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");  

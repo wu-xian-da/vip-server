@@ -256,13 +256,24 @@ public class OrderStaController {
 		}
     }
     
+    /**
+     * 销售榜单分页&TOP10
+     * @param uno
+     * @param pid
+     * @param begin
+     * @param end
+     * @param airportId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @RequestMapping(value="salesRanking")
     @ResponseBody
-    public BaseMsgInfo salesRanking(@RequestParam(value="uno") String uno,
-    		@RequestParam(value="pid") String pid,
+    public BaseMsgInfo salesRanking(@RequestParam(value="uno", required = false) String uno,
+    		@RequestParam(value="pid", required = false) String pid,
     		@RequestParam(value="begin") String begin,
     		@RequestParam(value="end") String end,
-    		@RequestParam(value="airportId") String airportId,
+    		@RequestParam(value="airportId", required = false) String airportId,
     		@RequestParam(value="pageNo") int pageNo,
     		@RequestParam(value="pageSize") int pageSize){
     	List <SalesRankingDto> result = statManager.salesRanking(uno, pid, airportId, begin, end, pageNo, pageSize);

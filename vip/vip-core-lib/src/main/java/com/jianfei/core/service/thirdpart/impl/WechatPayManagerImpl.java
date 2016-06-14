@@ -8,6 +8,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
@@ -154,7 +155,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 				if (resultCode.equals("SUCCESS")){
 					Map<String,Object> params = new HashMap<String,Object>();
 					params.put("orderId", req.getOutTradeNo());
-					params.put("orderState", 1);//已支付
+					params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
 					params.put("payUserId", req.getPayUserId());
 					params.put("payTime", req.getPayTime());
 					params.put("tradeNo", req.getTradeNo());

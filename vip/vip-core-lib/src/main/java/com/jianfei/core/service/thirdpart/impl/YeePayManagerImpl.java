@@ -1,6 +1,8 @@
 package com.jianfei.core.service.thirdpart.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.YeepayUtils;
 import com.jianfei.core.common.utils.impl.HttpServiceRequest;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
@@ -36,27 +39,27 @@ public class YeePayManagerImpl extends ThirdPayManager {
     	serviceCodeEle.setText("COD414");
     	Element tranIdEle = headEle.addElement("TransactionID");
     	
-    	//tranIdEle.setText(YeepayUtils.genTranctionId());
-    	tranIdEle.setText("ddddddddCOD414201606077628111915");
+    	tranIdEle.setText(YeepayUtils.genTranctionId());
+    	//tranIdEle.setText("ddddddddCOD414201606077628111915");
     	Element srcSysIDEle = headEle.addElement("SrcSysID");
-    	srcSysIDEle.setText("opsmart");
+    	srcSysIDEle.setText(GloabConfig.getConfig("yeepay.src.sysid"));
     	Element dstSysIDEle = headEle.addElement("DstSysID");
-    	dstSysIDEle.setText("yeepay");
+    	dstSysIDEle.setText(GloabConfig.getConfig("yeepay.dst.sysid"));
     	Element respTimeEle = headEle.addElement("Resp_Time");
     	
-    	//respTimeEle.setText(sdf.format(new Date()));
-    	respTimeEle.setText("20160607144433");
+    	respTimeEle.setText(sdf.format(new Date()));
+    	//respTimeEle.setText("20160607144433");
     	Element hmacEle = headEle.addElement("HMAC");
     	hmacEle.setText("hmac");
     	
     	Element bodyEle = codmsEle.addElement("SessionBody");
     	Element orderNoEle = bodyEle.addElement("OrderNo");
     	orderNoEle.setText(tradeNo);
-    	Element referNoEle = bodyEle.addElement("CustomerNo");
-    	referNoEle.setText("10040011560");
+    	Element customerNoEle = bodyEle.addElement("CustomerNo");
+    	customerNoEle.setText(GloabConfig.getConfig("yeepay.customerId"));
     	System.out.println(document.asXML());
-		String request =  YeepayUtils.hmacSign(document.asXML(), "DFE23HLAW198820SQWE1224SDAQQ3319203945");
-		String result = HttpServiceRequest.getInstance().sendPostXml("http://124.250.37.126:8081/cod/callback/codOrderQueryAction.do", request);
+		String request =  YeepayUtils.hmacSign(document.asXML(), GloabConfig.getConfig("yeepay.key"));
+		String result = HttpServiceRequest.getInstance().sendPostXml(GloabConfig.getConfig("yeepay.query.url"), request);
 		PayQueryResult payQueryResult = new PayQueryResult();
 		payQueryResult.setTradeNo(tradeNo);
 		Document documentR;
