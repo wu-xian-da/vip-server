@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @date: 2016/6/14 11:16
  */
 public class VipCardMsgDto implements Serializable {
+    private static final long serialVersionUID = -8377528897673577858L;
     private String vipCardNo;
     private String userPhone;
     private String userName;
