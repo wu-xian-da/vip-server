@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.bean.Role;
-import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MessageDto;
 
 /**
  *
- * @Description: TODO
+ * @Description: 角色管理
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年5月25日 下午1:32:29
  * 
@@ -54,15 +53,8 @@ public interface RoleManager {
 	 * @version 1.0.0
 	 */
 	MessageDto<String> updateRoleResource(Long id, String name,
-			String description, String ids, String url, String initPwd,String roleType);
-
-	/**
-	 * buildRoleTreeNode(构造树)
-	 * 
-	 * @return List<JsonTreeData>
-	 * @version 1.0.0
-	 */
-	List<JsonTreeData> buildRoleTreeNode();
+			String description, String ids, String url, String initPwd,
+			String roleType);
 
 	/**
 	 * selectRoleByUserId(根据用户ID查找角色信息)

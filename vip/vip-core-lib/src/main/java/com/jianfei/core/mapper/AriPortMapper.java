@@ -63,4 +63,6 @@ public interface AriPortMapper extends BaseMapper<AriPort> {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> mapList(Map<String, Object> map);
+	
+	AriPort selectAirPortInfoById(String airPortId);
 }

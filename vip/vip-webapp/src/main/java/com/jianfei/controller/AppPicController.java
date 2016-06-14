@@ -40,7 +40,7 @@ import com.jianfei.core.service.base.AppPictureManager;
 
 /**
  *
- * @Description: TODO
+ * @Description: 图片管理
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年5月23日 下午11:43:33
  * 
@@ -186,7 +186,8 @@ public class AppPicController extends BaseController {
 				ExportAip exportAip = new ExportAip(
 						StringUtils.obj2String(appCustomer.getCustomerName()),
 						StringUtils.obj2String(appCustomer.getPhone()),
-						StringUtils.obj2String(DateUtil.dateToString(appCustomer.getCreateTime(), "yyyy-MM-dd")),
+						StringUtils.obj2String(DateUtil.dateToString(
+								appCustomer.getCreateTime(), "yyyy-MM-dd")),
 						StringUtils.obj2String(appCustomer.getAddress()),
 						StringUtils.obj2String(appCustomer.getEmail()),
 						returnPayState(StringUtils.obj2String(appCustomer

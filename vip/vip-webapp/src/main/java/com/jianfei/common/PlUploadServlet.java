@@ -38,6 +38,11 @@ import com.jianfei.core.common.utils.GloabConfig;
  */
 public class PlUploadServlet extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7869679354782582632L;
+
 	public PlUploadServlet() {
 		super();
 	}

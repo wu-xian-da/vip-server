@@ -15,7 +15,7 @@ import com.jianfei.core.common.persistence.MyBatisDao;
 
 /**
  *
- * @Description: TODO
+ * @Description: 角色Mapper
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年5月12日 上午11:34:31
  * 

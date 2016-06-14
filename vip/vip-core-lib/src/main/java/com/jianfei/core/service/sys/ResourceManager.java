@@ -95,8 +95,22 @@ public interface ResourceManager {
 	 */
 	List<Resource> findResourceByRoleId(Long id);
 
+	/**
+	 * get(多维度查询)
+	 * 
+	 * @param map
+	 * @return List<Resource>
+	 * @version 1.0.0
+	 */
 	List<Resource> get(Map<String, Object> map);
 
+	/**
+	 * findResourceByUserId(根据用户id 查找资源)
+	 * 
+	 * @param id
+	 * @return List<Resource>
+	 * @version 1.0.0
+	 */
 	List<Resource> findResourceByUserId(Long id);
 
 }
