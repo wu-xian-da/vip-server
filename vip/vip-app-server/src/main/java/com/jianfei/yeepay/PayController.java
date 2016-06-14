@@ -26,6 +26,7 @@ import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.utils.DateUtil;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.YeepayUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.service.order.OrderManager;
@@ -151,7 +152,7 @@ public class PayController {
 			Element sessionBody = root.element("SessionBody");
 			String serviceCode = sessionHead.elementText("ServiceCode");
 			String hmacSend = sessionHead.elementText("HMAC");
-			String hmacAuth = YeepayUtils.getSignField(send, "DFE23HLAW198820SQWE1224SDAQQ3319203945");
+			String hmacAuth = YeepayUtils.getSignField(send, GloabConfig.getConfig("yeepay.key"));
 			
 			
 			if (serviceCode.equals("COD201")){
@@ -211,7 +212,6 @@ public class PayController {
      *
      */
     public static class YeePayResponseBuilder{
-    	public static final String hmac_key = "DFE23HLAW198820SQWE1224SDAQQ3319203945";
     	static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     	
     	public static String buildLoginResponse(Element sessionHead,Element sessionBody,int resultCode){
@@ -262,7 +262,7 @@ public class PayController {
 	    	Element companyCodeEle = extendAtt2Ele.addElement("Company_Code");
 	    	companyCodeEle.setText("opsmart");
 	    	
-	    	return YeepayUtils.hmacSign(document.asXML(), hmac_key);
+	    	return YeepayUtils.hmacSign(document.asXML(), GloabConfig.getConfig("yeepay.key"));
     	}
     	
     	public static String buildOrderQueryResponse(Element sessionHead,Element sessionBody,int resultCode,
@@ -317,11 +317,11 @@ public class PayController {
 	    	amoutEle.setText(String.valueOf(amout));
 	    	Element orderStatusNoEle = itemEle.addElement("OrderStatus");
 	    	Element orderStatusMsgNoEle = itemEle.addElement("OrderStatusMsg");
-	    	if (orderStatus == 0){
+	    	if (orderStatus == VipOrderState.NOT_PAY.getName()){
 	    		orderStatusNoEle.setText("23");
 	    		orderStatusMsgNoEle.setText("未支付,未签收");
 	    	}
-	    	else if (orderStatus == 1){
+	    	else if (orderStatus == VipOrderState.ALREADY_PAY.getName()){
 	    		orderStatusNoEle.setText("22");
 	    		orderStatusMsgNoEle.setText("已收款");
 	    	}
@@ -334,7 +334,7 @@ public class PayController {
 	    		orderStatusMsgNoEle.setText("订单处于退款状态");
 	    	}
 	    	
-	    	return YeepayUtils.hmacSign(document.asXML(), hmac_key);
+	    	return YeepayUtils.hmacSign(document.asXML(), GloabConfig.getConfig("yeepay.key"));
     	}
     	
     	public static String buildHead(Element sessionHead){
@@ -379,7 +379,7 @@ public class PayController {
 	    	Element referNoEle = bodyEle.addElement("ReferNo");
 	    	referNoEle.setText(referNo);
 	    	
-    		return YeepayUtils.hmacSign(document.asXML(), hmac_key);
+    		return YeepayUtils.hmacSign(document.asXML(), GloabConfig.getConfig("yeepay.key"));
     	}
     }
     
@@ -491,7 +491,7 @@ public class PayController {
 		param.setPayUserId(req.getOpenid());
 		param.setSign(req.getSign());
 		param.setSignResult(signResult);
-		param.setPayType(1);
+		param.setPayType(PayType.WXPAY.getName());
 	    try {
 			Date payTime = DateUtils.parseDate(req.getTime_end(), "yyyyMMddHHmmss");
 			param.setPayTime(DateUtil.dateToString(payTime, "yyyy-MM-dd HH:mm:ss"));
@@ -533,6 +533,7 @@ public class PayController {
 		param.setSignResult(sign);
 		param.setResultCode(tradeStatus);
     	param.setPayType(2);
+    	param.setPayType(PayType.ALIPAY.getName());
 	    //业务处理
     	String result = aliPayManager.payNotify(param);
     	

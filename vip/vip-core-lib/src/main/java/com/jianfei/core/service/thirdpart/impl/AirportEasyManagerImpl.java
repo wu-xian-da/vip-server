@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppConsume;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.impl.HttpServiceRequest;
 import com.jianfei.core.dto.AirportEasyUseInfo;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
@@ -36,9 +37,9 @@ import com.tencent.common.MD5;
 @Service
 public class AirportEasyManagerImpl implements AirportEasyManager{
 	
-	public static final String KONGGANG_URL = "http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/";
-	public static final String KONGGANG_PARTNER = "20160607001";
-	public static final String KONGGANG_KEY = "S1-L6-D0-T1-G2-S7";
+//	public static final String KONGGANG_URL = "http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/";
+//	public static final String KONGGANG_PARTNER = "20160607001";
+//	public static final String KONGGANG_KEY = "S1-L6-D0-T1-G2-S7";
 	
     /**
      * 激活VIP卡
@@ -55,18 +56,16 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
      */
     @Override
     public boolean activeVipCard(String vipCardNo, String userPhone, String userName) throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
-    	String sign = sign("partner="+KONGGANG_PARTNER+"&verify_code="+vipCardNo+"&mobile="+userPhone+KONGGANG_KEY);
-    	String result = HttpServiceRequest.getInstance().sendGet(KONGGANG_URL+"confirmcardphone?"+
-    															"partner="+ KONGGANG_PARTNER + 
+    	GloabConfig.getInstance();
+		String sign = sign("partner="+GloabConfig.getConfig("konggang.partner")+"&verify_code="+vipCardNo+"&mobile="+userPhone+GloabConfig.getConfig("konggang.key"));
+    	String result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"confirmcardphone?"+
+    															"partner="+ GloabConfig.getConfig("konggang.partner") + 
     															"&verify_code="+vipCardNo + 
     															"&mobile="+userPhone + 
     															"&name="+ userName + 
     															"&sign=" + sign);
 		JSONObject obj = JSON.parseObject(result);
-		if (obj.get("code").equals("00"))
-			return true;
-		else
-			return false;
+		return obj.get("code").equals("00")?true:false;
     }
 
     /**
@@ -83,16 +82,13 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     @Override
     public boolean disabledVipCard(String vipCardNo) throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
     	String result = null;
-    	String sign = sign("partner="+KONGGANG_PARTNER+"&verify_code="+vipCardNo+KONGGANG_KEY);
-    	result = HttpServiceRequest.getInstance().sendGet(KONGGANG_URL+"enableDis?"+
-    													"partner="+KONGGANG_PARTNER+
+    	String sign = sign("partner="+GloabConfig.getConfig("konggang.partner")+"&verify_code="+vipCardNo+GloabConfig.getConfig("konggang.key"));
+    	result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"enableDis?"+
+    													"partner="+GloabConfig.getConfig("konggang.partner")+
     													"&verify_code="+vipCardNo +
     													"&sign=" + sign);
 		JSONObject obj = JSON.parseObject(result);
-		if (obj.get("code").equals("00"))
-			return true;
-		else
-			return false;
+		return obj.get("code").equals("00")?true:false;
 
     }
 
@@ -109,11 +105,11 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     	String result = null;
     	String randomStr = getRandomStringByLength(18);
     	AirportEasyUseInfo aeInfo = null;
-    	String sign = sign("random="+randomStr+"&partner="+KONGGANG_PARTNER+KONGGANG_KEY);
+    	String sign = sign("random="+randomStr+"&partner="+GloabConfig.getConfig("konggang.partner")+GloabConfig.getConfig("konggang.key"));
     	
-    	result = HttpServiceRequest.getInstance().sendGet(KONGGANG_URL+"readcheckindata?"+
+    	result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"readcheckindata?"+
     													"random="+randomStr+
-    													"&partner="+KONGGANG_PARTNER+
+    													"&partner="+GloabConfig.getConfig("konggang.partner")+
     													"&sign=" + sign);
 
    		JSONObject obj = JSON.parseObject(result);
@@ -173,18 +169,19 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     	String ack = null;
     	Map<String,String> ackParam = new HashMap<String,String>();
     	ackParam.put("BatchNo", batchNo);
-    	ackParam.put("partner ", KONGGANG_PARTNER);
-    	String ackSign = sign("BatchNo="+batchNo+"&partner="+KONGGANG_PARTNER+KONGGANG_KEY);
+    	ackParam.put("partner ", GloabConfig.getConfig("konggang.partner"));
+    	String ackSign = sign("BatchNo="+batchNo+"&partner="+GloabConfig.getConfig("konggang.partner")+GloabConfig.getConfig("konggang.key"));
     	ackParam.put("sign", ackSign);
-		ack = HttpServiceRequest.getInstance().sendGet(KONGGANG_URL+"DataConfirm?"+
+		ack = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"DataConfirm?"+
 													"BatchNo="+batchNo+
-													"&partner="+KONGGANG_PARTNER+
+													"&partner="+GloabConfig.getConfig("konggang.partner")+
 													"&sign=" + ackSign);
 		JSONObject obj = JSON.parseObject(ack);
-		if (obj.get("code").equals("00"))
-			return true;
-		else
-			return false;
+		return obj.get("code").equals("00")?true:false;
+//		if (obj.get("code").equals("00"))
+//			return true;
+//		else
+//			return false;
     }
     
     public String sign(String str){
@@ -207,22 +204,25 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
         return sb.toString();
     }
 
+    /**
+     * 获取激活码，每次返回一个码
+     */
 	@Override
 	public boolean getCardCode(String tradeNo)
 			throws UnrecoverableKeyException, KeyManagementException,
 			NoSuchAlgorithmException, KeyStoreException, IOException {
-    	String sign = sign("out_trade_no="+tradeNo + "&partner="+ KONGGANG_PARTNER+"&sku="+"0125"+KONGGANG_KEY);
-    	String result = HttpServiceRequest.getInstance().sendGet(KONGGANG_URL+"add?"+
+    	String sign = sign("out_trade_no="+tradeNo + "&partner="+ GloabConfig.getConfig("konggang.partner")+"&sku="+"0125"+GloabConfig.getConfig("konggang.key"));
+    	String result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"add?"+
     															"out_trade_no="+ tradeNo + 
-    															"&partner="+KONGGANG_PARTNER + 
+    															"&partner="+GloabConfig.getConfig("konggang.partner") + 
     															"&sku="+"0125" + 
     															"&sign=" + sign);
 		JSONObject obj = JSON.parseObject(result);
-		if (obj.get("code").equals("00")){
-			System.out.println(obj.get("verify_code"));
-			return true;
-		}
-		else
-			return false;
+		return obj.get("code").equals("00")?true:false;
+//		if (obj.get("code").equals("00")){
+//			return true;
+//		}
+//		else
+//			return false;
 	}
 }
