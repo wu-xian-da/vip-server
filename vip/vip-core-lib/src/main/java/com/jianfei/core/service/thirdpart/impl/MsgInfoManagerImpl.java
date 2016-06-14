@@ -33,7 +33,7 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
         // 1、根据配置规则生成验证码 6位
         String code=String.valueOf(new java.util.Random().nextInt(1000000));
         //TODO 2、根据消息类型 查找相关模板
-
+        
         //TODO 3、生成发送消息 发送
         //TODO 4、存储验证码 时间可配置
         JedisUtils.setObject(CODE+phone+":"+msgType.getName(),code,5000000);

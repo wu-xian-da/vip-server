@@ -129,17 +129,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	public Map<String, Object> zhuGuanTotal(Map<String, Object> map,
 			String cacheKey) {
 
-		// Map<String, Object> rsMap = null;
-		// Object object = JedisUtils
-		// .getObject(CacheCons.Sys.LAST_MONTH_TOTAL_ZHUGUAN);
-		// if (null != object) {
-		// rsMap = (Map<String, Object>) JedisUtils
-		// .getObject(CacheCons.Sys.LAST_MONTH_TOTAL_ZHUGUAN);
-		// } else {
-		// rsMap = archiveMapper.zhuGuanTotal(map);
-		// JedisUtils.setObject(CacheCons.Sys.LAST_MONTH_TOTAL_ZHUGUAN, rsMap,
-		// 0);
-		// }
 		return archiveMapper.zhuGuanTotal(map);
 	}
 
