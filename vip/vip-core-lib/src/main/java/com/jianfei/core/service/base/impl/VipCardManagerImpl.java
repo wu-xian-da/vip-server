@@ -159,10 +159,13 @@ public class VipCardManagerImpl implements VipCardManager {
 					vipCard.setImportTime(new Date());
 					vipCard.setDtflag(0);
 					vipCard.setCardState(0);// 未激活
-					System.out.println(vipCard);
-
-					// 想数据表中插入一条数据
-					appVipcardMapper.importExcelToDB(vipCard);
+					// 向数据表中插入一条数据
+					try {
+						appVipcardMapper.importExcelToDB(vipCard);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					
 				}
 			}
 		} catch (Exception e) {

@@ -177,12 +177,12 @@
 						action="${pageContext.request.contextPath}/vipCard/importExcel"
 						method="post" enctype="multipart/form-data">
 						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 175px" data-options="required:true"/> 
-						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="button" onclick="importExcel();" value="导入vip卡号" />
+						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="button" onclick="importExcel();" value="导入" />
 					</form> 
 					
 				</td>
 				
-				<td><a href="${pageContext.request.contextPath}/vipCard/exportExcel"><button class="btn btn-default ">导出vip卡号</button></a></td>
+				<td><a href="${pageContext.request.contextPath}/vipCard/exportExcel"><button class="btn btn-default ">导出</button></a></td>
 
 				<!-- 搜索条件框 -->
 				<td>
