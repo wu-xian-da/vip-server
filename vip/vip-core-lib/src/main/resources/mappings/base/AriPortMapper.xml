@@ -148,7 +148,7 @@
 			,agent_num = #{agentNum}
 		</if>
 		<if test="province!=null">
-			,province = 'province'
+			,province =  #{province}
 		</if>
 		<if test="city!=null">
 			,city = #{city}

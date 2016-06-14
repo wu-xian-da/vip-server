@@ -16,7 +16,7 @@
 			title : '添加用户信息',
 			url : sy.contextPath + '/app/form',
 			buttons : [ {
-				text : '添加',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -28,7 +28,7 @@
 			title : '编辑用户信息',
 			url : sy.contextPath + '/app/form?id=' + id,
 			buttons : [ {
-				text : '编辑',
+				text : '保存',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}
@@ -64,16 +64,9 @@
 			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 		
 			columns : [ [ {
-				width : '80',
-				title : '描述',
-				field : 'descr'
-			},{
-				width : '150',
-				title : '链接',
-				field : 'clickUrl'
-			},{
 				width : '150',
 				title : '类型',
+				align : 'center',
 				field : 'imagetype',
 				formatter : function(value, row, index) {
 					switch (value) {
@@ -86,8 +79,13 @@
 					}
 				}
 			},{
+				width : '350',
+				title : '链接',
+				field : 'clickUrl'
+			},{
 				width : '150',
 				title : '图片',
+				align : 'center',
 				field : 'pictureUrl',
 				formatter : function(value, row) {
 					if(value){
@@ -97,14 +95,15 @@
 			}, {
 				title : '操作',
 				field : 'action',
-				width : '90',
+				width : '200',
+				align : 'center',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/>', row.pictureId);
+						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑', row.pictureId);
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/>', row.pictureId);
+						str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.pictureId);
 					<%}%>
 						return str;
 				}
