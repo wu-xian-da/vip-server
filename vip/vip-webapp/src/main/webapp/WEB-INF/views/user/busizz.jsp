@@ -83,6 +83,10 @@
 				width : '440',
 				title : '所属场站',
 				field : 'ariPortsNames'
+			},{
+				width : '120',
+				title : '职位',
+				field : 'job'
 			}, {
 				width : '120',
 				title : '手机号码',
@@ -166,7 +170,7 @@
 							<form id="searchForm">
 								<table>
 									<tr>
-										<td>姓名</td>
+										<td>姓名:</td>
 										<td><input id="name" style="width: 150px" placeholder='输入业务员名字'></input></td>
 										<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;

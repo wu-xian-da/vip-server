@@ -22,7 +22,7 @@
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFuns();">添加</a></td>
 				<td><div class="datagrid-btn-separator"></div></td>
 			</shiro:hasPermission>
-				<td>机场名字</td>
+				<td>机场名字:</td>
 				<td><input type="text" id="name" style="width: 150px" placeholder='输入机场名字'></input></td>
 				<td>
 					<input type="button" value="查询" style="width: 60px;height: 20px;
@@ -46,6 +46,7 @@
 	var addFuns = function() {
 		var dialog = parent.sy.modalDialog({
 			title : '添加场站信息',
+			height:400,
 			url : sy.contextPath + '/airport/form',
 			buttons : [ {
 				text : '保存',

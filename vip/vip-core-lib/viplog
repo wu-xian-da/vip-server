@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 2016-06-14 09:32:47,146 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==>  Preparing: SELECT city.CID as pid, city.`name` as pname, GROUP_CONCAT(DISTINCT sat.airport_id) as aids, GROUP_CONCAT(distinct sat.airport_name) as anames FROM sys_city city inner join sys_airport sat on sat.province=city.CID inner JOIN sys_user_airport sua on sat.airport_id=sua.airport_id inner JOIN sys_users su on su.id=sua.sys_id WHERE su.code=? group by city.CID,city.`name` 
 2016-06-14 09:32:47,318 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==> Parameters: qqqq(String)
 2016-06-14 09:32:47,428 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - <==      Total: 2
 2016-06-14 09:33:33,609 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==>  Preparing: SELECT city.CID as pid, city.`name` as pname, GROUP_CONCAT(DISTINCT sat.airport_id) as aids, GROUP_CONCAT(distinct sat.airport_name) as anames FROM sys_city city inner join sys_airport sat on sat.province=city.CID inner JOIN sys_user_airport sua on sat.airport_id=sua.airport_id inner JOIN sys_users su on su.id=sua.sys_id WHERE su.code=? and cid=? group by city.CID,city.`name` 
 2016-06-14 09:33:33,642 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==> Parameters: qqqq(String), 110(String)
 2016-06-14 09:33:33,767 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - <==      Total: 1
+=======
+2016-06-14 09:32:47,146 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==>  Preparing: SELECT city.CID as pid, city.`name` as pname, GROUP_CONCAT(DISTINCT sat.airport_id) as aids, GROUP_CONCAT(distinct sat.airport_name) as anames FROM sys_city city inner join sys_airport sat on sat.province=city.CID inner JOIN sys_user_airport sua on sat.airport_id=sua.airport_id inner JOIN sys_users su on su.id=sua.sys_id WHERE su.code=? group by city.CID,city.`name` 
+2016-06-14 09:32:47,318 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==> Parameters: qqqq(String)
+2016-06-14 09:32:47,428 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - <==      Total: 2
+2016-06-14 09:33:33,609 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==>  Preparing: SELECT city.CID as pid, city.`name` as pname, GROUP_CONCAT(DISTINCT sat.airport_id) as aids, GROUP_CONCAT(distinct sat.airport_name) as anames FROM sys_city city inner join sys_airport sat on sat.province=city.CID inner JOIN sys_user_airport sua on sat.airport_id=sua.airport_id inner JOIN sys_users su on su.id=sua.sys_id WHERE su.code=? and cid=? group by city.CID,city.`name` 
+2016-06-14 09:33:33,642 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==> Parameters: qqqq(String), 110(String)
+2016-06-14 09:33:33,767 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - <==      Total: 1
+>>>>>>> d662536b6ae6aa5cd3861fb73a278467905ba1c1
