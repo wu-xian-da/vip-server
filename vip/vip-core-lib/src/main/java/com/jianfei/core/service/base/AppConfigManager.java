@@ -1,9 +1,11 @@
 package com.jianfei.core.service.base;
 
+import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConfig;
 import com.jianfei.core.dto.VipCardInfoDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * APP Config manager
@@ -26,4 +28,34 @@ public interface AppConfigManager {
       * @return
      */
    AppConfig getQAInfo();
+   
+   /**
+    * 分页获取权益信息
+    * @param map
+    * @return
+    */
+   PageInfo<AppConfig> page(int pageNo, int pageSize,Map<String,Object> map);
+   
+   /**
+    * 添加权益
+    * @param appConfig
+    * @return
+    */
+   int addRight(AppConfig appConfig);
+   
+   /**
+    * 逻辑删除权益
+    * @param id
+    * @return
+    */
+   int delRight(String id);
+   
+   /**
+    * 根据id返回权益信息
+    * @param id
+    * @return
+    */
+   AppConfig selectByPrimaryKey(String id);
+   
+   int updateByPrimaryKeySelective(AppConfig appConfig);
 }

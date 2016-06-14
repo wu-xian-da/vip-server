@@ -1,15 +1,22 @@
 package com.jianfei.core.service.base.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConfig;
 import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
+import com.jianfei.core.common.utils.Grid;
+import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.dto.VipCardInfoDto;
 import com.jianfei.core.mapper.AppConfigMapper;
 import com.jianfei.core.service.base.AppConfigManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO
@@ -21,10 +28,10 @@ import java.util.List;
  */
 @Service
 public class AppConfigManagerImpl implements AppConfigManager {
-    @Autowired
+   @Autowired
    private AppPictureManagerImpl appPictureManager;
-    @Autowired
-  private  AppConfigMapper appConfigMapper;
+   @Autowired
+   private  AppConfigMapper appConfigMapper;
     /**
      * 获取配置信息VIP权益
      *
@@ -48,4 +55,72 @@ public class AppConfigManagerImpl implements AppConfigManager {
         List<AppConfig> list=appConfigMapper.selectByType(2);
         return list == null || list.isEmpty() ? new AppConfig() : list.get(0);
     }
+    
+	/**
+	 * 分页获取权益信息
+	 */
+	@Override
+	public PageInfo<AppConfig> page(int pageNo, int pageSize, Map<String, Object> map) {
+		// 显示第几页
+		PageHelper.startPage(pageNo, pageSize);
+		// 查询条件
+		List<AppConfig> list = appConfigMapper.page(map);
+		PageInfo<AppConfig> page = new PageInfo(list);
+		return page;
+	}
+	
+	
+	/**
+	 * 将权益信息转换成Grid格式 bindAppConfigGridData
+	 * @param pageInfo
+	 * @return
+	 */
+	public Grid bindAppConfigGridData(PageInfo<AppConfig> pageInfo) {
+		List<AppConfig> list = pageInfo.getList();
+		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+		for (AppConfig appConfig : list) {
+			Map<String, Object> map = MapUtils.<AppConfig> entityInitMap(appConfig);
+			maps.add(map);
+		}
+		Grid grid = new Grid();
+		grid.setRows(maps);
+		grid.setTotal(pageInfo.getTotal());
+		return grid;
+	}
+	
+	/**
+	 * 添加权益
+	 */
+	@Override
+	public int addRight(AppConfig appConfig) {
+		// TODO Auto-generated method stub
+		return appConfigMapper.insert(appConfig);
+	}
+	
+	/**
+	 * 逻辑删除权益
+	 */
+	@Override
+	public int delRight(String id) {
+		// TODO Auto-generated method stub
+		return appConfigMapper.delRight(id);
+	}
+	
+	/**
+	 * 根据id获取权益信息
+	 */
+	@Override
+	public AppConfig selectByPrimaryKey(String id) {
+		// TODO Auto-generated method stub
+		return appConfigMapper.selectByPrimaryKey(id);
+	}
+	
+	/**
+	 * 更新权益信息
+	 */
+	@Override
+	public int updateByPrimaryKeySelective(AppConfig appConfig) {
+		// TODO Auto-generated method stub
+		return appConfigMapper.updateByPrimaryKeySelective(appConfig);
+	}
 }
