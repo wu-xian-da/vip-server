@@ -2,6 +2,7 @@ package com.jianfei.core.mapper;
 
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import com.jianfei.core.dto.CharData;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.ReturnCardDto;
 import com.jianfei.core.dto.SalesRankingDto;
@@ -88,5 +89,5 @@ public interface AppOrderArchiveMapper {
      * @param map
      * @return
      */
-    List<AppOrderArchive> selectCharDataByUserId(Map<String,Object> map);
+    List<CharData> selectCharDataByUserId(Map<String,Object> map);
 }

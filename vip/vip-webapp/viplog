@@ -5212,3 +5212,74 @@ Caused by: java.lang.ClassNotFoundException: org.apache.http.client.ClientProtoc
 2016-06-14 12:56:40,386 [qtp1005692073-38] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - ==>  Preparing: select id, title,type, url , content from app_config where id = ? 
 2016-06-14 12:56:40,386 [qtp1005692073-38] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - ==> Parameters: 33b47d352f534cecbb1d1768c44edddb(String)
 2016-06-14 12:56:40,535 [qtp1005692073-38] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - <==      Total: 1
+2016-06-14 13:06:02,878 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.UserMapper.getUserByName] - ==>  Preparing: SELECT * from sys_users where login_name =? and (user_type=1 or user_type=2) and dtflag=0 
+2016-06-14 13:06:02,905 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.UserMapper.getUserByName] - ==> Parameters: iadmin(String)
+2016-06-14 13:06:03,019 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.UserMapper.getUserByName] - <==      Total: 1
+2016-06-14 13:06:03,272 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.UserMapper.getUserByName] - ==>  Preparing: SELECT * from sys_users where login_name =? and (user_type=1 or user_type=2) and dtflag=0 
+2016-06-14 13:06:03,273 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.UserMapper.getUserByName] - ==> Parameters: iadmin(String)
+2016-06-14 13:06:03,335 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.UserMapper.getUserByName] - <==      Total: 1
+2016-06-14 13:06:03,610 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.RoleMapper.selectRoleByUserId] - ==>  Preparing: SELECT role.* FROM `sys_roles` role INNER JOIN `sys_use_role` sur ON role.`id`=sur.`role_id` WHERE sur.`user_id`=? 
+2016-06-14 13:06:03,611 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.RoleMapper.selectRoleByUserId] - ==> Parameters: 58(Long)
+2016-06-14 13:06:03,647 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.RoleMapper.selectRoleByUserId] - <==      Total: 1
+2016-06-14 13:06:03,800 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AriPortMapper.selectAriportByUserId] - ==>  Preparing: SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=? 
+2016-06-14 13:06:03,801 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AriPortMapper.selectAriportByUserId] - ==> Parameters: 58(Long)
+2016-06-14 13:06:03,834 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AriPortMapper.selectAriportByUserId] - <==      Total: 0
+2016-06-14 13:06:04,614 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.ResourceMapper.findResourceByUserId] - ==>  Preparing: SELECT auth.* FROM `sys_author` auth INNER JOIN `sys_role_author` ra ON auth.`id`=ra.`author_id` INNER JOIN `sys_use_role` sur ON sur.`role_id`=ra.`role_id` WHERE sur.`user_id`=? 
+2016-06-14 13:06:04,615 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.ResourceMapper.findResourceByUserId] - ==> Parameters: 58(Long)
+2016-06-14 13:06:04,681 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.ResourceMapper.findResourceByUserId] - <==      Total: 42
+2016-06-14 13:06:04,714 [qtp884569993-36] DEBUG [com.jianfei.core.mapper.ArchiveMapper.masterTotal] - ==>  Preparing: SELECT SUM(a.`order_num`) AS total FROM app_order_archive a 
+2016-06-14 13:06:04,714 [qtp884569993-36] DEBUG [com.jianfei.core.mapper.ArchiveMapper.masterTotal] - ==> Parameters: 
+2016-06-14 13:06:04,747 [qtp884569993-36] DEBUG [com.jianfei.core.mapper.ArchiveMapper.masterTotal] - <==      Total: 1
+2016-06-14 13:06:04,820 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_month_top3 = [{province=广东, bname=章子怡, total=51, order_sum=51}, {province=北京, bname=秦青, total=11, order_sum=11}, {province=南京, bname=李依依, total=11, order_sum=11}]
+2016-06-14 13:06:04,823 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_month_top3 = [{province=广东, bname=章子怡, total=51, order_sum=51}, {province=北京, bname=秦青, total=11, order_sum=11}, {province=南京, bname=李依依, total=11, order_sum=11}]
+2016-06-14 13:06:04,825 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_1_month = [{province=北京, order_num=11}, {province=南京, order_num=11}, {province=广东, order_num=51}, {province=昆明, order_num=15}, {province=深圳, order_num=12}]
+2016-06-14 13:06:04,827 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_1_month = [{province=北京, order_num=11}, {province=南京, order_num=11}, {province=广东, order_num=51}, {province=昆明, order_num=15}, {province=深圳, order_num=12}]
+2016-06-14 13:06:04,830 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_2_month = [{province=北京, order_num=33}, {province=厦门, order_num=21}, {province=成都机场, order_num=31}, {province=杭州, order_num=17}, {province=西安, order_num=12}]
+2016-06-14 13:06:04,832 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_2_month = [{province=北京, order_num=33}, {province=厦门, order_num=21}, {province=成都机场, order_num=31}, {province=杭州, order_num=17}, {province=西安, order_num=12}]
+2016-06-14 13:06:04,834 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_3_month = [{province=上海, order_num=12}, {province=重庆, order_num=13}]
+2016-06-14 13:06:04,835 [qtp884569993-36] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject last_3_month = [{province=上海, order_num=12}, {province=重庆, order_num=13}]
+2016-06-14 13:06:10,926 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==>  Preparing: SELECT count(*) FROM app_config WHERE dtflag = 0 
+2016-06-14 13:06:10,926 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==> Parameters: 
+2016-06-14 13:06:10,959 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - <==      Total: 1
+2016-06-14 13:06:10,960 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==>  Preparing: select * from app_config where dtflag=0 limit ?,? 
+2016-06-14 13:06:10,960 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==> Parameters: 0(Integer), 10(Integer)
+2016-06-14 13:06:10,996 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - <==      Total: 3
+2016-06-14 13:06:47,382 [qtp884569993-36] DEBUG [com.jianfei.core.mapper.AppConfigMapper.insert] - ==>  Preparing: insert into app_config (id,title, type, url,content) values (?,?,?,?,?) 
+2016-06-14 13:06:47,382 [qtp884569993-36] DEBUG [com.jianfei.core.mapper.AppConfigMapper.insert] - ==> Parameters: 0f70f2e5afeb47dbaf12cdffcb07dd29(String), 20160614——常见问题(String), 2(Integer), null, <p>1、问题1</p><p>2、问题2</p>(String)
+2016-06-14 13:06:47,421 [qtp884569993-36] DEBUG [com.jianfei.core.mapper.AppConfigMapper.insert] - <==    Updates: 1
+2016-06-14 13:06:47,669 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==>  Preparing: SELECT count(*) FROM app_config WHERE dtflag = 0 
+2016-06-14 13:06:47,670 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==> Parameters: 
+2016-06-14 13:06:47,704 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - <==      Total: 1
+2016-06-14 13:06:47,704 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==>  Preparing: select * from app_config where dtflag=0 limit ?,? 
+2016-06-14 13:06:47,704 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==> Parameters: 0(Integer), 10(Integer)
+2016-06-14 13:06:47,739 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - <==      Total: 4
+2016-06-14 13:06:51,082 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - ==>  Preparing: select id, title,type, url , content from app_config where id = ? 
+2016-06-14 13:06:51,082 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - ==> Parameters: 0f70f2e5afeb47dbaf12cdffcb07dd29(String)
+2016-06-14 13:06:51,116 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - <==      Total: 1
+2016-06-14 13:07:04,974 [qtp884569993-34] DEBUG [com.jianfei.core.mapper.AppConfigMapper.updateByPrimaryKeySelective] - ==>  Preparing: update app_config SET title = ?, type = ?, content = ? where id = ? 
+2016-06-14 13:07:04,975 [qtp884569993-34] DEBUG [com.jianfei.core.mapper.AppConfigMapper.updateByPrimaryKeySelective] - ==> Parameters: 20160614——常见问题(String), 2(Integer), java.io.StringReader@750708dd(StringReader), 0f70f2e5afeb47dbaf12cdffcb07dd29(String)
+2016-06-14 13:07:05,014 [qtp884569993-34] DEBUG [com.jianfei.core.mapper.AppConfigMapper.updateByPrimaryKeySelective] - <==    Updates: 1
+2016-06-14 13:07:05,240 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==>  Preparing: SELECT count(*) FROM app_config WHERE dtflag = 0 
+2016-06-14 13:07:05,241 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==> Parameters: 
+2016-06-14 13:07:05,274 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - <==      Total: 1
+2016-06-14 13:07:05,274 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==>  Preparing: select * from app_config where dtflag=0 limit ?,? 
+2016-06-14 13:07:05,275 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==> Parameters: 0(Integer), 10(Integer)
+2016-06-14 13:07:05,309 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - <==      Total: 4
+2016-06-14 13:07:08,080 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - ==>  Preparing: select id, title,type, url , content from app_config where id = ? 
+2016-06-14 13:07:08,081 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - ==> Parameters: 0f70f2e5afeb47dbaf12cdffcb07dd29(String)
+2016-06-14 13:07:08,115 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.selectByPrimaryKey] - <==      Total: 1
+2016-06-14 13:07:09,945 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==>  Preparing: SELECT count(*) FROM app_config WHERE dtflag = 0 
+2016-06-14 13:07:09,946 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==> Parameters: 
+2016-06-14 13:07:09,979 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - <==      Total: 1
+2016-06-14 13:07:09,980 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==>  Preparing: select * from app_config where dtflag=0 limit ?,? 
+2016-06-14 13:07:09,980 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==> Parameters: 0(Integer), 10(Integer)
+2016-06-14 13:07:10,015 [qtp884569993-39] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - <==      Total: 4
+2016-06-14 13:07:13,933 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.delRight] - ==>  Preparing: update app_config set dtflag = 1 where id = ? 
+2016-06-14 13:07:13,933 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.delRight] - ==> Parameters: 0f70f2e5afeb47dbaf12cdffcb07dd29(String)
+2016-06-14 13:07:13,972 [qtp884569993-35] DEBUG [com.jianfei.core.mapper.AppConfigMapper.delRight] - <==    Updates: 1
+2016-06-14 13:07:13,993 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==>  Preparing: SELECT count(*) FROM app_config WHERE dtflag = 0 
+2016-06-14 13:07:13,994 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - ==> Parameters: 
+2016-06-14 13:07:14,028 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page_COUNT] - <==      Total: 1
+2016-06-14 13:07:14,028 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==>  Preparing: select * from app_config where dtflag=0 limit ?,? 
+2016-06-14 13:07:14,029 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - ==> Parameters: 0(Integer), 10(Integer)
+2016-06-14 13:07:14,063 [qtp884569993-37] DEBUG [com.jianfei.core.mapper.AppConfigMapper.page] - <==      Total: 3

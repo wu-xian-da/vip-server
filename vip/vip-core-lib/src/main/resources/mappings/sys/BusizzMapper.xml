@@ -203,7 +203,7 @@
 	<!--根据业务人员id获取所属省份id -->
 	<select id="getProvinceIdByUserId" resultMap="userProvinceMap" parameterType="java.lang.Integer">
 		SELECT
-		city.cid,u.id
+		distinct(city.cid),u.id
 		FROM
 		sys_users u
 		INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
