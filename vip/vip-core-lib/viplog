@@ -13,3 +13,10 @@
 2016-06-14 09:33:33,642 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - ==> Parameters: qqqq(String), 110(String)
 2016-06-14 09:33:33,767 [main] DEBUG [com.jianfei.core.mapper.ArchiveMapper.selectAirportByProvinceIds] - <==      Total: 1
 >>>>>>> d662536b6ae6aa5cd3861fb73a278467905ba1c1
+2016-06-14 14:18:56,378 [main] ERROR [com.jianfei.core.common.cache.JedisUtils] - 从队列中获取消息:ERR wrong number of arguments for 'brpop' command
+2016-06-14 14:20:42,643 [main] ERROR [com.jianfei.core.common.cache.JedisUtils] - 从队列中获取消息:ERR wrong number of arguments for 'brpop' command
+2016-06-14 16:29:24,589 [main] DEBUG [com.jianfei.core.common.cache.JedisUtils] - set refineli = tom
+2016-06-14 16:30:46,180 [main] DEBUG [com.jianfei.core.common.cache.JedisUtils] - get refineli = tom
+2016-06-14 16:32:09,671 [main] DEBUG [com.jianfei.core.common.cache.JedisUtils] - setObject refineli = ......
+2016-06-14 16:33:14,535 [main] DEBUG [com.jianfei.core.common.cache.JedisUtils] - setObject refineli = ......
+2016-06-14 16:33:49,400 [main] DEBUG [com.jianfei.core.common.cache.JedisUtils] - getObject refineli = ......

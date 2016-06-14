@@ -25,6 +25,7 @@ import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.security.shiro.ShiroUtils;
 import com.jianfei.core.common.shrio.ShiroDbRealm;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
@@ -61,8 +62,13 @@ public class ResourceManagerImpl implements ResourceManager {
 	@Override
 	public List<Menu> getCurrentMenus() {
 		List<Resource> resources = null;
+
+		if (null == ShiroUtils.getPrincipal()) {
+			logger.error("登入失败，获取菜单失败...");
+			return new ArrayList<Menu>();
+		}
 		// 超级管理员
-		if (ShiroUtils.getPrincipal().getUserType() == 2) {
+		if (ShiroUtils.getPrincipal().getUserType() == GloabConfig.SUPER_ADMIN) {
 			resources = resourceMapper.get(new MapUtils.Builder().build());
 		} else {
 			// 系统用户
