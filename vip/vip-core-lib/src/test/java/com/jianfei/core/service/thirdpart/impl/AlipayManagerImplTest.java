@@ -42,6 +42,7 @@ import com.tencent.protocol.native_protocol.NativePayReqData;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml" })
+@Transactional
 public class AlipayManagerImplTest {
 
 	@Autowired
@@ -92,13 +93,22 @@ public class AlipayManagerImplTest {
 		req.setPayUserId("13966662222");
 		req.setResultCode("TRADE_SUCCESS");
 		req.setTradeNo("2188909900");
+	    try {
+			Date dd = DateUtils.parseDate("20141030133525", "yyyyMMddHHmmss");
+			String dds = DateUtil.dateToString(dd, "yyyy-MM-dd HH:mm:ss");
+			System.out.println(dds);
+		} catch (ParseException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	    
 		alipayManagerImpl.payNotify(req);
 	}
 	
 	@Test
 	public void testKonggang_getcardcode(){
 		try {
-			airportEasyManager.getCardCode("1234231");
+			airportEasyManager.getCardCode("12342131");
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jianfei.core.mapper.AriPortMapper">
 
-	<resultMap id="airportRs" type="AriPort">
+	<resultMap id="airportRs" type="com.jianfei.core.bean.AriPort">
 		<id property="id" column="airport_id" />
 		<result property="name" column="airport_name" />
 		<result property="state" column="state" />
@@ -246,5 +246,10 @@
 				and name=#{name}
 			</if>
 		</where>
+	</select>
+	
+	<!--根据场站id获取场站信息 -->
+	<select id="selectAirPortInfoById" resultMap="airportRs" parameterType="java.lang.String">
+		select * from sys_airport where airport_id = #{airPortId}
 	</select>
 </mapper>

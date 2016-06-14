@@ -237,4 +237,13 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	public List<Map<String, Object>> mapList(Map<String, Object> map) {
 		return ariPortMapper.mapList(map);
 	}
+	
+	/**
+	 * 根据机场编号获取机场信息
+	 */
+	@Override
+	public AriPort selectAirPortInfoById(String airPortId) {
+		// TODO Auto-generated method stub
+		return ariPortMapper.selectAirPortInfoById(airPortId);
+	}
 }

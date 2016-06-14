@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jianfei.core.bean.AppOrderArchive;
+import com.jianfei.core.dto.CharData;
 
 
 /**
@@ -46,8 +47,8 @@ public class StatManagerImplTest {
 		paraMap.put("saleNo", 3);
 		paraMap.put("beginTime", "2016-02-02");
 		paraMap.put("endTime", "2016-06-10");
-		List<AppOrderArchive> list = statManagerImpl.selectCharDataByUserId(paraMap);
-		for(AppOrderArchive a : list){
+		List<CharData> list = statManagerImpl.selectCharDataByUserId(paraMap);
+		for(CharData a : list){
 			System.out.println(a);
 		}
 		System.out.println("size="+list.size());

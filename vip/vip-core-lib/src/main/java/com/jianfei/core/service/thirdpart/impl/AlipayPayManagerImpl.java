@@ -23,6 +23,7 @@ import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.alipay.demo.trade.model.result.AlipayF2FQueryResult;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
+import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
@@ -143,7 +144,6 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 		AlipayF2FQueryResult result = tradeService.queryTradeResult(tradeNo);
 		switch (result.getTradeStatus()) {
 		case SUCCESS:
-			AlipayTradeQueryResponse response = result.getResponse();
 			String tradeStatus = result.getResponse().getTradeStatus();
 			if (tradeStatus.equals("TRADE_SUCCESS")){
 				payQueryResult.setCode("0");
@@ -189,7 +189,7 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 		if (req.getResultCode().equals("TRADE_SUCCESS")){
 			Map<String,Object> params = new HashMap<String,Object>();
 			params.put("orderId", req.getOutTradeNo());
-			params.put("orderState", 1);//已支付
+			params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
 			params.put("payUserId", req.getPayUserId());
 			params.put("payTime", req.getPayTime());
 			params.put("tradeNo", req.getTradeNo());

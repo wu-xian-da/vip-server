@@ -11,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppAirportArchive;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.CharData;
 import com.jianfei.core.dto.GraphDto;
 import com.jianfei.core.dto.OrderAppDetailInfo;
 import com.jianfei.core.dto.ReturnCardDto;
@@ -60,7 +61,7 @@ public interface StatManager {
      * @param map
      * @return
      */
-    List<AppOrderArchive> selectCharDataByUserId(Map<String,Object> map);
+    List<CharData> selectCharDataByUserId(Map<String,Object> map);
     
     /**
      * 个人中心销售榜单获取接口

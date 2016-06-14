@@ -2,6 +2,7 @@ package com.jianfei.order;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrderArchive;
+import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.service.base.impl.AriPortManagerImpl;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,138 +132,157 @@ public class OrderStaController {
 		}
     }
     /**
-     * 个人中心销售榜单获取接口
-     * @param uno 用户编号
-     * @param begin 开始时间
-     * @param end 结束时间
-     * @return
-     */
-    @RequestMapping(value="getSaleCurveByUserId")
-    @ResponseBody
-    public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value="uno",required=true) String uno,
-    		@RequestParam(value="begin",required=true) String begin,
-    		@RequestParam(value="end",required=true) String end){
-    	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-    	try {
-    		//1、从归档表中查询该业务员某个时间段内的销售业绩
-    		Map<String,Object> paraMap = new HashMap<String,Object>();
-    		paraMap.put("saleNo", uno);
-    		paraMap.put("beginTime", begin);
-    		paraMap.put("endTime", end);
-    		List<AppOrderArchive> listBycustomer = statManager.selectCharDataByUserId(paraMap);
-    		Map<String,Object> customerMap = new HashMap<String,Object>();
-    		customerMap.put("customer", listBycustomer);
-    		list.add(customerMap);
-    		
-    		//2、业务人员所属省份该时间段内的平均开卡人数
-    		//2.1根据销售人员id获取该用户所属的省份id
-    		List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
-    		List<Map<String,Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList,begin,end);
-    		Map<String,Object> provinceMap = new HashMap<String,Object>();
-    		provinceMap.put("province", provinceList);
-    		list.add(provinceMap);
-            return BaseMsgInfo.success(list);
+	 * 个人中心销售榜单获取接口
+	 * 
+	 * @param uno
+	 *            用户编号
+	 * @param begin
+	 *            开始时间
+	 * @param end
+	 *            结束时间
+	 * @return
+	 */
+	@RequestMapping(value = "getSaleCurveByUserId")
+	@ResponseBody
+	public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value = "uno", required = true) String uno,
+			@RequestParam(value = "begin", required = true) String begin,
+			@RequestParam(value = "end", required = true) String end) {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		try {
+			// 1、从归档表中查询该业务员某个时间段内的销售业绩
+			Map<String, Object> paraMap = new HashMap<String, Object>();
+			paraMap.put("saleNo", uno);
+			paraMap.put("beginTime", begin);
+			paraMap.put("endTime", end);
+			// 1.1业务人员某个时间段内每天的开卡数量
+			List<CharData> listBycustomer = statManager.selectCharDataByUserId(paraMap);
+
+			// 2、业务人员所属省份该时间段内的平均开卡人数
+			// 2.1根据销售人员id获取该用户所属的省份id
+			List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+			List<Map<String, Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList, begin, end);
+
+			// 3将两个list合并为一个list
+			if (listBycustomer != null && listBycustomer.size() > 0) {
+				for (Map<String, Object> map : provinceList) {
+					String dateStr = (String) map.get("date");
+					int listBycustomerSize = listBycustomer.size();
+					int flag = 0;// 是否有该天的数据 0 表示没有
+					for (int index = 0; index < listBycustomerSize; index++) {
+						CharData charData = listBycustomer.get(index);
+						// 归档日期
+						String fileTime = formatDate(charData.getDate());
+						if (fileTime.equals(dateStr)) {
+							map.put("total", charData.getTotal());
+							flag = 1;
+							break;
+						}
+					}
+
+					if (flag == 0) {
+						map.put("total", "0");
+					}
+				}
+				resMap.put("cardNumList", provinceList);
+			} else {
+				for (Map<String, Object> map : provinceList) {
+					map.put("total", "0");
+				}
+				resMap.put("cardNumList", provinceList);
+			}
+			return BaseMsgInfo.success(resMap);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
 		}
-    }
-    
-    /**
-     * 销售榜单-详细图表接口
-     * @param uno
-     * @param areaId
-     * @param begin
-     * @param end
-     * @param airportId
-     * @return
-     */
-    @RequestMapping(value="getSticCardData")
-    @ResponseBody
-    public BaseMsgInfo getSticCardData(@RequestParam(value="uno",required=true) String uno,
-    		@RequestParam(value="areaId",defaultValue="", required=false) String areaId,
-    		@RequestParam(value="begin",required=true) String begin,
-    		@RequestParam(value="end",required=true) String end,
-    		@RequestParam(value="airportId",required=false,defaultValue="") String airportId){
-    	
-    	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-    	try {
-    		//1日期-所管辖的省份当日开卡总数
-    		//1.1省份列表
-    		List<UserProvince> userProvinceList=new ArrayList<UserProvince>();
-    		//全国
-    		if(!areaId.equals("")){
-    			UserProvince userProvince = new UserProvince();
-    			userProvince.setProvinceId(areaId);
-    			userProvince.setUserId(uno);
-    			userProvinceList.add(userProvince);
-    		}else{
-    			userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
-    		}
-    		
-    		List<Map<String,Object>> provinceList = statManager.getTotalSaleCurveByProvinceId(userProvinceList,begin,end);
-    		Map<String,Object> provinceMap = new HashMap<String,Object>();
-    		provinceMap.put("province", provinceList);
-    		list.add(provinceMap);
-    		
-    		//2场站-当日开卡总数
-    		//2.1组装一个省份+场站id列表
-    		List<Map<String,Object>> proIdApIdList = new ArrayList<Map<String,Object>>();
-    		if(!airportId.equals("")){
-    			Map<String,Object> map = new HashMap<String,Object>();
-    			map.put("pid", areaId);
-    			map.put("airportId", airportId);
-    			proIdApIdList.add(provinceMap);
-    		}else{
-    			if(!areaId.equals("")){//某个省下的所有的机场
-    				Map<String,Object> map = new HashMap<String,Object>();
-    				map.put("pids", areaId);
-    				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
-    				for(Map<String,Object> maps : airPortList){
-    					Map<String,Object> mapItem = new HashMap<String,Object>();
-    					//获取某个省份下所有的机场列表
-    					List<Map<String,Object>> airPortMaps = (List<Map<String, Object>>) maps.get("airPortList");
-    					for(Map<String,Object> airPortMap:airPortMaps){
-    						mapItem.put("pid", areaId);
-    						mapItem.put("anames", airPortMap.get("anames"));
-    						mapItem.put("airportId", airPortMap.get("aids"));
-    						proIdApIdList.add(mapItem);
-    					}
-    				}
-    			}else{//该业务人员管辖下的省份所有的机场
-    				Map<String,Object> map = new HashMap<String,Object>();
-    				List<Map<String,Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
-    				for(Map<String,Object> maps : airPortList){
-    					Map<String,Object> mapItem = new HashMap<String,Object>();
-    					List<Map<String,Object>> airPortMaps = (List<Map<String, Object>>) maps.get("airPortList");
-    					for(Map<String,Object> airPortMap:airPortMaps){
-    						mapItem.put("pid", maps.get("pid"));
-    						mapItem.put("anames", airPortMap.get("anames"));
-    						mapItem.put("airportId", airPortMap.get("aids"));
-    						proIdApIdList.add(mapItem);
-    					}
-    	    			
-    				}
-    			}
-    		}
-    		List<Map<String,Object>> airPortList = statManager.getSticCardData(proIdApIdList,begin,end);
-    		Map<String,Object> airPortMap = new HashMap<String,Object>();
-    		airPortMap.put("airPort", airPortList);
-    		list.add(airPortMap);
-    		
-    		return BaseMsgInfo.success(list);
+	}
+
+	/**
+	 * 销售榜单-详细图表接口
+	 * 
+	 * @param uno
+	 * @param areaId
+	 * @param begin
+	 * @param end
+	 * @param airportId
+	 * @return
+	 */
+	@RequestMapping(value = "getSticCardData")
+	@ResponseBody
+	public BaseMsgInfo getSticCardData(@RequestParam(value = "uno", required = true) String uno,
+			@RequestParam(value = "areaId", defaultValue = "", required = false) String areaId,
+			@RequestParam(value = "begin", required = true) String begin,
+			@RequestParam(value = "end", required = true) String end,
+			@RequestParam(value = "airportId", required = false, defaultValue = "") String airportId) {
+
+		List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
+		try {
+			// 1 构建一个【省份id+机场id】列表
+			List<Map<String, Object>> proIdApIdList = new ArrayList<Map<String, Object>>();
+			// 具体某个场站
+			if (!airportId.equals("")) {
+				Map<String, Object> mapItem = new HashMap<String, Object>();
+				mapItem.put("pid", areaId);
+				//**根据场站id获取场站名称
+				AriPort ariPort = ariPortService.selectAirPortInfoById(airportId);
+				mapItem.put("anames", ariPort.getName());
+				mapItem.put("airportId", airportId);
+				proIdApIdList.add(mapItem);
+
+			} else {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("code", uno);
+				if (!areaId.equals("")) {// 某个省下的所有的机场
+					map.put("cid", areaId);
+				}
+				List<Map<String, Object>> airPortList = archiveManager.selectAirportByProvinceIds(map);
+				for (Map<String, Object> maps : airPortList) {
+					List<Map<String, Object>> airPortMaps = (List<Map<String, Object>>) maps.get("airPortList");
+					for (Map<String, Object> airPortMap : airPortMaps) {
+						Map<String, Object> mapItem = new HashMap<String, Object>();
+						mapItem.put("pid", maps.get("pid"));
+						mapItem.put("anames", airPortMap.get("anames"));
+						mapItem.put("airportId", airPortMap.get("aids"));
+						proIdApIdList.add(mapItem);
+					}
+				}
+			}
+
+			// 2 ****** x轴：日期 y轴：当日所有场站的开卡总和
+			List<Map<String, Object>> carNumByDateList = statManager.returnCardNumByDate(proIdApIdList, begin, end);
+			Map<String, Object> dateMap = new HashMap<String, Object>();
+			dateMap.put("carNumByDate", carNumByDateList);
+			resList.add(dateMap);
+			// 3 ****** x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
+			List<Map<String, Object>> cardNumByAirPortList = statManager.getSticCardData(proIdApIdList, begin, end);
+			Map<String, Object> airPortMap = new HashMap<String, Object>();
+			airPortMap.put("cardNumByAirPort", cardNumByAirPortList);
+			resList.add(airPortMap);
+
+			return BaseMsgInfo.success(resList);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
 		}
-    }
-    
+	}
+    /**
+     * 销售榜单分页&TOP10
+     * @param uno
+     * @param pid
+     * @param begin
+     * @param end
+     * @param airportId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @RequestMapping(value="salesRanking")
     @ResponseBody
-    public BaseMsgInfo salesRanking(@RequestParam(value="uno") String uno,
-    		@RequestParam(value="pid") String pid,
+    public BaseMsgInfo salesRanking(@RequestParam(value="uno", required = false) String uno,
+    		@RequestParam(value="pid", required = false) String pid,
     		@RequestParam(value="begin") String begin,
     		@RequestParam(value="end") String end,
-    		@RequestParam(value="airportId") String airportId,
+    		@RequestParam(value="airportId", required = false) String airportId,
     		@RequestParam(value="pageNo") int pageNo,
     		@RequestParam(value="pageSize") int pageSize){
     	List <SalesRankingDto> result = statManager.salesRanking(uno, pid, airportId, begin, end, pageNo, pageSize);
@@ -283,11 +305,20 @@ public class OrderStaController {
     		paraMap.put("saleNo", uno);
     		paraMap.put("beginTime", begin);
     		paraMap.put("endTime", end);
-    		List<AppOrderArchive> listBycustomer = statManager.selectCharDataByUserId(paraMap);
+    		List<CharData> listBycustomer = statManager.selectCharDataByUserId(paraMap);
     		return BaseMsgInfo.success(listBycustomer);
     }
     
-    
+    /**
+	 * 格式化日期
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public String formatDate(Date date) {
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		return sf.format(date);
+	} 
 }
 
 

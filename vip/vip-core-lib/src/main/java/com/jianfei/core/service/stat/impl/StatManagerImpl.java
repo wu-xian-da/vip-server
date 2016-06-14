@@ -89,7 +89,8 @@ public class StatManagerImpl implements StatManager {
     }
     
     /**
-     * 销售榜单-详细图表接口 key:日前+省份id+场站id
+     * 销售榜单-详细图表接口
+     * x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
      * @throws ParseException 
      */
 	public List<Map<String, Object>> getSticCardData(List<Map<String,Object>> proIdApIdList, String begin,String end) throws ParseException {
@@ -125,6 +126,42 @@ public class StatManagerImpl implements StatManager {
 		return list;
 	}
 	
+	/**
+     * 销售榜单-详细图表接口
+     * x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
+     * @throws ParseException 
+     */
+	public List<Map<String, Object>> returnCardNumByDate(List<Map<String,Object>> proIdApIdList, 
+			String begin,String end) throws ParseException {
+		// TODO Auto-generated method stub
+		int days = returnDays(begin,end);
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		//天数
+		for(int index =0;index <= days; index ++){
+			Map<String,Object> mapItem = new HashMap<String,Object>();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(sf.parse(begin));
+			calendar.add(Calendar.DATE, index);
+			String date = sf.format(calendar.getTime());
+			float sum = 0;
+			//场站列表
+			for(Map<String,Object> proIdApIdMap:proIdApIdList){
+				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
+				if(obj == null){
+					sum +=sum;
+				}else{
+					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
+					sum += Float.parseFloat(charData.getTotal());
+				}
+			}
+			mapItem.put("date", date);
+			mapItem.put("total", sum);
+			list.add(mapItem);
+		}
+		return list;
+	}
+		
 	/** 所属省份平均开卡数
 	 * 个人中心销售榜单获取接口-key:日期+省份
 	 * @throws ParseException 
@@ -159,47 +196,6 @@ public class StatManagerImpl implements StatManager {
 				mapItem.put("avgNum", sum/UserProvinceList.size());
 			}else{
 				mapItem.put("avgNum", 0);
-			}
-			
-			list.add(mapItem);
-		}
-		return list;
-	}
-	
-	/** 所属省份总的开卡总数
-	 * 个人中心销售榜单获取接口-key:日期+省份
-	 * @throws ParseException 
-	 */
-	public List<Map<String, Object>> getTotalSaleCurveByProvinceId(List<UserProvince> UserProvinceList, String begin,String end) throws ParseException {
-		// TODO Auto-generated method stub
-		int days = returnDays(begin,end);
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int index =0;index <= days; index ++){
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(sf.parse(begin));
-			calendar.add(Calendar.DATE, index);
-			String date = sf.format(calendar.getTime());
-			Map<String,Object> mapItem = new HashMap<String,Object>();
-			mapItem.put("date", date);
-			
-			float sum=0;
-			//计算多个省份某天的平均值
-			if(UserProvinceList !=null && UserProvinceList.size()>=1){
-				for(int i =0 ;i <UserProvinceList.size(); i ++){
-					Object obj = JedisUtils.getObject(date+"$"+UserProvinceList.get(i).getProvinceId());
-					if(obj == null){
-						sum +=0;
-					}else{
-						//将json字符串转换为CharDate对象
-						CharData charData = JSON.parseObject(obj.toString(), CharData.class);
-						sum += Float.parseFloat(charData.getTotal());
-					}
-				}
-				//多个省份的平均开卡数
-				mapItem.put("total", sum/UserProvinceList.size());
-			}else{
-				mapItem.put("total", 0);
 			}
 			
 			list.add(mapItem);
@@ -259,7 +255,7 @@ public class StatManagerImpl implements StatManager {
 	 *  根据业务人员id号查询某个时间段内的销售情况
 	 */
 	@Override
-	public List<AppOrderArchive> selectCharDataByUserId(Map<String, Object> map) {
+	public List<CharData> selectCharDataByUserId(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return appOrderArchiveMapper.selectCharDataByUserId(map);
 	}

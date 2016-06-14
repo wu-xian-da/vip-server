@@ -75,4 +75,6 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> mapList(Map<String, Object> map);
+	
+	AriPort selectAirPortInfoById(String airPortId);
 }
