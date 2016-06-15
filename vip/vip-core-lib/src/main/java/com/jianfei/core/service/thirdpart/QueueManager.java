@@ -1,21 +1,25 @@
 package com.jianfei.core.service.thirdpart;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import com.jianfei.core.common.utils.MessageDto;
 
-public abstract class QueueManager {
-
-	public static final String messageKey="MESSAGEKEY";
+public interface QueueManager {
 
 	/**
-	 * 从队列中获取信息
+	 * processMessage(从队列中获取信息)
 	 * 
 	 * @param sourceQ
+	 *            目标队列
 	 * @param targerQ
-	 * @return
+	 *            数据备份队列
+	 * @return MessageDto<Map<String,String>>
+	 * @version 1.0.0
 	 */
-	public abstract MessageDto<HashMap<String, Object>> brpoplpush(String sourceQ,
+	MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ);
+
+	public static final String SMS_QUEUE_VIP = "SMS_QUEUES_VIP";
+	public static final String SMS_QUEUE_VIP_BAK = "SMS_QUEUES_VIP_BAK";
 
 }
