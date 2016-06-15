@@ -1,6 +1,6 @@
 package com.jianfei.core.service.thirdpart;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import com.jianfei.core.common.utils.MessageDto;
 
@@ -16,13 +16,16 @@ import com.jianfei.core.common.utils.MessageDto;
 public interface QueueManager {
 
 	/**
-	 * 从队列中获取信息
+	 * processMessage(从队列中获取信息)
 	 * 
 	 * @param sourceQ
+	 *            目标队列
 	 * @param targerQ
-	 * @return
+	 *            数据备份队列
+	 * @return MessageDto<Map<String,String>>
+	 * @version 1.0.0
 	 */
-	MessageDto<HashMap<String, Object>> brpoplpush(String sourceQ,
+	MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ);
 
 }
