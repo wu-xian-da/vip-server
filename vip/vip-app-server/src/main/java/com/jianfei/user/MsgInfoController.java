@@ -2,6 +2,7 @@ package com.jianfei.user;
 
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +26,7 @@ public class MsgInfoController {
 
     private static Log log = LogFactory.getLog(MsgInfoController.class);
     @Autowired
-    private MsgInfoManagerImpl msgInfoManager;
+    private ValidateCodeManagerImpl validateCodeManager;
 
     /**
      * 给用户发送登录验证码
@@ -49,8 +50,7 @@ public class MsgInfoController {
             if (msgType == null)
                 return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
 
-            boolean flag = msgInfoManager.sendValidateCode(phone, msgType);
-            return BaseMsgInfo.success(flag);
+           return validateCodeManager.sendValidateCode(phone, msgType);
         }catch (Exception e){
             log.error("给用户发送登录验证码",e);
             return BaseMsgInfo.msgFail("发送登录验证码失败");
@@ -78,7 +78,7 @@ public class MsgInfoController {
             if (msgType == null)
                 return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
 
-            String code = msgInfoManager.getValidateCode(phone, msgType);
+            String code = validateCodeManager.getSendValidateCode(phone, msgType);
             return BaseMsgInfo.success("手机号:"+phone+"的校验码为"+code+",请于5分钟内输入,请勿向任何人泄露。[亿出行]");
         }catch (Exception e){
             log.error("获取发送的验证码失败",e);

@@ -1,5 +1,6 @@
 package com.jianfei.core.common.cache;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -96,7 +97,8 @@ public class JedisUtils {
 		try {
 			jedis = getResource();
 			byte[] bytes=getBytesKey(value);
-			result = jedis.lpush(key, bytes.toString());
+			String str = new String(bytes, StandardCharsets.UTF_8);
+			result = jedis.lpush(key, str);
 			logger.debug("lpushObject {} = {}", key, value);
 		} catch (Exception e) {
 			logger.warn("lpushObject {} = {}", key, value, e);
