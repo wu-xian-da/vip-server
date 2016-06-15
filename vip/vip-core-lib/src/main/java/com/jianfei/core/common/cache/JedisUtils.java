@@ -1,8 +1,8 @@
 package com.jianfei.core.common.cache;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,8 +92,7 @@ public class JedisUtils {
 		Jedis jedis = null;
 		try {
 			jedis = getResource();
-			byte[] bytes=getBytesKey(value);
-			String str = new String(bytes, StandardCharsets.UTF_8);
+			String str = JSON.toJSONString(value);
 			result = jedis.lpush(key, str);
 			logger.debug("lpushObject {} = {}", key, value);
 		} catch (Exception e) {
