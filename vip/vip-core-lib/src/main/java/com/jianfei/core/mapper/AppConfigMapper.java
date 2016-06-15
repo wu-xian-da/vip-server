@@ -60,8 +60,6 @@ public interface AppConfigMapper {
      */
     int updateByPrimaryKey(AppConfig record);
 
-    VipCardInfoDto selectVipCardInfo(int type);
-
     List<AppConfig> selectByType(int type);
     
     //分页展示权益信息
