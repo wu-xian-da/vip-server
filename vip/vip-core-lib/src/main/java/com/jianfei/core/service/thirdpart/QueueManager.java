@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 import com.jianfei.core.common.utils.MessageDto;
 
-public interface QueueManager {
+public abstract class QueueManager {
+
+	public static final String messageKey="MESSAGEKEY";
 
 	/**
 	 * 同队列中获取信息
@@ -13,7 +15,7 @@ public interface QueueManager {
 	 * @param targerQ
 	 * @return
 	 */
-	MessageDto<HashMap<String, Object>> brpoplpush(String sourceQ,
+	public abstract MessageDto<HashMap<String, Object>> brpoplpush(String sourceQ,
 			String targerQ);
 
 }

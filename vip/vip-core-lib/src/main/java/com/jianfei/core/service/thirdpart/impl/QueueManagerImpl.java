@@ -6,7 +6,7 @@ import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.service.thirdpart.QueueManager;
 
-public class QueueManagerImpl implements QueueManager {
+public class QueueManagerImpl extends QueueManager {
 
 	@SuppressWarnings("unused")
 	@Override
