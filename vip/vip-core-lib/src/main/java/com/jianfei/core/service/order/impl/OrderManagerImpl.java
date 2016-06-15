@@ -413,7 +413,7 @@ public class OrderManagerImpl implements OrderManager {
 	@Override
 	public BaseMsgInfo getVipCardUseAndOrder(String phone, String code) {
 		//1、校验用户和手机验证码
-		boolean flag = msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD, code);
+		boolean flag = msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD_APPLY, code);
 		if (!flag)
 			return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
 		//2、查询用户信息和订单信息

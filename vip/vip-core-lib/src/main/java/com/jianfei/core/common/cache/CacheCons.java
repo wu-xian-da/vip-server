@@ -79,7 +79,7 @@ public class CacheCons {
 	 * @return
 	 */
 	public static String getMsgTemplateKey( MsgType msgType){
-		return ""+msgType.getName();
+		return "MSG:TEMPLATE"+msgType.getName();
 	}
 
 
