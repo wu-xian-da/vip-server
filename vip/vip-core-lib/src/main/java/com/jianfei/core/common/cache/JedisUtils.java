@@ -68,7 +68,7 @@ public class JedisUtils {
 	 * @return String
 	 * @version 1.0.0
 	 */
-	public static String rpoplpush(String sourceQ, String targetQ) {
+	public static String rpoplpushQ(String sourceQ, String targetQ) {
 		Jedis jedis = null;
 		try {
 			jedis = getResource();
@@ -79,6 +79,27 @@ public class JedisUtils {
 			returnResource(jedis);
 		}
 		return "";
+	}
+
+	/**
+	 * rpushQ(添加信息到消息队列)
+	 * 
+	 * @param sourceQ
+	 * @param msgBody
+	 * @return Long
+	 * @version 1.0.0
+	 */
+	public static Long rpushQ(String sourceQ, String msgBody) {
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			return jedis.rpush(sourceQ, msgBody);
+		} catch (Exception e) {
+			logger.warn("从队列中获取消息:{}", e.getMessage());
+		} finally {
+			returnResource(jedis);
+		}
+		return 0l;
 	}
 
 	/**
