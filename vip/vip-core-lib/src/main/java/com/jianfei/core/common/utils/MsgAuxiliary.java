@@ -7,6 +7,7 @@
  */
 package com.jianfei.core.common.utils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -47,6 +48,9 @@ public class MsgAuxiliary {
 		return false;
 	}
 
+	public static void main(String[] args) {
+	}
+
 	/**
 	 * buildMsgBody(解析模版构建短信消息内容)
 	 * 
@@ -60,7 +64,7 @@ public class MsgAuxiliary {
 	public static String buildMsgBody(Map<String, String> map, String msgType) {
 		String cacheKey = StringUtils.EMPTY;
 		for (MsgType mType : MsgType.values()) {
-			if (mType.equals(msgType)) {
+			if (mType.getName().equals(msgType)) {
 				cacheKey = CacheCons.getMsgTemplateKey(mType);
 			}
 		}
@@ -76,22 +80,22 @@ public class MsgAuxiliary {
 			return StringUtils.EMPTY;
 		}
 		// 解析模版
-		msgBody = msgBody.replaceAll("[userPhone]", map.get("userPhone"))
-				.replaceAll("[vipCardNo]", map.get("vipCardNo"));
+		msgBody = msgBody.replaceAll("\\[userPhone\\]", map.get("userPhone"))
+				.replaceAll("\\[vipCardNo\\]", map.get("vipCardNo"));
 
 		if (!StringUtils.isEmpty(map.get("userName"))) {
-			msgBody = msgBody.replaceAll("[userName]", map.get("userName"));
+			msgBody = msgBody.replaceAll("\\[userName\\]", map.get("userName"));
 		}
 
 		if (!StringUtils.isEmpty(map.get("msgBody"))) {
 			// 激活帐号信息
-			String msgBodyRs = JSONObject.toJSONString(map.get("msgBody"));
+			String msgBodyRs = map.get("msgBody");
 			@SuppressWarnings("unchecked")
 			Map<String, String> msgMap = JSONObject.parseObject(msgBodyRs,
 					Map.class);
 
-			msgBody = msgBody.replaceAll("[code]", msgMap.get("code"))
-					.replaceAll("[time]", msgMap.get("time"));
+			msgBody = msgBody.replaceAll("\\[code\\]", msgMap.get("code"))
+					.replaceAll("\\[time\\]", msgMap.get("time"));
 		}
 
 		return msgBody;
