@@ -105,7 +105,7 @@ public class AppUserFeedbackController {
 		for(AppUserFeedback appUserFeedback : feedbackList){
 			if(appUserFeedback.getFeedbackState() == 0){//反馈信息未处理
 				appUserFeedback.setFeedbackStateName("未处理");
-				appUserFeedback.setOpr("<button class='btn'><a href='goHandFeedbackView?userId="+appUserFeedback.getUserId()+"&feedbackId="+appUserFeedback.getId()+"&feedbackContent="+appUserFeedback.getFeedbackContent()+"'>处理</a></button>");
+				appUserFeedback.setOpr("<a href='goHandFeedbackView?userId="+appUserFeedback.getUserId()+"&feedbackId="+appUserFeedback.getId()+"&feedbackContent="+appUserFeedback.getFeedbackContent()+"'><button class='btn'>处理</button></a>");
 			}else if(appUserFeedback.getFeedbackState() == 1){//反馈信息已处理
 				appUserFeedback.setFeedbackStateName("已处理");
 				appUserFeedback.setOpr("<button class='btn'><a href='gotoFeedBackDetailView?userId="+appUserFeedback.getUserId()+"&feedBackId="+appUserFeedback.getId()+"'>查看</a></button><button class='btn' style='background-color:red' onclick='delFeedBackInfo("+appUserFeedback.getId()+")'>删除</button>");
