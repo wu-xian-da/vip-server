@@ -203,7 +203,7 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	 * 根据业务人员id获取所属省份id
 	 */
 	@Override
-	public List<UserProvince> getProvinceIdByUserId(Integer uNo) {
+	public List<UserProvince> getProvinceIdByUserId(String uNo) {
 		// TODO Auto-generated method stub
 		return busizzMaapper.getProvinceIdByUserId(uNo);
 	}

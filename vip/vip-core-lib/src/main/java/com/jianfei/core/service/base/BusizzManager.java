@@ -79,5 +79,5 @@ public interface BusizzManager<T> {
 	 * @param uNo
 	 * @return
 	 */
-	List<UserProvince> getProvinceIdByUserId(Integer uNo);
+	List<UserProvince> getProvinceIdByUserId(String uNo);
 }
