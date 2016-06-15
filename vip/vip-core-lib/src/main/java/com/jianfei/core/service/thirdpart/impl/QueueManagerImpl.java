@@ -41,6 +41,7 @@ public class QueueManagerImpl implements QueueManager {
 	 *
 	 * @version 1.0.0
 	 */
+	@Autowired
 	private MsgInfoManager msgInfoManager;
 
 	public MessageDto<Map<String, String>> processMessage(String sourceQ,
