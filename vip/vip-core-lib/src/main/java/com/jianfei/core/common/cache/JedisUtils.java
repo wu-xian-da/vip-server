@@ -1,5 +1,6 @@
 package com.jianfei.core.common.cache;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.slf4j.Logger;
