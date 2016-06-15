@@ -6,8 +6,6 @@ import com.jianfei.core.common.utils.MessageDto;
 
 public interface QueueManager {
 
-	public static final String messageKey = "MESSAGEKEY";
-
 	/**
 	 * processMessage(从队列中获取信息)
 	 * 
@@ -20,5 +18,8 @@ public interface QueueManager {
 	 */
 	MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ);
+
+	public static final String SMS_QUEUE_VIP = "SMS_QUEUES_VIP";
+	public static final String SMS_QUEUE_VIP_BAK = "SMS_QUEUES_VIP_BAK";
 
 }
