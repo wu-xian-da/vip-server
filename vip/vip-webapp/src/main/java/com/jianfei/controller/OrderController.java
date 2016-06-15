@@ -279,6 +279,7 @@ public class OrderController extends BaseController {
 		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.backCardPage(pageNo, pageSize, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
 		List<OrderShowInfoDto> list = pageinfo.getList();
+		List<OrderShowInfoDto> resList = new ArrayList<OrderShowInfoDto>();
 		String orderId = null;
 		if(list != null && list.size() >0){
 			for(OrderShowInfoDto appOrder : list){
@@ -326,7 +327,7 @@ public class OrderController extends BaseController {
 						appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
 					}
 					
-				
+					resList.add(appOrder);
 				}else if(appOrder.getOrderState() ==4){
 					//退款成功
 					orderId = appOrder.getOrderId();
@@ -350,14 +351,20 @@ public class OrderController extends BaseController {
 						appOrder.setBackTypeName("现场");
 					}
 					appOrder.setOperation("<button class='btn'><a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'>查看</a></button>");
+					resList.add(appOrder);
 				}
 			}
-			map.put("total", pageinfo.getTotal());
+			if(resList !=null && resList.size()>0){
+				map.put("total", resList.size());
+			}else{
+				map.put("total", 0);
+			}
+			
 		}else{
 			map.put("total", 0);
 		}
 		
-		map.put("rows", list);
+		map.put("rows", resList);
 		return map;
 		
 	}
