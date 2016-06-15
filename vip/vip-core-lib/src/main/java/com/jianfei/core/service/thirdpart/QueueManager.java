@@ -9,7 +9,7 @@ public abstract class QueueManager {
 	public static final String messageKey="MESSAGEKEY";
 
 	/**
-	 * 同队列中获取信息
+	 * 从队列中获取信息
 	 * 
 	 * @param sourceQ
 	 * @param targerQ

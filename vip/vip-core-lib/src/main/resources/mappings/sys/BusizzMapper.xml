@@ -201,7 +201,7 @@
 		</where>
 	</select>
 	<!--根据业务人员id获取所属省份id -->
-	<select id="getProvinceIdByUserId" resultMap="userProvinceMap" parameterType="java.lang.Integer">
+	<select id="getProvinceIdByUserId" resultMap="userProvinceMap" parameterType="java.lang.String">
 		SELECT
 		distinct(city.cid),u.id
 		FROM

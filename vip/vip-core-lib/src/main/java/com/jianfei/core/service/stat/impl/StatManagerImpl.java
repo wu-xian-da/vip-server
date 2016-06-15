@@ -110,7 +110,7 @@ public class StatManagerImpl implements StatManager {
 				String date = sf.format(calendar.getTime());
 				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
 				if(obj == null){
-					sum +=sum;
+					sum +=0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal());
@@ -149,7 +149,7 @@ public class StatManagerImpl implements StatManager {
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
 				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
 				if(obj == null){
-					sum +=sum;
+					sum +=0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal());

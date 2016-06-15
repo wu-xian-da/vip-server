@@ -38,7 +38,7 @@ public class BusizzManagerImplTest {
 	
 	@Test
 	public void testa(){
-		List<UserProvince> list = busizzManagerImpl.getProvinceIdByUserId(71);
+		List<UserProvince> list = busizzManagerImpl.getProvinceIdByUserId("71");
 		for(UserProvince a :list){
 			System.out.println(a);
 		}
