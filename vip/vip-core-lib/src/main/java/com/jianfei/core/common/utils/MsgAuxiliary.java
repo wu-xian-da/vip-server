@@ -7,7 +7,6 @@
  */
 package com.jianfei.core.common.utils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;

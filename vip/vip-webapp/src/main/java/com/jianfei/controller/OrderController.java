@@ -200,10 +200,13 @@ public class OrderController extends BaseController {
 				float remainMoney = orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", appOrder.getOrderId());
+				//2、获取验证码
+				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.BACK_CARD_APPLY);
+				
 				//是否有审核的权限
 				boolean flag = subject.isPermitted("system:order:audit");
 				if(flag){
-					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><input type='text' value='214' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
+					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><input style='width:50px' type='text' value='"+smsCode+"' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
 				}else{
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 				}
@@ -399,7 +402,7 @@ public class OrderController extends BaseController {
 		//是否有审核的权限
 		boolean flag = subject.isPermitted("system:order:audit");
 		if(flag){
-			map.put("data", "<input type='text' value='"+smsCode+"' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
+			map.put("data", "<input style='width:50px' type='text' value='"+smsCode+"' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
 		}else{
 			map.put("data", "");
 		}
