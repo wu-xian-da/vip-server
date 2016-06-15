@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class StatManagerImpl implements StatManager {
 		for(Map<String,Object> proIdApIdMap:proIdApIdList){
 			Map<String,Object> mapItem = new HashMap<String,Object>();
 			//该场站在选择时间内所有的开卡总数
-			float sum =0;
+			int sum =0;
 			for(int index =0;index <= days; index ++){
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(sf.parse(begin));
@@ -144,7 +145,7 @@ public class StatManagerImpl implements StatManager {
 			calendar.setTime(sf.parse(begin));
 			calendar.add(Calendar.DATE, index);
 			String date = sf.format(calendar.getTime());
-			float sum = 0;
+			int sum = 0;
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
 				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
@@ -193,9 +194,9 @@ public class StatManagerImpl implements StatManager {
 					}
 				}
 				//多个省份的平均开卡数
-				mapItem.put("avgNum", sum/UserProvinceList.size());
+				mapItem.put("avgNum", formatNum(sum/UserProvinceList.size()));
 			}else{
-				mapItem.put("avgNum", 0);
+				mapItem.put("avgNum", "0.00");
 			}
 			
 			list.add(mapItem);
@@ -249,6 +250,17 @@ public class StatManagerImpl implements StatManager {
             e.printStackTrace();
         }
 		return days;
+	}
+	
+	/**
+	 * 保留两位小数
+	 * 
+	 * @param num
+	 */
+	public String formatNum(double num) {
+		java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
+		return df.format(num);
+
 	}
 	
 	/**
