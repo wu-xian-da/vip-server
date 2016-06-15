@@ -26,7 +26,7 @@ import com.jianfei.core.service.thirdpart.QueueManager;
  * @Description: 队列消息管理实现类
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年6月14日 下午5:52:22
- * 
+ *
  * @version 1.0.0
  *
  */
@@ -43,7 +43,6 @@ public class QueueManagerImpl implements QueueManager {
 	 */
 	private MsgInfoManager msgInfoManager;
 
-	@Override
 	public MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ) {
 		// 从消息队列中去数据

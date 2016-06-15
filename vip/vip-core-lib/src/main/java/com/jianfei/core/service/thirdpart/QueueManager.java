@@ -4,16 +4,9 @@ import java.util.Map;
 
 import com.jianfei.core.common.utils.MessageDto;
 
-/**
- *
- * @Description: 队列消息管理
- * @author: li.binbin@jianfeitech.com
- * @date: 2016年6月14日 下午5:52:07
- * 
- * @version 1.0.0
- *
- */
 public interface QueueManager {
+
+	public static final String messageKey = "MESSAGEKEY";
 
 	/**
 	 * processMessage(从队列中获取信息)
