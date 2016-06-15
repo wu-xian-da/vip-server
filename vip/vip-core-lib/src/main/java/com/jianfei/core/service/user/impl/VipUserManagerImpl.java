@@ -7,17 +7,16 @@ import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.mapper.AppCustomerMapper;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
-import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
+import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
- * TODO
+ * 验证码管理实现类
  *
  * @version 1.0.0
  * @Description:
@@ -28,7 +27,7 @@ import java.util.UUID;
 public class VipUserManagerImpl implements VipUserManager {
 
     @Autowired
-   private MsgInfoManagerImpl msgInfoManager;
+   private ValidateCodeManagerImpl validateCodeManager;
     @Autowired
    private AppCustomerMapper customerMapper;
     @Autowired
@@ -40,7 +39,6 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean addUser(AppCustomer vipUser) {
-        //TODO 用户ID 生成规则 城市ID前4位+1随机码+流水号+1随机码
         vipUser.setCustomerId(IdGen.uuid());
         vipUser.setCreateTime(new Date());
         vipUser.setUseType(VipUserSate.NOT_ACTIVE.getName());
@@ -92,21 +90,10 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean validateLoginCode(String phone, String code) {
-        return  msgInfoManager.validateSendCode(phone, MsgType.LOGIN,code);
+        return  validateCodeManager.validateSendCode(phone, MsgType.LOGIN,code);
     }
 
 
-    /**
-     * 验证用户退卡验证码
-     *
-     * @param phone 用户手机号
-     * @param code  验证码
-     * @return
-     */
-    @Override
-    public boolean validateBackCardCode(String phone, String code) {
-        return  msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD_APPLY,code);
-    }
 
     /**
      * VIP用户反馈

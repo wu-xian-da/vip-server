@@ -12,20 +12,6 @@ import com.jianfei.core.common.enu.MsgType;
  */
 public interface MsgInfoManager {
 
-    /**
-     * 发送验证码
-     * @param phone
-     */
-    boolean sendValidateCode(String phone, MsgType msgType);
-
-    /**
-     * 验证验证码
-     * @param phone 手机号
-     * @param msgType 消息类型
-     * @param code 验证码
-     * @return
-     */
-    boolean validateSendCode(String phone, MsgType msgType,String code);
 
     /**
      * 发送短信
@@ -35,16 +21,5 @@ public interface MsgInfoManager {
      */
     boolean sendMsgInfo(String phone,String content);
 
-    /**
-     * 发送并获得短信验证码
-     * @param phone
-     */
-    String sendAndGetValidateCode(String phone, MsgType msgType);
-
-    /**
-     * 获得发送的短信验证码
-     * @param phone
-     */
-    String getValidateCode(String phone, MsgType msgType);
 
 }

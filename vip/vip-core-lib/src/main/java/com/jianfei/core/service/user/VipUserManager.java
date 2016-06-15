@@ -50,14 +50,6 @@ public interface VipUserManager {
 
 
     /**
-     * 验证用户退卡验证码
-     * @param phone 用户手机号
-     * @param code 验证码
-     * @return
-     */
-    boolean validateBackCardCode(String phone,String code);
-
-    /**
      * VIP用户反馈
      * @param phone 手机号
      * @param content 反馈内容

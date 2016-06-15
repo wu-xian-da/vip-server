@@ -17,6 +17,7 @@ import com.jianfei.core.common.enu.*;
 import com.jianfei.core.common.utils.*;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
+import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
@@ -60,7 +61,7 @@ public class OrderManagerImpl implements OrderManager {
 	@Autowired
 	private AppInvoiceManagerImpl invoiceManager;
 	@Autowired
-	private MsgInfoManagerImpl msgInfoManager;
+	private ValidateCodeManagerImpl validateCodeManager;
 	@Autowired
 	private ConsumeManagerImpl consumeManager;
 	@Autowired
@@ -79,7 +80,7 @@ public class OrderManagerImpl implements OrderManager {
 
 		try {
 			//1、校验用户和手机验证码
-			boolean flag=msgInfoManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER,addInfoDto.getCode());
+			boolean flag=validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER,addInfoDto.getCode());
 			if (!flag){
 				return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
 			}
@@ -413,7 +414,7 @@ public class OrderManagerImpl implements OrderManager {
 	@Override
 	public BaseMsgInfo getVipCardUseAndOrder(String phone, String code) {
 		//1、校验用户和手机验证码
-		boolean flag = msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD_APPLY, code);
+		boolean flag = validateCodeManager.validateSendCode(phone, MsgType.BACK_CARD_APPLY, code);
 		if (!flag)
 			return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
 		//2、查询用户信息和订单信息
