@@ -14,7 +14,6 @@ import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 
-public class QueueManagerImpl extends QueueManager {
 /**
  *
  * @Description: 队列消息管理实现类
@@ -25,7 +24,7 @@ public class QueueManagerImpl extends QueueManager {
  *
  */
 @Service
-public class QueueManagerImpl implements QueueManager {
+public class QueueManagerImpl extends QueueManager {
 
 	@Autowired
 	private AirportEasyManager airportEasyManager;
