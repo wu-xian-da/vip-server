@@ -7,13 +7,18 @@
  */
 package com.jianfei.core.common.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.MsgType;
 
 /**
  *
@@ -32,8 +37,24 @@ public class JedisUtilsTest {
 
 	@Test
 	public void consumer() {
-		String rs = JedisUtils.rpoplpush("messages", "kitty");
+		String rs = JedisUtils.rpoplpushQ("messages", "kitty");
 		System.out.println(rs);
+	}
+
+	@Test
+	public void producer() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userPhone", "13275601668");
+		map.put("userName", "refineli");
+		map.put("vipCardNo", "smart0012");
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("code", "134");
+		m.put("time", "5分钟");
+		map.put("msgBody", JSONObject.toJSONString(m));
+		map.put("msgType", MsgType.LOGIN);
+		Long rsTotal = JedisUtils.rpushQ("messages",
+				JSONObject.toJSONString(map));
+		System.out.println(rsTotal);
 	}
 
 	/**
@@ -53,7 +74,7 @@ public class JedisUtilsTest {
 	 */
 	@Test
 	public void testGetObject() {
-		String rs = (String) JedisUtils.getObject("refineli");
+		String rs = JedisUtils.get("MSG:TEMPLATE001");
 		System.out.println(rs);
 	}
 

@@ -159,7 +159,7 @@ public class OrderStaController {
 
 			// 2、业务人员所属省份该时间段内的平均开卡人数
 			// 2.1根据销售人员id获取该用户所属的省份id
-			List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(Integer.parseInt(uno));
+			List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(uno);
 			List<Map<String, Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList, begin, end);
 
 			// 3将两个list合并为一个list

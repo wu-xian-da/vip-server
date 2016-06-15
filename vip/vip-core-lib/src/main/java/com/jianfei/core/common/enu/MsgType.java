@@ -19,9 +19,20 @@ public enum MsgType {
      */
     LOGIN("002"),
     /**
-     * 退卡
+     * 退卡申请
      */
-    BACK_CARD("003");
+    BACK_CARD_APPLY("003"),
+
+    /**
+     * 退卡完成
+     */
+    BACK_CARD_FINISH("004"),
+
+    /**
+     * 激活VIP卡
+     */
+    ACTIVE_CARD("005");
+
     private String name;
 
     public String getName(){

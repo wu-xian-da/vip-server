@@ -59,6 +59,52 @@ public class JedisUtils {
 		}
 		return value;
 	}
+	/**
+	 * lpush(将一个或多个值value插入到列表key的表头)
+	 *
+	 * @param key
+	 * @param value
+	 * @return Long
+	 * @version 1.0.0
+	 */
+	public static Long lpushString(String key, String value) {
+		Long result = null;
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			result = jedis.lpush(key, value);
+			logger.debug("lpushObject {} = {}", key, value);
+		} catch (Exception e) {
+			logger.warn("lpushObject {} = {}", key, value, e);
+		} finally {
+			returnResource(jedis);
+		}
+		return result;
+	}
+
+	/**
+	 * lpush(将一个或多个值value插入到列表key的表头)
+	 *
+	 * @param key
+	 * @param value
+	 * @return Long
+	 * @version 1.0.0
+	 */
+	public static Long lpushObject(String key, Object value) {
+		Long result = null;
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			byte[] bytes=getBytesKey(value);
+			result = jedis.lpush(key, bytes.toString());
+			logger.debug("lpushObject {} = {}", key, value);
+		} catch (Exception e) {
+			logger.warn("lpushObject {} = {}", key, value, e);
+		} finally {
+			returnResource(jedis);
+		}
+		return result;
+	}
 
 	/**
 	 * rpoplpush(从队列中获取消息)
@@ -68,7 +114,7 @@ public class JedisUtils {
 	 * @return String
 	 * @version 1.0.0
 	 */
-	public static String rpoplpush(String sourceQ, String targetQ) {
+	public static String rpoplpushQ(String sourceQ, String targetQ) {
 		Jedis jedis = null;
 		try {
 			jedis = getResource();
@@ -79,6 +125,27 @@ public class JedisUtils {
 			returnResource(jedis);
 		}
 		return "";
+	}
+
+	/**
+	 * rpushQ(添加信息到消息队列)
+	 * 
+	 * @param sourceQ
+	 * @param msgBody
+	 * @return Long
+	 * @version 1.0.0
+	 */
+	public static Long rpushQ(String sourceQ, String msgBody) {
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			return jedis.rpush(sourceQ, msgBody);
+		} catch (Exception e) {
+			logger.warn("从队列中获取消息:{}", e.getMessage());
+		} finally {
+			returnResource(jedis);
+		}
+		return 0l;
 	}
 
 	/**
