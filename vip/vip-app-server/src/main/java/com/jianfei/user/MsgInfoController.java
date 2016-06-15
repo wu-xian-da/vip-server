@@ -43,8 +43,8 @@ public class MsgInfoController {
                 msgType = MsgType.REGISTER;
             } else if (MsgType.LOGIN.getName().equals(type)) {
                 msgType = MsgType.LOGIN;
-            } else if (MsgType.BACK_CARD.getName().equals(type)) {
-                msgType = MsgType.BACK_CARD;
+            } else if (MsgType.BACK_CARD_APPLY.getName().equals(type)) {
+                msgType = MsgType.BACK_CARD_APPLY;
             }
             if (msgType == null)
                 return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
@@ -72,8 +72,8 @@ public class MsgInfoController {
                 msgType = MsgType.REGISTER;
             } else if (MsgType.LOGIN.getName().equals(type)) {
                 msgType = MsgType.LOGIN;
-            } else if (MsgType.BACK_CARD.getName().equals(type)) {
-                msgType = MsgType.BACK_CARD;
+            } else if (MsgType.BACK_CARD_APPLY.getName().equals(type)) {
+                msgType = MsgType.BACK_CARD_APPLY;
             }
             if (msgType == null)
                 return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");

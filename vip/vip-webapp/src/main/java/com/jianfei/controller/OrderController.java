@@ -372,7 +372,7 @@ public class OrderController extends BaseController {
 		//1、改变订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、发送验证码
-		String smsCode = msgInfoManagerImpl.sendAndGetValidateCode(phone, MsgType.BACK_CARD);
+		//String smsCode = msgInfoManagerImpl.sendAndGetValidateCode(phone, MsgType.BACK_CARD);
 		
 		JSONObject outData = new JSONObject(); 
 		float remainMoney = orderManagerImpl.remainMoney(orderId);
