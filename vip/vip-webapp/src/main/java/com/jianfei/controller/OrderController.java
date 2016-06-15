@@ -354,7 +354,12 @@ public class OrderController extends BaseController {
 					resList.add(appOrder);
 				}
 			}
-			map.put("total", pageinfo.getTotal());
+			if(resList !=null && resList.size()>0){
+				map.put("total", resList.size());
+			}else{
+				map.put("total", 0);
+			}
+			
 		}else{
 			map.put("total", 0);
 		}
