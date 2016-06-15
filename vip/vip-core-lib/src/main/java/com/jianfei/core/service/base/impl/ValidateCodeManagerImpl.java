@@ -85,7 +85,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         object.put("time",time);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(phone).setMsgType(msgType.getName()).setMsgBody(object.toJSONString());
 
-        JedisUtils.lpushObject("MESSAGEKEY",msgBuilder);
+//        JedisUtils.lpushObject("MESSAGEKEY",msgBuilder);
         return BaseMsgInfo.success(true);
     }
 }
