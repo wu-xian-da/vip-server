@@ -210,6 +210,7 @@ public class ResourceController  {
 
 	/**
 	 *  APP版本修改接口
+	 *  发布后删除
 	 */
 	@RequestMapping(value = "/appVersion")
 	@ResponseBody

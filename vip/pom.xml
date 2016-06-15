@@ -564,6 +564,8 @@
 		</pluginManagement>
 	</build>
 	<modules>
+		<module>wxpay_scanpay_java_sdk_proj-master</module>
+		<module>trade</module>
 		<module>vip-core-lib</module>
 		<module>vip-webapp</module>
 		<module>vip-app-server</module>

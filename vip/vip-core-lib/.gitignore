@@ -21,3 +21,6 @@ temp/data/
 *.csv
 *.txt
 /target/
+/viplog.2016-06-12
+/viplog.2016-06-13
+/viplog

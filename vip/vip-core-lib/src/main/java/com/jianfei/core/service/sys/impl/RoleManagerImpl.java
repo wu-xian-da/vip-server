@@ -161,26 +161,6 @@ public class RoleManagerImpl implements RoleManager {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jianfei.core.service.sys.RoleManager#buildRoleTreeNode()
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<JsonTreeData> buildRoleTreeNode() {
-		List<Role> roles = null;
-		if (null != JedisUtils.getObject(CacheCons.Sys.SYS_ROLE_LIST)) {
-			roles = (List<Role>) JedisUtils
-					.getObject(CacheCons.Sys.SYS_ROLE_LIST);
-		} else {
-			roles = roleMapper.get(new HashMap<String, Object>());
-			JedisUtils.setObject(CacheCons.Sys.SYS_ROLE_LIST, roles, 0);
-		}
-		List<JsonTreeData> datas = TreeNodeUtil.buildRoleTree(roles);
-		return datas;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * com.jianfei.core.service.sys.RoleManager#selectRoleByUserId(java.lang
 	 * .Long)

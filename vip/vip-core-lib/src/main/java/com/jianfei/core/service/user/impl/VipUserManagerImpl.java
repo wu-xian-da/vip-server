@@ -105,7 +105,7 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean validateBackCardCode(String phone, String code) {
-        return  msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD,code);
+        return  msgInfoManager.validateSendCode(phone, MsgType.BACK_CARD_APPLY,code);
     }
 
     /**

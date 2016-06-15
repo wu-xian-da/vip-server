@@ -64,6 +64,13 @@ public interface UserManaer<T extends Serializable> {
 	 */
 	MessageDto<String> batchUpdateUserRoles(Long id, String ids);
 
+	/**
+	 * getUserByName(根据用户名查找用户)
+	 * 
+	 * @param loginName
+	 * @return User
+	 * @version 1.0.0
+	 */
 	User getUserByName(String loginName);
 
 }
