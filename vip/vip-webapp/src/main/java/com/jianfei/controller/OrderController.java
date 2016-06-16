@@ -200,6 +200,7 @@ public class OrderController extends BaseController {
 				float remainMoney = orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", appOrder.getOrderId());
+				outData.put("phone", appOrder.getCustomerPhone());
 				//2、获取验证码
 				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.BACK_CARD_APPLY);
 				
