@@ -496,4 +496,13 @@ public class OrderManagerImpl implements OrderManager {
 		int i=appCardBackMapper.insertBackCard(appCardBack);
 		return i > 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败") ;
 	}
+
+	/**
+	 * 根据订单号返回订单基本信息
+	 */
+	@Override
+	public AppOrders getOrderInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.getOrderInfoByOrderId(orderId);
+	}
 }
