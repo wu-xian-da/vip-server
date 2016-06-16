@@ -63,7 +63,7 @@
 				<li>身份证：${customer.customerIdenti }</li>
 				<li>用户手机号：${customer.phone }</li>
 				<li>用户性别：${customer.sex ==1 ? '男' : '女' }</li>
-				<li>常驻地址：${customer.provinceName} ${customer.cityName} ${customer.address} </li>
+				<li>常住地址：${customer.provinceName} ${customer.cityName} ${customer.address} </li>
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
 			
