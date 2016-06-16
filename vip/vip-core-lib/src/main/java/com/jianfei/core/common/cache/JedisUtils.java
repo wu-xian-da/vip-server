@@ -1,29 +1,26 @@
 package com.jianfei.core.common.cache;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.jianfei.core.common.utils.ObjectUtils;
-import com.jianfei.core.common.utils.SpringContextHolder;
-import com.jianfei.core.common.utils.StringUtils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisException;
+
+import com.google.common.collect.Maps;
+import com.jianfei.core.common.utils.ObjectUtils;
+import com.jianfei.core.common.utils.SpringContextHolder;
+import com.jianfei.core.common.utils.StringUtils;
 
 /**
  *
  * @Description: Jedis Cache 工具类
  * @author: li.binbin@jianfeitech.com
  * @date: 2016年5月25日 上午11:51:44
- * 
+ *
  * @version 1.0.0
  *
  */
@@ -36,7 +33,7 @@ public class JedisUtils {
 
 	/**
 	 * 获取缓存
-	 * 
+	 *
 	 * @param key
 	 *            键
 	 * @return 值
@@ -59,10 +56,98 @@ public class JedisUtils {
 		}
 		return value;
 	}
+	/**
+	 * lpush(将一个或多个值value插入到列表key的表头)
+	 *
+	 * @param key
+	 * @param value
+	 * @return Long
+	 * @version 1.0.0
+	 */
+	public static Long lpushString(String key, String value) {
+		Long result = null;
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			result = jedis.lpush(key, value);
+			logger.debug("lpushObject {} = {}", key, value);
+		} catch (Exception e) {
+			logger.warn("lpushObject {} = {}", key, value, e);
+		} finally {
+			returnResource(jedis);
+		}
+		return result;
+	}
+
+	/**
+	 * lpush(将一个或多个值value插入到列表key的表头)
+	 *
+	 * @param key
+	 * @param value
+	 * @return Long
+	 * @version 1.0.0
+	 */
+	public static Long lpushObject(String key, Object value) {
+		Long result = null;
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			String str = JSON.toJSONString(value);
+			result = jedis.lpush(key, str);
+			logger.debug("lpushObject {} = {}", key, value);
+		} catch (Exception e) {
+			logger.warn("lpushObject {} = {}", key, value, e);
+		} finally {
+			returnResource(jedis);
+		}
+		return result;
+	}
+
+	/**
+	 * rpoplpush(从队列中获取消息)
+	 *
+	 * @param sourceQ
+	 * @param targetQ
+	 * @return String
+	 * @version 1.0.0
+	 */
+	public static String rpoplpushQ(String sourceQ, String targetQ) {
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			return jedis.rpoplpush(sourceQ, targetQ);
+		} catch (Exception e) {
+			logger.warn("从队列中获取消息:{}", e.getMessage());
+		} finally {
+			returnResource(jedis);
+		}
+		return "";
+	}
+
+	/**
+	 * rpushQ(添加信息到消息队列)
+	 *
+	 * @param sourceQ
+	 * @param msgBody
+	 * @return Long
+	 * @version 1.0.0
+	 */
+	public static Long rpushQ(String sourceQ, String msgBody) {
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			return jedis.rpush(sourceQ, msgBody);
+		} catch (Exception e) {
+			logger.warn("从队列中获取消息:{}", e.getMessage());
+		} finally {
+			returnResource(jedis);
+		}
+		return 0l;
+	}
 
 	/**
 	 * 获取缓存
-	 * 
+	 *
 	 * @param key
 	 *            键
 	 * @return 值
@@ -86,7 +171,7 @@ public class JedisUtils {
 
 	/**
 	 * 设置缓存
-	 * 
+	 *
 	 * @param key
 	 *            键
 	 * @param value
@@ -115,7 +200,7 @@ public class JedisUtils {
 
 	/**
 	 * 设置缓存
-	 * 
+	 *
 	 * @param key
 	 *            键
 	 * @param value
@@ -143,129 +228,8 @@ public class JedisUtils {
 	}
 
 	/**
-	 * 获取List缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @return 值
-	 */
-	public static List<String> getList(String key) {
-		List<String> value = null;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(key)) {
-				value = jedis.lrange(key, 0, -1);
-				logger.debug("getList {} = {}", key, value);
-			}
-		} catch (Exception e) {
-			logger.warn("getList {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return value;
-	}
-
-	/**
-	 * 获取List缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @return 值
-	 */
-	public static List<Object> getObjectList(String key) {
-		List<Object> value = null;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(getBytesKey(key))) {
-				List<byte[]> list = jedis.lrange(getBytesKey(key), 0, -1);
-				value = Lists.newArrayList();
-				for (byte[] bs : list) {
-					value.add(toObject(bs));
-				}
-				logger.debug("getObjectList {} = {}", key, value);
-			}
-		} catch (Exception e) {
-			logger.warn("getObjectList {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return value;
-	}
-
-	/**
-	 * 设置List缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @param value
-	 *            值
-	 * @param cacheSeconds
-	 *            超时时间，0为不超时
-	 * @return
-	 */
-	public static long setList(String key, List<String> value, int cacheSeconds) {
-		long result = 0;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(key)) {
-				jedis.del(key);
-			}
-			result = jedis.rpush(key, (String[]) value.toArray());
-			if (cacheSeconds != 0) {
-				jedis.expire(key, cacheSeconds);
-			}
-			logger.debug("setList {} = {}", key, value);
-		} catch (Exception e) {
-			logger.warn("setList {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return result;
-	}
-
-	/**
-	 * 设置List缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @param value
-	 *            值
-	 * @param cacheSeconds
-	 *            超时时间，0为不超时
-	 * @return
-	 */
-	public static long setObjectList(String key, List<Object> value,
-			int cacheSeconds) {
-		long result = 0;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(getBytesKey(key))) {
-				jedis.del(key);
-			}
-			List<byte[]> list = Lists.newArrayList();
-			for (Object o : value) {
-				list.add(toBytes(o));
-			}
-			result = jedis.rpush(getBytesKey(key), (byte[][]) list.toArray());
-			if (cacheSeconds != 0) {
-				jedis.expire(key, cacheSeconds);
-			}
-			logger.debug("setObjectList {} = {}", key, value);
-		} catch (Exception e) {
-			logger.warn("setObjectList {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return result;
-	}
-
-	/**
 	 * 向List缓存中添加值
-	 * 
+	 *
 	 * @param key
 	 *            键
 	 * @param value
@@ -281,207 +245,6 @@ public class JedisUtils {
 			logger.debug("listAdd {} = {}", key, value);
 		} catch (Exception e) {
 			logger.warn("listAdd {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return result;
-	}
-
-	/**
-	 * 向List缓存中添加值
-	 * 
-	 * @param key
-	 *            键
-	 * @param value
-	 *            值
-	 * @return
-	 */
-	public static long listObjectAdd(String key, Object... value) {
-		long result = 0;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			List<byte[]> list = Lists.newArrayList();
-			for (Object o : value) {
-				list.add(toBytes(o));
-			}
-			result = jedis.rpush(getBytesKey(key), (byte[][]) list.toArray());
-			logger.debug("listObjectAdd {} = {}", key, value);
-		} catch (Exception e) {
-			logger.warn("listObjectAdd {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return result;
-	}
-
-	/**
-	 * 获取缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @return 值
-	 */
-	public static Set<String> getSet(String key) {
-		Set<String> value = null;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(key)) {
-				value = jedis.smembers(key);
-				logger.debug("getSet {} = {}", key, value);
-			}
-		} catch (Exception e) {
-			logger.warn("getSet {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return value;
-	}
-
-	/**
-	 * 获取缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @return 值
-	 */
-	public static Set<Object> getObjectSet(String key) {
-		Set<Object> value = null;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(getBytesKey(key))) {
-				value = Sets.newHashSet();
-				Set<byte[]> set = jedis.smembers(getBytesKey(key));
-				for (byte[] bs : set) {
-					value.add(toObject(bs));
-				}
-				logger.debug("getObjectSet {} = {}", key, value);
-			}
-		} catch (Exception e) {
-			logger.warn("getObjectSet {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return value;
-	}
-
-	/**
-	 * 设置Set缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @param value
-	 *            值
-	 * @param cacheSeconds
-	 *            超时时间，0为不超时
-	 * @return
-	 */
-	public static long setSet(String key, Set<String> value, int cacheSeconds) {
-		long result = 0;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(key)) {
-				jedis.del(key);
-			}
-			result = jedis.sadd(key, (String[]) value.toArray());
-			if (cacheSeconds != 0) {
-				jedis.expire(key, cacheSeconds);
-			}
-			logger.debug("setSet {} = {}", key, value);
-		} catch (Exception e) {
-			logger.warn("setSet {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return result;
-	}
-
-	/**
-	 * 设置Set缓存
-	 * 
-	 * @param key
-	 *            键
-	 * @param value
-	 *            值
-	 * @param cacheSeconds
-	 *            超时时间，0为不超时
-	 * @return
-	 */
-	public static long setObjectSet(String key, Set<Object> value,
-			int cacheSeconds) {
-		long result = 0;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			if (jedis.exists(getBytesKey(key))) {
-				jedis.del(key);
-			}
-			Set<byte[]> set = Sets.newHashSet();
-			for (Object o : value) {
-				set.add(toBytes(o));
-			}
-			result = jedis.sadd(getBytesKey(key), (byte[][]) set.toArray());
-			if (cacheSeconds != 0) {
-				jedis.expire(key, cacheSeconds);
-			}
-			logger.debug("setObjectSet {} = {}", key, value);
-		} catch (Exception e) {
-			logger.warn("setObjectSet {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return result;
-	}
-
-	/**
-	 * 向Set缓存中添加值
-	 * 
-	 * @param key
-	 *            键
-	 * @param value
-	 *            值
-	 * @return
-	 */
-	public static long setSetAdd(String key, String... value) {
-		long result = 0;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			result = jedis.sadd(key, value);
-			logger.debug("setSetAdd {} = {}", key, value);
-		} catch (Exception e) {
-			logger.warn("setSetAdd {} = {}", key, value, e);
-		} finally {
-			returnResource(jedis);
-		}
-		return result;
-	}
-
-	/**
-	 * 向Set缓存中添加值
-	 * 
-	 * @param key
-	 *            键
-	 * @param value
-	 *            值
-	 * @return
-	 */
-	public static long setSetObjectAdd(String key, Object... value) {
-		long result = 0;
-		Jedis jedis = null;
-		try {
-			jedis = getResource();
-			Set<byte[]> set = Sets.newHashSet();
-			for (Object o : value) {
-				set.add(toBytes(o));
-			}
-			result = jedis.rpush(getBytesKey(key), (byte[][]) set.toArray());
-			logger.debug("setSetObjectAdd {} = {}", key, value);
-		} catch (Exception e) {
-			logger.warn("setSetObjectAdd {} = {}", key, value, e);
 		} finally {
 			returnResource(jedis);
 		}
