@@ -7,7 +7,11 @@
         <dependent-module archiveName="vip-core-lib-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/vip-core-lib/vip-core-lib">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+<<<<<<< HEAD
         <dependent-module archiveName="com.alibaba.demo-trade-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/trade/trade">
+=======
+        <dependent-module archiveName="trade-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/trade/trade">
+>>>>>>> dd91b7564cbd4d66a9e37a661f67963a9ef931a7
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="wxpay-scanpay-java-sdk-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/wxpay-scanpay-java-sdk/wxpay-scanpay-java-sdk">

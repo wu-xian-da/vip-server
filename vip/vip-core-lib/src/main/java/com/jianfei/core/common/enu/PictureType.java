@@ -23,7 +23,11 @@ public enum PictureType {
     /**
      *  VIP APP合作按钮
      */
-    VIP_APP_HOME_MODULE(2);
+    VIP_APP_HOME_MODULE(2),
+    /**
+     *  VIP 权益
+     */
+    VIP_APP_RIGHT(3);
 
     private int name;
 

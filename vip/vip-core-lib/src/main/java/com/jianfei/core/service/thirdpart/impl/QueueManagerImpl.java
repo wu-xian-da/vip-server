@@ -47,7 +47,8 @@ public class QueueManagerImpl implements QueueManager {
 	public MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ) {
 		// 从消息队列中去数据
-		String result = JedisUtils.rpoplpushQ(sourceQ, targerQ);
+		// String result = JedisUtils.rpoplpushQ(sourceQ, targerQ);
+		String result = "";
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
 			LoggerFactory.getLogger(getClass()).error("短信消息队列:从队列中获取消息为空");
 			return new MessageDto<Map<String, String>>();

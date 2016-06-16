@@ -68,8 +68,6 @@ public class QueueManagerImplTest {
 		m.put("code", "smart001");
 		m.put("time", "10分钟");
 		map.put("msgBody", JSONObject.toJSONString(m));
-		JedisUtils.lpushString(QueueManager.SMS_QUEUE_VIP,
-				JSONObject.toJSONString(map));
 	}
 
 	@Test
