@@ -1,7 +1,5 @@
 package com.jianfei.core.service.thirdpart;
 
-import com.jianfei.core.common.enu.MsgType;
-
 /**
  *  短信相关接口
  *
