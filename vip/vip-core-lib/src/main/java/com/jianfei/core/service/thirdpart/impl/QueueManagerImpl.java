@@ -109,7 +109,7 @@ public class QueueManagerImpl implements QueueManager {
 
 		String msgBody = MsgAuxiliary.buildMsgBody(map, msgType);
 		if (StringUtils.isEmpty(msgBody)) {
-			return messageDto.setMsgBody("从缓存中获取短信消息模版为空...");
+			return messageDto.setData(map).setMsgBody("从缓存中获取指定类型的短信消息模版为空...");
 		}
 
 		String userPhone = map.get("userPhone");
