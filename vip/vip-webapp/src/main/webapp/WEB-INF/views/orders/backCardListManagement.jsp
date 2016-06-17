@@ -99,6 +99,10 @@
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab">
 				<div class="radio-tab-content">
+                    <label id="promptMessage" style="font-weight:bolder ;color: red;font-size:large;"></label>
+                </div>
+                
+				<div class="radio-tab-content">
 					<div class="raidp-tab-content-item" style="display: block">
 						<input type="hidden" value="" id="backCardOrderId" /> <label
 							id="backMethod">输入微信号:</label>&nbsp;<span id="payBackCardNo"></span>
@@ -188,7 +192,9 @@
 				$("#userName2div").show();
 				$("#userName2").text(args.customerName);
 			}
-			
+			if(args.invoice == 1){
+				$("#promptMessage").text("请确认是否收到发票！");
+			}
 			$("#backCardOrderId").val(args.orderId);
 			$("#backMethod").text(backMethod);
 			$("#payBackCardNo").text(args.backMoneyCard);

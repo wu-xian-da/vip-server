@@ -229,7 +229,7 @@ public class OrderManagerImpl implements OrderManager {
 			//2、app_consume表中返回vip消费次数
 			int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
 			//3、计算用户vip卡剩余金额
-			remainMoney = (float) (appOrderCard.getInitMoney()-count*200*0.8);
+			remainMoney = (float) (appOrderCard.getInitMoney()-count*200*0.8-100);
 			
 		}
 		System.out.println("float remainMoney="+remainMoney);
@@ -495,5 +495,14 @@ public class OrderManagerImpl implements OrderManager {
 		appCardBack.setCreateTime(new Date());
 		int i=appCardBackMapper.insertBackCard(appCardBack);
 		return i > 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败") ;
+	}
+
+	/**
+	 * 根据订单号返回订单基本信息
+	 */
+	@Override
+	public AppOrders getOrderInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.getOrderInfoByOrderId(orderId);
 	}
 }

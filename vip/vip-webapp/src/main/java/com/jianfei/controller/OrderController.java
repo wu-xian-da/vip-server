@@ -29,6 +29,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
@@ -183,6 +184,7 @@ public class OrderController extends BaseController {
 				outData.put("orderId", orderId);
 				outData.put("opr", "0");
 				outData.put("phone", phone);
+				outData.put("invoice",appOrder.getInvoiceFlag());
 				//是否有‘申请退款’权限
 				boolean flag = subject.isPermitted("system:order:applyBackMoney");
 				if(flag){
@@ -200,6 +202,7 @@ public class OrderController extends BaseController {
 				float remainMoney = orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", appOrder.getOrderId());
+				outData.put("phone", appOrder.getCustomerPhone());
 				//2、获取验证码
 				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.BACK_CARD_APPLY);
 				
@@ -225,6 +228,10 @@ public class OrderController extends BaseController {
 				outData.put("backType", appCardBack.getBackType());
 				outData.put("backName", appCardBack.getBankName());
 				outData.put("customerName", appCardBack.getCustomerName());
+				
+				//发票状态
+				AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
+				outData.put("invoice", orderInfo.getInvoiceFlag());
 				appOrder.setOrderStateName("审核通过");
 				
 				//是否有最终退款查看的权限
@@ -303,6 +310,9 @@ public class OrderController extends BaseController {
 					appOrder.setOrderStateName("审核通过");
 					outData.put("backName", appCardBack.getBankName());
 					outData.put("customerName", appCardBack.getCustomerName());
+					//发票状态
+					AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
+					outData.put("invoice", orderInfo.getInvoiceFlag());
 					//申请方式
 					int applyTypes = appOrder.getApplyType();
 					if(applyTypes == 0){
@@ -419,11 +429,12 @@ public class OrderController extends BaseController {
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		System.out.println("orderId="+orderId+"  opType="+opType);
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opType);
-		
+		AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(orderId);
 		JSONObject outData = new JSONObject(); 
 		outData.put("orderId", orderId);
 		outData.put("opr", "0");
 		outData.put("phone", phone);
+		outData.put("invoice", orderInfo.getInvoiceFlag());
 		
 		resMap.put("result", "1");
 		

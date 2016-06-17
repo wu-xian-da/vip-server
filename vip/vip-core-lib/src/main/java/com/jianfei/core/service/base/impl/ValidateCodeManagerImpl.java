@@ -9,6 +9,8 @@ import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ServiceMsgBuilder;
 import com.jianfei.core.service.base.ValidateCodeManager;
+import com.jianfei.core.service.thirdpart.QueueManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -22,6 +24,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ValidateCodeManagerImpl implements ValidateCodeManager {
+
+    @Autowired
+    private QueueManager queueManager;
     /**
      * 生成验证码 并存储
      *
@@ -84,8 +89,6 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         object.put("code",code);
         object.put("time",time);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(phone).setMsgType(msgType.getName()).setMsgBody(object.toJSONString());
-
-//        JedisUtils.lpushObject("MESSAGEKEY",msgBuilder);
-        return BaseMsgInfo.success(true);
+       return queueManager.sendMessage(msgBuilder);
     }
 }
