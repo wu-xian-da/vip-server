@@ -30,9 +30,6 @@ public interface QueueManager {
 	 * @param msgBuilder
 	 * @return
 	 */
-	 * @param msgBuilder
-	 * @return
-     */
 	BaseMsgInfo sendMessage(ServiceMsgBuilder msgBuilder);
 
 }
