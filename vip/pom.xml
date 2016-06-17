@@ -514,7 +514,7 @@
 				<yeepay.dst.sysid>yeepay</yeepay.dst.sysid>
 				<yeepay.transaction.id>OPSMART</yeepay.transaction.id>
 				<!-- pay notify address -->
-				<pay.notify.address>http://localhost:8090</pay.notify.address>
+				<pay.notify.address>http://hftest.wiplatform.com:8082</pay.notify.address>
 			</properties>
 			<build>
 				<plugins>

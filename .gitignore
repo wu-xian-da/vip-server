@@ -23,3 +23,4 @@ temp/data/
 .idea
 logs
 log4j.properties
+*.log

@@ -1,11 +1,7 @@
 package com.jianfei.core.service.thirdpart.impl;
 
-import com.jianfei.core.common.cache.JedisUtils;
-import com.jianfei.core.common.utils.StringUtils;
-import org.springframework.stereotype.Service;
-
-import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.service.thirdpart.MsgInfoManager;
+import org.springframework.stereotype.Service;
 
 /**
  * 消息短信相关功能
@@ -27,6 +23,7 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
      */
     @Override
     public boolean sendMsgInfo(String phone, String content) {
+        //TODO 集成短信接口
         return false;
     }
 

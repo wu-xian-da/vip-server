@@ -38,6 +38,9 @@ public class QueueManagerImpl implements QueueManager {
 	
 	public static final String MESSAGEKEY="MESSAGEKEY";
 	
+
+	public static final String MESSAGEKEY="MESSAGEKEY";
+
 	@Autowired
 	private AirportEasyManager airportEasyManager;
 	
