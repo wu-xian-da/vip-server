@@ -39,9 +39,12 @@ public class AppConfigManagerImpl implements AppConfigManager {
      */
     @Override
     public VipCardInfoDto getVipCardInfo() {
-        List<AppPicture> list=appPictureManager.getPicture(PictureType.VIP_APP_HOME);
-        VipCardInfoDto vipCardInfoDto=appConfigMapper.selectVipCardInfo(1);
-        vipCardInfoDto.setImages(list);
+        List<AppPicture> pictureList=appPictureManager.getPicture(PictureType.VIP_APP_RIGHT);
+		List<AppConfig> list=appConfigMapper.selectByType(1);
+        VipCardInfoDto vipCardInfoDto=new VipCardInfoDto();
+		AppConfig appConfig=list == null || list.isEmpty() ? new AppConfig() : list.get(0);
+		vipCardInfoDto.setRight(appConfig.getContent());
+        vipCardInfoDto.setImages(pictureList);
         return vipCardInfoDto;
     }
 

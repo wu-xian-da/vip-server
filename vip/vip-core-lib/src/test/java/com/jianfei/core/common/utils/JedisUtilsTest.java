@@ -37,8 +37,6 @@ public class JedisUtilsTest {
 
 	@Test
 	public void consumer() {
-		String rs = JedisUtils.rpoplpushQ("messages", "kitty");
-		System.out.println(rs);
 	}
 
 	@Test
@@ -52,9 +50,6 @@ public class JedisUtilsTest {
 		m.put("time", "5分钟");
 		map.put("msgBody", JSONObject.toJSONString(m));
 		map.put("msgType", MsgType.LOGIN);
-		Long rsTotal = JedisUtils.rpushQ("messages",
-				JSONObject.toJSONString(map));
-		System.out.println(rsTotal);
 	}
 
 	/**

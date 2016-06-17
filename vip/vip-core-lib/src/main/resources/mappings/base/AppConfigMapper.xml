@@ -140,9 +140,9 @@
 
   <select id="selectByType" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
   select
-    c.id, c.type, c.url,c.content
+    c.id, c.type, c.url,c.content,c.title
   from app_config c
-  where c.type = #{type,jdbcType=INTEGER}
+  where c.type = #{type,jdbcType=INTEGER} AND c.dtflag = 0
 </select>
 
 
