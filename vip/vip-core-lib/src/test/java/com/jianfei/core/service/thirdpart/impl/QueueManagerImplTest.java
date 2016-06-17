@@ -52,7 +52,7 @@ public class QueueManagerImplTest {
 	@Test
 	public void testProcessMessage() {
 		MessageDto<Map<String, String>> messageDto = queueManager
-				.processMessage(QueueManager.SMS_QUEUE_VIP,
+				.processMessage(QueueManagerImpl.MESSAGEKEY,
 						QueueManager.SMS_QUEUE_VIP_BAK);
 		System.out.println(JSONObject.toJSONString(messageDto));
 	}
@@ -68,7 +68,7 @@ public class QueueManagerImplTest {
 		m.put("code", "smart001");
 		m.put("time", "10分钟");
 		map.put("msgBody", JSONObject.toJSONString(m));
-		JedisUtils.lpushString(QueueManager.SMS_QUEUE_VIP,
+		JedisUtils.lpushString(QueueManagerImpl.MESSAGEKEY,
 				JSONObject.toJSONString(map));
 	}
 

@@ -21,7 +21,6 @@ public interface QueueManager {
 	MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ);
 
-	public static final String SMS_QUEUE_VIP = "SMS_QUEUES_VIP";
 	public static final String SMS_QUEUE_VIP_BAK = "SMS_QUEUES_VIP_BAK";
 
 	/**

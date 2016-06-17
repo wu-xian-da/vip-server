@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.MsgAuxiliary;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
@@ -38,10 +39,13 @@ import com.jianfei.core.service.thirdpart.QueueManager;
 @Service
 public class QueueManagerImpl implements QueueManager {
 
-	public static final String MESSAGEKEY = "MESSAGEKEY";
+	public static final String MESSAGEKEY = "SMS_QUEUE_VIP";
 
 	@Autowired
 	private AirportEasyManager airportEasyManager;
+	
+	@Autowired
+	private MsgInfoManager msgInfoManager;
 
 	// 没20秒执行一次
 	/**
@@ -49,33 +53,23 @@ public class QueueManagerImpl implements QueueManager {
 	 */
 	@Scheduled(fixedRate = 20000)
 	public void pullSmsMessage() {
-		MessageDto<Map<String, String>> messageDto = processMessage(
-				QueueManager.SMS_QUEUE_VIP, QueueManager.SMS_QUEUE_VIP_BAK);
-		if (messageDto.isOk()) {
-			LoggerFactory.getLogger(getClass()).info(
-					"从" + QueueManager.SMS_QUEUE_VIP + "队列拉消息，操作结果信息:"
+		MessageDto<Map<String, String>> messageDto = processMessage(MESSAGEKEY,
+				QueueManager.SMS_QUEUE_VIP_BAK);
+		if (!messageDto.isOk()) {
+			LoggerFactory.getLogger(getClass()).error(
+					"从" + MESSAGEKEY + "队列拉消息，操作失败。。。,接口反馈信息:"
 							+ JSONObject.toJSONString(messageDto));
-		} else {
-			LoggerFactory.getLogger(getClass()).info(
-					"从" + QueueManager.SMS_QUEUE_VIP + "队列拉消息，操作失败。。。");
 		}
 	}
 
-	/**
-	 * msgInfoManager:TODO（短信消息处理接口）
-	 *
-	 * @version 1.0.0
-	 */
-	@Autowired
-	private MsgInfoManager msgInfoManager;
 
 	public MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ) {
 		// 从消息队列中去数据
 		String result = JedisUtils.rpoplpushQ(sourceQ, targerQ);
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
-			LoggerFactory.getLogger(getClass()).error("短信消息队列:从队列中获取消息为空");
-			return new MessageDto<Map<String, String>>();
+			return new MessageDto<Map<String, String>>().setOk(true)
+					.setMsgBody("短信消息队列:从队列中获取消息为空");
 		}
 
 		try {
@@ -90,11 +84,11 @@ public class QueueManagerImpl implements QueueManager {
 			LoggerFactory.getLogger(getClass()).error("处理短信消息队列:{}",
 					e.getMessage());
 		}
-		return new MessageDto<Map<String, String>>();
+		return new MessageDto<Map<String, String>>().setMsgBody(MsgFlag.ERROR);
 	}
 
 	/**
-	 * logicalProcessing(这里用一句话描述这个方法的作用)
+	 * logicalProcessing(根据队列信息，分业务处理)
 	 *
 	 * @param map
 	 * @return boolean
@@ -109,27 +103,37 @@ public class QueueManagerImpl implements QueueManager {
 			Map<String, String> map) throws UnrecoverableKeyException,
 			KeyManagementException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
+
+		MessageDto<Map<String, String>> messageDto = new MessageDto<Map<String, String>>();
 		String msgType = map.get("msgType");
+
 		String msgBody = MsgAuxiliary.buildMsgBody(map, msgType);
+		if (StringUtils.isEmpty(msgBody)) {
+			return messageDto.setMsgBody("从缓存中获取短信消息模版为空...");
+		}
 
 		String userPhone = map.get("userPhone");
 
 		boolean isOk = false;// 操作结果状态
+		String message = StringUtils.EMPTY;
 		// 是否是激活vip卡标识
-		if (MsgType.ACTIVE_CARD.equals(msgType)
-				&& !StringUtils.isEmpty(msgBody)) {
+		if (MsgType.ACTIVE_CARD.equals(msgType)) {
 			// 激活VIP卡
 			if (airportEasyManager.activeVipCard(map.get("vipCardNo"),
 					userPhone, map.get("userName"))) {
 				isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);// 激活短信
 			} else {
 				LoggerFactory.getLogger(getClass()).error("激活用户帐号失败...");
+				message = "激活用户帐号失败...";
 			}
 		} else {
 			// 登入，注册，退卡，退卡完成短信
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
-		return new MessageDto<Map<String, String>>().setOk(isOk).setData(map);
+		if (!isOk && StringUtils.isEmpty(message)) {
+			message = "调用短信接口失败...";
+		}
+		return messageDto.setOk(isOk).setData(map).setMsgBody(message);
 	}
 
 	/**
