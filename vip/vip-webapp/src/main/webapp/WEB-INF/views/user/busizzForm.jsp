@@ -115,7 +115,7 @@
 							<table border="0">
 							<tr>
 							<c:forEach var="data" items="${datas }" varStatus="i" >
-								<c:if test="${(i.index)%4==0 }">
+								<c:if test="${(i.index)%3==0 }">
 								</tr>
 								</c:if>
 								<td style="border: none;">

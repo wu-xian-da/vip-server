@@ -13,7 +13,7 @@
 	var grid;
 	var addFun = function() {
 		var dialog = parent.sy.modalDialog({
-			title : '添加用户信息',
+			title : '添加业务员',
 			url : sy.contextPath + '/busizz/form',
 			buttons : [ {
 				text : '保存',
@@ -47,7 +47,7 @@
 	}
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
-			title : '编辑用户信息',
+			title : '编辑业务员信息',
 			url : sy.contextPath + '/busizz/form?id=' + id,
 			buttons : [ {
 				text : '保存',
