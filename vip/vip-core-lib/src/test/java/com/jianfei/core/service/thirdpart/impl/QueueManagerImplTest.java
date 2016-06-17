@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.service.thirdpart.MsgInfoManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
@@ -67,7 +68,8 @@ public class QueueManagerImplTest {
 		m.put("code", "smart001");
 		m.put("time", "10分钟");
 		map.put("msgBody", JSONObject.toJSONString(m));
-		System.out.println(JSONObject.toJSONString(map));
+		JedisUtils.lpushString(QueueManager.SMS_QUEUE_VIP,
+				JSONObject.toJSONString(map));
 	}
 
 	@Test

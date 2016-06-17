@@ -10,8 +10,10 @@ import java.util.Map;
 import com.alibaba.fastjson.JSON;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ServiceMsgBuilder;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -35,13 +37,30 @@ import com.jianfei.core.service.thirdpart.QueueManager;
  */
 @Service
 public class QueueManagerImpl implements QueueManager {
-	
-	public static final String MESSAGEKEY="MESSAGEKEY";
-	
+
+	public static final String MESSAGEKEY = "MESSAGEKEY";
 
 	@Autowired
 	private AirportEasyManager airportEasyManager;
-	
+
+	// 没20秒执行一次
+	/**
+	 * 从消息队列中拉消息
+	 */
+	@Scheduled(fixedRate = 20000)
+	public void pullSmsMessage() {
+		MessageDto<Map<String, String>> messageDto = processMessage(
+				QueueManager.SMS_QUEUE_VIP, QueueManager.SMS_QUEUE_VIP_BAK);
+		if (messageDto.isOk()) {
+			LoggerFactory.getLogger(getClass()).info(
+					"从" + QueueManager.SMS_QUEUE_VIP + "队列拉消息，操作结果信息:"
+							+ JSONObject.toJSONString(messageDto));
+		} else {
+			LoggerFactory.getLogger(getClass()).info(
+					"从" + QueueManager.SMS_QUEUE_VIP + "队列拉消息，操作失败。。。");
+		}
+	}
+
 	/**
 	 * msgInfoManager:TODO（短信消息处理接口）
 	 *
@@ -53,8 +72,7 @@ public class QueueManagerImpl implements QueueManager {
 	public MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ) {
 		// 从消息队列中去数据
-		// String result = JedisUtils.rpoplpushQ(sourceQ, targerQ);
-		String result = "";
+		String result = JedisUtils.rpoplpushQ(sourceQ, targerQ);
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
 			LoggerFactory.getLogger(getClass()).error("短信消息队列:从队列中获取消息为空");
 			return new MessageDto<Map<String, String>>();
@@ -123,7 +141,8 @@ public class QueueManagerImpl implements QueueManager {
 	@Override
 	public BaseMsgInfo sendMessage(ServiceMsgBuilder msgBuilder) {
 		String fastJsonStr = JSON.toJSONString(msgBuilder);
-		boolean flag = JedisUtils.lpushString(MESSAGEKEY, fastJsonStr) == null ? false : true;
+		boolean flag = JedisUtils.lpushString(MESSAGEKEY, fastJsonStr) == null ? false
+				: true;
 		if (flag) {
 			return BaseMsgInfo.success(true);
 		} else {
