@@ -68,7 +68,8 @@
 			                <select id="invoiceSelect">
 			                    <option value="3">全部发票状态</option>
 			                    <option value="0">未开</option>
-			                    <option value="1">已开</option>
+			                    <option value="1">发票未邮寄</option>
+			                    <option value="2">发票已邮寄</option>
 			                  
 			                </select>
 			            </div>

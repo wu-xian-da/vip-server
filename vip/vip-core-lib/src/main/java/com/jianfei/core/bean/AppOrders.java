@@ -46,7 +46,7 @@ public class AppOrders implements Serializable{
     private String airportId;
 
     private String payUserId;
-
+    
     /**
 	 * operation
 	 *
@@ -184,4 +184,5 @@ public class AppOrders implements Serializable{
     public void setPayUserId(String payUserId) {
         this.payUserId = payUserId;
     }
+    
 }

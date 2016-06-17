@@ -27,8 +27,24 @@ public class AppInvoice {
     private String address;
 
     private Integer dtflag;
+    private String invoiceNo;
+    
 
-    public String getInvoiceId() {
+    /**
+	 * @return the invoiceNo
+	 */
+	public String getInvoiceNo() {
+		return invoiceNo;
+	}
+
+	/**
+	 * @param invoiceNo the invoiceNo to set
+	 */
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
+	}
+
+	public String getInvoiceId() {
         return invoiceId;
     }
 

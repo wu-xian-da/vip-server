@@ -1,372 +1,409 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jianfei.core.mapper.AppOrdersMapper" >
+<mapper namespace="com.jianfei.core.mapper.AppOrdersMapper">
 
-  <resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppOrders" >
-    <id column="order_id" property="orderId" jdbcType="VARCHAR" />
-    <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
-    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
-    <result column="order_state" property="orderState" jdbcType="INTEGER" />
-    <result column="pay_type" property="payType" jdbcType="INTEGER" />
-    <result column="serial_id" property="serialId" jdbcType="VARCHAR" />
-    <result column="pay_money" property="payMoney" jdbcType="REAL" />
-    <result column="invoice_flag" property="invoiceFlag" jdbcType="INTEGER" />
-    <result column="remark1" property="remark1" jdbcType="VARCHAR" />
-    <result column="remark2" property="remark2" jdbcType="VARCHAR" />
-    <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
-      <result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
-      <result column="airport_id" property="airportId" jdbcType="VARCHAR" />
-  </resultMap>
-  
-  <!--订单列表展示返回类型 -->
-  <resultMap id="OrderShowInfoDto" type="com.jianfei.core.dto.OrderShowInfoDto">
-  	<id column="order_id" property="orderId" jdbcType="VARCHAR"/>
-  	<result column="order_time" property="orderTime" jdbcType="TIMESTAMP"/>
-  	<result column="airport_name" property="airportName" jdbcType="VARCHAR"/>
-  	<result column="name" property="agentName" jdbcType="VARCHAR"/>
-  	<result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
-  	<result column="customer_phone" property="customerPhone" jdbcType="VARCHAR"/>
-  	<result column="order_state" property="orderState" jdbcType="INTEGER"/>
-  	<result column="invoice_flag" property="invoiceFlag" jdbcType="INTEGER"/>
-  	
-  	<result column="apply_type" property="applyType" jdbcType="INTEGER"/>
-  	<result column="back_type" property="backType" jdbcType="INTEGER"/>
-  	<result column="money" property="remainMoney"/>
-  	
-  </resultMap>
-  
-  <!--订单详细信息展示返回类型 -->
-  <resultMap id="orderDetailInfo" type="com.jianfei.core.dto.OrderDetailInfo">
-  	<!--1、订单表  -->
-  	<id column="order_id" property="orderId"/>
-  	<result column="order_time" property="orderTime"/>
-  	<result column="order_state" property="orderState"/>
-  	<result column="pay_type" property="payMethod"/>
-  	<result column="pay_time" property="payTime"/>
-  	<result column="activat_time" property="activatTime"/>
-  	<result column="invoice_flag" property="invoiceFlag"/>
-  	<result column="pay_money" property="payMoney"/>
-  	<!--2、 机场表 -->
-  	<result column="airport_name" property="airportName"/>
-  	<!--3、业务人员表 -->
-  	<result column="name" property="agentName"/>
-  	<result column="phone" property="agentPhone"/>
-  	<!--4、用户表 -->
-  	<result column="customer_name" property="customerName"/>
-  	<result column="customer_identi" property="customerIdent"/>
-  	<result column="customer_phone" property="customerPhone"/>
-  	<result column="sex" property="sex"/>
-  	<result column="province_name" property="customerProvinceName"/>
-  	<result column="city_name" property="customerCityName"/>
-  	<result column="address" property="address"/>
-  	<result column="email" property="email"/>
-  	<!-- 5、卡表 -->
-  	<result column="card_id" property="vipCardNo"/>
-  	<result column="card_type" property="cardType"/>
-  	<result column="init_money" property="initMoney"/>
-  
-  </resultMap>
-  
-  <!--根据订单号查询订单详细信息 -->
-	<select id="selOrderDetailInfo" resultMap="orderDetailInfo" parameterType="java.lang.String">
-		select ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,ord.pay_money,
-			sa.airport_name,
-    		agent.name,agent.phone,
-    		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.province_name,cus.city_name,cus.address,cus.email,
-    		aoc.card_id ,aoc.card_type,aoc.init_money
-    			from app_orders ord,sys_airport sa,sys_users agent ,app_customer cus ,app_order_card aoc
-   					where  ord.airport_id = sa.airport_id  and ord.sale_no = agent.id 
-   						and ord.customer_id = cus.customer_id and ord.order_id = aoc.order_id
-    					and ord.order_id=#{orderId}
-  	</select>
-  
-  <!--订单列表信息展示  -->
-  <select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-  	select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,     
-  			ap.airport_name,agent.name,
-  	 		customer.customer_name,customer.customer_phone 
-  				 from app_orders ord,sys_airport ap,sys_users agent,app_customer customer
-  					 where ord.sale_no=agent.id and ord.customer_id = customer.customer_id and ord.airport_id = ap.airport_id
-  	 
-     	<if test="startTime != null">
-    	    and DATE_FORMAT(ord.order_time,'%Y-%m-%d') <![CDATA[  >=]]> #{startTime}
-         </if>
-         
-         <!-- 结束时间 -->
-         <if test="endTime != null">
-         	and DATE_FORMAT(ord.order_time,'%Y-%m-%d')  <![CDATA[  <= ]]> #{endTime}
-         </if>
-         
-         <!-- 机场编号 -->
-    	 <if test="airportId != null">
-    		and ord.airport_id = #{airportId}
-    	 </if>
-    	 
-    	 <!-- 订单状态 -->
-    	 <if test="orderState != 5">
-    		and ord.order_state = #{orderState}
-     	 </if>
-     	 <!-- 发票状态 -->
-     	 <if test="invoiceState != 3">
-     	 	and ord.invoice_flag = #{invoiceState}
-     	 </if>
-     	<!-- 用户名或者手机号码 -->
-    	<if test="phoneOrUserName != null">
-    		<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
-    		and concat(customer.customer_name,customer.customer_phone) like CONCAT('%','${phoneOrUserName}','%' )
-    	</if>
-    	<!-- 机场列表 -->
-    	<if test="aiportIdList !=null">
-    		and ord.airport_id in
-    		<foreach item="item" index="index" collection="aiportIdList" 
-                         open="(" separator="," close=")">
-                        #{item}
-                </foreach>
-    		
-    	</if>
-     	
-    	
-  </select>
-  
-  <!--退款订单分页查询  -->
-  <select id="page" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-  	select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
-	 	ap.airport_name,
-     	agent.name,
-  		customer.customer_name,customer.customer_phone,
-    	acb.back_type,acb.money
-  	 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer,app_card_back acb
-     		where ord.sale_no=agent.id and ord.customer_id = customer.customer_id and 
-    			 ord.airport_id = ap.airport_id and ord.order_id = acb.order_id 
-    			 <if test="backType != null">
-    			 	 and acb.back_type = #{backType}
-    			 </if>
-    			<if test="applyType !=null">
-    				and ord.apply_type = #{applyType}
-    			</if>
-    			 <if test="orderState != 10">
-    			  and ord.order_state = #{orderState}
-    			 </if>
-    			 <!-- 机场列表 -->
-    			<if test="aiportIdList !=null">
-    				and ord.airport_id in
-    				<foreach item="item" index="index" collection="aiportIdList" 
-                         open="(" separator="," close=")">
-                        #{item}
-               		 </foreach>
-    		
-    	</if>
-    			
-  </select>
-  
-  <!--更新订单状态  -->
-  <update id="updateOrderState" parameterType="java.util.Map">
-  	update app_orders set order_state=#{orderState} where order_id = #{orderId}
-  </update>
-  
-  <!--支付回调通知  -->
-  <update id="payNotify" parameterType="java.util.Map">
-  	update app_orders set order_state=#{orderState},pay_user_id=#{payUserId},pay_time=#{payTime},
-  		serial_id=#{tradeNo},pay_type=#{payType} where order_id = #{orderId}
-  </update>
-  
-  <sql id="Base_Column_List" >
-    order_id, id, customer_id, order_time, order_state, pay_type, serial_id, pay_money, 
-    invoice_flag, remark1, remark2, dtflag, sale_no,airport_id
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from app_orders
-    where order_id = #{orderId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from app_orders
-    where order_id = #{orderId,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="com.jianfei.core.bean.AppOrders" >
-    insert into app_orders (order_id, id, customer_id, 
-      order_time, order_state, pay_type, 
-      serial_id, pay_money, invoice_flag, 
-      remark1, remark2, dtflag, sale_no, airport_id
-      )
-    values (#{orderId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, 
-      #{orderTime,jdbcType=TIMESTAMP}, #{orderState,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER}, 
-      #{serialId,jdbcType=VARCHAR}, #{payMoney,jdbcType=REAL}, #{invoiceFlag,jdbcType=INTEGER}, 
-      #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{dtflag,jdbcType=INTEGER},
-       #{saleNo,jdbcType=VARCHAR}, #{airportId,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.jianfei.core.bean.AppOrders" >
-    insert into app_orders
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        order_id,
-      </if>
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="customerId != null" >
-        customer_id,
-      </if>
-      <if test="orderTime != null" >
-        order_time,
-      </if>
-      <if test="orderState != null" >
-        order_state,
-      </if>
-      <if test="payType != null" >
-        pay_type,
-      </if>
-      <if test="serialId != null" >
-        serial_id,
-      </if>
-      <if test="payMoney != null" >
-        pay_money,
-      </if>
-      <if test="invoiceFlag != null" >
-        invoice_flag,
-      </if>
-      <if test="remark1 != null" >
-        remark1,
-      </if>
-      <if test="remark2 != null" >
-        remark2,
-      </if>
-      <if test="dtflag != null" >
-        dtflag,
-      </if>
-        <if test="saleNo != null" >
-          sale_no,
-        </if>
-        <if test="airportId != null" >
-            airport_id,
-        </if>
+	<resultMap id="BaseResultMap" type="com.jianfei.core.bean.AppOrders">
+		<id column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="order_state" property="orderState" jdbcType="INTEGER" />
+		<result column="pay_type" property="payType" jdbcType="INTEGER" />
+		<result column="serial_id" property="serialId" jdbcType="VARCHAR" />
+		<result column="pay_money" property="payMoney" jdbcType="REAL" />
+		<result column="invoice_flag" property="invoiceFlag" jdbcType="INTEGER" />
+		<result column="remark1" property="remark1" jdbcType="VARCHAR" />
+		<result column="remark2" property="remark2" jdbcType="VARCHAR" />
+		<result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+		<result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
+		<result column="airport_id" property="airportId" jdbcType="VARCHAR" />
+	</resultMap>
 
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        #{orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="customerId != null" >
-        #{customerId,jdbcType=VARCHAR},
-      </if>
-      <if test="orderTime != null" >
-        #{orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="orderState != null" >
-        #{orderState,jdbcType=INTEGER},
-      </if>
-      <if test="payType != null" >
-        #{payType,jdbcType=INTEGER},
-      </if>
-      <if test="serialId != null" >
-        #{serialId,jdbcType=VARCHAR},
-      </if>
-      <if test="payMoney != null" >
-        #{payMoney,jdbcType=REAL},
-      </if>
-      <if test="invoiceFlag != null" >
-        #{invoiceFlag,jdbcType=INTEGER},
-      </if>
-      <if test="remark1 != null" >
-        #{remark1,jdbcType=VARCHAR},
-      </if>
-      <if test="remark2 != null" >
-        #{remark2,jdbcType=VARCHAR},
-      </if>
-      <if test="dtflag != null" >
-        #{dtflag,jdbcType=INTEGER},
-      </if>
-        <if test="saleNo != null" >
-            #{saleNo,jdbcType=VARCHAR},
-        </if>
-        <if test="airportId != null" >
-            #{airportId,jdbcType=VARCHAR},
-        </if>
+	<!--订单列表展示返回类型 -->
+	<resultMap id="OrderShowInfoDto" type="com.jianfei.core.dto.OrderShowInfoDto">
+		<id column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="airport_name" property="airportName" jdbcType="VARCHAR" />
+		<result column="name" property="agentName" jdbcType="VARCHAR" />
+		<result column="customer_name" property="customerName"
+			jdbcType="VARCHAR" />
+		<result column="customer_phone" property="customerPhone"
+			jdbcType="VARCHAR" />
+		<result column="order_state" property="orderState" jdbcType="INTEGER" />
+		<result column="invoice_flag" property="invoiceFlag" jdbcType="INTEGER" />
+		<result column="invoice_id" property="invoiceId"/>
+		<result column="invoice_no" property="invoiceNo"/>
+		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
+		<result column="back_type" property="backType" jdbcType="INTEGER" />
+		<result column="money" property="remainMoney" />
 
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppOrders" >
-    update app_orders
-    <set >
-      <if test="id != null" >
-        id = #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="customerId != null" >
-        customer_id = #{customerId,jdbcType=VARCHAR},
-      </if>
-      <if test="orderTime != null" >
-        order_time = #{orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="orderState != null" >
-        order_state = #{orderState,jdbcType=INTEGER},
-      </if>
-      <if test="payType != null" >
-        pay_type = #{payType,jdbcType=INTEGER},
-      </if>
-      <if test="serialId != null" >
-        serial_id = #{serialId,jdbcType=VARCHAR},
-      </if>
-      <if test="payMoney != null" >
-        pay_money = #{payMoney,jdbcType=REAL},
-      </if>
-      <if test="invoiceFlag != null" >
-        invoice_flag = #{invoiceFlag,jdbcType=INTEGER},
-      </if>
-      <if test="remark1 != null" >
-        remark1 = #{remark1,jdbcType=VARCHAR},
-      </if>
-      <if test="remark2 != null" >
-        remark2 = #{remark2,jdbcType=VARCHAR},
-      </if>
-      <if test="dtflag != null" >
-        dtflag = #{dtflag,jdbcType=INTEGER},
-      </if>
-        <if test="saleNo != null" >
-            sale_no= #{saleNo,jdbcType=VARCHAR},
-        </if>
-        <if test="airportId != null" >
-            airport_id= #{airportId,jdbcType=VARCHAR},
-        </if>
+	</resultMap>
 
-    </set>
-    where order_id = #{orderId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.jianfei.core.bean.AppOrders" >
-    update app_orders
-    set id = #{id,jdbcType=VARCHAR},
-      customer_id = #{customerId,jdbcType=VARCHAR},
-      order_time = #{orderTime,jdbcType=TIMESTAMP},
-      order_state = #{orderState,jdbcType=INTEGER},
-      pay_type = #{payType,jdbcType=INTEGER},
-      serial_id = #{serialId,jdbcType=VARCHAR},
-      pay_money = #{payMoney,jdbcType=REAL},
-      invoice_flag = #{invoiceFlag,jdbcType=INTEGER},
-      remark1 = #{remark1,jdbcType=VARCHAR},
-      remark2 = #{remark2,jdbcType=VARCHAR},
-      dtflag = #{dtflag,jdbcType=INTEGER},
-      sale_no= #{saleNo,jdbcType=VARCHAR},
-      airport_id= #{airportId,jdbcType=VARCHAR}
-    where order_id = #{orderId,jdbcType=VARCHAR}
-  </update>
-    <select id="selectOrder" parameterType="java.util.Map" resultType="java.util.Map">
-  		SELECT * FROM app_orders ao 
-  		<where>
-  			<if test="orderState!=null and orderState!=''">
-  				order_state=#{orderState}
-  			</if>
-  			<if test="dateTime!=null and dateTime!=''">
-  				and DATE_FORMAT(order_time,'%Y-%m')=#{dateTime}
-  			</if>
-  		</where>
-  </select>
-  <!-- 根据订单号返回订单信息 -->
-  <select id="getOrderInfoByOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	select * from app_orders where order_id = #{orderId}
-  </select>
+	<!--订单详细信息展示返回类型 -->
+	<resultMap id="orderDetailInfo" type="com.jianfei.core.dto.OrderDetailInfo">
+		<!--1、订单表 -->
+		<id column="order_id" property="orderId" />
+		<result column="order_time" property="orderTime" />
+		<result column="order_state" property="orderState" />
+		<result column="pay_type" property="payMethod" />
+		<result column="pay_time" property="payTime" />
+		<result column="activat_time" property="activatTime" />
+		<result column="invoice_flag" property="invoiceFlag" />
+		<result column="pay_money" property="payMoney" />
+		<!--2、 机场表 -->
+		<result column="airport_name" property="airportName" />
+		<!--3、业务人员表 -->
+		<result column="name" property="agentName" />
+		<result column="phone" property="agentPhone" />
+		<!--4、用户表 -->
+		<result column="customer_name" property="customerName" />
+		<result column="customer_identi" property="customerIdent" />
+		<result column="customer_phone" property="customerPhone" />
+		<result column="sex" property="sex" />
+		<result column="province_name" property="customerProvinceName" />
+		<result column="city_name" property="customerCityName" />
+		<result column="address" property="address" />
+		<result column="email" property="email" />
+		<!-- 5、卡表 -->
+		<result column="card_id" property="vipCardNo" />
+		<result column="card_type" property="cardType" />
+		<result column="init_money" property="initMoney" />
+
+	</resultMap>
+	
+	<!--查询需要开发票的订单信息 -->
+	<select id="invoicePageList" parameterType="java.util.Map"
+		resultMap="OrderShowInfoDto">
+		select ord.order_id,ord.invoice_flag,
+		inv.invoice_no,inv.invoice_id,
+		cus.customer_name,cus.customer_phone
+		from app_orders ord inner join app_invoice inv on ord.order_id =
+		inv.order_id
+		inner join app_customer cus on ord.customer_id = cus.customer_id
+		<if test="invoiceFlag != null">
+			and ord.invoice_flag = #{invoiceFlag}
+		</if>
+		<if test="phoneOrUserName != null">
+			and concat(cus.customer_name,cus.customer_phone) like
+			CONCAT('%','${phoneOrUserName}','%' )
+		</if>
+	</select>
+
+	<!--根据订单号查询订单详细信息 -->
+	<select id="selOrderDetailInfo" resultMap="orderDetailInfo"
+		parameterType="java.lang.String">
+		select
+		ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,ord.pay_money,
+		sa.airport_name,
+		agent.name,agent.phone,
+		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.province_name,cus.city_name,cus.address,cus.email,
+		aoc.card_id ,aoc.card_type,aoc.init_money
+		from app_orders ord,sys_airport sa,sys_users agent ,app_customer cus
+		,app_order_card aoc
+		where ord.airport_id = sa.airport_id and ord.sale_no = agent.id
+		and ord.customer_id = cus.customer_id and ord.order_id = aoc.order_id
+		and ord.order_id=#{orderId}
+	</select>
+
+	<!--订单列表信息展示 -->
+	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
+		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,
+		ap.airport_name,agent.name,
+		customer.customer_name,customer.customer_phone
+		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer
+		where ord.sale_no=agent.id and ord.customer_id = customer.customer_id
+		and ord.airport_id = ap.airport_id
+
+		<if test="startTime != null">
+			and DATE_FORMAT(ord.order_time,'%Y-%m-%d') <![CDATA[  >=]]>
+			#{startTime}
+		</if>
+
+		<!-- 结束时间 -->
+		<if test="endTime != null">
+			and DATE_FORMAT(ord.order_time,'%Y-%m-%d')  <![CDATA[  <= ]]>
+			#{endTime}
+		</if>
+
+		<!-- 机场编号 -->
+		<if test="airportId != null">
+			and ord.airport_id = #{airportId}
+		</if>
+
+		<!-- 订单状态 -->
+		<if test="orderState != 5">
+			and ord.order_state = #{orderState}
+		</if>
+		<!-- 发票状态 -->
+		<if test="invoiceState != 3">
+			and ord.invoice_flag = #{invoiceState}
+		</if>
+		<!-- 用户名或者手机号码 -->
+		<if test="phoneOrUserName != null">
+			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
+			and concat(customer.customer_name,customer.customer_phone) like
+			CONCAT('%','${phoneOrUserName}','%' )
+		</if>
+		<!-- 机场列表 -->
+		<if test="aiportIdList !=null">
+			and ord.airport_id in
+			<foreach item="item" index="index" collection="aiportIdList"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+
+		</if>
+
+
+	</select>
+
+	<!--退款订单分页查询 -->
+	<select id="page" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
+		select
+		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
+		ap.airport_name,
+		agent.name,
+		customer.customer_name,customer.customer_phone,
+		acb.back_type,acb.money
+		from app_orders ord,sys_airport ap,sys_users agent,app_customer
+		customer,app_card_back acb
+		where ord.sale_no=agent.id and ord.customer_id = customer.customer_id and
+		ord.airport_id = ap.airport_id and ord.order_id = acb.order_id
+		<if test="backType != null">
+			and acb.back_type = #{backType}
+		</if>
+		<if test="applyType !=null">
+			and ord.apply_type = #{applyType}
+		</if>
+		<if test="orderState != 10">
+			and ord.order_state = #{orderState}
+		</if>
+		<!-- 机场列表 -->
+		<if test="aiportIdList !=null">
+			and ord.airport_id in
+			<foreach item="item" index="index" collection="aiportIdList"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+
+		</if>
+
+	</select>
+
+	<!--更新订单状态 -->
+	<update id="updateOrderState" parameterType="java.util.Map">
+		update app_orders set order_state=#{orderState} where order_id = #{orderId}
+	</update>
+
+	<!--支付回调通知 -->
+	<update id="payNotify" parameterType="java.util.Map">
+		update app_orders set
+		order_state=#{orderState},pay_user_id=#{payUserId},pay_time=#{payTime},
+		serial_id=#{tradeNo},pay_type=#{payType} where order_id = #{orderId}
+	</update>
+
+	<sql id="Base_Column_List">
+		order_id, id, customer_id, order_time, order_state, pay_type, serial_id,
+		pay_money,
+		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from app_orders
+		where order_id = #{orderId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from app_orders
+		where order_id = #{orderId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jianfei.core.bean.AppOrders">
+		insert into app_orders (order_id, id, customer_id,
+		order_time, order_state, pay_type,
+		serial_id, pay_money, invoice_flag,
+		remark1, remark2, dtflag, sale_no, airport_id
+		)
+		values (#{orderId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR},
+		#{customerId,jdbcType=VARCHAR},
+		#{orderTime,jdbcType=TIMESTAMP}, #{orderState,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER},
+		#{serialId,jdbcType=VARCHAR}, #{payMoney,jdbcType=REAL},
+		#{invoiceFlag,jdbcType=INTEGER},
+		#{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{dtflag,jdbcType=INTEGER},
+		#{saleNo,jdbcType=VARCHAR}, #{airportId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.jianfei.core.bean.AppOrders">
+		insert into app_orders
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="id != null">
+				id,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="orderTime != null">
+				order_time,
+			</if>
+			<if test="orderState != null">
+				order_state,
+			</if>
+			<if test="payType != null">
+				pay_type,
+			</if>
+			<if test="serialId != null">
+				serial_id,
+			</if>
+			<if test="payMoney != null">
+				pay_money,
+			</if>
+			<if test="invoiceFlag != null">
+				invoice_flag,
+			</if>
+			<if test="remark1 != null">
+				remark1,
+			</if>
+			<if test="remark2 != null">
+				remark2,
+			</if>
+			<if test="dtflag != null">
+				dtflag,
+			</if>
+			<if test="saleNo != null">
+				sale_no,
+			</if>
+			<if test="airportId != null">
+				airport_id,
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderId != null">
+				#{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderTime != null">
+				#{orderTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orderState != null">
+				#{orderState,jdbcType=INTEGER},
+			</if>
+			<if test="payType != null">
+				#{payType,jdbcType=INTEGER},
+			</if>
+			<if test="serialId != null">
+				#{serialId,jdbcType=VARCHAR},
+			</if>
+			<if test="payMoney != null">
+				#{payMoney,jdbcType=REAL},
+			</if>
+			<if test="invoiceFlag != null">
+				#{invoiceFlag,jdbcType=INTEGER},
+			</if>
+			<if test="remark1 != null">
+				#{remark1,jdbcType=VARCHAR},
+			</if>
+			<if test="remark2 != null">
+				#{remark2,jdbcType=VARCHAR},
+			</if>
+			<if test="dtflag != null">
+				#{dtflag,jdbcType=INTEGER},
+			</if>
+			<if test="saleNo != null">
+				#{saleNo,jdbcType=VARCHAR},
+			</if>
+			<if test="airportId != null">
+				#{airportId,jdbcType=VARCHAR},
+			</if>
+
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppOrders">
+		update app_orders
+		<set>
+			<if test="id != null">
+				id = #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderTime != null">
+				order_time = #{orderTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orderState != null">
+				order_state = #{orderState,jdbcType=INTEGER},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=INTEGER},
+			</if>
+			<if test="serialId != null">
+				serial_id = #{serialId,jdbcType=VARCHAR},
+			</if>
+			<if test="payMoney != null">
+				pay_money = #{payMoney,jdbcType=REAL},
+			</if>
+			<if test="invoiceFlag != null">
+				invoice_flag = #{invoiceFlag,jdbcType=INTEGER},
+			</if>
+			<if test="remark1 != null">
+				remark1 = #{remark1,jdbcType=VARCHAR},
+			</if>
+			<if test="remark2 != null">
+				remark2 = #{remark2,jdbcType=VARCHAR},
+			</if>
+			<if test="dtflag != null">
+				dtflag = #{dtflag,jdbcType=INTEGER},
+			</if>
+			<if test="saleNo != null">
+				sale_no= #{saleNo,jdbcType=VARCHAR},
+			</if>
+			<if test="airportId != null">
+				airport_id= #{airportId,jdbcType=VARCHAR},
+			</if>
+
+		</set>
+		where order_id = #{orderId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jianfei.core.bean.AppOrders">
+		update app_orders
+		set id = #{id,jdbcType=VARCHAR},
+		customer_id = #{customerId,jdbcType=VARCHAR},
+		order_time = #{orderTime,jdbcType=TIMESTAMP},
+		order_state = #{orderState,jdbcType=INTEGER},
+		pay_type = #{payType,jdbcType=INTEGER},
+		serial_id = #{serialId,jdbcType=VARCHAR},
+		pay_money = #{payMoney,jdbcType=REAL},
+		invoice_flag = #{invoiceFlag,jdbcType=INTEGER},
+		remark1 = #{remark1,jdbcType=VARCHAR},
+		remark2 = #{remark2,jdbcType=VARCHAR},
+		dtflag = #{dtflag,jdbcType=INTEGER},
+		sale_no= #{saleNo,jdbcType=VARCHAR},
+		airport_id= #{airportId,jdbcType=VARCHAR}
+		where order_id = #{orderId,jdbcType=VARCHAR}
+	</update>
+	<select id="selectOrder" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT * FROM app_orders ao
+		<where>
+			<if test="orderState!=null and orderState!=''">
+				order_state=#{orderState}
+			</if>
+			<if test="dateTime!=null and dateTime!=''">
+				and DATE_FORMAT(order_time,'%Y-%m')=#{dateTime}
+			</if>
+		</where>
+	</select>
+	<!-- 根据订单号返回订单信息 -->
+	<select id="getOrderInfoByOrderId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from app_orders where order_id = #{orderId}
+	</select>
 </mapper>

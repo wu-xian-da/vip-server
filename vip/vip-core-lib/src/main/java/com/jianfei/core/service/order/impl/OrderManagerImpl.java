@@ -505,4 +505,16 @@ public class OrderManagerImpl implements OrderManager {
 		// TODO Auto-generated method stub
 		return appOrdersMapper.getOrderInfoByOrderId(orderId);
 	}
+
+	/**
+	 * 查询需要开发票的订单信息
+	 */
+	@Override
+	public PageInfo<OrderShowInfoDto> invoicePageList(int pageNo, int pageSize,Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(pageNo, pageSize);
+		List<OrderShowInfoDto> list = appOrdersMapper.invoicePageList(map);
+		PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
+		return pageInfo;
+	}
 }
