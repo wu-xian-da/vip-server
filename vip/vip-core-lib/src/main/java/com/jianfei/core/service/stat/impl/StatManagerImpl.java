@@ -104,6 +104,7 @@ public class StatManagerImpl implements StatManager {
 			Map<String,Object> mapItem = new HashMap<String,Object>();
 			//该场站在选择时间内所有的开卡总数
 			int sum =0;
+			int backTotal = 0;
 			for(int index =0;index <= days; index ++){
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(sf.parse(begin));
@@ -112,15 +113,18 @@ public class StatManagerImpl implements StatManager {
 				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
 				if(obj == null){
 					sum +=0;
+					backTotal +=0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal());
+					backTotal += Float.parseFloat(charData.getBack_order_total());
 				}
 			}
 			//场站名称
 			mapItem.put("airPortName", proIdApIdMap.get("anames"));
 			//该场站在选择时间内所有的开卡数量
 			mapItem.put("total", sum);
+			mapItem.put("backTotal", backTotal);
 			list.add(mapItem);
 		}
 		
@@ -146,18 +150,22 @@ public class StatManagerImpl implements StatManager {
 			calendar.add(Calendar.DATE, index);
 			String date = sf.format(calendar.getTime());
 			int sum = 0;
+			int backTotal = 0;
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
 				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
 				if(obj == null){
 					sum +=0;
+					backTotal +=0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal());
+					backTotal += Float.parseFloat(charData.getBack_order_total());
 				}
 			}
 			mapItem.put("date", date);
 			mapItem.put("total", sum);
+			mapItem.put("backTotal", backTotal);
 			list.add(mapItem);
 		}
 		return list;
