@@ -84,9 +84,18 @@ public class ResourceController extends BaseController {
 		if (0 != resource.getId()) {
 			MessageDto<Resource> messageDto = resourceManager
 					.findEntityById(resource.getId());
-			System.out.println(messageDto.isOk());
-			if (messageDto.isOk())
+			if (messageDto.isOk()) {
 				model.addAttribute("resource", messageDto.getData());
+				if (messageDto.getData().getParent() != null
+						&& messageDto.getData().getParent().getId() != 0) {
+					MessageDto<Resource> pMessageDto = resourceManager
+							.findEntityById(messageDto.getData().getParent()
+									.getId());
+					if (pMessageDto.isOk()) {
+						model.addAttribute("parent", pMessageDto.getData());
+					}
+				}
+			}
 		}
 		return "resource/SyresourceForm";
 	}
