@@ -27,6 +27,10 @@
 	
 <script type="text/javascript">
 	var grid;
+	function searchByCondition(){
+		grid.datagrid('load',{'_cardNo':$("#_cardNo").val()});
+	};
+	
 	//删除vip卡
 	var removeFun = function(id) {
 		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {
@@ -199,10 +203,10 @@
 
 								</select></td>
 								<td>请输入卡号</td>
-								<td><input name="_cardNo" value="" style="width: 80px;" /></td>
-								<td><a href="javascript:void(0);" class="easyui-linkbutton"
-									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',sy.serializeObject($('#searchForm')));">检索</a></td>
+								<td><input id="_cardNo" name="_cardNo" value="" style="width: 80px;" /></td>
+								<td><input type="button" value="查询"
+									style="width: 60px; height: 20px; border: none; background: #698DC3; border-radius: 5px; text-align: center; color: #FFF;"
+									onclick="searchByCondition();"></td>
 							</tr>
 						</table>
 					</form>

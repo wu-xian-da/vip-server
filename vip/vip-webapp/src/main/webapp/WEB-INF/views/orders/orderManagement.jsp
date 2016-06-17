@@ -75,8 +75,13 @@
 			
 			            <div class="order-condition-item" style="width: 190px">
 			                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
-			                <button id="searchBt">检索</button>
+			                <button id="searchBt">查询</button>
 			            </div>
+			            
+			            <div class="order-condition-item" style="width: 70px">
+			                <button id="resetBt">重置</button>
+			            </div>
+			            
 			        </div>
 	        </div>
 	        
@@ -382,6 +387,16 @@
         			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
         	$('#tt').datagrid({url:url});
         	
+        })
+        
+        //重置按钮
+        $("#resetBt").click(function(){
+        	$("#startTime").datebox("setValue","");
+        	$("#endTime").datebox("setValue","");
+        	$("#phoneOrUserName").val("");
+        	$("#airportIdSelect option[value='']").attr("selected","selected");
+        	$("#orderStateSelect option[value=5]").attr("selected","selected");
+        	$("#invoiceSelect option[value=3]").attr("selected","selected");
         })
 	</script>
 	
