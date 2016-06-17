@@ -179,8 +179,13 @@
         	var invoiceFlag = $("#invoiceFlagSelect option:selected").val();
         	//手机号后置用户姓名
         	var phoneOrUserName = $("#phoneOrUserName").val();
-        	var url = "invoiceList?invoiceFlag="+invoiceFlag+"&phoneOrUserName="+phoneOrUserName;
-        	$('#tt').datagrid({url:url});
+        	var url = "invoiceList";
+        	$('#tt').datagrid(
+        			{url:url,queryParams:{
+        				invoiceFlag:invoiceFlag,
+        				phoneOrUserName:phoneOrUserName
+        			}
+        	});
         	
         })
         
