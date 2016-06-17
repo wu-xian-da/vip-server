@@ -498,8 +498,8 @@
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
 				<redis.pool.minIdle>0</redis.pool.minIdle>
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
-				<redis.host>120.27.116.141</redis.host>
-				<redis.port>6399</redis.port>
+				<redis.host>192.168.110.8</redis.host>
+				<redis.port>6379</redis.port>
 				<!-- p12 cert location -->
 				<wechat.cert.location>/home/jianfei/apiclient_cert.p12</wechat.cert.location>
 				<!-- kongGang settings -->

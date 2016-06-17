@@ -7,6 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.dto.ServiceMsgBuilder;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +35,12 @@ import com.jianfei.core.service.thirdpart.QueueManager;
  */
 @Service
 public class QueueManagerImpl implements QueueManager {
-
+	
+	public static final String MESSAGEKEY="MESSAGEKEY";
+	
 	@Autowired
 	private AirportEasyManager airportEasyManager;
-
+	
 	/**
 	 * msgInfoManager:TODO（短信消息处理接口）
 	 *
@@ -106,5 +111,22 @@ public class QueueManagerImpl implements QueueManager {
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		return new MessageDto<Map<String, String>>().setOk(isOk).setData(map);
+	}
+
+	/**
+	 * 发送消息
+	 *
+	 * @param msgBuilder
+	 * @return
+	 */
+	@Override
+	public BaseMsgInfo sendMessage(ServiceMsgBuilder msgBuilder) {
+		String fastJsonStr = JSON.toJSONString(msgBuilder);
+		boolean flag = JedisUtils.lpushString(MESSAGEKEY, fastJsonStr) == null ? false : true;
+		if (flag) {
+			return BaseMsgInfo.success(true);
+		} else {
+			return BaseMsgInfo.msgFail("消息发送失败");
+		}
 	}
 }
