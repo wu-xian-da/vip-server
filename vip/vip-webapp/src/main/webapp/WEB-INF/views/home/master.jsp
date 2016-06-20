@@ -15,8 +15,7 @@
 		
 		<div id="person-manager-wrap">
 			<h3>欢迎登陆机场VIP卡业务管理后台</h3>
-			<div class="tips">
-			</div>
+			<c:if test="${empty error }">
 			<ul>
 				<li><span class="date-label">${dataStr }</span>各省业绩概况</li>
 				<li>全国VIP开卡总量：<span class="total-nums">${total } </span>张</li>
@@ -31,7 +30,7 @@
 					<div id="echart-box-1" style="width:800px; height:300px"></div>
 					<div id="echart-box-2" style="width:800px; height:300px"></div>
 			</div>
-			
+			</c:if>
 		</div>
 
 

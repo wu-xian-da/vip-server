@@ -110,6 +110,7 @@ public class UserManagerImpl implements UserManaer<User> {
 	@Override
 	public MessageDto<String> saveUser(User user, String arids, String roleid) {
 		MessageDto<String> messageDto = new MessageDto<String>();
+		System.out.println("----------------------------------------------------------");
 		Long id = 0l;
 		if (!StringUtils.isEmpty(user.getLoginName())) {
 			User u = userMapper.getUserByName(StringUtils.trim(user
@@ -122,12 +123,13 @@ public class UserManagerImpl implements UserManaer<User> {
 				// 设置密码
 				Map<String, Object> map = roelManager
 						.selectRoleById(StringUtils.toLong(roleid));
-
-				SimpleHash simpleHash = new SimpleHash("md5", map == null ? ""
-						: map.get("initPwd"), user.getSalt());
+				String passwd = map == null ? GloabConfig
+						.getConfig("defalut.passwd") : map.get("initPwd")
+						.toString();
+				SimpleHash simpleHash = new SimpleHash("md5", passwd,
+						user.getSalt());
 				user.setPassword(simpleHash.toString());
-				user.setExtraPasswd(new SimpleHash("md5", map == null ? ""
-						: map.get("initPwd")).toString());
+				user.setExtraPasswd(new SimpleHash("md5", passwd).toString());
 				userMapper.save(user);
 				User u2 = userMapper.getUserByName(user.getLoginName());
 				id = u2.getId();

@@ -198,14 +198,12 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		// 获取所有的权限区域 经理
 		List<AriPort> ariPorts = user.getAripors();
 		List<String> list = new ArrayList<String>();
-		StringBuffer buffer = new StringBuffer();
 		for (AriPort ariPort : ariPorts) {
 			list.add(ariPort.getId());
-			buffer.append("'" + ariPort.getId() + "'" + ",");
 		}
-		System.out.println(buffer);
-		if(CollectionUtils.isEmpty(list)){
-			return ;
+		if (CollectionUtils.isEmpty(list)) {
+			model.addAttribute("error", "true");
+			return;
 		}
 		// 查询管辖区域内总的开卡数
 		Map<String, Object> map = masterTotal(new MapUtils.Builder()
@@ -253,12 +251,13 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		List<AriPort> ariPorts = user.getAripors();
 		Map<String, Object> lastMoth = DateUtil.getDelayDate(1);
 		List<String> list = new ArrayList<String>();
-		StringBuffer buffer = new StringBuffer();
 		for (AriPort ariPort : ariPorts) {
 			list.add(ariPort.getId());
-			buffer.append("'" + ariPort.getId() + "'" + ",");
 		}
-		System.out.println(buffer);
+		if (CollectionUtils.isEmpty(list)) {
+			model.addAttribute("error", "true");
+			return;
+		}
 		lastMoth.put("ariportIds", list);
 		// 管辖区域范围内总的订单数
 		Map<String, Object> map = zhuGuanTotal(lastMoth,
