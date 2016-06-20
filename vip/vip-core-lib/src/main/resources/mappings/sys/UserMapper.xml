@@ -87,7 +87,7 @@
 	</select>
 
 	<select id="getYeepayUser" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{loginName} and (user_type=0)
+		SELECT * from sys_users where code =#{loginName} and (user_type=0) AND state=0
 	</select>
 
 	<insert id="save" parameterType="User">
