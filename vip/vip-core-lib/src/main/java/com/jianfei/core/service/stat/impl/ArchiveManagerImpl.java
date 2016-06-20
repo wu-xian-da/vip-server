@@ -86,14 +86,15 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> masterTop(Map<String, Object> map) {
+		JedisUtils.delObject(CacheCons.Sys.SYS_TOP3_MONTH);
 		List<Map<String, Object>> list = null;
-		Object object = JedisUtils.getObject(CacheCons.Sys.LAST_MONTH_TOP3);
+		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
 		if (null != object) {
 			list = (List<Map<String, Object>>) JedisUtils
-					.getObject(CacheCons.Sys.LAST_MONTH_TOP3);
+					.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
 		} else {
 			list = archiveMapper.masterTop(map);
-			JedisUtils.setObject(CacheCons.Sys.LAST_MONTH_TOP3, list, 0);
+			JedisUtils.setObject(CacheCons.Sys.SYS_TOP3_MONTH, list, 0);
 		}
 		return list;
 	}
@@ -109,6 +110,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	public List<Map<String, Object>> masterDraw(Map<String, Object> map,
 			String cacheKey) {
 		List<Map<String, Object>> maps = null;
+		JedisUtils.delObject(cacheKey);
 		Object object = JedisUtils.getObject(cacheKey);
 		if (null != object) {
 			maps = (List<Map<String, Object>>) JedisUtils.getObject(cacheKey);
@@ -171,16 +173,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		archiveMapper.baseDailyExtract(map);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jianfei.core.service.stat.ArchiveManager#selectOrderMaxDay()
-	 */
-	@Override
-	public Map<String, Object> selectOrderMaxDay() {
-		return archiveMapper.selectOrderMaxDay();
-	}
-
 	/**
 	 * dailyOrderArchice(每天23点58分执行定时任务) void
 	 * 
@@ -202,29 +194,50 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * .ui.Model)
 	 */
 	@Override
-	public void masterHome(Model model) {
-		Map<String, Object> map = masterTotal(new MapUtils.Builder().build());
+	public void masterHome(Model model, User user) {
+		// 获取所有的权限区域 经理
+		List<AriPort> ariPorts = user.getAripors();
+		List<String> list = new ArrayList<String>();
+		StringBuffer buffer = new StringBuffer();
+		for (AriPort ariPort : ariPorts) {
+			list.add(ariPort.getId());
+			buffer.append("'" + ariPort.getId() + "'" + ",");
+		}
+		System.out.println(buffer);
+		if(CollectionUtils.isEmpty(list)){
+			return ;
+		}
+		// 查询管辖区域内总的开卡数
+		Map<String, Object> map = masterTotal(new MapUtils.Builder()
+				.setKeyValue("ariportIds", list).build());
 		model.addAttribute("total", map.get("total"));
+
+		// 构造查询条件
 		Map<String, Object> lastMoth = DateUtil.getDelayDate(1);
+		lastMoth.put("ariportIds", list);
+		// 查询的时间条件，前端展示
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
+
+		// 开卡数前top3的省份
 		model.addAttribute("top", masterTop(lastMoth));
+		// 柱状图报表数据
 		model.addAttribute(
 				"draw1",
 				handDraw(masterDraw(lastMoth, CacheCons.Sys.LAST_1_MONTH),
-						"省份/月份开卡数", lastMoth.get("dataStr")));
+						"省份/月份开卡数", lastMoth.get("dataStr")));// 上个月各个省份的开卡数
 
 		model.addAttribute(
 				"draw2",
 				handDraw(
 						masterDraw(DateUtil.getDelayDate(2), Sys.LAST_2_MONTH),
-						"省份/月份开卡数", DateUtil.getDelayDate(2).get("dataStr")));
+						"省份/月份开卡数", DateUtil.getDelayDate(2).get("dataStr")));// 上上个月各个省份开卡数
 
 		model.addAttribute(
 				"draw3",
 				handDraw(
 						masterDraw(DateUtil.getDelayDate(3),
 								CacheCons.Sys.LAST_3_MONTH), "省份/月份开卡数",
-						DateUtil.getDelayDate(3).get("dataStr")));
+						DateUtil.getDelayDate(3).get("dataStr")));// 上上上个月各个省份的开卡数
 
 	}
 
@@ -240,21 +253,25 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		List<AriPort> ariPorts = user.getAripors();
 		Map<String, Object> lastMoth = DateUtil.getDelayDate(1);
 		List<String> list = new ArrayList<String>();
+		StringBuffer buffer = new StringBuffer();
 		for (AriPort ariPort : ariPorts) {
 			list.add(ariPort.getId());
+			buffer.append("'" + ariPort.getId() + "'" + ",");
 		}
+		System.out.println(buffer);
 		lastMoth.put("ariportIds", list);
 		// 管辖区域范围内总的订单数
 		Map<String, Object> map = zhuGuanTotal(lastMoth,
-				CacheCons.Sys.LAST_MONTH_TOTAL_ZHUGUAN);
-		map = map == null ? new MapUtils.Builder().setKeyValue("total", 0)
-				.build() : map;
+				CacheCons.Sys.SYS_HISTORY_ORDERS_ZHUGUAN);
+
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
 		model.addAttribute("total", map.get("total"));
+		// 上个月管辖区域内的开卡数
 		model.addAttribute(
 				"airPorts",
 				zhuGuanAllAirPort(lastMoth,
-						CacheCons.Sys.LAST_MONTH_All_ZHUGUAN));
+						CacheCons.Sys.SYS_LASTMONTH_ORDERS_ZHUGUAN));
+		// 管辖区域内每个场站每个业务员订单统计
 		List<Map<String, Object>> mapList = zhuGuanDraw(lastMoth, "");
 		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
 		for (Map<String, Object> m : mapList) {

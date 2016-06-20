@@ -17,22 +17,17 @@
 <body>
 		<div id="person-manager-wrap">
 			<h3>欢迎登陆机场VIP卡业务管理后台</h3>
-			<div class="tips">
-				注：此处展现的机场概况包括区域经理A 所管辖的所有机场概况
-			</div>
 			<ul>
 				<li><span class="date-label">${dataStr }</span>各机场业绩概况</li>
 				<li>辖区内VIP开卡总量：<span class="total-nums">${total } </span>张</li>
 				<li>辖区内各场站业绩概况：</li>
 				<c:forEach items="${airPorts }" var="airPort">
-					<li class="achievement-list">${airPort.airportname } <span>${dataStr }</span> vip开卡 <span class="prominent-color">${airPort.order_num }</span> ${airPort.bname }业务最佳：<span class="prominent-color">${airPort.bname }（${airPort.maxOrder } 张）</span></li>
+					<li class="achievement-list">${airPort.airportname } <span>${dataStr }</span> vip开卡 <span class="prominent-color">${airPort.order_num }</span><c:if test="${airPort.maxOrder!=0  }"> ${airPort.bname }业务最佳：<span class="prominent-color">${airPort.bname }（${airPort.maxOrder } 张）</c:if></span></li>
 				</c:forEach>
 			</ul>
 			
 			<div id="echart-wrap">
-					<div id="echart-box-0" style="width:800px; height:300px"></div>
-					<div id="echart-box-1" style="width:800px; height:300px"></div>
-					<div id="echart-box-2" style="width:800px; height:300px"></div>
+					
 			</div>
 			
 		</div>
@@ -42,8 +37,9 @@
 </body>
 <script src="${ctx }/jslib/echarts.min.js"></script>
 <script>
-
+console.info(data);
 	for (var i=0; i<data.length; i++) {
+		$("#echart-wrap").append($("<div id=\"echart-box-"+ i +"\" style=\"width:800px; height:300px\"></div>"))
 		var myChart = echarts.init(document.getElementById('echart-box-'+i));  
         var option = {
             title: {
