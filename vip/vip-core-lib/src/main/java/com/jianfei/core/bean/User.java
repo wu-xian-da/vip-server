@@ -413,7 +413,6 @@ public class User extends BaseEntity {
 	 * @return the aripors
 	 * @version 1.0.0
 	 */
-	@JsonIgnore
 	public List<AriPort> getAripors() {
 		return aripors;
 	}

@@ -235,9 +235,6 @@ public class OrderManagerImpl implements OrderManager {
 		System.out.println("float remainMoney="+remainMoney);
 		return remainMoney;
 	}
-
-
-	
 	
 
 	/* 获取销售某天开卡详细数据
@@ -342,7 +339,7 @@ public class OrderManagerImpl implements OrderManager {
 			  * @param goodsTag 商品标记，微信平台配置的商品标记，用于优惠券或者满减使用
 			  */
 			 NativePayReqData nativePayReqData=new NativePayReqData("",appOrders.getRemark1(),"",orderId,(int)(appOrders.getPayMoney()*100),
-					 "","192.168.199.200","","","", "","http://121.42.199.169/pay/wechat_notify","NATIVE",appOrders.getAirportId(),"","");
+					 "","192.168.199.200","","","", "",GloabConfig.getConfig("pay.notify.address")+"/pay/wechat_notify","NATIVE",appOrders.getAirportId(),"","");
 			 preCreateResult=wechatiPayManager.tradePrecreate(nativePayReqData);
 		 }else if (PayType.ALIPAY.equals(payType)){
 			 GoodsDetail goodsDetail = GoodsDetail.newInstance(appOrders.getOrderId(), appOrders.getRemark1(), 1, 1);
