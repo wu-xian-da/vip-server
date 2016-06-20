@@ -70,7 +70,7 @@ public interface UserMapper extends BaseMapper<User> {
 	 */
 	int updatePasswordByUno(@Param(value = "uno") String uno,
 			@Param(value = "password") String password,
-			@Param(value = "newPassword") String newPassword);
+			@Param(value = "newPassword") String newPassword,@Param(value = "md5Password") String md5Password);
 
 	public User getYeepayUser(String loginName);
 

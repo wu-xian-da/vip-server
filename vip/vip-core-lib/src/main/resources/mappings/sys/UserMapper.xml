@@ -87,8 +87,7 @@
 	</select>
 
 	<select id="getYeepayUser" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where login_name =#{loginName} and
-		(user_type=0)
+		SELECT * from sys_users where code =#{loginName} and (user_type=0)
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -183,7 +182,7 @@
 
 	<update id="updatePasswordByUno" parameterType="String">
 		UPDATE sys_users
-		SET `password`=#{newPassword} WHERE `code`=#{uno} and
+		SET `password`=#{newPassword},extra_passwd=#{md5Password} WHERE `code`=#{uno} and
 		`password`=#{password}
 	</update>
 

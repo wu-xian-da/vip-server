@@ -4,6 +4,8 @@ import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.user.SaleUserManager;
+import com.tencent.common.MD5;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.ManagedMap;
@@ -76,7 +78,8 @@ public class SaleUserManagerImpl implements SaleUserManager {
         }
         SimpleHash simpleHash = new SimpleHash("md5", password, users.get(0).getSalt());
         SimpleHash nweHash = new SimpleHash("md5", newPassword, users.get(0).getSalt());
-       int num= userMapper.updatePasswordByUno(userNo, simpleHash.toString(), nweHash.toString());
+        String md5Password=  MD5.MD5Encode(newPassword);
+       int num= userMapper.updatePasswordByUno(userNo, simpleHash.toString(), nweHash.toString(),md5Password);
         return num == 1 ? true : false;
     }
 

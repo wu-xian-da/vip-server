@@ -21,6 +21,7 @@
         <custom-filter ref="clientCredentialsTokenEndpointFilter"
                        before="BASIC_AUTH_FILTER" />
         <access-denied-handler ref="oauth2AccessDeniedHandler" />
+        <csrf disabled="true"></csrf>
     </http>
 
     <!--拦截Filter验证类型、用户名密码-->
