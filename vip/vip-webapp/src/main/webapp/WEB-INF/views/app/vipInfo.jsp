@@ -51,7 +51,7 @@
 						<c:otherwise><li>用户性别：女</li></c:otherwise>
 					</c:choose>
 					
-					<li>常住城市：${customer.address }</li>
+					<li>常住地址：${customer.address }</li>
 					<li>邮箱地址：${customer.email }</li>
 				</ul>
 				 <c:if test="${!empty postInfo }">

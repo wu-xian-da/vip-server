@@ -69,7 +69,16 @@ public class OrderMapperTest {
 		String viproomId = "261f47be25204aab9da048ad9cd032cb";
 		List<AppPicture> list = appPictureManager.selByVipRoomId(viproomId);
 	}
-
+	
+	//发票列表分页测试
+	@Test
+	public void testInvoiceList(){
+		/*List<OrderShowInfoDto> list= orderManagerImpl.invoicePageList(1,10,null);
+		for(OrderShowInfoDto a : list){
+			System.out.println(a);
+		}*/
+	}
+	
 	//订单列表分页测试
 	@Test
 	public void testGet() {

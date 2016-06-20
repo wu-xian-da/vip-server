@@ -65,7 +65,7 @@
 				<tr>
 					<th>姓名</th>
 					<td><input name="name" value="${user.name }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
-					<th>登入名称</th>
+					<th>登录名称</th>
 					<td><input name="loginName" value="${user.loginName }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
 				</tr>
 				<tr>

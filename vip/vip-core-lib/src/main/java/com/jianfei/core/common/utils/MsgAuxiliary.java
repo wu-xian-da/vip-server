@@ -8,6 +8,7 @@
 package com.jianfei.core.common.utils;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +46,6 @@ public class MsgAuxiliary {
 			}
 		}
 		return false;
-	}
-
-	public static void main(String[] args) {
 	}
 
 	/**
@@ -92,9 +90,10 @@ public class MsgAuxiliary {
 			@SuppressWarnings("unchecked")
 			Map<String, String> msgMap = JSONObject.parseObject(msgBodyRs,
 					Map.class);
-
-			msgBody = msgBody.replaceAll("\\[code\\]", msgMap.get("code"))
-					.replaceAll("\\[time\\]", msgMap.get("time"));
+			Set<String> setKeys = msgMap.keySet();
+			for (String key : setKeys) {
+				msgBody.replace("\\[" + key + "\\]", msgMap.get(key));
+			}
 		}
 
 		return msgBody;

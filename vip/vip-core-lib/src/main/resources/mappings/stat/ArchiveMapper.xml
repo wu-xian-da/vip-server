@@ -191,11 +191,17 @@
 			  `dayweek`,
 			  `sex`,
 			  `photo`,
-			  `pid`
+			  `pid`,
+			  order_num_back
 			)  SELECT
 				u.id,
 				max(ao.order_time) AS file_time,
-				sum(ao.order_id) AS order_num,
+				CASE
+				WHEN count(ao.order_id) IS NULL THEN
+					0
+				ELSE
+					count(ao.order_id)
+				END AS order_num,
 				ao.dtflag,
 				u.`name` AS bname,
 				a.airport_name,
@@ -207,14 +213,29 @@
 				WEEKDAY(#{maxTime})+1,
 				u.sex,
 				u.photo,
-				c.CID as pid
+				c.CID as pid,
+				CASE
+				WHEN ab.back_order_num IS NULL THEN
+					0
+				ELSE
+					ab.back_order_num
+				END
+				 as order_num_back
 			FROM
 				sys_users u
-			INNER JOIN app_orders ao ON ao.id = u.id
 			INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
 			INNER JOIN sys_airport a ON sua.airport_id = a.airport_id
 			inner join sys_city c on a.province=c.CID
-			WHERE DATE_FORMAT(ao.order_time, '%Y-%m-%m') =#{maxTime}
+			LEFT JOIN app_orders ao ON ao.id = u.id and DATE_FORMAT(ao.order_time, '%Y-%m-%m') =#{maxTime}
+			LEFT JOIN (
+				SELECT
+					count(ados.id) AS back_order_num,
+					ados.sale_no
+				FROM
+					app_orders ados
+				WHERE
+					ados.order_state = 4 and DATE_FORMAT(ados.order_time, '%Y-%m-%m') =#{maxTime}
+			) ab ON ab.sale_no = u.`code`
 			GROUP BY
 			u.id,
 			u.`name`,
@@ -236,7 +257,13 @@
 					count(DISTINCT aoa.bid) AS pcount,
 					sum(aoa.order_num) AS total,
 					sum(aoa.order_num) / count(DISTINCT aoa.bid) AS avgNum,
-					aoa.pid
+					aoa.pid,
+					CASE
+					WHEN sum(aoa.order_num_back) IS NULL THEN
+						0
+					ELSE
+						sum(aoa.order_num_back)
+					END AS back_order_total
 				FROM
 					app_order_archive aoa
 					where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}

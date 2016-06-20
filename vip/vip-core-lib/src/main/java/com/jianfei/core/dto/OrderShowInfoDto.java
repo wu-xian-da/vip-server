@@ -45,8 +45,35 @@ public class OrderShowInfoDto implements Serializable {
 	private String backTypeName;
 	private int backType;//退卡方式
 	private float remainMoney;//余额
+	private String invoiceId; //发票id
+    private String invoiceNo;//发票单号
 	
+    
 	
+	/**
+	 * @return the invoiceId
+	 */
+	public String getInvoiceId() {
+		return invoiceId;
+	}
+	/**
+	 * @param invoiceId the invoiceId to set
+	 */
+	public void setInvoiceId(String invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+	/**
+	 * @return the invoiceNo
+	 */
+	public String getInvoiceNo() {
+		return invoiceNo;
+	}
+	/**
+	 * @param invoiceNo the invoiceNo to set
+	 */
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
+	}
 	/**
 	 * @return the applyTypeName
 	 */
@@ -303,8 +330,9 @@ public class OrderShowInfoDto implements Serializable {
 		return "OrderShowInfoDto [orderId=" + orderId + ", orderTime=" + orderTime + ", airportName=" + airportName
 				+ ", agentName=" + agentName + ", customerName=" + customerName + ", customerPhone=" + customerPhone
 				+ ", orderState=" + orderState + ", orderStateName=" + orderStateName + ", invoiceFlag=" + invoiceFlag
-				+ ", invoiceFlagName=" + invoiceFlagName + "]";
+				+ ", invoiceFlagName=" + invoiceFlagName + ", operation=" + operation + ", applyType=" + applyType
+				+ ", applyTypeName=" + applyTypeName + ", backTypeName=" + backTypeName + ", backType=" + backType
+				+ ", remainMoney=" + remainMoney + ", invoiceId=" + invoiceId + ", invoiceNo=" + invoiceNo + "]";
 	}
-	
 	
 }

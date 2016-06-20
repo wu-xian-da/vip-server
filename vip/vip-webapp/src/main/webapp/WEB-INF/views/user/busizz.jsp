@@ -13,7 +13,7 @@
 	var grid;
 	var addFun = function() {
 		var dialog = parent.sy.modalDialog({
-			title : '添加用户信息',
+			title : '添加业务员',
 			url : sy.contextPath + '/busizz/form',
 			buttons : [ {
 				text : '保存',
@@ -47,7 +47,7 @@
 	}
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
-			title : '编辑用户信息',
+			title : '编辑业务员信息',
 			url : sy.contextPath + '/busizz/form?id=' + id,
 			buttons : [ {
 				text : '保存',
@@ -170,7 +170,7 @@
 							<form id="searchForm">
 								<table>
 									<tr>
-										<td>姓名:</td>
+										<td>姓名：</td>
 										<td><input id="name" style="width: 150px" placeholder='输入业务员名字'></input></td>
 										<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;

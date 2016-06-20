@@ -12,4 +12,7 @@ public interface AppInvoiceManager {
 	 * @return
      */
 	boolean insert(AppInvoice appInvoice);
+	
+	//更新发票信息
+	int updateByPrimaryKeySelective(AppInvoice appInvoice);
 }

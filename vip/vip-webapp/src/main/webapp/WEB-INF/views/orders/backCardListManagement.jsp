@@ -50,7 +50,7 @@
 				</div>
 	
 				<div class="order-condition-item" style="text-align: left">
-					<button id="searchBt" style="height: 20px">检索</button>
+					<button id="searchBt" style="height: 20px">查询</button>
 				</div>
 			</div>
 			
@@ -98,6 +98,10 @@
 		style="width: 500px; height: 260px; padding: 10px;">
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab">
+				<div class="radio-tab-content">
+                    <label id="promptMessage" style="font-weight:bolder ;color: red;font-size:large;"></label>
+                </div>
+                
 				<div class="radio-tab-content">
 					<div class="raidp-tab-content-item" style="display: block">
 						<input type="hidden" value="" id="backCardOrderId" /> <label
@@ -188,7 +192,9 @@
 				$("#userName2div").show();
 				$("#userName2").text(args.customerName);
 			}
-			
+			if(args.invoice == 1){
+				$("#promptMessage").text("请确认是否收到发票！");
+			}
 			$("#backCardOrderId").val(args.orderId);
 			$("#backMethod").text(backMethod);
 			$("#payBackCardNo").text(args.backMoneyCard);

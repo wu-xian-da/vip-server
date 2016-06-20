@@ -198,4 +198,17 @@ public interface OrderManager {
      * @return
      */
     BaseMsgInfo addBackCardInfo(AppCardBack appCardBack);
+    
+    /**
+     * 根据订单号返回订单基本信息
+     * @param orderId
+     * @return
+     */
+    AppOrders getOrderInfoByOrderId(String orderId);
+    
+    /**
+	 * 查询需要开发票的订单信息
+	 */
+    PageInfo<OrderShowInfoDto> invoicePageList(int pageNo, int pageSize,Map<String,Object> map);
+    
 }

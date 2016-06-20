@@ -122,7 +122,7 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDateProvinceIdRedisCache() {
 		Map<String, Object> mapCon = new HashMap<String, Object>();
-		mapCon.put("currentTime", "2016-04-09");
+		mapCon.put("currentTime", "2016-05-04");
 		List<Map<String, Object>> maps = archiveManager
 				.dateProvinceIdRedisCache(mapCon);
 		for (Map<String, Object> map : maps) {

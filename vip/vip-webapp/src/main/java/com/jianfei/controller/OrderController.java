@@ -29,6 +29,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
@@ -90,6 +91,86 @@ public class OrderController extends BaseController {
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("expires", -1);
 		return "orders/backCardListManagement";
+	}
+	
+	/**
+	 * 跳转到发票列表页面
+	 * @return
+	 */
+	@RequestMapping("/gotoInvoiceListView")
+	public String gotoInvoiceListView(){
+		return "orders/invoiceListManagement";
+	}
+	
+	/**
+	 * 获取需要开发票的订单
+	 * @param pageNo
+	 * @param pageSize
+	 * @param phoneOrUserName
+	 * @return
+	 */
+	@RequestMapping("invoiceList")
+	@ResponseBody
+	public Map<String,Object> invoiceList(@RequestParam(value="page",defaultValue="1") Integer pageNo,
+			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
+			@RequestParam(value="invoiceFlag",required=false,defaultValue="") String invoiceFlag,
+			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(!invoiceFlag.equals("")){
+			map.put("invoiceFlag", invoiceFlag);
+		}
+		if(!phoneOrUserName.equals("")){
+			map.put("phoneOrUserName", phoneOrUserName);
+		}
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		PageInfo<OrderShowInfoDto> pageInfo = orderManagerImpl.invoicePageList(pageNo, pageSize, map);
+		List<OrderShowInfoDto> invoiceList = pageInfo.getList();
+		if(invoiceList == null || invoiceList.size() ==0){
+			resMap.put("total", 0);
+		}else{
+			for(OrderShowInfoDto invoiceInfo : invoiceList){
+				int invoiceState = invoiceInfo.getInvoiceFlag();
+				JSONObject outData = new JSONObject(); 
+				outData.put("invoiceId", invoiceInfo.getInvoiceId());
+				outData.put("orderId", invoiceInfo.getOrderId());
+				//订单编号
+				String orderId = invoiceInfo.getOrderId();
+				if(invoiceState == 1){//发票未邮寄
+					invoiceInfo.setInvoiceFlagName("发票未邮寄");
+					invoiceInfo.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='drawBill("+outData+")'>开发票</button>");
+					//invoiceInfo.setOperation("<button class='btn btn-back' onclick='drawBill()'>开发票</button>");
+				}
+				if(invoiceState == 2){//发票已邮寄
+					invoiceInfo.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
+					invoiceInfo.setInvoiceFlagName("发票已邮寄");
+				}
+			}
+			resMap.put("total", invoiceList.size());
+		}
+		resMap.put("rows", invoiceList);
+		return resMap;
+	}
+	
+	/**
+	 * 将发票单号记录到数据表中
+	 * @return
+	 */
+	@RequestMapping("handelInvoiceInfo")
+	@ResponseBody
+	public Map<String,Object> handelInvoiceInfo(String invoiceId,String invoiceNo,String orderId){
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		//将订单号保存到订单表中
+		AppInvoice appInvoice = new AppInvoice();
+		appInvoice.setInvoiceNo(invoiceNo);
+		appInvoice.setInvoiceId(invoiceId);
+		appInvoiceManagerImpl.updateByPrimaryKeySelective(appInvoice);
+		//将订单的发票状态改为已邮寄
+		AppOrders addInfoDto = new AppOrders();
+		addInfoDto.setOrderId(orderId);
+		addInfoDto.setInvoiceFlag(2);
+		orderManagerImpl.updateOrderPayInfo(addInfoDto);
+		resMap.put("result", 1);
+		return resMap;
 	}
 	
 	/*
@@ -166,15 +247,15 @@ public class OrderController extends BaseController {
 		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
 		
 		for(OrderShowInfoDto appOrder : list){
+			int invoiceFlag = appOrder.getInvoiceFlag();
+			appOrder.setInvoiceFlagName(returnInvoiceFlagName(invoiceFlag));
 			if(appOrder.getOrderState() ==0){
 				//未支付
-				appOrder.setInvoiceFlagName(appOrder.getInvoiceFlag() ==0 ?"未开":"已开");
 				orderId = appOrder.getOrderId();
 				appOrder.setOrderStateName("未支付");
 				appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 			}else if(appOrder.getOrderState() == 1){
 				//已支付
-				appOrder.setInvoiceFlagName(appOrder.getInvoiceFlag() ==0 ?"未开":"已开");
 				appOrder.setOrderStateName("已支付");
 				orderId = appOrder.getOrderId();
 				phone = appOrder.getCustomerPhone();
@@ -183,6 +264,7 @@ public class OrderController extends BaseController {
 				outData.put("orderId", orderId);
 				outData.put("opr", "0");
 				outData.put("phone", phone);
+				outData.put("invoice",appOrder.getInvoiceFlag());
 				//是否有‘申请退款’权限
 				boolean flag = subject.isPermitted("system:order:applyBackMoney");
 				if(flag){
@@ -193,13 +275,13 @@ public class OrderController extends BaseController {
 				
 				
 			}else if(appOrder.getOrderState() == 2){
-				appOrder.setInvoiceFlagName(appOrder.getInvoiceFlag() ==0 ?"未开":"已开");
 				appOrder.setOrderStateName("正在审核");
 				JSONObject outData = new JSONObject(); 
 				orderId = appOrder.getOrderId();
 				float remainMoney = orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", appOrder.getOrderId());
+				outData.put("phone", appOrder.getCustomerPhone());
 				//2、获取验证码
 				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.BACK_CARD_APPLY);
 				
@@ -214,7 +296,6 @@ public class OrderController extends BaseController {
 			
 			}else if(appOrder.getOrderState() ==3){
 				//退款
-				appOrder.setInvoiceFlagName(appOrder.getInvoiceFlag() ==0 ?"未开":"已开");
 				JSONObject outData = new JSONObject(); 
 				orderId = appOrder.getOrderId();
 				float remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
@@ -225,6 +306,10 @@ public class OrderController extends BaseController {
 				outData.put("backType", appCardBack.getBackType());
 				outData.put("backName", appCardBack.getBankName());
 				outData.put("customerName", appCardBack.getCustomerName());
+				
+				//发票状态
+				AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
+				outData.put("invoice", orderInfo.getInvoiceFlag());
 				appOrder.setOrderStateName("审核通过");
 				
 				//是否有最终退款查看的权限
@@ -238,7 +323,6 @@ public class OrderController extends BaseController {
 			
 			}else if(appOrder.getOrderState() ==4){
 				//退款成功
-				appOrder.setInvoiceFlagName(appOrder.getInvoiceFlag() ==0 ?"未开":"已开");
 				orderId = appOrder.getOrderId();
 				appOrder.setOrderStateName("已退款");
 				appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
@@ -303,6 +387,9 @@ public class OrderController extends BaseController {
 					appOrder.setOrderStateName("审核通过");
 					outData.put("backName", appCardBack.getBankName());
 					outData.put("customerName", appCardBack.getCustomerName());
+					//发票状态
+					AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
+					outData.put("invoice", orderInfo.getInvoiceFlag());
 					//申请方式
 					int applyTypes = appOrder.getApplyType();
 					if(applyTypes == 0){
@@ -419,11 +506,12 @@ public class OrderController extends BaseController {
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		System.out.println("orderId="+orderId+"  opType="+opType);
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opType);
-		
+		AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(orderId);
 		JSONObject outData = new JSONObject(); 
 		outData.put("orderId", orderId);
 		outData.put("opr", "0");
 		outData.put("phone", phone);
+		outData.put("invoice", orderInfo.getInvoiceFlag());
 		
 		resMap.put("result", "1");
 		
@@ -550,5 +638,21 @@ public class OrderController extends BaseController {
 		resMap.put("result", 1);
 		resMap.put("airportList", airportList);
 		return resMap;
+	}
+	/**
+	 * 根据发票状态返回发票的中文名称
+	 * @param invoiceFlag
+	 * @return
+	 */
+	public String returnInvoiceFlagName(Integer invoiceFlag){
+		String invoiceFlagName = "";
+		if(invoiceFlag == 0){
+			invoiceFlagName = "未开";
+		}else if(invoiceFlag == 1){
+			invoiceFlagName = "发票未邮寄"; 
+		}else{
+			invoiceFlagName = "发票已邮寄";
+		}
+		return invoiceFlagName;
 	}
 }	

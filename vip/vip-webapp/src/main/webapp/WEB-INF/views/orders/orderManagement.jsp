@@ -68,15 +68,21 @@
 			                <select id="invoiceSelect">
 			                    <option value="3">全部发票状态</option>
 			                    <option value="0">未开</option>
-			                    <option value="1">已开</option>
+			                    <option value="1">发票未邮寄</option>
+			                    <option value="2">发票已邮寄</option>
 			                  
 			                </select>
 			            </div>
 			
 			            <div class="order-condition-item" style="width: 190px">
 			                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
-			                <button id="searchBt">检索</button>
+			                <button id="searchBt">查询</button>
 			            </div>
+			            
+			            <div class="order-condition-item" style="width: 70px">
+			                <button id="resetBt">重置</button>
+			            </div>
+			            
 			        </div>
 	        </div>
 	        
@@ -171,6 +177,10 @@
             style="width:500px;height:260px;padding:10px;">
        	<div class="easy-window-item">
             <div class="easy-window-radio-tab">
+            	<div class="radio-tab-content">
+                    <label id="promptMessage" style="font-weight:bolder ;color: red;font-size:large;"></label>
+                </div>
+                
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
                     	<input type="hidden" value="" id="backCardOrderId"/>
@@ -247,7 +257,9 @@
 				$("#userName2div").show();
 				$("#userName2").text(args.customerName);
 			}
-			
+			if(args.invoice == 1){
+				$("#promptMessage").text("请确认是否收到发票！");
+			}
 			$("#backCardOrderId").val(args.orderId);
 			$("#backMethod").text(backMethod);
 			$("#payBackCardNo").text(args.backMoneyCard);
@@ -335,6 +347,9 @@
        	*==================退单申请 已完成===============
        	*/
         function onRefundApplication(args,elem){
+        	if(args.invoice == 1){//开发票
+        		$.messager.alert("提示信息","该订单需要用户寄回发票才能进行最终退款操作！");
+        	}
         	var url = "applyBackCard?orderId="+args.orderId+"&operationType="+args.opr+"&phone="+args.phone;
             $.get(url,function(_d){
                 if(_d.result == 1){
@@ -373,6 +388,16 @@
         			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
         	$('#tt').datagrid({url:url});
         	
+        })
+        
+        //重置按钮
+        $("#resetBt").click(function(){
+        	$("#startTime").datebox("setValue","");
+        	$("#endTime").datebox("setValue","");
+        	$("#phoneOrUserName").val("");
+        	$("#airportIdSelect option[value='']").attr("selected","selected");
+        	$("#orderStateSelect option[value=5]").attr("selected","selected");
+        	$("#invoiceSelect option[value=3]").attr("selected","selected");
         })
 	</script>
 	

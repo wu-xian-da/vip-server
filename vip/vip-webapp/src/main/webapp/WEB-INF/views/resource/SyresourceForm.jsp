@@ -37,6 +37,9 @@
 			} ]
 		});
 	};
+	/*$(function(){
+		var node = $("#syresource_id").combotree('setValue', "${parent.name}");
+	});*/
 </script>
 </head>
 <body>
@@ -59,7 +62,7 @@
 				</tr>
 				<tr>
 					<th>上级资源</th>
-					<td><select id="syresource_id" name="parent.id"  value="${resource.parent.id }" class="easyui-combotree" data-options="editable:false,idField:'id',textField:'text',parentField:'pid',url:'${ctx }/resource/menus'" style="width: 155px;"></select><img class="iconImg ext-icon-cross" onclick="$('#syresource_id').combotree('clear');" title="清空" /></td>
+					<td><select id="syresource_id" name="parent.id"  class="easyui-combotree" data-options="editable:false,idField:'id',textField:'text',parentField:'pid',value:'${parent.id }',url:'${ctx }/resource/menus'" style="width: 155px;"></select><img class="iconImg ext-icon-cross" onclick="$('#syresource_id').combotree('clear');" title="清空" /></td>
 					<th>资源图标</th>
 					<td><input id="iconCls" name="iconCls"  value="${resource.iconCls }" readonly="readonly" style="padding-left: 18px; width: 134px;" /><img class="iconImg ext-icon-zoom" onclick="showIcons();" title="浏览图标" />&nbsp;<img class="iconImg ext-icon-cross" onclick="$('#iconCls').val('');$('#iconCls').attr('class','');" title="清空" /></td>
 				</tr>
