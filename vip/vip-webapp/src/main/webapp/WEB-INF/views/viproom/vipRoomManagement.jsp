@@ -145,7 +145,7 @@ a {
 				
 			},{
 				width : '100',
-				title : '机场状态',
+				title : 'vip室状态',
 				field : 'activeState',
 				align : 'center',
 				formatter : function(value, row, index) {
