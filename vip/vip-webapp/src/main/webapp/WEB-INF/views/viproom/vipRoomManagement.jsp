@@ -47,6 +47,41 @@ a {
 			}
 		});
 	};
+	
+	//启用vip室功能
+	var startUsing = function(viproomId){
+		parent.$.messager.confirm('询问', '您确定要启用该vip室？', function(r) {
+			if (r) {
+				$.post(sy.contextPath + '/viproom/startUsingVipRoomById', {
+					viproomId : viproomId
+				}, function(dataObj) {
+					if(!dataObj.ok){
+			    		$.messager.alert('msg',dataObj.msgBody,'error');
+			    		return ;
+			    	};
+					grid.datagrid('reload');
+				}, 'json');
+			}
+		});
+	};
+	
+	//禁用vip室功能
+	var forbiddenUsing = function(viproomId){
+		parent.$.messager.confirm('询问', '您确定要禁用该vip室？', function(r) {
+			if (r) {
+				$.post(sy.contextPath + '/viproom/forbiddenUsingVipRoomById', {
+					viproomId : viproomId
+				}, function(dataObj) {
+					if(!dataObj.ok){
+			    		$.messager.alert('msg',dataObj.msgBody,'error');
+			    		return ;
+			    	};
+					grid.datagrid('reload');
+				}, 'json');
+			}
+		});
+	};
+	
 	var grantRoleFun = function(id) {
 		var dialog = parent.sy.modalDialog({
 			title : '修改角色',
@@ -91,7 +126,7 @@ a {
 				align : 'center',
 				sortable : true
 			} ,{
-				width : '350',
+				width : '300',
 				title : 'vip室名称',
 				align : 'center',
 				field : 'viproomName',
@@ -109,15 +144,38 @@ a {
 				align : 'center',
 				
 			},{
+				width : '100',
+				title : '机场状态',
+				field : 'activeState',
+				align : 'center',
+				formatter : function(value, row, index) {
+					switch (value) {
+					case 0:
+						return '启用';
+					case 1:
+						return '禁用';
+					}
+				}
+				
+			},{
 				title : '操作',
 				field : 'action',
-				width : '180',
+				width : '200',
 				align : 'center',
-				formatter : function(value, row) {
+				formatter : function(value, row,index) {
 					var str = '';
-					str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/> 编辑&nbsp;</a>";
-						str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.viproomId);
-					return str;
+					switch (row.activeState){
+						case 0:
+							str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/> 编辑&nbsp;</a>";
+							str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除&nbsp;', row.viproomId);
+							str +=  sy.formatString('<img class="iconImg ext-icon-note_delete" title="禁用" onclick="forbiddenUsing(\'{0}\');"/> 禁用', row.viproomId);
+							return str;
+						case 1:
+							str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/> 编辑&nbsp;</a>";
+							str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除&nbsp', row.viproomId);
+							str +=  sy.formatString('<img class="iconImg ext-icon-note_delete" title="启用" onclick="startUsing(\'{0}\');"/> 启用', row.viproomId);
+							return str;
+					}
 				}
 			} ] ],
 			toolbar : '#toolbar',
