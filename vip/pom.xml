@@ -85,7 +85,7 @@
 	</repositories>
 	<properties>
 		<shiro.version>1.2.1</shiro.version>
-		<spring.version>4.0.2.RELEASE</spring.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
 		<hibernate.version>4.1.6.Final</hibernate.version>
 		<spring-data-jpa.version>1.6.2.RELEASE</spring-data-jpa.version>
 		<druid.version>1.0.14</druid.version>
@@ -103,6 +103,8 @@
 		<slf4j.version>1.7.7</slf4j.version>
 		<aspectj.version>1.7.1</aspectj.version>
 		<jackson.version>2.2.3</jackson.version>
+		<spring.security.version>3.2.5.RELEASE</spring.security.version>
+		<spring.security.oauth.version>2.0.4.RELEASE</spring.security.oauth.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

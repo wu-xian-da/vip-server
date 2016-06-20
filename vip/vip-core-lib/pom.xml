@@ -317,7 +317,7 @@
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-core</artifactId>
-		    <version>3.2.4.RELEASE</version>
+		    <version>4.0.1.RELEASE</version>
 		</dependency>
        <!--  <dependency>
             <groupId>org.apache.httpcomponents</groupId>
