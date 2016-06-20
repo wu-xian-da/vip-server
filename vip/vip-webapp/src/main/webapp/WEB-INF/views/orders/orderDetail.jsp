@@ -77,13 +77,27 @@
 			</ul>
 			
 			<!-- 发票信息 -->
-			<div class="order-list-title">发票信息（${orderDetailInfo.invoiceFlag ==0 ? '未开' : '已开' }）</div>
-			<c:if test="${orderDetailInfo.invoiceFlag ==1}">
+			<div class="order-list-title">发票信息（
+				<c:if test="${orderDetailInfo.invoiceFlag ==0}">
+					未开
+				</c:if>
+				<c:if test="${orderDetailInfo.invoiceFlag ==1}">
+					发票未邮寄
+				</c:if>
+				<c:if test="${orderDetailInfo.invoiceFlag ==2}">
+					发票已邮寄
+				</c:if>
+				）
+			</div>
+			<c:if test="${orderDetailInfo.invoiceFlag != 0}">
 				<div>
 					<ul>
 						<li>邮寄地址：${invoice.address }</li>
 						<li>发票类型：${invoice.invoiceType ==1? '个人':'公司' }</li>
 						<li>发票抬头：${invoice.invoiceTitle}</li>
+						<c:if test="${orderDetailInfo.invoiceFlag == 2}">
+						<li>发票编号：${invoice.invoiceNo}</li>
+						</c:if>
 					</ul>
 				</div>
 			</c:if>

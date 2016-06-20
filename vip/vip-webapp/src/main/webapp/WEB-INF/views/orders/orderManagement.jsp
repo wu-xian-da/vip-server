@@ -395,9 +395,9 @@
         	$("#startTime").datebox("setValue","");
         	$("#endTime").datebox("setValue","");
         	$("#phoneOrUserName").val("");
-        	$("#airportIdSelect option[value='']").attr("selected","selected");
-        	$("#orderStateSelect option[value=5]").attr("selected","selected");
-        	$("#invoiceSelect option[value=3]").attr("selected","selected");
+        	$("#airportIdSelect").val("");
+        	$("#orderStateSelect").val('5');
+        	$("#invoiceSelect").val('3');
         })
 	</script>
 	

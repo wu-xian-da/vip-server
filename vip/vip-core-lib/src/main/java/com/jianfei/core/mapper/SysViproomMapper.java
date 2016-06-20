@@ -31,4 +31,10 @@ public interface SysViproomMapper {
     int updateByPrimaryKey(SysViproom record);
 
     List<SysViproom> getVipRoomList(SysAirport airport);
+    
+    //启用vip室功能
+    int startUsingByVipRommId(String viproomId);
+    
+    //禁用vip室功能
+    int forbideenUsingByVipRommId(String viproomId);
 }

@@ -169,4 +169,26 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	public SysViproom selVipRoomById(String viproomId) {
 		return sysViproomMapper.selectByPrimaryKey(viproomId);
 	}
+	
+	/**
+	 * 启用vip室功能
+	 * @param viproomId
+	 * @return
+	 */
+	@Override
+	public int startUsingByVipRommId(String viproomId) {
+		// TODO Auto-generated method stub
+		return sysViproomMapper.startUsingByVipRommId(viproomId);
+	}
+	
+	/**
+     * 禁用vip室功能
+     * @param viproomId
+     * @return
+     */
+	@Override
+	public int forbideenUsingByVipRommId(String viproomId) {
+		// TODO Auto-generated method stub
+		return sysViproomMapper.forbideenUsingByVipRommId(viproomId);
+	}
 }

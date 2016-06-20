@@ -91,12 +91,37 @@ public class VipRoomController extends BaseController {
 	 */
 	@RequestMapping(value = "delVipRoomById", method = RequestMethod.POST)
 	@ResponseBody
-	public MessageDto<AppVipcard> delVipRoomById(SysViproom viproom) {
+	public MessageDto<SysViproom> delVipRoomById(SysViproom viproom) {
 
 		vipRoomManagerImp.delVipRoom(viproom.getViproomId());
-		return new MessageDto<AppVipcard>().setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+		return new MessageDto<SysViproom>().setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
+	
+	/**
+	 * 启用vip室功能
+	 * @param viproom
+	 * @return
+	 */
+	@RequestMapping(value="startUsingVipRoomById",method = RequestMethod.POST)
+	@ResponseBody
+	public MessageDto<SysViproom> startUsingVipRoomById(SysViproom viproom) {
 
+		vipRoomManagerImp.startUsingByVipRommId(viproom.getViproomId());
+		return new MessageDto<SysViproom>().setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+	}
+	
+	/**
+	 * 禁用vip室功能
+	 * @param viproom
+	 * @return
+	 */
+	@RequestMapping(value="forbiddenUsingVipRoomById",method = RequestMethod.POST)
+	@ResponseBody
+	public MessageDto<SysViproom> forbiddenUsingVipRoomById(SysViproom viproom) {
+		vipRoomManagerImp.forbideenUsingByVipRommId(viproom.getViproomId());
+		return new MessageDto<SysViproom>().setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
+	}
+	
 	/**
 	 * 跳转到vip室添加页面 gotoAddVipRoomView
 	 * 
