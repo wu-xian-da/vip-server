@@ -1,9 +1,14 @@
 package com.jianfei.user;
 
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.GloabConfig;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.service.base.VipCardManager;
+import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +35,8 @@ public class SalerUserController {
 
     @Autowired
     private SaleUserManagerImpl saleUserManager;
-
+	@Autowired
+	private VipCardManager vipCardManager;
 
     /**
      * 用户登录
@@ -77,6 +83,24 @@ public class SalerUserController {
     }
 
 	/**
+	 * 验证卡片信息
+	 * @return
+	 */
+	@RequestMapping(value = "/validateCard")
+	@ResponseBody
+	public BaseMsgInfo validateCard(@RequestParam(value = "cardNo", required = true) String cardNo
+	) {
+		AppVipcard vipCard = vipCardManager.getVipCardByNo(cardNo);
+		if (vipCard == null || StringUtils.isBlank(vipCard.getCardNo())) {
+			return BaseMsgInfo.msgFail("卡号有误或系统暂未录入此卡信息，请联系相关人员添加此卡信息！");
+		}else if (!VipCardState.ACTIVE.getName().equals(vipCard.getCardState())){
+			return BaseMsgInfo.success(true);
+		}else {
+			return BaseMsgInfo.msgFail("卡号有误，此卡已激活");
+		}
+	}
+
+	/**
 	 * 修改头像
 	 * @return
 	 */
@@ -88,71 +112,8 @@ public class SalerUserController {
 		return BaseMsgInfo.success(flag);
 	}
 
-    /**
-     * 用户登录
-     * @param xmlObj 请求格式如下
-     * <?xml version="1.0" encoding="utf-8"?>
-		<COD-MS> 
-		  <SessionHead> 
-		    <Version>V1</Version>  
-		    <ServiceCode>COD201</ServiceCode>  
-		    <TransactionID>SOUFANCOD201201507056500288432</TransactionID>  
-		    <SrcSysID>yeepay</SrcSysID>  
-		    <DstSysID>SOUFAN</DstSysID>  
-		    <ReqTime>20150705182331</ReqTime>  
-		    <ExtendAtt>12</ExtendAtt>  
-		    <HMAC>7cd9b45ac13d6b27e55e3cc566f70d9b</HMAC> 
-		  </SessionHead>  
-		  <SessionBody> 
-		    <Employee_ID>123456</Employee_ID>  
-		    <Password>e10adc3949ba59abbe56e057f20f883e</Password>  
-		    <PosSn>H7NL00119897</PosSn>  
-		    <CustomerNo>10012075953</CustomerNo> 
-		  </SessionBody> 
-		</COD-MS>
 
-     * @return 响应格式如下
-     * <?xml version="1.0" encoding="utf-8"?>
-		<COD-MS>
-		  <SessionHead>
-		    <Version>V1.0</Version>
-		    <ServiceCode>COD201</ServiceCode>
-		    <TransactionID>SOUFANCOD201201507056500288432</TransactionID>
-		    <SrcSysID>yeepay</SrcSysID>
-		    <DstSysID>SOUFAN</DstSysID>
-		    <Result_Code>2</Result_Code>  
-		    <Result_Msg>成 功</Result_Msg>  
-		    <Resp_Time>20150705182330</Resp_Time>  
-		    <ExtendAtt>
-		      <Employee_ID>123456</Employee_ID>
-		    </ExtendAtt>  
-		    <HMAC>3d78b90547a0e08c5fbc2abe61f4afb0</HMAC> 
-		  </SessionHead>  
-		  <SessionBody>
-		    <ExtendAtt> 
-		      <Employee_Name>搜房电商</Employee_Name>  
-		      <Company_Code>SOUFUN</Company_Code>  
-		      <Company_Name>搜房网</Company_Name>  
-		      <Company_Addr>北京</Company_Addr>  
-		      <Company_Tel>00000000</Company_Tel> 
-		    </ExtendAtt>
-		  </SessionBody> 
-		</COD-MS>
-     */
-    @RequestMapping(value = "/poslogin")
-    @ResponseBody
-    public BaseMsgInfo yeepayLogin(@RequestParam(value = "uno", required = true) String xmlObj) {
-    	
-        boolean validate= saleUserManager.validatePassword("","");
-        if (validate){
 
-            VipTestVo vipTestVo=new VipTestVo("4219a91f-45d5-4a07-9e8e-3acbadd0c23e","d41df9fd-3d36-4a20-b0b7-1a1883c7439d",
-                    "read write trust","bearer",43199);
-            return BaseMsgInfo.success(vipTestVo);
-        }else {
-            return BaseMsgInfo.fail("");
-        }
-    }
     
     @RequestMapping(value = "/photoUpdate")
     @ResponseBody
