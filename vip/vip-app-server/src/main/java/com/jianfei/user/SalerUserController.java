@@ -60,7 +60,7 @@ public class SalerUserController {
     @ResponseBody
     public BaseMsgInfo getUser(@RequestParam(value = "uno", required = true) String uno
     ) {
-        User saleUser= saleUserManager.getSaleUser(uno);
+        User saleUser= saleUserManager.getSaleUserDetail(uno);
         return BaseMsgInfo.success(saleUser);
     }
 
@@ -73,8 +73,7 @@ public class SalerUserController {
     public BaseMsgInfo update(@RequestParam(value = "uno", required = false) String uno,
                              @RequestParam(value = "password", required = false) String password,
                              @RequestParam(value = "newPassword", required = false) String newPassword) {
-        boolean flag = saleUserManager.updatePassword(uno, password, newPassword);
-        return BaseMsgInfo.success(flag);
+        return saleUserManager.updatePassword(uno, password, newPassword);
     }
 
 	/**

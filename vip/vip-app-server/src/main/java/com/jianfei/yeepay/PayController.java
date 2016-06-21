@@ -11,6 +11,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jianfei.core.bean.User;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,7 +74,7 @@ public class PayController {
     
     /**
      * 用户登录
-     * @param xmlObj 请求格式如下
+     * @param request 请求格式如下
      * <?xml version="1.0" encoding="utf-8"?>
 		<COD-MS> 
 		  <SessionHead> 
@@ -157,13 +158,27 @@ public class PayController {
 			
 			if (serviceCode.equals("COD201")){
 				if (!hmacSend.equals(hmacAuth)){
-					result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, 4);
+					result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, null,4,"报文验证失败");
 				}else{
 					String eid = sessionBody.elementText("Employee_ID");
 					String password = sessionBody.elementText("Password");
 					//数据库验证用户
-					int resultCode = saleUserManager.yeepayLogin(eid, password);
-					result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, resultCode);
+					int resultCode;
+					String msg;
+					User user = saleUserManager.getSaleUser(eid);
+					if (user == null) {
+						resultCode = 11;
+						msg = "没有该用户";
+					} else {
+						if (user.getExtraPasswd().equals(password)) {
+							resultCode = 2;
+							msg = "登录成功";
+						} else {
+							resultCode = 10;
+							msg = "用户名或密码错误";
+						}
+					}
+					result = YeePayResponseBuilder.buildLoginResponse(sessionHead, sessionBody, user,resultCode,msg);
 				}
 				
 			}else if (serviceCode.equals("COD402")){//订单查询
@@ -173,6 +188,7 @@ public class PayController {
 				}else{
 					String orderNo = sessionBody.elementText("OrderNo");
 					OrderDetailInfo order = orderManager.returnOrderDetailInfoByOrderId(orderNo);
+					log.info(order);
 					if (order == null)
 						result = YeePayResponseBuilder.buildOrderQueryResponse(sessionHead, sessionBody, 3, 5, 
 								"", "", 0);
@@ -186,6 +202,7 @@ public class PayController {
 					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 3);
 				}else{
 					String orderNo = sessionBody.elementText("OrderNo");
+					log.info(orderNo);
 					orderManager.updateOrderStateByOrderIdEx(orderNo, 2);
 					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 2);
 				}
@@ -194,7 +211,7 @@ public class PayController {
 		} catch (DocumentException e1) {
 			e1.printStackTrace();
 		}
-	    
+		log.info(result);
 	    response.setContentType("text/xml; charset=utf-8");
 	    response.setCharacterEncoding("utf-8");
 	    try { 
@@ -214,7 +231,7 @@ public class PayController {
     public static class YeePayResponseBuilder{
     	static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     	
-    	public static String buildLoginResponse(Element sessionHead,Element sessionBody,int resultCode){
+    	public static String buildLoginResponse(Element sessionHead,Element sessionBody,User user,int resultCode,String msg){
     		
 			String eid = sessionBody.elementText("Employee_ID");
 			String transId = sessionHead.elementText("TransactionID");
@@ -237,16 +254,7 @@ public class PayController {
 	    	Element resultCodeEle = headEle.addElement("Result_Code");
 	    	resultCodeEle.setText(String.valueOf(resultCode));
 	    	Element resultMsgEle = headEle.addElement("Result_Msg");
-	    	if (resultCode == 2)
-	    		resultMsgEle.setText("登录成功");
-	    	else if (resultCode == 10)
-	    		resultMsgEle.setText("用户名或密码错误");
-	    	else if (resultCode == 11)
-	    		resultMsgEle.setText("没有该用户");
-	    	else if (resultCode == 4)
-	    		resultMsgEle.setText("报文验证失败");
-	    	else
-	    		resultMsgEle.setText("位置错误");
+			resultMsgEle.setText(msg);
 	    	Element respTimeEle = headEle.addElement("Resp_Time");
 	    	respTimeEle.setText(sdf.format(new Date()));
 	    	Element extendAttEle = headEle.addElement("ExtendAtt");
@@ -259,7 +267,12 @@ public class PayController {
 	    	Element extendAtt2Ele = bodyEle.addElement("ExtendAtt");
 	    	Element eid2Ele = extendAtt2Ele.addElement("Employee_ID");
 	    	eid2Ele.setText(eid);
-	    	Element companyCodeEle = extendAtt2Ele.addElement("Company_Code");
+			//添加登陆用户名
+			if (user != null) {
+				Element employeeName = extendAtt2Ele.addElement("Employee_Name");
+				employeeName.setText(user.getName());
+			}
+			Element companyCodeEle = extendAtt2Ele.addElement("Company_Code");
 	    	companyCodeEle.setText("opsmart");
 	    	
 	    	return YeepayUtils.hmacSign(document.asXML(), GloabConfig.getConfig("yeepay.key"));

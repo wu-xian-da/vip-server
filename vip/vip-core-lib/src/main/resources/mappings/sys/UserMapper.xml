@@ -86,10 +86,6 @@
 		SELECT * from sys_users where code =#{uno} AND state=0
 	</select>
 
-	<select id="getYeepayUser" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{loginName} AND state=0
-	</select>
-
 	<insert id="save" parameterType="User">
 		<![CDATA[
 			INSERT INTO  sys_users (
