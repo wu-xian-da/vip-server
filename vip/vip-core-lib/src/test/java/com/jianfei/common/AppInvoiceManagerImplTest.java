@@ -9,17 +9,6 @@ package com.jianfei.common;
  */
 
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jianfei.core.service.base.AppInvoiceManager;
-import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
-import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 
 
 

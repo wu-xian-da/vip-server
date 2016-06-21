@@ -21,7 +21,7 @@ import com.jianfei.core.common.enu.MsgType;
 public class CacheCons {
 
 	public interface Sys {
-		public static final String SYS_ROLE_LIST = "sys_role_list";
+		public static final String SYS_ROLE_LIST = "sys:role:list";
 		public static final String SYS_RESOURCE_LIST = "sys_resource_list";
 
 		/**
@@ -29,37 +29,37 @@ public class CacheCons {
 		 *
 		 * @version 1.0.0
 		 */
-		public static final String LAST_1_MONTH = "last_1_month";
+		public static final String LAST_1_MONTH = "sys:last1:month";
 		/**
 		 * LAST_2_MONTH:TODO（按照省统计上上个月开卡数，月底清空）
 		 *
 		 * @version 1.0.0
 		 */
-		public static final String LAST_2_MONTH = "last_2_month";
+		public static final String LAST_2_MONTH = "sys:last2:month";
 		/**
 		 * LAST_3_MONTH:TODO（按照省统计上上上个月开卡数，月底清空）
 		 *
 		 * @version 1.0.0
 		 */
-		public static final String LAST_3_MONTH = "last_3_month";
+		public static final String LAST_3_MONTH = "sys:last3:month";
 		/**
 		 * LAST_MONTH_TOP:TODO（全国前三个省份，售卡统计,月底清空）
 		 *
 		 * @version 1.0.0
 		 */
-		public static final String LAST_MONTH_TOP3 = "last_month_top3";
+		public static final String SYS_TOP3_MONTH = "sys:top3:month";
 		/**
-		 * LAST_MONTH_TOTAL_ZHUGUAN:TODO(主管历史开卡总数，月底清除)
+		 * LAST_MONTH_TOTAL_ZHUGUAN:TODO(主管管辖区域历史开卡总数，月底清除)
 		 *
 		 * @version 1.0.0
 		 */
-		public static final String LAST_MONTH_TOTAL_ZHUGUAN = "last_month_total_zhuguan";
+		public static final String SYS_HISTORY_ORDERS_ZHUGUAN = "sys:history:orders:zhuguan";
 		/**
 		 * LAST_MONTH_All_ZHUGUAN:TODO（主管查看上个月的订单统计）
 		 *
 		 * @version 1.0.0
 		 */
-		public static final String LAST_MONTH_All_ZHUGUAN = "last_month_all_zhuguan";
+		public static final String SYS_LASTMONTH_ORDERS_ZHUGUAN = "sys:lastmonth:orders:zhuguan";
 
 	}
 

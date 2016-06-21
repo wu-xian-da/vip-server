@@ -37,7 +37,6 @@ import com.jianfei.core.service.stat.ArchiveManager;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml",
 		"classpath:spring-context-jedis.xml" })
-@Transactional
 public class ArchiveManagerImplTest {
 
 	@Autowired
@@ -150,7 +149,8 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDailyOrderArchice() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("maxTime", DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
+		Date date = DateUtil.getDate("2016-05-04", "yyyy-MM-dd");
+		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
 		archiveManager.baseDailyExtract(map);
 	}
 

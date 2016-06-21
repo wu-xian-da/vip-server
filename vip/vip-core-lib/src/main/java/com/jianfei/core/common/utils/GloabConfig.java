@@ -74,9 +74,9 @@ public class GloabConfig {
 	public static final int OPEN = 0;
 
 	//系统用户
-	public static final Integer BUSSNISS_USER = 0;
-	public static final Integer SYSTEM_USER = 1;
-	public static final Integer SUPER_ADMIN = 2;
+	public static final Integer BUSSNISS_USER = 3;//业务员
+	public static final Integer SYSTEM_USER = 1;//系统用户
+	public static final Integer SUPER_ADMIN = 2;//超级管理员
 	
 
 	/**
