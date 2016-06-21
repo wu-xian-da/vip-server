@@ -39,14 +39,11 @@ public class SaleUserManagerImpl implements SaleUserManager {
     @Override
     public boolean validatePassword(String userNo, String password) {
         List<User> users=userMapper.getUserByUno(userNo);
-        if (users == null ||users.isEmpty()|| StringUtils.isBlank(users.get(0).getPassword())) {
+        if (users == null ||users.isEmpty()||users.get(0) == null || StringUtils.isBlank(users.get(0).getExtraPasswd())) {
             return false;
         }
-        if (users.get(0) == null || StringUtils.isBlank(users.get(0).getPassword())) {
-            return false;
-        }
-        SimpleHash simpleHash = new SimpleHash("md5", password, users.get(0).getSalt());
-        return users.get(0).getPassword().equals(simpleHash.toString());
+        String md5Password = MD5.MD5Encode(password);
+        return users.get(0).getExtraPasswd().equals(md5Password);
     }
 
     /**
