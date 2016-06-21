@@ -70,7 +70,7 @@
 				<![CDATA[and u.create_time <= #{ends}]]>
 			</if>
 			<if test="uno!=null">
-				<![CDATA[and u.code <= #{uno}]]>
+				<![CDATA[and u.code = #{uno}]]>
 			</if>
 		</where>
 		GROUP BY u.`name`
