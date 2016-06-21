@@ -220,8 +220,8 @@ public class OrderManagerImpl implements OrderManager {
 	 * 根据订单号返回用户vip卡可退金额
 	 */
 	@Override
-	public float remainMoney(String orderId) {
-		float remainMoney = 0;
+	public double remainMoney(String orderId) {
+		double remainMoney = 0.00;
 		//1、app_order_card表中返回卡号，用户初始金额
 		AppOrderCard appOrderCard = appOrderCardMapper.getAppOrderCard(orderId);
 		if(appOrderCard!= null){
@@ -229,6 +229,9 @@ public class OrderManagerImpl implements OrderManager {
 			int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
 			//3、计算用户vip卡剩余金额
 			remainMoney = (float) (appOrderCard.getInitMoney()-count*200*0.8-100);
+			if(remainMoney < 0){
+				remainMoney = 0.00;
+			}
 			
 		}
 		System.out.println("float remainMoney="+remainMoney);

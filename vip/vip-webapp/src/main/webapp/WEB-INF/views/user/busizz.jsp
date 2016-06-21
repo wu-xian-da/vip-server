@@ -24,11 +24,11 @@
 		});
 	};
 	
-	var initPwd = function(id,code){
+	var initPwd = function(id,salt){
 		$.ajax({
 			  type: 'POST',
 			  url : sy.contextPath + '/busizz/initPwd',
-			  data: {id:id,code:code},
+			  data: {id:id,salt:salt},
 			  success: function(result){
 				  if (result.ok) {
 					  layer.alert(result.msgBody, {
@@ -129,8 +129,9 @@
 					<%if (anyPermissionsTag.showTagBody("system:busizz:update")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑&nbsp;', row.id);
 					<%}%>
+					console.info(row.salt);
 					<%if (anyPermissionsTag.showTagBody("system:busizz:initPwd")) {%>
-					 str += sy.formatString('&nbsp;<img class="iconImg ext-icon-lock_edit" title="重置密码" onclick="initPwd(\'{0}\',\'{1}\');"/> 重置密码', row.id,row.code);
+					 str += sy.formatString('&nbsp;<img class="iconImg ext-icon-lock_edit" title="重置密码" onclick="initPwd(\'{0}\',\'{1}\');"/> 重置密码', row.id,row.salt);
 					<%}%>
 						return str;
 				}

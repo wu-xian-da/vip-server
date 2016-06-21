@@ -278,7 +278,7 @@ public class OrderController extends BaseController {
 				appOrder.setOrderStateName("正在审核");
 				JSONObject outData = new JSONObject(); 
 				orderId = appOrder.getOrderId();
-				float remainMoney = orderManagerImpl.remainMoney(orderId);
+				double remainMoney = orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", appOrder.getOrderId());
 				outData.put("phone", appOrder.getCustomerPhone());
@@ -298,7 +298,7 @@ public class OrderController extends BaseController {
 				//退款
 				JSONObject outData = new JSONObject(); 
 				orderId = appOrder.getOrderId();
-				float remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
+				double remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
 				AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", orderId);//订单号
@@ -377,7 +377,7 @@ public class OrderController extends BaseController {
 					//退款
 					JSONObject outData = new JSONObject(); 
 					orderId = appOrder.getOrderId();
-					float remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
+					double remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
 					AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
 					outData.put("remainMoney", remainMoney);
 					outData.put("orderId", orderId);//订单号
@@ -476,7 +476,7 @@ public class OrderController extends BaseController {
 		//发送短信****
 		
 		JSONObject outData = new JSONObject(); 
-		float remainMoney = orderManagerImpl.remainMoney(orderId);
+		double remainMoney = orderManagerImpl.remainMoney(orderId);
 		outData.put("remainMoney", remainMoney);
 		outData.put("orderId",orderId);
 		outData.put("phone", phone);

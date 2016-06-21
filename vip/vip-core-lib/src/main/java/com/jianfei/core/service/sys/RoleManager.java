@@ -74,4 +74,5 @@ public interface RoleManager {
 	 */
 	Map<String, Object> selectRoleById(Long id);
 
+	List<Role> getAll();
 }

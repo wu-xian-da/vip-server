@@ -24,12 +24,10 @@ import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.shrio.ShiroDbRealm;
 import com.jianfei.core.common.utils.GloabConfig;
-import com.jianfei.core.common.utils.JsonTreeData;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.common.utils.TreeNodeUtil;
 import com.jianfei.core.mapper.RoleMapper;
 import com.jianfei.core.service.sys.RoleManager;
 
@@ -179,5 +177,19 @@ public class RoleManagerImpl implements RoleManager {
 	@Override
 	public Map<String, Object> selectRoleById(Long id) {
 		return roleMapper.selectRoleById(id);
+	}
+
+	@Override
+	public List<Role> getAll() {
+		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_ROLE_LIST);
+		if (null != object) {
+			return (List<Role>) object;
+		}
+		MessageDto<List<Role>> messageDto = get(new MapUtils.Builder().build());
+		if (messageDto.isOk()) {
+			JedisUtils.setObject(CacheCons.Sys.SYS_ROLE_LIST,
+					messageDto.getData(), 0);
+		}
+		return messageDto.getData();
 	}
 }
