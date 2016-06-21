@@ -2,6 +2,7 @@ package com.jianfei.core.service.user.impl;
 
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.user.SaleUserManager;
 import com.tencent.common.MD5;
@@ -56,6 +57,18 @@ public class SaleUserManagerImpl implements SaleUserManager {
      */
     @Override
     public User getSaleUser(String userNo) {
+        List<User> list=userMapper.getUserByUno(userNo);
+        return list == null || list.isEmpty() ? null : list.get(0);
+    }
+
+    /**
+     * 根据用户工号获取用户信息
+     *
+     * @param userNo
+     * @return
+     */
+    @Override
+    public User getSaleUserDetail(String userNo) {
         HashMap map = new HashMap();
         map.put("uno", userNo);
         List<User> list = userMapper.get(map);
@@ -71,16 +84,16 @@ public class SaleUserManagerImpl implements SaleUserManager {
      * @return
      */
     @Override
-    public boolean updatePassword(String userNo, String password, String newPassword) {
-        List<User> users=userMapper.getUserByUno(userNo);
-        if (users == null ||users.isEmpty()|| StringUtils.isBlank(users.get(0).getPassword())) {
-            return false;
+    public BaseMsgInfo updatePassword(String userNo, String password, String newPassword) {
+        List<User> users = userMapper.getUserByUno(userNo);
+        if (users == null || users.isEmpty() || StringUtils.isBlank(users.get(0).getPassword())) {
+            return BaseMsgInfo.msgFail("用户不存在或已被禁用");
         }
         SimpleHash simpleHash = new SimpleHash("md5", password, users.get(0).getSalt());
         SimpleHash nweHash = new SimpleHash("md5", newPassword, users.get(0).getSalt());
-        String md5Password=  MD5.MD5Encode(newPassword);
-       int num= userMapper.updatePasswordByUno(userNo, simpleHash.toString(), nweHash.toString(),md5Password);
-        return num == 1 ? true : false;
+        String md5Password = MD5.MD5Encode(newPassword);
+        int num = userMapper.updatePasswordByUno(userNo, simpleHash.toString(), nweHash.toString(), md5Password);
+        return num == 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("用户密码更新失败");
     }
 
     /**
@@ -95,17 +108,5 @@ public class SaleUserManagerImpl implements SaleUserManager {
         int num = userMapper.updatePhotoPath(userNo, photoPath);
         return num == 1 ? true : false;
     }
-    
-    public int yeepayLogin(String userNo,String password){
-    	User user = userMapper.getYeepayUser(userNo);
-    	if (user == null)
-    		return 11;
-    	else{
-    		if (user.getExtraPasswd().equals(password))
-        		return 2;
-    		else 
-    			return 10;
-    	}
-    	
-    }
+
 }
