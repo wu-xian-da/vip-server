@@ -78,59 +78,56 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) {
+    public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) throws InvocationTargetException, IllegalAccessException {
 
-		try {
-			//1、校验用户和手机验证码
-			boolean flag=validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER,addInfoDto.getCode());
-			if (!flag){
-				return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
-			}
-			//2、添加用户信息
-			AppCustomer customer= new AppCustomer();
-			BeanUtils.copyProperties(customer,addInfoDto);
-			vipUserManager.addUser(customer);
-			//3、根据查询VIP号查询卡片信息
-			AppVipcard vipCard=vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
-			if (vipCard == null) {
-				return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
-			}
-			vipCard.setCustomerId(customer.getCustomerId());
-			vipCardManager.updateVipCard(vipCard);
-
-			//4、添加订单信息
-			AppOrders orders=new AppOrders();
-			BeanUtils.copyProperties(orders,addInfoDto);
-			orders.setSaleNo(addInfoDto.getUno());
-			orders.setCustomerId(customer.getCustomerId());
-			orders.setPayMoney(vipCard.getInitMoney());
-			orders.setOrderId(IdGen.uuid());
-			orders.setOrderTime(new Date());
-			orders.setRemark1(vipCard.getCardName());
-			orders.setOrderState(VipOrderState.NOT_PAY.getName());
-			orders.setDtflag(StateType.EXIST.getName());
-			orders.setInvoiceFlag(0);
-			appOrdersMapper.insertSelective(orders);
-
-            //5、订单卡表
-			AppOrderCard appOrderCard=new AppOrderCard();
-			appOrderCard.setId(IdGen.uuid());
-			appOrderCard.setOrderId(orders.getOrderId());
-			appOrderCard.setCardNo(addInfoDto.getVipCardNo());
-			appOrderCard.setCardNum(1);
-			appOrderCard.setInitMoney(vipCard.getInitMoney());
-			appOrderCard.setCardType(vipCard.getCardType());
-			appOrderCardMapper.insert(appOrderCard);
-			addInfoDto.setOrderId(orders.getOrderId());
-			addInfoDto.setMoney(vipCard.getInitMoney());
-			return BaseMsgInfo.success(addInfoDto);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-
+		//1、校验用户和手机验证码
+		boolean flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
+		if (!flag) {
+			return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
 		}
-		return new BaseMsgInfo().setCode(-1).setMsg("开卡失败");
+
+		//2、根据查询VIP号查询卡片信息
+		AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
+		if (vipCard == null) {
+			return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
+		}
+
+		//3、添加用户信息
+		AppCustomer customer = new AppCustomer();
+		BeanUtils.copyProperties(customer, addInfoDto);
+		vipUserManager.addUser(customer);
+
+
+		//4、添加订单信息
+		AppOrders orders = new AppOrders();
+		BeanUtils.copyProperties(orders, addInfoDto);
+		orders.setSaleNo(addInfoDto.getUno());
+		orders.setCustomerId(customer.getCustomerId());
+		orders.setPayMoney(vipCard.getInitMoney());
+		orders.setOrderId(IdGen.uuid());
+		orders.setOrderTime(new Date());
+		orders.setRemark1("亿出行VIP卡");
+		orders.setOrderState(VipOrderState.NOT_PAY.getName());
+		orders.setDtflag(StateType.EXIST.getName());
+		orders.setInvoiceFlag(0);
+		appOrdersMapper.insertSelective(orders);
+
+		//5、卡表及订单卡表
+		vipCard.setCustomerId(customer.getCustomerId());
+		vipCardManager.updateVipCard(vipCard);
+		AppOrderCard appOrderCard = new AppOrderCard();
+		appOrderCard.setId(IdGen.uuid());
+		appOrderCard.setOrderId(orders.getOrderId());
+		appOrderCard.setCardNo(addInfoDto.getVipCardNo());
+		appOrderCard.setCardNum(1);
+		appOrderCard.setInitMoney(vipCard.getInitMoney());
+		appOrderCard.setCardType(vipCard.getCardType());
+		appOrderCardMapper.insert(appOrderCard);
+
+		addInfoDto.setOrderId(orders.getOrderId());
+		addInfoDto.setMoney(vipCard.getInitMoney());
+		return BaseMsgInfo.success(addInfoDto);
+
     }
 
 

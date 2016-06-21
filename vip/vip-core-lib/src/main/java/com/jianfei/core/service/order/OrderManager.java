@@ -1,5 +1,6 @@
 package com.jianfei.core.service.order;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public interface OrderManager {
      *
      * @return
      */
-    BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto);
+    BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) throws InvocationTargetException, IllegalAccessException;
 
     /**
      * 更新订单信息付款
