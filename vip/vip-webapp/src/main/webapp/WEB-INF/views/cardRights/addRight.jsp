@@ -34,7 +34,8 @@
 			<div class="clerk-container-item">
 				<label>素材类型：</label>
 				<select name="type">
-					<option value="1">vip卡权益</option>
+					<option value="1">登录前vip卡权益</option>
+					<option value="4">登录后vip卡权益</option>
 					<option value="2">常见问题</option>
 					<option value="3">关于</option>
 				</select>

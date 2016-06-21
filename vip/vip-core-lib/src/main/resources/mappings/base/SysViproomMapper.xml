@@ -21,6 +21,7 @@
     <result column="header_phone" property="headerPhone"/>
     <result column="header_name" property="headerName"/>
     <result column="active_state" property="activeState"/>
+    <result column="create_time" property="createTime"/>
   </resultMap>
 
 
@@ -34,6 +35,7 @@
   	    <if test="searchContent != null">
   	    	and concat(vr.viproom_id,vr.viproom_name,ap.header_name,ap.header_phone,ap.airport_name) like CONCAT('%','${searchContent}','%' )
   	    </if>
+  	    order by create_time desc
   </select>
   
   
@@ -109,13 +111,13 @@
       singleconsume_money, room_num, open_time, 
       end_time, longitude, province, 
       city, country, address, 
-      remark1, dtflag, Latitude
+      remark1, dtflag, Latitude,create_time
       )
     values (#{viproomId,jdbcType=VARCHAR}, #{airportId,jdbcType=VARCHAR}, #{viproomName,jdbcType=VARCHAR}, 
       #{singleconsumeMoney,jdbcType=REAL}, #{roomNum,jdbcType=INTEGER}, #{openTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{longitude,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
       #{city,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{remark1,jdbcType=VARCHAR}, #{dtflag,jdbcType=INTEGER}, #{latitude,jdbcType=VARBINARY}
+      #{remark1,jdbcType=VARCHAR}, #{dtflag,jdbcType=INTEGER}, #{latitude,jdbcType=VARBINARY},#{createTime}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jianfei.core.bean.SysViproom" >
@@ -261,6 +263,9 @@
       </if>
       <if test="latitude != null" >
         Latitude = #{latitude,jdbcType=VARBINARY},
+      </if>
+      <if test="createTime != null">
+      	create_time = #{createTime}
       </if>
     </set>
     where viproom_id = #{viproomId,jdbcType=VARCHAR}

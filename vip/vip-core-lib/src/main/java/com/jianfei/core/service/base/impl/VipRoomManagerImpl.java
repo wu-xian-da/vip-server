@@ -104,7 +104,7 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	public void updateVipRoom(SysViproom viproom) {
 		int updateFlag =0;
 		try {
-			sysViproomMapper.updateByPrimaryKey(viproom);
+			sysViproomMapper.updateByPrimaryKeySelective(viproom);
 		} catch (Exception e) {
 			e.printStackTrace();
 			updateFlag = 1;

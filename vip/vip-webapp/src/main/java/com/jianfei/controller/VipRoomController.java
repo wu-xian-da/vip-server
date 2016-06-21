@@ -8,6 +8,7 @@
 package com.jianfei.controller;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,6 +173,7 @@ public class VipRoomController extends BaseController {
 		}
 		room.setViproomId(viproomId);
 		room.setDtflag(DtFlagType.NOT_DELETE.getName());
+		room.setCreateTime(new Date());
 		vipRoomManagerImp.addVipRoom(room);
 
 		return "redirect:gotoVipRoomView";
@@ -252,6 +254,7 @@ public class VipRoomController extends BaseController {
 
 		// 更新vip室信息
 		room.setDtflag(DtFlagType.NOT_DELETE.getName());
+		room.setCreateTime(new Date());
 		vipRoomManagerImp.updateVipRoom(room);
 
 		return "redirect:gotoVipRoomView";

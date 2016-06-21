@@ -36,19 +36,28 @@
 				<label>素材类型：</label>
 				<select name="type">
 					<c:if test="${appConfig.type==1 }">
-						<option value="1" selected="selected">vip卡权益</option>
+						<option value="1" selected="selected">登录前vip卡权益</option>
+						<option value="4">登录后vip卡权益</option>
 						<option value="2">常见问题</option>
 						<option value="3">关于</option>
 					</c:if>
 					<c:if test="${appConfig.type==2 }">
-						<option value="1">vip卡权益</option>
+						<option value="1">登录前vip卡权益</option>
+						<option value="4">登录后vip卡权益</option>
 						<option value="2" selected="selected">常见问题</option>
 						<option value="3">关于</option>
 					</c:if>
 					<c:if test="${appConfig.type==3 }">
-						<option value="1">vip卡权益</option>
+						<option value="1">登录前vip卡权益</option>
+						<option value="4">登录后vip卡权益</option>
 						<option value="2">常见问题</option>
 						<option value="3" selected="selected">关于</option>
+					</c:if>
+					<c:if test="${appConfig.type==4 }">
+						<option value="1">登录前vip卡权益</option>
+						<option value="4" selected="selected">登录后vip卡权益</option>
+						<option value="2">常见问题</option>
+						<option value="3">关于</option>
 					</c:if>
 					
 				</select>
