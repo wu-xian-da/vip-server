@@ -37,6 +37,7 @@
 				u.id,
 				u.`code`,
 				u.`name`,
+				u.salt,
 				GROUP_CONCAT(DISTINCT ap.`airport_id`) AS 'ariPortsIds',
 				GROUP_CONCAT(DISTINCT ap.`airport_name`) AS 'ariPortsNames',
 				u.phone,
