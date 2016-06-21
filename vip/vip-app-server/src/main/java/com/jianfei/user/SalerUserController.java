@@ -88,9 +88,9 @@ public class SalerUserController {
 	 */
 	@RequestMapping(value = "/validateCard")
 	@ResponseBody
-	public BaseMsgInfo validateCard(@RequestParam(value = "cardNo", required = true) String cardNo
+	public BaseMsgInfo validateCard(@RequestParam(value = "vipCardNo", required = true) String vipCardNo
 	) {
-		AppVipcard vipCard = vipCardManager.getVipCardByNo(cardNo);
+		AppVipcard vipCard = vipCardManager.getVipCardByNo(vipCardNo);
 		if (vipCard == null || StringUtils.isBlank(vipCard.getCardNo())) {
 			return BaseMsgInfo.msgFail("卡号有误或系统暂未录入此卡信息，请联系相关人员添加此卡信息！");
 		}else if (!VipCardState.ACTIVE.getName().equals(vipCard.getCardState())){

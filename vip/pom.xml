@@ -82,7 +82,7 @@
 	</repositories>
 	<properties>
 		<shiro.version>1.2.1</shiro.version>
-		<spring.version>4.0.2.RELEASE</spring.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
 		<hibernate.version>4.1.6.Final</hibernate.version>
 		<spring-data-jpa.version>1.6.2.RELEASE</spring-data-jpa.version>
 		<druid.version>1.0.14</druid.version>
