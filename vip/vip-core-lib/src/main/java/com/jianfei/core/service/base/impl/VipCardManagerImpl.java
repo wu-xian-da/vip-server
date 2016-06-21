@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-
+import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -140,7 +140,8 @@ public class VipCardManagerImpl implements VipCardManager {
 							case HSSFCell.CELL_TYPE_FORMULA:
 								break;
 							case HSSFCell.CELL_TYPE_NUMERIC:
-								value += cell.getNumericCellValue() + ",";
+								HSSFDataFormatter dataFormatter = new HSSFDataFormatter();
+								value += dataFormatter.formatCellValue(cell)+",";
 								break;
 							case HSSFCell.CELL_TYPE_STRING:
 								value += cell.getStringCellValue() + ",";
