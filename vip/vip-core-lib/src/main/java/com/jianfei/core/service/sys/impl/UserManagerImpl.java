@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,8 +117,6 @@ public class UserManagerImpl implements UserManaer<User> {
 	@Override
 	public MessageDto<String> saveUser(User user, String arids, String roleid) {
 		MessageDto<String> messageDto = new MessageDto<String>();
-		System.out
-				.println("----------------------------------------------------------");
 		Long id = 0l;
 		if (!StringUtils.isEmpty(user.getLoginName())) {
 			User u = userMapper.getUserByName(StringUtils.trim(user
@@ -135,6 +132,7 @@ public class UserManagerImpl implements UserManaer<User> {
 				// 设置APP端登入密码
 				user.setExtraPasswd(PasswdHelper.passwdProdece(roleid,
 						roelManager, StringUtils.EMPTY));
+				user.setState(GloabConfig.OPEN);
 				userMapper.save(user);
 				User u2 = userMapper.getUserByName(user.getLoginName());
 				id = u2.getId();

@@ -6,6 +6,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.service.sys.RoleManager;
+import com.tencent.common.MD5;
 
 public class PasswdHelper {
 
@@ -27,6 +28,11 @@ public class PasswdHelper {
 		return StringUtils.EMPTY;
 	}
 
+	public static void main(String[] args) {
+		System.out.println(new MD5().MD5Encode("jingli123456"));
+		System.out.println( new SimpleHash("md5", "jingli123456"));
+	}
+
 	public static String passwdProdece(String roelId, RoleManager roleManager,
 			String salt) {
 		String passwd = passwdInit(roelId, roleManager);
@@ -37,6 +43,6 @@ public class PasswdHelper {
 		if (!StringUtils.isEmpty(salt)) {
 			return new SimpleHash("md5", passwd, salt).toString();
 		}
-		return new SimpleHash("md5", passwd).toString();
+		return new MD5().MD5Encode(passwd);
 	}
 }

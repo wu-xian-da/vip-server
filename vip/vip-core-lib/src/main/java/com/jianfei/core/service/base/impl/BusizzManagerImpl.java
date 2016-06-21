@@ -111,6 +111,7 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 				return messageDto.setMsgBody("工号已经存在,请更换...");
 			} else if (null == u && 0 == user.getId()) {
 				// 保存用户
+				user.setState(GloabConfig.OPEN);
 				busizzMaapper.save(user);
 				User u2 = busizzMaapper.getUserByCode(StringUtils.trim(user
 						.getCode()));
