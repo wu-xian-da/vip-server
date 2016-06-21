@@ -69,7 +69,7 @@
 				AND a.`month` = #{month}
 			) aoa1 ON aoa1.airport_id = ua.airport_id
 			WHERE
-				u.user_type = 0]]>
+				u.user_type = 3]]>
 		<if test="name!=null">
 			and u.name like CONCAT('%', #{name}, '%')
 		</if>
@@ -85,7 +85,7 @@
 
 	</select>
 	<select id="getUserByCode" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{code} and user_type=0;
+		SELECT * from sys_users where code =#{code} and user_type=3;
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -161,7 +161,7 @@
 
 	<delete id="delete" parameterType="Long">
 		<![CDATA[
-			update sys_users set dtflag =1 where id=#{id} and user_type=0;
+			update sys_users set dtflag =1 where id=#{id} and user_type=3;
 		]]>
 	</delete>
 

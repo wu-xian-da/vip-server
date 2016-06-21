@@ -77,6 +77,8 @@
 							</c:forEach>
 						</select>
 					</td>
+					<th>工号</th>
+					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true"  /></td>
 				</tr>
 				<tr>
 					<td colspan="4">

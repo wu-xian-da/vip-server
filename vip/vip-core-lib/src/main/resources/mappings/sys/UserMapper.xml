@@ -87,7 +87,7 @@
 	</select>
 
 	<select id="getYeepayUser" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{loginName} and (user_type=0) AND state=0
+		SELECT * from sys_users where code =#{loginName} and (user_type=3) AND state=0
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -106,7 +106,8 @@
 				  `update_time`,
 				  `salt`,
 				  `dtflag`,
-				  extra_passwd
+				  extra_passwd,
+				  code
 				) 
 				VALUES
 				  (
@@ -123,7 +124,8 @@
 				    #{updatedatetime},
 				    #{salt},
 				    #{dtflag},
-				    #{extraPasswd}
+				    #{extraPasswd},
+				    #{code}
 				  )
 			   ]]>
 	</insert>
@@ -146,8 +148,8 @@
 			<if test="phone!=null">
 				,phone=#{phone}
 			</if>
-			<if test="photo!=null">
-				,photo=#{photo}
+			<if test="code!=null and code!=''">
+				,code=#{code}
 			</if>
 			<if test="userType!=null">
 				,sex=#{userType}

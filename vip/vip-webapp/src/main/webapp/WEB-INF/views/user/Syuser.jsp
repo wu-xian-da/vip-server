@@ -83,6 +83,10 @@
 				title : '角色',
 				field : 'roelNames'
 			}, {
+				width : '120',
+				title : '工号',
+				field : 'code'
+			}, {
 				title : '操作',
 				field : 'action',
 				align : 'center',
