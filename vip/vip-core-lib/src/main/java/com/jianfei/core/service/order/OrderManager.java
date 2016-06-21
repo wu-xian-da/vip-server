@@ -88,7 +88,7 @@ public interface OrderManager {
      *float
      * @version  1.0.0
      */
-    float remainMoney(String orderId);
+    double remainMoney(String orderId);
     
     /**
      * guo.jian
