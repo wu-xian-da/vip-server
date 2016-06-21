@@ -43,7 +43,7 @@
 	
 				<div class="order-condition-item">
 					<select name="" id="orderStateSelect">
-						<option value="10">全部退款状态</option>
+						<option value="10">全部订单状态</option>
 						<option value="3">审核通过</option>
 						<option value="4">已退款</option>
 					</select>

@@ -384,9 +384,16 @@
         	//手机号后置用户姓名
         	var phoneOrUserName = $("#phoneOrUserName").val();
         	
-        	var url = "orderList?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
-        			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
-        	$('#tt').datagrid({url:url});
+        	//判断结束时间是否大于开始时间
+        	if(endTime < startTime ){
+        		$.messager.alert('提示','结束时间不能小于开始时间！','warning'); 
+        	}else{
+        		var url = "orderList?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
+    			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
+    			$('#tt').datagrid({url:url});
+        	}
+        	
+        	
         	
         })
         
