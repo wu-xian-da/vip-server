@@ -35,7 +35,8 @@
 			GROUP_CONCAT(distinct r.`id`) AS 'roles.id',
 			GROUP_CONCAT(distinct r.`name`) AS 'roles.name',
 			GROUP_CONCAT(distinct r.`role_type`) AS 'roles.roleType',
-			GROUP_CONCAT(distinct ap.`airport_name`) AS 'ariPorts.name'
+			GROUP_CONCAT(distinct ap.`airport_name`) AS 'ariPorts.name',
+			GROUP_CONCAT(DISTINCT ap.airport_id) AS 'ariPorts.id'
 		FROM
 			`sys_users` u
 		LEFT JOIN `sys_use_role` ur ON u.`id` = ur.`user_id`
@@ -86,9 +87,6 @@
 		SELECT * from sys_users where code =#{uno} AND state=0
 	</select>
 
-	<select id="getYeepayUser" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{loginName} and (user_type=3) AND state=0
-	</select>
 
 	<insert id="save" parameterType="User">
 		<![CDATA[
