@@ -1,14 +1,9 @@
 package com.jianfei.user;
 
-import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.GloabConfig;
-import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
-import com.jianfei.core.service.base.VipCardManager;
-import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +30,7 @@ public class SalerUserController {
 
     @Autowired
     private SaleUserManagerImpl saleUserManager;
-	@Autowired
-	private VipCardManager vipCardManager;
+
 
     /**
      * 用户登录
@@ -82,23 +76,7 @@ public class SalerUserController {
         return saleUserManager.updatePassword(uno, password, newPassword);
     }
 
-	/**
-	 * 验证卡片信息
-	 * @return
-	 */
-	@RequestMapping(value = "/validateCard")
-	@ResponseBody
-	public BaseMsgInfo validateCard(@RequestParam(value = "vipCardNo", required = true) String vipCardNo
-	) {
-		AppVipcard vipCard = vipCardManager.getVipCardByNo(vipCardNo);
-		if (vipCard == null || StringUtils.isBlank(vipCard.getCardNo())) {
-			return BaseMsgInfo.msgFail("卡号有误或系统暂未录入此卡信息，请联系相关人员添加此卡信息！");
-		}else if (!VipCardState.ACTIVE.getName().equals(vipCard.getCardState())){
-			return BaseMsgInfo.success(true);
-		}else {
-			return BaseMsgInfo.msgFail("卡号有误，此卡已激活");
-		}
-	}
+
 
 	/**
 	 * 修改头像
