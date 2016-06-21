@@ -44,8 +44,25 @@ public class SysViproom {
     
     private Integer activeState;//机场状态
     
+    private Date createTime;//创建时间
+    
+    
 
     
+
+	/**
+	 * @return the createTime
+	 */
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	/**
+	 * @param createTime the createTime to set
+	 */
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 	/**
 	 * @return the activeState
