@@ -2,9 +2,13 @@ package com.jianfei.order;
 
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.common.enu.VipCardState;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.OrderAddInfoDto;
+import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +33,32 @@ public class OrderController {
 	private static Log log = LogFactory.getLog(OrderController.class);
 	@Autowired
 	private OrderManagerImpl orderManager;
+
+	@Autowired
+	private VipCardManager vipCardManager;
+
+	/**
+	 * 验证卡片信息
+	 * @return
+	 */
+	@RequestMapping(value = "/validateCard")
+	@ResponseBody
+	public BaseMsgInfo validateCard(@RequestParam(value = "vipCardNo", required = true) String vipCardNo
+	) {
+		try {
+		AppVipcard vipCard = vipCardManager.getVipCardByNo(vipCardNo);
+		if (vipCard == null || StringUtils.isBlank(vipCard.getCardNo())) {
+			return BaseMsgInfo.msgFail("卡号有误或系统暂未录入此卡信息，请联系相关人员添加此卡信息！");
+		}else if (!VipCardState.ACTIVE.getName().equals(vipCard.getCardState())){
+			return BaseMsgInfo.success(true);
+		}else {
+			return BaseMsgInfo.msgFail("卡号有误，此卡已激活");
+		}
+		}catch (Exception e){
+			log.error("验证卡片信息失败",e);
+			return BaseMsgInfo.msgFail("验证卡片信息失败");
+		}
+	}
 
 	/**
 	 * 添加订单信息
