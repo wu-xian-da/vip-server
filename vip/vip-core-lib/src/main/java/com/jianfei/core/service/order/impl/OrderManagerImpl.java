@@ -34,6 +34,7 @@ import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.order.OrderManager;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * TODO
@@ -44,6 +45,7 @@ import com.jianfei.core.service.order.OrderManager;
  * @date: 2016/5/18 16:31
  */
 @Service
+@Transactional
 public class OrderManagerImpl implements OrderManager {
 
     @Autowired

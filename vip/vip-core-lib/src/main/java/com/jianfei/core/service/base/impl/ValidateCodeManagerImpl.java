@@ -38,8 +38,11 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         // 1、根据配置规则生成验证码 6位
         String code = UUIDUtils.getRandomStringByLength(6);
         String key = CacheCons.getVerifyPhoneKey(phone, msgType);
-        //TODO 需要把时间可配置
-        JedisUtils.setObject(key, code, 5000);
+       if(MsgType.REGISTER.equals(msgType)){
+           JedisUtils.setObject(key, code, 1000000);
+       }else {
+           JedisUtils.setObject(key, code, 1000000);
+       }
         return code;
     }
 
@@ -56,7 +59,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         String key = CacheCons.getVerifyPhoneKey(phone, msgType);
         String value = (String) JedisUtils.getObject(key);
         boolean flag = code == null || code.equals(value);
-        if (flag) {
+        if (flag && !MsgType.REGISTER.equals(msgType)) {
             JedisUtils.delObject(key);
         }
         return flag;
