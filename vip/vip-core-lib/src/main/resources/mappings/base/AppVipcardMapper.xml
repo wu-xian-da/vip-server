@@ -30,8 +30,9 @@
 			<if test="cardNo!=null">
 				and card_no like CONCAT('%','${cardNo}','%' )
 			</if>
-			and dtflag=0
+			and dtflag=0 order by import_time desc
 		</where>
+		
   </select>
   
   <!--根据卡号逻辑删除vip卡信息  -->
@@ -41,8 +42,8 @@
   
   <!--将excel表格中的数据导入到数据中 -->
   <insert id="importExcelToDB" parameterType="com.jianfei.core.bean.AppVipcard" >
-    insert into app_vipcard (card_no, nfc_id, import_time,dtflag,card_state)
-   		 values (#{cardNo},#{nfcId},#{importTime},#{dtflag},#{cardState})
+    insert into app_vipcard (card_no, nfc_id, import_time,dtflag,card_state,init_money,card_type)
+   		 values (#{cardNo},#{nfcId},#{importTime},#{dtflag},#{cardState},#{initMoney},#{cardType})
   </insert>
   
   <!-- 将数据导入到excel表格中 -->

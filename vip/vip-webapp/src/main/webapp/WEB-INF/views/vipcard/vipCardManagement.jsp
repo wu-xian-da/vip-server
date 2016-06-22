@@ -31,6 +31,9 @@
 		grid.datagrid('load',{'_cardNo':$("#_cardNo").val()});
 	};
 	
+	//格式化日期格式
+	
+	
 	//删除vip卡
 	var removeFun = function(id) {
 		parent.$.messager.confirm('询问', '您确定要删除此记录？', function(r) {

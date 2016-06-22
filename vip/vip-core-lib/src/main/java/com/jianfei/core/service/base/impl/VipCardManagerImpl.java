@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.mapper.AppConsumeMapper;
@@ -159,7 +160,9 @@ public class VipCardManagerImpl implements VipCardManager {
 					vipCard.setNfcId(val[2]);
 					vipCard.setImportTime(new Date());
 					vipCard.setDtflag(0);
-					vipCard.setCardState(0);// 未激活
+					vipCard.setCardState(VipCardState.NOT_ACTIVE.getName());// 未激活
+					vipCard.setCardType(1);//卡类型
+					vipCard.setInitMoney(1998f);//卡初始金额
 					// 向数据表中插入一条数据
 					try {
 						appVipcardMapper.importExcelToDB(vipCard);
