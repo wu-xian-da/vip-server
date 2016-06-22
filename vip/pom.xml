@@ -508,8 +508,8 @@
 				<konggang.partner>20160607001</konggang.partner>
 				<konggang.key>S1-L6-D0-T1-G2-S7</konggang.key>
 				<!-- yeepay settings -->
-				<yeepay.query.url>http://124.250.37.126:8081/cod/callback/codOrderQueryAction.do</yeepay.query.url>
-				<yeepay.customerId>10040011560</yeepay.customerId>
+				<yeepay.query.url>http://cod.yeepay.com/cod/callback/codOrderQueryAction.do</yeepay.query.url>
+				<yeepay.customerId>10001676182</yeepay.customerId>
 				<yeepay.key>DFE23HLAW198820SQWE1224SDAQQ3319203945</yeepay.key>
 				<yeepay.src.sysid>opsmart</yeepay.src.sysid>
 				<yeepay.dst.sysid>yeepay</yeepay.dst.sysid>
