@@ -174,10 +174,10 @@ public class BusizzController extends BaseController {
 
 	@RequestMapping(value = "initPwd")
 	@ResponseBody
-	public MessageDto<String> initPwd(String id, String code, String salt) {
+	public MessageDto<String> initPwd(String id, String salt, String roleId) {
 		return busizzManager.initpwd(new MapUtils.Builder()
-				.setKeyValue("id", id).setKeyValue("code", code)
-				.setKeyValue("salt", salt).build());
+				.setKeyValue("id", id).setKeyValue("salt", salt)
+				.setKeyValue("roleId", roleId).build());
 	}
 
 	@RequestMapping(value = "initUserPwd")

@@ -44,8 +44,7 @@ public class OrderStaController {
     private AriPortManagerImpl ariPortService;
     @Autowired
     private ArchiveManagerImpl archiveManager;
-    @Autowired
-    private SaleUserManagerImpl saleUserManager;
+
     @Autowired
 	private BusizzManagerImpl busizzManagerImpl;
 

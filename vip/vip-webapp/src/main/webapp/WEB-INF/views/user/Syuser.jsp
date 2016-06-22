@@ -23,6 +23,27 @@
 			} ]
 		});
 	};
+	var initPwd = function(id,salt,roleIds){
+		$.ajax({
+			  type: 'POST',
+			  url : sy.contextPath + '/busizz/initPwd',
+			  data: {id:id,salt:salt,roleId:roleIds},
+			  success: function(result){
+				  if (result.ok) {
+					  layer.alert(result.msgBody, {
+							icon : 1,
+							skin : 'layer-ext-moon' 
+						});
+					}else{
+						layer.alert(result.msgBody, {
+							icon : 2,
+							skin : 'layer-ext-moon' 
+						});
+					}
+			  },
+			  dataType: 'json'
+			});
+	}
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
 			title : '编辑用户信息',
@@ -79,7 +100,7 @@
 				title : '区域',
 				field : 'ariPortNames'
 			}, {
-				width : '300',
+				width : '120',
 				title : '角色',
 				field : 'roelNames'
 			}, {
@@ -90,7 +111,7 @@
 				title : '操作',
 				field : 'action',
 				align : 'center',
-				width : '150',
+				width : '250',
 				formatter : function(value, row) {
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
@@ -98,6 +119,9 @@
 					<%}%>
 					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:user:initPwd")) {%>
+					 str += sy.formatString('&nbsp;<img class="iconImg ext-icon-lock_edit" title="重置密码" onclick="initPwd(\'{0}\',\'{1}\',\'{2}\');"/> 重置密码', row.id,row.salt,row.roleIds);
 					<%}%>
 						return str;
 				}

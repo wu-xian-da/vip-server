@@ -27,7 +27,7 @@
 		<form action="addVipRoomInfo" method="post"  enctype="multipart/form-data">
 			<div class="clerk-container-item">
 				<label>vip室名称：</label>
-				<input class="easyui-validatebox" type="text" name="viproomName" value="" data-options="required:true"/>
+				<input class="easyui-validatebox" type="text" name="viproomName" value="" data-options="missingMessage:'必填项',required:true"/>
 			</div>
 			
 			<div class="clerk-container-item">

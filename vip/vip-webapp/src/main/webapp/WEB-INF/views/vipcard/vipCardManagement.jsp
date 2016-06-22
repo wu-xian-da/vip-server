@@ -28,7 +28,7 @@
 <script type="text/javascript">
 	var grid;
 	function searchByCondition(){
-		grid.datagrid('load',{'_cardNo':$("#_cardNo").val()});
+		grid.datagrid('load',{'_cardNo':$("#_cardNo").val(),"_cardState":$("#cardStateSel option:selected").val()});
 	};
 	
 	//删除vip卡
@@ -62,15 +62,16 @@
 							pagination : true,
 							singleSelect : true,
 							pageSize : 10,
-							pageList : [10, 20, 30, 40, 50 ],
-							columns : [ [{
-									width : '200',
-									title : '卡号',
-									field : 'cardNo',
-									align : 'center',
-									sortable : true
+							pageList : [ 10, 20, 30, 40, 50 ],
+							columns : [ [
+									{
+										width : '200',
+										title : '卡号',
+										field : 'cardNo',
+										align : 'center',
+										sortable : true
 									},
-							          
+
 									{
 										width : '200',
 										title : 'NFC号',
@@ -83,7 +84,10 @@
 										title : '导入时间',
 										field : 'importTime',
 										align : 'center',
-										sortable : true
+										sortable : true,
+										formatter : function(value,row,index){
+											return value;
+										}
 									},
 									{
 										width : '150',
@@ -128,8 +132,6 @@
 							}
 						});
 
-		
-
 		//输入框效果
 		$("#filePath").focus(function() {
 			var filePath = $("#filePath").val();
@@ -146,24 +148,24 @@
 		})
 
 	});
-	
+
 	//导入vip卡
-	function importExcel(){
-		$('#fm').form('submit',{
-			url: sy.contextPath+"/vipCard/importExcel",
-			onSubmit: function(){
+	function importExcel() {
+		$('#fm').form('submit', {
+			url : sy.contextPath + "/vipCard/importExcel",
+			onSubmit : function() {
 				return $(this).form('validate');
 			},
-			success: function(_d){
-				console.log("_d:"+_d);
-				if (_d.result == 0){
+			success : function(_d) {
+				console.log("_d:" + _d);
+				if (_d.result == 0) {
 					$.messager.show({
-						title: 'Error',
-						msg:"数据格式出错"
+						title : 'Error',
+						msg : "数据格式出错"
 					});
 				} else {
 					// reload the user data
-					$('#grid').datagrid('reload');	
+					$('#grid').datagrid('reload');
 				}
 			}
 		});
@@ -194,8 +196,7 @@
 						<table>
 							<tr>
 
-								<td><select name="_cardState" class="easyui-combobox"
-									data-options="panelHeight:'auto',editable:false">
+								<td><select name="_cardState" id="cardStateSel">
 										<option value="">全部vip卡状态</option>
 										<option value="0">未激活</option>
 										<option value="1">激活</option>

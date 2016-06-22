@@ -9,7 +9,9 @@ import com.jianfei.core.service.base.AppVersionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO
@@ -38,6 +40,11 @@ public class AppVersionManagerImpl implements AppVersionManager {
         if (appVersion == null) {
             List<AppVersion> list = appVersionMapper.getVersions(channel);
             appVersion = list == null || list.isEmpty() ? new AppVersion() : list.get(0);
+            if ("003".equals(channel)){
+                Map map=new HashMap();
+                map.put("vip_load_url","www.baidu.com");
+                appVersion.setMap(map);
+            }
             //数据库无论是否存在都设置值 防止缓存穿透
             JedisUtils.setObject("APP_VERSION_" + channel, appVersion, 0);
         }

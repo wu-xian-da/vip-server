@@ -70,6 +70,8 @@ public class OrderManagerImpl implements OrderManager {
 	private ThirdPayManager aliPayManager;
 	@Autowired
 	private ThirdPayManager wechatiPayManager;
+	@Autowired
+	private ThirdPayManager yeepayManager;
 
     /**
      * 添加订单信息
@@ -174,11 +176,11 @@ public class OrderManagerImpl implements OrderManager {
 		if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
 			return BaseMsgInfo.msgFail("订单不存在");
 		}
+		invoiceManager.insert(appInvoice);
 		orders.setInvoiceFlag(InvoiceState.NEED_INVOICE.getName());
 		int flag = appOrdersMapper.updateByPrimaryKeySelective(orders);
 		if (flag < 0)
 			return BaseMsgInfo.msgFail("订单邮寄信息状态更新失败");
-		invoiceManager.insert(appInvoice);
 		return BaseMsgInfo.success(true);
 	}
 
@@ -326,7 +328,10 @@ public class OrderManagerImpl implements OrderManager {
 	@Override
 	public BaseMsgInfo getPayUrl(String orderId, PayType payType) {
 		AppOrders appOrders=getOrderInfo(orderId);
-		PreCreateResult preCreateResult=null;
+		if (appOrders == null || StringUtils.isBlank(appOrders.getOrderId())) {
+			return BaseMsgInfo.msgFail("订单不存在");
+		}
+		PreCreateResult preCreateResult=new PreCreateResult();
 		 if(PayType.WXPAY.equals(payType)){
 			 /**
 			  * @param authCode 这个是扫码终端设备从用户手机上扫取到的支付授权号，这个号是跟用户用来支付的银行卡绑定的，有效期是1分钟
@@ -353,6 +358,9 @@ public class OrderManagerImpl implements OrderManager {
 					 .setGoodsDetailList(goodsDetailList).setStoreId("test");
 
 			 preCreateResult= aliPayManager.tradePrecreate(builder);
+		 }else if (PayType.BANKPAY.equals(payType)){
+			 preCreateResult.setCode("0");
+			 preCreateResult.setQrUrl(orderId);
 		 }
          if ("0".equals(preCreateResult.getCode())){
 			 return BaseMsgInfo.success(preCreateResult.getQrUrl());
@@ -388,12 +396,14 @@ public class OrderManagerImpl implements OrderManager {
 	 */
 	@Override
 	public BaseMsgInfo checkThirdPay(String orderId, PayType payType) {
-		PayQueryResult result=null;
+		PayQueryResult result=new PayQueryResult();
 		if(PayType.WXPAY.equals(payType)){
 			result=wechatiPayManager.tradeQuery(orderId);
 		}
 		else if (PayType.ALIPAY.equals(payType)){
 			result=aliPayManager.tradeQuery(orderId);
+		} else if (PayType.BANKPAY.equals(payType)) {
+			result=yeepayManager.tradeQuery(orderId);
 		}
 		if ("0".equals(result.getCode())){
 			return BaseMsgInfo.success(true);
@@ -464,6 +474,7 @@ public class OrderManagerImpl implements OrderManager {
 		}
 		orders.setPayType(payType.getName());
 		orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
+		orders.setPayTime(new Date());
 		int num = appOrdersMapper.updateByPrimaryKeySelective(orders);
 		if (num > 0) {
 			return BaseMsgInfo.success(true);

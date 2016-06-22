@@ -165,6 +165,8 @@ public class OrderController {
 				type = PayType.ALIPAY;
 			} else if (PayType.BANKPAY.getName() == payType) {
 				type = PayType.BANKPAY;
+			}else if (PayType.CASHPAY.getName() == payType) {
+				type = PayType.CASHPAY;
 			}
 			if (type == null)
 				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");

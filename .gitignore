@@ -24,3 +24,5 @@ temp/data/
 logs
 log4j.properties
 *.log
+vip/vip-webapp/.settings/org.eclipse.wst.common.component
+vip/vip-app-server/.settings/org.eclipse.wst.common.component

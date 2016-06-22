@@ -143,14 +143,9 @@ public class QueueManagerImpl implements QueueManager {
 	 * @return
 	 */
 	@Override
-	public BaseMsgInfo sendMessage(ServiceMsgBuilder msgBuilder) {
+	public boolean sendMessage(ServiceMsgBuilder msgBuilder) {
 		String fastJsonStr = JSON.toJSONString(msgBuilder);
-		boolean flag = JedisUtils.lpushString(MESSAGEKEY, fastJsonStr) == null ? false
+		return JedisUtils.lpushString(MESSAGEKEY, fastJsonStr) == null ? false
 				: true;
-		if (flag) {
-			return BaseMsgInfo.success(true);
-		} else {
-			return BaseMsgInfo.msgFail("消息发送失败");
-		}
 	}
 }

@@ -13,23 +13,23 @@ public enum VipCardState {
     /**
      * 未激活
      */
-    NOT_ACTIVE("0"),
+    NOT_ACTIVE(0),
     /**
      * 激活
      */
-    ACTIVE("1"),
+    ACTIVE(1),
     /**
      * 退卡
      */
-    BACK_CARD("2");
+    BACK_CARD(2);
 
-    private String name;
+    private Integer name;
 
-    public String getName(){
+    public Integer getName(){
         return this.name;
     }
 
-    private VipCardState(String name){
+    private VipCardState(Integer name){
         this.name = name;
     }
 }

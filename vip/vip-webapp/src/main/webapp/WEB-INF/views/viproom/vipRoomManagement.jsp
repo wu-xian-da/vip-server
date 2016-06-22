@@ -168,12 +168,12 @@ a {
 						case 0:
 							str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/> 编辑&nbsp;</a>";
 							str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除&nbsp;', row.viproomId);
-							str +=  sy.formatString('<img class="iconImg ext-icon-note_delete" title="禁用" onclick="forbiddenUsing(\'{0}\');"/> 禁用', row.viproomId);
+							str +=  sy.formatString('<img class="iconImg ext-icon-note_error" title="禁用" onclick="forbiddenUsing(\'{0}\');"/> 禁用', row.viproomId);
 							return str;
 						case 1:
 							str += "<a href='gotoUpdateVipRoomView?viproomId="+row.viproomId+"'><img class='iconImg ext-icon-note_edit title='编辑'/> 编辑&nbsp;</a>";
 							str += sy.formatString('<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除&nbsp', row.viproomId);
-							str +=  sy.formatString('<img class="iconImg ext-icon-note_delete" title="启用" onclick="startUsing(\'{0}\');"/> 启用', row.viproomId);
+							str +=  sy.formatString('<img class="iconImg ext-icon-note" title="启用" onclick="startUsing(\'{0}\');"/> 启用', row.viproomId);
 							return str;
 					}
 				}
