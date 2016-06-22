@@ -46,6 +46,11 @@ public class AppOrders implements Serializable{
     private String airportId;
 
     private String payUserId;
+
+    /**
+     * 支付时间
+     */
+    private Date payTime;
     
     /**
 	 * operation
@@ -184,5 +189,12 @@ public class AppOrders implements Serializable{
     public void setPayUserId(String payUserId) {
         this.payUserId = payUserId;
     }
-    
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
 }

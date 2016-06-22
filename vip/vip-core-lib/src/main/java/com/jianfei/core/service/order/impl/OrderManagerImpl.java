@@ -474,6 +474,7 @@ public class OrderManagerImpl implements OrderManager {
 		}
 		orders.setPayType(payType.getName());
 		orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
+		orders.setPayTime(new Date());
 		int num = appOrdersMapper.updateByPrimaryKeySelective(orders);
 		if (num > 0) {
 			return BaseMsgInfo.success(true);
