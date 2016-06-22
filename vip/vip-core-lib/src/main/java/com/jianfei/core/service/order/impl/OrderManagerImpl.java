@@ -326,7 +326,10 @@ public class OrderManagerImpl implements OrderManager {
 	@Override
 	public BaseMsgInfo getPayUrl(String orderId, PayType payType) {
 		AppOrders appOrders=getOrderInfo(orderId);
-		PreCreateResult preCreateResult=null;
+		if (appOrders == null || StringUtils.isBlank(appOrders.getOrderId())) {
+			return BaseMsgInfo.msgFail("订单不存在");
+		}
+		PreCreateResult preCreateResult=new PreCreateResult();
 		 if(PayType.WXPAY.equals(payType)){
 			 /**
 			  * @param authCode 这个是扫码终端设备从用户手机上扫取到的支付授权号，这个号是跟用户用来支付的银行卡绑定的，有效期是1分钟
@@ -353,6 +356,9 @@ public class OrderManagerImpl implements OrderManager {
 					 .setGoodsDetailList(goodsDetailList).setStoreId("test");
 
 			 preCreateResult= aliPayManager.tradePrecreate(builder);
+		 }else if (PayType.BANKPAY.equals(payType)){
+			 preCreateResult.setCode("0");
+			 preCreateResult.setQrUrl(orderId);
 		 }
          if ("0".equals(preCreateResult.getCode())){
 			 return BaseMsgInfo.success(preCreateResult.getQrUrl());
