@@ -40,7 +40,7 @@ public class AppVersionManagerImpl implements AppVersionManager {
         if (appVersion == null) {
             List<AppVersion> list = appVersionMapper.getVersions(channel);
             appVersion = list == null || list.isEmpty() ? new AppVersion() : list.get(0);
-            if ("003".equals(appVersion)){
+            if ("003".equals(channel)){
                 Map map=new HashMap();
                 map.put("vip_load_url","www.baidu.com");
                 appVersion.setMap(map);
