@@ -6,8 +6,10 @@ import com.jianfei.core.bean.AppConfig;
 import com.jianfei.core.bean.AppPicture;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
+import com.jianfei.core.common.enu.RightType;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.VipCardInfoDto;
 import com.jianfei.core.mapper.AppConfigMapper;
 import com.jianfei.core.service.base.AppConfigManager;
@@ -38,11 +40,16 @@ public class AppConfigManagerImpl implements AppConfigManager {
      * @return
      */
     @Override
-    public VipCardInfoDto getVipCardInfo() {
+    public VipCardInfoDto getVipCardInfo(String phone) {
         List<AppPicture> pictureList=appPictureManager.getPicture(PictureType.VIP_APP_RIGHT);
-		List<AppConfig> list=appConfigMapper.selectByType(1);
         VipCardInfoDto vipCardInfoDto=new VipCardInfoDto();
-		AppConfig appConfig=list == null || list.isEmpty() ? new AppConfig() : list.get(0);
+		AppConfig appConfig;
+		if (StringUtils.isBlank(phone)){
+			appConfig=getAppConfig(RightType.BEFORE_LOGIN_RIGHT);
+
+		}else {
+			appConfig=getAppConfig(RightType.AFTER_LOGIN_RIGHT);
+		}
 		vipCardInfoDto.setRight(appConfig.getContent());
         vipCardInfoDto.setImages(pictureList);
         return vipCardInfoDto;
@@ -54,8 +61,8 @@ public class AppConfigManagerImpl implements AppConfigManager {
      * @return
      */
     @Override
-    public AppConfig getQAInfo() {
-        List<AppConfig> list=appConfigMapper.selectByType(2);
+    public AppConfig getAppConfig(RightType rightType) {
+        List<AppConfig> list=appConfigMapper.selectByType(rightType.getName());
         return list == null || list.isEmpty() ? new AppConfig() : list.get(0);
     }
     

@@ -6,6 +6,7 @@ import com.jianfei.core.bean.AppVersion;
 import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
+import com.jianfei.core.common.enu.RightType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -170,9 +171,9 @@ public class ResourceController  {
 	 */
 	@RequestMapping(value = "/getVipCardRight", method = RequestMethod.GET)
 	@ResponseBody
-	public BaseMsgInfo getVipCardRight() {
+	public BaseMsgInfo getVipCardRight(@RequestParam(value = "phone", required = false) String phone) {
 		try {
-			return BaseMsgInfo.success(appConfigManager.getVipCardInfo());
+			return BaseMsgInfo.success(appConfigManager.getVipCardInfo(phone));
 		}catch (Exception e){
 			log.error("获取VIP卡权益信息失败",e);
 			return BaseMsgInfo.msgFail("获取VIP卡权益信息失败");
@@ -186,7 +187,7 @@ public class ResourceController  {
 	@ResponseBody
 	public BaseMsgInfo getVipCardQA() {
 		try {
-			return BaseMsgInfo.success(appConfigManager.getQAInfo());
+			return BaseMsgInfo.success(appConfigManager.getAppConfig(RightType.PROBLEM));
 		}catch (Exception e){
 			log.error("获取VIP卡权益信息失败",e);
 			return BaseMsgInfo.msgFail("获取VIP卡权益信息失败");

@@ -2,6 +2,7 @@ package com.jianfei.core.service.base;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConfig;
+import com.jianfei.core.common.enu.RightType;
 import com.jianfei.core.dto.VipCardInfoDto;
 
 import java.util.List;
@@ -21,13 +22,13 @@ public interface AppConfigManager {
      * 获取配置信息VIP权益
      * @return
      */
-   VipCardInfoDto getVipCardInfo();
+   VipCardInfoDto getVipCardInfo(String phone);
 
     /**
-     * 获取常见问题
+     * 获取配置信息
       * @return
      */
-   AppConfig getQAInfo();
+   AppConfig getAppConfig(RightType rightType);
    
    /**
     * 分页获取权益信息

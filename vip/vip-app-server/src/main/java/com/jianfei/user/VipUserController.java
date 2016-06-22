@@ -2,12 +2,18 @@ package com.jianfei.user;
 
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.service.base.AppConfigManager;
+import com.jianfei.core.service.base.impl.AppConfigManagerImpl;
 import com.jianfei.core.service.order.impl.ConsumeManagerImpl;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
+import com.jianfei.resource.ResourceController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,12 +28,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "vipUser")
 public class VipUserController {
-
+    private static Log log = LogFactory.getLog(VipUserController.class);
     @Autowired
     private VipUserManagerImpl vipUserManager;
 
     @Autowired
     private ConsumeManagerImpl consumeManager;
+
+    @Autowired
+    private AppConfigManager appConfigManager;
 
     /**
      * VIP 用户登录
