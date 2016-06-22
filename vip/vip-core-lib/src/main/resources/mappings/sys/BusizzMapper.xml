@@ -166,7 +166,7 @@
 				,code=#{code}
 			</if>
 			<if test="userType!=null">
-				,userType=#{userType}
+				,user_type=#{userType}
 			</if>
 			<if test="loginName!=null">
 				,login_name=#{loginName}
