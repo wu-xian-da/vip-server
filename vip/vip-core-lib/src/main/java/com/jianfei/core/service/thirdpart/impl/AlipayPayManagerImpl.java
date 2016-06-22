@@ -27,6 +27,7 @@ import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 
@@ -155,6 +156,9 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 				payQueryResult.setCode("2");
 				payQueryResult.setMsg("交易关闭");
 			}
+			payQueryResult.setOutTradeNo(result.getResponse().getTradeNo());
+			payQueryResult.setPayTime(DateUtil.dateToString(result.getResponse().getSendPayDate(), "yyyy-MM-dd HH:mm:ss"));
+			payQueryResult.setPayUserId(result.getResponse().getBuyerLogonId());
 
 			break;
 
@@ -176,6 +180,7 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 			payQueryResult.setMsg("ALIPAY_不支持的交易状态，交易返回异常!");
 			break;
 		}
+		
 		return payQueryResult;
 	}
 

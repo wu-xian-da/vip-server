@@ -17,3 +17,4 @@
         <property name="java-output-path" value="/vip-app-server/target/classes"/>
     </wb-module>
 </project-modules>
+

@@ -28,7 +28,7 @@
 			<div class="clerk-container-item">
 				<label>vip室名称：</label>
 				<input type="hidden" name="viproomId" value="${viproom.viproomId}">
-				<input class="easyui-validatebox" type="text" name="viproomName" value="${viproom.viproomName }" data-options="required:true"/>
+				<input class="easyui-validatebox" type="text" name="viproomName" value="${viproom.viproomName }" data-options="missingMessage:'必填项',required:true"/>
 			</div>
 			
 			<div class="clerk-container-item">

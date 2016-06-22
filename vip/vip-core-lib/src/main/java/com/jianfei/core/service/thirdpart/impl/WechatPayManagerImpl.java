@@ -1,10 +1,14 @@
 package com.jianfei.core.service.thirdpart.impl;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +109,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 				if(nativePayQueryResData.getResult_code().equals("SUCCESS")){
 					if (nativePayQueryResData.getTrade_state().equals("SUCCESS")){
 						payQueryResult.setCode("0");
-						payQueryResult.setMsg("已支付");		
+						payQueryResult.setMsg("已支付");
 					}else if (nativePayQueryResData.getTrade_state().equals("NOTPAY")){
 						payQueryResult.setCode("1");
 						payQueryResult.setMsg("未支付");	
@@ -117,6 +121,15 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 						payQueryResult.setMsg(nativePayQueryResData.getTrade_state());
 					}
 								
+					payQueryResult.setOutTradeNo(nativePayQueryResData.getTransaction_id());
+				    try {
+						Date payTime = DateUtils.parseDate(nativePayQueryResData.getTime_end(), "yyyyMMddHHmmss");
+						payQueryResult.setPayTime(DateUtil.dateToString(payTime, "yyyy-MM-dd HH:mm:ss"));
+					} catch (ParseException e2) {
+						e2.printStackTrace();
+					}
+					payQueryResult.setPayUserId(nativePayQueryResData.getOpenid());
+					
 				}else{
 					payQueryResult.setCode("3");
 					payQueryResult.setMsg(nativePayQueryResData.getErr_code_des());
