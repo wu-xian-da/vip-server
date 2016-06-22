@@ -73,6 +73,9 @@
 			<if test="uno!=null">
 				<![CDATA[and u.code = #{uno}]]>
 			</if>
+			<if test="state!=null">
+				<![CDATA[and u.state = #{state}]]>
+			</if>
 		</where>
 		GROUP BY u.`name`
 		<if test="sort!=null">
