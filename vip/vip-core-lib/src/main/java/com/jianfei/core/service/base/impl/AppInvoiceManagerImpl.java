@@ -1,5 +1,6 @@
 package com.jianfei.core.service.base.impl;
 
+import com.jianfei.core.common.enu.StateType;
 import com.jianfei.core.common.utils.IdGen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class AppInvoiceManagerImpl implements AppInvoiceManager{
 	@Override
 	public boolean insert(AppInvoice appInvoice) {
 		appInvoice.setInvoiceId(IdGen.uuid());
+		appInvoice.setDtflag(StateType.EXIST.getName());
 		return appInvoiceMapper.insert(appInvoice) == 1 ? true : false;
 	}
 	

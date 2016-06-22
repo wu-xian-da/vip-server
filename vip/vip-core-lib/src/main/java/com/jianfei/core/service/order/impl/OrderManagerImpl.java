@@ -176,11 +176,11 @@ public class OrderManagerImpl implements OrderManager {
 		if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
 			return BaseMsgInfo.msgFail("订单不存在");
 		}
+		invoiceManager.insert(appInvoice);
 		orders.setInvoiceFlag(InvoiceState.NEED_INVOICE.getName());
 		int flag = appOrdersMapper.updateByPrimaryKeySelective(orders);
 		if (flag < 0)
 			return BaseMsgInfo.msgFail("订单邮寄信息状态更新失败");
-		invoiceManager.insert(appInvoice);
 		return BaseMsgInfo.success(true);
 	}
 
