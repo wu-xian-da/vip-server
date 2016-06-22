@@ -10,7 +10,6 @@ package com.jianfei.core.service.base.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,10 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.MessageDto.MsgFlag;
+import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.PasswdHelper;
 import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.mapper.BusizzMapper;
 import com.jianfei.core.service.base.AriPortManager;
@@ -101,25 +101,23 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	@Override
 	public MessageDto<String> saveUser(User user, String arids, String roleids) {
 		MessageDto<String> messageDto = new MessageDto<String>();
-		SimpleHash simpleHash = new SimpleHash("md5",
-				GloabConfig.getConfig("defalut.passwd"), user.getSalt());
-		user.setPassword(simpleHash.toString());
-		user.setExtraPasswd(new SimpleHash("md5", GloabConfig
-				.getConfig("defalut.passwd")).toString());
+		user.setPassword(PasswdHelper.defaultPasswdProdece(user.getSalt()));
+		user.setExtraPasswd(PasswdHelper.defaultPasswdProdece());
 		Long id = 0l;
 		if (!StringUtils.isEmpty(user.getCode())) {
 			User u = busizzMaapper.getUserByCode(StringUtils.trim(user
 					.getCode()));
 			// 保存操作,用户名已经存在
-			if (null != u && 0 == user.getId()) {
+			if (!ObjectUtils.isEmpty(u) && 0 == user.getId()) {
 				return messageDto.setMsgBody("工号已经存在,请更换...");
-			} else if (null == u && 0 == user.getId()) {
+			} else if (ObjectUtils.isEmpty(u) && 0 == user.getId()) {
 				// 保存用户
 				user.setState(GloabConfig.OPEN);
 				busizzMaapper.save(user);
 				User u2 = busizzMaapper.getUserByCode(StringUtils.trim(user
 						.getCode()));
 				id = u2.getId();
+
 			} else if (u != null && user.getId() != u.getId()) {
 				// 更新操作
 				return messageDto.setMsgBody("工号已经存在,请更换...");

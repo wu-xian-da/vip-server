@@ -86,7 +86,22 @@
 
 	</select>
 	<select id="getUserByCode" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{code} and user_type=3;
+		SELECT
+		  `id`,
+		  `name`,
+		  `phone`,
+		  `state`,
+		  `entry_time`,
+		  `sex`,
+		  `photo`,
+		  `user_type`,
+		  `login_name`,
+		  `create_time`,
+		  `update_time`,
+		  `salt`,
+		  `dtflag`,
+		  `code`,
+		  `job` from sys_users where code =#{code} ;
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -147,11 +162,11 @@
 			<if test="phone!=null">
 				,phone=#{phone}
 			</if>
-			<if test="photo!=null">
-				,photo=#{photo}
+			<if test="code!=null and code!=''">
+				,code=#{code}
 			</if>
 			<if test="userType!=null">
-				,sex=#{userType}
+				,userType=#{userType}
 			</if>
 			<if test="loginName!=null">
 				,login_name=#{loginName}

@@ -47,7 +47,7 @@
 		 ]]>
 		<where>
 			<if test="userType!=null and userType!=''">
-				 u.user_type=#{userType}
+				u.user_type=#{userType}
 			</if>
 			<if test="id!=null">
 				and u.id=#{id}
@@ -77,7 +77,7 @@
 				<![CDATA[and u.state = #{state}]]>
 			</if>
 		</where>
-		GROUP BY u.`name`
+		GROUP BY u.login_name
 		<if test="sort!=null">
 			order by ${sort} ${order}
 		</if>
@@ -191,7 +191,8 @@
 
 	<update id="updatePasswordByUno" parameterType="String">
 		UPDATE sys_users
-		SET `password`=#{newPassword},extra_passwd=#{md5Password} WHERE `code`=#{uno} and
+		SET `password`=#{newPassword},extra_passwd=#{md5Password} WHERE
+		`code`=#{uno} and
 		`password`=#{password}
 	</update>
 
@@ -199,4 +200,34 @@
 		UPDATE sys_users SET
 		photo=#{photoPath} WHERE `code`=#{userNo}
 	</update>
+
+	<select id="validateAccount" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		`id`,
+		`name`,
+		`phone`,
+		`state`,
+		`sex`,
+		`photo`,
+		`user_type`,
+		`salt`,
+		`code`,
+		`login_name`,
+		`job`
+		FROM
+		sys_users
+		<where>
+			<if test="code!=null and code!=''">
+				code=#{code}
+			</if>
+			<if test="login_name!=null and login_name!=''">
+				and login_name=#{login_name}
+			</if>
+			<if test="id!=null and id!=''">
+				and id!=#{id}
+			</if>
+		</where>
+	</select>
+
 </mapper>
