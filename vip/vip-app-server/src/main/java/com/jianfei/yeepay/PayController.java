@@ -204,7 +204,7 @@ public class PayController {
 					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 3);
 				}else{
 					String orderNo = sessionBody.elementText("OrderNo");
-					log.info(orderNo);
+					log.info("yeepay_notify:"+orderNo);
 					//orderManager.updateOrderStateByOrderIdEx(orderNo, 1);
 					PayNotifyRequest param = new PayNotifyRequest();
 					
