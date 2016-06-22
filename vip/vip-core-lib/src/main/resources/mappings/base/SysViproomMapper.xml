@@ -30,7 +30,7 @@
   	select vr.viproom_id,vr.viproom_name,vr.active_state,ap.airport_name,ap.header_name,ap.header_phone 
   		from sys_viproom vr,sys_airport ap 
   		where vr.airport_id = ap.airport_id 
-  		and vr.dtflag=0
+  		and vr.dtflag=0  and ap.state=1
   		<!-- 搜索条件 -->
   	    <if test="searchContent != null">
   	    	and concat(vr.viproom_id,vr.viproom_name,ap.header_name,ap.header_phone,ap.airport_name) like CONCAT('%','${searchContent}','%' )
