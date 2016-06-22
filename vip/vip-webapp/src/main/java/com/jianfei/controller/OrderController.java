@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,8 @@ import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
  */
 @Controller
 public class OrderController extends BaseController {
+	private Logger logger = Logger.getLogger(LoginController.class);
+	
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
@@ -474,6 +477,13 @@ public class OrderController extends BaseController {
 		//2、获取验证码
 		String smsCode = validateCodeManager.getValidateCode(phone, MsgType.BACK_CARD_APPLY);
 		//发送短信****
+		try {
+			validateCodeManager.sendMsgInfo(phone, MsgType.BACK_CARD_APPLY, smsCode);
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("发送短信失败");
+		}
+		
 		
 		JSONObject outData = new JSONObject(); 
 		double remainMoney = orderManagerImpl.remainMoney(orderId);
