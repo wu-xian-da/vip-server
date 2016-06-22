@@ -41,4 +41,13 @@ public interface ValidateCodeManager {
      * @return
      */
     BaseMsgInfo sendValidateCode(String phone, MsgType msgType);
+
+    /**
+     * 发送验证码
+     * @param phone
+     * @param msgType
+     * @param code
+     * @return
+     */
+    boolean sendMsgInfo(String phone, MsgType msgType,String code);
 }

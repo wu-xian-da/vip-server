@@ -86,12 +86,27 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
      */
     @Override
     public BaseMsgInfo sendValidateCode(String phone, MsgType msgType) {
-        String code=getValidateCode(phone, msgType);
+        String code = getValidateCode(phone, msgType);
+        boolean flag = sendMsgInfo(phone, msgType, code);
+        return flag ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("消息发送失败");
+    }
+
+    /**
+     * 发送验证码
+     *
+     * @param phone
+     * @param msgType
+     * @param code
+     * @return
+     */
+    @Override
+    public boolean sendMsgInfo(String phone, MsgType msgType, String code) {
+        //TODO 需要配置验证码发送时间等相关信息
         String time="5分钟";
         JSONObject object=new JSONObject();
         object.put("code",code);
         object.put("time",time);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(phone).setMsgType(msgType.getName()).setMsgBody(object.toJSONString());
-       return queueManager.sendMessage(msgBuilder);
+        return queueManager.sendMessage(msgBuilder);
     }
 }
