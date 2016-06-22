@@ -70,6 +70,8 @@ public class OrderManagerImpl implements OrderManager {
 	private ThirdPayManager aliPayManager;
 	@Autowired
 	private ThirdPayManager wechatiPayManager;
+	@Autowired
+	private ThirdPayManager yeepayManager;
 
     /**
      * 添加订单信息
@@ -394,12 +396,14 @@ public class OrderManagerImpl implements OrderManager {
 	 */
 	@Override
 	public BaseMsgInfo checkThirdPay(String orderId, PayType payType) {
-		PayQueryResult result=null;
+		PayQueryResult result=new PayQueryResult();
 		if(PayType.WXPAY.equals(payType)){
 			result=wechatiPayManager.tradeQuery(orderId);
 		}
 		else if (PayType.ALIPAY.equals(payType)){
 			result=aliPayManager.tradeQuery(orderId);
+		} else if (PayType.BANKPAY.equals(payType)) {
+			result=yeepayManager.tradeQuery(orderId);
 		}
 		if ("0".equals(result.getCode())){
 			return BaseMsgInfo.success(true);
