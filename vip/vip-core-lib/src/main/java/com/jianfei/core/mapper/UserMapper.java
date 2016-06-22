@@ -70,8 +70,8 @@ public interface UserMapper extends BaseMapper<User> {
 	 */
 	int updatePasswordByUno(@Param(value = "uno") String uno,
 			@Param(value = "password") String password,
-			@Param(value = "newPassword") String newPassword,@Param(value = "md5Password") String md5Password);
-
+			@Param(value = "newPassword") String newPassword,
+			@Param(value = "md5Password") String md5Password);
 
 	/**
 	 * 根据用户工号更新用户头像
@@ -82,4 +82,12 @@ public interface UserMapper extends BaseMapper<User> {
 	 */
 	int updatePhotoPath(@Param(value = "userNo") String userNo,
 			@Param(value = "photoPath") String photoPath);
+
+	/**
+	 * 验证帐号是否合法
+	 * 
+	 * @param map
+	 * @return
+	 */
+	Map<String, Object> validateAccount(Map<String, Object> map);
 }

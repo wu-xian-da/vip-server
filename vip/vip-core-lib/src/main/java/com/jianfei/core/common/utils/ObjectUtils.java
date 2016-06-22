@@ -15,6 +15,14 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
 
+	public static boolean isEmpty(Object obj) {
+		if (null == obj) {
+			return true;
+		}
+		return false;
+
+	}
+
 	/**
 	 * 注解到对象复制，只复制能匹配上的方法。
 	 * 

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
+import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.PasswdHelper;
@@ -93,6 +94,68 @@ public class UserManagerImpl implements UserManaer<User> {
 		return messageDto;
 	}
 
+	/**
+	 * 更新用户信息
+	 * 
+	 * @param user
+	 * @param roleid
+	 * @return
+	 */
+	private MessageDto<Long> update(User user, String roleid) {
+		Map<String, Object> map = userMapper
+				.validateAccount(new MapUtils.Builder()
+						.setKeyValue("code", user.getCode())
+						.setKeyValue("id", user.getId()).build());
+		if (!MapUtils.isEmpty(map)) {
+			return new MessageDto<Long>().setMsgBody("工号已经存在，请更换...");
+		}
+		Map<String, Object> ln = userMapper
+				.validateAccount(new MapUtils.Builder()
+						.setKeyValue("login_name", user.getLoginName())
+						.setKeyValue("id", user.getId()).build());
+		if (!MapUtils.isEmpty(ln)) {
+			return new MessageDto<Long>().setMsgBody("登录名已经存在，请更换...");
+		}
+		userMapper.update(user);
+
+		return new MessageDto<Long>().setOk(true).setData(user.getId());
+
+	}
+
+	/**
+	 * 保存用户操作
+	 * 
+	 * @param user
+	 * @param roleid
+	 * @return
+	 */
+	private MessageDto<Long> save(User user, String roleid) {
+		Map<String, Object> map = userMapper
+				.validateAccount(new MapUtils.Builder().setKeyValue("code",
+						user.getCode()).build());
+		if (!MapUtils.isEmpty(map)) {
+			return new MessageDto<Long>().setMsgBody("工号已经存在，请更换...");
+		}
+		Map<String, Object> ln = userMapper
+				.validateAccount(new MapUtils.Builder().setKeyValue(
+						"login_name", user.getLoginName()).build());
+		if (!MapUtils.isEmpty(ln)) {
+			return new MessageDto<Long>().setMsgBody("登录名已经存在，请更换...");
+		}
+		// 保存用户
+		// 设置密码
+		user.setPassword(PasswdHelper.passwdProdece(roleid, roelManager,
+				user.getSalt()));
+		// 设置APP端登入密码
+		user.setExtraPasswd(PasswdHelper.passwdProdece(roleid, roelManager,
+				StringUtils.EMPTY));
+		user.setState(GloabConfig.OPEN);
+		userMapper.save(user);
+		User okUser = userMapper.getUserByName(user.getLoginName());
+
+		return new MessageDto<Long>().setOk(true).setData(okUser.getId());
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -103,35 +166,18 @@ public class UserManagerImpl implements UserManaer<User> {
 	@Override
 	public MessageDto<String> saveUser(User user, String arids, String roleid) {
 		MessageDto<String> messageDto = new MessageDto<String>();
+
 		Long id = 0l;
-		if (!StringUtils.isEmpty(user.getLoginName())) {
-			User u = userMapper.getUserByName(StringUtils.trim(user
-					.getLoginName()));
-			// 保存操作,用户名已经存在
-			if (null != u && 0 == user.getId()) {
-				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
-			} else if (null == u && 0 == user.getId()) {
-				// 保存用户
-				// 设置密码
-				user.setPassword(PasswdHelper.passwdProdece(roleid,
-						roelManager, user.getSalt()));
-				// 设置APP端登入密码
-				user.setExtraPasswd(PasswdHelper.passwdProdece(roleid,
-						roelManager, StringUtils.EMPTY));
-				user.setState(GloabConfig.OPEN);
-				userMapper.save(user);
-				User u2 = userMapper.getUserByName(user.getLoginName());
-				id = u2.getId();
-
-			} else if (u != null && user.getId() != u.getId()) {
-				// 更新操作
-				return messageDto.setMsgBody("用户名已经存在,请更换用户名...");
-			} else {
-				userMapper.update(user);
-				id = user.getId();
-			}
+		MessageDto<Long> result = null;
+		if (0 == user.getId()) {
+			result = save(user, roleid);
+		} else {
+			result = update(user, roleid);
 		}
-
+		if (!result.isOk()) {
+			return messageDto.setMsgBody(result.getMsgBody());
+		}
+		id = result.getData();
 		// 更新用户角色
 		if (!StringUtils.isEmpty(roleid)) {
 			MessageDto<String> dto = batchUpdateUserRoles(id, roleid);
