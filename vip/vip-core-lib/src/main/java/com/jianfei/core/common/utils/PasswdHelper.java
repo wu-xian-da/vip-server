@@ -28,11 +28,6 @@ public class PasswdHelper {
 		return StringUtils.EMPTY;
 	}
 
-	public static void main(String[] args) {
-		System.out.println(new MD5().MD5Encode("jingli123456"));
-		System.out.println( new SimpleHash("md5", "jingli123456"));
-	}
-
 	public static String passwdProdece(String roelId, RoleManager roleManager,
 			String salt) {
 		String passwd = passwdInit(roelId, roleManager);
@@ -44,5 +39,14 @@ public class PasswdHelper {
 			return new SimpleHash("md5", passwd, salt).toString();
 		}
 		return new MD5().MD5Encode(passwd);
+	}
+
+	public static String defaultPasswdProdece() {
+		return new MD5().MD5Encode(GloabConfig.getConfig("defalut.passwd"));
+	}
+
+	public static String defaultPasswdProdece(String salt) {
+		SimpleHash hash = new SimpleHash("md5", defaultPasswdProdece(), salt);
+		return hash.toString();
 	}
 }

@@ -21,12 +21,14 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.PasswdHelper;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.mapper.BusizzMapper;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.BusizzManager;
+import com.jianfei.core.service.sys.RoleManager;
 
 /**
  *
@@ -46,6 +48,8 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 
 	@Autowired
 	private AriPortManager<AriPort> ariPortService;
+	@Autowired
+	private RoleManager roleManager;
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -172,15 +176,31 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	public MessageDto<String> initpwd(Map<String, Object> map) {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
-			String pwd = GloabConfig.getConfig("defalut.passwd");
-			SimpleHash simpleHash = new SimpleHash("md5", pwd);
-			if (null == map.get("salt")) {
+			// 初始化系统后台用户密码
+			String roleId = StringUtils.obj2String(map.get("roleId"));
+			String salt = StringUtils.obj2String(map.get("salt"));
+			if (!StringUtils.isEmpty(roleId)) {
+				PasswdHelper.passwdProdece(roleId, roleManager,
+						StringUtils.obj2String(map.get("salt")));
+				map.put("pwd", PasswdHelper.passwdProdece(roleId, roleManager,
+						StringUtils.EMPTY));
+				map.put("password", PasswdHelper.passwdProdece(
+						roleId,
+						roleManager,
+						StringUtils.isEmpty(salt) ? GloabConfig
+								.getConfig("defalut.passwd") : salt));
+				busizzMaapper.initpwd(map);
+				return messageDto.setOk(true).setMsgBody(
+						MessageDto.MsgFlag.SUCCESS);
+			}
+
+			// 初始化业务员密码
+			if (StringUtils.isEmpty(salt)) {
 				return messageDto.setMsgBody(MsgFlag.ERROR);
 			} else {
-				SimpleHash hash = new SimpleHash("md5", pwd, map.get("salt"));
-				map.put("password", hash.toString());
+				map.put("password", PasswdHelper.defaultPasswdProdece(salt));
 			}
-			map.put("pwd", simpleHash.toString());
+			map.put("pwd", PasswdHelper.defaultPasswdProdece());
 
 			busizzMaapper.initpwd(map);
 		} catch (Exception e) {
