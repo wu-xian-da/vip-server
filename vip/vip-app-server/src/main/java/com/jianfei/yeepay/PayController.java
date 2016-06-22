@@ -210,7 +210,8 @@ public class PayController {
 					
 					param.setOutTradeNo(orderNo);
 					param.setTradeNo(sessionBody.elementText("YeepayOrderNo"));
-					param.setPayTime(sessionBody.elementText("OrderNo"));
+					
+					param.setPayTime(DateUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 					param.setPayUserId(sessionBody.elementText("BankCardNo"));
 			    	param.setPayType(PayType.BANKPAY.getName());
 			    	
