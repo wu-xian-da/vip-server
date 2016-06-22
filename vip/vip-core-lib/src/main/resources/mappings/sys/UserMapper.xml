@@ -109,7 +109,8 @@
 				  `salt`,
 				  `dtflag`,
 				  extra_passwd,
-				  code
+				  code,
+				  job
 				) 
 				VALUES
 				  (
@@ -127,7 +128,8 @@
 				    #{salt},
 				    #{dtflag},
 				    #{extraPasswd},
-				    #{code}
+				    #{code},
+				    #{job}
 				  )
 			   ]]>
 	</insert>
@@ -137,6 +139,9 @@
 			update sys_users set update_time=#{updatedatetime}
 			<if test="name!=null">
 				,name=#{name}
+			</if>
+			<if test="job!=null and job!=''">
+				,job=#{job}
 			</if>
 			<if test="password!=null">
 				,password=#{password}

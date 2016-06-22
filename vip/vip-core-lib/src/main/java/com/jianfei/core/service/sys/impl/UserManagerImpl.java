@@ -100,20 +100,6 @@ public class UserManagerImpl implements UserManaer<User> {
 	 * com.jianfei.core.service.sys.UserManaer#saveUser(com.jianfei.core.bean
 	 * .User, java.lang.String, java.lang.String)
 	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.sys.UserManaer#saveUser(com.jianfei.core.bean
-	 * .User, java.lang.String, java.lang.String)
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.sys.UserManaer#saveUser(com.jianfei.core.bean
-	 * .User, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public MessageDto<String> saveUser(User user, String arids, String roleid) {
 		MessageDto<String> messageDto = new MessageDto<String>();

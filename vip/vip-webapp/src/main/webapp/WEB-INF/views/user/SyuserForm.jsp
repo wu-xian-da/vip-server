@@ -52,10 +52,19 @@
 			$("#area input:checkbox").checkCbx(isChecked);
 		});
 	});
+	$(function(){
+		$('#cc').combobox({
+			onSelect: function(record){
+				console.info(record);
+				$("#job").val(record.text);
+			}
+		});
+	});
 </script>
 </head>
 <body>
 	<form method="post" class="form">
+	<input type="hidden" name="job" value="${user.job }" id="job">
 		<fieldset>
 		<input name="id" type="hidden" value="${user.id }" readonly="readonly" />
 		<input name="arids" type="hidden" id="arids">
