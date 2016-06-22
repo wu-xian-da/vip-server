@@ -68,6 +68,7 @@ public class SaleUserManagerImpl implements SaleUserManager {
     public User getSaleUserDetail(String userNo) {
         HashMap map = new HashMap();
         map.put("uno", userNo);
+        map.put("state", 0);
         List<User> list = userMapper.get(map);
         return list == null || list.isEmpty() ? null : list.get(0);
     }
