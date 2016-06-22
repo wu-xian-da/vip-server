@@ -22,6 +22,7 @@ import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.dto.UserProvince;
 import com.jianfei.core.mapper.BusizzMapper;
 import com.jianfei.core.service.base.AriPortManager;
@@ -110,6 +111,7 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 				return messageDto.setMsgBody("工号已经存在,请更换...");
 			} else if (null == u && 0 == user.getId()) {
 				// 保存用户
+				user.setState(GloabConfig.OPEN);
 				busizzMaapper.save(user);
 				User u2 = busizzMaapper.getUserByCode(StringUtils.trim(user
 						.getCode()));
@@ -170,11 +172,10 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	public MessageDto<String> initpwd(Map<String, Object> map) {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
-			String pwd = map.get("code") == null ? "" : map.get("code")
-					.toString();
+			String pwd = GloabConfig.getConfig("defalut.passwd");
 			SimpleHash simpleHash = new SimpleHash("md5", pwd);
 			if (null == map.get("salt")) {
-				map.put("password", "");
+				return messageDto.setMsgBody(MsgFlag.ERROR);
 			} else {
 				SimpleHash hash = new SimpleHash("md5", pwd, map.get("salt"));
 				map.put("password", hash.toString());
@@ -198,7 +199,7 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 	public List<Map<String, Object>> selectMap(Map<String, Object> map) {
 		return busizzMaapper.selectMap(map);
 	}
-	
+
 	/**
 	 * 根据业务人员id获取所属省份id
 	 */

@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
+import com.jianfei.core.common.utils.PasswdHelper;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.base.AriPortManager;
@@ -107,6 +107,13 @@ public class UserManagerImpl implements UserManaer<User> {
 	 * com.jianfei.core.service.sys.UserManaer#saveUser(com.jianfei.core.bean
 	 * .User, java.lang.String, java.lang.String)
 	 */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.sys.UserManaer#saveUser(com.jianfei.core.bean
+	 * .User, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public MessageDto<String> saveUser(User user, String arids, String roleid) {
 		MessageDto<String> messageDto = new MessageDto<String>();
@@ -120,14 +127,12 @@ public class UserManagerImpl implements UserManaer<User> {
 			} else if (null == u && 0 == user.getId()) {
 				// 保存用户
 				// 设置密码
-				Map<String, Object> map = roelManager
-						.selectRoleById(StringUtils.toLong(roleid));
-
-				SimpleHash simpleHash = new SimpleHash("md5", map == null ? ""
-						: map.get("initPwd"), user.getSalt());
-				user.setPassword(simpleHash.toString());
-				user.setExtraPasswd(new SimpleHash("md5", map == null ? ""
-						: map.get("initPwd")).toString());
+				user.setPassword(PasswdHelper.passwdProdece(roleid,
+						roelManager, user.getSalt()));
+				// 设置APP端登入密码
+				user.setExtraPasswd(PasswdHelper.passwdProdece(roleid,
+						roelManager, StringUtils.EMPTY));
+				user.setState(GloabConfig.OPEN);
 				userMapper.save(user);
 				User u2 = userMapper.getUserByName(user.getLoginName());
 				id = u2.getId();

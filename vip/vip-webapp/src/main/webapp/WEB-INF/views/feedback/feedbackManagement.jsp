@@ -29,7 +29,7 @@
 					</select>
 				</div>
 				<div class="order-condition-item" style="text-align: left">
-					<button id="searchBt" style="height: 20px">检索</button>
+					<button id="searchBt" style="height: 20px">查询</button>
 				</div>
 			</div>
 			

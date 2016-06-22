@@ -14,6 +14,7 @@
     <result column="country" property="country" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+    <result column="invoice_no" property="invoiceNo"/>
   </resultMap>
   
   <!--根据订单号返回发票信息  -->
@@ -161,6 +162,9 @@
       </if>
       <if test="dtflag != null" >
         dtflag = #{dtflag,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceNo != null">
+      	invoice_no = #{invoiceNo}
       </if>
     </set>
     where invoice_id = #{invoiceId,jdbcType=VARCHAR}

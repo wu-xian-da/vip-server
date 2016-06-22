@@ -63,4 +63,18 @@ public interface VipRoomManager {
      * @return
      */
 	PageInfo<SysViproom> pageVipRoom(PageDto pageDto, SysAirport airport);
+	
+	/**
+	 * 启用vip室功能
+	 * @param viproomId
+	 * @return
+	 */
+    int startUsingByVipRommId(String viproomId);
+    
+    /**
+     * 禁用vip室功能
+     * @param viproomId
+     * @return
+     */
+    int forbideenUsingByVipRommId(String viproomId);
 }

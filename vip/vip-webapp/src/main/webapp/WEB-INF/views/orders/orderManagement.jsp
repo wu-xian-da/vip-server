@@ -68,15 +68,21 @@
 			                <select id="invoiceSelect">
 			                    <option value="3">全部发票状态</option>
 			                    <option value="0">未开</option>
-			                    <option value="1">已开</option>
+			                    <option value="1">发票未邮寄</option>
+			                    <option value="2">发票已邮寄</option>
 			                  
 			                </select>
 			            </div>
 			
 			            <div class="order-condition-item" style="width: 190px">
 			                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
-			                <button id="searchBt">检索</button>
+			                <button id="searchBt">查询</button>
 			            </div>
+			            
+			            <div class="order-condition-item" style="width: 70px">
+			                <button id="resetBt">重置</button>
+			            </div>
+			            
 			        </div>
 	        </div>
 	        
@@ -378,10 +384,27 @@
         	//手机号后置用户姓名
         	var phoneOrUserName = $("#phoneOrUserName").val();
         	
-        	var url = "orderList?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
-        			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
-        	$('#tt').datagrid({url:url});
+        	//判断结束时间是否大于开始时间
+        	if(endTime < startTime ){
+        		$.messager.alert('提示','结束时间不能小于开始时间！','warning'); 
+        	}else{
+        		var url = "orderList?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
+    			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
+    			$('#tt').datagrid({url:url});
+        	}
         	
+        	
+        	
+        })
+        
+        //重置按钮
+        $("#resetBt").click(function(){
+        	$("#startTime").datebox("setValue","");
+        	$("#endTime").datebox("setValue","");
+        	$("#phoneOrUserName").val("");
+        	$("#airportIdSelect").val("");
+        	$("#orderStateSelect").val('5');
+        	$("#invoiceSelect").val('3');
         })
 	</script>
 	

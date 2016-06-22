@@ -32,4 +32,13 @@ public class AppInvoiceManagerImpl implements AppInvoiceManager{
 		appInvoice.setInvoiceId(IdGen.uuid());
 		return appInvoiceMapper.insert(appInvoice) == 1 ? true : false;
 	}
+	
+	/**
+	 * 更新发票信息
+	 */
+	@Override
+	public int updateByPrimaryKeySelective(AppInvoice appInvoice) {
+		// TODO Auto-generated method stub
+		return appInvoiceMapper.updateByPrimaryKeySelective(appInvoice);
+	}
 }

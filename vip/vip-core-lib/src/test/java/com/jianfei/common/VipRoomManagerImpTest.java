@@ -56,7 +56,7 @@ public class VipRoomManagerImpTest {
 	@Test
 	public void pageListTest(){
 		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("searchContent", "北京机场11");
+		//params.put("searchContent", "北京机场11");
 		PageInfo<SysViproom> pageinfo = vipRoomManagerImp.simplePage(1, 2, params);
 		System.out.println("总的条数："+pageinfo.getTotal());
 		List<SysViproom> list = pageinfo.getList();

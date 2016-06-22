@@ -12,38 +12,66 @@
 			<if test="month!=null">
 				<![CDATA[and  a.`month`=#{month} ]]>
 			</if>
+			<if test="ariportIds!=null">
+				and a.`airport_id` in
+				<foreach item="item" index="index" collection="ariportIds"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 		</where>
 	</select>
 
 	<!-- 开卡数前top3的省份 -->
 	<select id="masterTop" resultType="java.util.Map" parameterType="java.util.Map">
-		<![CDATA[SELECT A.*,B.bname,B.total FROM  (SELECT 
-			  archie.`province`,SUM(archie.`order_num`) AS order_sum
+		<![CDATA[
+			SELECT
+				aoa.pid,
+				aoa.province,
+				aoa.bname,
+				A.max_order as max_order,
+				aoa.`year`,
+				aoa.`month`,
+				aoa.`day`,
+				aoa.airport_id,
+				aoa.airportname,
+				sum(aoa.order_num) AS sum_order
 			FROM
-			  `app_order_archive` archie
-			 ]]>
+				app_order_archive aoa
+			INNER JOIN (
+				SELECT
+					ao.pid,
+					max(ao.order_num) AS max_order
+				FROM
+					app_order_archive ao
+					where 	
+					ao.`year` = #{year} 
+					AND ao. MONTH = #{month}
+				GROUP BY
+					ao.pid
+			) A ON aoa.pid = A.pid
+			AND A.max_order = aoa.order_num
+		]]>
 		<where>
 			<if test="year!=null">
-				<![CDATA[archie.`year`=#{year} ]]>
+				<![CDATA[aoa.`year`=#{year} ]]>
 			</if>
 			<if test="month!=null">
-				<![CDATA[and  archie.`month`=#{month} ]]>
+				<![CDATA[and  aoa.`month`=#{month} ]]>
+			</if>
+			<if test="ariportIds!=null">
+				and aoa.`airport_id` in
+				<foreach item="item" index="index" collection="ariportIds"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
 			</if>
 		</where>
-		<![CDATA[ GROUP BY archie.`province`	 LIMIT 0,3) A
-			 INNER JOIN 
-			 (SELECT MAX(a.`order_num`) AS total ,a.bname,a.`province` FROM app_order_archive a]]>
-		<where>
-			<if test="year!=null">
-				<![CDATA[a.`year`=#{year} ]]>
-			</if>
-			<if test="month!=null">
-				<![CDATA[and  a.`month`=#{month} ]]>
-			</if>
-		</where>
-		GROUP BY a.`bname`,a.`province` ) B
-		ON A.province=B.province order by
-		B.total desc
+			GROUP BY
+				aoa.pid
+			ORDER BY
+				sum_order DESC
+			LIMIT 0,3
 	</select>
 
 	<!-- 为经理角色绘图 -->
@@ -61,6 +89,13 @@
 			<if test="month!=null">
 				<![CDATA[and  archie.`month`=#{month} ]]>
 			</if>
+			<if test="ariportIds!=null">
+				and archie.`airport_id` in
+				<foreach item="item" index="index" collection="ariportIds"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 		</where>
 		GROUP BY archie.`province`
 	</select>
@@ -68,7 +103,13 @@
 	<!-- 统计-主管首页统计的订单数 -->
 	<select id="zhuGuanTotal" resultType="java.util.Map"
 		parameterType="java.util.Map">
-		SELECT SUM(a.`order_num`) AS total FROM `app_order_archive` a WHERE
+		SELECT CASE WHEN
+		SUM(a.`order_num`) IS NULL THEN
+		0
+		ELSE
+		SUM(a.`order_num`)
+		END AS total
+		FROM `app_order_archive` a WHERE
 		a.`year`=#{year} and a.`month`=#{month}
 		<if test="ariportIds!=null">
 			and a.`airport_id` in
@@ -77,8 +118,8 @@
 				#{item}
 			</foreach>
 		</if>
-
 	</select>
+	
 	<!-- 统计-主管首页统计的订单数和最优业务员统计 -->
 	<select id="zhuGuanAllAirPort" resultType="java.util.Map"
 		parameterType="java.util.Map">
@@ -86,7 +127,7 @@
 			SELECT
 			a.`airport_id`,
 			a.`airportname`,
-			SUM(a.`order_num`) AS order_num,
+			CASE WHEN SUM(a.`order_num`) is null then 0 ELSE SUM(a.`order_num`)  end AS order_num,
 			b.bname,
 			b.maxOrder
 		FROM
@@ -99,23 +140,13 @@
 			FROM
 				app_order_archive a
 			WHERE
-					 a.`year` = #{year} 
-					AND a. MONTH = #{month}
-		]]>
-		<if test="ariportIds!=null">
-			and a.`airport_id` in
-			<foreach item="item" index="index" collection="ariportIds"
-				open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
-		<![CDATA[GROUP BY
-						a.airport_id,
-						a.bname
-				) b ON b.airport_id = a.airport_id
-			WHERE
-				    a.`year` = #{year} 
-					AND a. MONTH = #{month}
+				a.`year` = #{year} 
+				AND a. MONTH = #{month}
+			GROUP BY a.airport_id) b
+		ON b.airport_id = a.airport_id and b.maxOrder=a.order_num
+		WHERE
+				a.`year` = #{year} 
+				AND a. MONTH = #{month}
 		]]>
 		<if test="ariportIds!=null">
 			and a.`airport_id` in
@@ -144,8 +175,8 @@
 						a.`airport_id`,
 						a.`airportname`,
 						a.`bname`,
-						a.`id`,
-						SUM(a.`order_num`) AS order_num
+						a.bid,
+						CASE WHEN SUM(a.`order_num`) is null THEN 0 ELSE SUM(a.`order_num`) END  AS order_num
 					FROM
 						app_order_archive a
 					WHERE
@@ -169,10 +200,6 @@
 						A.airportname
 		]]>
 	</select>
-	<!-- 获取订单的最大日期 -->
-	<select id="selectOrderMaxDay" resultType="java.util.Map">
-		<![CDATA[SELECT DATE_FORMAT(MAX(order_time),'%Y-%m-%d') AS maxTime FROM app_orders]]>
-	</select>
 	<!-- 日归档表抽取 -->
 	<select id="baseDailyExtract" parameterType="java.util.Map">
 		<![CDATA[
@@ -191,11 +218,17 @@
 			  `dayweek`,
 			  `sex`,
 			  `photo`,
-			  `pid`
+			  `pid`,
+			  order_num_back
 			)  SELECT
 				u.id,
 				max(ao.order_time) AS file_time,
-				sum(ao.order_id) AS order_num,
+				CASE
+				WHEN count(ao.order_id) IS NULL THEN
+					0
+				ELSE
+					count(ao.order_id)
+				END AS order_num,
 				ao.dtflag,
 				u.`name` AS bname,
 				a.airport_name,
@@ -203,18 +236,33 @@
 				DATE_FORMAT(#{maxTime},'%Y') AS YEAR,
 				DATE_FORMAT(#{maxTime},'%m') AS MONTH,
 				DATE_FORMAT(#{maxTime},'%d') AS DAY,
-				a.province,
+				c.name,
 				WEEKDAY(#{maxTime})+1,
 				u.sex,
 				u.photo,
-				c.CID as pid
+				c.CID as pid,
+				CASE
+				WHEN ab.back_order_num IS NULL THEN
+					0
+				ELSE
+					ab.back_order_num
+				END
+				 as order_num_back
 			FROM
 				sys_users u
-			INNER JOIN app_orders ao ON ao.id = u.id
 			INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
 			INNER JOIN sys_airport a ON sua.airport_id = a.airport_id
 			inner join sys_city c on a.province=c.CID
-			WHERE DATE_FORMAT(ao.order_time, '%Y-%m-%m') =#{maxTime}
+			LEFT JOIN app_orders ao ON ao.id = u.id and DATE_FORMAT(ao.order_time, '%Y-%m-%m') =#{maxTime}
+			LEFT JOIN (
+				SELECT
+					count(ados.id) AS back_order_num,
+					ados.sale_no
+				FROM
+					app_orders ados
+				WHERE
+					ados.order_state = 4 and DATE_FORMAT(ados.order_time, '%Y-%m-%m') =#{maxTime}
+			) ab ON ab.sale_no = u.`code`
 			GROUP BY
 			u.id,
 			u.`name`,
@@ -236,7 +284,13 @@
 					count(DISTINCT aoa.bid) AS pcount,
 					sum(aoa.order_num) AS total,
 					sum(aoa.order_num) / count(DISTINCT aoa.bid) AS avgNum,
-					aoa.pid
+					aoa.pid,
+					CASE
+					WHEN sum(aoa.order_num_back) IS NULL THEN
+						0
+					ELSE
+						sum(aoa.order_num_back)
+					END AS back_order_total
 				FROM
 					app_order_archive aoa
 					where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}

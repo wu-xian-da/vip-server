@@ -54,11 +54,13 @@
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 1:
-						return 'vip卡权益';
+						return '登录前vip卡权益';
 					case 2:
 						return '常见问题';
 					case 3:
 						return '关于';
+					case 4:
+						return '登录后vip卡权益';
 					}
 				}
 				

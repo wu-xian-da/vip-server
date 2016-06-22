@@ -67,7 +67,7 @@
 			<input name="id" type="hidden" value="${ariPort.airport_id }" readonly="readonly" />
 			<table class="table" style="width: 100%;">
 				<tr style="padding-top: 5px;">
-					<th style="width: 20%;">场站名称</th>
+					<th style="width: 20%;">场站名称 </th>
 					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" style="text-align: left;"/></td>
 						<th>场站负责人</th>
 					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" value="${ariPort.header_name }" /></td>

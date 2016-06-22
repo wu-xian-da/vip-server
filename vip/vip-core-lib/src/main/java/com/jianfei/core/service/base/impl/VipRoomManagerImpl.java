@@ -104,7 +104,7 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	public void updateVipRoom(SysViproom viproom) {
 		int updateFlag =0;
 		try {
-			sysViproomMapper.updateByPrimaryKey(viproom);
+			sysViproomMapper.updateByPrimaryKeySelective(viproom);
 		} catch (Exception e) {
 			e.printStackTrace();
 			updateFlag = 1;
@@ -168,5 +168,27 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	@Override
 	public SysViproom selVipRoomById(String viproomId) {
 		return sysViproomMapper.selectByPrimaryKey(viproomId);
+	}
+	
+	/**
+	 * 启用vip室功能
+	 * @param viproomId
+	 * @return
+	 */
+	@Override
+	public int startUsingByVipRommId(String viproomId) {
+		// TODO Auto-generated method stub
+		return sysViproomMapper.startUsingByVipRommId(viproomId);
+	}
+	
+	/**
+     * 禁用vip室功能
+     * @param viproomId
+     * @return
+     */
+	@Override
+	public int forbideenUsingByVipRommId(String viproomId) {
+		// TODO Auto-generated method stub
+		return sysViproomMapper.forbideenUsingByVipRommId(viproomId);
 	}
 }

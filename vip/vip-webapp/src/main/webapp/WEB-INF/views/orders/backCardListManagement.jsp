@@ -43,14 +43,14 @@
 	
 				<div class="order-condition-item">
 					<select name="" id="orderStateSelect">
-						<option value="10">全部退款状态</option>
+						<option value="10">全部订单状态</option>
 						<option value="3">审核通过</option>
 						<option value="4">已退款</option>
 					</select>
 				</div>
 	
 				<div class="order-condition-item" style="text-align: left">
-					<button id="searchBt" style="height: 20px">检索</button>
+					<button id="searchBt" style="height: 20px">查询</button>
 				</div>
 			</div>
 			
@@ -77,13 +77,13 @@
 							<th data-options="align:'center', field:'orderId',width:100">订单号</th>
 							<th data-options="align:'center', field:'customerName',width:100">用户名</th>
 							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-							<th data-options="align:'center', field:'orderTime',width:100">申请日期</th>
+							<th data-options="align:'center', field:'orderTime',width:120">申请日期</th>
 		
 							<th data-options="align:'center', field:'applyTypeName',width:150">申请途径</th>
 							<th data-options="align:'center', field:'backTypeName',width:100">退卡方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
 							<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
-							<th data-options="align:'center', field:'operation',width:210">操作</th>
+							<th data-options="align:'center', field:'operation',width:200">操作</th>
 						</tr>
 					</thead>
 		

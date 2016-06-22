@@ -57,13 +57,13 @@
 			</c:if>
 			
 			<!--个人资料  -->
-			<div class="order-list-title">个人资料</div>
+			<div class="order-list-title">用户资料</div>
 			<ul>
-				<li>用户姓名：${customer.customerName}</li>
+				<li>姓名：${customer.customerName}</li>
 				<li>身份证：${customer.customerIdenti }</li>
-				<li>用户手机号：${customer.phone }</li>
-				<li>用户性别：${customer.sex ==1 ? '男' : '女' }</li>
-				<li>常驻城市：${customer.address }</li>
+				<li>手机号：${customer.phone }</li>
+				<li>性别：${customer.sex ==1 ? '男' : '女' }</li>
+				<li>常住城市：${customer.address }</li>
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
 

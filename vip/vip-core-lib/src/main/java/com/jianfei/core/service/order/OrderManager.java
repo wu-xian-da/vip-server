@@ -1,5 +1,6 @@
 package com.jianfei.core.service.order;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public interface OrderManager {
      *
      * @return
      */
-    BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto);
+    BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) throws InvocationTargetException, IllegalAccessException;
 
     /**
      * 更新订单信息付款
@@ -88,7 +89,7 @@ public interface OrderManager {
      *float
      * @version  1.0.0
      */
-    float remainMoney(String orderId);
+    double remainMoney(String orderId);
     
     /**
      * guo.jian
@@ -205,4 +206,10 @@ public interface OrderManager {
      * @return
      */
     AppOrders getOrderInfoByOrderId(String orderId);
+    
+    /**
+	 * 查询需要开发票的订单信息
+	 */
+    PageInfo<OrderShowInfoDto> invoicePageList(int pageNo, int pageSize,Map<String,Object> map);
+    
 }

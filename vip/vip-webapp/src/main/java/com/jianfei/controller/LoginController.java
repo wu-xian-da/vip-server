@@ -53,6 +53,9 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
 		User user = getCurrentUser();
+		if(2==user.getUserType()){
+			return "home/default";
+		}
 		List<Role> roles = user.getRoles();
 		if (!CollectionUtils.isEmpty(roles)) {
 			// 查找优先级最大的角色和首页路径
@@ -137,8 +140,7 @@ public class LoginController extends BaseController {
 	public String finance(Model model) {
 		List<Map<String, Object>> maps = orderManager
 				.selectOrder(new MapUtils.Builder().setKeyValue("dateTime",
-						DateUtil.dateToString(new Date(), "yyyy-MM"))
-						.build());
+						DateUtil.dateToString(new Date(), "yyyy-MM")).build());
 		if (!CollectionUtils.isEmpty(maps)) {
 			model.addAttribute("nowMonthOrder", maps.size());
 		} else {
@@ -164,7 +166,8 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(value = "/master/home")
 	public String master(Model model) {
-		archiveManager.masterHome(model);
+		User user = getCurrentUser();
+		archiveManager.masterHome(model,user);
 
 		return "home/master";
 	}

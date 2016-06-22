@@ -34,6 +34,7 @@ import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.order.OrderManager;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * TODO
@@ -44,6 +45,7 @@ import com.jianfei.core.service.order.OrderManager;
  * @date: 2016/5/18 16:31
  */
 @Service
+@Transactional
 public class OrderManagerImpl implements OrderManager {
 
     @Autowired
@@ -76,59 +78,56 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) {
+    public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) throws InvocationTargetException, IllegalAccessException {
 
-		try {
-			//1、校验用户和手机验证码
-			boolean flag=validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER,addInfoDto.getCode());
-			if (!flag){
-				return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
-			}
-			//2、添加用户信息
-			AppCustomer customer= new AppCustomer();
-			BeanUtils.copyProperties(customer,addInfoDto);
-			vipUserManager.addUser(customer);
-			//3、根据查询VIP号查询卡片信息
-			AppVipcard vipCard=vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
-			if (vipCard == null) {
-				return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
-			}
-			vipCard.setCustomerId(customer.getCustomerId());
-			vipCardManager.updateVipCard(vipCard);
-
-			//4、添加订单信息
-			AppOrders orders=new AppOrders();
-			BeanUtils.copyProperties(orders,addInfoDto);
-			orders.setSaleNo(addInfoDto.getUno());
-			orders.setCustomerId(customer.getCustomerId());
-			orders.setPayMoney(vipCard.getInitMoney());
-			orders.setOrderId(IdGen.uuid());
-			orders.setOrderTime(new Date());
-			orders.setRemark1(vipCard.getCardName());
-			orders.setOrderState(VipOrderState.NOT_PAY.getName());
-			orders.setDtflag(StateType.EXIST.getName());
-			orders.setInvoiceFlag(0);
-			appOrdersMapper.insertSelective(orders);
-
-            //5、订单卡表
-			AppOrderCard appOrderCard=new AppOrderCard();
-			appOrderCard.setId(IdGen.uuid());
-			appOrderCard.setOrderId(orders.getOrderId());
-			appOrderCard.setCardNo(addInfoDto.getVipCardNo());
-			appOrderCard.setCardNum(1);
-			appOrderCard.setInitMoney(vipCard.getInitMoney());
-			appOrderCard.setCardType(vipCard.getCardType());
-			appOrderCardMapper.insert(appOrderCard);
-			addInfoDto.setOrderId(orders.getOrderId());
-			addInfoDto.setMoney(vipCard.getInitMoney());
-			return BaseMsgInfo.success(addInfoDto);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-
+		//1、校验用户和手机验证码
+		boolean flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
+		if (!flag) {
+			return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
 		}
-		return new BaseMsgInfo().setCode(-1).setMsg("开卡失败");
+
+		//2、根据查询VIP号查询卡片信息
+		AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
+		if (vipCard == null) {
+			return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
+		}
+
+		//3、添加用户信息
+		AppCustomer customer = new AppCustomer();
+		BeanUtils.copyProperties(customer, addInfoDto);
+		vipUserManager.addUser(customer);
+
+
+		//4、添加订单信息
+		AppOrders orders = new AppOrders();
+		BeanUtils.copyProperties(orders, addInfoDto);
+		orders.setSaleNo(addInfoDto.getUno());
+		orders.setCustomerId(customer.getCustomerId());
+		orders.setPayMoney(vipCard.getInitMoney());
+		orders.setOrderId(IdGen.uuid());
+		orders.setOrderTime(new Date());
+		orders.setRemark1("亿出行VIP卡");
+		orders.setOrderState(VipOrderState.NOT_PAY.getName());
+		orders.setDtflag(StateType.EXIST.getName());
+		orders.setInvoiceFlag(0);
+		appOrdersMapper.insertSelective(orders);
+
+		//5、卡表及订单卡表
+		vipCard.setCustomerId(customer.getCustomerId());
+		vipCardManager.updateVipCard(vipCard);
+		AppOrderCard appOrderCard = new AppOrderCard();
+		appOrderCard.setId(IdGen.uuid());
+		appOrderCard.setOrderId(orders.getOrderId());
+		appOrderCard.setCardNo(addInfoDto.getVipCardNo());
+		appOrderCard.setCardNum(1);
+		appOrderCard.setInitMoney(vipCard.getInitMoney());
+		appOrderCard.setCardType(vipCard.getCardType());
+		appOrderCardMapper.insert(appOrderCard);
+
+		addInfoDto.setOrderId(orders.getOrderId());
+		addInfoDto.setMoney(vipCard.getInitMoney());
+		return BaseMsgInfo.success(addInfoDto);
+
     }
 
 
@@ -221,8 +220,8 @@ public class OrderManagerImpl implements OrderManager {
 	 * 根据订单号返回用户vip卡可退金额
 	 */
 	@Override
-	public float remainMoney(String orderId) {
-		float remainMoney = 0;
+	public double remainMoney(String orderId) {
+		double remainMoney = 0.00;
 		//1、app_order_card表中返回卡号，用户初始金额
 		AppOrderCard appOrderCard = appOrderCardMapper.getAppOrderCard(orderId);
 		if(appOrderCard!= null){
@@ -230,14 +229,14 @@ public class OrderManagerImpl implements OrderManager {
 			int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
 			//3、计算用户vip卡剩余金额
 			remainMoney = (float) (appOrderCard.getInitMoney()-count*200*0.8-100);
+			if(remainMoney < 0){
+				remainMoney = 0.00;
+			}
 			
 		}
 		System.out.println("float remainMoney="+remainMoney);
 		return remainMoney;
 	}
-
-
-	
 	
 
 	/* 获取销售某天开卡详细数据
@@ -342,7 +341,7 @@ public class OrderManagerImpl implements OrderManager {
 			  * @param goodsTag 商品标记，微信平台配置的商品标记，用于优惠券或者满减使用
 			  */
 			 NativePayReqData nativePayReqData=new NativePayReqData("",appOrders.getRemark1(),"",orderId,(int)(appOrders.getPayMoney()*100),
-					 "","192.168.199.200","","","", "","http://121.42.199.169/pay/wechat_notify","NATIVE",appOrders.getAirportId(),"","");
+					 "","192.168.199.200","","","", "",GloabConfig.getConfig("pay.notify.address")+"/pay/wechat_notify","NATIVE",appOrders.getAirportId(),"","");
 			 preCreateResult=wechatiPayManager.tradePrecreate(nativePayReqData);
 		 }else if (PayType.ALIPAY.equals(payType)){
 			 GoodsDetail goodsDetail = GoodsDetail.newInstance(appOrders.getOrderId(), appOrders.getRemark1(), 1, 1);
@@ -504,5 +503,17 @@ public class OrderManagerImpl implements OrderManager {
 	public AppOrders getOrderInfoByOrderId(String orderId) {
 		// TODO Auto-generated method stub
 		return appOrdersMapper.getOrderInfoByOrderId(orderId);
+	}
+
+	/**
+	 * 查询需要开发票的订单信息
+	 */
+	@Override
+	public PageInfo<OrderShowInfoDto> invoicePageList(int pageNo, int pageSize,Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(pageNo, pageSize);
+		List<OrderShowInfoDto> list = appOrdersMapper.invoicePageList(map);
+		PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
+		return pageInfo;
 	}
 }

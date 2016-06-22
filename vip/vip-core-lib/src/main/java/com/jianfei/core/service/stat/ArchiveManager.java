@@ -93,21 +93,13 @@ public interface ArchiveManager {
 	void baseDailyExtract(Map<String, Object> map);
 
 	/**
-	 * selectOrderMaxDay(获取最大的订单日期)
-	 * 
-	 * @return Map<String,Object>
-	 * @version 1.0.0
-	 */
-	Map<String, Object> selectOrderMaxDay();
-
-	/**
 	 * masterHome(经理首页)
 	 * 
 	 * @param model
 	 *            void
 	 * @version 1.0.0
 	 */
-	void masterHome(Model model);
+	void masterHome(Model model,User user);
 
 	/**
 	 * chargeHome(主管首页)

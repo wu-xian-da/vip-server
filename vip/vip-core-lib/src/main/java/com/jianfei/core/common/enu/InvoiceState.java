@@ -9,13 +9,14 @@ package com.jianfei.core.common.enu;
  */
 public enum InvoiceState {
 	/**
-	 * 需要发票
-	 */
-	NEED_INVOICE(1),
-	/**
 	 * 不需要发票
 	 */
 	NOT_NEED_INVOICE(0),
+	/**
+	 * 需要发票
+	 */
+	NEED_INVOICE(1),
+	
 	/**
 	 * 发票已邮寄
 	 */

@@ -13,7 +13,7 @@
 	var grid;
 	var addFun = function() {
 		var dialog = parent.sy.modalDialog({
-			title : '添加用户信息',
+			title : '添加业务员',
 			url : sy.contextPath + '/busizz/form',
 			buttons : [ {
 				text : '保存',
@@ -24,11 +24,11 @@
 		});
 	};
 	
-	var initPwd = function(id,code){
+	var initPwd = function(id,salt){
 		$.ajax({
 			  type: 'POST',
 			  url : sy.contextPath + '/busizz/initPwd',
-			  data: {id:id,code:code},
+			  data: {id:id,salt:salt},
 			  success: function(result){
 				  if (result.ok) {
 					  layer.alert(result.msgBody, {
@@ -47,7 +47,7 @@
 	}
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
-			title : '编辑用户信息',
+			title : '编辑业务员信息',
 			url : sy.contextPath + '/busizz/form?id=' + id,
 			buttons : [ {
 				text : '保存',
@@ -129,8 +129,9 @@
 					<%if (anyPermissionsTag.showTagBody("system:busizz:update")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑&nbsp;', row.id);
 					<%}%>
+					console.info(row.salt);
 					<%if (anyPermissionsTag.showTagBody("system:busizz:initPwd")) {%>
-					 str += sy.formatString('&nbsp;<img class="iconImg ext-icon-lock_edit" title="重置密码" onclick="initPwd(\'{0}\',\'{1}\');"/> 重置密码', row.id,row.code);
+					 str += sy.formatString('&nbsp;<img class="iconImg ext-icon-lock_edit" title="重置密码" onclick="initPwd(\'{0}\',\'{1}\');"/> 重置密码', row.id,row.salt);
 					<%}%>
 						return str;
 				}
@@ -170,7 +171,7 @@
 							<form id="searchForm">
 								<table>
 									<tr>
-										<td>姓名:</td>
+										<td>姓名：</td>
 										<td><input id="name" style="width: 150px" placeholder='输入业务员名字'></input></td>
 										<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;

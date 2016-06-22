@@ -41,8 +41,44 @@ public class SysViproom {
     private Integer dtflag;
 
     private String latitude;
+    
+    private Integer activeState;//机场状态
+    
+    private Date createTime;//创建时间
+    
+    
 
-    private List<AppPicture> pictures= Lists.newArrayList();
+    
+
+	/**
+	 * @return the createTime
+	 */
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	/**
+	 * @param createTime the createTime to set
+	 */
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	/**
+	 * @return the activeState
+	 */
+	public Integer getActiveState() {
+		return activeState;
+	}
+
+	/**
+	 * @param activeState the activeState to set
+	 */
+	public void setActiveState(Integer activeState) {
+		this.activeState = activeState;
+	}
+
+	private List<AppPicture> pictures= Lists.newArrayList();
 
     public String getViproomId() {
         return viproomId;
@@ -218,6 +254,16 @@ public class SysViproom {
 		this.headerName = headerName;
 	}
 
+	
+    public List<AppPicture> getPictures() {
+        AppPicture.getStaticAdderss(pictures);
+        return pictures;
+    }
+
+    public void setPictures(List<AppPicture> pictures) {
+        this.pictures = pictures;
+    }
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -228,15 +274,9 @@ public class SysViproom {
 				+ ", singleconsumeMoney=" + singleconsumeMoney + ", roomNum=" + roomNum + ", openTime=" + openTime
 				+ ", endTime=" + endTime + ", longitude=" + longitude + ", province=" + province + ", city=" + city
 				+ ", country=" + country + ", address=" + address + ", remark1=" + remark1 + ", dtflag=" + dtflag
-				+ ", latitude=" + latitude + "]";
+				+ ", latitude=" + latitude + ", activeState=" + activeState + ", pictures=" + pictures + "]";
 	}
 
-    public List<AppPicture> getPictures() {
-        AppPicture.getStaticAdderss(pictures);
-        return pictures;
-    }
-
-    public void setPictures(List<AppPicture> pictures) {
-        this.pictures = pictures;
-    }
+	
+    
 }

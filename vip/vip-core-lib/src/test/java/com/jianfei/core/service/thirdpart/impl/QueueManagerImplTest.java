@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.service.thirdpart.MsgInfoManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
@@ -51,7 +52,7 @@ public class QueueManagerImplTest {
 	@Test
 	public void testProcessMessage() {
 		MessageDto<Map<String, String>> messageDto = queueManager
-				.processMessage(QueueManager.SMS_QUEUE_VIP,
+				.processMessage(QueueManagerImpl.MESSAGEKEY,
 						QueueManager.SMS_QUEUE_VIP_BAK);
 		System.out.println(JSONObject.toJSONString(messageDto));
 	}
@@ -60,14 +61,15 @@ public class QueueManagerImplTest {
 	public void testProcedure() {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userPhone", "13275601668");
-		map.put("msgType", "001");
+		map.put("msgType", "002");
 		map.put("userName", "refineli");
 		map.put("vipCardNo", "12312445333123");
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("code", "smart001");
 		m.put("time", "10分钟");
 		map.put("msgBody", JSONObject.toJSONString(m));
-		System.out.println(JSONObject.toJSONString(map));
+		JedisUtils.lpushString(QueueManagerImpl.MESSAGEKEY,
+				JSONObject.toJSONString(map));
 	}
 
 	@Test

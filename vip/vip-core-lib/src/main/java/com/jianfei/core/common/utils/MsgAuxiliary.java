@@ -48,9 +48,6 @@ public class MsgAuxiliary {
 		return false;
 	}
 
-	public static void main(String[] args) {
-	}
-
 	/**
 	 * buildMsgBody(解析模版构建短信消息内容)
 	 * 

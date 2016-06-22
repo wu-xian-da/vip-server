@@ -5,12 +5,28 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class CharData {
-	//该省份当日总的开卡总数
+	//个人开卡总数
 	private String total;
-	//该省份当日业务人员平均开卡人数
+	//平均开卡人数
 	private String avgNum;
+	//退卡数
+	private String back_order_total;
 	
 	
+	/**
+	 * @return the back_order_total
+	 */
+	public String getBack_order_total() {
+		return back_order_total;
+	}
+
+	/**
+	 * @param back_order_total the back_order_total to set
+	 */
+	public void setBack_order_total(String back_order_total) {
+		this.back_order_total = back_order_total;
+	}
+
 	private Date date;
 
 	/**

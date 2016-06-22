@@ -109,13 +109,13 @@
 				<tr>
 					<td colspan="4">
 						<fieldset>
-						<legend>所属区域</legend>
+						<legend>所属区域</legend> 
 						<label><input name="Fruit" type="checkbox" value="" id="all" />全国 </label> <br /><br /> 
 						<div id="area" style="padding-left: 20px;margin-top: -20px;">
 							<table border="0">
 							<tr>
 							<c:forEach var="data" items="${datas }" varStatus="i" >
-								<c:if test="${(i.index)%4==0 }">
+								<c:if test="${(i.index)%3==0 }">
 								</tr>
 								</c:if>
 								<td style="border: none;">
