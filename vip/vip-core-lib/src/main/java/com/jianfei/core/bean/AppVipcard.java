@@ -21,6 +21,8 @@ public class AppVipcard {
     private Integer valideTime;
 
     private Date activeTime;
+
+    private Date expiryTime;
     private Date importTime;
 
     private String nfcId;
@@ -85,6 +87,7 @@ public class AppVipcard {
         this.valideTime = valideTime;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public Date getActiveTime() {
         return activeTime;
     }
@@ -147,10 +150,12 @@ public class AppVipcard {
 				+ ", nfcId=" + nfcId + ", dtflag=" + dtflag + "]";
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	
-    
-    
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    public Date getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Date expiryTime) {
+        this.expiryTime = expiryTime;
+    }
 }

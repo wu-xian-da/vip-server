@@ -2,10 +2,12 @@ package com.jianfei.core.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
 
 public class AppCustomer implements Serializable {
 	/**
@@ -49,9 +51,7 @@ public class AppCustomer implements Serializable {
 
 	private Date createTime;
 
-	private String cardNo;
-
-	private Date cardActiveTime;
+	private List<AppVipcard> vipCards= Lists.newArrayList();
 
 	private String code;
 
@@ -220,31 +220,10 @@ public class AppCustomer implements Serializable {
 		return JSONObject.toJSONString(this);
 	}
 
-	public String getCardNo() {
-		return cardNo;
-	}
-
-	public void setCardNo(String cardNo) {
-		this.cardNo = cardNo;
-	}
-
-	/**
-	 * createTime
-	 *
-	 * @return the createTime
-	 * @version 1.0.0
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	public Date getCardActiveTime() {
-		return cardActiveTime;
-	}
-
-	public void setCardActiveTime(Date cardActiveTime) {
-		this.cardActiveTime = cardActiveTime;
-	}
 
 	public String getCode() {
-		return cardNo;
+		//TODO 用户二维码生成规则
+		return "111111";
 	}
 
 	public void setCode(String code) {
@@ -265,5 +244,13 @@ public class AppCustomer implements Serializable {
 
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
+	}
+
+	public List<AppVipcard> getVipCards() {
+		return vipCards;
+	}
+
+	public void setVipCards(List<AppVipcard> vipCards) {
+		this.vipCards = vipCards;
 	}
 }
