@@ -102,7 +102,7 @@
 				field : 'tmonth',
 				sortable : true
 			}, {
-				width : '80',
+				width : '120',
 				title : '开卡总量',
 				field : 'total',
 				sortable : true

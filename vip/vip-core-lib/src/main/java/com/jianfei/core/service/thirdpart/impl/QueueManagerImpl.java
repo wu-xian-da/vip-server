@@ -121,6 +121,7 @@ public class QueueManagerImpl implements QueueManager {
 			// 激活VIP卡
 			if (airportEasyManager.activeVipCard(map.get("vipCardNo"),
 					userPhone, map.get("userName"))) {
+				//TODO 刘东松
 				isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);// 激活短信
 			} else {
 				LoggerFactory.getLogger(getClass()).error("激活用户帐号失败...");
