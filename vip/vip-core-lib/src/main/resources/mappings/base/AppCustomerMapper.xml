@@ -89,7 +89,7 @@
 		<![CDATA[
 			SELECT ao.`order_id`,DATE_FORMAT(ao.`order_time`,'%Y-%m-%d %H:%i:%s') as order_time, airport.`airport_name`,suser.`name`,suser.`phone` FROM `app_orders` ao 
 			INNER JOIN `sys_airport` airport ON airport.`airport_id`=ao.`airport_id`
-			INNER JOIN `sys_users` suser ON suser.`id` = ao.sale_no
+			INNER JOIN `sys_users` suser ON suser.code = ao.sale_no
 			WHERE ao.`customer_id`=#{id}
 		 ]]>
 	</select>
