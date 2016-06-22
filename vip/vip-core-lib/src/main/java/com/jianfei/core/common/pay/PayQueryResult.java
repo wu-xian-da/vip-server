@@ -18,6 +18,20 @@ public class PayQueryResult {
 	 * 商户系统的订单号
 	 */
 	private String tradeNo;
+	/**
+	 * 第三方支付系统订单号
+	 */
+	private String outTradeNo;
+	/**
+	 * 付款账号：
+	 * 
+	 */
+	private String payUserId;
+	/**
+	 * 付款时间
+	 */
+	private String payTime;
+	
 	public String getCode() {
 		return code;
 	}
@@ -36,5 +50,25 @@ public class PayQueryResult {
 	public void setTradeNo(String tradeNo) {
 		this.tradeNo = tradeNo;
 	}
+	public String getOutTradeNo() {
+		return outTradeNo;
+	}
+	public void setOutTradeNo(String outTradeNo) {
+		this.outTradeNo = outTradeNo;
+	}
+	public String getPayUserId() {
+		return payUserId;
+	}
+	public void setPayUserId(String payUserId) {
+		this.payUserId = payUserId;
+	}
+	public String getPayTime() {
+		return payTime;
+	}
+	public void setPayTime(String payTime) {
+		this.payTime = payTime;
+	}
+	
+	
 	
 }

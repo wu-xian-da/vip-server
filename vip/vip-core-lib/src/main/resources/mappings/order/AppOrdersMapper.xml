@@ -100,7 +100,7 @@
 		aoc.card_id ,aoc.card_type,aoc.init_money
 		from app_orders ord,sys_airport sa,sys_users agent ,app_customer cus
 		,app_order_card aoc
-		where ord.airport_id = sa.airport_id and ord.sale_no = agent.id
+		where ord.airport_id = sa.airport_id and ord.sale_no = agent.code
 		and ord.customer_id = cus.customer_id and ord.order_id = aoc.order_id
 		and ord.order_id=#{orderId}
 	</select>

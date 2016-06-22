@@ -1,25 +1,36 @@
 package com.jianfei.core.service.thirdpart.impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.YeepayUtils;
 import com.jianfei.core.common.utils.impl.HttpServiceRequest;
+import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 
 @Service("yeepayManager")
 public class YeePayManagerImpl extends ThirdPayManager {
-
+	
+    @Autowired
+    private AppOrdersMapper appOrdersMapper;
+    
 	@Override
 	public PreCreateResult tradePrecreate(Object payParam) {
 		// TODO Auto-generated method stub
@@ -68,9 +79,9 @@ public class YeePayManagerImpl extends ThirdPayManager {
 			Element root = documentR.getRootElement();
 			Element sessionHead = root.element("SessionHead");
 			Element sessionBody = root.element("SessionBody");
+			sessionBody = sessionBody.element("item");
 			String serviceCode = sessionHead.elementText("ServiceCode");
 			String resultCode = sessionHead.elementText("ResultCode");
-		
 			if (resultCode.equals("2")){
 				String payStatus = sessionBody.elementText("PayStatus");
 				if (payStatus.equals("0")){
@@ -95,6 +106,15 @@ public class YeePayManagerImpl extends ThirdPayManager {
 					payQueryResult.setCode("-1");
 					payQueryResult.setMsg("未知状态");
 				}
+				
+				payQueryResult.setOutTradeNo(sessionBody.elementText("YeepayOrderNo"));
+			    try {
+					Date payTime = DateUtils.parseDate(sessionBody.elementText("TrxTime"), "yyyyMMddHHmmss");
+					payQueryResult.setPayTime(DateUtil.dateToString(payTime, "yyyy-MM-dd HH:mm:ss"));
+				} catch (ParseException e2) {
+					e2.printStackTrace();
+				}
+				payQueryResult.setPayUserId(sessionBody.elementText("BankCardNo"));
 			}else{
 				payQueryResult.setCode("-1");
 				payQueryResult.setMsg("未知状态");
@@ -117,8 +137,15 @@ public class YeePayManagerImpl extends ThirdPayManager {
 
 	@Override
 	public String payNotify(PayNotifyRequest param) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("orderId", param.getOutTradeNo());
+		params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
+		params.put("payUserId", param.getPayUserId());
+		params.put("payTime", param.getPayTime());
+		params.put("tradeNo", param.getTradeNo());
+		params.put("payType", param.getPayType());
+		appOrdersMapper.payNotify(params);		
+		return "success";
 	}
 
 }

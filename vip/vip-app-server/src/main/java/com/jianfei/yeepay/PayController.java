@@ -71,6 +71,8 @@ public class PayController {
     WechatPayManagerImpl wechatiPayManager;
     @Autowired
     ThirdPayManager aliPayManager;
+    @Autowired
+    ThirdPayManager yeepayManager;
     
     /**
      * 用户登录
@@ -203,7 +205,16 @@ public class PayController {
 				}else{
 					String orderNo = sessionBody.elementText("OrderNo");
 					log.info(orderNo);
-					orderManager.updateOrderStateByOrderIdEx(orderNo, 2);
+					//orderManager.updateOrderStateByOrderIdEx(orderNo, 1);
+					PayNotifyRequest param = new PayNotifyRequest();
+					
+					param.setOutTradeNo(orderNo);
+					param.setTradeNo(sessionBody.elementText("YeepayOrderNo"));
+					param.setPayTime(sessionBody.elementText("OrderNo"));
+					param.setPayUserId(sessionBody.elementText("BankCardNo"));
+			    	param.setPayType(PayType.BANKPAY.getName());
+			    	
+					yeepayManager.payNotify(param);
 					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 2);
 				}
 				
@@ -545,7 +556,6 @@ public class PayController {
 		param.setSign(sign);
 		param.setSignResult(sign);
 		param.setResultCode(tradeStatus);
-    	param.setPayType(2);
     	param.setPayType(PayType.ALIPAY.getName());
 	    //业务处理
     	String result = aliPayManager.payNotify(param);

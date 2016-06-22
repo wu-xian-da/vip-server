@@ -222,7 +222,7 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void test_yeepay_queryorder(){
-		yeepayManager.tradeQuery("10001");
+		yeepayManager.tradeQuery("0466560948457081");
 	}
 
 }
