@@ -28,7 +28,7 @@
 <script type="text/javascript">
 	var grid;
 	function searchByCondition(){
-		grid.datagrid('load',{'_cardNo':$("#_cardNo").val()});
+		grid.datagrid('load',{'_cardNo':$("#_cardNo").val(),"_cardState":$("#cardStateSel option:selected").val()});
 	};
 	
 	//删除vip卡
@@ -196,8 +196,7 @@
 						<table>
 							<tr>
 
-								<td><select name="_cardState" class="easyui-combobox"
-									data-options="panelHeight:'auto',editable:false">
+								<td><select name="_cardState" id="cardStateSel">
 										<option value="">全部vip卡状态</option>
 										<option value="0">未激活</option>
 										<option value="1">激活</option>
