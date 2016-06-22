@@ -19,9 +19,7 @@
 		<result column="city" property="city" jdbcType="VARCHAR" />
 		<result column="country" property="country" jdbcType="VARCHAR" />
 		<result column="orderStatu" property="orderStatu" />
-		<result column="card_no" property="cardNo" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="active_time" property="cardActiveTime" jdbcType="TIMESTAMP" />
 		<result column="province_name" property="provinceName" jdbcType="VARCHAR" />
 		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
 	</resultMap>
@@ -57,14 +55,23 @@
 		where customer_id = #{customerId,jdbcType=VARCHAR}
 	</select>
 
-	<select id="selectCustomerDetailByPhone" resultMap="BaseResultMap"
+	<resultMap id="ResultMapWithDetail" type="com.jianfei.core.bean.AppCustomer" extends="BaseResultMap" >
+		<collection property="vipCards" column="id" javaType="com.jianfei.core.bean.AppVipcard">
+			<id column="card_no" property="cardNo" jdbcType="VARCHAR" />
+			<result column="card_type" property="cardType" jdbcType="INTEGER" />
+			<result column="card_state" property="cardState" jdbcType="INTEGER" />
+			<result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+			<result column="card_name" property="cardName" jdbcType="VARCHAR" />
+			<result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+		</collection>
+	</resultMap>
+
+	<select id="selectCustomerDetailByPhone" resultMap="ResultMapWithDetail"
 		parameterType="java.lang.String">
 		SELECT
-		c.customer_id,c.customer_name,c.customer_identi,c.customer_phone,c.sex,c.email,c.address,c.use_type,c.remark1,c.dtflag,c.province,c.city,c.country,v.active_time,
-		v.card_no,c.province_name,c.city_name FROM app_customer c  LEFT JOIN app_vipcard v ON
-		c.customer_id=v.customer_id
-		where c.customer_phone =
-		#{phone,jdbcType=VARCHAR} AND c.dtflag=0
+		ac.customer_id,ac.customer_name,ac.customer_identi,ac.customer_phone,ac.sex,ac.email,ac.address,ac.use_type,ac.remark1,ac.dtflag,ac.province,ac.city,ac.country,
+		ac.province_name,ac.city_name,av.active_time,av.card_no,av.expiry_time,av.card_state,av.card_name FROM app_customer ac left join app_orders o on ac.customer_id=o.customer_id join app_order_card aoc on o.order_id=aoc.order_id join app_vipcard av on aoc.card_id=av.card_no
+		where ac.customer_phone = #{phone,jdbcType=VARCHAR} AND ac.dtflag=0 AND o.order_state!=0
 	</select>
 
 	<select id="selectByPhone" resultMap="BaseResultMap"

@@ -35,8 +35,6 @@ public class VipUserController {
     @Autowired
     private ConsumeManagerImpl consumeManager;
 
-    @Autowired
-    private AppConfigManager appConfigManager;
 
     /**
      * VIP 用户登录
