@@ -188,14 +188,11 @@ public class AppPicController extends BaseController {
 						StringUtils.obj2String(appCustomer.getPhone()),
 						StringUtils.obj2String(DateUtil.dateToString(
 								appCustomer.getCreateTime(), "yyyy-MM-dd")),
-						StringUtils.obj2String(appCustomer.getAddress()),
-						StringUtils.obj2String(appCustomer.getEmail()),
-						returnPayState(StringUtils.obj2String(appCustomer
-								.getOrderStatu())));
+						StringUtils.obj2String(appCustomer.getEmail()));
 				dataset.add(exportAip);
 			}
-			download(response, new String[] { "姓名", "手机号", "日期", "常住地址", "邮箱",
-					"用户状态" }, dataset, "vip用户.xls");
+			download(response, new String[] { "姓名", "手机号", "日期", "邮箱" },
+					dataset, "vip用户.xls");
 		}
 	}
 

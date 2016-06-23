@@ -24,11 +24,7 @@ public class ExportAip {
 
 	private String dateTime;
 
-	private String address;
-
 	private String email;
-
-	private String state;
 
 	/**
 	 * 创建一个新的实例 ExportAip.
@@ -48,14 +44,11 @@ public class ExportAip {
 	 * @param email
 	 * @param state
 	 */
-	public ExportAip(String name, String phone, String dateTime,
-			String address, String email, String state) {
+	public ExportAip(String name, String phone, String dateTime, String email) {
 		this.name = name;
 		this.phone = phone;
 		this.dateTime = dateTime;
-		this.address = address;
 		this.email = email;
-		this.state = state;
 	}
 
 	public String getName() {
@@ -82,28 +75,12 @@ public class ExportAip {
 		this.dateTime = dateTime;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
 	}
 
 }

@@ -175,7 +175,7 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	@Override
 	public List<Map<String, Object>> datePermissionData(Long id) {
 		List<Map<String, Object>> mapList = mapList(new MapUtils.Builder()
-				.build());
+				.setKeyValue("dtflag", "0").setKeyValue("state", "0").build());
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		if (CollectionUtils.isEmpty(mapList)) {
 			return list;
@@ -217,8 +217,8 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	 */
 	@Override
 	public List<SysAirport> getAirPortByProvince(String provinceId) {
-		if (StringUtils.isBlank(provinceId)){
-			provinceId=null;
+		if (StringUtils.isBlank(provinceId)) {
+			provinceId = null;
 		}
 		return ariPortMapper.getAirPortByProvince(provinceId);
 	}
@@ -237,7 +237,7 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	public List<Map<String, Object>> mapList(Map<String, Object> map) {
 		return ariPortMapper.mapList(map);
 	}
-	
+
 	/**
 	 * 根据机场编号获取机场信息
 	 */

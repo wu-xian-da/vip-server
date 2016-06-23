@@ -52,15 +52,18 @@
 			closable : true,
 			iconCls : 'ext-icon-lock_edit',
 			buttons : [ {
-				text : '修改',
+				text : '保存',
 				handler : function() {
 					if ($('#passwordDialog form').form('validate')) {
-						$.post(sy.contextPath + '/busizz/initUserPwd', {
-							'password' : $('#pwd').val()
+						$.post(sy.contextPath + '/user/resetPasswd', {
+							'password' : $('#pwd').val(),
+							'orgpwd' : $('#orgpwd').val()
 						}, function(result) {
 							if (result.ok) {
 								$.messager.alert('提示', '密码修改成功！', 'info');
 								$('#passwordDialog').dialog('close');
+							}else{
+								$.messager.alert('提示', result.msgBody, 'info');
 							}
 						}, 'json');
 					}
@@ -184,13 +187,17 @@
 	<div id="passwordDialog" title="修改密码" style="display: none;">
 		<form method="post" class="form" onsubmit="return false;">
 			<table class="table">
-				<tr>
-					<th>新密码</th>
-					<td><input id="pwd" name="data.pwd" type="password" class="easyui-validatebox" data-options="required:true" /></td>
+			<tr>
+					<th>原始密码</th>
+					<td><input id="orgpwd" type="password" class="easyui-validatebox" data-options="required:true,missingMessage:'必填项'" /></td>
 				</tr>
 				<tr>
-					<th>重复密码</th>
-					<td><input type="password" class="easyui-validatebox" data-options="required:true,validType:'eqPwd[\'#pwd\']'" /></td>
+					<th>新密码</th>
+					<td><input id="pwd" name="data.pwd" type="password" class="easyui-validatebox" data-options="required:true,missingMessage:'必填项'" /></td>
+				</tr>
+				<tr>
+					<th>重复新密码</th>
+					<td><input type="password" class="easyui-validatebox" data-options="required:true,missingMessage:'必填项',validType:'eqPwd[\'#pwd\']'" /></td>
 				</tr>
 			</table>
 		</form>

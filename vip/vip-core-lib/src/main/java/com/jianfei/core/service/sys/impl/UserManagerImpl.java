@@ -236,4 +236,10 @@ public class UserManagerImpl implements UserManaer<User> {
 	public User getUserByName(String loginName) {
 		return userMapper.getUserByName(loginName);
 	}
+
+	@Override
+	public boolean resetPasswd(Map<String, Object> map) {
+		int num = userMapper.resetPasswd(map);
+		return num == 1 ? true : false;
+	}
 }

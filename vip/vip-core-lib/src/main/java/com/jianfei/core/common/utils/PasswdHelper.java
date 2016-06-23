@@ -28,6 +28,11 @@ public class PasswdHelper {
 		return StringUtils.EMPTY;
 	}
 
+	public static void main(String[] args) {
+		System.out.println(passwdProdece("zhuguan123",
+				"4a0d7a70-19f3-4ded-9db3-fd050bf2372e"));
+	}
+
 	public static String passwdProdece(String roelId, RoleManager roleManager,
 			String salt) {
 		String passwd = passwdInit(roelId, roleManager);
@@ -47,6 +52,16 @@ public class PasswdHelper {
 
 	public static String defaultPasswdProdece(String salt) {
 		SimpleHash hash = new SimpleHash("md5", defaultPasswdProdece(), salt);
+		return hash.toString();
+	}
+
+	public static String passwdProdece(String passwd, String salt) {
+		SimpleHash hash = new SimpleHash("md5", passwd, salt);
+		return hash.toString();
+	}
+
+	public static String passwdProdece(String passwd) {
+		SimpleHash hash = new SimpleHash("md5", passwd);
 		return hash.toString();
 	}
 }

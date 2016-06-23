@@ -68,6 +68,9 @@
 			<if test="dtflag!=null">
 				t1.dtflag=#{dtflag}
 			</if>
+			<if test="state!=null and state!=''">
+			   and	t1.state=#{state}
+			</if>
 			<if test="id!=null">
 				and t1.airport_id =#{id}
 			</if>
@@ -203,7 +206,7 @@
 
 	<select id="selectAriportByUserId" resultMap="airportRs"
 		parameterType="Long">
-		<![CDATA[	SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=#{id} 	]]>
+		<![CDATA[	SELECT a.* FROM `sys_airport` a INNER JOIN `sys_user_airport` au ON a.`airport_id`=au.`airport_id` WHERE au.`sys_id`=#{id}  AND a.dtflag=0 AND a.state=0  	]]>
 	</select>
 
 	<resultMap type="com.jianfei.core.dto.BaseDto" id="province">

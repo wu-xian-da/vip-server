@@ -181,9 +181,5 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 		if (!CollectionUtils.isEmpty(backMoneyInfo)) {
 			model.addAttribute("backMoneyInfo", backMoneyInfo);
 		}
-		List<Map<String, Object>> vipCardRescordInfo = vipCardRescordInfo(id);
-		if (!CollectionUtils.isEmpty(vipCardRescordInfo)) {
-			model.addAttribute("vipCardRescordInfo", vipCardRescordInfo);
-		}
 	}
 }

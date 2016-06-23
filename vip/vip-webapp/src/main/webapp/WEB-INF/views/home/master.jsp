@@ -14,7 +14,7 @@
 <body>
 		
 		<div id="person-manager-wrap">
-			<h3>欢迎登陆机场VIP卡业务管理后台</h3>
+			<h3>欢迎登录机场VIP卡业务管理后台</h3>
 			<c:if test="${empty error }">
 			<ul>
 				<li><span class="date-label">${dataStr }</span>各省业绩概况</li>

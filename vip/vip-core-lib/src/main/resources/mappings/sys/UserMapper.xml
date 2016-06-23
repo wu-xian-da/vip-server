@@ -229,5 +229,9 @@
 			</if>
 		</where>
 	</select>
+	
+	<update id="resetPasswd" parameterType="java.util.Map">
+		update sys_users set password=#{newPassword} ,extra_passwd=#{extra_passwd} where id=#{id} and password=#{password}
+	</update>
 
 </mapper>

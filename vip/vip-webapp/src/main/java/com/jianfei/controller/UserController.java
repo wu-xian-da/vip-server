@@ -33,6 +33,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.PasswdHelper;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.sys.RoleManager;
@@ -87,7 +88,7 @@ public class UserController extends BaseController {
 				request, "_");
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
-		searchParams.put("dtflag","0");
+		searchParams.put("dtflag", "0");
 		PageHelper.startPage(page, rows);
 		MessageDto<List<User>> messageDto = userManaer.get(searchParams);
 		if (messageDto.isOk()) {
@@ -216,4 +217,34 @@ public class UserController extends BaseController {
 		return "user/permission";
 	}
 
+	/**
+	 * 重置密码
+	 * 
+	 * @param orgpwd
+	 *            原始密码
+	 * @param password
+	 *            新密码
+	 * @return
+	 */
+	@RequestMapping(value = "resetPasswd")
+	@ResponseBody
+	public MessageDto<String> initUserPwd(String orgpwd, String password) {
+		MessageDto<String> messageDto = new MessageDto<String>();
+		User user = getCurrentUser();
+		// 判断原始密码是否正确
+		String passwd = PasswdHelper.passwdProdece(orgpwd, user.getSalt());
+		if (!passwd.equals(user.getPassword())) {
+			return messageDto.setMsgBody("原始密码不正确...");
+		}
+		if (userManaer.resetPasswd(new MapUtils.Builder()
+				.setKeyValue("id", user.getId())
+				.setKeyValue("password", user.getPassword())
+				.setKeyValue("newPassword",
+						PasswdHelper.passwdProdece(password, user.getSalt()))
+				.setKeyValue("extra_passwd",
+						PasswdHelper.passwdProdece(password)).build())) {
+			return messageDto.setMsgBody("修改密码成功...").setOk(true);
+		}
+		return messageDto.setMsgBody("请稍后再试...");
+	}
 }

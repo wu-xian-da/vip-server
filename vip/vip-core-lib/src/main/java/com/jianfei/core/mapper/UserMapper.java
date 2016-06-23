@@ -90,4 +90,12 @@ public interface UserMapper extends BaseMapper<User> {
 	 * @return
 	 */
 	Map<String, Object> validateAccount(Map<String, Object> map);
+
+	/**
+	 * 修改密码
+	 * 
+	 * @param map
+	 * @return
+	 */
+	int resetPasswd(Map<String, Object> map);
 }
