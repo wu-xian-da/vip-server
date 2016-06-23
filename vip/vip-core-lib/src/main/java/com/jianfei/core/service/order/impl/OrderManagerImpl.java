@@ -422,31 +422,35 @@ public class OrderManagerImpl implements OrderManager {
 	 * @return
 	 */
 	@Override
-	public BaseMsgInfo getVipCardUseAndOrder(String phone, String code) {
+	public BaseMsgInfo getVipCardUseAndOrder(String phone, String code,String vipCardNo) {
 		//1、校验用户和手机验证码
 		boolean flag = validateCodeManager.validateSendCode(phone, MsgType.BACK_CARD_APPLY, code);
 		if (!flag)
 			return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
 		//2、查询用户信息和订单信息
-		List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(phone);
+		List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(phone,vipCardNo);
 		VipCardUseDetailInfo vipCardUseDetailInfo = vipCardUseDetailInfoList == null || vipCardUseDetailInfoList.isEmpty() ? new VipCardUseDetailInfo()
 				: vipCardUseDetailInfoList.get(0);
 		if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
-			return BaseMsgInfo.success(vipCardUseDetailInfo);
+			return BaseMsgInfo.fail("暂未查询到此VIP卡相关信息");
 		}
 
 		//3、查询VIP使用信息
 		List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
-		if (list == null|| list.isEmpty()){
-			return BaseMsgInfo.success(vipCardUseDetailInfo);
-		}
 		float usedMoney = 0;
-		for (AppConsume appConsume : list) {
-			usedMoney = usedMoney + appConsume.getConsumeMoney();
+		if (list != null&& list.isEmpty()){
+			for (AppConsume appConsume : list) {
+				usedMoney = usedMoney + appConsume.getConsumeMoney();
+			}
 		}
+		double remainMoney =  vipCardUseDetailInfo.getOrderMoney()-usedMoney*0.8-100;
+		if (remainMoney<0){
+			remainMoney=0;
+		}
+		vipCardUseDetailInfo.setReturnMoney(remainMoney);
+		vipCardUseDetailInfo.setReturnInfo("您已免费享受了价值"+usedMoney+"元的VIP室服务,若退卡需扣除该费用。亿出行仅收取该费用的80%作为服务费。");
 		vipCardUseDetailInfo.setUsedMoney(usedMoney);
 		vipCardUseDetailInfo.setCardUseList(list);
-		//TODO 可配置优惠信息多少
 		vipCardUseDetailInfo.setSaleRate("80%");
 		return BaseMsgInfo.success(vipCardUseDetailInfo);
 	}

@@ -174,7 +174,7 @@ public interface OrderManager {
      * @param code
      * @return
      */
-    BaseMsgInfo  getVipCardUseAndOrder(String phone,String code);
+    BaseMsgInfo  getVipCardUseAndOrder(String phone,String code,String vipCardNo);
     
     /**
 	 * selectOrder(订单状态查询)

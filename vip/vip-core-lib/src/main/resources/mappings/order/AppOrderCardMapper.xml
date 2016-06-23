@@ -33,7 +33,7 @@
   <!-- Vip使用记录相关查询  -->
   <select id="getVipCardUseDetailInfo" resultMap="VipResultMap" parameterType="java.lang.String">
     SELECT c.card_id,o.pay_money,o.activat_time,u.customer_name,u.customer_phone,u.customer_identi,o.order_id,o.pay_type,o.pay_user_id,o.invoice_flag  FROM app_orders o JOIN app_order_card c
-   ON o.order_id=c.order_id JOIN app_customer u ON o.customer_id=u.customer_id WHERE u.customer_phone=#{customerPhone}
+   ON o.order_id=c.order_id JOIN app_customer u ON o.customer_id=u.customer_id WHERE u.customer_phone=#{customerPhone} AND  o.order_state=1 and c.card_id = #{vipCardNo}
   </select>
 
 
