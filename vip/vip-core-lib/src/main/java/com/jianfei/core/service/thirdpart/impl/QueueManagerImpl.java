@@ -8,9 +8,12 @@ import java.security.UnrecoverableKeyException;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ServiceMsgBuilder;
 
+import com.jianfei.core.service.base.VipCardManager;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -46,6 +49,9 @@ public class QueueManagerImpl implements QueueManager {
 	
 	@Autowired
 	private MsgInfoManager msgInfoManager;
+
+	@Autowired
+	private VipCardManager vipCardManager;
 
 	// 没20秒执行一次
 	/**
@@ -118,14 +124,21 @@ public class QueueManagerImpl implements QueueManager {
 		String message = StringUtils.EMPTY;
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.equals(msgType)) {
+			AppVipcard vipcard = new AppVipcard();
+			vipcard.setCardNo(map.get("vipCardNo"));
 			// 激活VIP卡
 			if (airportEasyManager.activeVipCard(map.get("vipCardNo"),
 					userPhone, map.get("userName"))) {
-				//TODO 刘东松
+				//更改VIP卡状态
+				vipcard.setCardState(VipCardState.ACTIVE.getName());
+				vipCardManager.updateVipCard(vipcard);
 				isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);// 激活短信
 			} else {
 				LoggerFactory.getLogger(getClass()).error("激活用户帐号失败...");
 				message = "激活用户帐号失败...";
+				// 更改VIP卡状态为未激活
+				vipcard.setCardState(VipCardState.ACTIVATE_FAIL.getName());
+				vipCardManager.updateVipCard(vipcard);
 			}
 		} else {
 			// 登入，注册，退卡，退卡完成短信

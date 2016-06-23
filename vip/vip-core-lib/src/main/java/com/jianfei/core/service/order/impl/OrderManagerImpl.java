@@ -1,40 +1,32 @@
 package com.jianfei.core.service.order.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-
 import com.alipay.demo.trade.model.GoodsDetail;
 import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
-import com.jianfei.core.bean.*;
-import com.jianfei.core.common.enu.MsgType;
-import com.jianfei.core.common.enu.PayType;
-import com.jianfei.core.common.pay.PayQueryResult;
-import com.jianfei.core.common.pay.PreCreateResult;
-import com.jianfei.core.common.utils.BeanUtils;
-import com.jianfei.core.common.utils.IdGen;
-import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.common.enu.*;
-import com.jianfei.core.common.utils.*;
-import com.jianfei.core.dto.*;
-import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
-import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
-import com.jianfei.core.service.base.impl.VipCardManagerImpl;
-import com.jianfei.core.service.thirdpart.ThirdPayManager;
-import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
-import com.jianfei.core.service.user.impl.VipUserManagerImpl;
-
-import com.tencent.protocol.native_protocol.NativePayReqData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.*;
+import com.jianfei.core.common.enu.*;
+import com.jianfei.core.common.pay.PayQueryResult;
+import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.*;
+import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppCardBackMapper;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
+import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
+import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
+import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.OrderManager;
+import com.jianfei.core.service.thirdpart.ThirdPayManager;
+import com.jianfei.core.service.user.impl.VipUserManagerImpl;
+import com.tencent.protocol.native_protocol.NativePayReqData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * TODO
@@ -406,6 +398,15 @@ public class OrderManagerImpl implements OrderManager {
 			result=yeepayManager.tradeQuery(orderId);
 		}
 		if ("0".equals(result.getCode())){
+			//更新订单支付查询结果
+			Map<String,Object> params = new HashMap<String,Object>();
+			params.put("orderId", orderId);
+			params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
+			params.put("payUserId", result.getPayUserId());
+			params.put("payTime", result.getPayTime());
+			params.put("tradeNo", result.getTradeNo());
+			params.put("payType", payType.getName());
+			appOrdersMapper.payNotify(params);
 			return BaseMsgInfo.success(true);
 		}else {
 			return BaseMsgInfo.success(false);

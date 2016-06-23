@@ -1,13 +1,9 @@
 package com.jianfei.core.service.base;
 
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppConsume;
-import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
-import com.jianfei.core.dto.OrderShowInfoDto;
 
 import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 
 /**

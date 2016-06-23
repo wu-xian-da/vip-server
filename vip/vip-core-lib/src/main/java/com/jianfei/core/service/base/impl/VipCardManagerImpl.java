@@ -2,21 +2,12 @@ package com.jianfei.core.service.base.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppConsume;
-import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
-import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppVipcardMapper;
 import com.jianfei.core.service.base.VipCardManager;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -25,6 +16,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Vip卡管理
@@ -198,6 +195,4 @@ public class VipCardManagerImpl implements VipCardManager {
 	public AppVipcard getVipCardByNo(String vipCardNo) {
 		return appVipcardMapper.selectByPrimaryKey(vipCardNo);
 	}
-	
-	
 }
