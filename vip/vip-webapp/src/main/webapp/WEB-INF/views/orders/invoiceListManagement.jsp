@@ -98,6 +98,7 @@
 	</div>
 
 	<!--发票信息录入 -->
+	
 	<div id="w" class="easyui-window" title="开发票页面"
 		data-options="modal:'true',closed:'true'"
 		style="width: 500px; height: 300px; padding: 10px;">
@@ -105,10 +106,12 @@
 			<div class="easy-window-radio-tab">
 				<div class="radio-tab-content">
 					<div class="raidp-tab-content-item" style="display: block">
-						<input type="hidden" id="invoiceId" value=""/> 
-						<input type="hidden" id="orderId" value=""/> 
+						<form id="invoiceForm" method="post">
+						<input type="hidden" id="invoiceId" name="invoiceId" value=""/> 
+						<input type="hidden" id="orderId" name="orderId" value=""/> 
 						<label>输入发票单号&nbsp;</label>
-						<input type="text" id="invoiceNo"/>
+						<input class="easyui-validatebox" id="invoiceNo" name="invoiceNo" required="true" data-options="missingMessage:'必填项'" />
+						</form>
 					</div>
 				</div>
 
@@ -121,7 +124,7 @@
 		
 
 	</div>
-
+	
 	<script type="text/javascript">
         $(function(){
             $('#tt').datagrid();
@@ -158,21 +161,21 @@
        
         //将发票信息录入到发票表中
 		$("#writerUserInfo").click(function(){
-			var invoiceId = $("#invoiceId").val();
-			var orderId = $("#orderId").val();
-			var invoiceNo = $("#invoiceNo").val();
-			alert
-			var url = "handelInvoiceInfo?invoiceId="+invoiceId+"&invoiceNo="+invoiceNo+"&orderId="+orderId;
-			$.get(url,function(_d){
-				if(_d.result == 1){
-					$("#w").window('close');
-					window.location.reload();
-				}
-			})
-			
-			
+			//检查表单必填项
+			if($('#invoiceForm').form('validate')){
+				var invoiceId = $("#invoiceId").val();
+				var orderId = $("#orderId").val();
+				var invoiceNo = $("#invoiceNo").val();
+				var url = "handelInvoiceInfo?invoiceId="+invoiceId+"&invoiceNo="+invoiceNo+"&orderId="+orderId;
+				$.get(url,function(_d){
+					if(_d.result == 1){
+						$("#w").window('close');
+						$('#tt').datagrid('reload');
+					}
+				})
+			}
 		})
-        
+		
 		//搜索
         $("#searchBt").click(function(){
         	//发票状态
