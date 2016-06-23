@@ -47,7 +47,7 @@
 			                	
 			                    <option value="">全部机场</option>
 			                    <c:forEach items="${airPostList}" var="airPort">
-			                    	<option value="${airPort.airport_id }">${airPort.airport_name }</option>
+			                    	<option value="${airPort.id}">${airPort.name }</option>
 			                    </c:forEach>
 			                    
 			                </select>

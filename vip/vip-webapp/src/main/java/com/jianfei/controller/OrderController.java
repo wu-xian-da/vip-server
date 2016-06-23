@@ -88,8 +88,7 @@ public class OrderController extends BaseController {
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("expires", -1);
 		//所有的机场列表
-		Map<String,Object> resMap = new HashMap<String,Object>();
-		List<Map<String, Object>> list = ariPortService.mapList(resMap);
+		List<AriPort> list = returnAirportInfoList();
 		model.addAttribute("airPostList", list);
 		return "orders/orderManagement";
 	}
@@ -420,7 +419,7 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现场");
+						appOrder.setBackTypeName("现金");
 					}
 					
 					
@@ -455,7 +454,7 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现场");
+						appOrder.setBackTypeName("现金");
 					}
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 					resList.add(appOrder);
@@ -627,8 +626,19 @@ public class OrderController extends BaseController {
 		
 	}
 	
+	
 	/**
-	 * 返回当前用户可以查看的机场列表
+	 * 返回当前用户可以查看的机场信息
+	 */
+	public List<AriPort> returnAirportInfoList() {
+		// 用户可以看到机场列表
+		User user = getCurrentUser();
+		List<AriPort> airportList = user.getAripors();
+		return  airportList;
+	}
+	
+	/**
+	 * 返回当前用户可以查看的机场列表id
 	 * @return
 	 */
 	public List<String> returnAirportIdList() {
