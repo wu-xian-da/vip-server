@@ -1,21 +1,17 @@
 package com.jianfei.core.common.security.oauth2;
 
-import com.jianfei.core.bean.SysUsers;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
- * TODO
+ * 后台用户验证
  *
  * @version 1.0.0
  * @Description:

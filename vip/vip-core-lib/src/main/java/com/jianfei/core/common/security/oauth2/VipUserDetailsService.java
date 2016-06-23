@@ -1,6 +1,5 @@
 package com.jianfei.core.common.security.oauth2;
 
-import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.service.base.ValidateCodeManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
- * TODO
+ * VIP用户验证
  *
  * @version 1.0.0
  * @Description:
