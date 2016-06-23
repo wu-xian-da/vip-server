@@ -498,7 +498,15 @@ public class OrderManagerImpl implements OrderManager {
 			return BaseMsgInfo.msgFail("订单不存在");
 		}
 		//添加订单状态为已退款
-		orders.setOrderState(VipOrderState.BEING_AUDITED.getName());
+		if(StringUtils.isNotBlank(appCardBack.getAgreementUrl())){
+			//已退款
+			orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
+		}
+		else {
+			//审核通过
+			orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
+		}
+
 		appOrdersMapper.updateByPrimaryKeySelective(orders);
 		// 2、TODO 重新计算可退余额 校验是否正确
 		//3、插入数据库
