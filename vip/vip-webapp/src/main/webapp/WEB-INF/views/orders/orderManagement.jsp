@@ -79,8 +79,12 @@
 			                <button id="searchBt">查询</button>
 			            </div>
 			            
-			            <div class="order-condition-item" style="width: 70px">
+			            <div class="order-condition-item" style="width: 70px;margin-left: 15px">
 			                <button id="resetBt">重置</button>
+			            </div>
+			            <div class="order-condition-item" style="width: 70px">
+			                <!-- <a href="${pageContext.request.contextPath}/exportOrderInfoToExcel"><button id="exportBt">导出</button></a> -->
+			                 <button id="exportBt">导出</button>
 			            </div>
 			            
 			        </div>
@@ -412,8 +416,26 @@
     			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
     			$('#tt').datagrid({url:url});
         	}
-        	
-        	
+        })
+        
+        //导出功能
+        
+        $("#exportBt").click(function(){
+        	//开始时间
+        	var startTime = $("#startTime").datebox('getValue');
+        	//结束时间
+        	var endTime = $("#endTime").datebox('getValue');
+        	//机场编号
+        	var airportId = $("#airportIdSelect option:selected").val(); 
+        	//订单状态
+        	var orderState = $("#orderStateSelect option:selected").val();
+        	//发票状态
+        	var invoiceState = $("#invoiceSelect option:selected").val();
+        	//手机号后置用户姓名
+        	var phoneOrUserName = $("#phoneOrUserName").val();
+        	var url = "exportOrderInfoToExcel?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
+			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
+        	location.href=url;    
         	
         })
         
