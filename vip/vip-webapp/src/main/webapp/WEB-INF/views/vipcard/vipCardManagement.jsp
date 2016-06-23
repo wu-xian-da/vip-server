@@ -85,9 +85,6 @@
 										field : 'importTime',
 										align : 'center',
 										sortable : true,
-										formatter : function(value,row,index){
-											return value;
-										}
 									},
 									{
 										width : '150',
@@ -100,9 +97,11 @@
 											case 0:
 												return '未激活';
 											case 1:
-												return '激活';
+												return '激活成功';
 											case 2:
 												return '退卡';
+											case 3:
+												return '激活失败';
 											}
 										}
 									},
