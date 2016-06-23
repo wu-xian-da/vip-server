@@ -23,7 +23,7 @@
 		<![CDATA[
 			SELECT role.*,GROUP_CONCAT(sa.id  ) AS 'resources.id',GROUP_CONCAT(sa.`name` ) AS 'resources.name' FROM `sys_roles` role 
 			LEFT JOIN `sys_role_author` sau ON sau.`role_id`=role.`id` 
-			LEFT JOIN `sys_author` sa ON sa.`id`=sau.`author_id`  where role.dtflag!=1
+			LEFT JOIN `sys_author` sa ON sa.`id`=sau.`author_id`  where role.dtflag=0
 		]]>
 		<if test="id!=null">
 			and role.id =#{id}

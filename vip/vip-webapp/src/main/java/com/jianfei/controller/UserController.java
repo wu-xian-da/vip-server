@@ -33,6 +33,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.PasswdHelper;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.AriPortManager;
@@ -108,31 +109,25 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "form")
 	public String from(User user, Model model) {
 		if (0 != user.getId()) {
-			Map<String, Object> searchParams = new HashMap<String, Object>();
-			searchParams.put("id", user.getId());
-			MessageDto<List<User>> messageDto = userManaer.get(searchParams);
-			if (messageDto.isOk()) {
-				model.addAttribute("user", messageDto.getData().get(0));
-				List<Role> roles = roelManager.selectRoleByUserId(messageDto
-						.getData().get(0).getId());
+			User targetUser = userManaer.findEntityById(user.getId());
+			if (!ObjectUtils.isEmpty(targetUser)) {
+				model.addAttribute("user", targetUser);
+				List<Role> roles = roelManager.selectRoleByUserId(targetUser
+						.getId());
 				if (!CollectionUtils.isEmpty(roles)) {
 					model.addAttribute("selected", roles.get(0));
 				}
 			}
 		}
-		MessageDto<List<Role>> roleMessageDto = roelManager
-				.get(new MapUtils.Builder().build());
-		if (roleMessageDto.isOk()) {
-			model.addAttribute("roleSeclect", roleMessageDto.getData());
+		// 角色信息
+		List<Role> roles = roelManager.getAll();
+		if (!CollectionUtils.isEmpty(roles)) {
+			model.addAttribute("roleSeclect", roles);
 		}
+		// 机场信息
 		List<Map<String, Object>> list = ariPortService
 				.datePermissionData(StringUtils.toLong(user.getId()));
 		model.addAttribute("datas", list);
-		MessageDto<List<Role>> messageDto = roelManager
-				.get(new MapUtils.Builder().build());
-		if (messageDto.isOk()) {
-			model.addAttribute("roles", messageDto.getData());
-		}
 
 		return "user/SyuserForm";
 	}
@@ -148,6 +143,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public MessageDto<String> save(User user, String arids, String roleids) {
 		user.setUserType(GloabConfig.SYSTEM_USER);
+		user.setState(GloabConfig.OPEN);
 		return userManaer.saveUser(user, arids, roleids);
 
 	}

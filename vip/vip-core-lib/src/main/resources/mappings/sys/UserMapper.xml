@@ -84,14 +84,12 @@
 	</select>
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
 		SELECT * from sys_users where login_name =#{loginName} and
-		(user_type=1 or user_type=2) and dtflag=0
+		(user_type=1 or user_type=2) AND state=0 and dtflag=0
 	</select>
 
 	<select id="getUserByUno" resultMap="userRs" parameterType="String">
-		SELECT * from sys_users where code =#{uno} AND state=0
+		SELECT * from sys_users where code =#{uno} AND state=0 and dtflag=0
 	</select>
-
-
 	<insert id="save" parameterType="User">
 		<![CDATA[
 			INSERT INTO  sys_users (
@@ -229,9 +227,14 @@
 			</if>
 		</where>
 	</select>
-	
-	<update id="resetPasswd" parameterType="java.util.Map">
-		update sys_users set password=#{newPassword} ,extra_passwd=#{extra_passwd} where id=#{id} and password=#{password}
-	</update>
 
+	<update id="resetPasswd" parameterType="java.util.Map">
+		update sys_users set
+		password=#{newPassword} ,extra_passwd=#{extra_passwd} where id=#{id}
+		and password=#{password}
+	</update>
+	<select id="findEntityById" resultMap="userRs" parameterType="Long">
+		SELECT * from sys_users where id =#{id} and
+		(user_type=1 or user_type=2) AND state=0 and dtflag=0
+	</select>
 </mapper>

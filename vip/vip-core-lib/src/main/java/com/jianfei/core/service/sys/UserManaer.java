@@ -80,5 +80,7 @@ public interface UserManaer<T extends Serializable> {
 	 * @return
 	 */
 	boolean resetPasswd(Map<String, Object> map);
+	
+	User findEntityById(Long id);
 
 }

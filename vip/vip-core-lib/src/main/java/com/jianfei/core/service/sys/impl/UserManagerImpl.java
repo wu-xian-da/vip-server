@@ -242,4 +242,9 @@ public class UserManagerImpl implements UserManaer<User> {
 		int num = userMapper.resetPasswd(map);
 		return num == 1 ? true : false;
 	}
+
+	@Override
+	public User findEntityById(Long id) {
+		return userMapper.findEntityById(id);
+	}
 }
