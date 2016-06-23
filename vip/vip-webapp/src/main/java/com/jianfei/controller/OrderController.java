@@ -33,6 +33,7 @@ import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
@@ -166,6 +167,7 @@ public class OrderController extends BaseController {
 		AppInvoice appInvoice = new AppInvoice();
 		appInvoice.setInvoiceNo(invoiceNo);
 		appInvoice.setInvoiceId(invoiceId);
+		appInvoice.setInvoiceType(InvoiceState.SEND_INVOICE.getName());
 		appInvoiceManagerImpl.updateByPrimaryKeySelective(appInvoice);
 		//将订单的发票状态改为已邮寄
 		AppOrders addInfoDto = new AppOrders();
