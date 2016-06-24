@@ -1,5 +1,4 @@
 package com.jianfei.core.common.cache;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -7,16 +6,16 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisSentinelPool;
+import redis.clients.jedis.exceptions.JedisException;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.SpringContextHolder;
 import com.jianfei.core.common.utils.StringUtils;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.exceptions.JedisException;
 
 /**
  *
@@ -31,8 +30,8 @@ public class JedisUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(JedisUtils.class);
 
-	private static JedisPool jedisPool = SpringContextHolder
-			.getBean(JedisPool.class);
+	private static JedisSentinelPool jedisPool = SpringContextHolder
+			.getBean(JedisSentinelPool.class);
 
 	/**
 	 * 获取缓存

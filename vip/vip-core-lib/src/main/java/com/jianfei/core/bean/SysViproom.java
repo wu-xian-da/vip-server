@@ -46,9 +46,21 @@ public class SysViproom {
     
     private Date createTime;//创建时间
     
+    private String pictureUrl;
     
+    /**
+	 * @return the pictureUrl
+	 */
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
 
-    
+	/**
+	 * @param pictureUrl the pictureUrl to set
+	 */
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
+	}
 
 	/**
 	 * @return the createTime

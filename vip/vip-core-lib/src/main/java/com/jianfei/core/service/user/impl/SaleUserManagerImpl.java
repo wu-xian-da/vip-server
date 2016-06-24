@@ -87,10 +87,10 @@ public class SaleUserManagerImpl implements SaleUserManager {
         if (users == null || users.isEmpty() || StringUtils.isBlank(users.get(0).getPassword())) {
             return BaseMsgInfo.msgFail("用户不存在或已被禁用");
         }
-        SimpleHash simpleHash = new SimpleHash("md5", password, users.get(0).getSalt());
+      String passwordMd5 = MD5.MD5Encode(password);
         SimpleHash nweHash = new SimpleHash("md5", newPassword, users.get(0).getSalt());
         String md5Password = MD5.MD5Encode(newPassword);
-        int num = userMapper.updatePasswordByUno(userNo, simpleHash.toString(), nweHash.toString(), md5Password);
+        int num = userMapper.updatePasswordByUno(userNo,passwordMd5, nweHash.toString(), md5Password);
         return num == 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("用户密码更新失败");
     }
 

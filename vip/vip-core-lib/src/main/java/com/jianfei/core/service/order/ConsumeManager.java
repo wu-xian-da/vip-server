@@ -37,4 +37,11 @@ public interface ConsumeManager {
      * @return  List<AppCustomer>
      */
     List<AppConsume> getConsumesByVipNo( String vipCardNo );
+
+    /**
+     * 根据VIP卡号获取使用的金额
+     * @param vipCardNo
+     * @return
+     */
+    double getVipCardUseMoney(String vipCardNo);
 }

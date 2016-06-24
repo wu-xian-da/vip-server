@@ -191,7 +191,7 @@
 		UPDATE sys_users
 		SET `password`=#{newPassword},extra_passwd=#{md5Password} WHERE
 		`code`=#{uno} and
-		`password`=#{password}
+		`extra_passwd`=#{password}
 	</update>
 
 	<update id="updatePhotoPath" parameterType="String">

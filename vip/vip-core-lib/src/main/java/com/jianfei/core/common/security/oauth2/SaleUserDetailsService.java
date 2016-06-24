@@ -3,11 +3,13 @@ package com.jianfei.core.common.security.oauth2;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +32,10 @@ public class SaleUserDetailsService implements UserDetailsService {
         try {
             List<User> users=userMapper.getUserByUno(userName);
             User appUser=users.get(0);
-            return new OauthUser(appUser.getCode(),appUser.getExtraPasswd());
+            List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_SALE"));
+
+            return new OauthUser(appUser.getCode(),appUser.getExtraPasswd(),authorities);
         } catch (Exception e) {
             throw new UsernameNotFoundException("user select fail");
         }

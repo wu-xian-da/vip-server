@@ -35,7 +35,7 @@
 			
 			and auf.dtflag=0
 		</where>
-  		
+  		order by auf.feedback_time desc
   </select>
   
   <!-- 删除反馈信息-逻辑删除 -->
