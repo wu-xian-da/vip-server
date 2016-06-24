@@ -14,7 +14,11 @@
 		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地 <repository> <id>nexus-repos</id> <name>Team 
 			Nexus Repository</name> <url>http://192.168.110.9:8081/nexus/content/groups/public</url> 
 			</repository> -->
-
+		<repository>
+			<id>central</id>
+			<name>Nexus</name>
+			<url>http://maven.scalene-link.com:8081/nexus/content/groups/public</url>
+		</repository>
 		<repository>
 			<id>oschina-repos</id>
 			<name>Oschina Releases</name>
@@ -436,9 +440,9 @@
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
 
 				<!-- updload config -->
-				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
+				<upload.home.dir>/Users/leoliu/Documents/project</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>/workspcae/log/vip.log</log.home.dir>
+				<log.home.dir>/Users/leoliu/Documents/project/log/vip.log</log.home.dir>
 				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
@@ -490,9 +494,9 @@
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
 
 				<!-- updload config -->
-				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
+				<upload.home.dir>/Users/leoliu/Documents/project/uploadPath</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>/workspcae/log/vip.log</log.home.dir>
+				<log.home.dir>/Users/leoliu/Documents/project/log/vip.log</log.home.dir>
 				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>

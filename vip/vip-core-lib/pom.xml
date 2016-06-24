@@ -333,14 +333,19 @@
         </dependency>
          -->
        <dependency>
-       	<groupId>com.tencent</groupId>
-       	<artifactId>wxpay-scanpay-java-sdk</artifactId>
-       	<version>1.0</version>
+         	<groupId>com.tencent</groupId>
+        	<artifactId>wxpay-scanpay-java-sdk</artifactId>
+        	<version>1.0</version>
        </dependency>
        <dependency>
-       	<groupId>com.alibaba.demo</groupId>
-       	<artifactId>trade</artifactId>
-       	<version>1.0</version>
+        	<groupId>com.alibaba.demo</groupId>
+        	<artifactId>trade</artifactId>
+        	<version>1.0</version>
+       </dependency>
+       <dependency>
+       		<groupId>com.emay</groupId>
+			<artifactId>sms</artifactId>
+			<version>1.0</version>
        </dependency>
 	</dependencies>
 	<build>
