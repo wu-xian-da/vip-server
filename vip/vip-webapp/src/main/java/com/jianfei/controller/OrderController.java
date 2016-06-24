@@ -10,6 +10,7 @@ package com.jianfei.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -708,9 +709,7 @@ public class OrderController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping("exportOrderInfoToExcel")
-	public void exportOrderInfoToExcel(@RequestParam(value = "page", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "rows", defaultValue = "10") Integer pageSize,
-			@RequestParam(value = "startTime", defaultValue = "") String startTime,
+	public void exportOrderInfoToExcel(@RequestParam(value = "startTime", defaultValue = "") String startTime,
 			@RequestParam(value = "endTime", defaultValue = "") String endTime,
 			@RequestParam(value = "airportId", required = false, defaultValue = "") String airportId,
 			@RequestParam(value = "orderState", required = false, defaultValue = "5") Integer orderState,
@@ -741,9 +740,8 @@ public class OrderController extends BaseController {
 		paramsMap.put("orderState", orderState);
 		paramsMap.put("invoiceState", invoiceState);
 
-		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(pageNo, pageSize, paramsMap);
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		List<OrderShowInfoDto> list = pageinfo.getList();
+		List<OrderShowInfoDto> list = orderManagerImpl.simplePage(paramsMap);
+		
 
 		//3 生成提示信息，
 		response.setContentType("application/vnd.ms-excel");
@@ -814,7 +812,7 @@ public class OrderController extends BaseController {
 				//订单日期
 				HSSFCell orderTimesCell = row.createCell((int) 2);
 				orderTimesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
-				orderTimesCell.setCellValue(orderShowInfoDto.getOrderTime());
+				orderTimesCell.setCellValue(formatterDate(orderShowInfoDto.getOrderTime()));
 				
 				//场站
 				HSSFCell apNamesCell = row.createCell((int) 3);
@@ -848,6 +846,7 @@ public class OrderController extends BaseController {
 				index++;
 
 			}
+			System.out.println("index ="+index);
 			fOut = response.getOutputStream();
 			workbook.write(fOut);
 		} catch (UnsupportedEncodingException e1) {
@@ -870,9 +869,9 @@ public class OrderController extends BaseController {
 	public String returnOrderStateName(Integer orderState){
 		String orderStateName = "";
 		if(orderState == 0){
-			orderStateName = "未付款";
+			orderStateName = "未支付";
 		}else if(orderState == 1){
-			orderStateName = "已付款";
+			orderStateName = "已支付";
 		}else if(orderState == 2){
 			orderStateName = "正在审核";
 		}else if(orderState == 3){
@@ -897,6 +896,14 @@ public class OrderController extends BaseController {
 			invoiceFlagName = "发票已邮寄";
 		}
 		return invoiceFlagName;
+	}
+	/**
+	 * 将订单日期转成特定的格式
+	 */
+	public String formatterDate(Date date){
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sf.format(date);
+		
 	}
 	
 }	
