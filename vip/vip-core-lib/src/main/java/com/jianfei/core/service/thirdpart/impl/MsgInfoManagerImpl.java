@@ -1,6 +1,10 @@
 package com.jianfei.core.service.thirdpart.impl;
 
+import cn.emay.sdk.client.api.Client;
+
+import com.jianfei.core.common.utils.EmaySMSUtils;
 import com.jianfei.core.service.thirdpart.MsgInfoManager;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,8 +27,10 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
      */
     @Override
     public boolean sendMsgInfo(String phone, String content) {
+		Client client = EmaySMSUtils.getClient();
+		int result = client.sendSMS(new String[] {phone}, content, 1);
         //TODO 集成短信接口
-        return false;
+		return result==0?true:false;
     }
 
 }

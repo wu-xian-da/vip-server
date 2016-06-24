@@ -2,21 +2,23 @@ package com.jianfei.core.common.utils;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.service.sys.RoleManager;
-import com.tencent.common.MD5;
 
 public class PasswdHelper {
 
 	/**
-	 * 密码管理工具
+	 * 获取密码
 	 * 
 	 * @param roleMapper
 	 * @return
 	 */
-	private static String passwdInit(String roelId, RoleManager roleManager) {
+	private static String passwdInit(String roelId, RoleManager roleManager,
+			Long id) {
+		// 从缓存中获取角色信息
 		if (!StringUtils.isEmpty(roelId)) {
 			List<Role> roles = roleManager.getAll();
 			for (Role role : roles) {
@@ -25,41 +27,71 @@ public class PasswdHelper {
 				}
 			}
 		}
-		return StringUtils.EMPTY;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(passwdProdece("zhuguan123",
-				"4a0d7a70-19f3-4ded-9db3-fd050bf2372e"));
+		// 从缓存中获取数据失败，从数据库中获取密码
+		List<Role> list = roleManager.selectRoleByUserId(id);
+		if (!CollectionUtils.isEmpty(list)) {
+			return list.get(0).getInitPwd();
+		}
+		// 从数据中获取密码失败，使用默认密码
+		return GloabConfig.getConfig("defalut.passwd");
 	}
 
 	public static String passwdProdece(String roelId, RoleManager roleManager,
-			String salt) {
-		String passwd = passwdInit(roelId, roleManager);
-		System.out.println(roelId + "    " + passwd + "   " + salt);
-		if (StringUtils.isEmpty(passwd)) {
-			return passwd;
-		}
-		if (!StringUtils.isEmpty(salt)) {
-			return new SimpleHash("md5", passwd, salt).toString();
-		}
-		return new MD5().MD5Encode(passwd);
+			Long userId, String salt) {
+		String initPasswd = passwdInit(roelId, roleManager, userId);
+		return new SimpleHash("md5", initPasswd, salt).toString();
 	}
 
-	public static String defaultPasswdProdece() {
-		return new MD5().MD5Encode(GloabConfig.getConfig("defalut.passwd"));
-	}
-
-	public static String defaultPasswdProdece(String salt) {
-		SimpleHash hash = new SimpleHash("md5", defaultPasswdProdece(), salt);
+	public static String passwdProdeceNoSalt(String roelId,
+			RoleManager roleManager, Long userId) {
+		String initPasswd = passwdInit(roelId, roleManager, userId);
+		SimpleHash hash = new SimpleHash("md5", initPasswd);
 		return hash.toString();
 	}
 
+	/**
+	 * 默认密码
+	 * 
+	 * @return
+	 */
+	public static String defaultPasswdProdece() {
+		SimpleHash hash = new SimpleHash("md5",
+				GloabConfig.getConfig("defalut.passwd"));
+		return hash.toString();
+	}
+
+	/**
+	 * 默认密码加盐
+	 * 
+	 * @param salt
+	 * @return
+	 */
+	public static String defaultPasswdProdece(String salt) {
+		SimpleHash hash = new SimpleHash("md5",
+				GloabConfig.getConfig("defalut.passwd"), salt);
+		return hash.toString();
+	}
+
+	/**
+	 * 根据密码参数+盐生成密码
+	 * 
+	 * @param passwd
+	 *            密码
+	 * @param salt
+	 *            盐
+	 * @return
+	 */
 	public static String passwdProdece(String passwd, String salt) {
 		SimpleHash hash = new SimpleHash("md5", passwd, salt);
 		return hash.toString();
 	}
 
+	/**
+	 * 密码MD5加密
+	 * 
+	 * @param passwd
+	 * @return
+	 */
 	public static String passwdProdece(String passwd) {
 		SimpleHash hash = new SimpleHash("md5", passwd);
 		return hash.toString();
