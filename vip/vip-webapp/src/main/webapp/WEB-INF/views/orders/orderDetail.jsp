@@ -90,20 +90,17 @@
 				）
 			</div>
 			<c:if test="${orderDetailInfo.invoiceFlag != 0}">
-				<div>
-					<ul>
+				<ul>
 						<li>邮寄地址：${invoice.address }</li>
 						<li>发票类型：${invoice.invoiceType ==1? '个人':'公司' }</li>
 						<li>发票抬头：${invoice.invoiceTitle}</li>
 						<c:if test="${orderDetailInfo.invoiceFlag == 2}">
 						<li>发票编号：${invoice.invoiceNo}</li>
 						</c:if>
-					</ul>
-				</div>
+				</ul>
 			</c:if>
 			
 			
-
 			<div class="order-list-title">
 				退款信息 <span class="order-tips-red">（${orderDetailInfo.orderState ==4 ?'已退款':'未退款'}）</span>
 			</div>
@@ -130,7 +127,32 @@
 				</ul>
 			</c:if>
 			
-
+			<div class="order-list-title">VIP卡使用记录</div>
+			<ul>
+				<c:if test="${!empty consumeList}">
+					<c:forEach items="${consumeList}" var="consume">
+						<li>${consume.viproomName}&nbsp;单价：200元 &nbsp;消费时间：<fmt:formatDate value="${consume.consumeTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+					</c:forEach>
+					
+				</c:if>
+				
+				
+			</ul>
+			
+			<div class="order-list-title">反馈信息</div>
+			<ul>
+				<c:if test="${!empty appuserFeedBackInfoList}">
+					<c:forEach items="${appuserFeedBackInfoList }" var="appUserFeedBackInfo">
+						<li>反馈时间：<fmt:formatDate value="${appUserFeedBackInfo.feedbackTime}" pattern="yyyy-MM-dd HH:mm:ss"/>&nbsp;反馈内容：${appUserFeedBackInfo.feedbackContent}</li>
+					</c:forEach>
+				</c:if>
+			</ul>
+			
+			<c:if test="${!empty appCardBack.agreementUrl}">	
+				<div class="order-list-title">紧急退款照片</div>
+				<div><img width="400px" src="${appCardBack.agreementUrl}"></div>
+			</c:if>
+			
 		</div>
 
 	</div>

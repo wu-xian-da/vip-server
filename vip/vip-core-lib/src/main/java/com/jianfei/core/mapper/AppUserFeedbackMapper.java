@@ -32,4 +32,7 @@ public interface AppUserFeedbackMapper {
 	 */
 	int insertSelective(AppUserFeedback record);
 	
+	//根据用户id返回所有的反馈信息
+	List<AppUserFeedback> getFeedBackInfoListByUserId(String userId);
+	
 }
