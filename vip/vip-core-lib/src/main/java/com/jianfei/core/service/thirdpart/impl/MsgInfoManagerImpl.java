@@ -28,7 +28,7 @@ public class MsgInfoManagerImpl implements MsgInfoManager {
     @Override
     public boolean sendMsgInfo(String phone, String content) {
 		Client client = EmaySMSUtils.getClient();
-		int result = client.sendSMS(new String[] {phone}, content, 1);
+		int result = client.sendSMS(new String[] {phone}, "【亿出行】"+content,"0013", 1);
         //TODO 集成短信接口
 		return result==0?true:false;
     }
