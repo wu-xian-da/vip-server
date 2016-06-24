@@ -271,6 +271,7 @@ public class VipRoomController extends BaseController {
 	public List<Map<String, Object>> getAirPortList(@RequestParam(value = "provinceId") String provinceId) {
 		Map<String, Object> reqMap = new HashMap<String, Object>();
 		reqMap.put("province", provinceId);
+		reqMap.put("state", "0");
 		List<Map<String, Object>> list = ariPortService.mapList(reqMap);
 		return list;
 	}
