@@ -430,7 +430,7 @@ public class OrderManagerImpl implements OrderManager {
         VipCardUseDetailInfo vipCardUseDetailInfo = vipCardUseDetailInfoList == null || vipCardUseDetailInfoList.isEmpty() ? new VipCardUseDetailInfo()
                 : vipCardUseDetailInfoList.get(0);
         if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
-            return BaseMsgInfo.fail("暂未查询到此VIP卡相关信息");
+            return BaseMsgInfo.msgFail("暂未查询到此VIP卡相关信息");
         }
         getVipCardUseInfo(vipCardUseDetailInfo);
         return BaseMsgInfo.success(vipCardUseDetailInfo);
