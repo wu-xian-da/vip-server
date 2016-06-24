@@ -73,4 +73,21 @@ public class ConsumeManagerImpl implements ConsumeManager {
     }
 
 
+    /**
+     * 根据VIP卡号获取使用的金额
+     *
+     * @param vipCardNo
+     * @return
+     */
+    @Override
+    public double getVipCardUseMoney(String vipCardNo) {
+        List<AppConsume> appConsumeList= getConsumesByVipNo(vipCardNo);
+        double usedMoney = 0;
+        if (appConsumeList != null && appConsumeList.isEmpty()) {
+            for (AppConsume appConsume : appConsumeList) {
+                usedMoney = usedMoney + appConsume.getConsumeMoney();
+            }
+        }
+        return usedMoney;
+    }
 }

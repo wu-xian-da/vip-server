@@ -31,7 +31,7 @@ public class VipCardUseDetailInfo {
     /**
      * 订单金钱
      */
-   private double orderMoney;
+   private float orderMoney;
     /**
      * 用户名称
      */
@@ -52,12 +52,17 @@ public class VipCardUseDetailInfo {
     /**
      * 使用过的费用
      */
-    private double usedMoney;
+    private float usedMoney;
 
     /**
      * 退款金额
      */
-    private double returnMoney;
+    private float returnMoney;
+
+    /**
+     * 实际费用
+     */
+    private float  realMoney;
 
     /**
      * 退款信息
@@ -193,27 +198,27 @@ public class VipCardUseDetailInfo {
         this.customerSex = customerSex;
     }
 
-    public double getOrderMoney() {
+    public float getOrderMoney() {
         return orderMoney;
     }
 
-    public void setOrderMoney(double orderMoney) {
+    public void setOrderMoney(float orderMoney) {
         this.orderMoney = orderMoney;
     }
 
-    public double getUsedMoney() {
+    public float getUsedMoney() {
         return usedMoney;
     }
 
-    public void setUsedMoney(double usedMoney) {
+    public void setUsedMoney(float usedMoney) {
         this.usedMoney = usedMoney;
     }
 
-    public double getReturnMoney() {
+    public float getReturnMoney() {
         return returnMoney;
     }
 
-    public void setReturnMoney(double returnMoney) {
+    public void setReturnMoney(float returnMoney) {
         this.returnMoney = returnMoney;
     }
 
@@ -223,5 +228,13 @@ public class VipCardUseDetailInfo {
 
     public void setReturnInfo(String returnInfo) {
         this.returnInfo = returnInfo;
+    }
+
+    public float getRealMoney() {
+        return realMoney;
+    }
+
+    public void setRealMoney(float realMoney) {
+        this.realMoney = realMoney;
     }
 }

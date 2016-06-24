@@ -18,6 +18,7 @@ public class AppCardBack {
     private String agreementUrl;//协议图片
     private String cardNo;//vip卡号
     private String bankName;//银行名称
+	private String customerPhone;//消费者手机号
 	/**
 	 * backId
 	 *
@@ -253,6 +254,12 @@ public class AppCardBack {
 				+ createrId + ", checkId=" + checkId + ", agreementUrl=" + agreementUrl + ", cardNo=" + cardNo
 				+ ", bankName=" + bankName + "]";
 	}
-    
-    
+
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
 }
