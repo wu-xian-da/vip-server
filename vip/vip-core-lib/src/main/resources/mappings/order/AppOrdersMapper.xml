@@ -87,6 +87,7 @@
 			and concat(cus.customer_name,cus.customer_phone) like
 			CONCAT('%','${phoneOrUserName}','%' )
 		</if>
+		order by ord.order_time desc
 	</select>
 
 	<!--根据订单号查询订单详细信息 -->

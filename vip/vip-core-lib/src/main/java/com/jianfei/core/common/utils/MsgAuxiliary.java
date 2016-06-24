@@ -92,7 +92,7 @@ public class MsgAuxiliary {
 					Map.class);
 			Set<String> setKeys = msgMap.keySet();
 			for (String key : setKeys) {
-				msgBody.replace("\\[" + key + "\\]", msgMap.get(key));
+				msgBody = msgBody.replaceAll("\\[" + key + "\\]", msgMap.get(key));
 			}
 		}
 

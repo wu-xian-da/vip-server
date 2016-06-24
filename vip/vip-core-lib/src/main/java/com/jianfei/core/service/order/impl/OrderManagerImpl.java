@@ -589,4 +589,14 @@ public class OrderManagerImpl implements OrderManager {
 		// TODO Auto-generated method stub
 		return appConsumeMapper.selectByVipCardNo(cardNo);
 	}
+
+	/**
+	 * 不分页，返回所有满足条件的数据
+	 */
+	@Override
+	public List<OrderShowInfoDto> simplePage(Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		List<OrderShowInfoDto> list = appOrdersMapper.get(params);
+		return list;
+	}
 }
