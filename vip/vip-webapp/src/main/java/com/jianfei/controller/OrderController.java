@@ -37,19 +37,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
+import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppOrderCard;
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.bean.AppUserFeedback;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.base.AppInvoiceManager;
 import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
@@ -77,6 +82,8 @@ public class OrderController extends BaseController {
 	private AriPortManager ariPortService;
 	@Autowired
 	private ValidateCodeManagerImpl validateCodeManager;
+	@Autowired
+	private AppUserFeedbackImpl appUserFeedbackImpl;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -191,19 +198,38 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value="/returnOrderDetailInfoByOrderId")
 	public String returnOrderDetailInfoByOrderId(String orderId,Model model){
-		//订单基本信息
+		//1 订单基本信息
 		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		//发票信息
+		//2 发票信息
 		AppInvoice appInvoice = appInvoiceManagerImpl.selInvoiceInfoByOrderId(orderId);
-		//退卡余额信息
+		//3 退卡余额信息
 		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
+		
+		//4 反馈信息 根据用户id
+		//4.1 根据orderId获取用户id
+		AppOrders appOrders = orderManagerImpl.selectByPrimaryKey(orderId); 
+		List<AppUserFeedback> appuserFeedBackInfoList  = appUserFeedbackImpl.getFeedBackInfoListByUserId(appOrders.getCustomerId());
+		
+		//5 vip使用记录 根据cardno
+		//5.1 根据orderId 获取carNo
+		AppOrderCard appOrderCard = orderManagerImpl.selectByOrderId(orderId);
+		List<AppConsume> consumeList = orderManagerImpl.selectByVipCardNo(appOrderCard.getCardNo());
 		
 		model.addAttribute("orderDetailInfo", orderDetailInfo);
 		if(appInvoice !=null){
 			model.addAttribute("invoice", appInvoice);
 		}
 		if(appCardBack != null){
+			if(appCardBack.getAgreementUrl() !=null){
+				appCardBack.setAgreementUrl(GloabConfig.getConfig("static.resource.server.address")+appCardBack.getAgreementUrl());
+			}
 			model.addAttribute("appCardBack", appCardBack);
+		}
+		if(appuserFeedBackInfoList != null){
+			model.addAttribute("appuserFeedBackInfoList", appuserFeedBackInfoList);
+		}
+		if(consumeList !=null){
+			model.addAttribute("consumeList", consumeList);
 		}
 		return "orders/orderDetail";
 		

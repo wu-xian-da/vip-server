@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>掌慧纵盈</title>
+<title>${gloab_name }</title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
 	var mainMenu;
@@ -162,7 +162,7 @@
 	</div>
 	<div data-options="region:'center'" style="overflow: hidden;">
 		<div id="mainTabs">
-			<div title="掌慧纵盈" iconCls="ext-icon-medal_gold_1" data-options="">
+			<div title="${gloab_name }" iconCls="ext-icon-medal_gold_1" data-options="">
 				<iframe src="${ctx }/index" allowTransparency="true" style="border: 0; width: 100%; height: 99%;" frameBorder="0"></iframe>
 			</div>
 		</div>

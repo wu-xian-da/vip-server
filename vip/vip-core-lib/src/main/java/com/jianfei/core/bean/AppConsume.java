@@ -2,6 +2,8 @@ package com.jianfei.core.bean;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AppConsume {
     private String consumeId;
 
@@ -38,7 +40,8 @@ public class AppConsume {
     public void setConsumeMoney(Float consumeMoney) {
         this.consumeMoney = consumeMoney;
     }
-
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getConsumeTime() {
         return consumeTime;
     }

@@ -82,4 +82,11 @@ public interface AppOrderCardMapper {
 	 * @mbggenerated Thu Jun 02 14:29:29 CST 2016
 	 */
 	int updateByPrimaryKey(AppOrderCard record);
+	
+	/**
+	 * 根据订单id获取订单卡表信息
+	 * @param orderId
+	 * @return
+	 */
+	AppOrderCard selectByOrderId(String orderId);
 }

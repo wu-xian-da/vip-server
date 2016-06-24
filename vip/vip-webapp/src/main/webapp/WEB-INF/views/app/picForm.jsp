@@ -121,7 +121,7 @@
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>排序:</th>
-					<td><input class="easyui-numberspinner" name="priority"   required="required"  value="${appPicture.priority } data-options="increment:1,min:1,editable:false,missingMessage:'必填项',required:true" style="width:120px;" ></td>
+					<td><input class="easyui-numberspinner" name="priority"  value="${appPicture.priority } data-options="increment:1,min:1,editable:false" style="width:120px;" ></td>
 				</tr>
 				<tr>
 					<th>类型:</th>

@@ -6,7 +6,9 @@ import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
+import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppOrderCard;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.PageDto;
@@ -211,5 +213,25 @@ public interface OrderManager {
 	 * 查询需要开发票的订单信息
 	 */
     PageInfo<OrderShowInfoDto> invoicePageList(int pageNo, int pageSize,Map<String,Object> map);
+    
+    /**
+     * 根据order_id查询订单基本信息
+     * @param orderId
+     * @return
+     */
+    AppOrders selectByPrimaryKey(String orderId);
+    
+
+	/**
+	 * 根据订单id获取订单卡表信息
+	 * @param orderId
+	 * @return
+	 */
+	AppOrderCard selectByOrderId(String orderId);
+	
+	/**
+	 * 根据卡号返回所有消费记录
+	 */
+	List<AppConsume> selectByVipCardNo(String cardNo);
     
 }

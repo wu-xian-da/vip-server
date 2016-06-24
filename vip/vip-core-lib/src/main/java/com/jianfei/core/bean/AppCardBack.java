@@ -2,6 +2,8 @@ package com.jianfei.core.bean;
 
 import java.util.Date;
 
+import com.jianfei.core.common.utils.GloabConfig;
+
 public class AppCardBack {
 	
     private String backId;//退卡流水号

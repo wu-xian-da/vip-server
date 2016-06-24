@@ -130,7 +130,8 @@ public class OrderManagerImpl implements OrderManager {
      *
      * @param pageNo
      * @param pageSize
-     * @param params   封装查询参数
+     * @param params
+     *            封装查询参数
      * @return Page<Role>
      * @version 1.0.0
      */
@@ -550,15 +551,42 @@ public class OrderManagerImpl implements OrderManager {
         return appOrdersMapper.getOrderInfoByOrderId(orderId);
     }
 
-    /**
-     * 查询需要开发票的订单信息
-     */
-    @Override
-    public PageInfo<OrderShowInfoDto> invoicePageList(int pageNo, int pageSize, Map<String, Object> map) {
-        // TODO Auto-generated method stub
-        PageHelper.startPage(pageNo, pageSize);
-        List<OrderShowInfoDto> list = appOrdersMapper.invoicePageList(map);
-        PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
-        return pageInfo;
-    }
+	/**
+	 * 查询需要开发票的订单信息
+	 */
+	@Override
+	public PageInfo<OrderShowInfoDto> invoicePageList(int pageNo, int pageSize,Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(pageNo, pageSize);
+		List<OrderShowInfoDto> list = appOrdersMapper.invoicePageList(map);
+		PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
+		return pageInfo;
+	}
+
+	/**
+	 * 根据order_id返回订单基本信息
+	 */
+	@Override
+	public AppOrders selectByPrimaryKey(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.selectByPrimaryKey(orderId);
+	}
+
+	/**
+	 * 根据ordrId查询订单卡表信息
+	 */
+	@Override
+	public AppOrderCard selectByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrderCardMapper.selectByOrderId(orderId);
+	}
+
+	/**
+	 * 根据卡号返回所有的消费记录
+	 */
+	@Override
+	public List<AppConsume> selectByVipCardNo(String cardNo) {
+		// TODO Auto-generated method stub
+		return appConsumeMapper.selectByVipCardNo(cardNo);
+	}
 }

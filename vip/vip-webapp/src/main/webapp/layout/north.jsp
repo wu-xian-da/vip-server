@@ -15,7 +15,7 @@
 	};
 </script>
 <div style="position: absolute; right: 0px; bottom: 0px;">
-	<span>北京掌慧纵盈欢迎你！</span>
+	<span>${gloab_name }欢迎你！</span>
 	<a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_pfMenu',iconCls:'ext-icon-rainbow'">更换皮肤</a>
 	<a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_kzmbMenu',iconCls:'ext-icon-cog'">控制面板</a> 
 	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'ext-icon-door_out'" onclick="logoutFun();" style="">注销</a>

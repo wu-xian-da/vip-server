@@ -1,5 +1,6 @@
 package com.jianfei.core.service.base;
 
+import java.util.List;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
@@ -26,5 +27,12 @@ public interface AppUserFeedbackManager {
      * @return
      */
 	int addFeedbackInfo(AppCustomer customer,String content);
+	
+	/**
+	 * 根据用户id返回所有的反馈信息
+	 * @param userId
+	 * @return
+	 */
+	List<AppUserFeedback> getFeedBackInfoListByUserId(String userId);
 
 }
