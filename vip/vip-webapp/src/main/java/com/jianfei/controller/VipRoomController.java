@@ -197,7 +197,12 @@ public class VipRoomController extends BaseController {
 		//2、根据vip室编号返回vip室信息
 		SysViproom viproom = vipRoomManagerImp.selVipRoomById(viproomId);
 		List<AppPicture> pictureList = viproom.getPictures();
-		viproom.setPictureUrl(pictureList.get(0).getPictureUrl());
+		if(pictureList != null && pictureList.size() >0){
+			viproom.setPictureUrl(pictureList.get(0).getPictureUrl());
+		}else{
+			viproom.setPictureUrl("");
+		}
+		
 		model.addAttribute("viproom", viproom);
 		
 		//3、根据vip所属省份id返回该省份下机场列表
