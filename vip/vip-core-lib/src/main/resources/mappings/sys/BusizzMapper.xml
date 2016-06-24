@@ -38,6 +38,7 @@
 				u.`code`,
 				u.`name`,
 				u.salt,
+				DATE_FORMAT(create_time,'%Y-%m-%d') as create_time,
 				GROUP_CONCAT(DISTINCT ap.`airport_id`) AS 'ariPortsIds',
 				GROUP_CONCAT(DISTINCT ap.`airport_name`) AS 'ariPortsNames',
 				u.phone,
@@ -210,6 +211,9 @@
 			</if>
 			<if test="dtflag!=null and dtflag!=''">
 				and dtflag=#{dtflag}
+			</if>
+			<if test="state!=null and state!=''">
+				and state=#{state}
 			</if>
 			<if test="dateTime!=null and dateTime!=''">
 				and DATE_FORMAT(create_time,'%Y-%m')=#{dateTime}

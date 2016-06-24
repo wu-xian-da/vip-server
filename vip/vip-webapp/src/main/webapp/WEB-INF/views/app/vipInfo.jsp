@@ -74,15 +74,6 @@
 						</ul>
 					</c:forEach>
 				</c:if>
-				
-				<div class="order-list-title">VIP卡使用记录</div>
-					<ul>
-						<c:forEach items="${vipCardRescordInfo }" var="vp" varStatus="status">
-							<li>记录${ status.index + 1}</li>
-							<li style="padding-left: 20px;">${vp.viproom_name }&nbsp; 单价${vp.consume_money } &nbsp; 时间:${vp.consume_time }</li>
-						</c:forEach>
-					</ul>
-			</div>
 		</div>
 	</body>
 </html>

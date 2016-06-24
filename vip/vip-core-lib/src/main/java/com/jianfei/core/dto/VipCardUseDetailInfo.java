@@ -29,9 +29,9 @@ public class VipCardUseDetailInfo {
      */
     private String orderId;
     /**
-     * 订单时间
+     * 订单金钱
      */
-   private float orderMoney;
+   private double orderMoney;
     /**
      * 用户名称
      */
@@ -52,7 +52,17 @@ public class VipCardUseDetailInfo {
     /**
      * 使用过的费用
      */
-    private float  usedMoney;
+    private double usedMoney;
+
+    /**
+     * 退款金额
+     */
+    private double returnMoney;
+
+    /**
+     * 退款信息
+     */
+    private String returnInfo;
 
     /**
      * 打折比例
@@ -102,14 +112,6 @@ public class VipCardUseDetailInfo {
         this.activeTime = activeTime;
     }
 
-    public float getOrderMoney() {
-        return orderMoney;
-    }
-
-    public void setOrderMoney(float orderMoney) {
-        this.orderMoney = orderMoney;
-    }
-
     public String getCustomerName() {
         return customerName;
     }
@@ -134,13 +136,6 @@ public class VipCardUseDetailInfo {
         this.customerIdNo = customerIdNo;
     }
 
-    public float getUsedMoney() {
-        return usedMoney;
-    }
-
-    public void setUsedMoney(float usedMoney) {
-        this.usedMoney = usedMoney;
-    }
 
     public String getSaleRate() {
         return saleRate;
@@ -196,5 +191,37 @@ public class VipCardUseDetailInfo {
 
     public void setCustomerSex(int customerSex) {
         this.customerSex = customerSex;
+    }
+
+    public double getOrderMoney() {
+        return orderMoney;
+    }
+
+    public void setOrderMoney(double orderMoney) {
+        this.orderMoney = orderMoney;
+    }
+
+    public double getUsedMoney() {
+        return usedMoney;
+    }
+
+    public void setUsedMoney(double usedMoney) {
+        this.usedMoney = usedMoney;
+    }
+
+    public double getReturnMoney() {
+        return returnMoney;
+    }
+
+    public void setReturnMoney(double returnMoney) {
+        this.returnMoney = returnMoney;
+    }
+
+    public String getReturnInfo() {
+        return returnInfo;
+    }
+
+    public void setReturnInfo(String returnInfo) {
+        this.returnInfo = returnInfo;
     }
 }

@@ -21,7 +21,16 @@ public enum VipCardState {
     /**
      * 退卡
      */
-    BACK_CARD(2);
+    BACK_CARD(2),
+    /**
+     * 激活失败
+     */
+    ACTIVATE_FAIL(3),
+    /**
+     * 待激活
+     */
+    TO_ACTIVATE(4);
+
 
     private Integer name;
 

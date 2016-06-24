@@ -46,11 +46,10 @@
 
     <!--用户密码账号方式验证-->
     <authentication-manager alias="authenticationManager">
-        <authentication-provider >
-            <user-service>
-                <user name="jimi" password="jimispassword" authorities="ROLE_USER, ROLE_ADMIN" />
-                <user name="bob" password="bobspassword" authorities="ROLE_USER" />
-            </user-service>
+        <authentication-provider user-service-ref="saleUserDetailsService">
+        <password-encoder hash="md5"/>
+        </authentication-provider>
+        <authentication-provider user-service-ref="vipUserDetailsService">
         </authentication-provider>
     </authentication-manager>
     <!--客户端权限认证-->
@@ -64,9 +63,15 @@
     </beans:bean>
 
     <oauth2:client-details-service id="clientDetailsService" >
-        <oauth2:client client-id="mobile_1"
+        <oauth2:client client-id="mobile_sale_app"
                        authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                       secret="secret_1" scope="read,write,trust"      />
+                       secret="secret_sale_app" scope="read,write,trust"  />
+        <oauth2:client client-id="mobile_vip_app_ios"
+                       authorized-grant-types="password,authorization_code,refresh_token,implicit"
+                       secret="secret_vip_app_ios" scope="read,write,trust"  />
+        <oauth2:client client-id="mobile_vip_app_and"
+                       authorized-grant-types="password,authorization_code,refresh_token,implicit"
+                       secret="secret_vip_app_and" scope="read,write,trust"  />
     </oauth2:client-details-service>
 
 

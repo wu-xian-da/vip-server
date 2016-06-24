@@ -17,6 +17,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.ExportExclUtils;
@@ -54,12 +57,14 @@ public class AppCustomerManagerTest {
 	@Autowired
 	private BusizzManager<User> busizzManager;
 
+	@Autowired
+	private VipCardManager vipCardManager;
+
 	@Test
 	public void testsssssss() {
 		Map<String, Object> map = DateUtil.getDelayDate(1);
 		PageHelper.startPage(1, 10);
-		map.put("today",
-				DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
+		map.put("today", DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
 		List<Map<String, Object>> list = busizzManager.listMap(map);
 		System.out.println(JSONObject.toJSONString(list));
 	}
@@ -73,6 +78,18 @@ public class AppCustomerManagerTest {
 		System.out.println(JSONObject.toJSONString(maps));
 	}
 
+	@Rollback(false)
+	@Test
+	public void tesD() {
+		AppVipcard vipcard = vipCardManager.getVipCardByNo("1516326");
+		Date expireDate = DateUtil.addDays(new Date(), vipcard.getValideTime());
+		boolean isOk = vipCardManager.activeAppCard(new MapUtils.Builder()
+				.setKeyValue("expiryTime", expireDate)
+				.setKeyValue("card_state", VipCardState.ACTIVE.getName())
+				.setKeyValue("cardNo", "1516326").build());
+		System.out.println(isOk);
+	}
+
 	@Test
 	public void testsss() {
 		List<Map<String, Object>> maps = orderManager
@@ -82,26 +99,5 @@ public class AppCustomerManagerTest {
 		System.out.println(JSONObject.toJSONString(maps));
 	}
 
-	@Test
-	public void test() throws Exception {
-		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
-				.get(new MapUtils.Builder().build());
-		ExportExclUtils<ExportAip> exclUtils = new ExportExclUtils<ExportAip>();
-		String[] headers = { "姓名", "手机号", "日期", "常住地址", "邮箱", "用户状态" };
-		List<ExportAip> dataset = new ArrayList<ExportAip>();
-		for (AppCustomer appCustomer : messageDto.getData()) {
-			ExportAip exportAip = new ExportAip(
-					StringUtils.obj2String(appCustomer.getCustomerName()),
-					StringUtils.obj2String(appCustomer.getPhone()),
-					StringUtils.obj2String(appCustomer.getCreateTime()),
-					StringUtils.obj2String(appCustomer.getAddress()),
-					StringUtils.obj2String(appCustomer.getEmail()),
-					StringUtils.obj2String(appCustomer.getOrderStatu()));
-			dataset.add(exportAip);
-		}
-		OutputStream out = new FileOutputStream("E://a.xls");
-		exclUtils.exportExcel(headers, dataset, out);
-		out.close();
-	}
 
 }

@@ -47,8 +47,6 @@ public class AppCustomer implements Serializable {
 	@JsonIgnore
 	private String country;
 
-	private Integer orderStatu;
-
 	private Date createTime;
 
 	private List<AppVipcard> vipCards= Lists.newArrayList();
@@ -191,24 +189,6 @@ public class AppCustomer implements Serializable {
 		this.country = country == null ? null : country.trim();
 	}
 
-	/**
-	 * orderStatu
-	 *
-	 * @return the orderStatu
-	 * @version 1.0.0
-	 */
-
-	public Integer getOrderStatu() {
-		return orderStatu;
-	}
-
-	/**
-	 * @param orderStatu
-	 *            the orderStatu to set
-	 */
-	public void setOrderStatu(Integer orderStatu) {
-		this.orderStatu = orderStatu;
-	}
 
 	/*
 	 * (non-Javadoc)

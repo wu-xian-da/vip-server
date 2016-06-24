@@ -2,21 +2,13 @@ package com.jianfei.core.service.base.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jianfei.core.bean.AppConsume;
-import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
-import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppVipcardMapper;
 import com.jianfei.core.service.base.VipCardManager;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -25,6 +17,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Vip卡管理
@@ -63,12 +61,12 @@ public class VipCardManagerImpl implements VipCardManager {
 		return num == 1 ? true : false;
 	}
 
-
 	/**
 	 * 分页显示vip卡列表信息
 	 */
 	@Override
-	public PageInfo<AppVipcard> showCardListPage(int pageNo, int pageSize, Map<String, Object> params) {
+	public PageInfo<AppVipcard> showCardListPage(int pageNo, int pageSize,
+			Map<String, Object> params) {
 		// 显示第几页
 		PageHelper.startPage(pageNo, pageSize);
 		// 查询条件
@@ -88,7 +86,8 @@ public class VipCardManagerImpl implements VipCardManager {
 		List<AppVipcard> list = pageInfo.getList();
 		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
 		for (AppVipcard vipcard : list) {
-			Map<String, Object> map = MapUtils.<AppVipcard> entityInitMap(vipcard);
+			Map<String, Object> map = MapUtils
+					.<AppVipcard> entityInitMap(vipcard);
 			maps.add(map);
 		}
 		Grid grid = new Grid();
@@ -116,7 +115,8 @@ public class VipCardManagerImpl implements VipCardManager {
 	public int importExcelData(InputStream in) {
 		try {
 			// 创建对Excel工作簿文件的引用
-			//XSSFWorkbook wookbook = new XSSFWorkbook(new FileInputStream(filePath));
+			// XSSFWorkbook wookbook = new XSSFWorkbook(new
+			// FileInputStream(filePath));
 			XSSFWorkbook wookbook = new XSSFWorkbook(in);
 			// 在Excel文档中，第一张工作表的缺省索引是0
 			// 其语句为：HSSFSheet sheet = workbook.getSheetAt(0);
@@ -142,7 +142,8 @@ public class VipCardManagerImpl implements VipCardManager {
 								break;
 							case HSSFCell.CELL_TYPE_NUMERIC:
 								HSSFDataFormatter dataFormatter = new HSSFDataFormatter();
-								value += dataFormatter.formatCellValue(cell)+",";
+								value += dataFormatter.formatCellValue(cell)
+										+ ",";
 								break;
 							case HSSFCell.CELL_TYPE_STRING:
 								value += cell.getStringCellValue() + ",";
@@ -161,15 +162,15 @@ public class VipCardManagerImpl implements VipCardManager {
 					vipCard.setImportTime(new Date());
 					vipCard.setDtflag(0);
 					vipCard.setCardState(VipCardState.NOT_ACTIVE.getName());// 未激活
-					vipCard.setCardType(1);//卡类型
-					vipCard.setInitMoney(1998f);//卡初始金额
+					vipCard.setCardType(1);// 卡类型
+					vipCard.setInitMoney(1998f);// 卡初始金额
 					// 向数据表中插入一条数据
 					try {
 						appVipcardMapper.importExcelToDB(vipCard);
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
-					
+
 				}
 			}
 		} catch (Exception e) {
@@ -179,25 +180,31 @@ public class VipCardManagerImpl implements VipCardManager {
 		return 0;
 
 	}
-	
+
 	/**
 	 * 获取数据表中所有的数据，用于导出excel表格
+	 * 
 	 * @return
 	 */
-	public List<AppVipcard> getAllAppVipcardInfo(){
+	public List<AppVipcard> getAllAppVipcardInfo() {
 		return appVipcardMapper.selAllVipCard();
 	}
-	
+
 	/**
 	 * 根据vip card no 获取VIP卡片信息
 	 *
-	 * @param vipCardNo VIP卡号
+	 * @param vipCardNo
+	 *            VIP卡号
 	 * @return
 	 */
 	@Override
 	public AppVipcard getVipCardByNo(String vipCardNo) {
 		return appVipcardMapper.selectByPrimaryKey(vipCardNo);
 	}
-	
-	
+
+	@Override
+	public boolean activeAppCard(Map<String, Object> map) {
+		int num = appVipcardMapper.activeAppCard(map);
+		return num == 1 ? true : false;
+	}
 }

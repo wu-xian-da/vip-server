@@ -208,9 +208,10 @@ public class OrderController {
 	@ResponseBody
 	public BaseMsgInfo VipCardUseAndOrder(
 			@RequestParam(value = "phone", required = true) String phone,
-			@RequestParam(value = "code", required = true) String code) {
+			@RequestParam(value = "code", required = true) String code,
+			@RequestParam(value = "vipCardNo", required = false) String vipCardNo) {
 		try {
-			return orderManager.getVipCardUseAndOrder(phone, code);
+			return orderManager.getVipCardUseAndOrder(phone, code, vipCardNo);
 		}catch (Exception e){
 			log.error("用户使用记录查询接口异常",e);
 			return BaseMsgInfo.msgFail("用户使用记录查询失败");

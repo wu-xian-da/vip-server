@@ -1,40 +1,32 @@
 package com.jianfei.core.service.order.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-
 import com.alipay.demo.trade.model.GoodsDetail;
 import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
-import com.jianfei.core.bean.*;
-import com.jianfei.core.common.enu.MsgType;
-import com.jianfei.core.common.enu.PayType;
-import com.jianfei.core.common.pay.PayQueryResult;
-import com.jianfei.core.common.pay.PreCreateResult;
-import com.jianfei.core.common.utils.BeanUtils;
-import com.jianfei.core.common.utils.IdGen;
-import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.common.enu.*;
-import com.jianfei.core.common.utils.*;
-import com.jianfei.core.dto.*;
-import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
-import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
-import com.jianfei.core.service.base.impl.VipCardManagerImpl;
-import com.jianfei.core.service.thirdpart.ThirdPayManager;
-import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
-import com.jianfei.core.service.user.impl.VipUserManagerImpl;
-
-import com.tencent.protocol.native_protocol.NativePayReqData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.*;
+import com.jianfei.core.common.enu.*;
+import com.jianfei.core.common.pay.PayQueryResult;
+import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.*;
+import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppCardBackMapper;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
+import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
+import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
+import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.OrderManager;
+import com.jianfei.core.service.thirdpart.ThirdPayManager;
+import com.jianfei.core.service.user.impl.VipUserManagerImpl;
+import com.tencent.protocol.native_protocol.NativePayReqData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * TODO
@@ -406,6 +398,15 @@ public class OrderManagerImpl implements OrderManager {
 			result=yeepayManager.tradeQuery(orderId);
 		}
 		if ("0".equals(result.getCode())){
+			//更新订单支付查询结果
+			Map<String,Object> params = new HashMap<String,Object>();
+			params.put("orderId", orderId);
+			params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
+			params.put("payUserId", result.getPayUserId());
+			params.put("payTime", result.getPayTime());
+			params.put("tradeNo", result.getTradeNo());
+			params.put("payType", payType.getName());
+			appOrdersMapper.payNotify(params);
 			return BaseMsgInfo.success(true);
 		}else {
 			return BaseMsgInfo.success(false);
@@ -421,31 +422,35 @@ public class OrderManagerImpl implements OrderManager {
 	 * @return
 	 */
 	@Override
-	public BaseMsgInfo getVipCardUseAndOrder(String phone, String code) {
+	public BaseMsgInfo getVipCardUseAndOrder(String phone, String code,String vipCardNo) {
 		//1、校验用户和手机验证码
 		boolean flag = validateCodeManager.validateSendCode(phone, MsgType.BACK_CARD_APPLY, code);
 		if (!flag)
 			return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
 		//2、查询用户信息和订单信息
-		List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(phone);
+		List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(phone,vipCardNo);
 		VipCardUseDetailInfo vipCardUseDetailInfo = vipCardUseDetailInfoList == null || vipCardUseDetailInfoList.isEmpty() ? new VipCardUseDetailInfo()
 				: vipCardUseDetailInfoList.get(0);
 		if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
-			return BaseMsgInfo.success(vipCardUseDetailInfo);
+			return BaseMsgInfo.fail("暂未查询到此VIP卡相关信息");
 		}
 
 		//3、查询VIP使用信息
 		List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
-		if (list == null|| list.isEmpty()){
-			return BaseMsgInfo.success(vipCardUseDetailInfo);
-		}
 		float usedMoney = 0;
-		for (AppConsume appConsume : list) {
-			usedMoney = usedMoney + appConsume.getConsumeMoney();
+		if (list != null&& list.isEmpty()){
+			for (AppConsume appConsume : list) {
+				usedMoney = usedMoney + appConsume.getConsumeMoney();
+			}
 		}
+		double remainMoney =  vipCardUseDetailInfo.getOrderMoney()-usedMoney*0.8-100;
+		if (remainMoney<0){
+			remainMoney=0;
+		}
+		vipCardUseDetailInfo.setReturnMoney(remainMoney);
+		vipCardUseDetailInfo.setReturnInfo("您已免费享受了价值"+usedMoney+"元的VIP室服务,若退卡需扣除该费用。亿出行仅收取该费用的80%作为服务费。");
 		vipCardUseDetailInfo.setUsedMoney(usedMoney);
 		vipCardUseDetailInfo.setCardUseList(list);
-		//TODO 可配置优惠信息多少
 		vipCardUseDetailInfo.setSaleRate("80%");
 		return BaseMsgInfo.success(vipCardUseDetailInfo);
 	}
@@ -497,7 +502,15 @@ public class OrderManagerImpl implements OrderManager {
 			return BaseMsgInfo.msgFail("订单不存在");
 		}
 		//添加订单状态为已退款
-		orders.setOrderState(VipOrderState.BEING_AUDITED.getName());
+		if(StringUtils.isNotBlank(appCardBack.getAgreementUrl())){
+			//已退款
+			orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
+		}
+		else {
+			//审核通过
+			orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
+		}
+
 		appOrdersMapper.updateByPrimaryKeySelective(orders);
 		// 2、TODO 重新计算可退余额 校验是否正确
 		//3、插入数据库
@@ -526,5 +539,32 @@ public class OrderManagerImpl implements OrderManager {
 		List<OrderShowInfoDto> list = appOrdersMapper.invoicePageList(map);
 		PageInfo<OrderShowInfoDto> pageInfo = new PageInfo(list);
 		return pageInfo;
+	}
+
+	/**
+	 * 根据order_id返回订单基本信息
+	 */
+	@Override
+	public AppOrders selectByPrimaryKey(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.selectByPrimaryKey(orderId);
+	}
+
+	/**
+	 * 根据ordrId查询订单卡表信息
+	 */
+	@Override
+	public AppOrderCard selectByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrderCardMapper.selectByOrderId(orderId);
+	}
+
+	/**
+	 * 根据卡号返回所有的消费记录
+	 */
+	@Override
+	public List<AppConsume> selectByVipCardNo(String cardNo) {
+		// TODO Auto-generated method stub
+		return appConsumeMapper.selectByVipCardNo(cardNo);
 	}
 }

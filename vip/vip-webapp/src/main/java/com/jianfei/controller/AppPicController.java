@@ -34,6 +34,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.AppCustomerManager;
 import com.jianfei.core.service.base.AppPictureManager;
@@ -117,6 +118,9 @@ public class AppPicController extends BaseController {
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<String> save(AppPicture appPicture) {
+		if (ObjectUtils.isEmpty(appPicture.getPriority())) {
+			appPicture.setPictureId(0);
+		}
 		appPicture.setDtflag(GloabConfig.OPEN);
 		if (null != appPicture.getPictureId() && 0 != appPicture.getPictureId()) {
 			return appPictureManager.updateByPrimaryKeySelective(appPicture);
@@ -188,14 +192,11 @@ public class AppPicController extends BaseController {
 						StringUtils.obj2String(appCustomer.getPhone()),
 						StringUtils.obj2String(DateUtil.dateToString(
 								appCustomer.getCreateTime(), "yyyy-MM-dd")),
-						StringUtils.obj2String(appCustomer.getAddress()),
-						StringUtils.obj2String(appCustomer.getEmail()),
-						returnPayState(StringUtils.obj2String(appCustomer
-								.getOrderStatu())));
+						StringUtils.obj2String(appCustomer.getEmail()));
 				dataset.add(exportAip);
 			}
-			download(response, new String[] { "姓名", "手机号", "日期", "常住地址", "邮箱",
-					"用户状态" }, dataset, "vip用户.xls");
+			download(response, new String[] { "姓名", "手机号", "日期", "邮箱" },
+					dataset, "vip用户.xls");
 		}
 	}
 

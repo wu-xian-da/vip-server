@@ -79,4 +79,13 @@ public class AppUserFeedbackImpl implements AppUserFeedbackManager{
 		// TODO Auto-generated method stub
 		return appUserFeedbackMapper.getFeedBackInfoById(feedBackId);
 	}
+	
+	/**
+	 * 根据用户id返回所有的反馈信息
+	 */
+	@Override
+	public List<AppUserFeedback> getFeedBackInfoListByUserId(String userId) {
+		// TODO Auto-generated method stub
+		return appUserFeedbackMapper.getFeedBackInfoListByUserId(userId);
+	}
 }

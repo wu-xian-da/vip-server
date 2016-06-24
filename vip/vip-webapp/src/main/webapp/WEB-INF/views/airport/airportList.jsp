@@ -123,9 +123,9 @@
 				sortable : true,
 				formatter : function(value, row, index) {
 					switch (value) {
-					case 0:
-						return '冻结';
 					case 1:
+						return '冻结';
+					case 0:
 						return '运营';
 					}
 				}

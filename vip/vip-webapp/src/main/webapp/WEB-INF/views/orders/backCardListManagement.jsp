@@ -28,7 +28,7 @@
 						<option value="1">微信</option>
 						<option value="2">支付宝</option>
 						<option value="3">银行卡</option>
-						<option value="4">现场</option>
+						<option value="4">现金</option>
 					</select>
 				</div>
 	
@@ -80,7 +80,7 @@
 							<th data-options="align:'center', field:'orderTime',width:120">申请日期</th>
 		
 							<th data-options="align:'center', field:'applyTypeName',width:150">申请途径</th>
-							<th data-options="align:'center', field:'backTypeName',width:100">退卡方式</th>
+							<th data-options="align:'center', field:'backTypeName',width:100">退款方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
 							<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 							<th data-options="align:'center', field:'operation',width:200">操作</th>

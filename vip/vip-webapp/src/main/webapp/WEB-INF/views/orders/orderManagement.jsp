@@ -47,7 +47,7 @@
 			                	
 			                    <option value="">全部机场</option>
 			                    <c:forEach items="${airPostList}" var="airPort">
-			                    	<option value="${airPort.airport_id }">${airPort.airport_name }</option>
+			                    	<option value="${airPort.id}">${airPort.name }</option>
 			                    </c:forEach>
 			                    
 			                </select>
@@ -79,8 +79,12 @@
 			                <button id="searchBt">查询</button>
 			            </div>
 			            
-			            <div class="order-condition-item" style="width: 70px">
+			            <div class="order-condition-item" style="width: 70px;margin-left: 15px">
 			                <button id="resetBt">重置</button>
+			            </div>
+			            <div class="order-condition-item" style="width: 70px">
+			                <!-- <a href="${pageContext.request.contextPath}/exportOrderInfoToExcel"><button id="exportBt">导出</button></a> -->
+			                 <button id="exportBt">导出</button>
 			            </div>
 			            
 			        </div>
@@ -129,34 +133,43 @@
                     <label><input type="radio" name="card-radio" id="2">支付宝转账</label>
                     <label><input type="radio" name="card-radio" id="3">银行卡转账</label>
                 </div>
-
+					
+				
                 <div class="radio-tab-content">
                     <div class="raidp-tab-content-item" style="display:block">
+                    	<form id="wxform1">
                     	<input type="hidden" value="" id="hideOrderId"/>
-                        <label>输入微信号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="required:true"/>
+                        <label>输入微信号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="missingMessage:'必填项',required:true"/>
+                    	</form>
                     </div>
 
-                    <div class="raidp-tab-content-item">
-                        <label>输入支付宝账号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="required:true"/>
+                    <div class="raidp-tab-content-item" id="tbdiv2">
+                    <form id="tbform2">
+                        <label>输入支付宝账号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo1" data-options="missingMessage:'必填项',required:true"/>
+                    </form>
                     </div>
 
-                    <div class="raidp-tab-content-item">
+                    <div class="raidp-tab-content-item" id="bankdiv3">
+                    <form id="banckform3">
                     	<table>
                     		<tr>
                     			<td><label>输入开户行&nbsp;</label></td>
-                    			<td><input type="text" id="banckName"/></td>
+                    			<td><input class="easyui-validatebox" type="text" id="banckName" data-options="missingMessage:'必填项',required:true"/></td>
                     		</tr>
                     		<tr>
                     			<td> <label>输入银行卡账号&nbsp;</label></td>
-                    			<td><input type="text" id="backCardNo2"></td>
+                    			<td><input class="easyui-validatebox" type="text" id="backCardNo2" data-options="missingMessage:'必填项',required:true"></td>
                     		</tr>
                     		<tr>
                     			<td><label>输入持卡人姓名&nbsp;</label></td>
-                    			<td><input type="text" id="userNames"/></td>
+                    			<td><input class="easyui-validatebox" type="text" id="userNames" data-options="missingMessage:'必填项',required:true"/></td>
                     		</tr>
                     	</table>
+                    </form>
                      </div>
+                     
                 </div>
+                
 
                 <div class="raido-tab-refund-price">
                     <label>可退金额&nbsp;&nbsp;<span id="remainMoney">0.00</span>元</label>
@@ -312,32 +325,43 @@
 		
 		//3、将用户填写的信息写入到退卡流水表中
 		$("#writerUserInfo").click(function(elem){
-			var backCardNo = "";
-			var userNames = "";//开户名
-			var banckName = "";//开户行
-			var remainMoney = $("#remainMoney").text();
-			var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
-			var orderId = $("#hideOrderId").val();
-			if(payMethod==1){
-				backCardNo = $("#backCardNo0").val();
-			}else if(payMethod == 2){
-				backCardNo = $("#backCardNo1").val();
-			}else if(payMethod ==3){
-				backCardNo = $("#backCardNo2").val();
-				userNames = $("#userNames").val();
-				banckName = $("#banckName").val();
-			}
-			var url = "onRefund?orderId="+orderId+"&backCardNo="+backCardNo+"&remainMoney="+remainMoney+"&payMethod="+payMethod+"&opr="+3+"&userNames="+userNames+"&banckName="+banckName;
-			$.get(url,function(_d){
-				if(_d.result == 1){
-					/* $(elem).after($(_d.data));
-                    $(elem).parent().parent().prev().find("div").text(_d.orderStateName);
-                  	$(elem).remove(); */
-					$("#w").window('close');
-					window.location.reload();
+				var backCardNo = "";
+				var userNames = "";//开户名
+				var banckName = "";//开户行
+				var remainMoney = $("#remainMoney").text();
+				var payMethod = $('input:radio[name="card-radio"]:checked').attr("id");
+				var orderId = $("#hideOrderId").val();
+				if(payMethod==1){
+					if($("#wxform1").form('validate')){
+						backCardNo = $("#backCardNo0").val();
+					}else{
+						return;
+					}
+					
+				}else if(payMethod == 2){
+					if($("#tbform2").form('validate')){
+						backCardNo = $("#backCardNo1").val();
+					}else{
+						return ; 
+					}
+					
+				}else if(payMethod ==3){
+					if($('#banckform3').form('validate')){
+						backCardNo = $("#backCardNo2").val();
+						userNames = $("#userNames").val();
+						banckName = $("#banckName").val();
+					}else{
+						return;
+					}
+					
 				}
-			})
-			
+				var url = "onRefund?orderId="+orderId+"&backCardNo="+backCardNo+"&remainMoney="+remainMoney+"&payMethod="+payMethod+"&opr="+3+"&userNames="+userNames+"&banckName="+banckName;
+				$.get(url,function(_d){
+					if(_d.result == 1){
+						$("#w").window('close');
+						$('#tt').datagrid('reload');
+					}
+				})
 			
 		})
         
@@ -392,8 +416,26 @@
     			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
     			$('#tt').datagrid({url:url});
         	}
-        	
-        	
+        })
+        
+        //导出功能
+        
+        $("#exportBt").click(function(){
+        	//开始时间
+        	var startTime = $("#startTime").datebox('getValue');
+        	//结束时间
+        	var endTime = $("#endTime").datebox('getValue');
+        	//机场编号
+        	var airportId = $("#airportIdSelect option:selected").val(); 
+        	//订单状态
+        	var orderState = $("#orderStateSelect option:selected").val();
+        	//发票状态
+        	var invoiceState = $("#invoiceSelect option:selected").val();
+        	//手机号后置用户姓名
+        	var phoneOrUserName = $("#phoneOrUserName").val();
+        	var url = "exportOrderInfoToExcel?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
+			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
+        	location.href=url;    
         	
         })
         

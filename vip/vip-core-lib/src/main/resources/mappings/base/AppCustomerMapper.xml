@@ -33,13 +33,27 @@
 	</sql>
 	<select id="get" resultMap="BaseResultMap" parameterType="java.util.Map">
 		<![CDATA[
-			SELECT customer.*,o.`order_state` AS 'orderStatu' 
-			FROM `app_customer` customer LEFT JOIN `app_orders` o ON customer.`customer_id`=o.`customer_id`
+			SELECT 
+			  `customer_id`,
+			  `customer_name`,
+			  `customer_identi`,
+			  `customer_phone`,
+			  `sex`,
+			  `email`,
+			  `address`,
+			  `password`,
+			  `use_type`,
+			  `remark1`,
+			  `dtflag`,
+			  `province`,
+			  `city`,
+			  `country`,
+			  `create_time`,
+			  `province_name`,
+			  `city_name`  
+			FROM `app_customer` customer 
 		 ]]>
 		<where>
-			<if test="orderState!=null and orderState!=''">
-				order_state=#{orderState}
-			</if>
 			<if test="namephone!=null and namephone!=''">
 				and (customer_name like CONCAT('%', #{namephone}, '%') or
 				customer_phone like CONCAT('%', #{namephone}, '%') )

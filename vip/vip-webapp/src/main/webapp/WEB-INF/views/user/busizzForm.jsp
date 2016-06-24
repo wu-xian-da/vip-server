@@ -70,7 +70,23 @@
 	      
 	    },
 	    message: '请输入正确电话或手机格式'
-	  }
+	  },
+	  codeRex: {
+		    validator: function(value){
+		    var rex2=/^\d{3,}$/ ;
+		    if(rex2.test(value))
+		    {
+		      // alert('t'+value);
+		      return true;
+		    }else
+		    {
+		     //alert('false '+value);
+		       return false;
+		    }
+		      
+		    },
+		    message: '工号最小长度为3且只能是数字'
+		  }
 	});
 </script>
 </head>
@@ -90,7 +106,7 @@
 				</tr>
 				<tr>
 					<th>工号</th>
-					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true"  /></td>
+					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true,validType:'codeRex'"  /></td>
 					<th>性别</th>
 					<td><select class="easyui-combobox" name="sex" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
 							<option value="1" <c:if test="${user.sex==1 }">selected="selected"</c:if> >男</option>

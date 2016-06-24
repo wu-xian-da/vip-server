@@ -13,7 +13,7 @@
 	var grid;
 	var addFun = function() {
 		var dialog = parent.sy.modalDialog({
-			title : '添加用户信息',
+			title : '添加轮播图',
 			url : sy.contextPath + '/app/form',
 			buttons : [ {
 				text : '保存',
@@ -25,7 +25,7 @@
 	};
 	var editFun = function(id) {
 		var dialog = parent.sy.modalDialog({
-			title : '编辑用户信息',
+			title : '编辑轮播图',
 			url : sy.contextPath + '/app/form?id=' + id,
 			buttons : [ {
 				text : '保存',

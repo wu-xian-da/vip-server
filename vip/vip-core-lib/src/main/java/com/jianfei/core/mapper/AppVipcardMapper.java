@@ -8,28 +8,36 @@ import com.jianfei.core.common.persistence.MyBatisDao;
 
 @MyBatisDao
 public interface AppVipcardMapper {
-	//分页查询
-	List<AppVipcard> pageList(Map<String,Object> params);
-	
-	//根据vip卡号逻辑删除vip卡信息
+	// 分页查询
+	List<AppVipcard> pageList(Map<String, Object> params);
+
+	// 根据vip卡号逻辑删除vip卡信息
 	int delVipCard(String cardNo);
-	
-	//查询所有的vip卡信息
+
+	// 查询所有的vip卡信息
 	List<AppVipcard> selAllVipCard();
-	
-	//将excel表格中的数据到到数据表中
+
+	// 将excel表格中的数据到到数据表中
 	int importExcelToDB(AppVipcard record);
-	
-    int deleteByPrimaryKey(String cardNo);
 
-    int insert(AppVipcard record);
+	int deleteByPrimaryKey(String cardNo);
 
-    int insertSelective(AppVipcard record);
+	int insert(AppVipcard record);
 
-    AppVipcard selectByPrimaryKey(String cardNo);
+	int insertSelective(AppVipcard record);
 
-    int updateByPrimaryKeySelective(AppVipcard record);
+	AppVipcard selectByPrimaryKey(String cardNo);
 
-    int updateByPrimaryKey(AppVipcard record);
-    
+	int updateByPrimaryKeySelective(AppVipcard record);
+
+	int updateByPrimaryKey(AppVipcard record);
+
+	/**
+	 * 激活卡信息，更新卡的有效时间
+	 * 
+	 * @param map
+	 * @return
+	 */
+	int activeAppCard(Map<String, Object> map);
+
 }

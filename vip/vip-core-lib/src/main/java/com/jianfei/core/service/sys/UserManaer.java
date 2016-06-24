@@ -73,4 +73,14 @@ public interface UserManaer<T extends Serializable> {
 	 */
 	User getUserByName(String loginName);
 
+	/**
+	 * 修改密码
+	 * 
+	 * @param map
+	 * @return
+	 */
+	boolean resetPasswd(Map<String, Object> map);
+	
+	User findEntityById(Long id);
+
 }

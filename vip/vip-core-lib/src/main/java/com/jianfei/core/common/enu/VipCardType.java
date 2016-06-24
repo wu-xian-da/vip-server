@@ -8,5 +8,7 @@ package com.jianfei.core.common.enu;
  * @Version 1.0.0
  */
 public enum VipCardType {
+
+	
 	
 }

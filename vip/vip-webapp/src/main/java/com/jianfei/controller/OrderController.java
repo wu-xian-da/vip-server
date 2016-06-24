@@ -7,14 +7,23 @@
  */
 package com.jianfei.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +37,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCardBack;
+import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppOrderCard;
 import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.bean.AppUserFeedback;
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.service.base.AppInvoiceManager;
 import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
@@ -54,6 +70,8 @@ import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
  */
 @Controller
 public class OrderController extends BaseController {
+	private Logger logger = Logger.getLogger(LoginController.class);
+	
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
@@ -64,6 +82,8 @@ public class OrderController extends BaseController {
 	private AriPortManager ariPortService;
 	@Autowired
 	private ValidateCodeManagerImpl validateCodeManager;
+	@Autowired
+	private AppUserFeedbackImpl appUserFeedbackImpl;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -75,8 +95,7 @@ public class OrderController extends BaseController {
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("expires", -1);
 		//所有的机场列表
-		Map<String,Object> resMap = new HashMap<String,Object>();
-		List<Map<String, Object>> list = ariPortService.mapList(resMap);
+		List<AriPort> list = returnAirportInfoList();
 		model.addAttribute("airPostList", list);
 		return "orders/orderManagement";
 	}
@@ -163,6 +182,7 @@ public class OrderController extends BaseController {
 		AppInvoice appInvoice = new AppInvoice();
 		appInvoice.setInvoiceNo(invoiceNo);
 		appInvoice.setInvoiceId(invoiceId);
+		appInvoice.setInvoiceType(InvoiceState.SEND_INVOICE.getName());
 		appInvoiceManagerImpl.updateByPrimaryKeySelective(appInvoice);
 		//将订单的发票状态改为已邮寄
 		AppOrders addInfoDto = new AppOrders();
@@ -178,19 +198,38 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value="/returnOrderDetailInfoByOrderId")
 	public String returnOrderDetailInfoByOrderId(String orderId,Model model){
-		//订单基本信息
+		//1 订单基本信息
 		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		//发票信息
+		//2 发票信息
 		AppInvoice appInvoice = appInvoiceManagerImpl.selInvoiceInfoByOrderId(orderId);
-		//退卡余额信息
+		//3 退卡余额信息
 		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
+		
+		//4 反馈信息 根据用户id
+		//4.1 根据orderId获取用户id
+		AppOrders appOrders = orderManagerImpl.selectByPrimaryKey(orderId); 
+		List<AppUserFeedback> appuserFeedBackInfoList  = appUserFeedbackImpl.getFeedBackInfoListByUserId(appOrders.getCustomerId());
+		
+		//5 vip使用记录 根据cardno
+		//5.1 根据orderId 获取carNo
+		AppOrderCard appOrderCard = orderManagerImpl.selectByOrderId(orderId);
+		List<AppConsume> consumeList = orderManagerImpl.selectByVipCardNo(appOrderCard.getCardNo());
 		
 		model.addAttribute("orderDetailInfo", orderDetailInfo);
 		if(appInvoice !=null){
 			model.addAttribute("invoice", appInvoice);
 		}
 		if(appCardBack != null){
+			if(appCardBack.getAgreementUrl() !=null){
+				appCardBack.setAgreementUrl(GloabConfig.getConfig("static.resource.server.address")+appCardBack.getAgreementUrl());
+			}
 			model.addAttribute("appCardBack", appCardBack);
+		}
+		if(appuserFeedBackInfoList != null){
+			model.addAttribute("appuserFeedBackInfoList", appuserFeedBackInfoList);
+		}
+		if(consumeList !=null){
+			model.addAttribute("consumeList", consumeList);
 		}
 		return "orders/orderDetail";
 		
@@ -406,7 +445,7 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现场");
+						appOrder.setBackTypeName("现金");
 					}
 					
 					
@@ -441,7 +480,7 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现场");
+						appOrder.setBackTypeName("现金");
 					}
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 					resList.add(appOrder);
@@ -474,6 +513,13 @@ public class OrderController extends BaseController {
 		//2、获取验证码
 		String smsCode = validateCodeManager.getValidateCode(phone, MsgType.BACK_CARD_APPLY);
 		//发送短信****
+		try {
+			validateCodeManager.sendMsgInfo(phone, MsgType.BACK_CARD_APPLY, smsCode);
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("发送短信失败");
+		}
+		
 		
 		JSONObject outData = new JSONObject(); 
 		double remainMoney = orderManagerImpl.remainMoney(orderId);
@@ -606,8 +652,19 @@ public class OrderController extends BaseController {
 		
 	}
 	
+	
 	/**
-	 * 返回当前用户可以查看的机场列表
+	 * 返回当前用户可以查看的机场信息
+	 */
+	public List<AriPort> returnAirportInfoList() {
+		// 用户可以看到机场列表
+		User user = getCurrentUser();
+		List<AriPort> airportList = user.getAripors();
+		return  airportList;
+	}
+	
+	/**
+	 * 返回当前用户可以查看的机场列表id
 	 * @return
 	 */
 	public List<String> returnAirportIdList() {
@@ -639,6 +696,189 @@ public class OrderController extends BaseController {
 		resMap.put("airportList", airportList);
 		return resMap;
 	}
+	
+	
+	/**
+	 * 将用户刷选的订单信息导出到excle表格
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("exportOrderInfoToExcel")
+	public void exportOrderInfoToExcel(@RequestParam(value = "page", defaultValue = "1") Integer pageNo,
+			@RequestParam(value = "rows", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "startTime", defaultValue = "") String startTime,
+			@RequestParam(value = "endTime", defaultValue = "") String endTime,
+			@RequestParam(value = "airportId", required = false, defaultValue = "") String airportId,
+			@RequestParam(value = "orderState", required = false, defaultValue = "5") Integer orderState,
+			@RequestParam(value = "invoiceState", required = false, defaultValue = "3") Integer invoiceState,
+			@RequestParam(value = "phoneOrUserName", required = false, defaultValue = "") String phoneOrUserName,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		//1 用户可以看到机场列表
+		List<String> aiportIdList = returnAirportIdList();
+		//2 设置刷选条件
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		if (!startTime.equals("")) {
+			paramsMap.put("startTime", startTime);
+		}
+		if (!endTime.equals("")) {
+			paramsMap.put("endTime", endTime);
+		}
+		if (!phoneOrUserName.equals("")) {
+			paramsMap.put("phoneOrUserName", phoneOrUserName);
+		}
+		if (aiportIdList != null && aiportIdList.size() > 0) {
+			paramsMap.put("aiportIdList", aiportIdList);
+		}
+		if (!airportId.equals("")) {
+			paramsMap.put("airportId", airportId);
+		}
+
+		paramsMap.put("orderState", orderState);
+		paramsMap.put("invoiceState", invoiceState);
+
+		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(pageNo, pageSize, paramsMap);
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		List<OrderShowInfoDto> list = pageinfo.getList();
+
+		//3 生成提示信息，
+		response.setContentType("application/vnd.ms-excel");
+		String codedFileName = null;
+		OutputStream fOut = null;
+		try {
+			// 进行转码，使其支持中文文件名
+			codedFileName = java.net.URLEncoder.encode("订单信息", "UTF-8");
+			response.setHeader("content-disposition", "attachment;filename=" + codedFileName + ".xls");
+			// 产生工作簿对象
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			// 产生工作表对象
+			HSSFSheet sheet = workbook.createSheet();
+			// 设置表头
+			HSSFRow head = sheet.createRow((int) 0);
+			HSSFCell idCell = head.createCell((int) 0);
+			idCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			idCell.setCellValue("序号");
+			
+			HSSFCell orderIdCell = head.createCell((int) 1);
+			orderIdCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderIdCell.setCellValue("订单编号");
+			
+			HSSFCell orderTimeCell = head.createCell((int) 2);
+			orderTimeCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderTimeCell.setCellValue("订单日期");
+
+			HSSFCell airportStateCell = head.createCell((int) 3);
+			airportStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			airportStateCell.setCellValue("所属场站");
+
+			HSSFCell activeStateCell = head.createCell((int) 4);
+			activeStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			activeStateCell.setCellValue("业务员");
+			
+			HSSFCell userNameCell = head.createCell((int) 5);
+			userNameCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			userNameCell.setCellValue("用户姓名");
+			
+			HSSFCell userPhoneCell = head.createCell((int) 6);
+			userPhoneCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			userPhoneCell.setCellValue("用户手机");
+			
+			HSSFCell invoiceStateCell = head.createCell((int) 7);
+			invoiceStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			invoiceStateCell.setCellValue("发票状态");
+			
+			HSSFCell orderStateCell = head.createCell((int) 8);
+			orderStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderStateCell.setCellValue("订单状态");
+
+			// 返回表中所有的数据
+			int index = 1;
+			for (OrderShowInfoDto orderShowInfoDto : list) {
+				// 创建一行
+				HSSFRow row = sheet.createRow((int) index);
+				
+				//序号
+				HSSFCell id = row.createCell((int) 0);
+				id.setCellType(HSSFCell.CELL_TYPE_STRING);
+				id.setCellValue(index);
+				
+				//订单号
+				HSSFCell orderIdCells = row.createCell((int) 1);
+				orderIdCells.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderIdCells.setCellValue(orderShowInfoDto.getOrderId());
+				
+				//订单日期
+				HSSFCell orderTimesCell = row.createCell((int) 2);
+				orderTimesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderTimesCell.setCellValue(orderShowInfoDto.getOrderTime());
+				
+				//场站
+				HSSFCell apNamesCell = row.createCell((int) 3);
+				apNamesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				apNamesCell.setCellValue(orderShowInfoDto.getAirportName());
+				
+				//业务员
+				HSSFCell agentNameCell = row.createCell((int) 4);
+				agentNameCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				agentNameCell.setCellValue(orderShowInfoDto.getAgentName());
+				
+				//用户名
+				HSSFCell userNamesCell = row.createCell((int) 5);
+				userNamesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				userNamesCell.setCellValue(orderShowInfoDto.getCustomerName());
+				
+				//用户手机号码
+				HSSFCell userPhonesCell = row.createCell((int) 6);
+				userPhonesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				userPhonesCell.setCellValue(orderShowInfoDto.getCustomerPhone());
+				
+				//发票状态
+				HSSFCell invoiceStatesCell = row.createCell((int) 7);
+				invoiceStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				invoiceStatesCell.setCellValue(returnInvoiceFlagName(orderShowInfoDto.getInvoiceFlag()));
+				
+				//订单状态
+				HSSFCell orderStatesCell = row.createCell((int) 8);
+				orderStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderStatesCell.setCellValue(returnOrderStateName(orderShowInfoDto.getOrderState()));
+				index++;
+
+			}
+			fOut = response.getOutputStream();
+			workbook.write(fOut);
+		} catch (UnsupportedEncodingException e1) {
+		} catch (Exception e) {
+		} finally {
+			try {
+				fOut.flush();
+				fOut.close();
+			} catch (IOException e) {
+			}
+
+		}
+	}
+	
+	/**
+	 * 根据订单状态返回中文名称
+	 * @param orderState
+	 * @return
+	 */
+	public String returnOrderStateName(Integer orderState){
+		String orderStateName = "";
+		if(orderState == 0){
+			orderStateName = "未付款";
+		}else if(orderState == 1){
+			orderStateName = "已付款";
+		}else if(orderState == 2){
+			orderStateName = "正在审核";
+		}else if(orderState == 3){
+			orderStateName = "审核通过";
+		}else{
+			orderStateName = "已退款";
+		}
+		return orderStateName;
+	}
 	/**
 	 * 根据发票状态返回发票的中文名称
 	 * @param invoiceFlag
@@ -655,4 +895,5 @@ public class OrderController extends BaseController {
 		}
 		return invoiceFlagName;
 	}
+	
 }	

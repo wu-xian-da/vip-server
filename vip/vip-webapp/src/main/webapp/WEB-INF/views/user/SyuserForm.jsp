@@ -60,6 +60,39 @@
 			}
 		});
 	});
+	//自定义验证
+	  $.extend($.fn.validatebox.defaults.rules, {
+	  loginNameRex: {
+	    validator: function(value){
+		    var rex=/^[a-z0-9A-Z_.]+$/;
+		    if(rex.test(value))
+		    {
+		      return true;
+		    }else
+		    {
+		     //alert('false '+value);
+		       return false;
+		    }
+	    },
+	    message: '字母数字的组合'
+	  },
+	  codeRex: {
+		    validator: function(value){
+		    var rex2=/^\d{3,}$/ ;
+		    if(rex2.test(value))
+		    {
+		      // alert('t'+value);
+		      return true;
+		    }else
+		    {
+		     //alert('false '+value);
+		       return false;
+		    }
+		      
+		    },
+		    message: '工号最小长度为3且只能是数字'
+		  }
+	});
 </script>
 </head>
 <body>
@@ -72,12 +105,14 @@
 			<legend>用户基本信息</legend>
 			<table class="table" style="width: 100%;">
 				<tr>
+					<th>登录名称</th>
+					<td><input name="loginName" value="${user.loginName }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true,validType:'loginNameRex'" /></td>
 					<th>姓名</th>
 					<td><input name="name" value="${user.name }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
-					<th>登录名称</th>
-					<td><input name="loginName" value="${user.loginName }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" /></td>
 				</tr>
 				<tr>
+					<th>工号</th>
+					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true,validType:'codeRex'"  /></td>
 					<th>用户角色</th>
 					<td>
 						<select id="cc" class="easyui-combobox" name="roleids" style="width:200px;">
@@ -86,8 +121,6 @@
 							</c:forEach>
 						</select>
 					</td>
-					<th>工号</th>
-					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true"  /></td>
 				</tr>
 				<tr>
 					<td colspan="4">

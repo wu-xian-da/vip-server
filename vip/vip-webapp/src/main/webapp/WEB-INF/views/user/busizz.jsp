@@ -92,6 +92,10 @@
 				title : '手机号码',
 				field : 'phone'
 			}, {
+				width : '120',
+				title : '入职时间',
+				field : 'create_time'
+			}, {
 				width : '80',
 				title : '上月开卡数',
 				field : 'lmonth',
@@ -102,7 +106,7 @@
 				field : 'tmonth',
 				sortable : true
 			}, {
-				width : '80',
+				width : '120',
 				title : '开卡总量',
 				field : 'total',
 				sortable : true

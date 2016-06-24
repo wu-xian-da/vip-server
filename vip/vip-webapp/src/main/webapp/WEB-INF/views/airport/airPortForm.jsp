@@ -90,11 +90,14 @@
 					</td>
 					<th>场站状态</th>
 					<c:choose>
+						<c:when test="${!empty ariPort and ariPort.state==0}">
+							<td><input type="radio" value="0" name="state"  checked>运营<input type="radio" value="1" name="state" >冻结</td>
+						</c:when>
 						<c:when test="${!empty ariPort and ariPort.state==1}">
-							<td><input type="radio" value="1" name="state"  checked>运营<input type="radio" value="0" name="state" >冻结</td>
+							<td><input type="radio" value="0" name="state"  >运营<input type="radio" value="1" name="state" checked>冻结</td>
 						</c:when>
 						<c:otherwise>
-							<td><input type="radio" value="1" name="state"  >运营<input type="radio" value="0" name="state" checked >冻结</td>
+							<td><input type="radio" value="0" name="state" checked >运营<input type="radio" value="1" name="state"  >冻结</td>
 						</c:otherwise>
 					</c:choose>
 				</tr>
