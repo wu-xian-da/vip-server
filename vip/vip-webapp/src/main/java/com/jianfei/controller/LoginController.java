@@ -53,7 +53,7 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
 		User user = getCurrentUser();
-		if(2==user.getUserType()){
+		if (2 == user.getUserType()) {
 			return "home/default";
 		}
 		List<Role> roles = user.getRoles();
@@ -95,13 +95,13 @@ public class LoginController extends BaseController {
 		List<Map<String, Object>> maps = busizzManager
 				.selectMap(new MapUtils.Builder()
 						.setKeyValue("dateTime", dateTime)
-						.setKeyValue("dtflag", "0").build());
+						.setKeyValue("state", "0").build());
 		int come = maps == null ? 0 : maps.size();
 		model.addAttribute("come", come);
 		List<Map<String, Object>> mapsOut = busizzManager
 				.selectMap(new MapUtils.Builder()
 						.setKeyValue("dateTime", dateTime)
-						.setKeyValue("dtflag", "1").build());
+						.setKeyValue("state", "1").build());
 		int out = mapsOut == null ? 0 : mapsOut.size();
 		model.addAttribute("out", out);
 		return "home/hr";
@@ -167,7 +167,7 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/master/home")
 	public String master(Model model) {
 		User user = getCurrentUser();
-		archiveManager.masterHome(model,user);
+		archiveManager.masterHome(model, user);
 
 		return "home/master";
 	}
