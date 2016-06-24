@@ -22,10 +22,10 @@ public class OauthUser implements UserDetails, CredentialsContainer {
     private String password;
     private final String username;
     private List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-    public OauthUser(String username, String password) {
+    public OauthUser(String username, String password, List<SimpleGrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authorities.addAll(authorities);
     }
     public String getPassword() {
         return password;
