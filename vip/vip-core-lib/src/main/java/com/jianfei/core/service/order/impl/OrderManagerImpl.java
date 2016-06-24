@@ -73,7 +73,10 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) throws InvocationTargetException, IllegalAccessException {
-
+       //重复提交问题
+        if(StringUtils.isNotBlank(addInfoDto.getOrderId())){
+            return BaseMsgInfo.success(addInfoDto);
+        }
         //1、校验用户和手机验证码
         boolean flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
         if (!flag) {
