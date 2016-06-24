@@ -69,6 +69,10 @@
 				<label>场站位置：</label>
 				<input type="text" name="address" value="${viproom.address}"/>
 			</div>
+			<div class="clerk-container-item">
+				<label>vip室图片：</label>
+				<img width="300px" src="${viproom.pictureUrl}"/>
+			</div>
 			
 			<div class="clerk-container-item">
 				<label>编辑vip室图片：</label>
