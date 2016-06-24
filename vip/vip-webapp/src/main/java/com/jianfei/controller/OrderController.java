@@ -323,6 +323,9 @@ public class OrderController extends BaseController {
 				outData.put("phone", appOrder.getCustomerPhone());
 				//2、获取验证码
 				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.BACK_CARD_APPLY);
+				if(smsCode == null){
+					smsCode ="";
+				}
 				
 				//是否有审核的权限
 				boolean flag = subject.isPermitted("system:order:audit");
