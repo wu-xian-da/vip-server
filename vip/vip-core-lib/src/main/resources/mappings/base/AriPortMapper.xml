@@ -215,7 +215,7 @@
 	</resultMap>
 
 	<select id="getAriPortProvince" resultMap="province" >
-			SELECT c.CID as 'id',c.`name` as 'name' FROM  sys_city c JOIN (SELECT DISTINCT(a.province) FROM sys_airport a ) s ON s.province=c.CID;
+			SELECT c.CID as 'id',c.`name` as 'name' FROM  sys_city c JOIN (SELECT DISTINCT(a.province) FROM sys_airport a where a.dtflag=0 AND a.state=0  ) s ON s.province=c.CID;
 	</select>
 
 	<select id="getAirPortByProvince" resultMap="BaseResultMap"
@@ -232,12 +232,12 @@
 
 	<select id="selectCityById" parameterType="java.util.Map"
 		resultType="java.util.Map">
-		SELECT
-		pid,
-		cid,
-		name
-		FROM
-		`sys_city`
+			SELECT
+				pid,
+				cid,
+				name
+				FROM
+			`sys_city`
 		<where>
 			<if test="pid!=null">
 				pid=#{pid}

@@ -145,10 +145,10 @@ public class UserManagerImpl implements UserManaer<User> {
 		// 保存用户
 		// 设置密码
 		user.setPassword(PasswdHelper.passwdProdece(roleid, roelManager,
-				user.getSalt()));
+				user.getId(), user.getSalt()));
 		// 设置APP端登入密码
-		user.setExtraPasswd(PasswdHelper.passwdProdece(roleid, roelManager,
-				StringUtils.EMPTY));
+		user.setExtraPasswd(PasswdHelper.passwdProdeceNoSalt(roleid,
+				roelManager, user.getId()));
 		user.setState(GloabConfig.OPEN);
 		userMapper.save(user);
 		User okUser = userMapper.getUserByName(user.getLoginName());

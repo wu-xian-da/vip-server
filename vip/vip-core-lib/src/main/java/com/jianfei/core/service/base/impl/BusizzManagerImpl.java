@@ -177,16 +177,13 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 			// 初始化系统后台用户密码
 			String roleId = StringUtils.obj2String(map.get("roleId"));
 			String salt = StringUtils.obj2String(map.get("salt"));
+			Long id = StringUtils.toLong(map.get("id"));
 			if (!StringUtils.isEmpty(roleId)) {
-				PasswdHelper.passwdProdece(roleId, roleManager,
-						StringUtils.obj2String(map.get("salt")));
-				map.put("pwd", PasswdHelper.passwdProdece(roleId, roleManager,
-						StringUtils.EMPTY));
-				map.put("password", PasswdHelper.passwdProdece(
-						roleId,
-						roleManager,
-						StringUtils.isEmpty(salt) ? GloabConfig
-								.getConfig("defalut.passwd") : salt));
+				map.put("pwd", PasswdHelper.passwdProdeceNoSalt(roleId,
+						roleManager, id));
+				map.put("password", PasswdHelper.passwdProdece(roleId,
+						roleManager, id,
+						StringUtils.obj2String(map.get("salt"))));
 				busizzMaapper.initpwd(map);
 				return messageDto.setOk(true).setMsgBody(
 						MessageDto.MsgFlag.SUCCESS);

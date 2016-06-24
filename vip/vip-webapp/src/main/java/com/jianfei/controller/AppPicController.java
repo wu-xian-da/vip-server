@@ -27,7 +27,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppPicture;
-import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.GloabConfig;
@@ -198,31 +197,5 @@ public class AppPicController extends BaseController {
 			download(response, new String[] { "姓名", "手机号", "日期", "邮箱" },
 					dataset, "vip用户.xls");
 		}
-	}
-
-	/**
-	 * 支付状态
-	 * 
-	 * @param state
-	 * @return
-	 */
-	public String returnPayState(String state) {
-		System.out.println(state);
-		if (String.valueOf(VipOrderState.NOT_PAY.getName()).equals(state)) {
-			return "未支付";
-		} else if (String.valueOf(VipOrderState.ALREADY_PAY.getName()).equals(
-				state)) {
-			return "已支付";
-		} else if (String.valueOf(VipOrderState.ALREADY_REFUND.getName())
-				.equals(state)) {
-			return "已退款";
-		} else if (String.valueOf(VipOrderState.AUDIT_PASS.getName()).equals(
-				state)) {
-			return "审核通过";
-		} else if (String.valueOf(VipOrderState.BEING_AUDITED.getName())
-				.equals(state)) {
-			return "正在审核";
-		}
-		return "";
 	}
 }
