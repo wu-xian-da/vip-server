@@ -2,14 +2,17 @@ package com.jianfei.core.service.base.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ServiceMsgBuilder;
 import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
+import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,9 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
 
     @Autowired
     private QueueManager queueManager;
+
+    @Autowired
+    private VipUserManager vipUserManager;
     /**
      * 生成验证码 并存储
      *
@@ -86,6 +92,12 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
      */
     @Override
     public BaseMsgInfo sendValidateCode(String phone, MsgType msgType) {
+        if (!MsgType.REGISTER.equals(msgType)) {
+            AppCustomer customer = vipUserManager.getUser(phone);
+            if (customer == null || StringUtils.isBlank(customer.getCustomerId())) {
+                return BaseMsgInfo.msgFail("手机号尚未注册");
+            }
+        }
         String code = getValidateCode(phone, msgType);
         boolean flag = sendMsgInfo(phone, msgType, code);
         return flag ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("消息发送失败");
