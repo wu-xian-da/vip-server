@@ -61,7 +61,7 @@ public class QueueManagerImplTest {
 	public void testProcedure() {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userPhone", "13275601668");
-		map.put("msgType", "002");
+		map.put("msgType", "005");
 		map.put("userName", "refineli");
 		map.put("vipCardNo", "12312445333123");
 		Map<String, String> m = new HashMap<String, String>();
