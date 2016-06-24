@@ -13,6 +13,7 @@ public class EmaySMSUtils {
 		if(client == null){
 			try {
 				client=new Client(EMAY_SERIA_NO, EMAY_KEY);
+				int i=client.registEx(EMAY_KEY);
 			} catch (Exception e) {
 				//注册emay失败
 				e.printStackTrace();
@@ -23,7 +24,7 @@ public class EmaySMSUtils {
 	
 	public static void main(String[] args) {
 		Client client = EmaySMSUtils.getClient();
-		int result = client.sendSMS(new String[] {"13966727871"}, "你好你好啊", 1);//发送即时短信
+		int result = client.sendSMS(new String[] {"13966727871"}, "【亿出行】你好你好啊1","0013", 1);//发送即时短信
 		System.out.println("result=" + result);
 	}
 	
