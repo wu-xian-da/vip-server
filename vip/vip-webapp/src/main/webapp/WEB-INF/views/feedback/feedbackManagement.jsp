@@ -55,7 +55,7 @@
 				pagination="true">
 				<thead>
 					<tr>
-						<th data-options="align:'center', field:'id',width:100">序号</th>
+						<th data-options="align:'center', field:'id',width:100">反馈编号</th>
 						<th data-options="align:'center', field:'customerName',width:120">用户名</th>
 						<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 						<th data-options="align:'center', field:'feedbackTime',width:150">反馈日期</th>
