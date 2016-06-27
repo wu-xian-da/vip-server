@@ -77,4 +77,6 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	List<Map<String, Object>> mapList(Map<String, Object> map);
 	
 	AriPort selectAirPortInfoById(String airPortId);
+	
+	void deleteAirportByUserId(Long userId);
 }

@@ -193,6 +193,9 @@ public class UserManagerImpl implements UserManaer<User> {
 			if (!dto2.isOk()) {
 				return dto2;
 			}
+		} else {
+			ariPortManager.deleteAirportByUserId(id);
+
 		}
 		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}

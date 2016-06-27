@@ -133,6 +133,8 @@ public class BusizzManagerImpl implements BusizzManager<User> {
 			if (!dto2.isOk()) {
 				return dto2;
 			}
+		} else {
+			ariPortService.deleteAirportByUserId(id);
 		}
 		return messageDto.setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
