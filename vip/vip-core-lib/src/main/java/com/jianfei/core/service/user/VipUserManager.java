@@ -4,6 +4,8 @@ import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.dto.BaseMsgInfo;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Vip用户管理
  *
@@ -17,7 +19,7 @@ public interface VipUserManager {
      * 添加Vip用户
      * @param vipUser
      */
-    boolean addUser(AppCustomer vipUser);
+    boolean addORUpdateUser(AppCustomer vipUser) throws InvocationTargetException, IllegalAccessException;
 
     /**
      * 修改Vip用户信息
@@ -56,4 +58,12 @@ public interface VipUserManager {
      * @return
      */
     BaseMsgInfo sendFeedBackInfo(String phone,String content);
+
+    /**
+     * 更新用户状态
+     * @param phone
+     * @param vipUserSate
+     * @return
+     */
+    boolean updateUserSate(String phone,VipUserSate vipUserSate);
 }

@@ -3,7 +3,9 @@ package com.jianfei.core.service.user.impl;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
+import com.jianfei.core.common.utils.BeanUtils;
 import com.jianfei.core.common.utils.IdGen;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.mapper.AppCustomerMapper;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
@@ -12,6 +14,7 @@ import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 
@@ -38,12 +41,20 @@ public class VipUserManagerImpl implements VipUserManager {
      * @param vipUser
      */
     @Override
-    public boolean addUser(AppCustomer vipUser) {
-        vipUser.setCustomerId(IdGen.uuid());
-        vipUser.setCreateTime(new Date());
-        vipUser.setUseType(VipUserSate.NOT_ACTIVE.getName());
-        int num = customerMapper.insertSelective(vipUser);
-        return num == 1 ? true : false;
+    public boolean addORUpdateUser(AppCustomer vipUser) throws InvocationTargetException, IllegalAccessException {
+        //查询是否存在相应的顾客
+        AppCustomer appCustomer = getUser(vipUser.getPhone());
+        if (StringUtils.isNotBlank(appCustomer.getCustomerId())) {
+            vipUser.setCustomerId(appCustomer.getCustomerId());
+            BeanUtils.copyProperties(appCustomer, vipUser);
+            return updateUser(appCustomer);
+        } else {
+            vipUser.setCustomerId(IdGen.uuid());
+            vipUser.setCreateTime(new Date());
+            vipUser.setUseType(VipUserSate.NOT_ACTIVE.getName());
+            int num = customerMapper.insertSelective(vipUser);
+            return num == 1 ? true : false;
+        }
     }
 
     /**
@@ -106,9 +117,22 @@ public class VipUserManagerImpl implements VipUserManager {
     public BaseMsgInfo sendFeedBackInfo(String phone, String content) {
         AppCustomer customer=getUser(phone);
         int num=userFeedback.addFeedbackInfo(customer,content);
-        if (num==1){
+        if (num == 1) {
             return BaseMsgInfo.success(true);
         }
         return new BaseMsgInfo().setCode(-1).setMsg("反馈内容提交失败");
+    }
+
+    /**
+     * 更新用户状态
+     *
+     * @param phone
+     * @param vipUserSate
+     * @return
+     */
+    @Override
+    public boolean updateUserSate(String phone, VipUserSate vipUserSate) {
+        //TODO DAO
+        return true;
     }
 }

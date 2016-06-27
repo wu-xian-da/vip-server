@@ -60,4 +60,9 @@ public interface AppOrdersMapper {
 	 * 查询需要开发票的订单信息
 	 */
 	List<OrderShowInfoDto> invoicePageList(Map<String,Object> map);
+
+	/**
+	 * 根据订单号返回订单详细信息
+	 */
+	AppOrders getOrderDetailByOrderId(String orderId);
 }

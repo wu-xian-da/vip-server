@@ -1,7 +1,10 @@
 package com.jianfei.core.bean;
 
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class AppOrders implements Serializable{
     /**
@@ -51,6 +54,16 @@ public class AppOrders implements Serializable{
      * 支付时间
      */
     private Date payTime;
+
+    /**
+     * 顾客 1:1
+     */
+    private AppCustomer customer;
+
+    /**
+     * 卡 1:d
+     */
+    private List<AppVipcard> vipCards = Lists.newArrayList();
     
     /**
 	 * operation
@@ -74,8 +87,9 @@ public class AppOrders implements Serializable{
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public AppOrders setOrderId(String orderId) {
         this.orderId = orderId == null ? null : orderId.trim();
+        return this;
     }
 
     public String getId() {
@@ -90,32 +104,36 @@ public class AppOrders implements Serializable{
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public AppOrders setCustomerId(String customerId) {
         this.customerId = customerId == null ? null : customerId.trim();
+        return this;
     }
 
     public Date getOrderTime() {
         return orderTime;
     }
 
-    public void setOrderTime(Date orderTime) {
+    public AppOrders setOrderTime(Date orderTime) {
         this.orderTime = orderTime;
+        return this;
     }
 
     public Integer getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(Integer orderState) {
+    public AppOrders setOrderState(Integer orderState) {
         this.orderState = orderState;
+        return this;
     }
 
     public Integer getPayType() {
         return payType;
     }
 
-    public void setPayType(Integer payType) {
+    public AppOrders setPayType(Integer payType) {
         this.payType = payType;
+        return this;
     }
 
     public String getSerialId() {
@@ -186,15 +204,33 @@ public class AppOrders implements Serializable{
         return payUserId;
     }
 
-    public void setPayUserId(String payUserId) {
+    public AppOrders setPayUserId(String payUserId) {
         this.payUserId = payUserId;
+        return this;
     }
 
     public Date getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Date payTime) {
+    public AppOrders setPayTime(Date payTime) {
         this.payTime = payTime;
+        return this;
+    }
+
+    public AppCustomer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(AppCustomer customer) {
+        this.customer = customer;
+    }
+
+    public List<AppVipcard> getVipCards() {
+        return vipCards;
+    }
+
+    public void setVipCards(List<AppVipcard> vipCards) {
+        this.vipCards = vipCards;
     }
 }

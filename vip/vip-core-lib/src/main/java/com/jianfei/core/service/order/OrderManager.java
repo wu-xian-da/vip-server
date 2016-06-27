@@ -196,11 +196,10 @@ public interface OrderManager {
 
     /**
      * 更新用户付款状态
-     * @param orderId
-     * @param payType
+     * @param appOrders
      * @return
      */
-    BaseMsgInfo updatePayState(String orderId, PayType payType);
+    BaseMsgInfo updatePayState(AppOrders appOrders);
 
     /**
      * APP端添加退卡信息

@@ -18,6 +18,7 @@ import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.OrderManager;
+import com.jianfei.core.service.thirdpart.QueueManager;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.tencent.protocol.native_protocol.NativePayReqData;
@@ -64,12 +65,15 @@ public class OrderManagerImpl implements OrderManager {
     private ThirdPayManager wechatiPayManager;
     @Autowired
     private ThirdPayManager yeepayManager;
+    @Autowired
+    private QueueManager queueManager;
 
     /**
      * 添加订单信息
      *
      * @param addInfoDto
      * @return
+     * @author dsliu
      */
     @Override
     public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) throws InvocationTargetException, IllegalAccessException {
@@ -89,10 +93,10 @@ public class OrderManagerImpl implements OrderManager {
             return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
         }
 
-        //3、添加用户信息
+        //3、添加或修改用户信息
         AppCustomer customer = new AppCustomer();
         BeanUtils.copyProperties(customer, addInfoDto);
-        vipUserManager.addUser(customer);
+        vipUserManager.addORUpdateUser(customer);
 
 
         //4、添加订单信息
@@ -390,6 +394,17 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public BaseMsgInfo checkThirdPay(String orderId, PayType payType) {
+        //先查询订单是否存在及合法
+        AppOrders appOrders=appOrdersMapper.getOrderInfoByOrderId(orderId);
+
+        //如果订单存在 并且已付款
+        if (appOrders==null || StringUtils.isNotBlank(appOrders.getOrderId())){
+            return BaseMsgInfo.msgFail("订单不存在");
+        }
+        if (VipOrderState.ALREADY_PAY.getName() == appOrders.getOrderState()) {
+            return BaseMsgInfo.success(true);
+        }
+        //查询第三方支付接口
         PayQueryResult result = new PayQueryResult();
         if (PayType.WXPAY.equals(payType)) {
             result = wechatiPayManager.tradeQuery(orderId);
@@ -399,15 +414,13 @@ public class OrderManagerImpl implements OrderManager {
             result = yeepayManager.tradeQuery(orderId);
         }
         if ("0".equals(result.getCode())) {
-            //更新订单支付查询结果
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("orderId", orderId);
-            params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
-            params.put("payUserId", result.getPayUserId());
-            params.put("payTime", result.getPayTime());
-            params.put("tradeNo", result.getTradeNo());
-            params.put("payType", payType.getName());
-            appOrdersMapper.payNotify(params);
+            appOrders.setPayUserId(result.getPayUserId());
+            appOrders.setSerialId( result.getTradeNo());
+            appOrders.setPayType(payType.getName());
+            BaseMsgInfo baseMsgInfo = updatePayState(appOrders);
+            if (baseMsgInfo.getCode() < 0) {
+                return baseMsgInfo;
+            }
             return BaseMsgInfo.success(true);
         } else {
             return BaseMsgInfo.success(false);
@@ -478,20 +491,23 @@ public class OrderManagerImpl implements OrderManager {
     /**
      * 更新用户付款状态
      *
-     * @param orderId
-     * @param payType
      * @return
      */
     @Override
-    public BaseMsgInfo updatePayState(String orderId, PayType payType) {
-        AppOrders orders = appOrdersMapper.selectByPrimaryKey(orderId);
-        if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
-            return BaseMsgInfo.msgFail("订单不存在");
+    public BaseMsgInfo updatePayState(AppOrders appOrders) {
+        if (StringUtils.isBlank(appOrders.getOrderId())){
+            return BaseMsgInfo.msgFail("订单号不存在");
         }
-        orders.setPayType(payType.getName());
-        orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
-        orders.setPayTime(new Date());
-        int num = appOrdersMapper.updateByPrimaryKeySelective(orders);
+        appOrders.setOrderState(VipOrderState.ALREADY_PAY.getName());
+        appOrders.setPayTime(new Date());
+        int num = appOrdersMapper.updateByPrimaryKeySelective(appOrders);
+        //查询是否存在用户手机号等信息 如果不存在查询
+        if (appOrders.getCustomer() == null || StringUtils.isBlank(appOrders.getCustomer().getPhone())) {
+            appOrders=appOrdersMapper.getOrderDetailByOrderId(appOrders.getOrderId());
+        }
+        ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(appOrders.getCustomer().getPhone()).setMsgType(MsgType.ACTIVE_CARD.getName()).
+                setVipCardNo(appOrders.getVipCards().get(0).getCardNo()).setUserName(appOrders.getCustomer().getCustomerName());
+         queueManager.sendMessage(msgBuilder);
         if (num > 0) {
             return BaseMsgInfo.success(true);
         } else {

@@ -2,6 +2,7 @@ package com.jianfei.order;
 
 import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
+import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.StateType;
@@ -174,7 +175,7 @@ public class OrderController {
 			}
 			if (type == null)
 				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
-			return orderManager.updatePayState(orderId, type);
+			return orderManager.updatePayState(new AppOrders().setOrderId(orderId).setPayType(PayType.CASHPAY.getName()));
 		}catch (Exception e){
 			log.error("顾客现金刷卡确认接口失败",e);
 			return BaseMsgInfo.msgFail("顾客现金刷卡确认接口失败");
