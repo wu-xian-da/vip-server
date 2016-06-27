@@ -66,161 +66,160 @@
 				<!-- <textarea name="remark1"></textarea> -->
 				<!-- 加载编辑器的容器 -->
     			<script id="container" name="remark1" type="text/plain">
-        			<table data-sort="sortDisabled">
-    					<body>
-        					<tr class="firstRow">
-            					<td valign="top" colspan="1" rowspan="12" style="word-break: break-all;" width="123">
-               						<span style="color: rgb(216, 216, 216);">基础服务</span><br/>
-            					</td>
-            					<td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="136">
-               	 					<span style="color: rgb(216, 216, 216);">营业时间</span>
-            					</td>
-            					<td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="218">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-       						<tr>
-            					<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">位置指引</span>
-            					</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-       	 					<tr>
-            					<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">协助取票<br/></span>
-            					</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-        					<tr>
-            					<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">行李协助</span>
-            					</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-        					<tr>
-            					<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">手机充电<br/></span>
-           		 				</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-        					<tr>
-            					<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">免费小食品<br/></span>
-            					</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-        					<tr>
-           						<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">免费饮品<br/></span>
-            					</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-        					<tr>
-           						<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">wifi<br/></span>
-            					</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-        					<tr>
-            					<td width="133" valign="top" style="word-break: break-all;">
-                					<span style="color: rgb(216, 216, 216);">报刊书籍<br/></span>
-            					</td>
-            					<td width="226" valign="top" style="word-break: break-all;">
-                					<span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            					</td>
-        					</tr>
-        <tr>
-            <td width="133" valign="top" style="word-break: break-all;">
-                <span style="color: rgb(216, 216, 216);">电视<br/></span>
-            </td>
-            <td width="226" valign="top" style="word-break: break-all;">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="133">
-                <span style="color: rgb(216, 216, 216);">行李寄存</span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="226">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="133">
-                <span style="color: rgb(216, 216, 216);">登车提醒<br/></span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="226">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="5" width="133" style="word-break: break-all;">
-                <span style="color: rgb(216, 216, 216);">五星要客服务<br/></span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="136">
-                <span style="color: rgb(216, 216, 216);">专人迎送<br/></span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" width="218" style="word-break: break-all;">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="1" width="133" style="word-break: break-all;">
-                <span style="color: rgb(216, 216, 216);">送站登车<br/></span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" width="226" style="word-break: break-all;">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="1" width="133" style="word-break: break-all;">
-                <span style="color: rgb(216, 216, 216);">站台接车</span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" width="226" style="word-break: break-all;">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="1" width="133" style="word-break: break-all;">
-                <span style="color: rgb(216, 216, 216);">专用检票口</span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" width="226" style="word-break: break-all;">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="1" width="133" style="word-break: break-all;">
-                <span style="color: rgb(216, 216, 216);">专用安检通道<br/></span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" width="226" style="word-break: break-all;">
-                <span style="font-family: 宋体; font-size: 12px; line-height: 18px; text-align: center; color: rgb(216, 216, 216); background-color: rgb(240, 243, 248);">●</span>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="133">
-                <span style="color: rgb(216, 216, 216);">其他</span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="136">
-                <span style="color: rgb(216, 216, 216);">其他</span>
-            </td>
-            <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="218"></td>
-        </tr>
-    </body>
-</table>
+               <table data-sort="sortDisabled" id="table-box">
+                            <style>
+                                #table-box{ border: 1px solid #aaa; border-collapse:collapse; border-color:#909090}
+                                #table-box tr, #table-box td{ border: 1px solid #aaa; border-color:#909090}
+                            </style>
+                            <tr class="firstRow">
+                                <td valign="top" colspan="1" rowspan="12" style="word-break: break-all;" width="123">
+                                    <span style="color: rgb(216, 216, 216); display:block; width:15px; margin:0 auto;">基础服务</span><br/>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="136">
+                                    <span style="color: rgb(216, 216, 216);">营业时间</span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all; text-align:center" width="76">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="283" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">位置指引</span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="283" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">协助取票<br/></span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="233" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">行李协助</span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="233" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">手机充电</span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="233" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">免费小食品<br/></span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="233" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">免费饮品<br/></span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="233" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">wifi<br/></span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="233" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">报刊书籍<br/></span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="233" valign="top" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">电视<br/></span>
+                                </td>
+                                <td width="76" valign="top" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="233">
+                                    <span style="color: rgb(216, 216, 216);">行李寄存</span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;text-align:center" width="76">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="233">
+                                    <span style="color: rgb(216, 216, 216);">登车提醒<br/></span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;text-align:center" width="76">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="5" width="233" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);width:15px; display:block; margin:0 auto;">五星要客服务<br/></span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="236">
+                                    <span style="color: rgb(216, 216, 216);">专人迎送<br/></span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" width="76" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="1" width="133" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">送站登车<br/></span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" width="76" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="1" width="233" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">站台接车</span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" width="126" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="1" width="233" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">专用检票口</span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" width="126" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="1" width="233" style="word-break: break-all;">
+                                    <span style="color: rgb(216, 216, 216);">专用安检通道<br/></span>
+                                </td>
+                                <td valign="top" colspan="1" rowspan="1" width="126" style="word-break: break-all;text-align:center">
+                                    <span style="color: rgb(216, 216, 216);">●</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;text-align:center" width="133">
+                                    <span style="color: rgb(216, 216, 216); text-align:center">其他</span>
+                                </td>
+                                <td valign="top" colspan="2" rowspan="1" style="word-break: break-all;"></td>
+                            </tr>
+</table>    
 <p>
     <br/>
 </p>
