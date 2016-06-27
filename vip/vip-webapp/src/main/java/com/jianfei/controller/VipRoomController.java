@@ -75,7 +75,7 @@ public class VipRoomController extends BaseController {
 	@RequestMapping("showVipRoomList")
 	@ResponseBody
 	public Grid showVipRoomList(@RequestParam(value = "page", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "rows", defaultValue = "10") Integer pageSize, HttpServletRequest request) {
+			@RequestParam(value = "rows", defaultValue = "20") Integer pageSize, HttpServletRequest request) {
 		// 查询条件
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, "_");
 		PageInfo<SysViproom> page = vipRoomManagerImp.simplePage(pageNo, pageSize, searchParams);

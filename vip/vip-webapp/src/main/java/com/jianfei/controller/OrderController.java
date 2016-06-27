@@ -132,7 +132,7 @@ public class OrderController extends BaseController {
 	@RequestMapping("invoiceList")
 	@ResponseBody
 	public Map<String,Object> invoiceList(@RequestParam(value="page",defaultValue="1") Integer pageNo,
-			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
+			@RequestParam(value="rows",defaultValue="20") Integer pageSize,
 			@RequestParam(value="invoiceFlag",required=false,defaultValue="") String invoiceFlag,
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -242,7 +242,7 @@ public class OrderController extends BaseController {
 	@RequestMapping("orderList")
 	@ResponseBody
 	public Map<Object,Object> list(@RequestParam(value="page",defaultValue="1") Integer pageNo,
-			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
+			@RequestParam(value="rows",defaultValue="20") Integer pageSize,
 			@RequestParam(value="startTime",defaultValue="") String startTime,
 			@RequestParam(value="endTime",defaultValue="") String endTime,
 			@RequestParam(value="airportId",required=false,defaultValue="") String airportId,
@@ -383,7 +383,7 @@ public class OrderController extends BaseController {
 	@RequestMapping("backCardList")
 	@ResponseBody
 	public Map<Object,Object> backCardlist(@RequestParam(value="page",defaultValue="1") Integer pageNo,
-			@RequestParam(value="rows",defaultValue="10") Integer pageSize,
+			@RequestParam(value="rows",defaultValue="20") Integer pageSize,
 			@RequestParam(value="backType",defaultValue="") String backType,
 			@RequestParam(value="applyType",defaultValue="") String applyType,
 			@RequestParam(value="orderState",defaultValue="10") Integer orderState){
@@ -588,7 +588,6 @@ public class OrderController extends BaseController {
 	public Map<String,Object> onRefund(String orderId,String backCardNo,String remainMoney,String payMethod,Integer opr,
 			@RequestParam(value="userNames",defaultValue="",required=false) String userNames,
 			@RequestParam(value="banckName",defaultValue="",required=false) String banckName){
-		System.out.println("orderId="+orderId+" backCardNo="+backCardNo);
 		//1、将订单状态有'正在审核'变成'审核通过'
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
 		
@@ -622,8 +621,21 @@ public class OrderController extends BaseController {
 		}else{
 			resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 		}
+		// 3、*****给用户发送短信 内容：用户名、卡号
+		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		// 3.1用户名
+		String customerName = orderDetailInfos.getCustomerName();
+		// 3.2vip卡号
+		String cardNo = orderDetailInfos.getVipCardNo();
+		//3.3调用发送短信接口（*******未完*******）
+		try {
+			
+		} catch (Exception e) {
+			logger.error("发送短信失败");
+		}
 		
 		resMap.put("orderStateName", "审核通过");
+		
 		
 		return resMap;
 	}
@@ -652,6 +664,21 @@ public class OrderController extends BaseController {
 		resMap.put("result", "1");
 		resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 		resMap.put("orderStateName", "已退款");
+		
+		// 2发送短信  内容如下：用户名+卡号+退款金额
+		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		// 2.1用户名
+		String customerName = orderDetailInfos.getCustomerName();
+		// 2.2vip卡号
+		String cardNo = orderDetailInfos.getVipCardNo();
+		// 2.3退款金额
+		double remainMoneys = orderManagerImpl.remainMoney(orderId);
+		// 2.4发送短信 （*****未完********）
+		try {
+			
+		} catch (Exception e) {
+			logger.error("发送短信失败");
+		}
 		return resMap;
 		
 	}

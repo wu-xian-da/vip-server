@@ -157,18 +157,24 @@ public class VipCardManagerImpl implements VipCardManager {
 					// 将数据插入到mysql数据库中
 					String[] val = value.split(",");
 					AppVipcard vipCard = new AppVipcard();
+					//卡号
 					vipCard.setCardNo(val[1]);
+					//nfc号
 					vipCard.setNfcId(val[2]);
+					//卡初始金额
+					vipCard.setInitMoney(Float.parseFloat(val[3]));
+					//卡有效期
+					vipCard.setValideTime(Integer.parseInt(val[4]));
 					vipCard.setImportTime(new Date());
 					vipCard.setDtflag(0);
 					vipCard.setCardState(VipCardState.NOT_ACTIVE.getName());// 未激活
 					vipCard.setCardType(1);// 卡类型
-					vipCard.setInitMoney(1998f);// 卡初始金额
 					// 向数据表中插入一条数据
 					try {
 						appVipcardMapper.importExcelToDB(vipCard);
 					} catch (Exception e) {
 						// TODO: handle exception
+						e.printStackTrace();
 					}
 
 				}
