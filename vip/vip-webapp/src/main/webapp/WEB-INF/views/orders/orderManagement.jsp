@@ -42,7 +42,7 @@
 			        
 			        	
 			        	
-			            <div class="order-condition-item" style="width: 140px">
+			            <div class="order-condition-item" style="width: 120px">
 			                <select id="airportIdSelect">
 			                	
 			                    <option value="">全部机场</option>
@@ -53,7 +53,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item" style="width: 140px">
+			            <div class="order-condition-item" style="width: 130px">
 			                <select id="orderStateSelect">
 			                    <option value="5">全部订单状态</option>
 			                    <option value="0">未支付</option>
@@ -64,7 +64,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item" style="width: 140px">
+			            <div class="order-condition-item" style="width: 130px">
 			                <select id="invoiceSelect">
 			                    <option value="3">全部发票状态</option>
 			                    <option value="0">未开</option>
@@ -79,7 +79,7 @@
 			                <button id="searchBt">查询</button>
 			            </div>
 			            
-			            <div class="order-condition-item" style="width: 70px;margin-left: 15px">
+			            <div class="order-condition-item" style="width: 70px;margin-left: 12px">
 			                <button id="resetBt">重置</button>
 			            </div>
 			            <div class="order-condition-item" style="width: 70px">
@@ -112,7 +112,7 @@
 	                
 	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
 	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
-	                <th data-options="align:'center', field:'operation',width:210">操作</th>
+	                <th data-options="align:'center', field:'operation',width:230">操作</th>
 	                </tr>
 	            </thead>
 	

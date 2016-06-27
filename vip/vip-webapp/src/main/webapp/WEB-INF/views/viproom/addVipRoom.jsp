@@ -67,7 +67,7 @@
 				<!-- 加载编辑器的容器 -->
     			<script id="container" name="remark1" type="text/plain">
         			<table data-sort="sortDisabled">
-    					<tbody>
+    					<body>
         					<tr class="firstRow">
             					<td valign="top" colspan="1" rowspan="12" style="word-break: break-all;" width="123">
                						<span style="color: rgb(216, 216, 216);">基础服务</span><br/>
@@ -219,7 +219,7 @@
             </td>
             <td valign="top" colspan="1" rowspan="1" style="word-break: break-all;" width="218"></td>
         </tr>
-    </tbody>
+    </body>
 </table>
 <p>
     <br/>
