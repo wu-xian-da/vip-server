@@ -208,7 +208,11 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		// 查询管辖区域内总的开卡数
 		Map<String, Object> map = masterTotal(new MapUtils.Builder()
 				.setKeyValue("ariportIds", list).build());
-		model.addAttribute("total", map.get("total"));
+		if (MapUtils.isEmpty(map)) {
+			model.addAttribute("total", 0);
+		} else {
+			model.addAttribute("total", map.get("total"));
+		}
 
 		// 构造查询条件
 		Map<String, Object> lastMoth = DateUtil.getDelayDate(1);
@@ -264,7 +268,11 @@ public class ArchiveManagerImpl implements ArchiveManager {
 				CacheCons.Sys.SYS_HISTORY_ORDERS_ZHUGUAN);
 
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
-		model.addAttribute("total", map.get("total"));
+		if (MapUtils.isEmpty(map)) {
+			model.addAttribute("total", 0);
+		} else {
+			model.addAttribute("total", map.get("total"));
+		}
 		// 上个月管辖区域内的开卡数
 		model.addAttribute(
 				"airPorts",
