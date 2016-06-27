@@ -58,8 +58,8 @@ public class JedisUtilsTest {
 	 */
 	@Test
 	public void testGet() {
-		String rs = JedisUtils.get("refineli");
-		System.out.println(rs);
+		String rs = JedisUtils.set("test", "测试", 0);
+		System.out.println(JedisUtils.get("test"));
 	}
 
 	/**
