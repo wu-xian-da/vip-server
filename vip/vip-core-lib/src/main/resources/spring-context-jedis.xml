@@ -11,7 +11,7 @@
 	<context:property-placeholder ignore-unresolvable="true" location="classpath:config.properties" />
 
 	<!--Redis连接池-->
-	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisSentinelPool">
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxTotal" value="${redis.pool.maxTotal}" /> <!-- 最大能够保持idel状态的对象数  -->
 		<property name="maxIdle" value="${redis.pool.maxIdle}" /> <!-- 最大分配的对象数 -->
 		<property name="minIdle" value="${redis.pool.minIdle}" />
