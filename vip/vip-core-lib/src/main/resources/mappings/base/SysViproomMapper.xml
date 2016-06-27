@@ -35,7 +35,7 @@
   	    <if test="searchContent != null">
   	    	and concat(vr.viproom_id,vr.viproom_name,ap.header_name,ap.header_phone,ap.airport_name) like CONCAT('%','${searchContent}','%' )
   	    </if>
-  	    order by create_time desc
+  	    order by vr.create_time desc
   </select>
   
   
