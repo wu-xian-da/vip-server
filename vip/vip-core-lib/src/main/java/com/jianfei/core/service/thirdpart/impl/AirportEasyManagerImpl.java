@@ -218,6 +218,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     															"&sku="+"0125" + 
     															"&sign=" + sign);
 		JSONObject obj = JSON.parseObject(result);
+		System.out.println(obj.get("verify_code").toString());
 		return obj.get("code").equals("00")?true:false;
 //		if (obj.get("code").equals("00")){
 //			return true;

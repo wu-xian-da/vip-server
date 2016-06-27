@@ -43,8 +43,8 @@
   
   <!--将excel表格中的数据导入到数据中 -->
   <insert id="importExcelToDB" parameterType="com.jianfei.core.bean.AppVipcard" >
-    insert into app_vipcard (card_no, nfc_id, import_time,dtflag,card_state,init_money,card_type)
-   		 values (#{cardNo},#{nfcId},#{importTime},#{dtflag},#{cardState},#{initMoney},#{cardType})
+    insert into app_vipcard (card_no, nfc_id, import_time,dtflag,card_state,init_money,card_type,valide_time)
+   		 values (#{cardNo},#{nfcId},#{importTime},#{dtflag},#{cardState},#{initMoney},#{cardType},#{valideTime})
   </insert>
   
   <!-- 将数据导入到excel表格中 -->

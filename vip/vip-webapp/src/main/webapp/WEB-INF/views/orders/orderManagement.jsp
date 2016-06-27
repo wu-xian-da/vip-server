@@ -23,20 +23,23 @@
 	 			#order-container-wrap{ overflow:hidden;}
         		#order-container{width:auto;}
         		#order-container-calac,#order-condition-box{float:left; padding-top:5px;}
-        		#order-container #order-condition-box{ padding-top:5px; margin-left:20px;}
+        		#order-container #order-condition-box{ padding-top:5px; margin-left:15px;}
         		#order-container #order-condition-box select{height:26px;}
         		.panel-body{ background:none;}
+        		.order-condition-item{margin-right: 0px}
+        		
         </style>
         <div id="order-container-wrap" style="height:10%; margin:0; padding:0;">
-	        <div style="width:1000px; overflow:hidden;">
+	        <div style="width:1070px; overflow:hidden;">
 	        
-	        <div style="padding:20px 0 0 20px;width: 1500px;">
+	        
+	        <div style="padding:20px 0 0 20px;width: 1200px;">
 			        <div id="order-container-calac">
 			            <label>订单日期：</label>
-			            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:110px;height:26px">
+			            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:90px;height:26px">
 			
 			            <label>-</label>
-			            <input class="easyui-datebox" id="endTime" data-options="formatter:myformatter,parser:myparser" style="width:110px;height:26px">
+			            <input class="easyui-datebox" id="endTime" data-options="formatter:myformatter,parser:myparser" style="width:90px;height:26px">
 			
 			        </div>
 			
@@ -44,7 +47,7 @@
 			        
 			        	
 			        	
-			            <div class="order-condition-item" style="width: 120px">
+			            <div class="order-condition-item" style="width: 96px">
 			                <select id="airportIdSelect">
 			                	
 			                    <option value="">全部机场</option>
@@ -84,12 +87,13 @@
 			            <div class="order-condition-item" style="width: 70px;margin-left: 12px">
 			                <button id="resetBt">重置</button>
 			            </div>
-			            <div class="order-condition-item" style="width: 70px">
+			            <div class="order-condition-item" style="width: 65px">
 			                 <button id="exportBt">导出</button>
 			            </div>
 			            
 			        </div>
 	        </div>
+	        
 	        </div>
 		</div>        
         <div style="clear:both; height:93%;" id="data-grid-wrap" data-options="region:'center',fit:true,border:false">

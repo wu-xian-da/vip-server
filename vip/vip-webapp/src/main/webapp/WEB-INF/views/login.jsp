@@ -15,6 +15,8 @@ if (window != top)
 	<link rel="stylesheet" href="${ctx }/style/vip.css">
 	<script src="${ctx }/jslib/jquery-1.9.1.js"></script>
 	<script src="${ctx }/jslib/jquery-easyui-1.3.4/jquery.easyui.min.js"></script>
+	<link rel="icon" href="${ctx }/style/images/vip.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="${ctx }/style/images/vip.ico" type="image/x-icon" />
 </head>
 <body>
 		<style>

@@ -70,7 +70,7 @@ public class VipCardController extends BaseController {
 	@RequestMapping(value = "showVipCardList", method = RequestMethod.POST)
 	@ResponseBody
 	public Grid showVipCardList(@RequestParam(value = "page", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "rows", defaultValue = "10") Integer pageSize, HttpServletRequest request) {
+			@RequestParam(value = "rows", defaultValue = "20") Integer pageSize, HttpServletRequest request) {
 		System.out.println("");
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, "_");
 		if (searchParams != null) {
