@@ -449,6 +449,8 @@
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
 				<redis.pool.minIdle>0</redis.pool.minIdle>
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
+				<redis.host>192.168.110.8</redis.host>
+				<redis.port>6379</redis.port>
 				<!-- p12 cert location -->
 				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>
 				<!-- kongGang settings -->
@@ -456,8 +458,7 @@
 				<konggang.partner>20160607001</konggang.partner>
 				<konggang.key>S1-L6-D0-T1-G2-S7</konggang.key>
 				<!-- yeepay settings -->
-				<!-- <yeepay.query.url>http://124.250.37.126:8081/cod/callback/codOrderQueryAction.do</yeepay.query.url>
-				 -->
+				<!-- <yeepay.query.url>http://124.250.37.126:8081/cod/callback/codOrderQueryAction.do</yeepay.query.url> -->
 				<yeepay.query.url>http://cod.yeepay.com/cod/callback/codOrderQueryAction.do</yeepay.query.url>
 				<yeepay.customerId>10001676182</yeepay.customerId>
 				<yeepay.key>DFE23HLAW198820SQWE1224SDAQQ3319203945</yeepay.key>
