@@ -76,6 +76,8 @@
 						return 'VIP卡权益轮播';
 					case 2:
 						return '用户APP合作按钮';
+					case 3:
+						return '用户APP轮播图';
 					}
 				}
 			},{
