@@ -28,7 +28,9 @@
         		.panel-body{ background:none;}
         </style>
         <div id="order-container-wrap" style="height:10%; margin:0; padding:0;">
-	        <div style="padding:20px 0 0 20px;">
+	        <div style="width:1000px; overflow:hidden;">
+	        
+	        <div style="padding:20px 0 0 20px;width: 1500px;">
 			        <div id="order-container-calac">
 			            <label>订单日期：</label>
 			            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:110px;height:26px">
@@ -88,7 +90,7 @@
 			            
 			        </div>
 	        </div>
-	        
+	        </div>
 		</div>        
         <div style="clear:both; height:93%;" id="data-grid-wrap" data-options="region:'center',fit:true,border:false">
 	        <table id="tt" title=""
