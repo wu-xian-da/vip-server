@@ -4,6 +4,7 @@ import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.common.enu.StateType;
 import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -49,7 +50,10 @@ public class OrderController {
 		AppVipcard vipCard = vipCardManager.getVipCardByNo(vipCardNo);
 		if (vipCard == null || StringUtils.isBlank(vipCard.getCardNo())) {
 			return BaseMsgInfo.msgFail("卡号有误或系统暂未录入此卡信息，请联系相关人员添加此卡信息！");
-		}else if (!VipCardState.ACTIVE.getName().equals(vipCard.getCardState())){
+		}else if (StateType.NOT_EXIST.getName() == vipCard.getDtflag()) {
+			return BaseMsgInfo.msgFail("此卡已禁用");
+		}
+		else if (!VipCardState.ACTIVE.getName().equals(vipCard.getCardState())){
 			return BaseMsgInfo.success(true);
 		}else {
 			return BaseMsgInfo.msgFail("卡号有误，此卡已激活");
