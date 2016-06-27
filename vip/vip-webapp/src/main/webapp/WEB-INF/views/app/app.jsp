@@ -73,9 +73,9 @@
 					case 0:
 						return '业务APP轮播图';
 					case 1:
-						return 'VIP卡权益轮播';
-					case 2:
 						return '用户APP合作按钮';
+					case 2:
+						return 'VIP卡权益轮播';
 					case 3:
 						return '用户APP轮播图';
 					}
