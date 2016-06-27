@@ -56,11 +56,11 @@ public class QueueManagerImpl implements QueueManager {
 	@Autowired
 	private VipCardManager vipCardManager;
 
-	// 没20秒执行一次
+	// 每1秒执行一次
 	/**
 	 * 从消息队列中拉消息
 	 */
-	@Scheduled(fixedRate = 20000)
+	@Scheduled(fixedRate = 1000)
 	public void pullSmsMessage() {
 		MessageDto<Map<String, String>> messageDto = processMessage(MESSAGEKEY,
 				QueueManager.SMS_QUEUE_VIP_BAK);
@@ -125,7 +125,7 @@ public class QueueManagerImpl implements QueueManager {
 		boolean isOk = false;// 操作结果状态
 		String message = StringUtils.EMPTY;
 		// 是否是激活vip卡标识
-		if (MsgType.ACTIVE_CARD.equals(msgType)) {
+		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
 			AppVipcard vipcard = vipCardManager.getVipCardByNo(map
 					.get("vipCardNo"));
 			// 判断卡号是否存在
