@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jianfei.core.dto.BaseDto;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -245,5 +246,10 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	public AriPort selectAirPortInfoById(String airPortId) {
 		// TODO Auto-generated method stub
 		return ariPortMapper.selectAirPortInfoById(airPortId);
+	}
+
+	@Override
+	public void deleteAirportByUserId(Long userId) {
+		ariPortMapper.deleteAriport(userId);
 	}
 }

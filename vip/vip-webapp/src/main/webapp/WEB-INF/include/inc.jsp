@@ -53,7 +53,8 @@ if (StringUtils.indexOfIgnoreCase(User_Agent, "MSIE") > -1 && (StringUtils.index
 %>
 <%-- 引入jquery扩展 --%>
 <script src="<%=contextPath%>/jslib/syExtJquery.js?version=<%=version%>" type="text/javascript" charset="utf-8"></script>
-
+<link rel="icon" href="<%=contextPath%>/style/images/vip.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="<%=contextPath%>/style/images/vip.ico" type="image/x-icon" />
 <%-- 引入Highcharts --%>
 <script src="<%=contextPath%>/jslib/Highcharts-3.0.6/js/highcharts.js" type="text/javascript" charset="utf-8"></script>
 <script src="<%=contextPath%>/jslib/Highcharts-3.0.6/js/modules/exporting.js" type="text/javascript" charset="utf-8"></script>

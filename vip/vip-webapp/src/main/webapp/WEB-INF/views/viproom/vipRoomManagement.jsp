@@ -117,8 +117,8 @@ a {
 			pagination : true,
 			singleSelect : true,
 			
-			pageSize : 10,
-			pageList : [10, 20, 30, 40, 50],
+			pageSize : 20,
+			pageList : [20, 30, 40, 50],
 			columns : [ [{
 				width : '200',
 				title : '所属场站',

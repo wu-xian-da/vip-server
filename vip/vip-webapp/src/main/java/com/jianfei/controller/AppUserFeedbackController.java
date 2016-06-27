@@ -91,7 +91,7 @@ public class AppUserFeedbackController {
 	@RequestMapping("feedbackList")
 	@ResponseBody
 	public Map<String,Object> pageList(@RequestParam(value="page",defaultValue="1") Integer pageNo,
-			@RequestParam(value="rows",defaultValue="10") Integer pageSize, 
+			@RequestParam(value="rows",defaultValue="20") Integer pageSize, 
 			@RequestParam(value="feedbackState",defaultValue="2") Integer feedbackState ){
 		//设置刷选条件
 		Map<String,Object> paramsMap = new HashMap<String,Object>();

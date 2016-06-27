@@ -35,7 +35,6 @@ import com.jianfei.core.service.thirdpart.QueueManager;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml",
 		"classpath:spring-context-jedis.xml" })
-@Transactional
 public class QueueManagerImplTest {
 
 	@Autowired
@@ -52,9 +51,15 @@ public class QueueManagerImplTest {
 	@Test
 	public void testProcessMessage() {
 		MessageDto<Map<String, String>> messageDto = queueManager
-				.processMessage("QU",
-						QueueManager.SMS_QUEUE_VIP_BAK);
+				.processMessage("QU", QueueManager.SMS_QUEUE_VIP_BAK);
 		System.out.println(JSONObject.toJSONString(messageDto));
+	}
+
+	@Test
+	public void testProcessMessagesss() {
+		String result = JedisUtils.rpoplpushQ(QueueManager.SMS_QUEUE_VIP_BAK,
+				"SMS_BAK");
+		System.out.println(result);
 	}
 
 	@Test
@@ -63,13 +68,12 @@ public class QueueManagerImplTest {
 		map.put("userPhone", "13275601668");
 		map.put("msgType", "005");
 		map.put("userName", "refineli");
-		map.put("vipCardNo", "12312445333123");
+		map.put("vipCardNo", "07939046849");
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("code", "smart001");
 		m.put("time", "10分钟");
 		map.put("msgBody", JSONObject.toJSONString(m));
-		JedisUtils.lpushString("QU",
-				JSONObject.toJSONString(map));
+		JedisUtils.lpushString("QU", JSONObject.toJSONString(map));
 	}
 
 	@Test
