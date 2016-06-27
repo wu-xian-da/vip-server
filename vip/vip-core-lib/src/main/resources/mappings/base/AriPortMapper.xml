@@ -99,7 +99,7 @@
 				and header_phone =#{headerPhone}
 			</if>
 		</where>
-		group by t1.airport_id
+		group by t1.airport_id order by t1.updatetime desc
 	</select>
 
 	<insert id="save" parameterType="AriPort">
@@ -117,7 +117,9 @@
 			  latitude,
 			  header_name,
 			  header_phone,
-			  dtflag
+			  dtflag,
+			  createtime,
+			  updatetime
 			) 
 			VALUES
 			  (
@@ -133,7 +135,9 @@
 			    #{latitude},
 			    #{headerName},
 			    #{headerPhone},
-			    #{dtflag}
+			    #{dtflag},
+			    #{createdatetime},
+			    #{updatedatetime}
 			  ) 
 		]]>
 	</insert>
@@ -174,6 +178,9 @@
 		</if>
 		<if test="headerPhone!=null">
 			, header_phone =#{headerPhone}
+		</if>
+		<if test="updatedatetime!=null">
+			, updatetime =#{updatedatetime}
 		</if>
 		<if test="address!=null">
 			, address =#{address}

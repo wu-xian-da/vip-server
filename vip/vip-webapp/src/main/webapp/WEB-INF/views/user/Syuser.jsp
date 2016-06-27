@@ -80,7 +80,7 @@
 			pagination : true,
 			singleSelect : true,
 			idField : 'id',
-			sortName : 'createdatetime',
+			sortName : 'updatedatetime',
 			sortOrder : 'desc',
 			pageSize : 20,
 			pageList : [20, 30, 40, 50 ],

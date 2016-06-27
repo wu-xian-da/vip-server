@@ -42,6 +42,7 @@
 				GROUP_CONCAT(DISTINCT ap.`airport_id`) AS 'ariPortsIds',
 				GROUP_CONCAT(DISTINCT ap.`airport_name`) AS 'ariPortsNames',
 				u.phone,
+				u.update_time,
 				count(ao.order_id) AS tmonth,
 				u.state,
 				u.job,
@@ -77,9 +78,7 @@
 		</if>
 		<![CDATA[
 			GROUP BY
-			u.`name`
-			ORDER BY
-			create_time DESC]]>)
+			u.`name`]]>)
 		A
 		<if test="sort!=null">
 			order by ${sort} ${order}

@@ -83,7 +83,7 @@
 			pagination : true,
 			singleSelect : true,
 			idField : 'airport_id',
-			sortName : 'seq',
+			sortName : 'update_time',
 			sortOrder : 'asc',
 			columns : [ [{
 				width : '100',

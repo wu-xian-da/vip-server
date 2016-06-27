@@ -123,6 +123,13 @@
 					</td>
 				</tr>
 				<tr>
+						<th>性别</th>
+					<td><select class="easyui-combobox" name="sex" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+							<option value="1" <c:if test="${user.sex==1 }">selected="selected"</c:if> >男</option>
+							<option value="0" <c:if test="${user.sex==0 }">selected="selected"</c:if> >女</option>
+					</select></td>
+				</tr>
+				<tr>
 					<td colspan="4">
 						<fieldset>
 						<legend>所属区域</legend>

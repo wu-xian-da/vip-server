@@ -8,6 +8,7 @@
 package com.jianfei.core.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.utils.IdGen;
@@ -39,6 +40,10 @@ public class AriPort implements Serializable {
 	private Integer dtflag;
 
 	private String orderIds;// 该机场对应的订单编号
+
+	private Date createdatetime = new Date();
+
+	private Date updatedatetime = new Date();
 
 	/**
 	 * id
@@ -293,6 +298,22 @@ public class AriPort implements Serializable {
 	 */
 	public void setDtflag(Integer dtflag) {
 		this.dtflag = dtflag;
+	}
+
+	public Date getCreatedatetime() {
+		return createdatetime;
+	}
+
+	public void setCreatedatetime(Date createdatetime) {
+		this.createdatetime = createdatetime;
+	}
+
+	public Date getUpdatedatetime() {
+		return updatedatetime;
+	}
+
+	public void setUpdatedatetime(Date updatedatetime) {
+		this.updatedatetime = updatedatetime;
 	}
 
 	/*
