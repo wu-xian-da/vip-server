@@ -76,10 +76,10 @@
 						
 						
 		
-							<th data-options="align:'center', field:'orderId',width:100">订单号</th>
+							<th data-options="align:'center', field:'orderId',width:130">订单号</th>
 							<th data-options="align:'center', field:'customerName',width:100">用户名</th>
 							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-							<th data-options="align:'center', field:'orderTime',width:120">申请日期</th>
+							<th data-options="align:'center', field:'orderTime',width:150">申请日期</th>
 		
 							<th data-options="align:'center', field:'applyTypeName',width:150">申请途径</th>
 							<th data-options="align:'center', field:'backTypeName',width:100">退款方式</th>
@@ -139,6 +139,11 @@
 
 	<script type="text/javascript">
         $(function(){
+        	//1、重置条件选项
+        	$("#backTypeSelect").val("");
+        	$("#applyTypeSelect").val("");
+        	$("#orderStateSelect").val("10");
+        	//2、表格初始化
             $('#tt').datagrid();
         });
 

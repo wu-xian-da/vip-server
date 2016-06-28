@@ -111,8 +111,8 @@
 	                                pagination:true">
 	            <thead>
 	                <tr>
-	                <th data-options="align:'center', field:'orderId',width:120">订单编号</th>
-	                <th data-options="align:'center', field:'orderTime',width:130">订单日期</th>
+	                <th data-options="align:'center', field:'orderId',width:130">订单编号</th>
+	                <th data-options="align:'center', field:'orderTime',width:150">订单日期</th>
 	                
 	                <th data-options="align:'center', field:'airportName',width:150">场站</th>
 	                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
@@ -237,6 +237,15 @@
 
     <script type="text/javascript">
         $(function(){
+        	//重置选择条件
+        	$("#startTime").datebox("setValue","");
+        	$("#endTime").datebox("setValue","");
+        	$("#phoneOrUserName").val("");
+        	$("#airportIdSelect").val("");
+        	$("#orderStateSelect").val('5');
+        	$("#invoiceSelect").val('3');
+        	
+        	//初始化表格
             $('#tt').datagrid();
         });
 

@@ -29,7 +29,12 @@ public enum VipCardState {
     /**
      * 待激活
      */
-    TO_ACTIVATE(4);
+    TO_ACTIVATE(4),
+    
+    /**
+     * 解绑失败
+     */
+	UNBUNDLING_FAIL(5);
 
 
     private Integer name;
