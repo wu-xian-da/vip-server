@@ -19,19 +19,23 @@ public enum MsgType {
      */
     LOGIN("002"),
     /**
-     * 退卡申请
+     * 退卡查询
      */
-    BACK_CARD_APPLY("003"),
+    SELECT("003"),
 
     /**
-     * 退卡完成
+     * 退卡完成后短信
      */
     BACK_CARD_FINISH("004"),
 
     /**
      * 激活VIP卡
      */
-    ACTIVE_CARD("005");
+    ACTIVE_CARD("005"),
+    /**
+     * 退卡申请后短信
+     */
+    BACK_CARD_APPLY("006");
 
     private String name;
 

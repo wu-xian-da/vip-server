@@ -30,7 +30,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,7 +42,6 @@ import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrderCard;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AppUserFeedback;
-import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.InvoiceState;
@@ -323,7 +321,7 @@ public class OrderController extends BaseController {
 				outData.put("orderId", appOrder.getOrderId());
 				outData.put("phone", appOrder.getCustomerPhone());
 				//2、获取验证码
-				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.BACK_CARD_APPLY);
+				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.SELECT);
 				if(smsCode == null){
 					smsCode ="";
 				}
@@ -515,10 +513,10 @@ public class OrderController extends BaseController {
 		//1、改变订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、获取验证码
-		String smsCode = validateCodeManager.getValidateCode(phone, MsgType.BACK_CARD_APPLY);
+		String smsCode = validateCodeManager.getValidateCode(phone, MsgType.SELECT);
 		//发送短信****
 		try {
-			validateCodeManager.sendMsgInfo(phone, MsgType.BACK_CARD_APPLY, smsCode);
+			validateCodeManager.sendMsgInfo(phone, MsgType.SELECT, smsCode);
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("发送短信失败");
