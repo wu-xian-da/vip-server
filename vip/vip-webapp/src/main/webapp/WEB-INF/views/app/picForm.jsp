@@ -127,9 +127,9 @@
 					<th>类型:</th>
 					<td><select class="easyui-combobox" name=imagetype data-options="panelHeight:'auto',editable:false" style="width: 155px;">
 							<option value="0" <c:if test="${appPicture.imagetype==0 }">selected="selected"</c:if> >业务APP轮播图</option>
-							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >VIP卡权益轮播</option>
+							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >用户APP轮播图</option>
 							<option value="2" <c:if test="${appPicture.imagetype==2 }">selected="selected"</c:if> >用户APP合作按钮</option>
-							<option value="3" <c:if test="${appPicture.imagetype==3 }">selected="selected"</c:if> >用户APP轮播图</option>
+							<option value="3" <c:if test="${appPicture.imagetype==3 }">selected="selected"</c:if> >VIP卡权益轮播</option>
 					</select></td>
 				</tr>
 				<tr>
