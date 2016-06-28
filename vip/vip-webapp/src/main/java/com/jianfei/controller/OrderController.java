@@ -46,7 +46,6 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
-import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
@@ -75,8 +74,6 @@ public class OrderController extends BaseController {
 	
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
-	@Autowired
-	private MsgInfoManagerImpl msgInfoManagerImpl;
 	@Autowired
 	private AppInvoiceManager appInvoiceManagerImpl;
 	@Autowired
