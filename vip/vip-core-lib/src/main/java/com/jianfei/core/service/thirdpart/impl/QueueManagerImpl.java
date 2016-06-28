@@ -64,6 +64,7 @@ public class QueueManagerImpl implements QueueManager {
 	public void pullSmsMessage() {
 		MessageDto<Map<String, String>> messageDto = processMessage(MESSAGEKEY,
 				QueueManager.SMS_QUEUE_VIP_BAK);
+		System.out.println("获取的队列信息：" + JSONObject.toJSONString(messageDto));
 		if (!messageDto.isOk()) {
 			LoggerFactory.getLogger(getClass()).error(
 					"从" + MESSAGEKEY + "队列拉消息，操作失败。。。,接口反馈信息:"

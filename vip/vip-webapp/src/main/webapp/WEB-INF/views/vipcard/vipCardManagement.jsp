@@ -19,7 +19,7 @@
 			display: inline-block;
 		    vertical-align: top;
 		    width: auto;
-		    line-height: 22px;
+		    line-height: 20px;
 		    font-size: 12px;
 			margin: 0 4px;
 		}
@@ -99,10 +99,13 @@
 											case 1:
 												return '激活成功';
 											case 2:
-												return '退卡';
+												return '已退卡';
 											case 3:
 												return '激活失败';
+											case 4:
+												return '待激活';
 											}
+											
 										}
 									},
 									{
@@ -177,43 +180,49 @@
 	
 		<table>
 			<tr>
+				<!-- 导入按钮 -->
 				<td>
 					<form id="fm" name="excelImportForm"
 						action="${pageContext.request.contextPath}/vipCard/importExcel"
 						method="post" enctype="multipart/form-data">
-						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 175px" data-options="required:true"/> 
+						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 190px" data-options="required:true"/> 
 						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="button" onclick="importExcel();" value="导入" />
 					</form> 
-					
 				</td>
+				<td style="width: 10px"></td>
 				
+				<!-- 导出按钮 -->
 				<td><a href="${pageContext.request.contextPath}/vipCard/exportExcel"><button class="btn btn-default ">导出</button></a></td>
-
+				<td style="width: 10px"></td>
+				
 				<!-- 搜索条件框 -->
 				<td>
 					<form id="searchForm">
 						<table>
 							<tr>
-
-								<td><select name="_cardState" id="cardStateSel">
+								<td>
+									<select name="_cardState" id="cardStateSel">
 										<option value="">全部vip卡状态</option>
 										<option value="0">未激活</option>
-										<option value="1">激活</option>
-										<option value="2">退卡</option>
+										<option value="1">激活成功</option>
+										<option value="2">已退卡</option>
+										<option value="3">激活失败</option>
+										<option value="4">待激活</option>
 
-								</select></td>
+									</select>
+								</td>
+								<td style="width: 10px"></td>
 								<td>请输入卡号</td>
-								<td><input id="_cardNo" name="_cardNo" value="" style="width: 80px;" /></td>
+								<td><input id="_cardNo" name="_cardNo" value="" style="width: 120px;" /></td>
 								<td><input type="button" value="查询"
 									style="width: 60px; height: 20px; border: none; background: #698DC3; border-radius: 5px; text-align: center; color: #FFF;"
 									onclick="searchByCondition();"></td>
 							</tr>
 						</table>
 					</form>
-
 				</td>
+				
 			</tr>
-
 		</table>
 	</div>
 

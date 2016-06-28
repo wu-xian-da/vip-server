@@ -213,4 +213,13 @@ public class VipCardManagerImpl implements VipCardManager {
 		int num = appVipcardMapper.activeAppCard(map);
 		return num == 1 ? true : false;
 	}
+	
+	/**
+	 * 更新卡信息
+	 */
+	@Override
+	public int updateByPrimaryKeySelective(AppVipcard record) {
+		// TODO Auto-generated method stub
+		return appVipcardMapper.updateByPrimaryKeySelective(record);
+	}
 }

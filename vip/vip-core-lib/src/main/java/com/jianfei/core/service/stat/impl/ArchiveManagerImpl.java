@@ -86,7 +86,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> masterTop(Map<String, Object> map) {
-		JedisUtils.delObject(CacheCons.Sys.SYS_TOP3_MONTH);
 		List<Map<String, Object>> list = null;
 		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
 		if (null != object) {
@@ -110,7 +109,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	public List<Map<String, Object>> masterDraw(Map<String, Object> map,
 			String cacheKey) {
 		List<Map<String, Object>> maps = null;
-		JedisUtils.delObject(cacheKey);
 		Object object = JedisUtils.getObject(cacheKey);
 		if (null != object) {
 			maps = (List<Map<String, Object>>) JedisUtils.getObject(cacheKey);
@@ -181,7 +179,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Scheduled(cron = "0 58 23 * * ? ")
 	public void dailyOrderArchice() {
 		logger.info("开始执行订单归档任务...");
-		baseDailyExtract(DateUtil.getCurrentTime());
+		baseDailyExtract(DateUtil.dailyExtractDate());
 		dateProvinceIdRedisCache(DateUtil.getCurrentTime());
 		dateProvinceIdApportIds(DateUtil.getCurrentTime());
 	}

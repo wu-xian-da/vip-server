@@ -14,12 +14,4 @@
 	default-lazy-init="true">
 	<!-- task任务扫描注解 -->
 	<task:annotation-driven />
-
-	<bean id="facadeMonitoringAdvisor" class="net.bull.javamelody.MonitoringSpringAdvisor">
-		<property name="pointcut">
-			<bean class="org.springframework.aop.support.JdkRegexpMethodPointcut">
-				<property name="pattern" value="com.jianfei.core.service.*" /><!--正则表达式 -->
-			</bean>
-		</property>
-	</bean>
 </beans>
