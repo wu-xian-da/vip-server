@@ -405,11 +405,7 @@
 			</if>
 		</where>
 	</select>
-	<!-- 根据订单号返回订单信息 -->
-	<select id="getOrderInfoByOrderId" parameterType="java.lang.String"
-		resultMap="BaseResultMap">
-		select * from app_orders where order_id = #{orderId}
-	</select>
+
 
 	<resultMap id="ResultMapWithDetail" type="com.jianfei.core.bean.AppOrders" extends="BaseResultMap" >
 		<collection property="vipCards" column="id" javaType="com.jianfei.core.bean.AppVipcard">

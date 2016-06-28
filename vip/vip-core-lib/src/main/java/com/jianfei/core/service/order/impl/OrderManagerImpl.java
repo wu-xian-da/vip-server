@@ -14,6 +14,7 @@ import com.jianfei.core.mapper.AppCardBackMapper;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
+import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
@@ -52,7 +53,7 @@ public class OrderManagerImpl implements OrderManager {
     @Autowired
     private VipUserManagerImpl vipUserManager;
     @Autowired
-    private VipCardManagerImpl vipCardManager;
+    private VipCardManager vipCardManager;
     @Autowired
     private AppInvoiceManagerImpl invoiceManager;
     @Autowired
@@ -79,6 +80,8 @@ public class OrderManagerImpl implements OrderManager {
     public BaseMsgInfo addOrderAndUserInfo(OrderAddInfoDto addInfoDto) throws InvocationTargetException, IllegalAccessException {
        //重复提交问题
         if(StringUtils.isNotBlank(addInfoDto.getOrderId())){
+            AppOrders appOrders=appOrdersMapper.selectByPrimaryKey(addInfoDto.getOrderId());
+            addInfoDto.setMoney(appOrders.getPayMoney());
             return BaseMsgInfo.success(addInfoDto);
         }
         //1、校验用户和手机验证码
@@ -91,6 +94,8 @@ public class OrderManagerImpl implements OrderManager {
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
         if (vipCard == null) {
             return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
+        } else if (VipCardState.ACTIVE.getName() == vipCard.getCardState()) {
+            return BaseMsgInfo.msgFail("VIP卡已使用");
         }
 
         //3、添加或修改用户信息
@@ -395,10 +400,10 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public BaseMsgInfo checkThirdPay(String orderId, PayType payType) {
         //先查询订单是否存在及合法
-        AppOrders appOrders=appOrdersMapper.getOrderInfoByOrderId(orderId);
+        AppOrders appOrders=appOrdersMapper.selectByPrimaryKey(orderId);
 
         //如果订单存在 并且已付款
-        if (appOrders==null || StringUtils.isNotBlank(appOrders.getOrderId())){
+        if (appOrders==null || StringUtils.isBlank(appOrders.getOrderId())){
             return BaseMsgInfo.msgFail("订单不存在");
         }
         if (VipOrderState.ALREADY_PAY.getName() == appOrders.getOrderState()) {
@@ -490,6 +495,7 @@ public class OrderManagerImpl implements OrderManager {
 
     /**
      * 更新用户付款状态
+     * 并发送激活卡消息
      *
      * @return
      */
@@ -524,35 +530,35 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
         //1、根据订单号查询订单信息
-        AppOrders orders = appOrdersMapper.selectByPrimaryKey(appCardBack.getOrderId());
+        AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(appCardBack.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
 
         //2、查询用户信息和订单信息
-        List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(appCardBack.getCustomerPhone(), appCardBack.getCardNo());
-        VipCardUseDetailInfo vipCardUseDetailInfo = vipCardUseDetailInfoList == null || vipCardUseDetailInfoList.isEmpty() ? new VipCardUseDetailInfo()
-                : vipCardUseDetailInfoList.get(0);
-        if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
-            return BaseMsgInfo.fail("暂未查询到此VIP卡相关信息");
+        if (VipOrderState.NOT_PAY.getName() == orders.getOrderState()) {
+            return BaseMsgInfo.msgFail("订单未付款");
+        }else if (!(VipOrderState.ALREADY_PAY.getName() == orders.getOrderState())){
+            return BaseMsgInfo.msgFail("订单已经申请退款");
         }
 
         // 2、重新计算可退余额 校验是否正确
-        getVipCardUseInfo(vipCardUseDetailInfo);
-        if (!orders.getOrderId().equals(vipCardUseDetailInfo.getOrderId())) {
-            return BaseMsgInfo.fail("此订单已经退款");
-        }
-    /*	if(vipCardUseDetailInfo.getReturnMoney()!=appCardBack.getMoney()){
+        VipCardUseDetailInfo useDetailInfo=new VipCardUseDetailInfo();
+        useDetailInfo.setOrderMoney(orders.getPayMoney());
+        useDetailInfo.setVipCardNo(orders.getVipCards().get(0).getCardNo());
+        getVipCardUseInfo(useDetailInfo);
+         if(useDetailInfo.getReturnMoney()!=appCardBack.getMoney()){
 			return BaseMsgInfo.fail("退款金额有误，请重新查询使用");
-		}*/
+		}
         //3、插入数据库
         appCardBack.setBackId(IdGen.uuid());
         appCardBack.setCreateTime(new Date());
         int i = appCardBackMapper.insertBackCard(appCardBack);
         //添加订单状态为已退款
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
-            //已退款
+            //更改订单状态为已退款 和申请方式为
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
+
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
@@ -567,7 +573,7 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public AppOrders getOrderInfoByOrderId(String orderId) {
         // TODO Auto-generated method stub
-        return appOrdersMapper.getOrderInfoByOrderId(orderId);
+        return appOrdersMapper.selectByPrimaryKey(orderId);
     }
 
 	/**
