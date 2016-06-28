@@ -222,7 +222,7 @@
 			  order_num_back
 			)  SELECT
 				u.id,
-				max(ao.order_time) AS file_time,
+				#{maxTime},
 				CASE
 				WHEN count(ao.order_id) IS NULL THEN
 					0

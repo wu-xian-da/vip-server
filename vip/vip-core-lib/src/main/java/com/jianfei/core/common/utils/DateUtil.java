@@ -451,6 +451,12 @@ public class DateUtil {
 		return map;
 	}
 
+	public static Map<String, Object> dailyExtractDate() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("maxTime", DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
+		return map;
+	}
+
 	public static Map<String, Object> getDelayDate(int putoff) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(cal.getTime());
