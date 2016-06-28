@@ -186,9 +186,13 @@ public class VipCardController extends BaseController {
 				if(vipCard.getCardState() == 0){
 					activeState.setCellValue("未激活");
 				}else if(vipCard.getCardState() == 1){
-					activeState.setCellValue("激活");
+					activeState.setCellValue("激活成功");
 				}else if(vipCard.getCardState() == 2){
-					activeState.setCellValue("退卡");
+					activeState.setCellValue("已退卡");
+				}else if(vipCard.getCardState() == 3){
+					activeState.setCellValue("激活失败");
+				}else if(vipCard.getCardState() == 4){
+					activeState.setCellValue("待激活");
 				}
 				index ++;
 				
