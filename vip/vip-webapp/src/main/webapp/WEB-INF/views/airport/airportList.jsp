@@ -23,7 +23,7 @@
 				<td><div class="datagrid-btn-separator"></div></td>
 			</shiro:hasPermission>
 				<td>场站名称：</td>
-				<td><input type="text" id="name" style="width: 150px" placeholder='输入机场名字'></input></td>
+				<td><input type="text" id="name" style="width: 150px" ></input></td>
 				<td>
 					<input type="button" value="查询" style="width: 60px;height: 20px;
 				    border: none;
