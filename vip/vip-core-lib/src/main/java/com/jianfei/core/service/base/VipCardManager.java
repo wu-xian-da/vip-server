@@ -71,5 +71,9 @@ public interface VipCardManager {
 	AppVipcard getVipCardByNo(String vipCardNo);
 
 	boolean activeAppCard(Map<String, Object> map);
+	
+	//更新卡记录
+	int updateByPrimaryKeySelective(AppVipcard record);
+	
 
 }

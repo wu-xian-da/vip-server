@@ -79,7 +79,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item" style="width: 190px">
+			            <div class="order-condition-item" style="width: 200px">
 			                <input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
 			                <button id="searchBt">查询</button>
 			            </div>

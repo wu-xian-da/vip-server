@@ -48,6 +48,7 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
@@ -57,6 +58,7 @@ import com.jianfei.core.service.base.AppInvoiceManager;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
+import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 
@@ -85,6 +87,8 @@ public class OrderController extends BaseController {
 	private ValidateCodeManagerImpl validateCodeManager;
 	@Autowired
 	private AppUserFeedbackImpl appUserFeedbackImpl;
+	@Autowired
+	private VipCardManagerImpl vipCardManagerImpl;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -323,7 +327,7 @@ public class OrderController extends BaseController {
 				outData.put("orderId", appOrder.getOrderId());
 				outData.put("phone", appOrder.getCustomerPhone());
 				//2、获取验证码
-				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.BACK_CARD_APPLY);
+				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.SELECT);
 				if(smsCode == null){
 					smsCode ="";
 				}
@@ -515,10 +519,10 @@ public class OrderController extends BaseController {
 		//1、改变订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、获取验证码
-		String smsCode = validateCodeManager.getValidateCode(phone, MsgType.BACK_CARD_APPLY);
+		String smsCode = validateCodeManager.getValidateCode(phone, MsgType.SELECT);
 		//发送短信****
 		try {
-			validateCodeManager.sendMsgInfo(phone, MsgType.BACK_CARD_APPLY, smsCode);
+			validateCodeManager.sendMsgInfo(phone, MsgType.SELECT, smsCode);
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("发送短信失败");
@@ -629,7 +633,7 @@ public class OrderController extends BaseController {
 		String cardNo = orderDetailInfos.getVipCardNo();
 		//3.3调用发送短信接口（*******未完*******）
 		try {
-			
+			System.out.println("用户名="+customerName+" 卡号="+cardNo);
 		} catch (Exception e) {
 			logger.error("发送短信失败");
 		}
@@ -665,8 +669,16 @@ public class OrderController extends BaseController {
 		resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 		resMap.put("orderStateName", "已退款");
 		
-		// 2发送短信  内容如下：用户名+卡号+退款金额
+		//根据订单编号返回订单详情
 		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		
+		//更新卡状态 将开状态变为已退卡**（放在消息队列中处理）
+		/*AppVipcard appVipcard = new AppVipcard();
+		appVipcard.setCardNo(orderDetailInfos.getVipCardNo());
+		appVipcard.setCardState(VipCardState.BACK_CARD.getName());
+		vipCardManagerImpl.updateByPrimaryKeySelective(appVipcard);*/
+		
+		// 2发送短信  内容如下：用户名+卡号+退款金额
 		// 2.1用户名
 		String customerName = orderDetailInfos.getCustomerName();
 		// 2.2vip卡号
@@ -675,10 +687,12 @@ public class OrderController extends BaseController {
 		double remainMoneys = orderManagerImpl.remainMoney(orderId);
 		// 2.4发送短信 （*****未完********）
 		try {
-			
+			System.out.println("用户名="+customerName+" 卡号="+cardNo+"退款金额="+remainMoneys);
 		} catch (Exception e) {
 			logger.error("发送短信失败");
 		}
+		
+		
 		return resMap;
 		
 	}
