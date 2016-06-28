@@ -127,6 +127,11 @@
 	
 	<script type="text/javascript">
         $(function(){
+        	//初始化选择条件
+        	$("#invoiceFlagSelect").val("");
+        	$("#phoneOrUserName").val("");
+        	
+        	//初始化表格
             $('#tt').datagrid();
         });
 

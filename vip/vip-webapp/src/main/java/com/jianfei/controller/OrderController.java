@@ -42,10 +42,12 @@ import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrderCard;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AppUserFeedback;
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
@@ -653,6 +655,7 @@ public class OrderController extends BaseController {
 		//****审核员id
 		String userId = user.getId()+"";
 		
+		//2、更新退卡表状态
 		Map<String,Object> parMap = new HashMap<String,Object>();
 		parMap.put("finishTime", new Date());
 		parMap.put("orderId", orderId);
@@ -667,11 +670,11 @@ public class OrderController extends BaseController {
 		//根据订单编号返回订单详情
 		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		
-		//更新卡状态 将开状态变为已退卡**（放在消息队列中处理）
-		/*AppVipcard appVipcard = new AppVipcard();
+		//3、更新卡状态 将开状态变为已退卡
+		AppVipcard appVipcard = new AppVipcard();
 		appVipcard.setCardNo(orderDetailInfos.getVipCardNo());
 		appVipcard.setCardState(VipCardState.BACK_CARD.getName());
-		vipCardManagerImpl.updateByPrimaryKeySelective(appVipcard);*/
+		vipCardManagerImpl.updateByPrimaryKeySelective(appVipcard);
 		
 		// 2发送短信  内容如下：用户名+卡号+退款金额
 		// 2.1用户名

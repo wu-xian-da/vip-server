@@ -71,6 +71,7 @@
 
 	<script type="text/javascript">
         $(function(){
+        	$("#feedbackStateSelect").val("2");
             $('#tt').datagrid();
         });
 
