@@ -559,6 +559,7 @@ public class OrderManagerImpl implements OrderManager {
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
         object.put("returnMoney",useDetailInfo.getRealMoney());
+        msgBuilder.setMsgBody(object.toJSONString());
         //添加订单状态为已退款
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
             //更改订单状态为已退款 和申请方式为
