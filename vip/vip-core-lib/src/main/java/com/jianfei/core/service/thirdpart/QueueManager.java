@@ -22,6 +22,7 @@ public interface QueueManager {
 			String targerQ);
 
 	public static final String SMS_QUEUE_VIP_BAK = "SMS_QUEUES_VIP_BAK";
+	public static final String MESSAGEKEY = "SMS_QUEUE_VIP";
 
 	/**
 	 * 发送消息

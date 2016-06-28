@@ -105,8 +105,9 @@ public class AppCustomer implements Serializable {
 		return phone;
 	}
 
-	public void setPhone(String phone) {
+	public AppCustomer setPhone(String phone) {
 		this.phone = phone == null ? null : phone.trim();
+		return this;
 	}
 
 	public Integer getSex() {

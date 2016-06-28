@@ -99,7 +99,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
             }
         }else {
             if (customer != null && StringUtils.isNotBlank(customer.getCustomerId())) {
-                return BaseMsgInfo.msgFail("手机号已注册");
+                return BaseMsgInfo.msgFail("该会员已存在");
             }
         }
         String code = getValidateCode(phone, msgType);

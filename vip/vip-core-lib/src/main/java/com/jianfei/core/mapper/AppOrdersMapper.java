@@ -52,11 +52,6 @@ public interface AppOrdersMapper {
 	int payNotify(Map<String, Object> params);
 	
 	/**
-	 * 根据订单号返回订单基本信息
-	 */
-	AppOrders getOrderInfoByOrderId(String orderId);
-	
-	/**
 	 * 查询需要开发票的订单信息
 	 */
 	List<OrderShowInfoDto> invoicePageList(Map<String,Object> map);

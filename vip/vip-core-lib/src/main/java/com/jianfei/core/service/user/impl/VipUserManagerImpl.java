@@ -45,13 +45,11 @@ public class VipUserManagerImpl implements VipUserManager {
         //查询是否存在相应的顾客
         AppCustomer appCustomer = getUser(vipUser.getPhone());
         if (StringUtils.isNotBlank(appCustomer.getCustomerId())) {
-            vipUser.setCustomerId(appCustomer.getCustomerId());
-            BeanUtils.copyProperties(appCustomer, vipUser);
-            return updateUser(appCustomer);
+            return updateUser(vipUser);
         } else {
             vipUser.setCustomerId(IdGen.uuid());
             vipUser.setCreateTime(new Date());
-            vipUser.setUseType(VipUserSate.NOT_ACTIVE.getName());
+            vipUser.setDtflag(VipUserSate.NOT_ACTIVE.getName());
             int num = customerMapper.insertSelective(vipUser);
             return num == 1 ? true : false;
         }
@@ -132,7 +130,6 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean updateUserSate(String phone, VipUserSate vipUserSate) {
-        //TODO DAO
-        return true;
+        return updateUser(new AppCustomer().setPhone(phone));
     }
 }
