@@ -35,7 +35,11 @@ public enum MsgType {
     /**
      * 退卡申请后短信
      */
-    BACK_CARD_APPLY("006");
+    BACK_CARD_APPLY("006"),
+    /**
+     * 紧急退卡完成
+     */
+    RIGHT_BACK_CARD("007");
 
     private String name;
 
