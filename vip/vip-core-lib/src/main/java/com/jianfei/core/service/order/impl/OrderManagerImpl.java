@@ -636,4 +636,12 @@ public class OrderManagerImpl implements OrderManager {
 		List<OrderShowInfoDto> list = appOrdersMapper.get(params);
 		return list;
 	}
+	
+	/**
+	 * 发送短信（录入退款信息、完成退款信息）
+	 * @param msgBuilder
+	 */
+	public void sendMessageOfOrder(ServiceMsgBuilder msgBuilder){
+		 queueManager.sendMessage(msgBuilder);
+	}
 }

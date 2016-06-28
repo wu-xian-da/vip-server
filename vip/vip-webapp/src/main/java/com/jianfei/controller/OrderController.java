@@ -53,6 +53,7 @@ import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import com.jianfei.core.dto.ServiceMsgBuilder;
 import com.jianfei.core.service.base.AppInvoiceManager;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
@@ -624,13 +625,12 @@ public class OrderController extends BaseController {
 		}
 		// 3、*****给用户发送短信 内容：用户名、卡号
 		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		// 3.1用户名
-		String customerName = orderDetailInfos.getCustomerName();
-		// 3.2vip卡号
-		String cardNo = orderDetailInfos.getVipCardNo();
-		//3.3调用发送短信接口（*******未完*******）
+		//3.3调用发送短信接口
 		try {
-			System.out.println("用户名="+customerName+" 卡号="+cardNo);
+			ServiceMsgBuilder msgBuilder = new ServiceMsgBuilder().setUserPhone(orderDetailInfos.getCustomerPhone()).
+					setUserName(orderDetailInfos.getCustomerName()).setVipCardNo(orderDetailInfos.getVipCardNo()).
+					setMsgType(MsgType.BACK_CARD_APPLY.getName());
+			orderManagerImpl.sendMessageOfOrder(msgBuilder);
 		} catch (Exception e) {
 			logger.error("发送短信失败");
 		}
@@ -677,15 +677,16 @@ public class OrderController extends BaseController {
 		vipCardManagerImpl.updateByPrimaryKeySelective(appVipcard);
 		
 		// 2发送短信  内容如下：用户名+卡号+退款金额
-		// 2.1用户名
-		String customerName = orderDetailInfos.getCustomerName();
-		// 2.2vip卡号
-		String cardNo = orderDetailInfos.getVipCardNo();
-		// 2.3退款金额
+		// 2.1退款金额
 		double remainMoneys = orderManagerImpl.remainMoney(orderId);
-		// 2.4发送短信 （*****未完********）
+		JSONObject object=new JSONObject();
+	    object.put("returnMoney",remainMoneys);
+		// 2.2发送短信
 		try {
-			System.out.println("用户名="+customerName+" 卡号="+cardNo+"退款金额="+remainMoneys);
+			ServiceMsgBuilder msgBuilder = new ServiceMsgBuilder().setUserPhone(orderDetailInfos.getCustomerPhone()).
+					setUserName(orderDetailInfos.getCustomerName()).setVipCardNo(orderDetailInfos.getVipCardNo()).
+					setMsgType(MsgType.BACK_CARD_FINISH.getName()).setMsgBody(object.toJSONString());
+			orderManagerImpl.sendMessageOfOrder(msgBuilder);
 		} catch (Exception e) {
 			logger.error("发送短信失败");
 		}
