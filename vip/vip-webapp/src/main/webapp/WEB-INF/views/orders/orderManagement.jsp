@@ -29,17 +29,21 @@
         		.order-condition-item{margin-right: 0px}
         		
         </style>
-        <div id="order-container-wrap" style="height:10%; margin:0; padding:0;">
+        <div id="order-container-wrap" style="margin:0; padding:0;">
 	        <div style="width:1070px; overflow:hidden;">
 	        
-	        
-	        <div style="padding:20px 0 0 20px;width: 1200px;">
+	        <style>
+	        	#order-container-calac, #order-condition-box{ float:none;}
+	        	#order-container-calac, #order-condition-box{ text-align:left; padding-left:20px;}
+	        	#order-container #order-condition-box{ margin-left:0;}
+	        </style>
+	        <div style="width: 1200px;">
 			        <div id="order-container-calac">
 			            <label>订单日期：</label>
-			            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:90px;height:26px">
+			            <input class="easyui-datebox" id="startTime" data-options="formatter:myformatter,parser:myparser" style="width:120px;height:26px">
 			
 			            <label>-</label>
-			            <input class="easyui-datebox" id="endTime" data-options="formatter:myformatter,parser:myparser" style="width:90px;height:26px">
+			            <input class="easyui-datebox" id="endTime" data-options="formatter:myformatter,parser:myparser" style="width:120px;height:26px">
 			
 			        </div>
 			
@@ -47,7 +51,7 @@
 			        
 			        	
 			        	
-			            <div class="order-condition-item" style="width: 96px">
+			            <div class="order-condition-item" style="width: 150px">
 			                <select id="airportIdSelect">
 			                	
 			                    <option value="">全部机场</option>
@@ -58,7 +62,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item" style="width: 130px">
+			            <div class="order-condition-item" style="width: 140px">
 			                <select id="orderStateSelect">
 			                    <option value="5">全部订单状态</option>
 			                    <option value="0">未支付</option>
@@ -69,7 +73,7 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item" style="width: 130px">
+			            <div class="order-condition-item" style="width: 140px">
 			                <select id="invoiceSelect">
 			                    <option value="3">全部发票状态</option>
 			                    <option value="0">未开</option>
