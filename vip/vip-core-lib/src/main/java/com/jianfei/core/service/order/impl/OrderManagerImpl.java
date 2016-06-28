@@ -1,5 +1,6 @@
 package com.jianfei.core.service.order.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.demo.trade.model.GoodsDetail;
 import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
 import com.github.pagehelper.PageHelper;
@@ -556,6 +557,8 @@ public class OrderManagerImpl implements OrderManager {
         int i = appCardBackMapper.insertBackCard(appCardBack);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
+        JSONObject object=new JSONObject();
+        object.put("returnMoney",useDetailInfo.getRealMoney());
         //添加订单状态为已退款
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
             //更改订单状态为已退款 和申请方式为
