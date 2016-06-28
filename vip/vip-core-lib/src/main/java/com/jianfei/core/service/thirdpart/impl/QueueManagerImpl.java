@@ -8,27 +8,26 @@ import java.security.UnrecoverableKeyException;
 import java.util.Date;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
-import com.jianfei.core.bean.AppVipcard;
-import com.jianfei.core.common.enu.VipCardState;
-import com.jianfei.core.dto.ServiceMsgBuilder;
-import com.jianfei.core.service.base.VipCardManager;
-
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.enu.MsgType;
-import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.common.utils.MessageDto.MsgFlag;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
+import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.MsgAuxiliary;
 import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.dto.ServiceMsgBuilder;
+import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.jianfei.core.service.thirdpart.MsgInfoManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
@@ -45,8 +44,7 @@ import com.jianfei.core.service.thirdpart.QueueManager;
 @Service
 public class QueueManagerImpl implements QueueManager {
 
-	public static final String MESSAGEKEY = "SMS_QUEUE_VIP";
-
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private AirportEasyManager airportEasyManager;
 
@@ -56,22 +54,6 @@ public class QueueManagerImpl implements QueueManager {
 	@Autowired
 	private VipCardManager vipCardManager;
 
-	// 每1秒执行一次
-	/**
-	 * 从消息队列中拉消息
-	 */
-	@Scheduled(fixedRate = 1000)
-	public void pullSmsMessage() {
-		MessageDto<Map<String, String>> messageDto = processMessage(MESSAGEKEY,
-				QueueManager.SMS_QUEUE_VIP_BAK);
-		System.out.println("获取的队列信息：" + JSONObject.toJSONString(messageDto));
-		if (!messageDto.isOk()) {
-			LoggerFactory.getLogger(getClass()).error(
-					"从" + MESSAGEKEY + "队列拉消息，操作失败。。。,接口反馈信息:"
-							+ JSONObject.toJSONString(messageDto));
-		}
-	}
-
 	public MessageDto<Map<String, String>> processMessage(String sourceQ,
 			String targerQ) {
 		// 从消息队列中去数据
@@ -80,7 +62,7 @@ public class QueueManagerImpl implements QueueManager {
 			return new MessageDto<Map<String, String>>().setOk(true)
 					.setMsgBody("短信消息队列:从队列中获取消息为空");
 		}
-
+		logger.info("SMS:获取的消息体->" + result);
 		try {
 			// 反序列化结果
 			@SuppressWarnings({ "unchecked" })
@@ -90,8 +72,7 @@ public class QueueManagerImpl implements QueueManager {
 			return logicalProcessing(returnMap);
 		} catch (UnrecoverableKeyException | KeyManagementException
 				| NoSuchAlgorithmException | KeyStoreException | IOException e) {
-			LoggerFactory.getLogger(getClass()).error("处理短信消息队列:{}",
-					e.getMessage());
+			logger.error("处理短信消息队列:{}", e.getMessage());
 		}
 		return new MessageDto<Map<String, String>>().setMsgBody(MsgFlag.ERROR);
 	}
@@ -131,7 +112,7 @@ public class QueueManagerImpl implements QueueManager {
 					.get("vipCardNo"));
 			// 判断卡号是否存在
 			if (ObjectUtils.isEmpty(vipcard)) {
-				LoggerFactory.getLogger(getClass()).error("激活用户帐号失败...");
+				logger.error("激活用户帐号失败...");
 				return messageDto.setOk(isOk).setData(map)
 						.setMsgBody("激活失败，卡号不存在...");
 			}
@@ -150,7 +131,7 @@ public class QueueManagerImpl implements QueueManager {
 					isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);// 激活短信
 				}
 			} else {
-				LoggerFactory.getLogger(getClass()).error("激活用户帐号失败...");
+				logger.error("激活用户帐号失败...");
 				message = "激活用户帐号失败...";
 				// 更改VIP卡状态为未激活
 				vipCardManager.activeAppCard(new MapUtils.Builder()
@@ -159,17 +140,13 @@ public class QueueManagerImpl implements QueueManager {
 						.setKeyValue("cardNo", vipcard.getCardNo()).build());
 			}
 		} else {
-			// 登入，注册，退卡，退卡完成短信
+			// 登入，注册，退卡完成短信
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		if (!isOk && StringUtils.isEmpty(message)) {
 			message = "调用短信接口失败...";
 		}
 		return messageDto.setOk(isOk).setData(map).setMsgBody(message);
-	}
-
-	public static void main(String[] args) {
-
 	}
 
 	/**

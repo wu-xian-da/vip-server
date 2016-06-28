@@ -196,11 +196,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.jianfei</groupId>
-			<artifactId>vip-core-lib</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
@@ -270,6 +265,11 @@
 			<groupId>com.tencent</groupId>
 			<artifactId>wxpay-scanpay-java-sdk</artifactId>
 			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jianfei</groupId>
+			<artifactId>vip-scheduled</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

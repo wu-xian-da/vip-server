@@ -219,7 +219,7 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void test_konggang_schedule(){
-		archiveManagerImpl.checkinDataSchedule();
+//		archiveManagerImpl.checkinDataSchedule();
 	}
 	
 	@Test
