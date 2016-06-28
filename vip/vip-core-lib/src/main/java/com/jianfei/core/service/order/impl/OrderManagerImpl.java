@@ -554,16 +554,24 @@ public class OrderManagerImpl implements OrderManager {
         appCardBack.setBackId(IdGen.uuid());
         appCardBack.setCreateTime(new Date());
         int i = appCardBackMapper.insertBackCard(appCardBack);
+        ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
+                setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         //添加订单状态为已退款
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
             //更改订单状态为已退款 和申请方式为
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
-
+            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
+            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
         }
+        AppVipcard vipcard=new AppVipcard();
+        vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
+        vipcard.setCardState(VipCardState.BACK_CARD.getName());
+        vipCardManager.updateVipCard(vipcard);
         appOrdersMapper.updateByPrimaryKeySelective(orders);
+        queueManager.sendMessage(msgBuilder);
         return i > 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败");
     }
 
