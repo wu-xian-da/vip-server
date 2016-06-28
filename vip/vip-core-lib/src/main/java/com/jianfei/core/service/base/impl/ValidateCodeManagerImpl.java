@@ -92,10 +92,14 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
      */
     @Override
     public BaseMsgInfo sendValidateCode(String phone, MsgType msgType) {
+        AppCustomer customer = vipUserManager.getUser(phone);
         if (!MsgType.REGISTER.equals(msgType)) {
-            AppCustomer customer = vipUserManager.getUser(phone);
             if (customer == null || StringUtils.isBlank(customer.getCustomerId())) {
                 return BaseMsgInfo.msgFail("手机号尚未注册");
+            }
+        }else {
+            if (customer != null && StringUtils.isNotBlank(customer.getCustomerId())) {
+                return BaseMsgInfo.msgFail("手机号已注册");
             }
         }
         String code = getValidateCode(phone, msgType);

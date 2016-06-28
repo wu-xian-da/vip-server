@@ -3,7 +3,6 @@ package com.jianfei.user;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
-import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +43,8 @@ public class MsgInfoController {
                 msgType = MsgType.REGISTER;
             } else if (MsgType.LOGIN.getName().equals(type)) {
                 msgType = MsgType.LOGIN;
-            } else if (MsgType.BACK_CARD_APPLY.getName().equals(type)) {
-                msgType = MsgType.BACK_CARD_APPLY;
+            } else if (MsgType.SELECT.getName().equals(type)) {
+                msgType = MsgType.SELECT;
             }
             if (msgType == null)
                 return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
@@ -72,8 +71,8 @@ public class MsgInfoController {
                 msgType = MsgType.REGISTER;
             } else if (MsgType.LOGIN.getName().equals(type)) {
                 msgType = MsgType.LOGIN;
-            } else if (MsgType.BACK_CARD_APPLY.getName().equals(type)) {
-                msgType = MsgType.BACK_CARD_APPLY;
+            } else if (MsgType.SELECT.getName().equals(type)) {
+                msgType = MsgType.SELECT;
             }
             if (msgType == null)
                 return new BaseMsgInfo().setCode(-1).setMsg("消息类型有误");
