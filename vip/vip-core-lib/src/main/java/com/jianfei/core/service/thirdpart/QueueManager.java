@@ -3,7 +3,6 @@ package com.jianfei.core.service.thirdpart;
 import java.util.Map;
 
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.ServiceMsgBuilder;
 
 public interface QueueManager {
@@ -23,7 +22,6 @@ public interface QueueManager {
 
 	public static final String SMS_QUEUE_VIP_BAK = "SMS_QUEUES_VIP_BAK";
 	public static final String MESSAGEKEY = "SMS_QUEUE_VIP";
-
 	/**
 	 * 发送消息
 	 * 

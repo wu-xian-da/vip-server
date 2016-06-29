@@ -111,10 +111,14 @@ public class TaskManagerImpl implements ITaskManager {
 		MessageDto<Map<String, String>> messageDto = queueManager
 				.processMessage(QueueManager.MESSAGEKEY,
 						QueueManager.SMS_QUEUE_VIP_BAK);
-		if (!messageDto.isOk()) {
-			logger.error("从" + QueueManager.MESSAGEKEY
-					+ "队列拉消息，操作失败。。。,接口反馈信息:"
-					+ JSONObject.toJSONString(messageDto));
+		if (null != messageDto) {
+			if (messageDto.isOk()) {
+				LoggerFactory.getLogger(getClass()).info(
+						JSONObject.toJSONString(messageDto));
+			} else {
+				LoggerFactory.getLogger(getClass()).error(
+						JSONObject.toJSONString(messageDto));
+			}
 		}
 	}
 

@@ -2,10 +2,7 @@ package com.jianfei.core.mapper;
 
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.persistence.MyBatisDao;
-import com.jianfei.core.dto.CharData;
-import com.jianfei.core.dto.OrderAppDetailInfo;
-import com.jianfei.core.dto.ReturnCardDto;
-import com.jianfei.core.dto.SalesRankingDto;
+import com.jianfei.core.dto.*;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -60,6 +57,8 @@ public interface AppOrderArchiveMapper {
      * @mbggenerated Fri May 20 13:59:51 CST 2016
      */
     int updateByPrimaryKey(AppOrderArchive record);
+
+    List<GraphDto> selectByUserUno(@Param("uno")String uno);
 
     List<AppOrderArchive> selectByUserId(@Param("userId")String userId);
 
