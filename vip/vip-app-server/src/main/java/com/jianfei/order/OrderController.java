@@ -4,13 +4,16 @@ import com.jianfei.core.bean.AppCardBack;
 import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.StateType;
 import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.OrderAddInfoDto;
+import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.VipCardManager;
+import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,29 +41,37 @@ public class OrderController {
 
 	@Autowired
 	private VipCardManager vipCardManager;
-
+	@Autowired
+	private ValidateCodeManager validateCodeManager;
 	/**
-	 * 验证卡片信息
+	 * 验证卡片信息及用户手机号
 	 * @return
 	 */
 	@RequestMapping(value = "/validateCard")
 	@ResponseBody
-	public BaseMsgInfo validateCard(@RequestParam(value = "vipCardNo", required = true) String vipCardNo
+	public BaseMsgInfo validateCard(@RequestParam(value = "vipCardNo", required = true) String vipCardNo,
+									@RequestParam(value = "phone", required = false) String phone,
+									@RequestParam(value = "vipCardNo", required = false) String code
 	) {
 		try {
-		AppVipcard vipCard = vipCardManager.getVipCardByNo(vipCardNo);
-		if (vipCard == null || StringUtils.isBlank(vipCard.getCardNo())) {
-			return BaseMsgInfo.msgFail("卡号有误或系统暂未录入此卡信息，请联系相关人员添加此卡信息！");
-		}else if (StateType.NOT_EXIST.getName() == vipCard.getDtflag()) {
-			return BaseMsgInfo.msgFail("此卡已禁用");
-		}
-		else if (!VipCardState.ACTIVE.getName().equals(vipCard.getCardState())){
+			AppVipcard vipCard = vipCardManager.getVipCardByNo(vipCardNo);
+			if (vipCard == null || StringUtils.isBlank(vipCard.getCardNo())) {
+				return BaseMsgInfo.msgFail("卡号有误或系统暂未录入此卡信息，请联系相关人员添加此卡信息！");
+			} else if (StateType.NOT_EXIST.getName() == vipCard.getDtflag()) {
+				return BaseMsgInfo.msgFail("此卡已禁用");
+			} else if (VipCardState.ACTIVE.getName().equals(vipCard.getCardState())) {
+				return BaseMsgInfo.msgFail("卡号有误，此卡已激活");
+			}
+			if (StringUtils.isBlank(phone) && StringUtils.isBlank(code)) {
+				//1、校验用户和手机验证码
+				boolean flag = validateCodeManager.validateSendCode(phone, MsgType.REGISTER, code);
+				if (!flag) {
+					return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
+				}
+			}
 			return BaseMsgInfo.success(true);
-		}else {
-			return BaseMsgInfo.msgFail("卡号有误，此卡已激活");
-		}
-		}catch (Exception e){
-			log.error("验证卡片信息失败",e);
+		} catch (Exception e) {
+			log.error("验证卡片信息失败", e);
 			return BaseMsgInfo.msgFail("验证卡片信息失败");
 		}
 	}

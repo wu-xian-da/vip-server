@@ -85,11 +85,11 @@ public class OrderManagerImpl implements OrderManager {
             addInfoDto.setMoney(appOrders.getPayMoney());
             return BaseMsgInfo.success(addInfoDto);
         }
-        //1、校验用户和手机验证码
+        /*//1、校验用户和手机验证码
         boolean flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
         if (!flag) {
             return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
-        }
+        }*/
 
         //2、根据查询VIP号查询卡片信息
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
