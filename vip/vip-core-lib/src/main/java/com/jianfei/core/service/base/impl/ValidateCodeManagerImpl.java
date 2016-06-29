@@ -6,6 +6,7 @@ import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -93,13 +94,16 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
     @Override
     public BaseMsgInfo sendValidateCode(String phone, MsgType msgType) {
         AppCustomer customer = vipUserManager.getUser(phone);
-        if (!MsgType.REGISTER.equals(msgType)) {
-            if (customer == null || StringUtils.isBlank(customer.getCustomerId())) {
-                return BaseMsgInfo.msgFail("手机号尚未注册");
+        if (MsgType.REGISTER.equals(msgType)) {
+            //注册 先查找用户是否存在 如果存在 判断是否是激活状态 如果是不能开卡
+            if (customer != null && (VipUserSate.ACTIVE.getName() == customer.getDtflag())) {
+                return BaseMsgInfo.msgFail("该会员已存在");
             }
         }else {
-            if (customer != null && StringUtils.isNotBlank(customer.getCustomerId())) {
-                return BaseMsgInfo.msgFail("该会员已存在");
+            if (customer == null || StringUtils.isBlank(customer.getCustomerId())) {
+                return BaseMsgInfo.msgFail("手机号尚未注册");
+            }else if (!(VipUserSate.ACTIVE.getName() == customer.getDtflag())) {
+                return BaseMsgInfo.msgFail("手机号暂未激活或已经退卡");
             }
         }
         String code = getValidateCode(phone, msgType);
