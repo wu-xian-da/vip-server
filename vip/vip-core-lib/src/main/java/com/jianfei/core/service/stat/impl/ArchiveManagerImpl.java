@@ -74,13 +74,17 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	public List<Map<String, Object>> masterTop(Map<String, Object> map) {
 		List<Map<String, Object>> list = null;
 		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
-		if (null != object) {
-			list = (List<Map<String, Object>>) JedisUtils
-					.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
-		} else {
-			list = archiveMapper.masterTop(map);
-			JedisUtils.setObject(CacheCons.Sys.SYS_TOP3_MONTH, list, 0);
+		try {
+			if (null != object) {
+				list = (List<Map<String, Object>>) object;
+				return list;
+			}
+		} catch (Exception e) {
+			logger.error("经理首页，从缓存获取top3失败....");
 		}
+		list = archiveMapper.masterTop(map);
+		JedisUtils.setObject(CacheCons.Sys.SYS_TOP3_MONTH, list, 0);
+
 		return list;
 	}
 
@@ -96,12 +100,16 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			String cacheKey) {
 		List<Map<String, Object>> maps = null;
 		Object object = JedisUtils.getObject(cacheKey);
-		if (null != object) {
-			maps = (List<Map<String, Object>>) JedisUtils.getObject(cacheKey);
-		} else {
-			maps = archiveMapper.masterDraw(map);
-			JedisUtils.setObject(cacheKey, maps, 0);
+		try {
+			if (null != object) {
+				maps = (List<Map<String, Object>>) object;
+				return maps;
+			}
+		} catch (Exception e) {
+			logger.error("经理首页，从缓存获取数据失败....");
 		}
+		maps = archiveMapper.masterDraw(map);
+		JedisUtils.setObject(cacheKey, maps, 0);
 		return maps;
 	}
 
@@ -172,7 +180,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		StringBuffer buffer = new StringBuffer();
 		for (AriPort ariPort : ariPorts) {
 			list.add(ariPort.getId());
-			buffer.append("'"+ariPort.getId()+"',");
+			buffer.append("'" + ariPort.getId() + "',");
 		}
 		System.out.println(buffer);
 		if (CollectionUtils.isEmpty(list)) {
@@ -202,18 +210,19 @@ public class ArchiveManagerImpl implements ArchiveManager {
 				handDraw(masterDraw(lastMoth, CacheCons.Sys.LAST_1_MONTH),
 						"省份/月份开卡数", lastMoth.get("dataStr")));// 上个月各个省份的开卡数
 
+		Map<String, Object> lastMoth2 = DateUtil.getDelayDate(2);
+		lastMoth2.put("ariportIds", list);
 		model.addAttribute(
 				"draw2",
-				handDraw(
-						masterDraw(DateUtil.getDelayDate(2), Sys.LAST_2_MONTH),
-						"省份/月份开卡数", DateUtil.getDelayDate(2).get("dataStr")));// 上上个月各个省份开卡数
+				handDraw(masterDraw(lastMoth2, Sys.LAST_2_MONTH), "省份/月份开卡数",
+						DateUtil.getDelayDate(2).get("dataStr")));// 上上个月各个省份开卡数
 
+		Map<String, Object> lastMoth3 = DateUtil.getDelayDate(3);
+		lastMoth3.put("ariportIds", list);
 		model.addAttribute(
 				"draw3",
-				handDraw(
-						masterDraw(DateUtil.getDelayDate(3),
-								CacheCons.Sys.LAST_3_MONTH), "省份/月份开卡数",
-						DateUtil.getDelayDate(3).get("dataStr")));// 上上上个月各个省份的开卡数
+				handDraw(masterDraw(lastMoth3, CacheCons.Sys.LAST_3_MONTH),
+						"省份/月份开卡数", DateUtil.getDelayDate(3).get("dataStr")));// 上上上个月各个省份的开卡数
 
 	}
 
