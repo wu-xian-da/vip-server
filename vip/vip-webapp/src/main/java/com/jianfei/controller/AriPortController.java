@@ -74,10 +74,8 @@ public class AriPortController extends BaseController {
 	@ResponseBody
 	public MessageDto<AriPort> save(AriPort ariPort) {
 		ariPort.setDtflag(GloabConfig.OPEN);
-		MessageDto<List<AriPort>> messageDto = ariPortManager
-				.get(new MapUtils.Builder().setKeyValue("name",
-						ariPort.getName()).build());
-		if (messageDto.isOk() && !CollectionUtils.isEmpty(messageDto.getData())) {
+		if (!ariPortManager.validateAirPortExist(new MapUtils.Builder()
+				.setKeyValue("name", ariPort.getName()).build())) {
 			return new MessageDto<AriPort>().setMsgBody("场站已经存在...");
 		}
 		return ariPortManager.save(ariPort);
@@ -86,6 +84,12 @@ public class AriPortController extends BaseController {
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<AriPort> update(AriPort ariPort) {
+
+		if (!ariPortManager.validateAirPortExist(new MapUtils.Builder()
+				.setKeyValue("name", ariPort.getName())
+				.setKeyValue("id", ariPort.getId()).build())) {
+			return new MessageDto<AriPort>().setMsgBody("场站已经存在...");
+		}
 		ariPort.setDtflag(GloabConfig.OPEN);
 		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
 		return messageDto;

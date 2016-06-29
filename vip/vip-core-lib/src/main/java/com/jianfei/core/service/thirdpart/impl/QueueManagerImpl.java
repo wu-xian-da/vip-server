@@ -60,6 +60,7 @@ public class QueueManagerImpl implements QueueManager {
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
 			return null;
 		}
+		System.out.println("messageBody->队列消息体->:" + result);
 
 		try {
 			// 反序列化结果
@@ -106,7 +107,7 @@ public class QueueManagerImpl implements QueueManager {
 		boolean isOk = false;// 操作结果状态
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
-
+			
 			return activeCard(map, msgBody, userPhone);
 
 		} else if (MsgType.BACK_CARD_APPLY.getName().equals(msgType)// 退卡申请后短信

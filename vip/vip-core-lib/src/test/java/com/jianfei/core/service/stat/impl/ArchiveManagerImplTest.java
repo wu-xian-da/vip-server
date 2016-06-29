@@ -139,11 +139,20 @@ public class ArchiveManagerImplTest {
 	}
 
 	@Test
-	public void testDateProvinceIdApportIds() {
-		Map<String, Object> mapCon = new HashMap<String, Object>();
-		mapCon.put("currentTime", "2016-04-09");
+	public void cacheDate() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("currentTime", "2016-06-28");
+		archiveManager.dateProvinceIdRedisCache(map);
+		archiveManager.dateProvinceIdApportIds(map);
+	}
+
+	@Test
+	public void cacheProvince() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("currentTime", "2016-06-27");
 		List<Map<String, Object>> maps = archiveManager
-				.dateProvinceIdApportIds(mapCon);
+				.dateProvinceIdRedisCache(map);
+		System.out.println(JSONObject.toJSONString(maps));
 	}
 
 	@Test
@@ -158,7 +167,7 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDailyOrderArchice() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Date date = DateUtil.getDate("2016-06-26", "yyyy-MM-dd");
+		Date date = DateUtil.getDate("2016-06-27", "yyyy-MM-dd");
 		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
 		archiveManager.baseDailyExtract(map);
 	}
