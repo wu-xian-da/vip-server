@@ -13,7 +13,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
@@ -23,6 +25,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alipay.demo.trade.model.GoodsDetail;
+import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.common.utils.DateUtil;
@@ -82,6 +86,19 @@ public class AlipayManagerImplTest {
 	@Test
 	public void test_alipay_query(){
 		alipayManagerImpl.tradeQuery("abc123");
+	}
+	
+	@Test
+	public void test_alipay_preCreate(){
+        GoodsDetail goodsDetail = GoodsDetail.newInstance("0001", "大苹果", 15, 1);
+        List<GoodsDetail> goodsDetailList = new ArrayList<GoodsDetail>();
+        goodsDetailList.add(goodsDetail);
+		AlipayTradePrecreateContentBuilder param = new AlipayTradePrecreateContentBuilder()
+				.setSubject("my subject")
+                .setTotalAmount("180").setOutTradeNo("80090897812")
+                .setGoodsDetailList(goodsDetailList).setStoreId("test");
+		PreCreateResult res = alipayManagerImpl.tradePrecreate(param);
+        res.getCode();
 	}
 	
 	@Test
