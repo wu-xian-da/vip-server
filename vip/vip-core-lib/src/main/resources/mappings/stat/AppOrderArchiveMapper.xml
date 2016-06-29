@@ -297,7 +297,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
   
   <!--根据业务人员id号查询某个时间段内的销售情况 -->
   <select id="selectCharDataByUserId" resultMap="charDataMap" parameterType="java.util.Map">
-  	select order_num,file_time from app_order_archive aoa where aoa.bid=#{saleNo}
+  	select sum(order_num) as order_num,file_time from app_order_archive aoa where aoa.bid=#{saleNo} group by file_time
   	<if test="beginTime!=null">
     	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')]]>
     </if>
