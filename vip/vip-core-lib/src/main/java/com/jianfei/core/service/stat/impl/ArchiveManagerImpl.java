@@ -169,9 +169,12 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		// 获取所有的权限区域 经理
 		List<AriPort> ariPorts = user.getAripors();
 		List<String> list = new ArrayList<String>();
+		StringBuffer buffer = new StringBuffer();
 		for (AriPort ariPort : ariPorts) {
 			list.add(ariPort.getId());
+			buffer.append("'"+ariPort.getId()+"',");
 		}
+		System.out.println(buffer);
 		if (CollectionUtils.isEmpty(list)) {
 			model.addAttribute("error", "true");
 			return;
