@@ -181,9 +181,13 @@ public class RoleManagerImpl implements RoleManager {
 
 	@Override
 	public List<Role> getAll() {
-		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_ROLE_LIST);
-		if (null != object) {
-			return (List<Role>) object;
+		try {
+			Object object = JedisUtils.getObject(CacheCons.Sys.SYS_ROLE_LIST);
+			if (null != object) {
+				return (List<Role>) object;
+			}
+		} catch (Exception e) {
+			logger.error("从缓存中获取角色信息失败:{}", e.getMessage());
 		}
 		MessageDto<List<Role>> messageDto = get(new MapUtils.Builder().build());
 		if (messageDto.isOk()) {

@@ -68,7 +68,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     															"&sign=" + sign);
     	
     	logger.info("active_vip_card:"+result);
-    	
+    	System.out.println("active_vip_card1:"+result);
 		JSONObject obj = JSON.parseObject(result);
 		return obj.get("code").equals("00")?true:false;
     }
@@ -94,6 +94,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     													"&sign=" + sign);
     	
     	logger.info("disable_vip_card:"+result);
+    	System.out.println("disable_vip_card1:"+result);
 		JSONObject obj = JSON.parseObject(result);
 		return obj.get("code").equals("00")?true:false;
 

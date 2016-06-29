@@ -75,8 +75,19 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> mapList(Map<String, Object> map);
-	
+
 	AriPort selectAirPortInfoById(String airPortId);
-	
+
 	void deleteAirportByUserId(Long userId);
+
+	/**
+	 * 验证场站是否存在，<br>
+	 * 参数：name(机场的名字) <br>
+	 * true ：不存在，<br>
+	 * false:已经存在
+	 * 
+	 * @param map
+	 * @return
+	 */
+	boolean validateAirPortExist(Map<String, Object> map);
 }

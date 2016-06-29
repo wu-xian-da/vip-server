@@ -262,4 +262,11 @@
 	<select id="selectAirPortInfoById" resultMap="airportRs" parameterType="java.lang.String">
 		select * from sys_airport where airport_id = #{airPortId}
 	</select>
+	
+	<select id="validateAirPortExist" resultType="java.util.Map"  parameterType="java.util.Map">
+		select `airport_id`,`airport_name` from sys_airport sa where sa.airport_name =#{name} 
+		<if test="id!=null">
+			and sa.airport_id!=#{id};
+		</if>
+	</select>
 </mapper>

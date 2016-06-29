@@ -22,7 +22,7 @@
 	<div id="order-container"  style="height:99%;">
 		<div id="order-condition-box" style="height:10%; margin:0; padding:0;">
 		<div style="width:1000px; overflow:hidden;">
-			<div style="padding-top:20px; padding-left:20px;width:1200px">
+			<div style="padding-top:16px; padding-left:20px;width:1200px">
 				<div class="order-condition-item">
 					<select name="" id="backTypeSelect">
 						<option value="">全部退款方式</option>

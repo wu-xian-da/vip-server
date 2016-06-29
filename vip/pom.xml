@@ -491,7 +491,7 @@
 				<!-- updload config -->
 				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>/workspcae/vipt.log</log.home.dir>
+				<log.home.dir>/workspace/vip.log</log.home.dir>
 				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>

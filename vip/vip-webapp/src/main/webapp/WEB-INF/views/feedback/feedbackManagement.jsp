@@ -20,7 +20,7 @@
 	<div id="order-container" style="height:99%; margin:0;">
 		<!--搜索条件框  -->
 		<div id="order-condition-box" style="height:10%; padding:0;">
-			<div style="padding-left:20px; padding-top:20px;">
+			<div style="padding-left:20px; padding-top:15px;">
 				<div class="order-condition-item">
 					<select name="" id="feedbackStateSelect">
 						<option value="2">全部处理状态</option>

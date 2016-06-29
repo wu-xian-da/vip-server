@@ -276,7 +276,7 @@ public class StatManagerImpl implements StatManager {
 	 * @param num
 	 */
 	public String formatNum(double num) {
-		java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
+		java.text.DecimalFormat   df   =new   java.text.DecimalFormat("0.00");
 		return df.format(num);
 
 	}

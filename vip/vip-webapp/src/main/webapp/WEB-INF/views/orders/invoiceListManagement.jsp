@@ -54,7 +54,7 @@
 </style>
 		<div id="order-container-wrap"
 			style="height: 10%; margin: 0; padding: 0;">
-			<div style="padding: 20px 0 0 20px;">
+			<div style="padding: 15px 0 0 20px;">
 				<div id="order-condition-box">
 					<div class="order-condition-item" style="width: 140px">
 						<select id="invoiceFlagSelect">
