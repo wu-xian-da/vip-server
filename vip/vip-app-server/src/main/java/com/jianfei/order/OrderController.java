@@ -51,7 +51,7 @@ public class OrderController {
 	@ResponseBody
 	public BaseMsgInfo validateCard(@RequestParam(value = "vipCardNo", required = true) String vipCardNo,
 									@RequestParam(value = "phone", required = false) String phone,
-									@RequestParam(value = "vipCardNo", required = false) String code
+									@RequestParam(value = "code", required = false) String code
 	) {
 		try {
 			AppVipcard vipCard = vipCardManager.getVipCardByNo(vipCardNo);
