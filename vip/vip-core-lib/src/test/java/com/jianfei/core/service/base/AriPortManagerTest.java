@@ -1,5 +1,6 @@
 package com.jianfei.core.service.base;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,4 +58,11 @@ public class AriPortManagerTest {
 		System.out.println(JSONObject.toJSONString(maps));
 	}
 
+	@Test
+	public void testValidateExist() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name", "北京站");
+		boolean result = ariPortManager.validateAirPortExist(map);
+		System.out.println(result);
+	}
 }

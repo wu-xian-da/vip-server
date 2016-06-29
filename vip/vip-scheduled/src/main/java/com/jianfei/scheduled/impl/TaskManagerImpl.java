@@ -113,9 +113,11 @@ public class TaskManagerImpl implements ITaskManager {
 						QueueManager.SMS_QUEUE_VIP_BAK);
 		if (null != messageDto) {
 			if (messageDto.isOk()) {
+				System.out.println("jianfei-info->"+JSONObject.toJSONString(messageDto));
 				LoggerFactory.getLogger(getClass()).info(
 						JSONObject.toJSONString(messageDto));
 			} else {
+				System.out.println("jianfei-error->"+JSONObject.toJSONString(messageDto));
 				LoggerFactory.getLogger(getClass()).error(
 						JSONObject.toJSONString(messageDto));
 			}

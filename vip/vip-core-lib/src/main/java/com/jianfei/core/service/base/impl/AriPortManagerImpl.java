@@ -43,6 +43,9 @@ import com.jianfei.core.service.base.AriPortManager;
 @Service
 @Transactional
 public class AriPortManagerImpl implements AriPortManager<AriPort> {
+	@Autowired
+	private AriPortMapper ariPortMapper;
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
 	 * (non-Javadoc)
@@ -162,10 +165,6 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 		return dto;
 	}
 
-	@Autowired
-	private AriPortMapper ariPortMapper;
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -244,12 +243,21 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 	 */
 	@Override
 	public AriPort selectAirPortInfoById(String airPortId) {
-		// TODO Auto-generated method stub
 		return ariPortMapper.selectAirPortInfoById(airPortId);
 	}
 
 	@Override
 	public void deleteAirportByUserId(Long userId) {
 		ariPortMapper.deleteAriport(userId);
+	}
+
+	@Override
+	public boolean validateAirPortExist(Map<String, Object> map) {
+		List<Map<String, Object>> list = ariPortMapper
+				.validateAirPortExist(map);
+		if (CollectionUtils.isEmpty(list)) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -22,7 +22,7 @@
 				<li>辖区内VIP开卡总量：<span class="total-nums">${total } </span>张</li>
 				<li>${dataStr }辖区内各场站业绩概况：</li>
 				<c:forEach items="${airPorts }" var="airPort">
-					<li class="achievement-list">${airPort.airportname } <span>${dataStr }</span> vip开卡 <span class="prominent-color">${airPort.order_num }</span><c:if test="${airPort.maxOrder!=0  }"> ${airPort.bname }业务最佳：<span class="prominent-color">${airPort.bname }（${airPort.maxOrder } 张）</c:if></span></li>
+					<li class="achievement-list">${airPort.airportname } <span>${dataStr }</span> vip开卡 <span class="prominent-color">${airPort.order_num }张 &nbsp;</span><c:if test="${airPort.maxOrder!=0  }"> ${airPort.bname }业务最佳,开卡<span class="prominent-color">${airPort.maxOrder } 张</c:if></span></li>
 				</c:forEach>
 			</ul>
 			
