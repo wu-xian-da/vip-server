@@ -225,7 +225,7 @@
 				<artifactId>mybatis-spring</artifactId>
 				<version>${mybatis-spring.version}</version>
 			</dependency>
-			<!-- *****************数据�?************************ -->
+			<!-- *****************数据�?************************ -->
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
@@ -283,7 +283,7 @@
 				<version>1.2</version>
 			</dependency>
 
-			<!-- ******************工具�?***************** -->
+			<!-- ******************工具�?***************** -->
 			<dependency>
 				<groupId>commons-logging</groupId>
 				<artifactId>commons-logging</artifactId>
@@ -491,7 +491,7 @@
 				<!-- updload config -->
 				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>/workspcae/vip.log</log.home.dir>
+				<log.home.dir>/workspcae/vipt.log</log.home.dir>
 				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
