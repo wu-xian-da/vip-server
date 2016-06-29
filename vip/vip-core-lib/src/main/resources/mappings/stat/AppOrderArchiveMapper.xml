@@ -260,7 +260,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
   </resultMap>
 
   <select id="listOrderByUserId" resultMap="OrderResultMap" parameterType="java.lang.String" >
-    SELECT o.order_time ,c.customer_name,c.customer_phone,c.sex,o.invoice_flag FROM app_orders o JOIN app_customer c ON o.customer_id=c.customer_id WHERE o.sale_no=#{userId,jdbcType=VARCHAR} and DATE_FORMAT(o.order_time,'%Y%m%d')=#{date,jdbcType=VARCHAR}
+    SELECT o.order_time ,c.customer_name,c.customer_phone,c.sex,o.invoice_flag FROM app_orders o JOIN app_customer c ON o.customer_id=c.customer_id WHERE o.sale_no=#{userId,jdbcType=VARCHAR} and DATE_FORMAT(o.pay_time,'%Y%m%d')=#{date,jdbcType=VARCHAR}
   </select>
 
 

@@ -5,11 +5,10 @@ import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.*;
-import com.jianfei.core.service.base.impl.AriPortManagerImpl;
+import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.impl.BusizzManagerImpl;
-import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
+import com.jianfei.core.service.stat.ArchiveManager;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
-import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO
@@ -41,9 +36,9 @@ public class OrderStaController {
     @Autowired
     private StatManagerImpl statManager;
     @Autowired
-    private AriPortManagerImpl ariPortService;
+    private AriPortManager ariPortService;
     @Autowired
-    private ArchiveManagerImpl archiveManager;
+    private ArchiveManager archiveManager;
 
     @Autowired
 	private BusizzManagerImpl busizzManagerImpl;
