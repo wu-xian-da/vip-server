@@ -202,9 +202,10 @@ public class PayController {
 			}else if (serviceCode.equals("COD403")){//易宝付款通知，数据库更新订单已付款
 				if (!hmacSend.equals(hmacAuth)){ //签名验证失败
 					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 3);
+					log.info("yeepay_notify:签名验证失败:"+send);
 				}else{
 					String orderNo = sessionBody.elementText("OrderNo");
-					log.info("yeepay_notify:"+orderNo);
+					log.info("yeepay_notify:"+send);
 					//orderManager.updateOrderStateByOrderIdEx(orderNo, 1);
 					PayNotifyRequest param = new PayNotifyRequest();
 					
@@ -503,6 +504,7 @@ public class PayController {
 			e.printStackTrace();
 		}
 	    
+	    log.info("wechat_notify:"+send);
 	    NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(send, NativeNotifyReq.class);
 	    
 	    
@@ -548,7 +550,7 @@ public class PayController {
     	String payTime = request.getParameter("gmt_payment");//转换格式
     	String payUserId = request.getParameter("buyer_logon_id");
     	String sign = request.getParameter("sign");
-    	
+    	log.info("alipay_notify:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
     	PayNotifyRequest param = new PayNotifyRequest();
 		param.setOutTradeNo(outTradeNo);
 		param.setTradeNo(tradeNo);

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -36,7 +38,7 @@ import com.tencent.common.MD5;
  */
 @Service
 public class AirportEasyManagerImpl implements AirportEasyManager{
-	
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 //	public static final String KONGGANG_URL = "http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/";
 //	public static final String KONGGANG_PARTNER = "20160607001";
 //	public static final String KONGGANG_KEY = "S1-L6-D0-T1-G2-S7";
@@ -64,6 +66,9 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     															"&mobile="+userPhone + 
     															"&name="+ userName + 
     															"&sign=" + sign);
+    	
+    	logger.info("active_vip_card:"+result);
+    	
 		JSONObject obj = JSON.parseObject(result);
 		return obj.get("code").equals("00")?true:false;
     }
@@ -87,6 +92,8 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     													"partner="+GloabConfig.getConfig("konggang.partner")+
     													"&verify_code="+vipCardNo +
     													"&sign=" + sign);
+    	
+    	logger.info("disable_vip_card:"+result);
 		JSONObject obj = JSON.parseObject(result);
 		return obj.get("code").equals("00")?true:false;
 

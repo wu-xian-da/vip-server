@@ -240,7 +240,17 @@ where file_id = #{fileId,jdbcType=INTEGER}
     where bid = #{userId,jdbcType=VARCHAR} ORDER BY `year`,`month`,`day`
   </select>
 
+  <!--图表数据  -->
+  <resultMap type="com.jianfei.core.dto.GraphDto" id="GraphResultMap">
+    <result column="name" property="name"/>
+    <result column="name" property="name"/>
+  </resultMap>
 
+  <select id="selectByUserUno" resultMap="GraphResultMap" parameterType="java.lang.String" >
+
+   SELECT count(order_num) as 'value' ,concat(year,month,day) as 'name'FROM app_order_archive join sys_users u on bid=u.id
+   WHERE u.code=#{uno,jdbcType=VARCHAR} group by concat(year,month,day)
+  </select>
   <resultMap id="OrderResultMap" type="com.jianfei.core.dto.OrderAppDetailInfo">
     <id column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
     <result column="customer_name" jdbcType="VARCHAR" property="customerName" />

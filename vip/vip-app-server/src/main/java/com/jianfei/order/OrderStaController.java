@@ -62,6 +62,19 @@ public class OrderStaController {
         return BaseMsgInfo.success(pageInfo);
     }
 
+	/**
+	 * 分页获取
+	 * @param pageDto
+	 * @param uno
+	 * @return
+	 */
+	@RequestMapping(value = "/pageSaleVipCard")
+	@ResponseBody
+	public BaseMsgInfo pageSaleVipCard(PageDto pageDto, @RequestParam(value = "uno", required = true) String uno
+	) {
+		PageInfo<GraphDto> pageInfo= statManager.pageOrderStatByUserUno(pageDto,uno);
+		return BaseMsgInfo.success(pageInfo);
+	}
 
     /**
      * 个人销售记录
