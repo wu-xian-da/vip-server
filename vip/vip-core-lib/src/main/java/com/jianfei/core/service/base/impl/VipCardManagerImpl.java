@@ -157,13 +157,13 @@ public class VipCardManagerImpl implements VipCardManager {
 					// 将数据插入到mysql数据库中
 					String[] val = value.split(",");
 					AppVipcard vipCard = new AppVipcard();
-					//卡号
+					// 卡号
 					vipCard.setCardNo(val[1]);
-					//nfc号
+					// nfc号
 					vipCard.setNfcId(val[2]);
-					//卡初始金额
+					// 卡初始金额
 					vipCard.setInitMoney(Float.parseFloat(val[3]));
-					//卡有效期
+					// 卡有效期
 					vipCard.setValideTime(Integer.parseInt(val[4]));
 					vipCard.setImportTime(new Date());
 					vipCard.setDtflag(0);
@@ -210,10 +210,14 @@ public class VipCardManagerImpl implements VipCardManager {
 
 	@Override
 	public boolean activeAppCard(Map<String, Object> map) {
-		int num = appVipcardMapper.activeAppCard(map);
-		return num == 1 ? true : false;
+		try {
+			int num = appVipcardMapper.activeAppCard(map);
+			return num == 1 ? true : false;
+		} catch (Exception e) {
+			return false;
+		}
 	}
-	
+
 	/**
 	 * 更新卡信息
 	 */

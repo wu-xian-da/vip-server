@@ -12,10 +12,10 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.cache.JedisUtils;
@@ -52,14 +52,15 @@ public class QueueManagerImplTest {
 	public void testProcessMessage() {
 		MessageDto<Map<String, String>> messageDto = queueManager
 				.processMessage("QU", QueueManager.SMS_QUEUE_VIP_BAK);
-		System.out.println(JSONObject.toJSONString(messageDto));
-	}
-
-	@Test
-	public void testProcessMessagesss() {
-		String result = JedisUtils.rpoplpushQ(QueueManager.SMS_QUEUE_VIP_BAK,
-				"SMS_BAK");
-		System.out.println(result);
+		if (null != messageDto) {
+			if (messageDto.isOk()) {
+				LoggerFactory.getLogger(getClass()).info(
+						JSONObject.toJSONString(messageDto));
+			} else {
+				LoggerFactory.getLogger(getClass()).error(
+						JSONObject.toJSONString(messageDto));
+			}
+		}
 	}
 
 	@Test
@@ -82,5 +83,6 @@ public class QueueManagerImplTest {
 				"hello kitty...");
 		System.out.println(isOk);
 	}
+	
 
 }
