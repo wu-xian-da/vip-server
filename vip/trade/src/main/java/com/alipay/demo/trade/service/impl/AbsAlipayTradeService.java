@@ -88,6 +88,7 @@ abstract class AbsAlipayTradeService extends AbsAlipayService implements AlipayT
         validateBuilder(builder);
 
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
+        request.setNotifyUrl(Configs.getNotifyUrl());
         request.setBizContent(builder.toJsonString());
         log.info("trade.precreate bizContent:" + request.getBizContent());
 

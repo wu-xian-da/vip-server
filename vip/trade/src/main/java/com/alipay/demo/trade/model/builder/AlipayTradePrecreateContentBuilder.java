@@ -13,6 +13,9 @@ import com.google.gson.annotations.SerializedName;
  * Created by liuyangkly on 15/7/1.
  */
 public class AlipayTradePrecreateContentBuilder extends RequestBuilder {
+//    @SerializedName("notify_url")
+//    private String notifyUrl;
+	
     // 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
     // 需保证商户系统端不能重复，建议通过数据库sequence生成，
     @SerializedName("out_trade_no")
@@ -119,7 +122,16 @@ public class AlipayTradePrecreateContentBuilder extends RequestBuilder {
         return sb.toString();
     }
 
-    public String getOutTradeNo() {
+//    public String getNotifyUrl() {
+//		return notifyUrl;
+//	}
+//
+//	public AlipayTradePrecreateContentBuilder setNotifyUrl(String notifyUrl) {
+//		this.notifyUrl = notifyUrl;
+//		return this;
+//	}
+
+	public String getOutTradeNo() {
         return outTradeNo;
     }
 

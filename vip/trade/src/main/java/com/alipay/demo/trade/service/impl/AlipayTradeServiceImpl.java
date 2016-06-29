@@ -27,6 +27,7 @@ public class AlipayTradeServiceImpl extends AbsAlipayTradeService {
         private String format;
         private String charset;
         private String alipayPublicKey;
+        private String notifyUrl;
 
         public AlipayTradeServiceImpl build() {
             if (StringUtils.isEmpty(gatewayUrl)) {
