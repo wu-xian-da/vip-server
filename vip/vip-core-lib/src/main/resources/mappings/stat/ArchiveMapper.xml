@@ -250,18 +250,23 @@
 				 as order_num_back
 			FROM
 				sys_users u
-			INNER JOIN app_orders ao ON ao.sale_no = u.`code` and DATE_FORMAT(ao.order_time, '%Y-%m-%d') =#{maxTime}
+			INNER JOIN app_orders ao ON ao.sale_no = u.`code` and DATE_FORMAT(ao.pay_time, '%Y-%m-%d') =#{maxTime}
 			INNER JOIN sys_airport a ON a.airport_id=ao.airport_id and a.dtflag=0 and a.state=0
 			inner join sys_city c on a.province=c.CID
 			LEFT JOIN (
 				SELECT
-					count(ados.id) AS back_order_num,
-					ados.sale_no
+					ao.sale_no,
+					ao.airport_id as airport_id,
+					count(card.back_id) as back_order_num
 				FROM
-					app_orders ados
+					`app_card_back` card
+				INNER JOIN `app_orders` ao ON card.order_id = ao.id
 				WHERE
-					ados.order_state = 4 and DATE_FORMAT(ados.order_time, '%Y-%m-%m') =#{maxTime} GROUP BY ados.`sale_no`
-			) ab ON ab.sale_no = u.`code`
+					DATE_FORMAT(card.finish_time,'%Y-%m-%d')  =#{maxTime}
+				GROUP BY
+					ao.sale_no,
+					ao.airport_id
+			) ab ON ab.sale_no = u.`code` and ab.airport_id=a.airport_id
 			GROUP BY
 			u.id,
 			u.`name`,

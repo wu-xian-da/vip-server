@@ -10,7 +10,7 @@ import com.jianfei.core.common.enu.RightType;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
-import com.jianfei.core.service.base.impl.*;
+import com.jianfei.core.service.base.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +36,18 @@ import java.util.List;
 public class ResourceController  {
 	private static Log log = LogFactory.getLog(ResourceController.class);
 	@Autowired
-	private AriPortManagerImpl ariPortService;
+	private AriPortManager ariPortService;
 
 	@Autowired
-	private VipRoomManagerImpl vipRoomManager;
+	private VipRoomManager vipRoomManager;
 
 	@Autowired
-	private AppPictureManagerImpl appPictureService;
+	private AppPictureManager appPictureService;
 
 	@Autowired
-	private AppVersionManagerImpl appVersionManager;
+	private AppVersionManager appVersionManager;
 	@Autowired
-	private AppConfigManagerImpl appConfigManager;
+	private AppConfigManager appConfigManager;
 	/**
 	 * 获取支持的省份列表
 	 * @param

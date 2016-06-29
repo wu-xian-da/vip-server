@@ -17,9 +17,8 @@
 			<h3>欢迎登录机场VIP卡业务管理后台</h3>
 			<c:if test="${empty error }">
 			<ul>
-				<li><span class="date-label">${dataStr }</span>各省业绩概况</li>
 				<li>全国VIP开卡总量：<span class="total-nums">${total } </span>张</li>
-				<li>开卡数前三的省份：</li>
+				<li>${dataStr }开卡数前三的省份：</li>
 				<c:forEach items="${top }" var="top">
 					<li class="achievement-list province-list">${top.province } <span>${dataStr }</span> vip开卡 <span class="prominent-color">${top.sum_order }</span><c:if test="${top.max_order!=0  }"> ${top.bname }业务最佳：<span class="prominent-color">${top.bname }（${top.max_order } 张）</c:if></span></li>
 				</c:forEach>
