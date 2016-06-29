@@ -31,6 +31,13 @@ import java.util.Map;
  */
 public interface StatManager {
 
+    /**
+     * 分页获取个人每日开卡数据
+     * @param pageDto 分页数据
+     * @param uno 用户工号
+     * @return
+     */
+    PageInfo<GraphDto> pageOrderStatByUserUno(PageDto pageDto, String uno);
 
     /**
      * 分页获取个人每日开卡数据

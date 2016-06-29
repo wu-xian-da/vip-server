@@ -9,12 +9,7 @@ import com.jianfei.core.bean.AppAirportArchive;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.dto.CharData;
-import com.jianfei.core.dto.OrderAppDetailInfo;
-import com.jianfei.core.dto.OrderShowInfoDto;
-import com.jianfei.core.dto.ReturnCardDto;
-import com.jianfei.core.dto.SalesRankingDto;
-import com.jianfei.core.dto.UserProvince;
+import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
@@ -47,7 +42,22 @@ public class StatManagerImpl implements StatManager {
     @Autowired
     private AppOrderArchiveMapper appOrderArchiveMapper;
 
-    /**
+	/**
+	 * 分页获取个人每日开卡数据
+	 *
+	 * @param pageDto 分页数据
+	 * @param uno     用户工号
+	 * @return
+	 */
+	@Override
+	public PageInfo<GraphDto> pageOrderStatByUserUno(PageDto pageDto, String uno) {
+		PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize());
+		List<GraphDto> list = appOrderArchiveMapper.selectByUserUno(uno);
+		PageInfo<GraphDto> pageInfo = new PageInfo(list);
+		return pageInfo;
+	}
+
+	/**
      * 分页获取个人每日开卡数据
      *
      * @param pageDto 分页数据
