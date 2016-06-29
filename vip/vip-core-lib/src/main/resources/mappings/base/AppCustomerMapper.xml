@@ -93,8 +93,7 @@
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM app_customer
-		where customer_phone = #{phone,jdbcType=VARCHAR} AND
-		dtflag=0
+		where customer_phone = #{phone,jdbcType=VARCHAR}
 	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
