@@ -554,8 +554,8 @@ public class PayController {
     	String payTime = request.getParameter("gmt_payment");//转换格式
     	String payUserId = request.getParameter("buyer_logon_id");
     	String sign = request.getParameter("sign");
-    	log.info("alipay_notify:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
-    	System.out.println("alipay_notify1:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
+    	log.info("alipay_notify_url:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
+    	System.out.println("alipay_notify_url:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
     	
     	PayNotifyRequest param = new PayNotifyRequest();
 		param.setOutTradeNo(outTradeNo);
