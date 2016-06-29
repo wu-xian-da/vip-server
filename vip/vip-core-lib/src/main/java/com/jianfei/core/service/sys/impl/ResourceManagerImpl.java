@@ -93,13 +93,18 @@ public class ResourceManagerImpl implements ResourceManager {
 	@SuppressWarnings("unchecked")
 	public List<Resource> getAll() {
 		List<Resource> resources = null;
-		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_RESOURCE_LIST);
-		if (null != object) {
-			resources = (List<Resource>) object;
-		} else {
-			resources = resourceMapper.get(new HashMap<String, Object>());
-			JedisUtils.setObject(CacheCons.Sys.SYS_RESOURCE_LIST, resources, 0);
+		try {
+			Object object = JedisUtils
+					.getObject(CacheCons.Sys.SYS_RESOURCE_LIST);
+			if (null != object) {
+				resources = (List<Resource>) object;
+				return resources;
+			}
+		} catch (Exception e) {
+			logger.error("从缓存中获取菜单信息失败...");
 		}
+		resources = resourceMapper.get(new HashMap<String, Object>());
+		JedisUtils.setObject(CacheCons.Sys.SYS_RESOURCE_LIST, resources, 0);
 		return resources;
 	}
 

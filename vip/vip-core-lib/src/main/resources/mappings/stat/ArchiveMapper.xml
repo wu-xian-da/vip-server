@@ -79,7 +79,7 @@
 		parameterType="java.util.Map">
 		<![CDATA[	
 			SELECT
-				archie.`province`,SUM(archie.`order_num`) as order_num
+				archie.pid,archie.`province`,SUM(archie.`order_num`) as order_num
 			FROM
 			`app_order_archive` archie]]>
 		<where>
@@ -97,7 +97,7 @@
 				</foreach>
 			</if>
 		</where>
-		GROUP BY archie.`province`
+		GROUP BY archie.`province`,archie.pid
 	</select>
 
 	<!-- 统计-主管首页统计的订单数 -->

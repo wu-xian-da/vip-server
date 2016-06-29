@@ -7,21 +7,16 @@
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <style type="text/css">
 		.btn{
-			padding: 0 8px;
-			background: #D6DDE4;
-			border-radius: 5px;
-    		border: none;
-    		border:1px solid #ccc;
-    		box-shadow: 1px 1px 2px #DED7D7;
+			width: 60px;
+		    height: 20px;
+		    border: none;
+		    background: #698DC3;
+		    border-radius: 5px;
+		    text-align: center;
+		    color: #FFF;
 		}
-		
-		.btn-default{
-			display: inline-block;
-		    vertical-align: top;
-		    width: auto;
-		    line-height: 20px;
-		    font-size: 12px;
-			margin: 0 4px;
+		.btn_ex{
+			width: 45px
 		}
 </style>
 	
@@ -186,13 +181,13 @@
 						action="${pageContext.request.contextPath}/vipCard/importExcel"
 						method="post" enctype="multipart/form-data">
 						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 190px" data-options="required:true"/> 
-						<input class="btn btn-default l-btn-left l-btn-icon-left easyui-linkbutton" id="excel_button" type="button" onclick="importExcel();" value="导入" />
+						<input class="btn btn_ex" id="excel_button" type="button" onclick="importExcel();" value="导入" />
 					</form> 
 				</td>
 				<td style="width: 10px"></td>
 				
 				<!-- 导出按钮 -->
-				<td><a href="${pageContext.request.contextPath}/vipCard/exportExcel"><button class="btn btn-default ">导出</button></a></td>
+				<td><a href="${pageContext.request.contextPath}/vipCard/exportExcel"><button class="btn btn_ex">导出</button></a></td>
 				<td style="width: 10px"></td>
 				
 				<!-- 搜索条件框 -->
@@ -214,9 +209,7 @@
 								<td style="width: 10px"></td>
 								<td>请输入卡号</td>
 								<td><input id="_cardNo" name="_cardNo" value="" style="width: 120px;" /></td>
-								<td><input type="button" value="查询"
-									style="width: 60px; height: 20px; border: none; background: #698DC3; border-radius: 5px; text-align: center; color: #FFF;"
-									onclick="searchByCondition();"></td>
+								<td><input type="button" value="查询" class="btn" onclick="searchByCondition();"></td>
 							</tr>
 						</table>
 					</form>
