@@ -506,8 +506,8 @@ public class PayController {
 			e.printStackTrace();
 		}
 	    
-	    log.info("wechat_notify:"+send);
-	    System.out.println("wechat_notify1:"+send);
+	    log.info("wechat_notify_url:"+send);
+	    System.out.println("wechat_notify_url:"+send);
 	    
 	    NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(send, NativeNotifyReq.class);
 	    
