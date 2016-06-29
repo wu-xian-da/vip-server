@@ -203,9 +203,11 @@ public class PayController {
 				if (!hmacSend.equals(hmacAuth)){ //签名验证失败
 					result = YeePayResponseBuilder.buildPayResponse(sessionHead, sessionBody, 3);
 					log.info("yeepay_notify:签名验证失败:"+send);
+					System.out.println("yeepay_notify1:签名验证失败:"+send);
 				}else{
 					String orderNo = sessionBody.elementText("OrderNo");
 					log.info("yeepay_notify:"+send);
+					System.out.println("yeepay_notify1:"+send);
 					//orderManager.updateOrderStateByOrderIdEx(orderNo, 1);
 					PayNotifyRequest param = new PayNotifyRequest();
 					
@@ -505,6 +507,8 @@ public class PayController {
 		}
 	    
 	    log.info("wechat_notify:"+send);
+	    System.out.println("wechat_notify1:"+send);
+	    
 	    NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(send, NativeNotifyReq.class);
 	    
 	    
@@ -551,6 +555,8 @@ public class PayController {
     	String payUserId = request.getParameter("buyer_logon_id");
     	String sign = request.getParameter("sign");
     	log.info("alipay_notify:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
+    	System.out.println("alipay_notify1:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
+    	
     	PayNotifyRequest param = new PayNotifyRequest();
 		param.setOutTradeNo(outTradeNo);
 		param.setTradeNo(tradeNo);
@@ -562,7 +568,6 @@ public class PayController {
     	param.setPayType(PayType.ALIPAY.getName());
 	    //业务处理
     	String result = aliPayManager.payNotify(param);
-    	
 //	    response.setContentType("text/xml; charset=utf-8");
 //	    response.setCharacterEncoding("utf-8");
 	    try { 
