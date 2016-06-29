@@ -71,5 +71,15 @@ public class CharData {
 	public void setAvgNum(String avgNum) {
 		this.avgNum = avgNum;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CharData [total=" + total + ", avgNum=" + avgNum + ", back_order_total=" + back_order_total + ", date="
+				+ date + "]";
+	}
+	
 	
 }
