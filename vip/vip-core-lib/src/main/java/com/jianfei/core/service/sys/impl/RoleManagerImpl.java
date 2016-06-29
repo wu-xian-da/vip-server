@@ -184,7 +184,8 @@ public class RoleManagerImpl implements RoleManager {
 		try {
 			Object object = JedisUtils.getObject(CacheCons.Sys.SYS_ROLE_LIST);
 			if (null != object) {
-				return (List<Role>) object;
+				List<Role> roles = (List<Role>) object;
+				return roles;
 			}
 		} catch (Exception e) {
 			logger.error("从缓存中获取角色信息失败:{}", e.getMessage());

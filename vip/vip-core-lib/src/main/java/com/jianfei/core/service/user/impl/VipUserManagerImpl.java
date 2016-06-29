@@ -3,13 +3,12 @@ package com.jianfei.core.service.user.impl;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
-import com.jianfei.core.common.utils.BeanUtils;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.mapper.AppCustomerMapper;
+import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
-import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ import java.util.List;
 public class VipUserManagerImpl implements VipUserManager {
 
     @Autowired
-   private ValidateCodeManagerImpl validateCodeManager;
+   private ValidateCodeManager validateCodeManager;
     @Autowired
    private AppCustomerMapper customerMapper;
     @Autowired
@@ -134,6 +133,9 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public boolean updateUserSate(String phone, VipUserSate vipUserSate) {
-        return updateUser(new AppCustomer().setPhone(phone));
+        AppCustomer appCustomer=new AppCustomer();
+        appCustomer.setPhone(phone);
+        appCustomer.setDtflag(vipUserSate.getName());
+        return updateUser(appCustomer);
     }
 }
