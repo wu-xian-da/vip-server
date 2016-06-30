@@ -125,9 +125,10 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_getcardcode(){
 		try {
-			Long ii = 123421312l;
-			for (ii = 123421312l;ii<123421312l + 20 ;ii++)
+			for (Long ii = 1234213121l;ii<1234213121l + 20 ;ii++)
 				airportEasyManager.getCardCode(ii.toString());
+			
+//			airportEasyManager.getCardCode("1291901010");
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

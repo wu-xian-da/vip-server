@@ -31,6 +31,8 @@ public class Configs {
 
     private static long heartbeatDelay ; // 交易保障线程第一次调度延迟（秒）
     private static long heartbeatDuration ; // 交易保障线程调度间隔（秒）
+    
+    private static String notifyUrl;
 
     private Configs() {
         // No Constructor
@@ -51,7 +53,7 @@ public class Configs {
         if (configs == null) {
             throw new IllegalStateException("can`t find file by path:" + filePath);
         }
-
+        notifyUrl = configs.getString("notify_url");
         openApiDomain = configs.getString("open_api_domain");
         mcloudApiDomain = configs.getString("mcloud_api_domain");
 
@@ -226,5 +228,15 @@ public class Configs {
     public static void setHeartbeatDuration(long heartbeatDuration) {
         Configs.heartbeatDuration = heartbeatDuration;
     }
+
+	public static String getNotifyUrl() {
+		return notifyUrl;
+	}
+
+	public static void setNotifyUrl(String notifyUrl) {
+		Configs.notifyUrl = notifyUrl;
+	}
+    
+    
 }
 

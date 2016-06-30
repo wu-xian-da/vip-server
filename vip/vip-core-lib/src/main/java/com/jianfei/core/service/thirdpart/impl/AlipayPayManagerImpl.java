@@ -60,6 +60,9 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 	@Override
 	public PreCreateResult tradePrecreate(Object param) {
 		AlipayTradePrecreateContentBuilder payParam = (AlipayTradePrecreateContentBuilder) param;
+		//payParam.setNotifyUrl("");
+		
+		
 		PreCreateResult tradeResult = new PreCreateResult();
 		/**
 		 * param参数示例
@@ -105,7 +108,6 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 		 * //.setExtendParams(extendParams) .setTimeExpress(timeExpress)
 		 * .setGoodsDetailList(goodsDetailList);
 		 **/
-
 		AlipayF2FPrecreateResult result = tradeService.tradePrecreate(payParam);
 		tradeResult.setTradeNo(payParam.getOutTradeNo());
 		switch (result.getTradeStatus()) {
