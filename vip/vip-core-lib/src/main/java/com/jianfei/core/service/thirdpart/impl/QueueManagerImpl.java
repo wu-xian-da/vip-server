@@ -107,7 +107,7 @@ public class QueueManagerImpl implements QueueManager {
 		boolean isOk = false;// 操作结果状态
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
-			
+
 			return activeCard(map, msgBody, userPhone);
 
 		} else if (MsgType.BACK_CARD_APPLY.getName().equals(msgType)// 退卡申请后短信
@@ -121,9 +121,9 @@ public class QueueManagerImpl implements QueueManager {
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		if (!isOk) {
-			messageDto.setMsgBody("调用短信接口失败...");
+			messageDto.setOk(isOk).setMsgBody("调用短信接口失败...");
 		} else {
-			messageDto.setMsgBody("调用短信接口失败...").setOk(isOk);
+			messageDto.setMsgBody("发送短信成功...").setOk(isOk);
 		}
 		return messageDto.setData(map);
 	}
