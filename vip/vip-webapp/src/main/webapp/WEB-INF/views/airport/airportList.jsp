@@ -109,13 +109,7 @@
 			},{
 				width : '100',
 				title : '开卡总量',
-				field : 'orderIds',
-				formatter : function(value, row) {
-					if(''==value||null==value){
-						return '0';
-					}
-					return value.split(',').length;
-				}
+				field : 'total'
 			},{
 				width : '60',
 				title : '状态',

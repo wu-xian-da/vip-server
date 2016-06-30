@@ -82,7 +82,7 @@ public class BusizzController extends BaseController {
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
 		searchParams.put("today",
-				DateUtil.dateToString(new Date(), "yyyy-MM-dd"));
+				DateUtil.dateToString(new Date(), "yyyy-MM"));
 		searchParams.put("name", request.getParameter("name"));
 		Map<String, Object> map = DateUtil.getDelayDate(1);
 		searchParams.put("year", map.get("year"));

@@ -69,7 +69,7 @@ public class QueueManagerImplTest {
 		map.put("userPhone", "13275601668");
 		map.put("msgType", "005");
 		map.put("userName", "refineli");
-		map.put("vipCardNo", "07939046849");
+		map.put("vipCardNo", "07998371917");
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("code", "smart001");
 		m.put("time", "10分钟");
