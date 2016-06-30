@@ -81,14 +81,7 @@ public interface OrderManager {
      * @version  1.0.0
      */
     int updateOrderStateByOrderId(String orderId,int optype);
-    
-    /**
-     * liu.lei@jianfeitech.com
-     * @param order
-     * @param orderState
-     * @return
-     */
-    int updateOrderStateByOrderIdEx(String orderId,int orderState);
+
     
     /**
      * guo.jian
@@ -170,9 +163,9 @@ public interface OrderManager {
     AppOrders getOrderInfo(String orderId);
 
     /**
-     *
-     * @param orderId
-     * @param payType
+     * 查询订单是否支付成功并改变订单状态
+     * @param orderId 订单ID
+     * @param payType 支付方式
      * @return
      */
     BaseMsgInfo checkThirdPay(String orderId, PayType payType);

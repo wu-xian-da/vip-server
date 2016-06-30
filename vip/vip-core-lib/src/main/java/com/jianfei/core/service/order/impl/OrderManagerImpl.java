@@ -388,15 +388,6 @@ public class OrderManagerImpl implements OrderManager {
     }
 
 
-    @Override
-    public int updateOrderStateByOrderIdEx(String orderId, int orderState) {
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("orderState", orderState);
-        params.put("orderId", orderId);
-
-        return appOrdersMapper.updateOrderState(params);
-    }
-
     /**
      * @param orderId
      * @param payType
@@ -520,8 +511,13 @@ public class OrderManagerImpl implements OrderManager {
        // appOrders.setPayTime(new Date());
         int num = appOrdersMapper.updateByPrimaryKeySelective(appOrders);
 
-        //更新VIP用户未激活
+        //更新VIP用户激活
         vipUserManager.updateUserSate(appOrders.getCustomer().getPhone(),VipUserSate.ACTIVE);
+        //更新VIP卡状态为待激活
+        AppVipcard vipcard=new AppVipcard();
+        vipcard.setCardNo(appOrders.getVipCards().get(0).getCardNo());
+        vipcard.setCardState(VipCardState.TO_ACTIVATE.getName());
+        vipCardManager.updateVipCard(vipcard);
         //构建消息体 并放入消息队列
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(appOrders.getCustomer().getPhone()).setMsgType(MsgType.ACTIVE_CARD.getName()).
                 setVipCardNo(appOrders.getVipCards().get(0).getCardNo()).setUserName(appOrders.getCustomer().getCustomerName());
@@ -586,6 +582,7 @@ public class OrderManagerImpl implements OrderManager {
         AppVipcard vipcard=new AppVipcard();
         vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
         vipcard.setCardState(VipCardState.BACK_CARD.getName());
+        vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
         vipCardManager.updateVipCard(vipcard);
         appOrdersMapper.updateByPrimaryKeySelective(orders);
         queueManager.sendMessage(msgBuilder);

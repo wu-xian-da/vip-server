@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
+
 /**
  * 订单相关接口
  *
@@ -61,6 +63,8 @@ public class OrderController {
 				return BaseMsgInfo.msgFail("此卡已禁用");
 			} else if (VipCardState.ACTIVE.getName().equals(vipCard.getCardState())) {
 				return BaseMsgInfo.msgFail("卡号有误，此卡已激活");
+			}else if (VipCardState.TO_ACTIVATE.getName().equals(vipCard.getCardState())) {
+				return BaseMsgInfo.msgFail("卡号有误，此卡待激活");
 			}
 			if (StringUtils.isBlank(phone) && StringUtils.isBlank(code)) {
 				//1、校验用户和手机验证码
@@ -160,7 +164,7 @@ public class OrderController {
 	}
 
 	/**
-	 * 顾客现金刷卡确认接口
+	 * 顾客现金确认接口
 	 * 
 	 * @param orderId
 	 *            订单号
@@ -172,21 +176,13 @@ public class OrderController {
 	@ResponseBody
 	public BaseMsgInfo updatePayState(
 			@RequestParam(value = "orderId", required = true) String orderId,
-			@RequestParam(value = "payType", required = true) int payType) {
+			@RequestParam(value = "payType", required = false) int payType) {
 		try {
-			PayType type = null;
-			if (PayType.WXPAY.getName() == payType) {
-				type = PayType.WXPAY;
-			} else if (PayType.ALIPAY.getName() == payType) {
-				type = PayType.ALIPAY;
-			} else if (PayType.BANKPAY.getName() == payType) {
-				type = PayType.BANKPAY;
-			}else if (PayType.CASHPAY.getName() == payType) {
-				type = PayType.CASHPAY;
-			}
-			if (type == null)
-				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
-			return orderManager.updatePayState(new AppOrders().setOrderId(orderId).setPayType(PayType.CASHPAY.getName()));
+			AppOrders appOrders=new AppOrders();
+			appOrders.setOrderId(orderId);
+			appOrders.setPayTime(new Date());
+			appOrders.setPayType(PayType.CASHPAY.getName());
+			return orderManager.updatePayState(appOrders);
 		}catch (Exception e){
 			log.error("顾客现金刷卡确认接口失败",e);
 			return BaseMsgInfo.msgFail("顾客现金刷卡确认接口失败");

@@ -87,9 +87,8 @@ public class AppOrders implements Serializable{
         return orderId;
     }
 
-    public AppOrders setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId == null ? null : orderId.trim();
-        return this;
     }
 
     public String getId() {
@@ -104,18 +103,16 @@ public class AppOrders implements Serializable{
         return customerId;
     }
 
-    public AppOrders setCustomerId(String customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId == null ? null : customerId.trim();
-        return this;
     }
 
     public Date getOrderTime() {
         return orderTime;
     }
 
-    public AppOrders setOrderTime(Date orderTime) {
+    public void setOrderTime(Date orderTime) {
         this.orderTime = orderTime;
-        return this;
     }
 
     public Integer getOrderState() {
@@ -131,9 +128,8 @@ public class AppOrders implements Serializable{
         return payType;
     }
 
-    public AppOrders setPayType(Integer payType) {
+    public void setPayType(Integer payType) {
         this.payType = payType;
-        return this;
     }
 
     public String getSerialId() {
