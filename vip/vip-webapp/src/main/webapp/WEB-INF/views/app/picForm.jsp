@@ -6,24 +6,33 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
+var checksubmitflg = false; 
+var checksubmit = function(){
+	if(checksubmitflg==true){
+		return false;
+	}
+	checksubmitflg=true;
+	return true;
+};
 	var uploader;//上传对象
 	var submitNow = function($dialog, $grid, $pjq) {
-		var url;
-			url = sy.contextPath + '/app/save';
-		$.post(url, sy.serializeObject($('form')), function(result) {
-			parent.sy.progressBar('close');//关闭上传进度条
-
-			if (result.ok) {
-				$pjq.messager.alert('提示', result.msgBody, 'info');
-				$grid.datagrid('load');
-				$dialog.dialog('destroy');
-			} else {
-				layer.alert(result.msgBody, {
-					icon : 2,
-					skin : 'layer-ext-moon' 
-				});
-			}
-		}, 'json');
+		if(checksubmit()){
+			var url = sy.contextPath + '/app/save';
+			$.post(url, sy.serializeObject($('form')), function(result) {
+				parent.sy.progressBar('close');//关闭上传进度条
+	
+				if (result.ok) {
+					$pjq.messager.alert('提示', result.msgBody, 'info');
+					$grid.datagrid('load');
+					$dialog.dialog('destroy');
+				} else {
+					layer.alert(result.msgBody, {
+						icon : 2,
+						skin : 'layer-ext-moon' 
+					});
+				}
+			}, 'json');
+	    }
 	};
 	var submitForm = function($dialog, $grid, $pjq) {
 		if ($('form').form('validate')) {
