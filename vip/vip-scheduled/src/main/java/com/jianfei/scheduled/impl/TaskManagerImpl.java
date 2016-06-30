@@ -5,6 +5,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -113,11 +114,17 @@ public class TaskManagerImpl implements ITaskManager {
 						QueueManager.SMS_QUEUE_VIP_BAK);
 		if (null != messageDto) {
 			if (messageDto.isOk()) {
-				System.out.println("jianfei-info->"+JSONObject.toJSONString(messageDto));
+				System.out.println(DateUtil.dateToString(new Date(),
+						DateUtil.ALL_FOMAT)
+						+ "->jianfei-info->"
+						+ JSONObject.toJSONString(messageDto));
 				LoggerFactory.getLogger(getClass()).info(
 						JSONObject.toJSONString(messageDto));
 			} else {
-				System.out.println("jianfei-error->"+JSONObject.toJSONString(messageDto));
+				System.out.println(DateUtil.dateToString(new Date(),
+						DateUtil.ALL_FOMAT)
+						+ "->jianfei-error->"
+						+ JSONObject.toJSONString(messageDto));
 				LoggerFactory.getLogger(getClass()).error(
 						JSONObject.toJSONString(messageDto));
 			}

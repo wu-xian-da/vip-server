@@ -60,7 +60,9 @@ public class QueueManagerImpl implements QueueManager {
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
 			return null;
 		}
-		System.out.println("messageBody->队列消息体->:" + result);
+		System.out.println(DateUtil
+				.dateToString(new Date(), DateUtil.ALL_FOMAT)
+				+ "->messageBody->队列消息体->:" + result);
 
 		try {
 			// 反序列化结果
@@ -98,6 +100,9 @@ public class QueueManagerImpl implements QueueManager {
 		String msgType = map.get("msgType");
 
 		String msgBody = MsgAuxiliary.buildMsgBody(map, msgType);
+		System.out.println(DateUtil
+				.dateToString(new Date(), DateUtil.ALL_FOMAT)
+				+ "->templateAnalysis->" + msgBody);
 		if (StringUtils.isEmpty(msgBody)) {
 			return messageDto.setData(map).setMsgBody("从缓存中获取指定类型的短信消息模版为空...");
 		}
@@ -118,6 +123,11 @@ public class QueueManagerImpl implements QueueManager {
 
 		} else {
 			// 登入，注册，退卡完成短信
+			System.out.println(DateUtil.dateToString(new Date(),
+					DateUtil.ALL_FOMAT)
+					+ "->登入，注册，退卡完成短信->"
+					+ msgBody
+					+ "  手机号：" + userPhone);
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		if (!isOk) {
@@ -151,6 +161,11 @@ public class QueueManagerImpl implements QueueManager {
 
 		// 调用空港绑定接口
 		if (airportEasyManager.disabledVipCard(vipCardNo)) {
+			System.out.println(DateUtil.dateToString(new Date(),
+					DateUtil.ALL_FOMAT)
+					+ "->退卡申请后短信, 紧急退卡完成>"
+					+ msgBody
+					+ "  手机号:" + userPhone);
 			if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
 				messageDto.setOk(true).setMsgBody(
 						"调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到" + userPhone
@@ -224,6 +239,12 @@ public class QueueManagerImpl implements QueueManager {
 					.setKeyValue("cardNo", cardNo).build());
 
 			if (isOk) {
+				System.out.println(DateUtil.dateToString(new Date(),
+						DateUtil.ALL_FOMAT)
+						+ "->激活短信->"
+						+ msgBody
+						+ "  手机号："
+						+ userPhone);
 				if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {// 激活短信
 					messageDto.setOk(true).setMsgBody(
 							"调用空港接口激活卡号为" + cardNo + "卡成功,发送短信成功。。。");

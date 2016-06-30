@@ -80,7 +80,7 @@ public class QueueManagerImplTest {
 	@Test
 	public void sendMsg() {
 		boolean isOk = msgInfoManager.sendMsgInfo("13275601668",
-				"hello kitty...");
+				"【亿出行】hello kitty...");
 		System.out.println(isOk);
 	}
 	
