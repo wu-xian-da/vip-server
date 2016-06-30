@@ -153,7 +153,6 @@ public interface OrderManager {
      * @param payType 付款方式
      * @return
      */
-    BaseMsgInfo getPayUrl(String orderId, PayType payType);
 
     /**
      * 根据订单ID获取订单金额
@@ -162,13 +161,7 @@ public interface OrderManager {
      */
     AppOrders getOrderInfo(String orderId);
 
-    /**
-     * 查询订单是否支付成功并改变订单状态
-     * @param orderId 订单ID
-     * @param payType 支付方式
-     * @return
-     */
-    BaseMsgInfo checkThirdPay(String orderId, PayType payType);
+
 
     /**
      * 根据手机号查询用户VIP卡使用信息和订单详细信息

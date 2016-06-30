@@ -14,6 +14,7 @@ import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
+import com.jianfei.core.service.order.OrderPayManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +41,9 @@ public class OrderController {
 	private static Log log = LogFactory.getLog(OrderController.class);
 	@Autowired
 	private OrderManagerImpl orderManager;
+
+	@Autowired
+	private OrderPayManager orderPayManager;
 
 	@Autowired
 	private VipCardManager vipCardManager;
@@ -122,7 +126,7 @@ public class OrderController {
 			}
 			if (type == null)
 				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
-			return  orderManager.getPayUrl(orderId,type);
+			return  orderPayManager.getPayUrl(orderId,type);
 		}catch (Exception e){
 			log.error("生成支付URL失败",e);
 			return BaseMsgInfo.msgFail("生成支付URL失败");
@@ -155,7 +159,7 @@ public class OrderController {
 			if (type == null)
 				return new BaseMsgInfo().setCode(-1).setMsg("付款方式错误");
 
-			return orderManager.checkThirdPay(orderId, type);
+			return orderPayManager.checkThirdPay(orderId, type);
 		}catch (Exception e){
 			log.error("第三方支付确认收款接口失败",e);
 			return BaseMsgInfo.msgFail("第三方支付确认收款接口失败");
