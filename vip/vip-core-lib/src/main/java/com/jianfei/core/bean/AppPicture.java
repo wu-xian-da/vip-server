@@ -1,6 +1,7 @@
 package com.jianfei.core.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
@@ -26,6 +27,8 @@ public class AppPicture implements Serializable {
 	private Integer imagetype;
 
 	private String descr;
+
+	private Date updatetime;
 
 	public Integer getPictureId() {
 		return pictureId;
@@ -94,6 +97,14 @@ public class AppPicture implements Serializable {
 		this.imagetype = imagetype;
 	}
 
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
+
 	/**
 	 * descr
 	 *
@@ -125,13 +136,16 @@ public class AppPicture implements Serializable {
 
 	/**
 	 * 获取拼接URL
+	 * 
 	 * @param pictures
-     */
-	public static void getStaticAdderss(List<AppPicture> pictures){
-		if (pictures==null ||pictures.isEmpty())
+	 */
+	public static void getStaticAdderss(List<AppPicture> pictures) {
+		if (pictures == null || pictures.isEmpty())
 			return;
 		for (AppPicture picture : pictures) {
-			picture.setPictureUrl(GloabConfig.getConfig("static.resource.server.address") + picture.getPictureUrl());
+			picture.setPictureUrl(GloabConfig
+					.getConfig("static.resource.server.address")
+					+ picture.getPictureUrl());
 		}
 	}
 }

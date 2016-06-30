@@ -34,11 +34,12 @@
 				and imagetype=#{imagetype}
 			</if>
 		</where>
+		order by updatetime desc
 	</select>
 
 	<sql id="Base_Column_List">
 		picture_id, viproom_id, picture_url, click_url, priority,
-		dtflag,imagetype,descr
+		dtflag,imagetype,descr,updatetime
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
@@ -56,13 +57,13 @@
 		insert into app_picture
 		(picture_id, viproom_id, picture_url,
 		click_url, priority,
-		dtflag,imagetype,descr
+		dtflag,imagetype,descr,updatetime
 		)
 		values (#{pictureId,jdbcType=INTEGER},
 		#{viproomId,jdbcType=VARCHAR},
 		#{pictureUrl,jdbcType=VARCHAR},
 		#{clickUrl,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER},
-		#{dtflag,jdbcType=INTEGER},#{imagetype},#{descr}
+		#{dtflag,jdbcType=INTEGER},#{imagetype},#{descr},#{updatetime}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.jianfei.core.bean.AppPicture">
@@ -140,6 +141,9 @@
 			</if>
 			<if test="imagetype != null">
 				imagetype = #{imagetype},
+			</if>
+			<if test="updatetime != null">
+				updatetime = #{updatetime},
 			</if>
 			<if test="descr != null">
 				descr = #{descr},

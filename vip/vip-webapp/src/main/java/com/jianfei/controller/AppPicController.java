@@ -8,6 +8,7 @@
 package com.jianfei.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +118,7 @@ public class AppPicController extends BaseController {
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<String> save(AppPicture appPicture) {
+		appPicture.setUpdatetime(new Date());
 		if (ObjectUtils.isEmpty(appPicture.getPriority())) {
 			appPicture.setPictureId(0);
 		}
