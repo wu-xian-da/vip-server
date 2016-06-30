@@ -6,23 +6,33 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
+	var checksubmitflg = false; 
+	var checksubmit = function(){
+		if(checksubmitflg==true){
+			return false;
+		}
+		checksubmitflg=true;
+		return true;
+	};
 	var submitForm = function($dialog, $grid, $pjq, $mainMenu) {
-		if ($('form').form('validate')) {
-			var url;
-			if ($(':input[name="id"]').val()!= '0') {
-				url = sy.contextPath + '/resource/update';
-			} else {
-				url = sy.contextPath + '/resource/save';
-			}
-			$.post(url, sy.serializeObject($('form')), function(result) {
-				if (result.ok) {
-					$grid.treegrid('reload');
-					$dialog.dialog('destroy');
-					$mainMenu.tree('reload');
+		if(checksubmit()){
+			if ($('form').form('validate')) {
+				var url;
+				if ($(':input[name="id"]').val()!= '0') {
+					url = sy.contextPath + '/resource/update';
 				} else {
-					$pjq.messager.alert('提示', result.msgBody, 'error');
+					url = sy.contextPath + '/resource/save';
 				}
-			}, 'json');
+				$.post(url, sy.serializeObject($('form')), function(result) {
+					if (result.ok) {
+						$grid.treegrid('reload');
+						$dialog.dialog('destroy');
+						$mainMenu.tree('reload');
+					} else {
+						$pjq.messager.alert('提示', result.msgBody, 'error');
+					}
+				}, 'json');
+			}
 		}
 	};
 	var showIcons = function() {

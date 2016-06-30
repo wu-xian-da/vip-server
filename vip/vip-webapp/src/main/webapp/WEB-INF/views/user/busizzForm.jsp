@@ -6,27 +6,37 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
+	var checksubmitflg = false; 
+	var checksubmit = function(){
+		if(checksubmitflg==true){
+			return false;
+		}
+		checksubmitflg=true;
+		return true;
+	};
 	var submitNow = function($dialog, $grid, $pjq) {
-		var url=sy.contextPath + '/busizz/save';
-		var arids = '';
-		$("#area input:checkbox").each(function(){
-			if(this.checked){
-				arids=arids+$(this).val()+",";
-			}
-		});
-		$("#arids").val(arids);
-		$.post(url, sy.serializeObject($('form')), function(result) {
-			if (result.ok) {
-				$pjq.messager.alert('提示', result.msgBody, 'info');
-				$grid.datagrid('load');
-				$dialog.dialog('destroy');
-			} else {
-				layer.alert(result.msgBody, {
-					icon : 2,
-					skin : 'layer-ext-moon' 
-				});
-			}
-		}, 'json');
+		if(checksubmit()){
+			var url=sy.contextPath + '/busizz/save';
+			var arids = '';
+			$("#area input:checkbox").each(function(){
+				if(this.checked){
+					arids=arids+$(this).val()+",";
+				}
+			});
+			$("#arids").val(arids);
+			$.post(url, sy.serializeObject($('form')), function(result) {
+				if (result.ok) {
+					$pjq.messager.alert('提示', result.msgBody, 'info');
+					$grid.datagrid('load');
+					$dialog.dialog('destroy');
+				} else {
+					layer.alert(result.msgBody, {
+						icon : 2,
+						skin : 'layer-ext-moon' 
+					});
+				}
+			}, 'json');
+		}
 	};
 	var submitForm = function($dialog, $grid, $pjq) {
 		if ($('form').form('validate')) {

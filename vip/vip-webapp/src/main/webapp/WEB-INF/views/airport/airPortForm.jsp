@@ -6,23 +6,33 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
+var checksubmitflg = false; 
+var checksubmit = function(){
+	if(checksubmitflg==true){
+		return false;
+	}
+	checksubmitflg=true;
+	return true;
+};
 	var submitForm = function($dialog, $grid, $pjq) {
-		if ($('form').form('validate')) {
-			
-			var url;
-			if ($(':input[name="id"]').val()!='') {
-				url = sy.contextPath + '/airport/update';
-			} else {
-				url = sy.contextPath + '/airport/save';
-			}
-			$.post(url, sy.serializeObject($('form')), function(result) {
-				if (result.ok) {
-					$grid.datagrid('load');
-					$dialog.dialog('destroy');
+		if(checksubmit()){
+			if ($('form').form('validate')) {
+				
+				var url;
+				if ($(':input[name="id"]').val()!='') {
+					url = sy.contextPath + '/airport/update';
 				} else {
-					$pjq.messager.alert('提示', result.msgBody, 'error');
+					url = sy.contextPath + '/airport/save';
 				}
-			}, 'json');
+				$.post(url, sy.serializeObject($('form')), function(result) {
+					if (result.ok) {
+						$grid.datagrid('load');
+						$dialog.dialog('destroy');
+					} else {
+						$pjq.messager.alert('提示', result.msgBody, 'error');
+					}
+				}, 'json');
+			}
 		}
 	};
 	//自定义验证

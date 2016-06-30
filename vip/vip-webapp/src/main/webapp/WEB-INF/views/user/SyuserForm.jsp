@@ -6,34 +6,45 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
-	var submitNow = function($dialog, $grid, $pjq) {
-		var url= sy.contextPath + '/user/save';
-		var arids = '';
-		$("#area input:checkbox").each(function(){
-			if(this.checked){
-				arids=arids+$(this).val()+",";
-			}
-		});
-		var nodes = $('#tree').tree('getChecked',
-				[ 'checked', 'indeterminate' ]);
-		$("#arids").val(arids);
-		var ids = [];
-		for (var i = 0; i < nodes.length; i++) {
-			ids.push(nodes[i].id);
+	var checksubmitflg = false; 
+	var checksubmit = function(){
+		if(checksubmitflg==true){
+			return false;
 		}
-		$("#roleids").val(ids.join(','));
-		$.post(url, sy.serializeObject($('form')), function(result) {
-			if (result.ok) {
-				$pjq.messager.alert('提示', result.msgBody, 'info');
-				$grid.datagrid('load');
-				$dialog.dialog('destroy');
-			} else {
-				layer.alert(result.msgBody, {
-					icon : 2,
-					skin : 'layer-ext-moon' 
-				});
+		checksubmitflg=true;
+		return true;
+	};
+	var submitNow = function($dialog, $grid, $pjq) {
+	   if (checksubmit()) { 
+		   console.info("......");
+			var url= sy.contextPath + '/user/save';
+			var arids = '';
+			$("#area input:checkbox").each(function(){
+				if(this.checked){
+					arids=arids+$(this).val()+",";
+				}
+			});
+			var nodes = $('#tree').tree('getChecked',
+					[ 'checked', 'indeterminate' ]);
+			$("#arids").val(arids);
+			var ids = [];
+			for (var i = 0; i < nodes.length; i++) {
+				ids.push(nodes[i].id);
 			}
-		}, 'json');
+			$("#roleids").val(ids.join(','));
+			$.post(url, sy.serializeObject($('form')), function(result) {
+				if (result.ok) {
+					$pjq.messager.alert('提示', result.msgBody, 'info');
+					$grid.datagrid('load');
+					$dialog.dialog('destroy');
+				} else {
+					layer.alert(result.msgBody, {
+						icon : 2,
+						skin : 'layer-ext-moon' 
+					});
+				}
+			}, 'json');
+	    } 
 	};
 	var submitForm = function($dialog, $grid, $pjq) {
 		if ($('form').form('validate')) {

@@ -6,28 +6,38 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
+var checksubmitflg = false; 
+var checksubmit = function(){
+	if(checksubmitflg==true){
+		return false;
+	}
+	checksubmitflg=true;
+	return true;
+};
 	var submitForm = function($dialog, $grid, $pjq) {
-		if ($('form').form('validate')) {
-			var nodes = $('#tree').tree('getChecked', [ 'checked', 'indeterminate' ]);
-			var ids = [];
-			for (var i = 0; i < nodes.length; i++) {
-				ids.push(nodes[i].id);
-			}
-			$("#ids").val(ids);
-			var url;
-			if ($(':input[name="id"]').val()!= '') {
-				url = sy.contextPath + '/role/saveAndgrant';
-			} else {
-				url = sy.contextPath + '/role/saveAndgrant';
-			}
-			$.post(url, sy.serializeObject($('form')), function(result) {
-				if (result.ok) {
-					$grid.datagrid('load');
-					$dialog.dialog('destroy');
-				} else {
-					$pjq.messager.alert('提示', result.msgBody, 'error');
+		if(checksubmit()){
+			if ($('form').form('validate')) {
+				var nodes = $('#tree').tree('getChecked', [ 'checked', 'indeterminate' ]);
+				var ids = [];
+				for (var i = 0; i < nodes.length; i++) {
+					ids.push(nodes[i].id);
 				}
-			}, 'json');
+				$("#ids").val(ids);
+				var url;
+				if ($(':input[name="id"]').val()!= '') {
+					url = sy.contextPath + '/role/saveAndgrant';
+				} else {
+					url = sy.contextPath + '/role/saveAndgrant';
+				}
+				$.post(url, sy.serializeObject($('form')), function(result) {
+					if (result.ok) {
+						$grid.datagrid('load');
+						$dialog.dialog('destroy');
+					} else {
+						$pjq.messager.alert('提示', result.msgBody, 'error');
+					}
+				}, 'json');
+			}
 		}
 	};
 	$(function() {
