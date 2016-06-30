@@ -10,6 +10,9 @@ package com.jianfei.core.service.thirdpart.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.service.order.OrderManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +48,7 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 	private static Log log = LogFactory.getLog(AlipayPayManagerImpl.class);
 	private static AlipayTradeService tradeService;
     @Autowired
-    private AppOrdersMapper appOrdersMapper;
+    private OrderManager orderManager;
     
 	static {
 		// 支付宝环境初始化
@@ -194,14 +197,14 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
 	@Override
 	public String payNotify(PayNotifyRequest req) {
 		if (req.getResultCode().equals("TRADE_SUCCESS")){
-			Map<String,Object> params = new HashMap<String,Object>();
-			params.put("orderId", req.getOutTradeNo());
-			params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
-			params.put("payUserId", req.getPayUserId());
-			params.put("payTime", req.getPayTime());
-			params.put("tradeNo", req.getTradeNo());
-			params.put("payType", req.getPayType());
-			appOrdersMapper.payNotify(params);
+			AppOrders appOrders=new AppOrders();
+			appOrders.setOrderId(req.getOutTradeNo());
+			appOrders.setPayUserId(req.getPayUserId());
+			appOrders.setSerialId(req.getTradeNo());
+			appOrders.setPayType(PayType.ALIPAY.getName());
+			//TODO 支付宝支付时间 转换为 DATE类型
+			/*params.put("payTime", req.getPayTime());*/
+			orderManager.updatePayState(appOrders);
 			return "success";
 		}else
 			return "failed";

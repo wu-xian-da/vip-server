@@ -15,6 +15,7 @@ import com.jianfei.core.mapper.AppCardBackMapper;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
+import com.jianfei.core.service.base.AppCustomerManager;
 import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
@@ -22,8 +23,11 @@ import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.OrderManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
+import com.jianfei.core.service.user.VipUserManager;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.tencent.protocol.native_protocol.NativePayReqData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +46,7 @@ import java.util.*;
 @Service
 @Transactional
 public class OrderManagerImpl implements OrderManager {
-
+    private static Log log = LogFactory.getLog(OrderManagerImpl.class);
     @Autowired
     private AppOrdersMapper appOrdersMapper;
     @Autowired
@@ -51,8 +55,6 @@ public class OrderManagerImpl implements OrderManager {
     private AppConsumeMapper appConsumeMapper;
     @Autowired
     private AppCardBackMapper appCardBackMapper;
-    @Autowired
-    private VipUserManagerImpl vipUserManager;
     @Autowired
     private VipCardManager vipCardManager;
     @Autowired
@@ -69,6 +71,8 @@ public class OrderManagerImpl implements OrderManager {
     private ThirdPayManager yeepayManager;
     @Autowired
     private QueueManager queueManager;
+    @Autowired
+    private VipUserManager vipUserManager;
 
     /**
      * 添加订单信息
@@ -164,7 +168,7 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public boolean updateOrderPayInfo(AppOrders addInfoDto) {
+    public boolean updateOrderInfo(AppOrders addInfoDto) {
         return appOrdersMapper.updateByPrimaryKeySelective(addInfoDto) < 0 ? false : true;
     }
 
@@ -502,18 +506,27 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public BaseMsgInfo updatePayState(AppOrders appOrders) {
+        log.info("更新订单状态:"+appOrders.getOrderId());
         if (StringUtils.isBlank(appOrders.getOrderId())){
             return BaseMsgInfo.msgFail("订单号不存在");
         }
-        appOrders.setOrderState(VipOrderState.ALREADY_PAY.getName());
-        appOrders.setPayTime(new Date());
-        int num = appOrdersMapper.updateByPrimaryKeySelective(appOrders);
-        //查询是否存在用户手机号等信息 如果不存在查询
-        if (appOrders.getCustomer() == null || StringUtils.isBlank(appOrders.getCustomer().getPhone())) {
-            appOrders=appOrdersMapper.getOrderDetailByOrderId(appOrders.getOrderId());
+        //1、查询订单是否支付
+        AppOrders order=appOrdersMapper.getOrderDetailByOrderId(appOrders.getOrderId());
+        if (VipOrderState.ALREADY_PAY.getName() == order.getOrderState()) {
+            return BaseMsgInfo.success(true);
         }
+        //2、选择性更新订单信息
+        appOrders.setOrderState(VipOrderState.ALREADY_PAY.getName());
+       // appOrders.setPayTime(new Date());
+        int num = appOrdersMapper.updateByPrimaryKeySelective(appOrders);
+
+        //更新VIP用户未激活
+        vipUserManager.updateUserSate(appOrders.getCustomer().getPhone(),VipUserSate.ACTIVE);
+        //构建消息体 并放入消息队列
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(appOrders.getCustomer().getPhone()).setMsgType(MsgType.ACTIVE_CARD.getName()).
                 setVipCardNo(appOrders.getVipCards().get(0).getCardNo()).setUserName(appOrders.getCustomer().getCustomerName());
+        //放入消息队列
+        log.info(msgBuilder);
          queueManager.sendMessage(msgBuilder);
         if (num > 0) {
             return BaseMsgInfo.success(true);

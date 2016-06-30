@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.common.enu.PayType;
+import com.jianfei.core.service.order.OrderManager;
 import org.apache.commons.lang3.time.DateUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -29,7 +32,7 @@ import com.jianfei.core.service.thirdpart.ThirdPayManager;
 public class YeePayManagerImpl extends ThirdPayManager {
 	
     @Autowired
-    private AppOrdersMapper appOrdersMapper;
+    private OrderManager orderManager;
     
 	@Override
 	public PreCreateResult tradePrecreate(Object payParam) {
@@ -137,14 +140,14 @@ public class YeePayManagerImpl extends ThirdPayManager {
 
 	@Override
 	public String payNotify(PayNotifyRequest param) {
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("orderId", param.getOutTradeNo());
-		params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
-		params.put("payUserId", param.getPayUserId());
-		params.put("payTime", param.getPayTime());
-		params.put("tradeNo", param.getTradeNo());
-		params.put("payType", param.getPayType());
-		appOrdersMapper.payNotify(params);		
+		AppOrders appOrders = new AppOrders();
+		appOrders.setOrderId(param.getOutTradeNo());
+		appOrders.setPayUserId(param.getPayUserId());
+		appOrders.setSerialId(param.getTradeNo());
+		appOrders.setPayType(PayType.BANKPAY.getName());
+		//TODO 支付时间 转换为 DATE类型
+		/*params.put("payTime", req.getPayTime());*/
+		orderManager.updatePayState(appOrders);
 		return "success";
 	}
 

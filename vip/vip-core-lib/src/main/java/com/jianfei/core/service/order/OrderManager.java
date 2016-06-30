@@ -35,7 +35,7 @@ public interface OrderManager {
      *
      * @return
      */
-    boolean updateOrderPayInfo(AppOrders addInfoDto);
+    boolean updateOrderInfo(AppOrders addInfoDto);
 
 
     /**

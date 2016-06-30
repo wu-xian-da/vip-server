@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jianfei.core.bean.AppOrders;
+import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 
+import com.jianfei.core.service.order.OrderManager;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +45,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 	}
 	
     @Autowired
-    private AppOrdersMapper appOrdersMapper;
+    private OrderManager orderManager;
     
 	/**
 	 * 预下单接口（微信扫码支付）
@@ -167,14 +170,14 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 		if (sign.equals(signResult)){
 			if (returnCode.equals("SUCCESS")){
 				if (resultCode.equals("SUCCESS")){
-					Map<String,Object> params = new HashMap<String,Object>();
-					params.put("orderId", req.getOutTradeNo());
-					params.put("orderState", VipOrderState.ALREADY_PAY.getName());//已支付
-					params.put("payUserId", req.getPayUserId());
-					params.put("payTime", req.getPayTime());
-					params.put("tradeNo", req.getTradeNo());
-					params.put("payType", req.getPayType());
-					appOrdersMapper.payNotify(params);
+					AppOrders appOrders=new AppOrders();
+					appOrders.setOrderId(req.getOutTradeNo());
+					appOrders.setPayUserId(req.getPayUserId());
+					appOrders.setSerialId(req.getTradeNo());
+					appOrders.setPayType(PayType.WXPAY.getName());
+					//TODO 微信支付时间 转换为 DATE类型
+		        	/*params.put("payTime", req.getPayTime());*/
+					orderManager.updatePayState(appOrders);
 				}
 				result = buildResult("SUCCESS", "OK");
 			}else{

@@ -60,7 +60,6 @@ import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
-import com.jianfei.core.service.thirdpart.impl.MsgInfoManagerImpl;
 
 /**
  * 订单管理
@@ -191,7 +190,7 @@ public class OrderController extends BaseController {
 		AppOrders addInfoDto = new AppOrders();
 		addInfoDto.setOrderId(orderId);
 		addInfoDto.setInvoiceFlag(2);
-		orderManagerImpl.updateOrderPayInfo(addInfoDto);
+		orderManagerImpl.updateOrderInfo(addInfoDto);
 		resMap.put("result", 1);
 		return resMap;
 	}
