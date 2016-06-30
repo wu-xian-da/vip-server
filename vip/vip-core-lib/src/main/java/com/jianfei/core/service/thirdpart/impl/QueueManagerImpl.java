@@ -106,13 +106,15 @@ public class QueueManagerImpl implements QueueManager {
 		if (StringUtils.isEmpty(msgBody)) {
 			return messageDto.setData(map).setMsgBody("从缓存中获取指定类型的短信消息模版为空...");
 		}
+		
+		map.put("templateAnalysisBody", msgBody);
 
 		String userPhone = map.get("userPhone");
 		String vipCardNo = map.get("vipCardNo");
 		boolean isOk = false;// 操作结果状态
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
-
+			
 			return activeCard(map, msgBody, userPhone);
 
 		} else if (MsgType.BACK_CARD_APPLY.getName().equals(msgType)// 退卡申请后短信
@@ -163,9 +165,9 @@ public class QueueManagerImpl implements QueueManager {
 		if (airportEasyManager.disabledVipCard(vipCardNo)) {
 			System.out.println(DateUtil.dateToString(new Date(),
 					DateUtil.ALL_FOMAT)
-					+ "->退卡申请后短信, 紧急退卡完成>"
+					+ "->退卡申请后短信, 紧急退卡完成短信>"
 					+ msgBody
-					+ "  手机号:" + userPhone);
+					+ "  手机号:" + userPhone + "  卡号：" + vipCardNo);
 			if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
 				messageDto.setOk(true).setMsgBody(
 						"调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到" + userPhone
@@ -244,7 +246,7 @@ public class QueueManagerImpl implements QueueManager {
 						+ "->激活短信->"
 						+ msgBody
 						+ "  手机号："
-						+ userPhone);
+						+ userPhone + "  卡号：" + cardNo);
 				if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {// 激活短信
 					messageDto.setOk(true).setMsgBody(
 							"调用空港接口激活卡号为" + cardNo + "卡成功,发送短信成功。。。");
