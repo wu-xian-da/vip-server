@@ -70,7 +70,7 @@ public class AlipayManagerImplTest {
 //				"","192.168.199.200","20160601152528","20160602155528","",
 //				"detail","http://121.42.199.169","NATIVE","1001","","");
 		
-		NativePayReqData req = new NativePayReqData("","kongcard","","ba00ecaaf5eb69e744692e9f0fded635",198000,
+		NativePayReqData req = new NativePayReqData("","kongcard","","ba00ecaaf5eb69e744692e9f0fded6",198000,
 				"","192.168.199.200","","","",
 				"","http://121.42.199.169","NATIVE","1001","","");
 		PreCreateResult result = wechatiPayManager.tradePrecreate(req);
