@@ -42,7 +42,7 @@
 			</div>
 			<ul>
 				<li><label>有效期：</label>${orderDetailInfo.cardType}年</li>
-				<li><label>vip卡金额：</label><fmt:formatNumber value="${orderDetailInfo.initMoney}" pattern="0.00"/> 元</li>
+				<li><label>vip卡金额：           </label><fmt:formatNumber value="${orderDetailInfo.initMoney}" pattern="0.00"/> 元</li>
 				<li><label>支付方式：
 				      <c:choose>
 				      	<c:when test="${orderDetailInfo.payMethod == 1}">
