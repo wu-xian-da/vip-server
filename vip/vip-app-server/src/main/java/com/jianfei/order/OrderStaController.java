@@ -181,6 +181,7 @@ public class OrderStaController {
 						String fileTime = formatDate(charData.getDate());
 						if (fileTime.equals(dateStr)) {
 							map.put("total", charData.getTotal());
+							map.put("back_total", charData.getBack_order_total());
 							flag = 1;
 							break;
 						}
@@ -188,12 +189,14 @@ public class OrderStaController {
 
 					if (flag == 0) {
 						map.put("total", "0");
+						map.put("back_total","0");
 					}
 				}
 				resMap.put("cardNumList", provinceList);
 			} else {
 				for (Map<String, Object> map : provinceList) {
 					map.put("total", "0");
+					map.put("back_total","0");
 				}
 				resMap.put("cardNumList", provinceList);
 			}

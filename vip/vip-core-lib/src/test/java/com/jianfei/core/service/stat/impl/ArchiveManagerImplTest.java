@@ -142,26 +142,14 @@ public class ArchiveManagerImplTest {
 	public void cacheDate() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("currentTime", "2016-06-28");
-		archiveManager.dateProvinceIdRedisCache(map);
-		archiveManager.dateProvinceIdApportIds(map);
-	}
-
-	@Test
-	public void cacheProvince() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("currentTime", "2016-06-27");
-		List<Map<String, Object>> maps = archiveManager
+		List<Map<String, Object>> datePid = archiveManager
 				.dateProvinceIdRedisCache(map);
-		System.out.println(JSONObject.toJSONString(maps));
-	}
-
-	@Test
-	public void testSelectAirportByProvinceIds() {
-		List<Map<String, Object>> maps = archiveManager
-				.selectAirportByProvinceIds(new MapUtils.Builder()
-						.setKeyValue("code", "qqqq").setKeyValue("cid", "110")
-						.build());
-		System.out.println(JSONObject.toJSONString(maps));
+		System.out.println("~~~~~~~~~~~~datePid->"
+				+ JSONObject.toJSONString(datePid));
+		List<Map<String, Object>> datePidAid = archiveManager
+				.dateProvinceIdApportIds(map);
+		System.out.println("~~~~~~~~~~~~datePidAid->"
+				+ JSONObject.toJSONString(datePidAid));
 	}
 
 	@Test
