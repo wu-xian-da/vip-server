@@ -221,9 +221,9 @@ public class QueueManagerImpl implements QueueManager {
 
 		// 判断卡号是否存在
 		if (ObjectUtils.isEmpty(vipcard)) {
-			logger.error("卡号为" + map.get("vipCardNo") + "的卡不存在...");
+			logger.error("jinfei:卡号为" + map.get("vipCardNo") + "的卡不存在...");
 			return messageDto.setData(map).setMsgBody(
-					"卡号为" + map.get("vipCardNo") + "的卡不存在...");
+					"jianfei:卡号为" + map.get("vipCardNo") + "的卡不存在...");
 		}
 		String cardNo = vipcard.getCardNo();
 
@@ -241,7 +241,7 @@ public class QueueManagerImpl implements QueueManager {
 					.setKeyValue("cardNo", cardNo).build());
 
 			if (isOk) {
-				System.out.println(DateUtil.dateToString(new Date(),
+				System.out.println("jinfei:"+DateUtil.dateToString(new Date(),
 						DateUtil.ALL_FOMAT)
 						+ "->激活短信->"
 						+ msgBody
