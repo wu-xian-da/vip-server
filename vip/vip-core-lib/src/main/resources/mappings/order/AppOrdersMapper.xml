@@ -372,6 +372,9 @@
 			<if test="payTime != null">
 				pay_time= #{payTime,jdbcType=TIMESTAMP},
 			</if>
+			<if test="payUserId != null">
+				pay_user_id= #{payUserId,jdbcType=VARCHAR},
+			</if>
 
 		</set>
 		where order_id = #{orderId,jdbcType=VARCHAR}

@@ -12,6 +12,8 @@ import com.jianfei.core.common.utils.GloabConfig;
 
 import com.jianfei.core.service.order.OrderManager;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ import com.tencent.protocol.native_query_protocol.NativePayQueryResData;
 
 @Service("wechatiPayManager")
 public class WechatPayManagerImpl extends ThirdPayManager {
+	private static Log log = LogFactory.getLog(WechatPayManagerImpl.class);
 	static {
 		
 		//微信环境初始化
@@ -175,8 +178,11 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 					appOrders.setPayUserId(req.getPayUserId());
 					appOrders.setSerialId(req.getTradeNo());
 					appOrders.setPayType(PayType.WXPAY.getName());
-					//TODO 微信支付时间 转换为 DATE类型
-		        	/*params.put("payTime", req.getPayTime());*/
+					try {
+						appOrders.setPayTime(DateUtil.parseDateTime(req.getPayTime()));
+					}catch (Exception e){
+						log.error(e);
+					}
 					orderManager.updatePayState(appOrders);
 				}
 				result = buildResult("SUCCESS", "OK");

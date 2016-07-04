@@ -64,6 +64,19 @@ public class QueueManagerImplTest {
 	}
 
 	@Test
+	public void testProcedureBack() {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userPhone", "13275601668");
+		map.put("msgType", "006");
+		map.put("userName", "tom");
+		map.put("vipCardNo", "07998371917");
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("returnMoney", 0);
+		map.put("msgBody", JSONObject.toJSONString(m));
+		JedisUtils.lpushString("QU", JSONObject.toJSONString(map));
+	}
+
+	@Test
 	public void testProcedure() {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userPhone", "13275601668");
@@ -83,6 +96,5 @@ public class QueueManagerImplTest {
 				"【亿出行】hello kitty...");
 		System.out.println(isOk);
 	}
-	
 
 }
