@@ -117,14 +117,14 @@ public class QueueManagerImpl implements QueueManager {
 
 			return activeCard(map, msgBody, userPhone);
 
-		} else if (MsgType.BACK_CARD_APPLY.getName().equals(msgType)// 退卡申请后短信
+		} else if (MsgType.BACK_CARD_FINISH.getName().equals(msgType)// 退卡完成后短信
 																	// 紧急退卡完成
 				|| MsgType.RIGHT_BACK_CARD.getName().equals(msgType)) {
 
 			return backCard(msgBody, userPhone, vipCardNo, map);
 
 		} else {
-			// 登入，注册，退卡完成短信
+			// 登入，注册，退卡申请短信
 			System.out.println("jianfei->"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 					+ "->登入，注册，退卡完成短信->" + msgBody + "  手机号：" + userPhone);
