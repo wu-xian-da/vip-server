@@ -69,7 +69,9 @@
 			<div class="order-list-title">个人资料</div>
 			<ul>
 				<li>用户姓名：${orderDetailInfo.customerName}</li>
-				<li>身份证：${orderDetailInfo.customerIdent }</li>
+				<li>证件类型：</li>
+				<li>证件号：${orderDetailInfo.customerIdent }</li>
+				<li>出生日期：</li>
 				<li>用户手机号：${orderDetailInfo.customerPhone }</li>
 				<li>用户性别：${orderDetailInfo.sex ==1 ? '男' : '女' }</li>
 				<li>常住地址：${orderDetailInfo.customerProvinceName} ${orderDetailInfo.customerCityName} ${orderDetailInfo.address}</li>
