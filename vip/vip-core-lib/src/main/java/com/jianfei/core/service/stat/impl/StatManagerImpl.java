@@ -11,6 +11,7 @@ import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
+import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
 
@@ -41,6 +42,8 @@ import java.util.Map;
 public class StatManagerImpl implements StatManager {
     @Autowired
     private AppOrderArchiveMapper appOrderArchiveMapper;
+	@Autowired
+	private AppOrdersMapper ordersMapper;
 
 	/**
 	 * 分页获取个人每日开卡数据
@@ -313,5 +316,28 @@ public class StatManagerImpl implements StatManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
+	/**
+	 * 根据工号获取业务员需要处理的数据
+	 *
+	 * @param uno 工号
+	 * @return
+	 */
+	@Override
+	public List<GraphDto> getSaleToDoData(String uno) {
+		return ordersMapper.getSaleToDoData(uno);
+	}
+
+	/**
+	 * 分页查询订单相关状态
+	 *
+	 * @param uno
+	 * @param orderState
+	 * @param cardState
+	 * @return
+	 */
+	@Override
+	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno, String orderState, String cardState) {
+		return ordersMapper.pageOrderInfoBySale(uno, orderState, cardState);
+	}
 }

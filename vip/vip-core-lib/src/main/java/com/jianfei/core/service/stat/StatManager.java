@@ -11,11 +11,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppAirportArchive;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.dto.CharData;
-import com.jianfei.core.dto.GraphDto;
-import com.jianfei.core.dto.OrderAppDetailInfo;
-import com.jianfei.core.dto.ReturnCardDto;
-import com.jianfei.core.dto.SalesRankingDto;
+import com.jianfei.core.dto.*;
 
 import java.util.List;
 import java.util.Map;
@@ -88,4 +84,20 @@ public interface StatManager {
      * @param pageSize
      */
     public List<SalesRankingDto> salesRanking(String uno,String  pid,String airportId,String begin,String end,int pageNo,int pageSize);
+
+    /**
+     * 根据工号获取业务员需要处理的数据
+     * @param uno 工号
+     * @return
+     */
+    List<GraphDto> getSaleToDoData(String uno);
+
+    /**
+     * 分页查询订单相关状态
+     * @param uno
+     * @param orderState
+     * @param cardState
+     * @return
+     */
+    PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,String orderState,String cardState);
 }
