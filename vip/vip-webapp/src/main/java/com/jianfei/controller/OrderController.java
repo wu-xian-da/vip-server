@@ -295,7 +295,7 @@ public class OrderController extends BaseController {
 			if(appOrder.getOrderState() ==0){
 				//未支付
 				orderId = appOrder.getOrderId();
-				appOrder.setOrderStateName("未支付");
+				appOrder.setOrderStateName("正在支付");
 				appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 			}else if(appOrder.getOrderState() == 1){
 				//已支付

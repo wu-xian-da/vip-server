@@ -10,8 +10,10 @@ import java.util.Date;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.ParserConfigurationException;
 
 import com.jianfei.core.bean.User;
+
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +24,7 @@ import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.xml.sax.SAXException;
 
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.VipOrderState;
@@ -509,9 +512,21 @@ public class PayController {
 	    log.info("wechat_notify_url:"+send);
 	    
 	    NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(send, NativeNotifyReq.class);
-	    log.info("wechat_result:"+req.toString());
+	    log.info("wechat_result:"+req.toString()+",signResult:"+Signature.getSign(req.toMap()));
 	    
-	    String signResult = Signature.getSign(req.toMap());
+	    String signResult;
+		try {
+			signResult = Signature.getSignFromResponseString(send);
+		} catch (IOException e1) {
+			signResult = "faild";
+			e1.printStackTrace();
+		} catch (SAXException e1) {
+			signResult = "faild";
+			e1.printStackTrace();
+		} catch (ParserConfigurationException e1) {
+			signResult = "faild";
+			e1.printStackTrace();
+		}
 		PayNotifyRequest param = new PayNotifyRequest();
 		param.setResultCode(req.getResult_code());
 		param.setReturnCode(req.getReturn_code());

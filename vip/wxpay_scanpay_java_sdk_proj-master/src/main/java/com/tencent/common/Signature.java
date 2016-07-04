@@ -61,13 +61,45 @@ public class Signature {
             sb.append(arrayToSort[i]);
         }
         String result = sb.toString();
-        result += "key=" + Configure.getKey();
+        result += "key=" + "5173af15bcd5ee99fb9ca5257ba4436a";//Configure.getKey();
         //Util.log("Sign Before MD5:" + result);
         result = MD5.MD5Encode(result).toUpperCase();
         //Util.log("Sign Result:" + result);
         return result;
     }
 
+    
+    public static void main(String[] args){
+    	try {
+			String result = Signature.getSignFromResponseString("<xml><appid><![CDATA[wx49a4c8c1d7ed22cb]]></appid>"+
+												"<bank_type><![CDATA[CFT]]></bank_type>"+
+												"<cash_fee><![CDATA[1]]></cash_fee>"+
+												"<fee_type><![CDATA[CNY]]></fee_type>"+
+												"<is_subscribe><![CDATA[Y]]></is_subscribe>"+
+												"<mch_id><![CDATA[1359191602]]></mch_id>"+
+												"<nonce_str><![CDATA[zwiqdqwlfospgh2tr3ri28jh5fct1dru]]></nonce_str>"+
+												"<openid><![CDATA[o8BE9v6ykD_k1bzeflrP9DQYBm0g]]></openid>"+
+												"<out_trade_no><![CDATA[0467607977423974]]></out_trade_no>"+
+												"<result_code><![CDATA[SUCCESS]]></result_code>"+
+												"<return_code><![CDATA[SUCCESS]]></return_code>"+
+												"<sign><![CDATA[1F5341BB7CA81F85DC7A164F920C4360]]></sign>"+
+												"<time_end><![CDATA[20160704125401]]></time_end>"+
+												"<total_fee>1</total_fee>"+
+												"<trade_type><![CDATA[NATIVE]]></trade_type>"+
+												"<transaction_id><![CDATA[4003832001201607048350990006]]></transaction_id>"+
+												"</xml>");
+			System.out.println(result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
     /**
      * 从API返回的XML数据里面重新计算一次签名

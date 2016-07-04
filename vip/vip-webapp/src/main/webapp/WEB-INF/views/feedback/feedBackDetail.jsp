@@ -60,7 +60,9 @@
 			<div class="order-list-title">用户资料</div>
 			<ul>
 				<li>姓名：${customer.customerName}</li>
-				<li>身份证：${customer.customerIdenti }</li>
+				<li>证件类型：</li>
+				<li>证件号：${customer.customerIdenti }</li>
+				<li>出生日期：</li>
 				<li>手机号：${customer.phone }</li>
 				<li>性别：${customer.sex ==1 ? '男' : '女' }</li>
 				<li>常住地址：${customer.provinceName} ${customer.cityName} ${customer.address} </li>
