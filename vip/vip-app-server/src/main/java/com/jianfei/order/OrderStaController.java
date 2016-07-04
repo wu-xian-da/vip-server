@@ -343,6 +343,19 @@ public class OrderStaController {
 		return BaseMsgInfo.success(statManager.getSaleToDoData(uno));
 	}
 
+	/**
+	 * 个人中心-我的订单分页数据
+	 * @param uno 用户工号
+	 * @return
+	 */
+	@RequestMapping(value="pageOrderInfoBySale")
+	@ResponseBody
+	public BaseMsgInfo pageOrderByUno(@RequestParam(value="uno",required=true) String uno,@RequestParam(value="orderState",required=true) int orderState,
+									  @RequestParam(value="pageNo") int pageNo,
+									  @RequestParam(value="pageSize") int pageSize){
+		return BaseMsgInfo.success(statManager.pageOrderInfoBySale(uno,orderState,pageNo,pageSize));
+	}
+
 }
 
 
