@@ -1,0 +1,92 @@
+2016-06-30 13:14:00,666 [main] DEBUG [com.jianfei.core.common.cache.JedisUtils] - lpushObject QU = {"msgBody":"{\"time\":\"10分钟\",\"code\":\"smart001\"}","userName":"refineli","msgType":"005","userPhone":"13275601668","vipCardNo":"07998371917"}
+2016-06-30 13:15:00,332 [main] DEBUG [com.jianfei.core.common.cache.JedisUtils] - get MSG:TEMPLATE005 = 【亿出行】尊敬的客户[userName]，欢迎您成为亿出行的VIP贵宾卡会员，愿我们的服务能为您的出行带来一份舒适与温暖，客服热线：40040080660，祝您旅途愉快！
+2016-06-30 13:15:11,615 [main] DEBUG [com.jianfei.core.mapper.AppVipcardMapper.selectByPrimaryKey] - ==>  Preparing: select card_no, customer_id, init_money, remain_money, card_type, card_state, valide_time, active_time, nfc_id, dtflag, card_name from app_vipcard where card_no = ? 
+2016-06-30 13:15:11,827 [main] DEBUG [com.jianfei.core.mapper.AppVipcardMapper.selectByPrimaryKey] - ==> Parameters: 07939046849(String)
+2016-06-30 13:15:12,058 [main] DEBUG [com.jianfei.core.mapper.AppVipcardMapper.selectByPrimaryKey] - <==      Total: 1
+2016-06-30 13:15:22,664 [main] INFO  [com.jianfei.core.service.thirdpart.impl.AirportEasyManagerImpl] - active_vip_card:{"code":"99","info":"会员已存在，且名字不同。"}
+2016-06-30 17:10:21,732 [main] WARN  [org.apache.ibatis.io.ResolverUtil] - Could not examine class 'com/jianfei/core/service/thirdpart/impl/WechatPayManagerImpl$1.class' due to a java.lang.NoClassDefFoundError with message: com/tencent/business/NativePayBusiness$ResultListener
+2016-06-30 17:10:22,960 [main] ERROR [org.springframework.test.context.TestContextManager] - Caught exception while allowing TestExecutionListener [org.springframework.test.context.support.DependencyInjectionTestExecutionListener@507501ff] to prepare test instance [com.jianfei.core.service.base.BusizzManagerImplTest@31d6359d]
+java.lang.IllegalStateException: Failed to load ApplicationContext
+	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:94)
+	at org.springframework.test.context.DefaultTestContext.getApplicationContext(DefaultTestContext.java:72)
+	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:117)
+	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.prepareTestInstance(DependencyInjectionTestExecutionListener.java:83)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:212)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.createTest(SpringJUnit4ClassRunner.java:200)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner$1.runReflectiveCall(SpringJUnit4ClassRunner.java:259)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.methodBlock(SpringJUnit4ClassRunner.java:261)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:219)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:83)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:68)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:163)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'orderManagerImpl': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.jianfei.core.service.thirdpart.ThirdPayManager com.jianfei.core.service.order.impl.OrderManagerImpl.aliPayManager; nested exception is java.lang.NoClassDefFoundError: com/tencent/business/NativePayBusiness$ResultListener
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1210)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:755)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:757)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:480)
+	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:125)
+	at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
+	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:109)
+	at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:261)
+	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:68)
+	at org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:86)
+	... 25 more
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.jianfei.core.service.thirdpart.ThirdPayManager com.jianfei.core.service.order.impl.OrderManagerImpl.aliPayManager; nested exception is java.lang.NoClassDefFoundError: com/tencent/business/NativePayBusiness$ResultListener
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:561)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	... 41 more
+Caused by: java.lang.NoClassDefFoundError: com/tencent/business/NativePayBusiness$ResultListener
+	at java.lang.Class.getDeclaredMethods0(Native Method)
+	at java.lang.Class.privateGetDeclaredMethods(Unknown Source)
+	at java.lang.Class.getDeclaredMethods(Unknown Source)
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:571)
+	at org.springframework.util.ReflectionUtils.doWithMethods(ReflectionUtils.java:488)
+	at org.springframework.util.ReflectionUtils.doWithMethods(ReflectionUtils.java:474)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:241)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineConstructorsFromBeanPostProcessors(AbstractAutowireCapableBeanFactory.java:1065)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1038)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:504)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:476)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:303)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:299)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:194)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1120)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1044)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:942)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:533)
+	... 43 more
+Caused by: java.lang.ClassNotFoundException: com.tencent.business.NativePayBusiness$ResultListener
+	at java.net.URLClassLoader$1.run(Unknown Source)
+	at java.net.URLClassLoader$1.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 62 more
+2016-06-30 17:12:31,786 [main] DEBUG [com.jianfei.core.mapper.UserMapper.get] - ==>  Preparing: SELECT u.*, GROUP_CONCAT(distinct r.`id`) AS 'roles.id', GROUP_CONCAT(distinct r.`name`) AS 'roles.name', GROUP_CONCAT(distinct r.`role_type`) AS 'roles.roleType', GROUP_CONCAT(distinct ap.`airport_name`) AS 'ariPorts.name', GROUP_CONCAT(DISTINCT ap.airport_id) AS 'ariPorts.id' FROM `sys_users` u LEFT JOIN `sys_use_role` ur ON u.`id` = ur.`user_id` LEFT JOIN `sys_roles` r ON ur.`role_id` = r.`id` LEFT JOIN `sys_user_airport` ua ON ua.`sys_id` = u.`id` LEFT JOIN `sys_airport` ap ON ap.`airport_id` = ua.`airport_id` WHERE u.user_type=? and u.code = ? GROUP BY u.login_name 
+2016-06-30 17:12:34,793 [main] DEBUG [com.jianfei.core.mapper.UserMapper.get] - ==> Parameters: 1(Integer), 1111(String)
+2016-06-30 17:12:34,847 [main] DEBUG [com.jianfei.core.mapper.UserMapper.get] - <==      Total: 0

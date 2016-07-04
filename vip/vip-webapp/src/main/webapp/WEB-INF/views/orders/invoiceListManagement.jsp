@@ -103,7 +103,7 @@
 		data-options="modal:'true',closed:'true'"
 		style="width: 500px; height: 300px; padding: 10px;">
 		<div class="easy-window-item">
-			<div class="easy-window-radio-tab">
+			<div class="easy-window-radio-tab" style="text-align: center">
 				<div class="radio-tab-content">
 					<div class="raidp-tab-content-item" style="display: block">
 						<form id="invoiceForm" method="post">
@@ -115,7 +115,7 @@
 					</div>
 				</div>
 
-				<div class="easyui-window-footer" style="padding-left: 50px">
+				<div class="easyui-window-footer" style="padding-left: 10px">
 					<button id="writerUserInfo">保存</button>
 					<button id="cancleBt">返回</button>
 				</div>

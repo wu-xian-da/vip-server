@@ -40,7 +40,7 @@
 				field : 'phone'
 			},{
 				width : '150',
-				title : '日期',
+				title : '开卡日期',
 				field : 'createTime'
 			},{
 				width : '150',

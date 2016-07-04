@@ -436,9 +436,9 @@
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
 
 				<!-- updload config -->
-				<upload.home.dir>/Users/leoliu/Documents/project</upload.home.dir>
+				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>E:vip.log</log.home.dir>
+				<log.home.dir>/workspace/vip.log</log.home.dir>
 				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
@@ -514,7 +514,7 @@
 				<yeepay.dst.sysid>yeepay</yeepay.dst.sysid>
 				<yeepay.transaction.id>OPSMART</yeepay.transaction.id>
 				<!-- pay notify address -->
-				<pay.notify.address>http://hftest.wiplatform.com:8082</pay.notify.address>
+				<pay.notify.address>http://hftest.wiplatform.com:8082/vip-app-server</pay.notify.address>
 			</properties>
 			<build>
 				<plugins>

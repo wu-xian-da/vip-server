@@ -125,5 +125,10 @@ public class JedisUtilsTest {
 		Object rs = JedisUtils.getObject("2016-05-02$110$0465785487752808");
 		System.out.println(rs);
 	}
+	
+	@Test
+	public void removeKeyTest(){
+		JedisUtils.del("2016-06-29$110");
+	}
 
 }

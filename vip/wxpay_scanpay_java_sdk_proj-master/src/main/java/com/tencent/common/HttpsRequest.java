@@ -159,6 +159,7 @@ public class HttpsRequest implements IServiceRequest{
 //					 "</xml>";
         //得指明使用UTF-8编码，否则到API服务器XML的中文不能被成功识别
         StringEntity postEntity = new StringEntity(postDataXML, "UTF-8");
+        System.out.println("微信发送："+postDataXML);
         httpPost.addHeader("Content-Type", "text/xml");
         httpPost.setEntity(postEntity);
 

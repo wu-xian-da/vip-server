@@ -231,7 +231,7 @@ public class DefaultAlipayClient implements AlipayClient {
         } catch (IOException e) {
             throw new AlipayApiException(e);
         }
-        System.out.println("发送："+urlSb.toString());
+        System.out.println("支付宝发送："+urlSb.toString());
         String rsp = null;
         try {
             if (request instanceof AlipayUploadRequest) {

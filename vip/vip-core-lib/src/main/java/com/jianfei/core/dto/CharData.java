@@ -5,14 +5,31 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class CharData {
-	//个人开卡总数
+	//开卡总数
 	private String total;
 	//平均开卡人数
 	private String avgNum;
 	//退卡数
 	private String back_order_total;
+	//平均退卡数
+	private String avgNum_back;
+	//归档日期
+	private Date date;
 	
-	
+	/**
+	 * @return the avgNum_back
+	 */
+	public String getAvgNum_back() {
+		return avgNum_back;
+	}
+
+	/**
+	 * @param avgNum_back the avgNum_back to set
+	 */
+	public void setAvgNum_back(String avgNum_back) {
+		this.avgNum_back = avgNum_back;
+	}
+
 	/**
 	 * @return the back_order_total
 	 */
@@ -27,7 +44,7 @@ public class CharData {
 		this.back_order_total = back_order_total;
 	}
 
-	private Date date;
+	
 
 	/**
 	 * @return the date
@@ -77,9 +94,10 @@ public class CharData {
 	 */
 	@Override
 	public String toString() {
-		return "CharData [total=" + total + ", avgNum=" + avgNum + ", back_order_total=" + back_order_total + ", date="
-				+ date + "]";
+		return "CharData [total=" + total + ", avgNum=" + avgNum + ", back_order_total=" + back_order_total
+				+ ", avgNum_back=" + avgNum_back + ", date=" + date + "]";
 	}
+
 	
 	
 }
