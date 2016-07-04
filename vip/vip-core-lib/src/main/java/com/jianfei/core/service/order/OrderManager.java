@@ -132,18 +132,11 @@ public interface OrderManager {
 
 
     /**
-     * 根据付款方式获取付款URL
-     * @param orderId 订单ID
-     * @param payType 付款方式
-     * @return
-     */
-
-    /**
      * 根据订单ID获取订单金额
      * @param orderId
      * @return
      */
-    AppOrders getOrderInfo(String orderId);
+    AppOrders getOrderDetailByOrderId(String orderId);
 
 
 

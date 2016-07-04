@@ -303,8 +303,8 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public AppOrders getOrderInfo(String orderId) {
-        return appOrdersMapper.selectByPrimaryKey(orderId);
+    public AppOrders getOrderDetailByOrderId(String orderId) {
+        return appOrdersMapper.getOrderDetailByOrderId(orderId);
     }
 
 

@@ -47,7 +47,7 @@ public class OrderPayManagerImpl implements OrderPayManager {
     @Override
     public BaseMsgInfo checkThirdPay(String orderId, PayType payType) {
         //先查询订单是否存在及合法
-        AppOrders appOrders=orderManager.getOrderInfo(orderId);
+        AppOrders appOrders=orderManager.getOrderInfoByOrderId(orderId);
 
         //如果订单存在 并且已付款
         if (appOrders==null || StringUtils.isBlank(appOrders.getOrderId())){
@@ -89,7 +89,7 @@ public class OrderPayManagerImpl implements OrderPayManager {
      */
     @Override
     public BaseMsgInfo getPayUrl(String orderId, PayType payType) {
-        AppOrders appOrders = orderManager.getOrderInfo(orderId);
+        AppOrders appOrders = orderManager.getOrderInfoByOrderId(orderId);
         if (appOrders == null || StringUtils.isBlank(appOrders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
