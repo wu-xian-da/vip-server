@@ -167,7 +167,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 		
 		
 		System.out.println(signResult+":"+sign);
-		if (sign.equals(signResult)){
+//		if (sign.equals(signResult)){
 			if (returnCode.equals("SUCCESS")){
 				if (resultCode.equals("SUCCESS")){
 					AppOrders appOrders=new AppOrders();
@@ -183,8 +183,8 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 			}else{
 				result = buildResult("FAIL", "发生错误");
 			}
-		}else
-			result = buildResult("FAIL", "签名错误");
+//		}else
+//			result = buildResult("FAIL", "签名错误");
 		return result;
 	}
 	
