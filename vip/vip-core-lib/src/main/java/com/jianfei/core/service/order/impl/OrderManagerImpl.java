@@ -392,15 +392,15 @@ public class OrderManagerImpl implements OrderManager {
         int num = appOrdersMapper.updateByPrimaryKeySelective(appOrders);
 
         //更新VIP用户激活
-        vipUserManager.updateUserSate(appOrders.getCustomer().getPhone(),VipUserSate.ACTIVE);
+        vipUserManager.updateUserSate(order.getCustomer().getPhone(),VipUserSate.ACTIVE);
         //更新VIP卡状态为待激活
         AppVipcard vipcard=new AppVipcard();
-        vipcard.setCardNo(appOrders.getVipCards().get(0).getCardNo());
+        vipcard.setCardNo(order.getVipCards().get(0).getCardNo());
         vipcard.setCardState(VipCardState.TO_ACTIVATE.getName());
         vipCardManager.updateVipCard(vipcard);
         //构建消息体 并放入消息队列
-        ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(appOrders.getCustomer().getPhone()).setMsgType(MsgType.ACTIVE_CARD.getName()).
-                setVipCardNo(appOrders.getVipCards().get(0).getCardNo()).setUserName(appOrders.getCustomer().getCustomerName());
+        ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(order.getCustomer().getPhone()).setMsgType(MsgType.ACTIVE_CARD.getName()).
+                setVipCardNo(order.getVipCards().get(0).getCardNo()).setUserName(order.getCustomer().getCustomerName());
         //放入消息队列
         log.info(msgBuilder);
          queueManager.sendMessage(msgBuilder);
