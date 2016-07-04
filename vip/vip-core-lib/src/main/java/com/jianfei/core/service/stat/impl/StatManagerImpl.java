@@ -350,7 +350,8 @@ public class StatManagerImpl implements StatManager {
 		dto.setOrderId("67899756789");
 		dto.setCardState(2);
 		dto.setOrderState(0);
-		dto.setCustomerName("13454322");
+		dto.setCustomerName("杨蕾");
+		dto.setCustomerName("13456784567");
 		dto.setOrderTime(new Date());
 		orderPageDtos.add(dto);
 		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<OrderPageDto>();

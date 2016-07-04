@@ -1,5 +1,8 @@
 package com.jianfei.core.dto;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -27,6 +30,7 @@ public class OrderPageDto{
         this.orderId = orderId;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getOrderTime() {
         return orderTime;
     }
