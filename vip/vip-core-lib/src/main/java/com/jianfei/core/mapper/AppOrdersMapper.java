@@ -3,9 +3,12 @@ package com.jianfei.core.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import com.jianfei.core.dto.GraphDto;
 import com.jianfei.core.dto.OrderDetailInfo;
+import com.jianfei.core.dto.OrderPageDto;
 import com.jianfei.core.dto.OrderShowInfoDto;
 
 @MyBatisDao
@@ -60,4 +63,21 @@ public interface AppOrdersMapper {
 	 * 根据订单号返回订单详细信息
 	 */
 	AppOrders getOrderDetailByOrderId(String orderId);
+
+	/**
+	 * 根据工号获取业务员需要处理的数据
+	 * @param uno 工号
+	 * @return
+	 */
+	List<GraphDto> getSaleToDoData(String uno);
+
+	/**
+	 * 分页查询订单相关状态
+	 * @param uno
+	 * @param orderState
+	 * @param cardState
+	 * @return
+	 */
+	 PageInfo<OrderPageDto> pageOrderInfoBySale(String uno, String orderState, String cardState);
+
 }

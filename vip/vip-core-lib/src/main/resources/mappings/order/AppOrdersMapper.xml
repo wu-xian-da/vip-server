@@ -422,4 +422,21 @@
 			resultMap="ResultMapWithDetail">
 		select o.*,au.customer_name ,au.customer_phone,ac.card_id as card_no from app_orders o join app_customer au on o.customer_id=au.customer_id  join app_order_card ac on  o.order_id=ac.order_id WHERE o.order_id= #{orderId}
 	</select>
+
+
+
+	<resultMap id="GraphResultMap" type="com.jianfei.core.dto.GraphDto" >
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="value" property="value" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 根据工号获取业务员需要处理的数据 -->
+	<select id="getSaleToDoData" parameterType="java.lang.String"
+			resultMap="GraphResultMap">
+		select count(*) as 'value', 'TO_PAY' as 'name' from app_orders where order_state=0
+union
+select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_order_card oc on o.order_id=oc.order_id join app_vipcard v on oc.card_id=v.card_no  where order_state=1 and  v.card_state in (3,4)
+union
+select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3)
+	</select>
 </mapper>

@@ -328,7 +328,21 @@ public class OrderStaController {
 	public String formatDate(Date date) {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		return sf.format(date);
-	} 
+	}
+
+
+	/**
+	 * 个人中心-我的订单统计数据
+	 * @param uno 用户工号
+	 * @return
+	 */
+	@RequestMapping(value="sticSaleDataByUno")
+	@ResponseBody
+	public BaseMsgInfo sticSaleDataByUno(@RequestParam(value="uno",required=true) String uno){
+
+		return BaseMsgInfo.success(statManager.getSaleToDoData(uno));
+	}
+
 }
 
 

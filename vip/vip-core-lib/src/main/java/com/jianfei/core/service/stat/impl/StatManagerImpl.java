@@ -11,6 +11,7 @@ import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
+import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.StatManager;
 
@@ -41,6 +42,8 @@ import java.util.Map;
 public class StatManagerImpl implements StatManager {
     @Autowired
     private AppOrderArchiveMapper appOrderArchiveMapper;
+	@Autowired
+	private AppOrdersMapper ordersMapper;
 
 	/**
 	 * 分页获取个人每日开卡数据
@@ -198,10 +201,8 @@ public class StatManagerImpl implements StatManager {
 			Map<String,Object> mapItem = new HashMap<String,Object>();
 			mapItem.put("date", date);
 			
-			//开卡数
 			float sum=0;
-			//退卡数
-			float sum_back=0;
+			int sum_back = 0;
 			//计算多个省份某天的平均值
 			if(UserProvinceList !=null && UserProvinceList.size()>=1){
 				for(int i =0 ;i <UserProvinceList.size(); i ++){
@@ -214,7 +215,7 @@ public class StatManagerImpl implements StatManager {
 						CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 						sum += Float.parseFloat(charData.getAvgNum());
 						sum_back += Float.parseFloat(charData.getAvgNum_back());
-						
+
 					}
 				}
 				//多个省份的平均开卡数
@@ -322,5 +323,28 @@ public class StatManagerImpl implements StatManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
+	/**
+	 * 根据工号获取业务员需要处理的数据
+	 *
+	 * @param uno 工号
+	 * @return
+	 */
+	@Override
+	public List<GraphDto> getSaleToDoData(String uno) {
+		return ordersMapper.getSaleToDoData(uno);
+	}
+
+	/**
+	 * 分页查询订单相关状态
+	 *
+	 * @param uno
+	 * @param orderState
+	 * @param cardState
+	 * @return
+	 */
+	@Override
+	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno, String orderState, String cardState) {
+		return ordersMapper.pageOrderInfoBySale(uno, orderState, cardState);
+	}
 }
