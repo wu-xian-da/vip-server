@@ -61,7 +61,7 @@ public class AlipayManagerImplTest {
 	YeePayManagerImpl yeepayManager;
 	
 	@Test
-	public void testGet() {
+	public void test_wxpay_precreate() {
 		//alipayManagerImpl.tradeQuery("abc123");
 //		File fff = new File("apiclient_cert.p12");
 //		fff.getAbsoluteFile();
