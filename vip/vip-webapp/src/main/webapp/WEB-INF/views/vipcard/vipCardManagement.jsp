@@ -99,6 +99,8 @@
 												return '激活失败';
 											case 4:
 												return '待激活';
+											case 5:
+												return '解绑失败';
 											}
 											
 										}
@@ -203,6 +205,7 @@
 										<option value="2">已退卡</option>
 										<option value="3">激活失败</option>
 										<option value="4">待激活</option>
+										<option value="5">解绑失败</option>
 
 									</select>
 								</td>
