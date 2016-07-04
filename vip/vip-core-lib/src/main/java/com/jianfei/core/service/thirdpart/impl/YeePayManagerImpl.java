@@ -10,6 +10,8 @@ import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.service.order.OrderManager;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -30,6 +32,7 @@ import com.jianfei.core.service.thirdpart.ThirdPayManager;
 
 @Service("yeepayManager")
 public class YeePayManagerImpl extends ThirdPayManager {
+	private static Log log = LogFactory.getLog(YeePayManagerImpl.class);
 	
     @Autowired
     private OrderManager orderManager;
@@ -145,8 +148,11 @@ public class YeePayManagerImpl extends ThirdPayManager {
 		appOrders.setPayUserId(param.getPayUserId());
 		appOrders.setSerialId(param.getTradeNo());
 		appOrders.setPayType(PayType.BANKPAY.getName());
-		//TODO 支付时间 转换为 DATE类型
-		/*params.put("payTime", req.getPayTime());*/
+		try {
+			appOrders.setPayTime(DateUtil.parseDateTime(param.getPayTime()));
+		}catch (Exception e){
+			log.error(e);
+		}
 		orderManager.updatePayState(appOrders);
 		return "success";
 	}
