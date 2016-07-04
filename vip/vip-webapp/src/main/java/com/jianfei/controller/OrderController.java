@@ -247,8 +247,8 @@ public class OrderController extends BaseController {
 			@RequestParam(value="startTime",defaultValue="") String startTime,
 			@RequestParam(value="endTime",defaultValue="") String endTime,
 			@RequestParam(value="airportId",required=false,defaultValue="") String airportId,
-			@RequestParam(value="orderState",required=false,defaultValue="5") Integer orderState,
-			@RequestParam(value="invoiceState",required=false,defaultValue="3") Integer invoiceState,
+			@RequestParam(value="orderState",required=false,defaultValue="") String orderState,
+			@RequestParam(value="invoiceState",required=false,defaultValue="") String invoiceState,
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
 		
 		//用户可以看到机场列表
@@ -273,10 +273,12 @@ public class OrderController extends BaseController {
 		if(!airportId.equals("")){
 			paramsMap.put("airportId",airportId);
 		}
-		
-		paramsMap.put("orderState",orderState);
-		paramsMap.put("invoiceState", invoiceState);
-		
+		if(!orderState.equals("")){
+			paramsMap.put("orderState", orderState);
+		}
+		if(!invoiceState.equals("")){
+			paramsMap.put("invoiceState", invoiceState);
+		}
 		
 		PageInfo<OrderShowInfoDto> pageinfo = orderManagerImpl.simplePage(pageNo, pageSize, paramsMap);
 		Map<Object,Object> map = new HashMap<Object,Object>();
@@ -370,6 +372,11 @@ public class OrderController extends BaseController {
 				orderId = appOrder.getOrderId();
 				appOrder.setOrderStateName("已退款");
 				appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
+			}else if(appOrder.getOrderState() ==5){
+				//已失效
+				orderId = appOrder.getOrderId();
+				appOrder.setOrderStateName("已失效");
+				appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 			}
 		}
 		map.put("total", pageinfo.getTotal());
@@ -387,7 +394,7 @@ public class OrderController extends BaseController {
 			@RequestParam(value="rows",defaultValue="20") Integer pageSize,
 			@RequestParam(value="backType",defaultValue="") String backType,
 			@RequestParam(value="applyType",defaultValue="") String applyType,
-			@RequestParam(value="orderState",defaultValue="10") Integer orderState){
+			@RequestParam(value="orderState",defaultValue="") String orderState){
 		
 		//用户可以看到机场列表
 		
@@ -402,9 +409,10 @@ public class OrderController extends BaseController {
 		if(!applyType.equals("")){
 			paramsMap.put("applyType", applyType);
 		}
-		
 		//订单状态
-		paramsMap.put("orderState", orderState);
+		if(!orderState.equals("")){
+			paramsMap.put("orderState", orderState);
+		}
 		//机场id列表
 		if(aiportIdList !=null && aiportIdList.size() >0){
 			paramsMap.put("aiportIdList", aiportIdList);

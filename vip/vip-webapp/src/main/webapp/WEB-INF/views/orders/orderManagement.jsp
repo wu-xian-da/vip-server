@@ -64,18 +64,19 @@
 			
 			            <div class="order-condition-item" style="width: 140px">
 			                <select id="orderStateSelect">
-			                    <option value="5">全部订单状态</option>
+			                    <option value="">全部订单状态</option>
 			                    <option value="0">未支付</option>
 			                    <option value="1">已支付</option>
 			                    <option value="2">正在审核</option>
 			                    <option value="3">审核通过</option>
 			                    <option value="4">已退款</option>
+			                    <option value="5">已失效</option>
 			                </select>
 			            </div>
 			
 			            <div class="order-condition-item" style="width: 140px">
 			                <select id="invoiceSelect">
-			                    <option value="3">全部发票状态</option>
+			                    <option value="">全部发票状态</option>
 			                    <option value="0">未开</option>
 			                    <option value="1">发票未邮寄</option>
 			                    <option value="2">发票已邮寄</option>
@@ -242,8 +243,8 @@
         	$("#endTime").datebox("setValue","");
         	$("#phoneOrUserName").val("");
         	$("#airportIdSelect").val("");
-        	$("#orderStateSelect").val('5');
-        	$("#invoiceSelect").val('3');
+        	$("#orderStateSelect").val("");
+        	$("#invoiceSelect").val("");
         	
         	//初始化表格
             $('#tt').datagrid();
@@ -463,8 +464,8 @@
         	$("#endTime").datebox("setValue","");
         	$("#phoneOrUserName").val("");
         	$("#airportIdSelect").val("");
-        	$("#orderStateSelect").val('5');
-        	$("#invoiceSelect").val('3');
+        	$("#orderStateSelect").val("");
+        	$("#invoiceSelect").val("");
         })
 	</script>
 	

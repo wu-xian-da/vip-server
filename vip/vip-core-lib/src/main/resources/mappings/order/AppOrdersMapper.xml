@@ -132,11 +132,11 @@
 		</if>
 
 		<!-- 订单状态 -->
-		<if test="orderState != 5">
+		<if test="orderState != null">
 			and ord.order_state = #{orderState}
 		</if>
 		<!-- 发票状态 -->
-		<if test="invoiceState != 3">
+		<if test="invoiceState != null">
 			and ord.invoice_flag = #{invoiceState}
 		</if>
 		<!-- 用户名或者手机号码 -->
@@ -176,7 +176,7 @@
 		<if test="applyType !=null">
 			and ord.apply_type = #{applyType}
 		</if>
-		<if test="orderState != 10">
+		<if test="orderState != null">
 			and ord.order_state = #{orderState}
 		</if>
 		<!-- 机场列表 -->
