@@ -507,10 +507,9 @@ public class PayController {
 		}
 	    
 	    log.info("wechat_notify_url:"+send);
-	    System.out.println("wechat_notify_url:"+send);
 	    
 	    NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(send, NativeNotifyReq.class);
-	    
+	    log.info("wechat_result:"+req.toString());
 	    
 	    String signResult = Signature.getSign(req.toMap());
 		PayNotifyRequest param = new PayNotifyRequest();
@@ -531,6 +530,7 @@ public class PayController {
 			e2.printStackTrace();
 		}
 	    result = wechatiPayManager.payNotify(param);
+	    log.info("wechat_response:"+result);
 	    response.setContentType("text/xml; charset=utf-8");
 	    response.setCharacterEncoding("utf-8");
 	    try { 
@@ -555,8 +555,7 @@ public class PayController {
     	String payUserId = request.getParameter("buyer_logon_id");
     	String sign = request.getParameter("sign");
     	log.info("alipay_notify_url:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
-    	System.out.println("alipay_notify_url:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
-    	
+    	//System.out.println("alipay_notify_url:"+ outTradeNo + "|" + tradeNo + "|" + tradeStatus + "|" + payTime + "|" + payUserId + "|" + sign);
     	PayNotifyRequest param = new PayNotifyRequest();
 		param.setOutTradeNo(outTradeNo);
 		param.setTradeNo(tradeNo);
