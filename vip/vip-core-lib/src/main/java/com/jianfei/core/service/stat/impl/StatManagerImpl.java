@@ -202,6 +202,7 @@ public class StatManagerImpl implements StatManager {
 			mapItem.put("date", date);
 			
 			float sum=0;
+			int sum_back = 0;
 			//计算多个省份某天的平均值
 			if(UserProvinceList !=null && UserProvinceList.size()>=1){
 				for(int i =0 ;i <UserProvinceList.size(); i ++){
