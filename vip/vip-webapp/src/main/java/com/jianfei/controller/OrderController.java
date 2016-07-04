@@ -923,8 +923,10 @@ public class OrderController extends BaseController {
 			orderStateName = "正在审核";
 		}else if(orderState == 3){
 			orderStateName = "审核通过";
-		}else{
+		}else if(orderState == 4){
 			orderStateName = "已退款";
+		}else{
+			orderStateName = "已失效";
 		}
 		return orderStateName;
 	}
