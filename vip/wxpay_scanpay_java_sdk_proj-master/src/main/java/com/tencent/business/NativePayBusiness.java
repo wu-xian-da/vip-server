@@ -109,7 +109,7 @@ public class NativePayBusiness {
 
         log.i("支付API返回的数据如下：");
         payServiceResponseString = nativePayService.request(nativePayReqData);
-
+        System.out.println("wechat_result:"+payServiceResponseString);
         long costTimeEnd = System.currentTimeMillis();
         long totalTimeCost = costTimeEnd - costTimeStart;
         log.i("api请求总耗时：" + totalTimeCost + "ms");
