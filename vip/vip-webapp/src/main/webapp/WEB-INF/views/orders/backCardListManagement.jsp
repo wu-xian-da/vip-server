@@ -44,7 +44,7 @@
 	
 				<div class="order-condition-item">
 					<select name="" id="orderStateSelect">
-						<option value="10">全部订单状态</option>
+						<option value="">全部订单状态</option>
 						<option value="3">审核通过</option>
 						<option value="4">已退款</option>
 					</select>
@@ -142,7 +142,7 @@
         	//1、重置条件选项
         	$("#backTypeSelect").val("");
         	$("#applyTypeSelect").val("");
-        	$("#orderStateSelect").val("10");
+        	$("#orderStateSelect").val("");
         	//2、表格初始化
             $('#tt').datagrid();
         });

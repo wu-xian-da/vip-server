@@ -33,7 +33,12 @@ public enum VipOrderState {
 	/**
 	 * 已退款
 	 */
-	ALREADY_REFUND(4);
+	ALREADY_REFUND(4),
+	
+	/**
+	 * 已失效
+	 */
+	ALREADY_INVALID(5);
 	
 	private int name;
 
