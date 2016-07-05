@@ -9,6 +9,8 @@ import com.jianfei.core.bean.AppInvoice;
 import com.jianfei.core.mapper.AppInvoiceMapper;
 import com.jianfei.core.service.base.AppInvoiceManager;
 
+import java.util.Date;
+
 @Service
 public class AppInvoiceManagerImpl implements AppInvoiceManager{
 	@Autowired
@@ -32,6 +34,7 @@ public class AppInvoiceManagerImpl implements AppInvoiceManager{
 	public boolean insert(AppInvoice appInvoice) {
 		appInvoice.setInvoiceId(IdGen.uuid());
 		appInvoice.setDtflag(StateType.EXIST.getName());
+		appInvoice.setCreateTime(new Date());
 		return appInvoiceMapper.insert(appInvoice) == 1 ? true : false;
 	}
 	
