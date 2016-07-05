@@ -1,13 +1,11 @@
 package com.jianfei.order;
 
-import com.jianfei.core.bean.AppCardBack;
-import com.jianfei.core.bean.AppInvoice;
-import com.jianfei.core.bean.AppOrders;
-import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.bean.*;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.StateType;
 import com.jianfei.core.common.enu.VipCardState;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.OrderAddInfoDto;
@@ -16,6 +14,7 @@ import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.order.OrderPayManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
+import com.jianfei.core.service.user.VipUserManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +48,9 @@ public class OrderController {
 	private VipCardManager vipCardManager;
 	@Autowired
 	private ValidateCodeManager validateCodeManager;
+
+	@Autowired
+	private VipUserManager vipUserManager;
 	/**
 	 * 验证卡片信息及用户手机号
 	 * @return
@@ -265,6 +267,26 @@ public class OrderController {
 		}catch (Exception e){
 			log.error("查询订单详细信息异常",e);
 			return BaseMsgInfo.msgFail("查询订单详细信息失败");
+		}
+	}
+
+	/**
+	 * 更新顾客信息
+	 * @return
+	 */
+	@RequestMapping(value = "/customerInfo")
+	@ResponseBody
+	public BaseMsgInfo updateCustomer(AppCustomer customer,@RequestParam(value = "birthDayStr", required = true) String birthDayStr) {
+		try {
+			customer.setBirthDay(DateUtil.parseDate(birthDayStr));
+			if (vipUserManager.updateUser(customer)){
+				return BaseMsgInfo.success(true);
+			}else {
+				return BaseMsgInfo.msgFail("用户信息完善失败");
+			}
+		}catch (Exception e){
+			log.error("用户信息完善异常",e);
+			return BaseMsgInfo.msgFail("用户信息完善失败");
 		}
 	}
 }
