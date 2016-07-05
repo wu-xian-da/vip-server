@@ -512,7 +512,7 @@ public class PayController {
 	    log.info("wechat_notify_url:"+send);
 	    
 	    NativeNotifyReq req = (NativeNotifyReq)Util.getObjectFromXML(send, NativeNotifyReq.class);
-	    log.info("wechat_result:"+req.toString()+",signResult:"+Signature.getSign(req.toMap()));
+	    log.info("wechat_result:"+req.toString());
 	    
 	    String signResult;
 		try {
