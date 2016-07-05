@@ -88,11 +88,12 @@ public class MsgAuxiliary {
 			// 激活帐号信息
 			String msgBodyRs = map.get("msgBody");
 			@SuppressWarnings("unchecked")
-			Map<String, String> msgMap = JSONObject.parseObject(msgBodyRs,
+			Map<String, Object> msgMap = JSONObject.parseObject(msgBodyRs,
 					Map.class);
 			Set<String> setKeys = msgMap.keySet();
 			for (String key : setKeys) {
-				msgBody = msgBody.replaceAll("\\[" + key + "\\]", msgMap.get(key));
+				msgBody = msgBody.replaceAll("\\[" + key + "\\]",
+						StringUtils.obj2String(msgMap.get(key)));
 			}
 		}
 
