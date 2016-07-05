@@ -168,7 +168,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 		String sign = req.getSign();
 		String signResult = req.getSignResult();
 		
-		if (orderManager.getOrderInfo(req.getOutTradeNo()).getOrderState().equals(VipOrderState.ALREADY_PAY.getName())){
+		if (orderManager.getOrderInfoByOrderId(req.getOutTradeNo()).getOrderState().equals(VipOrderState.ALREADY_PAY.getName())){
 			result = buildResult("SUCCESS", "OK");
 			return result;
 		}
