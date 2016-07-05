@@ -20,3 +20,9 @@ body{font-size:12px/150% Arial,Hiragino Sans GB W3,Hiragino Sans GB,Microsoft Ya
 #clerk-wrap .clerk-container-item select {
     width: 203px;
 }
+.label-content-item{
+	margin-left: 25px;
+}
+.div-content-item{
+	padding-bottom: 5px;
+}
