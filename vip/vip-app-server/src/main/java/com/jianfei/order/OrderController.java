@@ -250,4 +250,21 @@ public class OrderController {
 			return BaseMsgInfo.msgFail("保存用户退卡信息失败");
 		}
 	}
+
+
+	/**
+	 * 查询订单详细信息
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/orderDetail")
+	@ResponseBody
+	public BaseMsgInfo addVipReturnInfo(@RequestParam(value = "orderId", required = true) String orderId) {
+		try {
+			return BaseMsgInfo.success(orderManager.getOrderDetailByOrderId(orderId));
+		}catch (Exception e){
+			log.error("查询订单详细信息异常",e);
+			return BaseMsgInfo.msgFail("查询订单详细信息失败");
+		}
+	}
 }

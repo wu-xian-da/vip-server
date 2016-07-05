@@ -100,13 +100,13 @@ public class QueueManagerImpl implements QueueManager {
 		String msgType = map.get("msgType");
 
 		String msgBody = MsgAuxiliary.buildMsgBody(map, msgType);
-		System.out.println(DateUtil
-				.dateToString(new Date(), DateUtil.ALL_FOMAT)
+		System.out.println("jianfei->"
+				+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 				+ "->templateAnalysis->" + msgBody);
 		if (StringUtils.isEmpty(msgBody)) {
 			return messageDto.setData(map).setMsgBody("从缓存中获取指定类型的短信消息模版为空...");
 		}
-		
+
 		map.put("templateAnalysisBody", msgBody);
 
 		String userPhone = map.get("userPhone");
@@ -114,22 +114,20 @@ public class QueueManagerImpl implements QueueManager {
 		boolean isOk = false;// 操作结果状态
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
-			
+
 			return activeCard(map, msgBody, userPhone);
 
-		} else if (MsgType.BACK_CARD_APPLY.getName().equals(msgType)// 退卡申请后短信
+		} else if (MsgType.BACK_CARD_FINISH.getName().equals(msgType)// 退卡完成后短信
 																	// 紧急退卡完成
 				|| MsgType.RIGHT_BACK_CARD.getName().equals(msgType)) {
 
 			return backCard(msgBody, userPhone, vipCardNo, map);
 
 		} else {
-			// 登入，注册，退卡完成短信
-			System.out.println(DateUtil.dateToString(new Date(),
-					DateUtil.ALL_FOMAT)
-					+ "->登入，注册，退卡完成短信->"
-					+ msgBody
-					+ "  手机号：" + userPhone);
+			// 登入，注册，退卡申请短信
+			System.out.println("jianfei->"
+					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+					+ "->登入，注册，退卡完成短信->" + msgBody + "  手机号：" + userPhone);
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		if (!isOk) {
@@ -163,11 +161,10 @@ public class QueueManagerImpl implements QueueManager {
 
 		// 调用空港绑定接口
 		if (airportEasyManager.disabledVipCard(vipCardNo)) {
-			System.out.println(DateUtil.dateToString(new Date(),
-					DateUtil.ALL_FOMAT)
-					+ "->退卡申请后短信, 紧急退卡完成短信>"
-					+ msgBody
-					+ "  手机号:" + userPhone + "  卡号：" + vipCardNo);
+			System.out.println("jianfei->back->"
+					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
+					+ "  卡号：" + vipCardNo);
 			if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
 				messageDto.setOk(true).setMsgBody(
 						"调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到" + userPhone
@@ -177,7 +174,10 @@ public class QueueManagerImpl implements QueueManager {
 						+ userPhone + "失败");
 			}
 		} else {
-
+			System.out.println("jianfei->解绑失败->"
+					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
+					+ "  卡号：" + vipCardNo);
 			// 修改卡的状态
 			if (vipCardManager.activeAppCard(new MapUtils.Builder()
 					.setKeyValue("card_state",
@@ -221,9 +221,9 @@ public class QueueManagerImpl implements QueueManager {
 
 		// 判断卡号是否存在
 		if (ObjectUtils.isEmpty(vipcard)) {
-			logger.error("卡号为" + map.get("vipCardNo") + "的卡不存在...");
+			logger.error("jinfei:卡号为" + map.get("vipCardNo") + "的卡不存在...");
 			return messageDto.setData(map).setMsgBody(
-					"卡号为" + map.get("vipCardNo") + "的卡不存在...");
+					"jianfei:卡号为" + map.get("vipCardNo") + "的卡不存在...");
 		}
 		String cardNo = vipcard.getCardNo();
 
@@ -241,7 +241,7 @@ public class QueueManagerImpl implements QueueManager {
 					.setKeyValue("cardNo", cardNo).build());
 
 			if (isOk) {
-				System.out.println(DateUtil.dateToString(new Date(),
+				System.out.println("jinfei:"+DateUtil.dateToString(new Date(),
 						DateUtil.ALL_FOMAT)
 						+ "->激活短信->"
 						+ msgBody

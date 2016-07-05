@@ -338,13 +338,26 @@ public class StatManagerImpl implements StatManager {
 	/**
 	 * 分页查询订单相关状态
 	 *
-	 * @param uno
-	 * @param orderState
-	 * @param cardState
+	 * @param uno 销售员工号
+	 * @param orderState 订单状态
 	 * @return
 	 */
 	@Override
-	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno, String orderState, String cardState) {
-		return ordersMapper.pageOrderInfoBySale(uno, orderState, cardState);
+	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,int orderState,int pageNo,int pageSize) {
+		//TODO
+		List<OrderPageDto> orderPageDtos=new ArrayList<>();
+		OrderPageDto dto=new OrderPageDto();
+		dto.setOrderId("0467615151402953");
+		dto.setCardState(2);
+		dto.setOrderState(0);
+		dto.setCustomerName("杨蕾");
+		dto.setCustomerName("13456784567");
+		dto.setOrderTime(new Date());
+		orderPageDtos.add(dto);
+		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<OrderPageDto>();
+		pageDtoPageInfo.setList(orderPageDtos);
+		return pageDtoPageInfo;
+
+		/*return ordersMapper.pageOrderInfoBySale(uno, orderState, cardState);*/
 	}
 }

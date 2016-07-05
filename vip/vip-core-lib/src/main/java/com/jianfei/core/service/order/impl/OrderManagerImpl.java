@@ -303,8 +303,8 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public AppOrders getOrderInfo(String orderId) {
-        return appOrdersMapper.selectByPrimaryKey(orderId);
+    public AppOrders getOrderDetailByOrderId(String orderId) {
+        return appOrdersMapper.getOrderDetailByOrderId(orderId);
     }
 
 
@@ -419,6 +419,8 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
+        log.info("提交退卡信息");
+        log.info(appCardBack);
         //1、根据订单号查询订单信息
         AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(appCardBack.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
@@ -433,6 +435,7 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         // 2、重新计算可退余额 校验是否正确
+        log.info("重新计算可退余额 校验是否正确");
         VipCardUseDetailInfo useDetailInfo=new VipCardUseDetailInfo();
         useDetailInfo.setOrderMoney(orders.getPayMoney());
         useDetailInfo.setVipCardNo(orders.getVipCards().get(0).getCardNo());
@@ -459,12 +462,17 @@ public class OrderManagerImpl implements OrderManager {
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
             msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
         }
+        log.info("更改VIP卡状态");
         AppVipcard vipcard=new AppVipcard();
         vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
         vipcard.setCardState(VipCardState.BACK_CARD.getName());
+        log.info(vipcard);
         vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
+        log.info("更改用户状态为不可用");
         vipCardManager.updateVipCard(vipcard);
         appOrdersMapper.updateByPrimaryKeySelective(orders);
+        log.info("发送消息");
+        log.info(msgBuilder);
         queueManager.sendMessage(msgBuilder);
         return i > 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败");
     }
