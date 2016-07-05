@@ -38,7 +38,19 @@
 		<result column="money" property="remainMoney" />
 		<result column="card_no" property="vipCardNo" />
 		<result column="card_state" property="cardState"/>
-
+		<result column="invoice_kind" property="invoiceKind"/>
+		<result column="company_name" property="companyName"/>
+		<result column="company_address" property="companyAddress"/>
+		<result column="company_phone" property="companyPhone"/>
+		<result column="business_license_url" property="businessLicenseUrl"/>
+		<result column="company_tax_no" property="companyTaxNo"/>
+		<result column="invoice_content" property="invoiceContent"/>
+		<result column="province" property="provinceName"/>
+		<result column="city" property="cityName"/>
+		<result column="country" property="countryName"/>
+		<result column="address" property="address"/>
+		<result column="invoice_title" property="invoiceTitle"/>
+		<result column="postcode" property="postCode"/>
 	</resultMap>
 
 	<!--订单详细信息展示返回类型 -->
@@ -77,7 +89,9 @@
 	<select id="invoicePageList" parameterType="java.util.Map"
 		resultMap="OrderShowInfoDto">
 		select ord.order_id,ord.invoice_flag,
-		inv.invoice_no,inv.invoice_id,
+		inv.invoice_no,inv.invoice_id,inv.invoice_kind,inv.company_name,inv.company_address,
+		inv.company_phone,inv.business_license_url,inv.company_tax_no,inv.invoice_content,
+		inv.province,inv.city,inv.country,inv.address,inv.invoice_title,inv.postcode,
 		cus.customer_name,cus.customer_phone
 		from app_orders ord inner join app_invoice inv on ord.order_id =
 		inv.order_id
