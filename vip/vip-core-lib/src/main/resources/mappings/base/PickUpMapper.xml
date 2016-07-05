@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianfei.core.mapper.PickUpMapper">
+
+	<!-- 更具查询条件查找接送机信息列表 -->
+	<select id="mapList" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[SELECT 
+					  `id`,
+					  `phone`,
+					  `name`,
+					  `airport_id`,
+					  `airport_name`,
+					  `flight_lou`,
+					  `flight_num`,
+					  `flight_date`,
+					  `number_peers`,
+					  `gooff_date`,
+					  `pid`,
+					  `pname`,
+					  `sid`,
+					  `sname`,
+					  `cid`,
+					  `cname`,
+					  `detail_address`,
+					  `create_date`,
+					  `pickup_type`,
+					  `remark`,
+					  `submit`,
+					  `deal_id`,
+					  `update_date` 
+					FROM
+					 app_airport_trans aat
+		]]>
+		<where>
+			<if test="submit!=null">
+				aat.submit=#{submit}
+			</if>
+			<if test="pickup_type!=null">
+				and aat.pickup_type=#{pickup_type}
+			</if>
+		</where>
+		ORDER BY aat.`flight_date` DESC ,aat.`gooff_date` DESC
+	</select>
+
+	<update id="updateState" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE `app_airport_trans` aat SET aat.`submit`=#{submit} WHERE aat.`id`=#{id}
+		]]>
+	</update>
+
+</mapper>
