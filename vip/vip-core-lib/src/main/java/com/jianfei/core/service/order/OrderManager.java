@@ -139,7 +139,6 @@ public interface OrderManager {
     AppOrders getOrderDetailByOrderId(String orderId);
 
 
-
     /**
      * 根据手机号查询用户VIP卡使用信息和订单详细信息
      * @param phone 手机号

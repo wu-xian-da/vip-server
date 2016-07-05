@@ -101,7 +101,7 @@ public class QueueManagerImpl implements QueueManager {
 		String msgType = map.get("msgType");
 
 		String msgBody = MsgAuxiliary.buildMsgBody(map, msgType);
-		System.out.println("jianfei->"
+		System.out.println("vipjianfei:template:"
 				+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 				+ "->templateAnalysis->" + msgBody);
 		if (StringUtils.isEmpty(msgBody)) {
@@ -162,7 +162,7 @@ public class QueueManagerImpl implements QueueManager {
 
 		// 调用空港绑定接口
 		if (airportEasyManager.disabledVipCard(vipCardNo)) {
-			System.out.println("jianfei->back->"
+			System.out.println("vipjianfei:vipbacksuccess:"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
 					+ "  卡号：" + vipCardNo);
@@ -175,7 +175,7 @@ public class QueueManagerImpl implements QueueManager {
 						+ userPhone + "失败");
 			}
 		} else {
-			System.out.println("jianfei->解绑失败->"
+			System.out.println("vipjianfei:解绑失败:"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
 					+ "  卡号：" + vipCardNo);
@@ -222,16 +222,19 @@ public class QueueManagerImpl implements QueueManager {
 
 		// 判断卡号是否存在
 		if (ObjectUtils.isEmpty(vipcard)) {
-			logger.error("jinfei:卡号为" + map.get("vipCardNo") + "的卡不存在...");
+			logger.error("vipjinfei:vip激活:卡号为" + map.get("vipCardNo") + "的卡不存在...");
 			return messageDto.setData(map).setMsgBody(
-					"jianfei:卡号为" + map.get("vipCardNo") + "的卡不存在...");
+					"vipjianfei:vip激活:卡号为" + map.get("vipCardNo") + "的卡不存在...");
 		}
 		String cardNo = vipcard.getCardNo();
 
 		// 激活VIP卡
 		if (airportEasyManager.activeVipCard(map.get("vipCardNo"), userPhone,
 				map.get("userName"))) {
-
+			System.out.println("vipjianfei:vipactivesuccess:"
+					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+					+ "->激活成功。。。>" + msgBody + "  手机号:" + userPhone
+					+ "  卡号：" + cardNo);
 			// 计算卡的有效期
 			Date expireDate = DateUtil.addDays(new Date(),
 					vipcard.getValideTime());
@@ -242,7 +245,7 @@ public class QueueManagerImpl implements QueueManager {
 					.setKeyValue("cardNo", cardNo).build());
 
 			if (isOk) {
-				System.out.println("jinfei:"+DateUtil.dateToString(new Date(),
+				System.out.println("vipjinfei:"+DateUtil.dateToString(new Date(),
 						DateUtil.ALL_FOMAT)
 						+ "->激活短信->"
 						+ msgBody

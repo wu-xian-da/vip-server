@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jianfei.core.common.utils.GloabConfig;
 
 /**
  * 订单列表页面展示的订单信息
@@ -45,15 +46,26 @@ public class OrderShowInfoDto implements Serializable {
 	private String backTypeName;
 	private int backType;//退卡方式
 	private float remainMoney;//余额
-	private String invoiceId; //发票id
-    private String invoiceNo;//发票单号
-    private String vipCardNo;//卡号
+	private String vipCardNo;//卡号
     private int cardState;//卡状态
     private String cardStateName;//卡状态的中文提示
     
-	
+    private String invoiceId; //发票id
+    private String invoiceNo;//发票单号
+    private int invoiceKind;//发票种类
+    private String companyName;//公司名称
+    private String companyAddress;//公司地址
+    private String companyPhone;//公司电话
+    private String businessLicenseUrl;//营业执照url
+    private String companyTaxNo;//税务发票
+    private String invoiceContent;//发票内容
+    private String provinceName;
+    private String cityName;
+    private String countryName;
+    private String address;
+    private String invoiceTitle;
+    private String postCode;
     
-	
 	/**
 	 * @return the cardStateName
 	 */
@@ -362,18 +374,164 @@ public class OrderShowInfoDto implements Serializable {
 	public void setInvoiceFlagName(String invoiceFlagName) {
 		this.invoiceFlagName = invoiceFlagName;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the invoiceKind
 	 */
-	@Override
-	public String toString() {
-		return "OrderShowInfoDto [orderId=" + orderId + ", orderTime=" + orderTime + ", airportName=" + airportName
-				+ ", agentName=" + agentName + ", customerName=" + customerName + ", customerPhone=" + customerPhone
-				+ ", orderState=" + orderState + ", orderStateName=" + orderStateName + ", invoiceFlag=" + invoiceFlag
-				+ ", invoiceFlagName=" + invoiceFlagName + ", operation=" + operation + ", applyType=" + applyType
-				+ ", applyTypeName=" + applyTypeName + ", backTypeName=" + backTypeName + ", backType=" + backType
-				+ ", remainMoney=" + remainMoney + ", invoiceId=" + invoiceId + ", invoiceNo=" + invoiceNo
-				+ ", vipCardNo=" + vipCardNo + ", cardState=" + cardState + ", cardStateName=" + cardStateName + "]";
+	public int getInvoiceKind() {
+		return invoiceKind;
 	}
+	/**
+	 * @param invoiceKind the invoiceKind to set
+	 */
+	public void setInvoiceKind(int invoiceKind) {
+		this.invoiceKind = invoiceKind;
+	}
+	/**
+	 * @return the companyName
+	 */
+	public String getCompanyName() {
+		return companyName;
+	}
+	/**
+	 * @param companyName the companyName to set
+	 */
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	/**
+	 * @return the companyAddress
+	 */
+	public String getCompanyAddress() {
+		return companyAddress;
+	}
+	/**
+	 * @param companyAddress the companyAddress to set
+	 */
+	public void setCompanyAddress(String companyAddress) {
+		this.companyAddress = companyAddress;
+	}
+	/**
+	 * @return the companyPhone
+	 */
+	public String getCompanyPhone() {
+		return companyPhone;
+	}
+	/**
+	 * @param companyPhone the companyPhone to set
+	 */
+	public void setCompanyPhone(String companyPhone) {
+		this.companyPhone = companyPhone;
+	}
+	/**
+	 * @return the businessLicenseUrl
+	 */
+	public String getBusinessLicenseUrl() {
+		return GloabConfig.getConfig("static.resource.server.address")+businessLicenseUrl;
+	}
+	/**
+	 * @param businessLicenseUrl the businessLicenseUrl to set
+	 */
+	public void setBusinessLicenseUrl(String businessLicenseUrl) {
+		this.businessLicenseUrl = businessLicenseUrl;
+	}
+	/**
+	 * @return the companyTaxNo
+	 */
+	public String getCompanyTaxNo() {
+		return companyTaxNo;
+	}
+	/**
+	 * @param companyTaxNo the companyTaxNo to set
+	 */
+	public void setCompanyTaxNo(String companyTaxNo) {
+		this.companyTaxNo = companyTaxNo;
+	}
+	/**
+	 * @return the invoiceContent
+	 */
+	public String getInvoiceContent() {
+		return invoiceContent;
+	}
+	/**
+	 * @param invoiceContent the invoiceContent to set
+	 */
+	public void setInvoiceContent(String invoiceContent) {
+		this.invoiceContent = invoiceContent;
+	}
+	/**
+	 * @return the provinceName
+	 */
+	public String getProvinceName() {
+		return provinceName;
+	}
+	/**
+	 * @param provinceName the provinceName to set
+	 */
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+	/**
+	 * @return the cityName
+	 */
+	public String getCityName() {
+		return cityName;
+	}
+	/**
+	 * @param cityName the cityName to set
+	 */
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+	/**
+	 * @return the countryName
+	 */
+	public String getCountryName() {
+		return countryName;
+	}
+	/**
+	 * @param countryName the countryName to set
+	 */
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
+	}
+	/**
+	 * @return the address
+	 */
+	public String getAddress() {
+		return address;
+	}
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	/**
+	 * @return the invoiceTitle
+	 */
+	public String getInvoiceTitle() {
+		return invoiceTitle;
+	}
+	/**
+	 * @param invoiceTitle the invoiceTitle to set
+	 */
+	public void setInvoiceTitle(String invoiceTitle) {
+		this.invoiceTitle = invoiceTitle;
+	}
+	/**
+	 * @return the postCode
+	 */
+	public String getPostCode() {
+		return postCode;
+	}
+	/**
+	 * @param postCode the postCode to set
+	 */
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
+	
+	
+	
 	
 }

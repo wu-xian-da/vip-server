@@ -57,6 +57,10 @@ public class AppCustomer implements Serializable {
 
 	private String cityName;
 
+	private int cardType;
+
+	private Date birthDay;
+
 	/**
 	 * createTime
 	 *
@@ -232,5 +236,21 @@ public class AppCustomer implements Serializable {
 
 	public void setVipCards(List<AppVipcard> vipCards) {
 		this.vipCards = vipCards;
+	}
+
+	public int getCardType() {
+		return cardType;
+	}
+
+	public void setCardType(int cardType) {
+		this.cardType = cardType;
+	}
+
+	public Date getBirthDay() {
+		return birthDay;
+	}
+
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
 	}
 }

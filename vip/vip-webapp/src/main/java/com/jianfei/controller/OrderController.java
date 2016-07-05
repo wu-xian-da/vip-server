@@ -90,8 +90,11 @@ public class OrderController extends BaseController {
 	@Autowired
 	private AirportEasyManagerImpl airportEasyManagerImpl;
 	
-	/*
+	/**
 	 * 跳转到订单列表页面
+	 * @param response
+	 * @param model
+	 * @return
 	 */
 	@RequiresPermissions(value="system:orderList:home")
 	@RequestMapping(value="/goOrderManagementView")
@@ -105,8 +108,10 @@ public class OrderController extends BaseController {
 		return "orders/orderManagement";
 	}
 	
-	/*
+	/**
 	 * 跳转到退卡列表页面
+	 * @param response
+	 * @return
 	 */
 	@RequiresPermissions(value="system:backList:home")
 	@RequestMapping(value="/goBackCardListManagementView")
@@ -153,19 +158,42 @@ public class OrderController extends BaseController {
 			resMap.put("total", 0);
 		}else{
 			for(OrderShowInfoDto invoiceInfo : invoiceList){
+				//发票状态
 				int invoiceState = invoiceInfo.getInvoiceFlag();
+				//发票种类
+				int invoiceKind = invoiceInfo.getInvoiceKind();
+				//组装用于显示的数据
 				JSONObject outData = new JSONObject(); 
 				outData.put("invoiceId", invoiceInfo.getInvoiceId());
 				outData.put("orderId", invoiceInfo.getOrderId());
+				outData.put("invoiceKind", invoiceKind);
+				outData.put("invoiceContent", invoiceInfo.getInvoiceContent());
+				outData.put("customerName", invoiceInfo.getCustomerName());
+				outData.put("customerPhone", invoiceInfo.getCustomerPhone());
+				outData.put("provinceName",invoiceInfo.getProvinceName());
+				outData.put("cityName",invoiceInfo.getCityName());
+				outData.put("countryName",invoiceInfo.getCountryName());
+				outData.put("address",invoiceInfo.getAddress());
+				outData.put("invoiceTitle", invoiceInfo.getInvoiceTitle());
+				outData.put("postCode", invoiceInfo.getPostCode());
+				if(invoiceKind == 0){//--普通发票
+					
+				}else{//--专用发票
+					outData.put("companyName", invoiceInfo.getCompanyName());
+					outData.put("companyAddress", invoiceInfo.getCompanyAddress());
+					outData.put("companyPhone", invoiceInfo.getCompanyPhone());
+					outData.put("businessLicenseUrl", invoiceInfo.getBusinessLicenseUrl());
+					outData.put("companyTaxNo", invoiceInfo.getCompanyTaxNo());
+				}
 				//订单编号
 				String orderId = invoiceInfo.getOrderId();
 				if(invoiceState == 1){//发票未邮寄
 					invoiceInfo.setInvoiceFlagName("发票未邮寄");
-					invoiceInfo.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='drawBill("+outData+")'>开发票</button>");
-					//invoiceInfo.setOperation("<button class='btn btn-back' onclick='drawBill()'>开发票</button>");
+					invoiceInfo.setOperation("<button class='btn btn-back' onclick='drawBill("+outData+")'>开发票</button>");
 				}
 				if(invoiceState == 2){//发票已邮寄
-					invoiceInfo.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
+					outData.put("invoiceNo", invoiceInfo.getInvoiceNo());
+					invoiceInfo.setOperation("<button class='btn'onclick='lookOverInvoiceInfo("+outData+")'>查看</button>");
 					invoiceInfo.setInvoiceFlagName("发票已邮寄");
 				}
 			}
@@ -187,19 +215,22 @@ public class OrderController extends BaseController {
 		AppInvoice appInvoice = new AppInvoice();
 		appInvoice.setInvoiceNo(invoiceNo);
 		appInvoice.setInvoiceId(invoiceId);
-		appInvoice.setInvoiceType(InvoiceState.SEND_INVOICE.getName());
+		appInvoice.setInvoiceState(InvoiceState.SEND_INVOICE.getName());
 		appInvoiceManagerImpl.updateByPrimaryKeySelective(appInvoice);
 		//将订单的发票状态改为已邮寄
 		AppOrders addInfoDto = new AppOrders();
 		addInfoDto.setOrderId(orderId);
-		addInfoDto.setInvoiceFlag(2);
+		addInfoDto.setInvoiceFlag(InvoiceState.SEND_INVOICE.getName());
 		orderManagerImpl.updateOrderInfo(addInfoDto);
 		resMap.put("result", 1);
 		return resMap;
 	}
 	
-	/*
+	/**
 	 * 根据订单号查询订单详细信息
+	 * @param orderId
+	 * @param model
+	 * @return
 	 */
 	@RequestMapping(value="/returnOrderDetailInfoByOrderId")
 	public String returnOrderDetailInfoByOrderId(String orderId,Model model){
@@ -240,8 +271,17 @@ public class OrderController extends BaseController {
 		
 	}
 	
-	/*
+	/**
 	 * 订单列表分页查询
+	 * @param pageNo
+	 * @param pageSize
+	 * @param startTime
+	 * @param endTime
+	 * @param airportId
+	 * @param orderState
+	 * @param invoiceState
+	 * @param phoneOrUserName
+	 * @return
 	 */
 	@RequestMapping("orderList")
 	@ResponseBody
@@ -383,8 +423,14 @@ public class OrderController extends BaseController {
 		
 	}
 	
-	/*
+	/**
 	 * 退款列表分页查询
+	 * @param pageNo
+	 * @param pageSize
+	 * @param backType
+	 * @param applyType
+	 * @param orderState
+	 * @return
 	 */
 	@RequestMapping("backCardList")
 	@ResponseBody
@@ -517,9 +563,12 @@ public class OrderController extends BaseController {
 		
 	}
 	
-	
-	/*
+	/**
 	 * 退单申请,给用户发送短信验证码，并将短信验证码回显
+	 * @param orderId
+	 * @param operationType
+	 * @param phone
+	 * @return
 	 */
 	@RequestMapping(value="/applyBackCard")
 	@ResponseBody
@@ -557,8 +606,12 @@ public class OrderController extends BaseController {
 		return map;
 	}
 	
-	/*
+	/**
 	 * 订单退款审核不通过
+	 * @param orderId
+	 * @param opType
+	 * @param phone
+	 * @return
 	 */
 	@RequestMapping(value="/applyBackCardaAudit")
 	@ResponseBody
@@ -589,8 +642,16 @@ public class OrderController extends BaseController {
 		
 	}
 	
-	/*
+	/**
 	 * 核算退卡金额,并将用户账号信息记录到退卡流水表中
+	 * @param orderId
+	 * @param backCardNo
+	 * @param remainMoney
+	 * @param payMethod
+	 * @param opr
+	 * @param userNames
+	 * @param banckName
+	 * @return
 	 */
 	@RequestMapping(value="/onRefund")
 	@ResponseBody
@@ -645,8 +706,11 @@ public class OrderController extends BaseController {
 		return resMap;
 	}
 	
-	/*
+	/**
 	 * 最终退款
+	 * @param orderId
+	 * @param opr
+	 * @return
 	 */
 	@RequestMapping(value="/finalRefundMoney")
 	@ResponseBody
