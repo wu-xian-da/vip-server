@@ -125,10 +125,10 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_getcardcode(){
 		try {
-//			for (Long ii = 1234213121l;ii<1234213121l + 20 ;ii++)
-//				airportEasyManager.getCardCode(ii.toString());
+			for (Long ii = 22778899l;ii<22778899l + 20 ;ii++)
+				airportEasyManager.getCardCode(ii.toString());
 			
-			airportEasyManager.getCardCode("129190101012");
+//			airportEasyManager.getCardCode("31213413415");
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -150,7 +150,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_activeCard(){
 		try {
-			airportEasyManager.activeVipCard("07901220050", "13900000033", "leo1");
+			airportEasyManager.activeVipCard("07916907450", "13355602019", "刘东松");
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,7 +172,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_disabledVipCard(){
 		try {
-			airportEasyManager.disabledVipCard("07901220050");
+			airportEasyManager.disabledVipCard("07916907450");
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

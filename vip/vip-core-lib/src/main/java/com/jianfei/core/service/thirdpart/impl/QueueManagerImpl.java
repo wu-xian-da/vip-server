@@ -58,6 +58,7 @@ public class QueueManagerImpl implements QueueManager {
 		// 从消息队列中去数据
 		String result = JedisUtils.rpoplpushQ(sourceQ, targerQ);
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
+			System.out.println("rpop返回为空");
 			return null;
 		}
 		System.out.println(DateUtil
