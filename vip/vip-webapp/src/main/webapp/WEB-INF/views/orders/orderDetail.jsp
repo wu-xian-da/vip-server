@@ -69,9 +69,14 @@
 			<div class="order-list-title">个人资料</div>
 			<ul>
 				<li>用户姓名：${orderDetailInfo.customerName}</li>
-				<li>证件类型：</li>
+				<li>证件类型：
+					<c:if test="${orderDetailInfo.indentType == 1}">身份证</c:if>
+					<c:if test="${orderDetailInfo.indentType == 2}">护照</c:if>
+					<c:if test="${orderDetailInfo.indentType == 3}">军官证</c:if>
+					<c:if test="${orderDetailInfo.indentType == 4}">回乡证</c:if>
+				</li>
 				<li>证件号：${orderDetailInfo.customerIdent }</li>
-				<li>出生日期：</li>
+				<li>出生日期：${orderDetailInfo.birthDay}</li>
 				<li>用户手机号：${orderDetailInfo.customerPhone }</li>
 				<li>用户性别：${orderDetailInfo.sex ==1 ? '男' : '女' }</li>
 				<li>常住地址：${orderDetailInfo.customerProvinceName} ${orderDetailInfo.customerCityName} ${orderDetailInfo.address}</li>
@@ -93,12 +98,38 @@
 			</div>
 			<c:if test="${orderDetailInfo.invoiceFlag != 0}">
 				<ul>
-						<li>邮寄地址：${invoice.address }</li>
-						<li>发票类型：${invoice.invoiceType ==1? '个人':'公司' }</li>
+					<!--普通发票  -->
+					<c:if test="${invoice.invoiceKind ==0}">
+						<li>发票类型：普通发票</li>
+						<li>邮寄地址：${invoice.province} ${invoice.city} ${invoice.country} ${invoice.address }</li>
+						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
 						<li>发票抬头：${invoice.invoiceTitle}</li>
+						<li>发票内容：${invoice.invoiceContent}</li>
+						<li>邮　　编：${invoice.postcode }</li>
 						<c:if test="${orderDetailInfo.invoiceFlag == 2}">
 						<li>发票编号：${invoice.invoiceNo}</li>
 						</c:if>
+					</c:if>
+					
+					<!--专用发票 -->
+					<c:if test="${invoice.invoiceKind ==1}">
+						<li>发票类型：专用发票</li>
+						<li>邮寄地址：${invoice.province} ${invoice.city} ${invoice.country} ${invoice.address }</li>
+						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
+						<li>发票抬头：${invoice.invoiceTitle}</li>
+						<li>发票内容：${invoice.invoiceContent}</li>
+						<li>邮　　编：${invoice.postcode }</li>
+						<li>公司名称：${invoice.companyName}</li>
+						<li>公司税号：${invoice.companyTaxNo }</li>
+						<li>公司地址：${invoice.companyAddress }</li>
+						<li>公司电话：${invoice.companyPhone }</li>
+						<li>营业执照：<img src="${invoice.businessLicenseUrl}" style="width: 400px"></li>
+						<c:if test="${orderDetailInfo.invoiceFlag == 2}">
+						<li>发票编号：${invoice.invoiceNo}</li>
+						</c:if>
+					</c:if>
+					
+						
 				</ul>
 			</c:if>
 			

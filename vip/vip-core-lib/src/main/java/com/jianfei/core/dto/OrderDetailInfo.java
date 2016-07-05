@@ -40,12 +40,15 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	private Date activatTime;//激活时间
 	private String customerIdent;//用户身份证号
 	private int sex;//用户性别
+	private int indentType;//证件类型
 	private String customerProvinceName;
 	private String customerCityName;
+	private Date birthDay;//出生日期
 	private String address;//常驻地址
 	private String email;//邮箱地址
 	private int invoiceType;//发票类型
 	private String invoiceTitle;//发票抬头
+	
 	
 	
 	/**
@@ -296,16 +299,43 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	public void setPayMoney(float payMoney) {
 		this.payMoney = payMoney;
 	}
+	/**
+	 * @return the indentType
+	 */
+	public int getIndentType() {
+		return indentType;
+	}
+	/**
+	 * @param indentType the indentType to set
+	 */
+	public void setIndentType(int indentType) {
+		this.indentType = indentType;
+	}
+	/**
+	 * @return the birthDay
+	 */
+	public Date getBirthDay() {
+		return birthDay;
+	}
+	/**
+	 * @param birthDay the birthDay to set
+	 */
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "OrderDetailInfo [agentPhone=" + agentPhone + ", vipCardNo=" + vipCardNo + ", cardType=" + cardType
-				+ ", initMoney=" + initMoney + ", payMethod=" + payMethod + ", payTime=" + payTime + ", activatTime="
-				+ activatTime + ", customerIdent=" + customerIdent + ", sex=" + sex + ", address=" + address
+				+ ", initMoney=" + initMoney + ", payMoney=" + payMoney + ", payMethod=" + payMethod + ", payTime="
+				+ payTime + ", activatTime=" + activatTime + ", customerIdent=" + customerIdent + ", sex=" + sex
+				+ ", indentType=" + indentType + ", customerProvinceName=" + customerProvinceName
+				+ ", customerCityName=" + customerCityName + ", birthDay=" + birthDay + ", address=" + address
 				+ ", email=" + email + ", invoiceType=" + invoiceType + ", invoiceTitle=" + invoiceTitle + "]";
 	}
+	
 	
 	
 	

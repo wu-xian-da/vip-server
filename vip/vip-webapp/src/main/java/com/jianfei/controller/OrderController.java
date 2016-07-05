@@ -48,19 +48,21 @@ import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipCardState;
+import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.dto.ServiceMsgBuilder;
-import com.jianfei.core.service.base.AppInvoiceManager;
 import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.impl.AirportEasyManagerImpl;
+import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 
 /**
  * 订单管理
@@ -78,7 +80,7 @@ public class OrderController extends BaseController {
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
-	private AppInvoiceManager appInvoiceManagerImpl;
+	private AppInvoiceManagerImpl appInvoiceManagerImpl;
 	@Autowired
 	private AriPortManager ariPortService;
 	@Autowired
@@ -89,7 +91,8 @@ public class OrderController extends BaseController {
 	private VipCardManagerImpl vipCardManagerImpl;
 	@Autowired
 	private AirportEasyManagerImpl airportEasyManagerImpl;
-	
+	@Autowired
+	private VipUserManagerImpl vipUserManager;
 	/**
 	 * 跳转到订单列表页面
 	 * @param response
@@ -692,6 +695,8 @@ public class OrderController extends BaseController {
 		}
 		// 3、*****给用户发送短信 内容：用户名、卡号
 		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		// 4、将用户状态变为禁用
+		vipUserManager.updateUserSate(orderDetailInfos.getCustomerPhone(),VipUserSate.NOT_ACTIVE);
 		//3.3调用发送短信接口
 		try {
 			ServiceMsgBuilder msgBuilder = new ServiceMsgBuilder().setUserPhone(orderDetailInfos.getCustomerPhone()).
@@ -699,7 +704,7 @@ public class OrderController extends BaseController {
 					setMsgType(MsgType.BACK_CARD_APPLY.getName());
 			orderManagerImpl.sendMessageOfOrder(msgBuilder);
 		} catch (Exception e) {
-			logger.error("发送短信失败");
+			logger.error("退卡申请-发送短信失败");
 		}
 		
 		resMap.put("orderStateName", "审核通过");

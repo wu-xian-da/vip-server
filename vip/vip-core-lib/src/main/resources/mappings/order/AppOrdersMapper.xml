@@ -78,6 +78,8 @@
 		<result column="city_name" property="customerCityName" />
 		<result column="address" property="address" />
 		<result column="email" property="email" />
+		<result column="card_type" property="indentType"/>
+		<result column="birth_day" property="birthDay"/>
 		<!-- 5、卡表 -->
 		<result column="card_id" property="vipCardNo" />
 		<result column="card_type" property="cardType" />
@@ -114,6 +116,7 @@
 		sa.airport_name,
 		agent.name,agent.phone,
 		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.province_name,cus.city_name,cus.address,cus.email,
+		cus.card_type,cus.birth_day,
 		aoc.card_id ,aoc.card_type,aoc.init_money
 		from app_orders ord,sys_airport sa,sys_users agent ,app_customer cus
 		,app_order_card aoc
