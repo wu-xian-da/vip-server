@@ -47,9 +47,49 @@ public class OrderShowInfoDto implements Serializable {
 	private float remainMoney;//余额
 	private String invoiceId; //发票id
     private String invoiceNo;//发票单号
+    private String vipCardNo;//卡号
+    private int cardState;//卡状态
+    private String cardStateName;//卡状态的中文提示
+    
 	
     
 	
+	/**
+	 * @return the cardStateName
+	 */
+	public String getCardStateName() {
+		return cardStateName;
+	}
+	/**
+	 * @param cardStateName the cardStateName to set
+	 */
+	public void setCardStateName(String cardStateName) {
+		this.cardStateName = cardStateName;
+	}
+	/**
+	 * @return the vipCardNo
+	 */
+	public String getVipCardNo() {
+		return vipCardNo;
+	}
+	/**
+	 * @param vipCardNo the vipCardNo to set
+	 */
+	public void setVipCardNo(String vipCardNo) {
+		this.vipCardNo = vipCardNo;
+	}
+	/**
+	 * @return the cardState
+	 */
+	public int getCardState() {
+		return cardState;
+	}
+	/**
+	 * @param cardState the cardState to set
+	 */
+	public void setCardState(int cardState) {
+		this.cardState = cardState;
+	}
 	/**
 	 * @return the invoiceId
 	 */
@@ -332,7 +372,8 @@ public class OrderShowInfoDto implements Serializable {
 				+ ", orderState=" + orderState + ", orderStateName=" + orderStateName + ", invoiceFlag=" + invoiceFlag
 				+ ", invoiceFlagName=" + invoiceFlagName + ", operation=" + operation + ", applyType=" + applyType
 				+ ", applyTypeName=" + applyTypeName + ", backTypeName=" + backTypeName + ", backType=" + backType
-				+ ", remainMoney=" + remainMoney + ", invoiceId=" + invoiceId + ", invoiceNo=" + invoiceNo + "]";
+				+ ", remainMoney=" + remainMoney + ", invoiceId=" + invoiceId + ", invoiceNo=" + invoiceNo
+				+ ", vipCardNo=" + vipCardNo + ", cardState=" + cardState + ", cardStateName=" + cardStateName + "]";
 	}
 	
 }
