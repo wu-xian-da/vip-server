@@ -61,7 +61,7 @@ public class Signature {
             sb.append(arrayToSort[i]);
         }
         String result = sb.toString();
-        result += "key=" + "5173af15bcd5ee99fb9ca5257ba4436a";//Configure.getKey();
+        result += "key=" + Configure.getKey();
         //Util.log("Sign Before MD5:" + result);
         result = MD5.MD5Encode(result).toUpperCase();
         //Util.log("Sign Result:" + result);

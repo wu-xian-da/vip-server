@@ -81,9 +81,10 @@
 							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 							<th data-options="align:'center', field:'orderTime',width:150">申请日期</th>
 		
-							<th data-options="align:'center', field:'applyTypeName',width:150">申请途径</th>
-							<th data-options="align:'center', field:'backTypeName',width:100">退款方式</th>
+							<th data-options="align:'center', field:'applyTypeName',width:120">申请途径</th>
+							<th data-options="align:'center', field:'backTypeName',width:80">退款方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
+							<th data-options="align:'center', field:'cardStateName',width:100">卡状态</th>
 							<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 							<th data-options="align:'center', field:'operation',width:200">操作</th>
 						</tr>

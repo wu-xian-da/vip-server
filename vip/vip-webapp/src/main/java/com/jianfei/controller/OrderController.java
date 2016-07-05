@@ -60,6 +60,7 @@ import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
+import com.jianfei.core.service.thirdpart.impl.AirportEasyManagerImpl;
 
 /**
  * 订单管理
@@ -86,6 +87,8 @@ public class OrderController extends BaseController {
 	private AppUserFeedbackImpl appUserFeedbackImpl;
 	@Autowired
 	private VipCardManagerImpl vipCardManagerImpl;
+	@Autowired
+	private AirportEasyManagerImpl airportEasyManagerImpl;
 	
 	/*
 	 * 跳转到订单列表页面
@@ -252,10 +255,8 @@ public class OrderController extends BaseController {
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
 		
 		//用户可以看到机场列表
-		
 		List<String> aiportIdList = returnAirportIdList();
 		
-
 		//设置刷选条件
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
 		if(!startTime.equals("")){
@@ -316,7 +317,6 @@ public class OrderController extends BaseController {
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 				}
 				
-				
 			}else if(appOrder.getOrderState() == 2){
 				appOrder.setOrderStateName("正在审核");
 				JSONObject outData = new JSONObject(); 
@@ -330,7 +330,6 @@ public class OrderController extends BaseController {
 				if(smsCode == null){
 					smsCode ="";
 				}
-				
 				//是否有审核的权限
 				boolean flag = subject.isPermitted("system:order:audit");
 				if(flag){
@@ -366,7 +365,6 @@ public class OrderController extends BaseController {
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 				}
 				
-			
 			}else if(appOrder.getOrderState() ==4){
 				//退款成功
 				orderId = appOrder.getOrderId();
@@ -397,7 +395,6 @@ public class OrderController extends BaseController {
 			@RequestParam(value="orderState",defaultValue="") String orderState){
 		
 		//用户可以看到机场列表
-		
 		List<String> aiportIdList = returnAirportIdList();
 		
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
@@ -425,6 +422,10 @@ public class OrderController extends BaseController {
 		String orderId = null;
 		if(list != null && list.size() >0){
 			for(OrderShowInfoDto appOrder : list){
+				//卡状态
+				int cardState =  appOrder.getCardState();
+				appOrder.setCardStateName(returnCardStateName(cardState)); 
+				
 				if(appOrder.getOrderState() ==3){
 					//退款
 					JSONObject outData = new JSONObject(); 
@@ -460,8 +461,6 @@ public class OrderController extends BaseController {
 					}else{
 						appOrder.setBackTypeName("现金");
 					}
-					
-					
 					//权限校验
 					org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
 					//是否有最终退款查看的权限
@@ -495,7 +494,12 @@ public class OrderController extends BaseController {
 					}else{
 						appOrder.setBackTypeName("现金");
 					}
-					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
+					if(cardState == 5){
+						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><a href='unbundCard?vipCardNo="+appOrder.getVipCardNo()+"'><button class='btn' style='background:green'>解绑</button></a>");
+					}else{
+						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
+					}
+					
 					resList.add(appOrder);
 				}
 			}
@@ -508,7 +512,6 @@ public class OrderController extends BaseController {
 		}else{
 			map.put("total", 0);
 		}
-		
 		map.put("rows", resList);
 		return map;
 		
@@ -533,7 +536,6 @@ public class OrderController extends BaseController {
 			logger.error("发送短信失败");
 		}
 		
-		
 		JSONObject outData = new JSONObject(); 
 		double remainMoney = orderManagerImpl.remainMoney(orderId);
 		outData.put("remainMoney", remainMoney);
@@ -552,7 +554,6 @@ public class OrderController extends BaseController {
 		}else{
 			map.put("data", "");
 		}
-		
 		return map;
 	}
 	
@@ -583,7 +584,6 @@ public class OrderController extends BaseController {
 		}else{
 			resMap.put("data", "<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 		}
-		
 		resMap.put("orderStateName", "已支付");
 		return resMap;	
 		
@@ -601,7 +601,6 @@ public class OrderController extends BaseController {
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
 		
 		//2、将退款信息录入到流水表中
-		
 		User user = getCurrentUser();
 		//****审批人员id
 		String userId = user.getId()+"";
@@ -643,8 +642,6 @@ public class OrderController extends BaseController {
 		}
 		
 		resMap.put("orderStateName", "审核通过");
-		
-		
 		return resMap;
 	}
 	
@@ -697,10 +694,7 @@ public class OrderController extends BaseController {
 		} catch (Exception e) {
 			logger.error("发送短信失败");
 		}
-		
-		
 		return resMap;
-		
 	}
 	
 	
@@ -727,9 +721,7 @@ public class OrderController extends BaseController {
 		for(AriPort ariPort :airportList){
 			aiportIdList.add(ariPort.getId());
 		}
-		
 		return aiportIdList;
-		
 	}
 	
 	/**
@@ -759,8 +751,8 @@ public class OrderController extends BaseController {
 	public void exportOrderInfoToExcel(@RequestParam(value = "startTime", defaultValue = "") String startTime,
 			@RequestParam(value = "endTime", defaultValue = "") String endTime,
 			@RequestParam(value = "airportId", required = false, defaultValue = "") String airportId,
-			@RequestParam(value = "orderState", required = false, defaultValue = "5") Integer orderState,
-			@RequestParam(value = "invoiceState", required = false, defaultValue = "3") Integer invoiceState,
+			@RequestParam(value = "orderState", required = false, defaultValue = "") String orderState,
+			@RequestParam(value = "invoiceState", required = false, defaultValue = "") String invoiceState,
 			@RequestParam(value = "phoneOrUserName", required = false, defaultValue = "") String phoneOrUserName,
 			HttpServletRequest request, HttpServletResponse response) {
 
@@ -782,14 +774,15 @@ public class OrderController extends BaseController {
 		}
 		if (!airportId.equals("")) {
 			paramsMap.put("airportId", airportId);
+		}if(!orderState.equals("")){
+			paramsMap.put("orderState", orderState);
 		}
-
-		paramsMap.put("orderState", orderState);
-		paramsMap.put("invoiceState", invoiceState);
-
+		if(!invoiceState.equals("")){
+			paramsMap.put("invoiceState", invoiceState);
+		}
+		
 		List<OrderShowInfoDto> list = orderManagerImpl.simplePage(paramsMap);
 		
-
 		//3 生成提示信息，
 		response.setContentType("application/vnd.ms-excel");
 		String codedFileName = null;
@@ -909,6 +902,28 @@ public class OrderController extends BaseController {
 	}
 	
 	/**
+	 * 解绑操作
+	 * @param card
+	 */
+	@RequestMapping("unbundCard")
+	public String unbundCard(@RequestParam(value="vipCardNo",required=true) String vipCardNo){
+		try {
+			if(airportEasyManagerImpl.disabledVipCard(vipCardNo)){
+				//更新卡状态，将解绑失败变成已退卡
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("card_state", VipCardState.BACK_CARD.getName());
+				map.put("cardNo", vipCardNo);
+				vipCardManagerImpl.activeAppCard(map);
+			};
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "redirect:goBackCardListManagementView";
+	}
+	
+	/**
 	 * 根据订单状态返回中文名称
 	 * @param orderState
 	 * @return
@@ -930,6 +945,7 @@ public class OrderController extends BaseController {
 		}
 		return orderStateName;
 	}
+	
 	/**
 	 * 根据发票状态返回发票的中文名称
 	 * @param invoiceFlag
@@ -946,13 +962,36 @@ public class OrderController extends BaseController {
 		}
 		return invoiceFlagName;
 	}
+	
+	/**
+	 * 根据卡状态返回卡状态的中文提示
+	 * @param cardState
+	 * @return
+	 */
+	public String returnCardStateName(Integer cardState){
+		String cardStateName = "";
+		if(cardState == 0){
+			cardStateName = "未激活";
+		}else if(cardState == 1){
+			cardStateName = "激活成功";
+		}else if(cardState == 2){
+			cardStateName = "已退卡";
+		}else if(cardState == 3){
+			cardStateName = "激活失败";
+		}else if(cardState == 4){
+			cardStateName = "待激活";
+		}else{
+			cardStateName = "解绑失败";
+		}
+		return cardStateName;
+	}
+	
 	/**
 	 * 将订单日期转成特定的格式
 	 */
 	public String formatterDate(Date date){
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sf.format(date);
-		
 	}
 	
 }	
