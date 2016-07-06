@@ -429,7 +429,7 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
+    public synchronized BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
         log.info("提交退卡信息");
         log.info(appCardBack);
         //1、根据订单号查询订单信息
