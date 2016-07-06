@@ -207,7 +207,7 @@ public class StatManagerImpl implements StatManager {
 			}
 			mapItem.put("date", date);
 			mapItem.put("total", sum);
-			mapItem.put("backTotal", backTotal);
+			mapItem.put("back_total", backTotal);
 			mapItem.put("avgNum", formatNum(avgNum/proIdApIdList.size()));
 			mapItem.put("avgNum_back", formatNum(avgNum_back/proIdApIdList.size()));
 			list.add(mapItem);
@@ -216,11 +216,11 @@ public class StatManagerImpl implements StatManager {
 			backTotalAllDay += backTotal;
 		}
 		
-		totalMap.put("cardNum", sumAllDay);
-		totalMap.put("backTotal", backTotalAllDay);
+		totalMap.put("saleCardNumTotal", sumAllDay);
+		totalMap.put("backCardNumTotal", backTotalAllDay);
 		
 		Map<String,Object> resList = new HashMap<String,Object>();
-		resList.put("carNumByDate", list);
+		resList.put("cardNumList", list);
 		resList.put("total", totalMap);
 		
 		return resList;
