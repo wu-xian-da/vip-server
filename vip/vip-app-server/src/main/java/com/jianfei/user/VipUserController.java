@@ -1,9 +1,12 @@
 package com.jianfei.user;
 
+import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.service.base.AirportTransManager;
 import com.jianfei.core.service.base.AppConfigManager;
 import com.jianfei.core.service.base.impl.AppConfigManagerImpl;
+import com.jianfei.core.service.order.OrderPayManager;
 import com.jianfei.core.service.order.impl.ConsumeManagerImpl;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
@@ -35,6 +38,8 @@ public class VipUserController {
     @Autowired
     private ConsumeManagerImpl consumeManager;
 
+    @Autowired
+    private AirportTransManager transManager;
 
     /**
      * VIP 用户登录
@@ -118,5 +123,22 @@ public class VipUserController {
     public BaseMsgInfo loginOut(@RequestParam(value = "token ", required = false) String token
     ) {
         return BaseMsgInfo.success(true);
+    }
+
+    /**
+     * 接送机信息添加
+     *
+     * @return
+     */
+    @RequestMapping(value = "/airportTransInfo")
+    @ResponseBody
+    public BaseMsgInfo addAppAirportTrans(AppAirportTrans airportTrans
+    ) {
+        try {
+            return transManager.addAirportTransInfo(airportTrans);
+        }catch (Exception e){
+            log.error("添加接送机信息失败",e);
+            return BaseMsgInfo.msgFail("接送机信息添加失败");
+        }
     }
 }
