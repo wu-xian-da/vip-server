@@ -131,11 +131,14 @@ public class ArchiveManagerImplTest {
 	}
 
 	@Test
-	public void testKitty() {
-		SimpleHash simpleHash = new SimpleHash("md5",
-				GloabConfig.getConfig("defalut.passwd"),
-				"f6e537de-04a6-47e1-834a-c6177295b327");
-		System.out.println(simpleHash.toString());
+	public void testDateProvinceIdAirport() {
+		Map<String, Object> mapCon = new HashMap<String, Object>();
+		mapCon.put("currentTime", "2016-06-27");
+		List<Map<String, Object>> maps = archiveManager
+				.dateProvinceIdApportIds(mapCon);
+		for (Map<String, Object> map : maps) {
+			System.out.println(JSONObject.toJSONString(map));
+		}
 	}
 
 	@Test
