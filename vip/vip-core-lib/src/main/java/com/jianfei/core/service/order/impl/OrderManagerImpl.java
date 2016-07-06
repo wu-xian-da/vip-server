@@ -250,8 +250,16 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public int insertBackCardInfo(AppCardBack appCardBack) {
         // TODO Auto-generated method stub
-        appCardBackMapper.insertBackCard(appCardBack);
-        return 0;
+    	int flag =0;
+    	try {
+    		appCardBackMapper.insertBackCard(appCardBack);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error(e.getMessage());
+			flag =1;
+		}
+        
+        return flag;
     }
 
 
@@ -457,13 +465,13 @@ public class OrderManagerImpl implements OrderManager {
         msgBuilder.setMsgBody(object.toJSONString());
         //添加订单状态为已退款
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
-            //更改订单状态为已退款 和申请方式为
+            //紧急退卡 更改订单状态为已退款 和申请方式为紧急
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
-            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
+            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
-            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
+            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
         }
         log.info("更改VIP卡状态");
         AppVipcard vipcard=new AppVipcard();

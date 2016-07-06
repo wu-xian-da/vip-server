@@ -40,11 +40,11 @@ public class AppVersionManagerImpl implements AppVersionManager {
         if (appVersion == null) {
             List<AppVersion> list = appVersionMapper.getVersions(channel);
             appVersion = list == null || list.isEmpty() ? new AppVersion() : list.get(0);
-            if ("003".equals(channel)){
-                Map map=new HashMap();
-                map.put("vip_load_url","www.baidu.com");
-                appVersion.setMap(map);
-            }
+            Map map = new HashMap();
+            map.put("vip_load_url", "http://www.baidu.com");
+            map.put("company_wechat_url", "http://www.baidu.com");
+            map.put("company_kefu_phone", "40088888888");
+            appVersion.setMap(map);
             //数据库无论是否存在都设置值 防止缓存穿透
             JedisUtils.setObject("APP_VERSION_" + channel, appVersion, 0);
         }

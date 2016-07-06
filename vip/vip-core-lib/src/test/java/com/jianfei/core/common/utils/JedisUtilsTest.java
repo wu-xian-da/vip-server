@@ -69,8 +69,8 @@ public class JedisUtilsTest {
 	 */
 	@Test
 	public void testGetObject() {
-		String rs = JedisUtils.get("MSG:TEMPLATE001");
-		System.out.println(rs);
+		Object obj = JedisUtils.get("2016-06-27$370$0466996481520071");
+		System.out.println(obj);
 	}
 
 	/**
@@ -80,55 +80,37 @@ public class JedisUtilsTest {
 	 */
 	@Test
 	public void testSet() {
-		//2016-05-03$120$0465796345470881
-		//北京 -测试场站
-		// 2016-05-02$110$0465785487752808   {'total':10,'avgNum':5,'back_order_total':2}
-		// 2016-05-03$110$0465785487752808   {'total':12,'avgNum':6,'back_order_total':5}
-		// 2016-05-04$110$0465785487752808   {'total':6,'avgNum':3,'back_order_total':1}
-		JedisUtils.setObject("2016-05-02$110$0465785487752808", "{'total':10,'avgNum':5,'back_order_total':2}",0);
-		JedisUtils.setObject("2016-05-03$110$0465785487752808", "{'total':12,'avgNum':6,'back_order_total':5}",0);
-		JedisUtils.setObject("2016-05-04$110$0465785487752808","{'total':6,'avgNum':3,'back_order_total':1}",0);
-		
-		//北京-北京首都国际机场
-		// 2016-05-02$110$0465798272992435 {'total':10,'avgNum':5,'back_order_total':2}
-		// 2016-05-03$110$0465798272992435 {'total':6,'avgNum':10,'back_order_total':3}
-		// 2016-05-04$110$0465798272992435 {'total':8,'avgNum':8,'back_order_total':3}
-		JedisUtils.setObject("2016-05-02$110$0465798272992435","{'total':10,'avgNum':5,'back_order_total':2}",0);
-		JedisUtils.setObject("2016-05-03$110$0465798272992435","{'total':6,'avgNum':10,'back_order_total':3}",0);
-		JedisUtils.setObject("2016-05-04$110$0465798272992435","{'total':8,'avgNum':8,'back_order_total':3}",0);
-		
-		//天津 - 天津场站1
-		//2016-05-02$120$0465796345470881  {'total':20,'avgNum':3,'back_order_total':1}
-		//2016-05-02$120$0465796345470881  {'total':23,'avgNum':5,'back_order_total':1}
-		//2016-05-02$120$0465796345470881  {'total':25,'avgNum':6,'back_order_total':1}
-		JedisUtils.setObject("2016-05-02$120$0465796345470881","{'total':20,'avgNum':3,'back_order_total':1}",0);
-		JedisUtils.setObject("2016-05-03$120$0465796345470881","{'total':23,'avgNum':5,'back_order_total':1}",0);
-		JedisUtils.setObject("2016-05-04$120$0465796345470881","{'total':25,'avgNum':6,'back_order_total':1}",0);
-		
-
-		//天津 - 天津场站2
-		//2016-05-02$120$0465798075207510  {'total':20,'avgNum':3,'back_order_total':1}
-		//2016-05-02$120$0465798075207510  {'total':23,'avgNum':5,'back_order_total':1}
-		//2016-05-02$120$0465798075207510  {'total':25,'avgNum':6,'back_order_total':1}
-		JedisUtils.setObject("2016-05-02$120$0465798075207510","{'total':20,'avgNum':3,'back_order_total':1}",0);
-		JedisUtils.setObject("2016-05-03$120$0465798075207510","{'total':23,'avgNum':5,'back_order_total':1}",0);
-		JedisUtils.setObject("2016-05-04$120$0465798075207510","{'total':25,'avgNum':6,'back_order_total':1}",0);
-		
-		//成都
-		//2016-05-02$210$0465807419050017 {'total':15,'avgNum':5,'back_order_total':2}
-		//2016-05-03$210$0465807419050017 {'total':10,'avgNum':10,'back_order_total':2}
-		//2016-05-04$210$0465807419050017 {'total':20,'avgNum':3,'back_order_total':2}
-		JedisUtils.setObject("2016-05-02$210$0465807419050017","{'total':15,'avgNum':5,'back_order_total':2}",0);
-		JedisUtils.setObject("2016-05-03$210$0465807419050017","{'total':10,'avgNum':10,'back_order_total':2}",0);
-		JedisUtils.setObject("2016-05-04$210$0465807419050017","{'total':20,'avgNum':3,'back_order_total':2}",0);
-		
-		Object rs = JedisUtils.getObject("2016-05-02$110$0465785487752808");
-		System.out.println(rs);
+		JedisUtils.setObject("2016-06-27$110$0466995347947498",
+				"{'total':2,'avgNum_back':1.00,'cacheKey':'2016-06-27$110','pcount':1,'back_order_total':1,'avgNum':1.0000,'pid':'110'}",0);
+		JedisUtils.setObject("2016-06-27$110$0466995391093644",
+				"{'total':3,'avgNum_back':1.00,'cacheKey':'2016-06-27$110','pcount':1,'back_order_total':1,'avgNum':1.0000,'pid':'110'}",0);         
+		JedisUtils.setObject("2016-06-27$120$0466996232803354",
+				"{'total':5,'avgNum_back':1.00,'cacheKey':'2016-06-27$120','pcount':1,'back_order_total':0,'avgNum':1.0000,'pid':'120'}",0);
+		JedisUtils.setObject("2016-06-27$130$0466996281393944",
+				"{'total':2,'avgNum_back':1.00,'cacheKey':'2016-06-27$130','pcount':1,'back_order_total':0,'avgNum':1.0000,'pid':'130'}",0);
+		JedisUtils.setObject("2016-06-27$370$0466996481520071",
+				"{'total':6,'avgNum_back':2.00,'cacheKey':'2016-06-27$110','pcount':1,'back_order_total':2,'avgNum':1.0000,'pid':'370'}",0);
+		JedisUtils.setObject("2016-06-27$410$0466996307279830",
+				"{'total':2,'avgNum_back':1.00,'cacheKey':'2016-06-27$110','pcount':1,'back_order_total':0,'avgNum':1.0000,'pid':'410'}",0);
+		/*
+		[{pid=110, airportId=0467021250493044, anames=北京站}, 
+		 {pid=110, airportId=0466995347947498, anames=北京首都国际机场},
+		 {pid=110, airportId=0466995391093644, anames=北京南苑机场}, 
+		 {pid=120, airportId=0466996232803354, anames=天津滨海国际机场}, 
+		 {pid=130, airportId=0466996281393944, anames=石家庄正定国际机场}, 
+		 {pid=370, airportId=0466996481520071, anames=青岛流亭国际机场}, 
+		 {pid=410, airportId=0466996307279830, anames=郑州新郑国际机场}]
+		 */
 	}
 	
 	@Test
 	public void removeKeyTest(){
-		JedisUtils.del("2016-06-29$110");
+		System.out.println(JedisUtils.del("2016-06-27$110$0466995347947498"));
+		System.out.println(JedisUtils.del("2016-06-27$110$0466995391093644"));
+		System.out.println(JedisUtils.del("2016-06-27$120$0466996232803354"));
+		System.out.println(JedisUtils.del("2016-06-27$130$0466996281393944"));
+		System.out.println(JedisUtils.del("2016-06-27$370$0466996481520071"));
+		System.out.println(JedisUtils.del("2016-06-27$410$0466996307279830"));
 	}
 
 }

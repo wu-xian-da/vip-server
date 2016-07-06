@@ -146,42 +146,84 @@ public class StatManagerImpl implements StatManager {
 	
 	/**
      * 销售榜单-详细图表接口
-     * x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
+     * x轴：日期  y轴：该场站在所选时间段内所有的开卡总数
      * @throws ParseException 
      */
-	public List<Map<String, Object>> returnCardNumByDate(List<Map<String,Object>> proIdApIdList, 
+	public Map<String,Object> returnCardNumByDate(List<Map<String,Object>> proIdApIdList, 
 			String begin,String end) throws ParseException {
 		// TODO Auto-generated method stub
 		int days = returnDays(begin,end);
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		//1、返回数据----x轴：日期  y轴：该场站在所选时间段内所有的开卡总数
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		//天数
+		//2、返回数据----所选期间所有的开卡总数和退卡总数
+		Map<String,Object> totalMap = new HashMap<String,Object>();
+		
+		//在所选期间所有的开卡总数
+		int sumAllDay = 0;
+		//在所选期间所有的退卡总数
+		int backTotalAllDay = 0;
+		
+		//间隔天数
 		for(int index =0;index <= days; index ++){
 			Map<String,Object> mapItem = new HashMap<String,Object>();
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(sf.parse(begin));
 			calendar.add(Calendar.DATE, index);
 			String date = sf.format(calendar.getTime());
+			//每天的开卡总数
 			int sum = 0;
+			//每天的退卡总数
 			int backTotal = 0;
+			//每天的平均开卡总数
+			int avgNum = 0;
+			//每天的平均退卡总数
+			int avgNum_back = 0;
+			
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
-				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
+				Object obj = null;
+				String test = date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId");
+				try {
+					obj = JedisUtils.getObject(test);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				
 				if(obj == null){
 					sum +=0;
 					backTotal +=0;
+					avgNum += 0;
+					avgNum_back += 0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal());
 					backTotal += Float.parseFloat(charData.getBack_order_total());
+					avgNum += Float.parseFloat(charData.getAvgNum());
+					avgNum_back += Float.parseFloat(charData.getAvgNum_back());
 				}
 			}
 			mapItem.put("date", date);
 			mapItem.put("total", sum);
-			mapItem.put("backTotal", backTotal);
+			mapItem.put("back_total", backTotal);
+			mapItem.put("avgNum", formatNum(avgNum/proIdApIdList.size()));
+			mapItem.put("avgNum_back", formatNum(avgNum_back/proIdApIdList.size()));
 			list.add(mapItem);
+			
+			sumAllDay += sum;
+			backTotalAllDay += backTotal;
 		}
-		return list;
+		
+		totalMap.put("saleCardNumTotal", sumAllDay);
+		totalMap.put("backCardNumTotal", backTotalAllDay);
+		
+		Map<String,Object> resList = new HashMap<String,Object>();
+		resList.put("cardNumList", list);
+		resList.put("total", totalMap);
+		
+		return resList;
 	}
 		
 	/** 所属省份平均开卡数

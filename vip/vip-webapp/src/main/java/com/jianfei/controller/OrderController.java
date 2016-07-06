@@ -544,7 +544,7 @@ public class OrderController extends BaseController {
 						appOrder.setBackTypeName("现金");
 					}
 					if(cardState == 5){
-						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><a href='unbundCard?vipCardNo="+appOrder.getVipCardNo()+"'><button class='btn' style='background:green'>解绑</button></a>");
+						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><a href='unbundCard?vipCardNo="+appOrder.getVipCardNo()+"'><button class='btn' style='background:#698DC3'>解绑</button></a>");
 					}else{
 						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 					}
