@@ -433,7 +433,7 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
+    public synchronized BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
         log.info("提交退卡信息");
         log.info(appCardBack);
         //1、根据订单号查询订单信息
@@ -469,13 +469,13 @@ public class OrderManagerImpl implements OrderManager {
         msgBuilder.setMsgBody(object.toJSONString());
         //添加订单状态为已退款
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
-            //更改订单状态为已退款 和申请方式为
+            //紧急退卡 更改订单状态为已退款 和申请方式为紧急
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
-            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
+            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
-            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
+            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
         }
         log.info("更改VIP卡状态");
         AppVipcard vipcard=new AppVipcard();

@@ -1,5 +1,6 @@
 package com.jianfei.core.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
@@ -106,7 +107,7 @@ public class AppOrders implements Serializable{
     public void setCustomerId(String customerId) {
         this.customerId = customerId == null ? null : customerId.trim();
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public Date getOrderTime() {
         return orderTime;
     }
@@ -204,7 +205,7 @@ public class AppOrders implements Serializable{
         this.payUserId = payUserId;
         return this;
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public Date getPayTime() {
         return payTime;
     }
