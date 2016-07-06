@@ -264,7 +264,7 @@ public class QueueManagerImpl implements QueueManager {
 			return messageDto;
 		}
 
-		// 更改VIP卡状态为未激活
+		// 更改VIP卡绑定失败
 		boolean rs = vipCardManager
 				.activeAppCard(new MapUtils.Builder()
 						.setKeyValue("card_state",

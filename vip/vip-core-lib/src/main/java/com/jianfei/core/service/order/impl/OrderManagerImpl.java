@@ -250,8 +250,16 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public int insertBackCardInfo(AppCardBack appCardBack) {
         // TODO Auto-generated method stub
-        appCardBackMapper.insertBackCard(appCardBack);
-        return 0;
+    	int flag =0;
+    	try {
+    		appCardBackMapper.insertBackCard(appCardBack);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error(e.getMessage());
+			flag =1;
+		}
+        
+        return flag;
     }
 
 
