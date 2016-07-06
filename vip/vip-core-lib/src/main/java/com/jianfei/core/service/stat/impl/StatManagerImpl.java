@@ -176,11 +176,6 @@ public class StatManagerImpl implements StatManager {
 			int sum = 0;
 			//每天的退卡总数
 			int backTotal = 0;
-			//每天的平均开卡总数
-			int avgNum = 0;
-			//每天的平均退卡总数
-			int avgNum_back = 0;
-			
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
 				Object obj = null;
@@ -195,21 +190,17 @@ public class StatManagerImpl implements StatManager {
 				if(obj == null){
 					sum +=0;
 					backTotal +=0;
-					avgNum += 0;
-					avgNum_back += 0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal());
 					backTotal += Float.parseFloat(charData.getBack_order_total());
-					avgNum += Float.parseFloat(charData.getAvgNum());
-					avgNum_back += Float.parseFloat(charData.getAvgNum_back());
 				}
 			}
 			mapItem.put("date", date);
 			mapItem.put("total", sum);
 			mapItem.put("back_total", backTotal);
-			mapItem.put("avgNum", formatNum(avgNum/proIdApIdList.size()));
-			mapItem.put("avgNum_back", formatNum(avgNum_back/proIdApIdList.size()));
+			mapItem.put("avgNum", formatNum( (double)sum/proIdApIdList.size()) );
+			mapItem.put("avgNum_back", formatNum( (double)backTotal/proIdApIdList.size()) );
 			list.add(mapItem);
 			
 			sumAllDay += sum;
