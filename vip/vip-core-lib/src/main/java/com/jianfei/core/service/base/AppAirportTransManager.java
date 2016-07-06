@@ -21,7 +21,7 @@ import com.jianfei.core.common.utils.MessageDto;
  * @version 1.0.0
  *
  */
-public interface PickUpManager {
+public interface AppAirportTransManager {
 
 	/**
 	 * resultMapList(根据查询条件获取接送机信息)
@@ -41,4 +41,13 @@ public interface PickUpManager {
 	 * @version 1.0.0
 	 */
 	public MessageDto<String> updateState(Map<String, Object> params);
+
+	/**
+	 * pickupLook(查看接送机详情)
+	 * 
+	 * @param id
+	 *            接送机主键
+	 * @version 1.0.0
+	 */
+	Map<String, Object> pickupLook(String id);
 }
