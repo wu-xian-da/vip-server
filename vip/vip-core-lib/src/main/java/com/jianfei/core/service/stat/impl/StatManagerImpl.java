@@ -176,32 +176,51 @@ public class StatManagerImpl implements StatManager {
 			int sum = 0;
 			//每天的退卡总数
 			int backTotal = 0;
+			//每天的平均开卡总数
+			int avgNum = 0;
+			//每天的平均退卡总数
+			int avgNum_back = 0;
+			
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
-				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
+				Object obj = null;
+				String test = date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId");
+				try {
+					obj = JedisUtils.getObject(test);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				
 				if(obj == null){
 					sum +=0;
 					backTotal +=0;
+					avgNum += 0;
+					avgNum_back += 0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal());
 					backTotal += Float.parseFloat(charData.getBack_order_total());
+					avgNum += Float.parseFloat(charData.getAvgNum());
+					avgNum_back += Float.parseFloat(charData.getAvgNum_back());
 				}
 			}
 			mapItem.put("date", date);
 			mapItem.put("total", sum);
-			mapItem.put("backTotal", backTotal);
+			mapItem.put("back_total", backTotal);
+			mapItem.put("avgNum", formatNum(avgNum/proIdApIdList.size()));
+			mapItem.put("avgNum_back", formatNum(avgNum_back/proIdApIdList.size()));
 			list.add(mapItem);
 			
 			sumAllDay += sum;
 			backTotalAllDay += backTotal;
 		}
 		
-		totalMap.put("cardNum", sumAllDay);
-		totalMap.put("backTotal", backTotalAllDay);
+		totalMap.put("saleCardNumTotal", sumAllDay);
+		totalMap.put("backCardNumTotal", backTotalAllDay);
 		
 		Map<String,Object> resList = new HashMap<String,Object>();
-		resList.put("carNumByDate", list);
+		resList.put("cardNumList", list);
 		resList.put("total", totalMap);
 		
 		return resList;
