@@ -185,7 +185,6 @@ public class AppPictureManagerImpl implements AppPictureManager {
 	 */
 	@Override
 	public int updateByVipRoomId(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		appPictureMapper.updateByVipRoomId(map);
 		return 0;
 	}
