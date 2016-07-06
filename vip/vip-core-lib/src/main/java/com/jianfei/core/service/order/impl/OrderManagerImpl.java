@@ -386,6 +386,9 @@ public class OrderManagerImpl implements OrderManager {
         if (VipOrderState.ALREADY_PAY.getName() == order.getOrderState()) {
             return BaseMsgInfo.success(true);
         }
+        if (!(VipOrderState.NOT_PAY.getName() == order.getOrderState())){
+            return BaseMsgInfo.msgFail("订单状态已更改");
+        }
         //2、选择性更新订单信息
         appOrders.setOrderState(VipOrderState.ALREADY_PAY.getName());
        // appOrders.setPayTime(new Date());
