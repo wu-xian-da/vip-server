@@ -161,6 +161,9 @@ public class OrderController extends BaseController {
 			resMap.put("total", 0);
 		}else{
 			for(OrderShowInfoDto invoiceInfo : invoiceList){
+				//订单状态
+				int ordersState = invoiceInfo.getOrderState();
+				invoiceInfo.setOrderStateName(returnOrderStateName(ordersState));
 				//发票状态
 				int invoiceState = invoiceInfo.getInvoiceFlag();
 				//发票种类
@@ -192,7 +195,13 @@ public class OrderController extends BaseController {
 				String orderId = invoiceInfo.getOrderId();
 				if(invoiceState == 1){//发票未邮寄
 					invoiceInfo.setInvoiceFlagName("发票未邮寄");
-					invoiceInfo.setOperation("<button class='btn btn-back' onclick='drawBill("+outData+")'>开发票</button>");
+					if(ordersState == 3 || ordersState == 4){
+						invoiceInfo.setOperation("<button class='btn'onclick='lookOverInvoiceInfo("+outData+")'>查看</button>");
+					}else{
+						
+						invoiceInfo.setOperation("<button class='btn btn-back' onclick='drawBill("+outData+")'>开发票</button>");
+					}
+					
 				}
 				if(invoiceState == 2){//发票已邮寄
 					outData.put("invoiceNo", invoiceInfo.getInvoiceNo());
@@ -494,7 +503,7 @@ public class OrderController extends BaseController {
 					outData.put("invoice", orderInfo.getInvoiceFlag());
 					//申请方式
 					int applyTypes = appOrder.getApplyType();
-					if(applyTypes == 0){
+					if(applyTypes == 1){
 						appOrder.setApplyTypeName("客服");
 					}else{
 						appOrder.setApplyTypeName("现场");
@@ -508,7 +517,7 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现金");
+						appOrder.setBackTypeName("紧急退款");
 					}
 					//权限校验
 					org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
@@ -527,7 +536,7 @@ public class OrderController extends BaseController {
 					appOrder.setOrderStateName("已退款");
 					//申请方式
 					int applyTypes = appOrder.getApplyType();
-					if(applyTypes == 0){
+					if(applyTypes == 1){
 						appOrder.setApplyTypeName("客服");
 					}else{
 						appOrder.setApplyTypeName("现场");
@@ -541,7 +550,7 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现金");
+						appOrder.setBackTypeName("紧急退款");
 					}
 					if(cardState == 5){
 						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><a href='unbundCard?vipCardNo="+appOrder.getVipCardNo()+"'><button class='btn' style='background:#698DC3'>解绑</button></a>");
@@ -661,7 +670,7 @@ public class OrderController extends BaseController {
 	public Map<String,Object> onRefund(String orderId,String backCardNo,String remainMoney,String payMethod,Integer opr,
 			@RequestParam(value="userNames",defaultValue="",required=false) String userNames,
 			@RequestParam(value="banckName",defaultValue="",required=false) String banckName){
-		//1、将订单状态有'正在审核'变成'审核通过'
+		//1、将订单状态有'正在审核'变成'审核通过'，退款申请变成客服
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
 		
 		//2、将退款信息录入到流水表中

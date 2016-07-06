@@ -56,14 +56,14 @@
 			style="height: 10%; margin: 0; padding: 0;">
 			<div style="padding: 15px 0 0 20px;">
 				<div id="order-condition-box">
-					<div class="order-condition-item" style="width: 140px">
+					<div class="order-condition-item" style="width: 130px">
 						<select id="invoiceFlagSelect">
 							<option value="">全部发票状态</option>
 							<option value="1">发票未邮寄</option>
 							<option value="2">发票已邮寄</option>
 						</select>
 					</div>
-					<div class="order-condition-item" style="width: 190px">
+					<div class="order-condition-item" style="width: 200px">
 						<input id="phoneOrUserName" type="text" placeholder="用户手机号码/姓名">
 						<button id="searchBt">查询</button>
 					</div>
@@ -86,8 +86,8 @@
 						<th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 						<th data-options="align:'center', field:'customerPhone',width:100">用户手机号</th>
 						<th data-options="align:'center', field:'invoiceNo',width:200">发票单号</th>
-						<th
-							data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
+						<th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
+						<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 						<th data-options="align:'center', field:'operation',width:210">操作</th>
 					</tr>
 				</thead>

@@ -7,19 +7,21 @@ package com.jianfei.core.common.enu;
  * @date 2016年6月12日 下午1:48:42 
  * @Version 1.0.0
  */
-public enum ApplyMethod {
-	/**
-	 * 客服申请
-	 */
-	CUSTOMER_SERVICE_APPLY(0),
-	
+public enum ApplyBackCardMethod {
 	/**
 	 * 现场申请
 	 */
-	SCENE_APPLY(1);
+	SCENE_APPLY(0),
+	
+	/**
+	 * 客服申请
+	 */
+	CUSTOMER_SERVICE_APPLY(1);
+	
+	
 	private int name;
 
-	private ApplyMethod(int name) {
+	private ApplyBackCardMethod(int name) {
 		this.name = name;
 	}
 

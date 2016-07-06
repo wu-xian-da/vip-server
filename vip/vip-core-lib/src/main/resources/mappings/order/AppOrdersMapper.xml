@@ -90,7 +90,7 @@
 	<!--查询需要开发票的订单信息 -->
 	<select id="invoicePageList" parameterType="java.util.Map"
 		resultMap="OrderShowInfoDto">
-		select ord.order_id,ord.invoice_flag,
+		select ord.order_id,ord.invoice_flag,ord.order_state,
 		inv.invoice_no,inv.invoice_id,inv.invoice_kind,inv.company_name,inv.company_address,
 		inv.company_phone,inv.business_license_url,inv.company_tax_no,inv.invoice_content,
 		inv.province,inv.city,inv.country,inv.address,inv.invoice_title,inv.postcode,
@@ -225,7 +225,11 @@
 
 	<!--更新订单状态 -->
 	<update id="updateOrderState" parameterType="java.util.Map">
-		update app_orders set order_state=#{orderState} where order_id = #{orderId}
+		update app_orders set order_state=#{orderState}
+		<if test="applyType !=null">
+		,apply_type=#{applyType} 
+		</if>
+		where order_id = #{orderId}
 	</update>
 
 	<!--支付回调通知 -->

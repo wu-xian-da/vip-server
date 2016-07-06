@@ -29,15 +29,15 @@
 						<option value="1">微信</option>
 						<option value="2">支付宝</option>
 						<option value="3">银行卡</option>
-						<option value="4">现金</option>
+						<option value="4">紧急退款</option>
 					</select>
 				</div>
 	
 				<div class="order-condition-item">
 					<select name="" id="applyTypeSelect">
 						<option value="">全部申请途径</option>
-						<option value="0">客服</option>
-						<option value="1">现场</option>
+						<option value="0">现场</option>
+						<option value="1">客服</option>
 						
 					</select>
 				</div>
