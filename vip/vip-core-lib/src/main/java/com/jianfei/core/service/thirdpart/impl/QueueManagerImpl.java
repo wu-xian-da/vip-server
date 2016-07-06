@@ -58,7 +58,6 @@ public class QueueManagerImpl implements QueueManager {
 		// 从消息队列中去数据
 		String result = JedisUtils.rpoplpushQ(sourceQ, targerQ);
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
-			System.out.println("rpop返回为空");
 			return null;
 		}
 		System.out.println(DateUtil
@@ -265,7 +264,7 @@ public class QueueManagerImpl implements QueueManager {
 			return messageDto;
 		}
 
-		// 更改VIP卡状态为未激活
+		// 更改VIP卡绑定失败
 		boolean rs = vipCardManager
 				.activeAppCard(new MapUtils.Builder()
 						.setKeyValue("card_state",

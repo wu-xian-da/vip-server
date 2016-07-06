@@ -146,7 +146,11 @@
   </insert>
   
   <update id="activeAppCard" parameterType="java.util.Map" >
-  		update app_vipcard set expiry_time = #{expiryTime} ,card_state=#{card_state}  where card_no = #{cardNo}
+  		update app_vipcard set 
+  			<if test="expiryTime!=null">
+  				expiry_time = #{expiryTime} ,
+  			</if>
+  		card_state=#{card_state}  where card_no = #{cardNo}
   </update>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppVipcard" >

@@ -250,8 +250,16 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public int insertBackCardInfo(AppCardBack appCardBack) {
         // TODO Auto-generated method stub
-        appCardBackMapper.insertBackCard(appCardBack);
-        return 0;
+    	int flag =0;
+    	try {
+    		appCardBackMapper.insertBackCard(appCardBack);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error(e.getMessage());
+			flag =1;
+		}
+        
+        return flag;
     }
 
 
@@ -385,6 +393,9 @@ public class OrderManagerImpl implements OrderManager {
         AppOrders order=appOrdersMapper.getOrderDetailByOrderId(appOrders.getOrderId());
         if (VipOrderState.ALREADY_PAY.getName() == order.getOrderState()) {
             return BaseMsgInfo.success(true);
+        }
+        if (!(VipOrderState.NOT_PAY.getName() == order.getOrderState())){
+            return BaseMsgInfo.msgFail("订单状态已更改");
         }
         //2、选择性更新订单信息
         appOrders.setOrderState(VipOrderState.ALREADY_PAY.getName());

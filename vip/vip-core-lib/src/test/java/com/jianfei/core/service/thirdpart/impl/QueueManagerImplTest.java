@@ -7,6 +7,7 @@
  */
 package com.jianfei.core.service.thirdpart.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.VipCardState;
+import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.thirdpart.MsgInfoManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 
@@ -42,6 +46,8 @@ public class QueueManagerImplTest {
 
 	@Autowired
 	private MsgInfoManager msgInfoManager;
+	@Autowired
+	private VipCardManager vipCardManager;
 
 	/**
 	 * Test method for
@@ -92,9 +98,32 @@ public class QueueManagerImplTest {
 
 	@Test
 	public void sendMsg() {
-		boolean isOk = msgInfoManager.sendMsgInfo("13275601668",
+		boolean isOk = msgInfoManager.sendMsgInfo("15155514581",
 				"【亿出行】hello kitty...");
 		System.out.println(isOk);
+	}
+
+	@Test
+	public void vipCardState() {
+		// 修改卡的状态
+		if (vipCardManager.activeAppCard(new MapUtils.Builder()
+				.setKeyValue("card_state",
+						VipCardState.UNBUNDLING_FAIL.getName())// 更改VIP卡状态
+				.setKeyValue("cardNo", "07927752083").build())) {
+			System.out.println("*****************8");
+		}
+	}
+
+	@Test
+	public void vipCardState2() {
+		// 更新激活时间和卡的有效期
+		boolean isOk = vipCardManager.activeAppCard(new MapUtils.Builder()
+				.setKeyValue("expiryTime", new Date())
+				.setKeyValue("card_state", VipCardState.ACTIVE.getName())// 更改VIP卡状态
+				.setKeyValue("cardNo", "07927752083").build());
+		if (isOk) {
+			System.out.println("*****************8");
+		}
 	}
 
 }
