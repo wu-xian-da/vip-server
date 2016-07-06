@@ -2,6 +2,7 @@ package com.jianfei.core.service.base.impl;
 
 import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -36,12 +37,17 @@ public class AirportTransManagerImpl implements AirportTransManager {
      * @return
      */
     @Override
-    public BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans) {
+    public BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans) throws Exception {
         //查找下相关用户
         AppCustomer customer= vipUserManager.getUser(airportTrans.getPhone());
         if (customer==null || StringUtils.isBlank(customer.getCustomerId())){
             BaseMsgInfo.msgFail("用户不存在，接送机信息添加失败");
         }
+        //转换前台传入日期
+        Date flightDate= DateUtil.parseDateTime(airportTrans.getFlightDateStr());
+        Date goofDate=DateUtil.parseDateTime(airportTrans.getGooffDateStr());
+        airportTrans.setFlightDate(flightDate);
+        airportTrans.setGooffDate(goofDate);
         airportTrans.setName(customer.getCustomerName());
         airportTrans.setId(IdGen.uuid());
         airportTrans.setCreateDate(new Date());

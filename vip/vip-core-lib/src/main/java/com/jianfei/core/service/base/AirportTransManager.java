@@ -18,6 +18,6 @@ public interface AirportTransManager {
      * @param airportTrans
      * @return
      */
-    BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans);
+    BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans) throws Exception;
 
 }
