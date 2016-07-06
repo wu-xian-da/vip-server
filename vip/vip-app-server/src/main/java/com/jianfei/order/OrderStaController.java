@@ -138,6 +138,7 @@ public class OrderStaController {
             return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
 		}
     }
+    
     /**
 	 * 个人中心销售榜单获取接口
 	 * 
@@ -161,9 +162,9 @@ public class OrderStaController {
 			paraMap.put("saleNo", uno);
 			paraMap.put("beginTime", begin);
 			paraMap.put("endTime", end);
-			// 1.1业务人员某个时间段内每天的开卡数量
+			// 1.1业务人员某个时间段内每天的开卡数量、退卡数量
 			List<CharData> listBycustomer = statManager.selectCharDataByUserId(paraMap);
-
+			
 			// 2、业务人员所属省份该时间段内的平均开卡人数
 			// 2.1根据销售人员id获取该用户所属的省份id
 			List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(uno);
@@ -200,6 +201,24 @@ public class OrderStaController {
 				}
 				resMap.put("cardNumList", provinceList);
 			}
+			
+			//4 根据 listBycustomer计算业务员某个月份总的开卡总数和退款总数
+			Map<String,Object> totalCardNumMap = new HashMap<String,Object>();
+			if (listBycustomer != null && listBycustomer.size() > 0) {
+				float saleCardNumTotal = 0;
+				float backCardNumTotal = 0;
+				for(CharData charData : listBycustomer){
+					saleCardNumTotal += Float.parseFloat(charData.getTotal());
+					backCardNumTotal += Float.parseFloat(charData.getBack_order_total());
+				}
+				totalCardNumMap.put("saleCardNumTotal", saleCardNumTotal);
+				totalCardNumMap.put("backCardNumTotal", backCardNumTotal);
+			}else{
+				totalCardNumMap.put("saleCardNumTotal", "0");
+				totalCardNumMap.put("backCardNumTotal", "0");
+			}
+			resMap.put("total", totalCardNumMap);
+			
 			return BaseMsgInfo.success(resMap);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -259,10 +278,8 @@ public class OrderStaController {
 			}
 
 			// 2 ****** x轴：日期 y轴：当日所有场站的开卡总和
-			List<Map<String, Object>> carNumByDateList = statManager.returnCardNumByDate(proIdApIdList, begin, end);
-			Map<String, Object> dateMap = new HashMap<String, Object>();
-			dateMap.put("carNumByDate", carNumByDateList);
-			resList.add(dateMap);
+			Map<String, Object> repMap = statManager.returnCardNumByDate(proIdApIdList, begin, end);
+			resList.add(repMap);
 			// 3 ****** x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
 			List<Map<String, Object>> cardNumByAirPortList = statManager.getSticCardData(proIdApIdList, begin, end);
 			Map<String, Object> airPortMap = new HashMap<String, Object>();
