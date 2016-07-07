@@ -209,5 +209,13 @@ public interface OrderManager {
      * @return
      */
     BaseMsgInfo  removeBackCard(String phone,String code,String vipCardNo,String orderId);
+
+    /**
+     * 重新激活VIP卡
+     * @param phone 手机号
+     * @param orderId 订单ID
+     * @return
+     */
+    BaseMsgInfo  activeCard(String phone,String vipCardNo,String orderId);
     
 }

@@ -314,4 +314,24 @@ public class OrderController {
 			return BaseMsgInfo.msgFail("用户取消退卡接口失败");
 		}
 	}
+
+
+	/**
+	 * 重新激活
+	 * @param phone 手机号
+	 * @return
+	 */
+	@RequestMapping(value = "/activeCard")
+	@ResponseBody
+	public BaseMsgInfo activeCard(
+			@RequestParam(value = "phone", required = true) String phone,
+			@RequestParam(value = "vipCardNo", required = true) String vipCardNo,
+			@RequestParam(value = "orderId", required = true) String orderId) {
+		try {
+			return orderManager.activeCard(phone, vipCardNo, orderId);
+		}catch (Exception e){
+			log.error("用户取消退卡接口异常",e);
+			return BaseMsgInfo.msgFail("用户取消退卡接口失败");
+		}
+	}
 }

@@ -579,4 +579,19 @@ public class OrderManagerImpl implements OrderManager {
 
         return BaseMsgInfo.success(true);
     }
+
+    /**
+     * 重新激活VIP卡
+     *
+     * @param phone     手机号
+     * @param vipCardNo
+     * @param orderId   订单ID
+     */
+    @Override
+    public BaseMsgInfo activeCard(String phone, String vipCardNo, String orderId) {
+        //TODO 查询订单详细信息 订单是否付款
+        //TODO 查询卡状态是否为激活失败
+        //TODO 重新发送激活消息
+        return BaseMsgInfo.success(true);
+    }
 }
