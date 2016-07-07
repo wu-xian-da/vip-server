@@ -237,7 +237,7 @@ public class OrderManagerImpl implements OrderManager {
             //2、app_consume表中返回vip消费次数
             int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
             //3、计算用户vip卡剩余金额
-            remainMoney = (float) (appOrderCard.getInitMoney() - count * 200 * 0.8 - 100);
+            remainMoney = (float) (appOrderCard.getInitMoney() - count * 150 - 100);
             if (remainMoney < 0) {
                 remainMoney = 0.00;
             }
