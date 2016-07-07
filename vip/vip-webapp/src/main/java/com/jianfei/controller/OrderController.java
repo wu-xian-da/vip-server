@@ -1037,11 +1037,11 @@ public class OrderController extends BaseController {
 	public String returnInvoiceFlagName(Integer invoiceFlag){
 		String invoiceFlagName = "";
 		if(invoiceFlag == 0){
-			invoiceFlagName = "未开";
+			invoiceFlagName = "不需要";
 		}else if(invoiceFlag == 1){
-			invoiceFlagName = "发票未邮寄"; 
+			invoiceFlagName = "未邮寄"; 
 		}else{
-			invoiceFlagName = "发票已邮寄";
+			invoiceFlagName = "已邮寄";
 		}
 		return invoiceFlagName;
 	}

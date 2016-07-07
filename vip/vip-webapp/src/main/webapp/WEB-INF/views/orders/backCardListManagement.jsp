@@ -194,8 +194,16 @@
 		*/
         function finalBackMoneyToUser(args){
 			var backMethod = "";
+			//----初始化页面
 			$("#banckName2div").hide();
 			$("#userName2div").hide();
+			//----1、开户行
+			$("#banckName2").text('');
+			//----2、用户姓名
+			$("#userName2").text('');
+			//----3、转账卡号
+			$('#payBackCardNo').text('');
+			
 			//-----是否需要提示信息
 			if(args.invoice == 1){
 				$("#promptMessage").text("请确认是否收到发票！");

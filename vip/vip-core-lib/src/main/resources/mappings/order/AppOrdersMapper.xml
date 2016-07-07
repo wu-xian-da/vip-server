@@ -127,7 +127,7 @@
 
 	<!--订单列表信息展示 -->
 	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,
+		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
 		ap.airport_name,agent.name,
 		customer.customer_name,customer.customer_phone
 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer

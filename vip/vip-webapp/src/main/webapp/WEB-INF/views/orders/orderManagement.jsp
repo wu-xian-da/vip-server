@@ -77,9 +77,9 @@
 			            <div class="order-condition-item" style="width: 140px">
 			                <select id="invoiceSelect">
 			                    <option value="">全部发票状态</option>
-			                    <option value="0">未开</option>
-			                    <option value="1">发票未邮寄</option>
-			                    <option value="2">发票已邮寄</option>
+			                    <option value="0">不需要</option>
+			                    <option value="1">未邮寄</option>
+			                    <option value="2">已邮寄</option>
 			                  
 			                </select>
 			            </div>
@@ -282,8 +282,16 @@
 		*/
 		function finalBackMoneyToUser(args){
 			var backMethod = "";
+			//----初始化页面
 			$("#banckName2div").hide();
 			$("#userName2div").hide();
+			//----1、开户行
+			$("#banckName2").text('');
+			//----2、用户姓名
+			$("#userName2").text('');
+			//----3、转账卡号
+			$('#payBackCardNo').text('');
+			
 			//-----是否需要提示信息
 			if(args.invoice == 1){
 				$("#promptMessage").text("请确认是否收到发票！");
