@@ -1,5 +1,6 @@
 package com.jianfei.user;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Vip用户Controller
@@ -139,6 +143,29 @@ public class VipUserController {
         }catch (Exception e){
             log.error("添加接送机信息失败",e);
             return BaseMsgInfo.msgFail("接送机信息添加失败");
+        }
+    }
+
+    /**
+     * 接送机机场列表信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/airportList")
+    @ResponseBody
+    public BaseMsgInfo airportList(@RequestParam(value = "city", required = false) String city
+    ) {
+        try {
+            JSONObject object=new JSONObject();
+            object.put("airportId","23456");
+            object.put("airportName","合肥新桥机场");
+            object.put("city","合肥");
+            List list=new ArrayList();
+            list.add(object);
+            return BaseMsgInfo.success(list);
+        }catch (Exception e){
+            log.error("接送机机场列表失败",e);
+            return BaseMsgInfo.msgFail("接送机机场列表失败");
         }
     }
 }

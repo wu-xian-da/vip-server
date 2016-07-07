@@ -102,7 +102,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         }else {
             if (customer == null || StringUtils.isBlank(customer.getCustomerId())) {
                 return BaseMsgInfo.msgFail("手机号尚未注册");
-            }else if (!(VipUserSate.ACTIVE.getName() == customer.getDtflag())) {
+            }else if (MsgType.LOGIN.equals(msgType) && !(VipUserSate.ACTIVE.getName() == customer.getDtflag())) {
                 return BaseMsgInfo.msgFail("手机号暂未激活或已经退卡");
             }
         }

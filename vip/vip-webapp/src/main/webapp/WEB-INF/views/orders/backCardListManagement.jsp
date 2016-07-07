@@ -98,19 +98,24 @@
 	<!-- 退款确认 -->
 	<div id="refund" class="easyui-window" title="退款"
 		data-options="modal:'true',closed:'true'"
-		style="width: 500px; height: 260px; padding: 10px;">
+		style="width: 500px; height: 300px; padding: 10px;">
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab">
+				<!-- 需要开发票的提示信息 -->
 				<div class="radio-tab-content">
                     <label id="promptMessage" style="font-weight:bolder ;color: red;font-size:large;"></label>
                 </div>
                 
+                <div class="radio-tab-content">
+                    <label>申请退卡途径&nbsp;</label><span id="applyBackCardMethod"></span>
+                </div>
+                
+                <!--退款方式 -->
 				<div class="radio-tab-content">
 					<div class="raidp-tab-content-item" style="display: block">
-						<input type="hidden" value="" id="backCardOrderId" /> <label
-							id="backMethod">输入微信号:</label>&nbsp;<span id="payBackCardNo"></span>
+						<input type="hidden" value="" id="backCardOrderId" /> 
+						<label id="backMethod">输入微信号:</label>&nbsp;<span id="payBackCardNo"></span>
 					</div>
-
 				</div>
 				
 				<div id="banckName2div" class="radio-tab-content" style="display: none;">
@@ -169,6 +174,7 @@
                 return new Date();
             }
         }
+        
         //搜索
         $("#searchBt").click(function(){
         	//退款方式
@@ -186,31 +192,72 @@
 		/*
 		*==================最终退款页面===============
 		*/
-        //1、打开最终退款页面
         function finalBackMoneyToUser(args){
 			var backMethod = "";
-			if(args.backType == 1){
-				backMethod="微信账号";
-			}else if(args.backType ==2){
-				backMethod = '支付宝账号';
-			}else if(args.backType == 3){
-				backMethod = '银行卡号';
-				$("#banckName2div").show();
-				$("#banckName2").text(args.backName);
-				$("#userName2div").show();
-				$("#userName2").text(args.customerName);
-			}
+			//----初始化页面
+			$("#banckName2div").hide();
+			$("#userName2div").hide();
+			//----1、开户行
+			$("#banckName2").text('');
+			//----2、用户姓名
+			$("#userName2").text('');
+			//----3、转账卡号
+			$('#payBackCardNo').text('');
+			
+			//-----是否需要提示信息
 			if(args.invoice == 1){
 				$("#promptMessage").text("请确认是否收到发票！");
 			}
-			$("#backCardOrderId").val(args.orderId);
-			$("#backMethod").text(backMethod);
-			$("#payBackCardNo").text(args.backMoneyCard);
-			$("#remainMoney2").text(args.remainMoney);
 			
-        	$("#refund").window('open');
+			//申请途径
+			if(args.applyBackCardMethod == 0){
+				$('#applyBackCardMethod').text('现场');
+				if(args.backType ==1){
+					$("#backMethod").text('退款方式');
+					$("#payBackCardNo").text('微信转账');
+				}else if(args.backType ==2){
+					$("#backMethod").text('退款方式');
+					$("#payBackCardNo").text('支付宝转账');
+				}else if(args.backType == 3){
+					$("#backMethod").text('退款方式');
+					$("#payBackCardNo").text('银行卡转账');
+				}else{
+					$("#backMethod").text('银行卡号');
+					$("#payBackCardNo").text(args.backMoneyCard);
+					$("#banckName2div").show();
+					$("#banckName2").text(args.backName);
+					$("#userName2div").show();
+					$("#userName2").text(args.customerName);
+				}
+				
+			} else{
+				$('#applyBackCardMethod').text('客服');
+				if(args.backType == 1){
+					backMethod="微信账号";
+				}else if(args.backType ==2){
+					backMethod = '支付宝账号';
+				}else if(args.backType == 3){
+					backMethod = '银行卡号';
+					$("#banckName2div").show();
+					$("#banckName2").text(args.backName);
+					$("#userName2div").show();
+					$("#userName2").text(args.customerName);
+				}
+				$("#backMethod").text(backMethod);
+				$("#payBackCardNo").text(args.backMoneyCard);
+				
+			}
+			//----退卡表的订单号
+			$("#backCardOrderId").val(args.orderId);
+			//----退款金额
+			$("#remainMoney2").text(args.remainMoney);
+			$("#refund").window('open');
         }
-		//2、财务人员进行退款操作
+        
+        
+		/*
+		* ======2、财务人员进行退款操作
+		*/
 		$("#finalBackMoneyToUserBt").click(function(){
 			var orderId = $("#backCardOrderId").val();
 			var url = "finalRefundMoney?orderId="+orderId+"&opr="+4;
@@ -221,6 +268,7 @@
 				}
 			})
 		})
+		
         //3、关闭最终退款页面
         $("#refundCloseWindow").click(function(){
         	$("#refund").window('close');

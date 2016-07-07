@@ -237,7 +237,7 @@ public class OrderManagerImpl implements OrderManager {
             //2、app_consume表中返回vip消费次数
             int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
             //3、计算用户vip卡剩余金额
-            remainMoney = (float) (appOrderCard.getInitMoney() - count * 200 * 0.8 - 100);
+            remainMoney = (float) (appOrderCard.getInitMoney() - count * 150 - 100);
             if (remainMoney < 0) {
                 remainMoney = 0.00;
             }
@@ -557,4 +557,41 @@ public class OrderManagerImpl implements OrderManager {
 	public void sendMessageOfOrder(ServiceMsgBuilder msgBuilder){
 		 queueManager.sendMessage(msgBuilder);
 	}
+
+    /**
+     * 取消VIP卡退卡记录
+     *
+     * @param phone     手机号
+     * @param code      验证码
+     * @param vipCardNo
+     * @return
+     */
+    @Override
+    public BaseMsgInfo removeBackCard(String phone, String code, String vipCardNo,String orderId) {
+        //1、校验用户和手机验证码
+        boolean flag = validateCodeManager.validateSendCode(phone, MsgType.SELECT, code);
+        if (!flag)
+            return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
+        //2、查询卡状态及卡对应的订单状态
+
+        //3、如果订单状态时已退款 则提示用户退卡申请失败 已退卡
+        //TODO
+
+        return BaseMsgInfo.success(true);
+    }
+
+    /**
+     * 重新激活VIP卡
+     *
+     * @param phone     手机号
+     * @param vipCardNo
+     * @param orderId   订单ID
+     */
+    @Override
+    public BaseMsgInfo activeCard(String phone, String vipCardNo, String orderId) {
+        //TODO 查询订单详细信息 订单是否付款
+        //TODO 查询卡状态是否为激活失败
+        //TODO 重新发送激活消息
+        return BaseMsgInfo.success(true);
+    }
 }

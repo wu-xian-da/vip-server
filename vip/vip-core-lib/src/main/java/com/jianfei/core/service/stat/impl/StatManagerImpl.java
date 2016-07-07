@@ -9,6 +9,7 @@ import com.jianfei.core.bean.AppAirportArchive;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppOrderArchiveMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
@@ -372,25 +373,29 @@ public class StatManagerImpl implements StatManager {
 	 * 分页查询订单相关状态
 	 *
 	 * @param uno 销售员工号
-	 * @param orderState 订单状态
+	 * @param state 订单状态
 	 * @return
 	 */
 	@Override
-	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,int orderState,int pageNo,int pageSize) {
-		//TODO
-		List<OrderPageDto> orderPageDtos=new ArrayList<>();
-		OrderPageDto dto=new OrderPageDto();
-		dto.setOrderId("0467615151402953");
-		dto.setCardState(2);
-		dto.setOrderState(0);
-		dto.setCustomerName("杨蕾");
-		dto.setCustomerName("13456784567");
-		dto.setOrderTime(new Date());
-		orderPageDtos.add(dto);
-		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<OrderPageDto>();
-		pageDtoPageInfo.setList(orderPageDtos);
+	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,String state,int pageNo,int pageSize,String key) {
+		// state 1 全部 2 代付款 3 未激活 4 退款中 5 已退卡
+		PageHelper.startPage(pageNo, pageSize);
+		//订单状态
+		String orderState=null;
+		String cardState=null;
+		if ("2".equals(state)){
+			orderState="0";
+		}else if ("3".equals(state)){
+			orderState="1";
+			cardState="3,4";
+		}else if ("4".equals(state)){
+			orderState="2,3";
+		}else if ("5".equals(state)){
+			orderState="4";
+		}
+		List<OrderPageDto> list=ordersMapper.orderListBySale(uno,orderState,cardState,key);
+		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<>();
+		pageDtoPageInfo.setList(list);
 		return pageDtoPageInfo;
-
-		/*return ordersMapper.pageOrderInfoBySale(uno, orderState, cardState);*/
 	}
 }

@@ -127,7 +127,7 @@
 
 	<!--订单列表信息展示 -->
 	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,
+		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
 		ap.airport_name,agent.name,
 		customer.customer_name,customer.customer_phone
 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer
@@ -472,10 +472,40 @@
 	<!-- 根据工号获取业务员需要处理的数据 -->
 	<select id="getSaleToDoData" parameterType="java.lang.String"
 			resultMap="GraphResultMap">
-		select count(*) as 'value', 'TO_PAY' as 'name' from app_orders where order_state=0
+		select count(*) as 'value', 'TO_PAY' as 'name' from app_orders where order_state=0 and sale_no=#{uno}
 union
-select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_order_card oc on o.order_id=oc.order_id join app_vipcard v on oc.card_id=v.card_no  where order_state=1 and  v.card_state in (3,4)
+select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_order_card oc on o.order_id=oc.order_id join app_vipcard v on oc.card_id=v.card_no  where order_state=1 and  v.card_state in (3,4) and sale_no=#{uno}
 union
-select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3)
+select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3) and sale_no=#{uno}
+	</select>
+
+
+
+	<resultMap id="OrderListResultMap" type="com.jianfei.core.dto.OrderPageDto" >
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+		<result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="order_state" property="orderState" jdbcType="INTEGER" />
+		<result column="card_state" property="cardState" jdbcType="INTEGER" />
+
+	</resultMap>
+
+	<!-- 根据工号获取业务员需要处理的数据 -->
+	<select id="orderListBySale" parameterType="java.lang.String"
+			resultMap="OrderListResultMap">
+	select o.order_id,o.order_state,o.order_time,c.customer_name,c.customer_phone,av.card_state  from app_orders o join app_customer c on o.customer_id=c.customer_id join app_order_card aoc on o.order_id=aoc.order_id join app_vipcard av on aoc.card_id=av.card_no
+	   WHERE o.sale_no = (#{uno})
+
+			<if test="orderState!=null and orderState!=''">
+				AND o.order_state IN (#{orderState})
+			</if>
+			<if test="cardState!=null and cardState!=''">
+			  AND 	av.card_state IN (#{cardState})
+			</if>
+		<if test="key!=null and key!=''">
+			and concat(c.customer_name,c.customer_phone) like
+			CONCAT('%','${key}','%' )
+		</if>
 	</select>
 </mapper>

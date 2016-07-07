@@ -10,6 +10,7 @@ import com.jianfei.core.dto.GraphDto;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderPageDto;
 import com.jianfei.core.dto.OrderShowInfoDto;
+import org.apache.ibatis.annotations.Param;
 
 @MyBatisDao
 public interface AppOrdersMapper {
@@ -69,7 +70,7 @@ public interface AppOrdersMapper {
 	 * @param uno 工号
 	 * @return
 	 */
-	List<GraphDto> getSaleToDoData(String uno);
+	List<GraphDto> getSaleToDoData(@Param(value = "uno")String uno);
 
 	/**
 	 * 分页查询订单相关状态
@@ -78,6 +79,6 @@ public interface AppOrdersMapper {
 	 * @param cardState
 	 * @return
 	 */
-	 PageInfo<OrderPageDto> pageOrderInfoBySale(String uno, String orderState, String cardState);
+	List<OrderPageDto> orderListBySale(@Param(value = "uno")String uno, @Param(value = "orderState")String orderState, @Param(value = "cardState")String cardState,@Param(value = "key")String key);
 
 }

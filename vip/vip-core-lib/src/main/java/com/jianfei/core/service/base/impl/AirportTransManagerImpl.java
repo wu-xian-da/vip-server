@@ -2,6 +2,7 @@ package com.jianfei.core.service.base.impl;
 
 import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.StringUtils;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 接送机相关服务
@@ -53,5 +55,18 @@ public class AirportTransManagerImpl implements AirportTransManager {
         airportTrans.setCreateDate(new Date());
         int i = appAirportTransMapper.insertSelective(airportTrans);
         return i == 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("接送机信息添加失败");
+    }
+
+
+    /**
+     * 根据城市获取易道机场列表
+     *
+     * @param city 城市名
+     * @return
+     */
+    @Override
+    public BaseMsgInfo getTransAirportList(String city) {
+        List<Object> objectList = JedisUtils.getObjectList("YONGCHEAIRPORTLIST");
+        return BaseMsgInfo.success(objectList);
     }
 }
