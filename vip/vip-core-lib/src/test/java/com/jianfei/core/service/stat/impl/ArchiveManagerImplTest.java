@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.utils.DateUtil;
-import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.service.stat.ArchiveManager;
 

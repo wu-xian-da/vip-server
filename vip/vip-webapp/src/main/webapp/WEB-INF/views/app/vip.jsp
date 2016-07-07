@@ -75,8 +75,9 @@
 	function blurClick(){
 		grid.datagrid('load',
 				{
-				'_orderState':$('#orderState').combobox('getValue'),
-				'_namephone':$("#searchBox").val()
+				'_orderState':$('#orderstate').combobox('getValue'),
+				'_namephone':$("#searchBox").val(),
+				'insured':$("#insured").val()
 				});
 	}
 </script>
@@ -86,7 +87,17 @@
 	<table>
 			<tr>
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-table_go',plain:true" onclick="exportVip()">导出</a></td>
-				<td><div class="datagrid-btn-separator"></div></td>
+				<td><select id="orderstate" name="orderstate" >
+											<option value="" selected="selected">请选择用户状态</option>
+											<option value="未支付">未支付</option>
+											<option value="已支付">已支付</option>
+											<option value="已退款">已退款</option>
+										</select></td>
+										<td><select id="insured" name="insured">
+											<option value="" selected="selected">请选择投保状态</option>
+											<option value="1">未投保</option>
+											<option value="2">已投保</option>
+										</select></td>
 				<td><input id="searchBox" class="easyui-validatebox" style="width: 150px" placeholder='输入手机号/姓名'></input></td>
 				<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;

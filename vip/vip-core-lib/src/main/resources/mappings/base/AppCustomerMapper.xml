@@ -35,30 +35,38 @@
 	</sql>
 	<select id="get" resultMap="BaseResultMap" parameterType="java.util.Map">
 		<![CDATA[
-			SELECT 
-			  `customer_id`,
-			  `customer_name`,
-			  `customer_identi`,
-			  `customer_phone`,
-			  `sex`,
-			  `email`,
-			  `address`,
-			  `password`,
-			  `use_type`,
-			  `remark1`,
-			  `dtflag`,
-			  `province`,
-			  `city`,
-			  `country`,
-			  `create_time`,
-			  `province_name`,
-			  `city_name`  
-			FROM `app_customer` customer 
+			select B.* from(
+				SELECT
+					customer.`customer_id`,
+					customer.`customer_name`,
+					customer.`customer_phone`,
+					customer.`sex`,
+					 customer.card_type,
+					customer.`customer_identi`,
+					 customer.birth_day,
+					 insured,
+					case 
+						when ao.order_state=1 or ao.order_state=3 or ao.order_state=2 THEN '已支付'
+						when ao.order_state=4 THEN '已退卡'
+					ELSE
+						'未支付'
+				end as orderstate,
+				 insured as action
+				FROM
+					`app_customer` customer
+				inner join app_orders ao on customer.customer_id=ao.customer_id
+			)B
 		 ]]>
 		<where>
 			<if test="namephone!=null and namephone!=''">
-				and (customer_name like CONCAT('%', #{namephone}, '%') or
+			    (customer_name like CONCAT('%', #{namephone}, '%') or
 				customer_phone like CONCAT('%', #{namephone}, '%') )
+			</if>
+			<if test="orderstate!=null and orderstate!=''">
+				and orderstate=#{orderstate}
+			</if>
+			<if test="insured!=null and insured!=''">
+				and insured=#{insured}
 			</if>
 		</where>
 	</select>

@@ -336,7 +336,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			return maps;
 		}
 		for (Map<String, Object> m : maps) {
-			JedisUtils.set(m.get("cacheKey").toString(),
+			JedisUtils.setObject(m.get("cacheKey").toString(),
 					JSONObject.toJSONString(m), 0);
 			logger.info("按照省和机场归档key:" + m.get("cacheKey").toString()
 					+ " value:" + JSONObject.toJSONString(m));
