@@ -18,6 +18,20 @@
 			wight : '700px',
 			url : sy.contextPath + '/app/look?id=' + id});
 	};
+	var delivery = function(id) {
+			var url = sy.contextPath + '/app/updateDeliveryState/'+id;
+			$.post(url, function(result) {
+				if (result.ok) {
+					 parent.$.messager.alert('提示', result.msgBody, 'info');
+					 window.location.reload();
+				} else {
+					layer.alert(result.msgBody, {
+						icon : 2,
+						skin : 'layer-ext-moon' 
+					});
+				}
+			}, 'json');
+	};
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
@@ -26,34 +40,83 @@
 			rownumbers : true,
 			pagination : true,
 			singleSelect : true,
-			idField : 'customerId',
+			idField : 'customer_id',
 			pageSize : 20,
 			pageList : [20, 30, 40, 50, ],
 		
 			columns : [ [ {
 				width : '80',
 				title : '姓名',
-				field : 'customerName'
+				field : 'customer_name'
 			},{
 				width : '150',
 				title : '手机号',
-				field : 'phone'
+				field : 'customer_phone'
+			},{
+				width : '50',
+				title : '性别',
+				field : 'sex',
+				formatter : function(value, row, index) {
+					switch (value) {
+					case 0:
+						return '女';
+					case 1:
+						return '男';
+					}
+				}
 			},{
 				width : '150',
-				title : '开卡日期',
-				field : 'createTime'
+				title : '证件类型',
+				field : 'card_type',
+				formatter : function(value, row, index) {
+					switch (value) {
+					case 1:
+						return '身份证';
+					case 2:
+						return '护照';
+					case 3:
+						return '军官证';
+					case 4:
+						return '回乡证';
+					}
+				}
 			},{
 				width : '150',
-				title : '邮箱',
-				field : 'email'
+				title : '证件号码',
+				field : 'customer_identi'
+			},{
+				width : '150',
+				title : '出生日期',
+				field : 'birthday'
+			},{
+				width : '80',
+				title : '投保状态',
+				field : 'insured',
+				formatter : function(value, row, index) {
+					switch (value) {
+					case 0:
+						return '未投';
+					case 1:
+						return '已投';
+					}
+				}
+			},{
+				width : '80',
+				title : '用户状态',
+				field : 'orderstate'
 			}, {
 				title : '操作',
 				field : 'action',
 				width : '90',
 				formatter : function(value, row) {
-					var str = '';
-						str += sy.formatString('<img class="iconImg ext-icon-note" title="查看详情" onclick="look(\'{0}\');"/> 查看', row.customerId);
-						return str;
+					switch (value) {
+					case 0:
+						return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.customer_id);
+					case 1:
+						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> 查看&nbsp;', row.customer_id);
+					//default: 
+						// return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.id);
+					}
 				}
 			} ] ],
 			toolbar : '#toolbar',
@@ -70,14 +133,15 @@
 	});
 	
 	function exportVip(){
-	   window.open(sy.contextPath + '/app/download');
+		var url = sy.contextPath + '/app/download?_insured='+$("#insured").val()+"&_orderstate="+$('#orderstate').val()+"&_namephone="+$("#searchBox").val();
+	   window.open(url=encodeURI(url));
 	}
 	function blurClick(){
 		grid.datagrid('load',
 				{
-				'_orderState':$('#orderstate').combobox('getValue'),
-				'_namephone':$("#searchBox").val(),
-				'insured':$("#insured").val()
+				_insured:$("#insured").val(),
+				_orderstate:$('#orderstate').val(),
+				_namephone:$("#searchBox").val()
 				});
 	}
 </script>
@@ -92,12 +156,12 @@
 											<option value="未支付">未支付</option>
 											<option value="已支付">已支付</option>
 											<option value="已退款">已退款</option>
-										</select></td>
+										</select>&nbsp;&nbsp;</td>
 										<td><select id="insured" name="insured">
 											<option value="" selected="selected">请选择投保状态</option>
-											<option value="1">未投保</option>
-											<option value="2">已投保</option>
-										</select></td>
+											<option value="0">未投保</option>
+											<option value="1">已投保</option>
+										</select>&nbsp;&nbsp;</td>
 				<td><input id="searchBox" class="easyui-validatebox" style="width: 150px" placeholder='输入手机号/姓名'></input></td>
 				<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;

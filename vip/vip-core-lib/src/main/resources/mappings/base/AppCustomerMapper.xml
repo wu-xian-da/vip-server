@@ -33,7 +33,7 @@
 		dtflag, province, city,
 		country,province_name,city_name
 	</sql>
-	<select id="get" resultMap="BaseResultMap" parameterType="java.util.Map">
+	<select id="get" resultType="java.util.Map" parameterType="java.util.Map">
 		<![CDATA[
 			select B.* from(
 				SELECT
@@ -41,17 +41,17 @@
 					customer.`customer_name`,
 					customer.`customer_phone`,
 					customer.`sex`,
-					 customer.card_type,
+					customer.card_type,
 					customer.`customer_identi`,
-					 customer.birth_day,
-					 insured,
+					DATE_FORMAT(customer.birth_day,'%Y%m%d') as birthday,
+					insured,
 					case 
 						when ao.order_state=1 or ao.order_state=3 or ao.order_state=2 THEN '已支付'
 						when ao.order_state=4 THEN '已退卡'
 					ELSE
 						'未支付'
-				end as orderstate,
-				 insured as action
+					end as orderstate,
+					insured as action
 				FROM
 					`app_customer` customer
 				inner join app_orders ao on customer.customer_id=ao.customer_id
@@ -70,6 +70,14 @@
 			</if>
 		</where>
 	</select>
+	
+	<update id="updateDeliveryState" parameterType="String">
+			UPDATE 
+			   app_customer
+			SET
+			  insured = 1
+			WHERE customer_id = #{id} ;
+	</update>
 
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
