@@ -372,12 +372,12 @@ public class StatManagerImpl implements StatManager {
 	 * 分页查询订单相关状态
 	 *
 	 * @param uno 销售员工号
-	 * @param orderState 订单状态
+	 * @param state 订单状态
 	 * @return
 	 */
 	@Override
-	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,int orderState,int pageNo,int pageSize) {
-		//TODO
+	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,String state,int pageNo,int pageSize,String key) {
+		// state 1 全部 2代付款 3 未激活 4 退款中 5 已退卡
 		List<OrderPageDto> orderPageDtos=new ArrayList<>();
 		OrderPageDto dto=new OrderPageDto();
 		dto.setOrderId("0467615151402953");

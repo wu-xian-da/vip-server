@@ -557,4 +557,26 @@ public class OrderManagerImpl implements OrderManager {
 	public void sendMessageOfOrder(ServiceMsgBuilder msgBuilder){
 		 queueManager.sendMessage(msgBuilder);
 	}
+
+    /**
+     * 取消VIP卡退卡记录
+     *
+     * @param phone     手机号
+     * @param code      验证码
+     * @param vipCardNo
+     * @return
+     */
+    @Override
+    public BaseMsgInfo removeBackCard(String phone, String code, String vipCardNo,String orderId) {
+        //1、校验用户和手机验证码
+        boolean flag = validateCodeManager.validateSendCode(phone, MsgType.SELECT, code);
+        if (!flag)
+            return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
+        //2、查询卡状态及卡对应的订单状态
+
+        //3、如果订单状态时已退款 则提示用户退卡申请失败 已退卡
+        //TODO
+
+        return BaseMsgInfo.success(true);
+    }
 }

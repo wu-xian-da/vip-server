@@ -201,5 +201,13 @@ public interface OrderManager {
 	 * 根据卡号返回所有消费记录
 	 */
 	List<AppConsume> selectByVipCardNo(String cardNo);
+
+    /**
+     * 取消VIP卡退卡记录
+     * @param phone 手机号
+     * @param code 验证码
+     * @return
+     */
+    BaseMsgInfo  removeBackCard(String phone,String code,String vipCardNo,String orderId);
     
 }

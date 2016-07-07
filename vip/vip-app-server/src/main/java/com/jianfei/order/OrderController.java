@@ -224,7 +224,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/vipCardUse")
 	@ResponseBody
-	public BaseMsgInfo VipCardUseAndOrder(
+	public BaseMsgInfo getVipCardUseAndOrder(
 			@RequestParam(value = "phone", required = true) String phone,
 			@RequestParam(value = "code", required = true) String code,
 			@RequestParam(value = "vipCardNo", required = false) String vipCardNo) {
@@ -287,6 +287,31 @@ public class OrderController {
 		}catch (Exception e){
 			log.error("用户信息完善异常",e);
 			return BaseMsgInfo.msgFail("用户信息完善失败");
+		}
+	}
+
+
+	/**
+	 * 用户取消退卡接口
+	 *
+	 * @param phone
+	 *            手机号
+	 * @param code
+	 *            验证码
+	 * @return
+	 */
+	@RequestMapping(value = "/removeBackCard")
+	@ResponseBody
+	public BaseMsgInfo removeBackCard(
+			@RequestParam(value = "phone", required = true) String phone,
+			@RequestParam(value = "code", required = true) String code,
+			@RequestParam(value = "vipCardNo", required = true) String vipCardNo,
+			@RequestParam(value = "orderId", required = true) String orderId) {
+		try {
+			return orderManager.removeBackCard(phone, code, vipCardNo,orderId);
+		}catch (Exception e){
+			log.error("用户取消退卡接口异常",e);
+			return BaseMsgInfo.msgFail("用户取消退卡接口失败");
 		}
 	}
 }

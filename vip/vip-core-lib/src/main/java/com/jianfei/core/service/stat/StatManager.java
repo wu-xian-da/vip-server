@@ -95,8 +95,8 @@ public interface StatManager {
     /**
      * 分页查询订单相关状态
      * @param uno
-     * @param orderState
+     * @param state
      * @return
      */
-    PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,int orderState,int pageNo,int pageSize );
+    PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,String state,int pageNo,int pageSize,String key );
 }

@@ -367,10 +367,11 @@ public class OrderStaController {
 	 */
 	@RequestMapping(value="pageOrderInfoBySale")
 	@ResponseBody
-	public BaseMsgInfo pageOrderByUno(@RequestParam(value="uno",required=true) String uno,@RequestParam(value="orderState",required=true) int orderState,
+	public BaseMsgInfo pageOrderByUno(@RequestParam(value="uno",required=true) String uno,@RequestParam(value="state",required=true) String orderState,
 									  @RequestParam(value="pageNo") int pageNo,
-									  @RequestParam(value="pageSize") int pageSize){
-		return BaseMsgInfo.success(statManager.pageOrderInfoBySale(uno,orderState,pageNo,pageSize));
+									  @RequestParam(value="pageSize") int pageSize,
+									  @RequestParam(value="key",required=true) String key){
+		return BaseMsgInfo.success(statManager.pageOrderInfoBySale(uno,orderState,pageNo,pageSize,key));
 	}
 
 }
