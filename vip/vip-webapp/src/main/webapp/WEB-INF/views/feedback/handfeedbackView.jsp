@@ -57,30 +57,78 @@
 			</c:if>
 			
 			<!--个人资料  -->
-			<div class="order-list-title">用户资料</div>
+			<div class="order-list-title">个人资料</div>
 			<ul>
-				<li>姓名：${customer.customerName}</li>
-				<li>身份证：${customer.customerIdenti }</li>
-				<li>手机号：${customer.phone }</li>
-				<li>性别：${customer.sex ==1 ? '男' : '女' }</li>
-				<li>常住城市：${customer.address }</li>
+				<li>用户姓名：${customer.customerName}</li>
+				<li>证件类型：
+					<c:if test="${customer.cardType == 1}">身份证</c:if>
+					<c:if test="${customer.cardType == 2}">护照</c:if>
+					<c:if test="${customer.cardType == 3}">军官证</c:if>
+					<c:if test="${customer.cardType == 4}">回乡证</c:if>
+				</li>
+				<li>证件号：${customer.customerIdenti }</li>
+				<li>出生日期：</li>
+				<li>用户手机号：${customer.phone }</li>
+				<li>用户性别：${customer.sex ==1 ? '男' : '女' }</li>
+				<li>常住地址：${customer.provinceName} ${customer.cityName} ${customer.address }</li>
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
 
 			<!-- 发票信息 -->
-			<c:if test="${empty postInfo }">
-			<div class="order-list-title">发票信息（未开）</div>
-			</c:if>
-			
 			<c:if test="${!empty postInfo }">
 				<c:forEach items="${postInfo }" var="post">
-					<div class="order-list-title">发票信息（已开）</div>
-					<ul>
-						<li></li>
-						<li>邮寄地址：${post.address }</li>
-						<li>发票类型：${post.invoice_type==1? '个人':'公司'}</li>
-						<li>发票抬头：${post.invoice_title }</li>
-					</ul>
+
+					<div class="order-list-title">
+						发票信息（
+						<c:if test="${postInfo.invoiceFlag ==0}">
+							未开
+						</c:if>
+						<c:if test="${postInfo.invoiceFlag ==1}">
+							发票未邮寄
+						</c:if>
+						<c:if test="${postInfo.invoiceFlag ==2}">
+							发票已邮寄
+						</c:if>
+						）
+					</div>
+					
+					<c:if test="${orderDetailInfo.invoiceFlag != 0}">
+						<ul>
+							<!--普通发票  -->
+							<c:if test="${invoice.invoiceKind ==0}">
+								<li>发票类型：普通发票</li>
+								<li>邮寄地址：${invoice.province} ${invoice.city}
+									${invoice.country} ${invoice.address }</li>
+								<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
+								<li>发票抬头：${invoice.invoiceTitle}</li>
+								<li>发票内容：${invoice.invoiceContent}</li>
+								<li>邮 编：${invoice.postcode }</li>
+								<c:if test="${orderDetailInfo.invoiceFlag == 2}">
+									<li>发票编号：${invoice.invoiceNo}</li>
+								</c:if>
+							</c:if>
+
+							<!--专用发票 -->
+							<c:if test="${invoice.invoiceKind ==1}">
+								<li>发票类型：专用发票</li>
+								<li>邮寄地址：${invoice.province} ${invoice.city}
+									${invoice.country} ${invoice.address }</li>
+								<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
+								<li>发票抬头：${invoice.invoiceTitle}</li>
+								<li>发票内容：${invoice.invoiceContent}</li>
+								<li>邮 编：${invoice.postcode }</li>
+								<li>公司名称：${invoice.companyName}</li>
+								<li>公司税号：${invoice.companyTaxNo }</li>
+								<li>公司地址：${invoice.companyAddress }</li>
+								<li>公司电话：${invoice.companyPhone }</li>
+								<li>营业执照：<img src="${invoice.businessLicenseUrl}"
+									style="width: 400px"></li>
+								<c:if test="${orderDetailInfo.invoiceFlag == 2}">
+									<li>发票编号：${invoice.invoiceNo}</li>
+								</c:if>
+							</c:if>
+						</ul>
+					</c:if>
 
 				</c:forEach>
 			</c:if>
@@ -92,11 +140,26 @@
 				</div>
 				<c:forEach items="${backMoneyInfo }" var="backMoneyInfo">
 					<ul>
-						<li>退款金额：${backMoneyInfo.money }<</li>
-						<li>退款方式：${backMoneyInfo.back_type }</li>
+						<li>退款进度：${backMoneyInfo.order_state == 3?'审核通过':'已退款'}</li>
+						<li>订单编号：${backMoneyInfo.order_id}</li>
+						<li>退款金额：${backMoneyInfo.money} 元</li>
+						<li>退款方式： <c:choose>
+								<c:when test="${backMoneyInfo.back_type ==1}">
+								微信转账
+							</c:when>
+								<c:when test="${backMoneyInfo.back_type ==2 }">
+								支付宝转账
+							</c:when>
+								<c:when test="${backMoneyInfo.back_type ==3 }">
+								银行卡转账
+							</c:when>
+								<c:otherwise>
+								现金转账
+							</c:otherwise>
+							</c:choose>
+						</li>
 					</ul>
 				</c:forEach>
-				
 			</c:if>
 			
 			<!-- vip卡使用记录 -->

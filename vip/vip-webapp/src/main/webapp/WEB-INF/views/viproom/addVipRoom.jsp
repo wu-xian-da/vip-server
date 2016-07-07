@@ -24,7 +24,7 @@
 <body>
 	<div id="clerk-wrap">
 		<div id="clerk-container" class="clerk-container-viproom">
-		<form action="addVipRoomInfo" method="post"  enctype="multipart/form-data">
+		<form action="addVipRoomInfo" method="post" id="fm" enctype="multipart/form-data">
 			<div class="clerk-container-item">
 				<label>vip室名称：</label>
 				<input class="easyui-validatebox" type="text" name="viproomName" value="" data-options="missingMessage:'必填项',required:true"/>
@@ -53,12 +53,12 @@
 			
 			<div class="clerk-container-item">
 				<label>场站位置：</label>
-				<input type="text" name="address"/>
+				<input type="text" name="address" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true"/>
 			</div>
 			
 			<div class="clerk-container-item">
 				<label>vip室图片：</label>
-				<input type="file" name="file"/> 
+				<input type="file" name="file" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true"/> 
 			</div>
 
 				<div class="clerk-container-item">
@@ -228,7 +228,7 @@
 				</div>
 
 				<div id="clerk-footer">
-			<input  class="btn btn-save" type="submit" value="保存"/>
+			<input  class="btn btn-save" type="button" onclick="addVipInfo()" value="保存"/>
 			<button class="btn btn-cancel" onClick="javascript:history.go(-1);">取消</button>
 		</div>
 	</form>
@@ -267,6 +267,28 @@
 				$("#airportId").append("<option value='"+_d[index].airport_id+"'>"+_d[index].airport_name+"</option>");
 			}
 		})
+	}
+	
+	//添加vip室信息
+	function addVipInfo() {
+		$('#fm').form('submit', {
+			url : "addVipRoomInfo",
+			onSubmit : function() {
+				return $(this).form('validate');
+			},
+			success : function(_d) {
+				console.log("_d:" + _d);
+				if (_d.result == 0) {
+					$.messager.show({
+						title : 'Error',
+						msg : "数据格式出错"
+					});
+				} else {
+					history.go(-1);
+					//location.href="gotoVipRoomView";
+				}
+			}
+		});
 	}
 	
 </script>

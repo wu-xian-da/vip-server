@@ -128,8 +128,6 @@
 						<li>发票编号：${invoice.invoiceNo}</li>
 						</c:if>
 					</c:if>
-					
-						
 				</ul>
 			</c:if>
 			
