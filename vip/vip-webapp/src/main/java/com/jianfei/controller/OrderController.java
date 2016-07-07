@@ -403,7 +403,7 @@ public class OrderController extends BaseController {
 				outData.put("backType", appCardBack.getBackType());
 				outData.put("backName", appCardBack.getBankName());
 				outData.put("customerName", appCardBack.getCustomerName());
-				
+				outData.put("applyBackCardMethod",appOrder.getApplyType());
 				//发票状态
 				AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
 				outData.put("invoice", orderInfo.getInvoiceFlag());
@@ -495,19 +495,24 @@ public class OrderController extends BaseController {
 					outData.put("backMoneyCard",appCardBack.getCustomerCard());
 					outData.put("backType", appCardBack.getBackType());
 					outData.put("phone", appOrder.getCustomerPhone());
-					appOrder.setOrderStateName("审核通过");
 					outData.put("backName", appCardBack.getBankName());
 					outData.put("customerName", appCardBack.getCustomerName());
+					
+					int applyTypes = appOrder.getApplyType();
+					outData.put("applyBackCardMethod", appOrder.getApplyType());
+					
 					//发票状态
 					AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
 					outData.put("invoice", orderInfo.getInvoiceFlag());
 					//申请方式
-					int applyTypes = appOrder.getApplyType();
 					if(applyTypes == 1){
 						appOrder.setApplyTypeName("客服");
 					}else{
 						appOrder.setApplyTypeName("现场");
 					}
+					
+					//订单状态
+					appOrder.setOrderStateName("审核通过");
 					//退卡方式
 					int backCardTypes = appOrder.getBackType();
 					if(backCardTypes == 1){
