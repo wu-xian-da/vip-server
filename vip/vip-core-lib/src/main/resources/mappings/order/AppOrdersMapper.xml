@@ -472,10 +472,10 @@
 	<!-- 根据工号获取业务员需要处理的数据 -->
 	<select id="getSaleToDoData" parameterType="java.lang.String"
 			resultMap="GraphResultMap">
-		select count(*) as 'value', 'TO_PAY' as 'name' from app_orders where order_state=0
+		select count(*) as 'value', 'TO_PAY' as 'name' from app_orders where order_state=0 and sale_no=#{uno}
 union
-select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_order_card oc on o.order_id=oc.order_id join app_vipcard v on oc.card_id=v.card_no  where order_state=1 and  v.card_state in (3,4)
+select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_order_card oc on o.order_id=oc.order_id join app_vipcard v on oc.card_id=v.card_no  where order_state=1 and  v.card_state in (3,4) and sale_no=#{uno}
 union
-select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3)
+select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3) and sale_no=#{uno}
 	</select>
 </mapper>
