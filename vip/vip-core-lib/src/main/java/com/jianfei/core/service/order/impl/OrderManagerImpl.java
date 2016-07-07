@@ -215,6 +215,10 @@ public class OrderManagerImpl implements OrderManager {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("orderState", orderState);
         params.put("orderId", orderId);
+        //审核通过
+        if(operationType == 3){
+        	params.put("applyType", ApplyBackCardMethod.CUSTOMER_SERVICE_APPLY.getName());
+        }
 
         return appOrdersMapper.updateOrderState(params);
 

@@ -17,7 +17,7 @@
 			width : 640,
 			height : 410,
 			buttons : [ {
-				text : '保存',
+				text : '投递',
 				handler : function() {
 					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
 				}

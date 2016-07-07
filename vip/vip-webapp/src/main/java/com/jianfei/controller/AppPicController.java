@@ -120,7 +120,7 @@ public class AppPicController extends BaseController {
 	public MessageDto<String> save(AppPicture appPicture) {
 		appPicture.setUpdatetime(new Date());
 		if (ObjectUtils.isEmpty(appPicture.getPriority())) {
-			appPicture.setPictureId(0);
+			appPicture.setPriority(0);
 		}
 		appPicture.setDtflag(GloabConfig.OPEN);
 		if (null != appPicture.getPictureId() && 0 != appPicture.getPictureId()) {

@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.utils.DateUtil;
-import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.service.stat.ArchiveManager;
 
@@ -131,11 +129,14 @@ public class ArchiveManagerImplTest {
 	}
 
 	@Test
-	public void testKitty() {
-		SimpleHash simpleHash = new SimpleHash("md5",
-				GloabConfig.getConfig("defalut.passwd"),
-				"f6e537de-04a6-47e1-834a-c6177295b327");
-		System.out.println(simpleHash.toString());
+	public void testDateProvinceIdAirport() {
+		Map<String, Object> mapCon = new HashMap<String, Object>();
+		mapCon.put("currentTime", "2016-06-27");
+		List<Map<String, Object>> maps = archiveManager
+				.dateProvinceIdApportIds(mapCon);
+		for (Map<String, Object> map : maps) {
+			System.out.println(JSONObject.toJSONString(map));
+		}
 	}
 
 	@Test
