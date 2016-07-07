@@ -79,6 +79,6 @@ public interface AppOrdersMapper {
 	 * @param cardState
 	 * @return
 	 */
-	 PageInfo<OrderPageDto> pageOrderInfoBySale(String uno, String orderState, String cardState);
+	List<OrderPageDto> orderListBySale(@Param(value = "uno")String uno, @Param(value = "orderState")String orderState, @Param(value = "cardState")String cardState,@Param(value = "key")String key);
 
 }
