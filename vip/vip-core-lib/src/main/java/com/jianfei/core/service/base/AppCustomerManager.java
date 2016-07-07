@@ -33,7 +33,7 @@ public interface AppCustomerManager {
 	 * @return MessageDto<List<AppCustomer>>
 	 * @version 1.0.0
 	 */
-	MessageDto<List<AppCustomer>> get(Map<String, Object> map);
+	MessageDto<List<Map<String, Object>>> get(Map<String, Object> map);
 
 	/**
 	 * delete(删除用户信息)
@@ -104,11 +104,21 @@ public interface AppCustomerManager {
 
 	/**
 	 * batchDealMsg(这里用一句话描述这个方法的作用)
+	 * 
 	 * @param id
 	 * @param model
-	 *void
-	 * @version  1.0.0
-	*/
+	 *            void
+	 * @version 1.0.0
+	 */
 	void batchDealMsg(String id, Model model);
+
+	/**
+	 * updateDeliveryState(更新投递状态未已投递)
+	 * 
+	 * @param id
+	 * @return MessageDto<String>
+	 * @version 1.0.0
+	 */
+	MessageDto<String> updateDeliveryState(String id);
 
 }

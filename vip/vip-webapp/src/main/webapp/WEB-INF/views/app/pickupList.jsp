@@ -117,7 +117,7 @@
 					case 1:
 						return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投递" onclick="handled(\'{0}\');"/> 投递&nbsp;', row.id);
 					case 2:
-						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> ddd查看&nbsp;', row.id);
+						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> 查看&nbsp;', row.id);
 					 default: 
 						 return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投递" onclick="handled(\'{0}\');"/> 投递&nbsp;', row.id);
 					}
@@ -158,12 +158,12 @@
 											<option value="" selected="selected">请选择用车类型</option>
 											<option value="1">接机</option>
 											<option value="2">送机</option>
-										</select></td>
+										</select>&nbsp;&nbsp;</td>
 										<td><select id="submit" name="submit">
 											<option value="" selected="selected">请选择用车状态</option>
 											<option value="1">未递交</option>
 											<option value="2">已递交</option>
-										</select></td>
+										</select>&nbsp;&nbsp;</td>
 										<td><input id="nameandphone" name="nameandphone" style="width: 150px" placeholder='输入手机号/姓名'></input></td>
 										<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;

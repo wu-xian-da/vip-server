@@ -20,4 +20,11 @@ public interface AirportTransManager {
      */
     BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans) throws Exception;
 
+    /**
+     * 根据城市获取易道机场列表
+     * @param city 城市名
+     * @return
+     */
+    BaseMsgInfo getTransAirportList(String city);
+
 }
