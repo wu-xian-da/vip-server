@@ -260,7 +260,7 @@
 					count(card.back_id) as back_order_num
 				FROM
 					`app_card_back` card
-				INNER JOIN `app_orders` ao ON card.order_id = ao.id
+				INNER JOIN `app_orders` ao ON card.order_id = ao.order_id
 				WHERE
 					DATE_FORMAT(card.finish_time,'%Y-%m-%d')  =#{maxTime}
 				GROUP BY
