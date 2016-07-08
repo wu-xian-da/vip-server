@@ -75,55 +75,55 @@
 
 			<!-- 发票信息 -->
 			<c:if test="${!empty postInfo }">
-				<c:forEach items="${postInfo }" var="post">
+				<c:forEach items="${postInfo}" var="postInfo">
 
 					<div class="order-list-title">
 						发票信息（
-						<c:if test="${postInfo.invoiceFlag ==0}">
+						<c:if test="${postInfo.invoice_flag =='0'}">
 							未开
 						</c:if>
-						<c:if test="${postInfo.invoiceFlag ==1}">
+						<c:if test="${postInfo.invoice_flag =='1'}">
 							发票未邮寄
 						</c:if>
-						<c:if test="${postInfo.invoiceFlag ==2}">
+						<c:if test="${postInfo.invoice_flag =='2'}">
 							发票已邮寄
 						</c:if>
 						）
 					</div>
 					
-					<c:if test="${orderDetailInfo.invoiceFlag != 0}">
+					<c:if test="${postInfo.invoice_flag != '0'}">
 						<ul>
 							<!--普通发票  -->
-							<c:if test="${invoice.invoiceKind ==0}">
+							<c:if test="${postInfo.invoice_kind =='0'}">
 								<li>发票类型：普通发票</li>
-								<li>邮寄地址：${invoice.province} ${invoice.city}
-									${invoice.country} ${invoice.address }</li>
-								<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
-								<li>发票抬头：${invoice.invoiceTitle}</li>
-								<li>发票内容：${invoice.invoiceContent}</li>
-								<li>邮 编：${invoice.postcode }</li>
-								<c:if test="${orderDetailInfo.invoiceFlag == 2}">
-									<li>发票编号：${invoice.invoiceNo}</li>
+								<li>邮寄地址：${postInfo.province} ${postInfo.city}
+									${postInfo.country} ${postInfo.address }</li>
+								<li>发票类型：${postInfo.invoice_type =='0'? '个人':'公司' }</li>
+								<li>发票抬头：${postInfo.invoice_title}</li>
+								<li>发票内容：${postInfo.invoice_content}</li>
+								<li>邮 编：${postInfo.postcode }</li>
+								<c:if test="${postInfo.invoice_flag == '2'}">
+									<li>发票编号：${postInfo.invoice_no}</li>
 								</c:if>
 							</c:if>
 
 							<!--专用发票 -->
-							<c:if test="${invoice.invoiceKind ==1}">
+							<c:if test="${postInfo.invoice_kind =='1'}">
 								<li>发票类型：专用发票</li>
-								<li>邮寄地址：${invoice.province} ${invoice.city}
-									${invoice.country} ${invoice.address }</li>
-								<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
-								<li>发票抬头：${invoice.invoiceTitle}</li>
-								<li>发票内容：${invoice.invoiceContent}</li>
-								<li>邮 编：${invoice.postcode }</li>
-								<li>公司名称：${invoice.companyName}</li>
-								<li>公司税号：${invoice.companyTaxNo }</li>
-								<li>公司地址：${invoice.companyAddress }</li>
-								<li>公司电话：${invoice.companyPhone }</li>
-								<li>营业执照：<img src="${invoice.businessLicenseUrl}"
+								<li>邮寄地址：${postInfo.province} ${postInfo.city}
+									${postInfo.country} ${postInfo.address }</li>
+								<li>发票类型：${postInfo.invoice_type =='0'? '个人':'公司' }</li>
+								<li>发票抬头：${postInfo.invoice_title}</li>
+								<li>发票内容：${postInfo.invoice_content}</li>
+								<li>邮 编：${postInfo.postcode }</li>
+								<li>公司名称：${postInfo.company_name}</li>
+								<li>公司税号：${postInfo.company_tax_no }</li>
+								<li>公司地址：${postInfo.company_address }</li>
+								<li>公司电话：${invpostInfooice.company_phone }</li>
+								<li>营业执照：<img src="${postInfo.business_license_url}"
 									style="width: 400px"></li>
-								<c:if test="${orderDetailInfo.invoiceFlag == 2}">
-									<li>发票编号：${invoice.invoiceNo}</li>
+								<c:if test="${postInfo.invoice_flag == '2'}">
+									<li>发票编号：${postInfo.invoice_no}</li>
 								</c:if>
 							</c:if>
 						</ul>
