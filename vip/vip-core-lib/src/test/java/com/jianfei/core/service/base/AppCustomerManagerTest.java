@@ -7,6 +7,8 @@
  */
 package com.jianfei.core.service.base;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -24,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.VipCardState;
@@ -33,7 +34,6 @@ import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.ExportExclUtils;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.order.OrderManager;
 
 /**
@@ -59,6 +59,28 @@ public class AppCustomerManagerTest {
 
 	@Autowired
 	private VipCardManager vipCardManager;
+
+	@Test
+	public void testCu() throws Exception {
+		MessageDto<List<Map<String, Object>>> messageDto = appCustomerManager
+				.get(new MapUtils.Builder().build());
+		ExportExclUtils<ExportAip> exclUtils = new ExportExclUtils<ExportAip>();
+		if (messageDto.isOk()) {
+			List<ExportAip> dataset = new ArrayList<ExportAip>();
+			for (Map<String, Object> map : messageDto.getData()) {
+				ExportAip exportAip = new ExportAip(map.get("customer_name"),
+						map.get("customer_phone"), map.get("sex"),
+						map.get("card_type"), map.get("customer_identi"),
+						map.get("birthday"), map.get("insured"),
+						map.get("orderstate"));
+				dataset.add(exportAip);
+			}
+			File file = new File("E:\\a.xls");
+			OutputStream output = new FileOutputStream(file);
+			exclUtils.exportExcel(new String[] { "姓名", "手机号", "性别", "证件类型",
+					"证件号码", "出生日期", "投保状态", "用户状态" }, dataset, output);
+		}
+	}
 
 	@Test
 	public void testsssssss() {
@@ -98,6 +120,5 @@ public class AppCustomerManagerTest {
 						.setKeyValue("orderState", 3).build());
 		System.out.println(JSONObject.toJSONString(maps));
 	}
-
 
 }

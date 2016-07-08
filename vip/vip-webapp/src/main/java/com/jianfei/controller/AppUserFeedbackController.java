@@ -70,13 +70,15 @@ public class AppUserFeedbackController {
 	 */
 	@RequestMapping("goHandFeedbackView")
 	public String goHandFeedbackView(String userId,String feedbackId,String feedbackContent,Model model){
-		MessageDto<AppCustomer> messageDto = appCustomerManager
-				.selectByPrimaryKey(userId);
+		MessageDto<AppCustomer> messageDto = appCustomerManager.selectByPrimaryKey(userId);
 		if (messageDto.isOk()) {
 			model.addAttribute("customer", messageDto.getData());
 		}
+		//--反馈信息
 		model.addAttribute("feedbackContent", feedbackContent);
+		//--反馈id
 		model.addAttribute("feedbackId", feedbackId);
+		
 		appCustomerManager.batchDealMsg(userId, model);
 		return "feedback/handfeedbackView";
 	}

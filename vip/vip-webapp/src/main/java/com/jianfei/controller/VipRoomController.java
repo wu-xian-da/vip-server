@@ -145,7 +145,7 @@ public class VipRoomController extends BaseController {
 	 * @version 1.0.0
 	 */
 	@RequestMapping(value = "addVipRoomInfo", method = RequestMethod.POST)
-	public String addVipRoom(@RequestParam(value = "file", required = false) MultipartFile file, SysViproom room) {
+	public Map<String,Object> addVipRoom(@RequestParam(value = "file", required = false) MultipartFile file, SysViproom room) {
 		// 文件上传
 		String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "//viproomPhoto";
 		String fileName = file.getOriginalFilename();
@@ -175,8 +175,11 @@ public class VipRoomController extends BaseController {
 		room.setDtflag(DtFlagType.NOT_DELETE.getName());
 		room.setCreateTime(new Date());
 		vipRoomManagerImp.addVipRoom(room);
-
-		return "redirect:gotoVipRoomView";
+		
+		Map<String,Object> repMap = new HashMap<String,Object>();
+		repMap.put("result", 1);
+		return repMap;
+		//return "redirect:gotoVipRoomView";
 	}
 
 	/**

@@ -47,9 +47,9 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 	 * @see com.jianfei.core.service.base.AppCustomerService#get(java.util.Map)
 	 */
 	@Override
-	public MessageDto<List<AppCustomer>> get(Map<String, Object> map) {
-		MessageDto<List<AppCustomer>> messageDto = new MessageDto<List<AppCustomer>>();
-		List<AppCustomer> appCustomers = appCustomerMapper.get(map);
+	public MessageDto<List<Map<String, Object>>> get(Map<String, Object> map) {
+		MessageDto<List<Map<String, Object>>> messageDto = new MessageDto<List<Map<String, Object>>>();
+		List<Map<String, Object>> appCustomers = appCustomerMapper.get(map);
 		if (!CollectionUtils.isEmpty(appCustomers)) {
 			messageDto.setData(appCustomers).setOk(true);
 		}
@@ -181,5 +181,26 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 		if (!CollectionUtils.isEmpty(backMoneyInfo)) {
 			model.addAttribute("backMoneyInfo", backMoneyInfo);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.base.AppCustomerManager#updateDeliveryState(
+	 * java.lang.String)
+	 */
+	@Override
+	public MessageDto<String> updateDeliveryState(String id) {
+		MessageDto<String> messageDto = new MessageDto<String>();
+		try {
+			appCustomerMapper.updateDeliveryState(id);
+
+			messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
+		} catch (Exception e) {
+			logger.error("更改用户投递状态为已投递失败...");
+			messageDto.setMsgBody(MsgFlag.ERROR);
+		}
+		return messageDto;
 	}
 }
