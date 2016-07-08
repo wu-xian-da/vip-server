@@ -450,6 +450,7 @@
 		<collection property="vipCards" column="id" javaType="com.jianfei.core.bean.AppVipcard">
 			<id column="card_no" property="cardNo" jdbcType="VARCHAR" />
 			<result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+			<result column="card_type" property="cardType" jdbcType="INTEGER" />
 		</collection>
 		<collection property="customer" column="id" javaType="com.jianfei.core.bean.AppCustomer">
 			<result column="au.customer_id" property="customerId" jdbcType="VARCHAR" />
