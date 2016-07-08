@@ -401,8 +401,7 @@ public class StatManagerImpl implements StatManager {
 			orderStates.add(4);
 		}
 		List<OrderPageDto> list=ordersMapper.orderListBySale(uno,orderStates,cardStates,key);
-		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<>();
-		pageDtoPageInfo.setList(list);
+		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<>(list);
 		return pageDtoPageInfo;
 	}
 }

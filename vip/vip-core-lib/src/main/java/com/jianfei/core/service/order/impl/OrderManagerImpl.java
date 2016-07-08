@@ -20,6 +20,7 @@ import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
+import com.jianfei.core.service.order.CardBackManager;
 import com.jianfei.core.service.order.OrderManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
@@ -68,6 +69,8 @@ public class OrderManagerImpl implements OrderManager {
     private QueueManager queueManager;
     @Autowired
     private VipUserManager vipUserManager;
+    @Autowired
+    private CardBackManager cardBackManager;
 
     /**
      * 添加订单信息
@@ -459,9 +462,7 @@ public class OrderManagerImpl implements OrderManager {
 			return BaseMsgInfo.fail("退款金额有误，请重新查询使用");
 		}
         //3、插入数据库
-        appCardBack.setBackId(IdGen.uuid());
-        appCardBack.setCreateTime(new Date());
-        int i = appCardBackMapper.insertBackCard(appCardBack);
+     boolean  temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
@@ -489,7 +490,7 @@ public class OrderManagerImpl implements OrderManager {
         log.info("发送消息");
         log.info(msgBuilder);
         queueManager.sendMessage(msgBuilder);
-        return i > 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败");
+        return temp ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败");
     }
 
     /**
@@ -573,9 +574,25 @@ public class OrderManagerImpl implements OrderManager {
         if (!flag)
             return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
         //2、查询卡状态及卡对应的订单状态
+        AppOrders orders=appOrdersMapper.selectByPrimaryKey(orderId);
 
         //3、如果订单状态时已退款 则提示用户退卡申请失败 已退卡
-        //TODO
+        if (orders == null || orders.getOrderState() == VipOrderState.ALREADY_REFUND.getName()) {
+            return BaseMsgInfo.msgFail("订单不存在 或已退款");
+        }
+
+        //4、判断订单状态是否在可取消退卡范围内
+        if (!(orders.getOrderState() == VipOrderState.BEING_AUDITED.getName() ||
+                orders.getOrderState() == VipOrderState.AUDIT_PASS.getName())){
+            return BaseMsgInfo.msgFail("订单无法取消退卡");
+        }
+
+        //5、更改订单状态为已付款 逻辑删除退卡信息
+        orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
+        appOrdersMapper.updateByPrimaryKeySelective(orders);
+
+
+        //6、给用户发送取消退卡成功短信
 
         return BaseMsgInfo.success(true);
     }
