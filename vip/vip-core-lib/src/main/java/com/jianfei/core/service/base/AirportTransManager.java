@@ -27,4 +27,12 @@ public interface AirportTransManager {
      */
     BaseMsgInfo getTransAirportList(String city);
 
+
+    /**
+     * 根据手机号获取接送机次数
+     * @param phone
+     * @return
+     */
+    BaseMsgInfo getAirportTransNum(String phone);
+
 }

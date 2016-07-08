@@ -147,6 +147,23 @@ public class VipUserController {
     }
 
     /**
+     *  接送机次数统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/airportTransNum")
+    @ResponseBody
+    public BaseMsgInfo airportTransNum(@RequestParam(value = "phone", required = true) String phone
+    ) {
+        try {
+            return transManager.getAirportTransNum(phone);
+        }catch (Exception e){
+            log.error("接送机次数统计错误",e);
+            return BaseMsgInfo.msgFail("接送机次数统计失败");
+        }
+    }
+
+    /**
      * 接送机机场列表信息
      *
      * @return

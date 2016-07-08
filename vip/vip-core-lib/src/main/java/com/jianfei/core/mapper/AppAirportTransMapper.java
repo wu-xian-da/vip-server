@@ -82,4 +82,11 @@ public interface AppAirportTransMapper {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> pickupLook(String id);
+
+	/**
+	 * 根据手机号查询用户预定机记录
+	 * @param phone
+	 * @return
+     */
+	List<AppAirportTrans> selectByPhone(String phone);
 }

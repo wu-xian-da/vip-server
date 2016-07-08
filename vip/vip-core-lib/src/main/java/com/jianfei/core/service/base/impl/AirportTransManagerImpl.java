@@ -69,4 +69,17 @@ public class AirportTransManagerImpl implements AirportTransManager {
         List<Object> objectList = JedisUtils.getObjectList("YONGCHEAIRPORTLIST");
         return BaseMsgInfo.success(objectList);
     }
+
+
+    /**
+     * 根据手机号获取接送机次数
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public BaseMsgInfo getAirportTransNum(String phone) {
+        List<AppAirportTrans> appAirportTranses = appAirportTransMapper.selectByPhone(phone);
+        return appAirportTranses == null || appAirportTranses.size() == 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
+    }
 }
