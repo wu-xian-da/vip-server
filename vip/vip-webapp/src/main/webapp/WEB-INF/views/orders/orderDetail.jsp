@@ -86,7 +86,7 @@
 			<!-- 发票信息 -->
 			<div class="order-list-title">发票信息（
 				<c:if test="${orderDetailInfo.invoiceFlag ==0}">
-					未开
+					不需要
 				</c:if>
 				<c:if test="${orderDetailInfo.invoiceFlag ==1}">
 					发票未邮寄
@@ -130,16 +130,17 @@
 					</c:if>
 				</ul>
 			</c:if>
-			
-			
-			<div class="order-list-title">
-				退款信息 <span class="order-tips-red">（${orderDetailInfo.orderState ==4 ?'已退款':'未退款'}）</span>
-			</div>
-			<c:if test="${orderDetailInfo.orderState ==4}">
-				<ul>
-					<li>退款金额：<fmt:formatNumber value="${appCardBack.money}" pattern="0.00"/> 元</li>
-					<li>退款方式：
-						<c:choose>
+
+			<div class="order-list-title">退款信息</div>
+			<ul>
+				<c:if
+					test="${orderDetailInfo.orderState==3 || orderDetailInfo.orderState==4}">
+
+					<li>退款进度：${orderDetailInfo.orderState ==4 ?'已退款':'审核通过'}</li>
+					<li>退款金额：<fmt:formatNumber value="${appCardBack.money}"
+							pattern="0.00" /> 元
+					</li>
+					<li>退款方式： <c:choose>
 							<c:when test="${appCardBack.backType ==1}">
 								微信转账
 							</c:when>
@@ -155,9 +156,9 @@
 						</c:choose>
 					</li>
 					<li>转账账号：${appCardBack.customerCard}</li>
-				</ul>
-			</c:if>
-			
+				</c:if>
+			</ul>
+
 			<div class="order-list-title">VIP卡使用记录</div>
 			<ul>
 				<c:if test="${!empty consumeList}">

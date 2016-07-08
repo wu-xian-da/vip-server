@@ -147,7 +147,7 @@
 	<select id="postInfo" resultType="java.util.HashMap"
 		parameterType="String">
 		<![CDATA[
-			SELECT v.`address`,v.`invoice_type`,v.`invoice_title`,ao.`invoice_flag` FROM `app_invoice`  v 
+			SELECT v.*,ao.`invoice_flag` FROM `app_invoice`  v 
 			INNER JOIN `app_orders` ao ON v.`order_id`=ao.`order_id` 
 			WHERE ao.`customer_id`=#{id}
 		 ]]>
