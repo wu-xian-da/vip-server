@@ -381,19 +381,26 @@ public class StatManagerImpl implements StatManager {
 		// state 1 全部 2 代付款 3 未激活 4 退款中 5 已退卡
 		PageHelper.startPage(pageNo, pageSize);
 		//订单状态
-		String orderState=null;
-		String cardState=null;
+		List<Integer> orderStates=null;
+		List<Integer> cardStates=null;
 		if ("2".equals(state)){
-			orderState="0";
+			orderStates=new ArrayList<>();
+			orderStates.add(0);
 		}else if ("3".equals(state)){
-			orderState="1";
-			cardState="3,4";
+			orderStates=new ArrayList<>();
+			cardStates=new ArrayList<>();
+			orderStates.add(1);
+			cardStates.add(3);
+			cardStates.add(4);
 		}else if ("4".equals(state)){
-			orderState="2,3";
+			orderStates=new ArrayList<>();
+			orderStates.add(2);
+			orderStates.add(3);
 		}else if ("5".equals(state)){
-			orderState="4";
+			orderStates=new ArrayList<>();
+			orderStates.add(4);
 		}
-		List<OrderPageDto> list=ordersMapper.orderListBySale(uno,orderState,cardState,key);
+		List<OrderPageDto> list=ordersMapper.orderListBySale(uno,orderStates,cardStates,key);
 		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<>();
 		pageDtoPageInfo.setList(list);
 		return pageDtoPageInfo;

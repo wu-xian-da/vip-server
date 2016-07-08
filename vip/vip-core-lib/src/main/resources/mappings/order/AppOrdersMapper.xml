@@ -538,11 +538,19 @@ select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_stat
 	select o.order_id,o.order_state,o.order_time,c.customer_name,c.customer_phone,av.card_state  from app_orders o join app_customer c on o.customer_id=c.customer_id join app_order_card aoc on o.order_id=aoc.order_id join app_vipcard av on aoc.card_id=av.card_no
 	   WHERE o.sale_no = (#{uno})
 
-			<if test="orderState!=null and orderState!=''">
-				AND o.order_state IN (#{orderState})
+			<if test="orderState!=null ">
+				and  o.order_state in
+				<foreach item="item" index="index" collection="orderState"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
 			</if>
-			<if test="cardState!=null and cardState!=''">
-			  AND 	av.card_state IN (#{cardState})
+			<if test="cardState!=null">
+				and  av.card_state in
+				<foreach item="cardItem" index="index" collection="cardState"
+						 open="(" separator="," close=")">
+					#{cardItem}
+				</foreach>
 			</if>
 		<if test="key!=null and key!=''">
 			and concat(c.customer_name,c.customer_phone) like

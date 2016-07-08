@@ -79,6 +79,6 @@ public interface AppOrdersMapper {
 	 * @param cardState
 	 * @return
 	 */
-	List<OrderPageDto> orderListBySale(@Param(value = "uno")String uno, @Param(value = "orderState")String orderState, @Param(value = "cardState")String cardState,@Param(value = "key")String key);
+	List<OrderPageDto> orderListBySale(@Param(value = "uno")String uno, @Param(value = "orderState")List<Integer> orderState, @Param(value = "cardState")List<Integer> cardState,@Param(value = "key")String key);
 
 }
