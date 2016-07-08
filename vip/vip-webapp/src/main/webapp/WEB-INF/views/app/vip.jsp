@@ -22,7 +22,6 @@
 			var url = sy.contextPath + '/app/updateDeliveryState/'+id;
 			$.post(url, function(result) {
 				if (result.ok) {
-					 parent.$.messager.alert('提示', result.msgBody, 'info');
 					 window.location.reload();
 				} else {
 					layer.alert(result.msgBody, {
