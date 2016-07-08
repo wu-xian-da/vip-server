@@ -21,6 +21,8 @@ public class AppCardBack {
     private String cardNo;//vip卡号
     private String bankName;//银行名称
 	private String customerPhone;//消费者手机号
+	private float serviceMoney;//服务费
+	private float safeMoney;//保险费
 	/**
 	 * backId
 	 *
@@ -263,5 +265,21 @@ public class AppCardBack {
 
 	public void setCustomerPhone(String customerPhone) {
 		this.customerPhone = customerPhone;
+	}
+
+	public float getServiceMoney() {
+		return serviceMoney;
+	}
+
+	public void setServiceMoney(float serviceMoney) {
+		this.serviceMoney = serviceMoney;
+	}
+
+	public float getSafeMoney() {
+		return safeMoney;
+	}
+
+	public void setSafeMoney(float safeMoney) {
+		this.safeMoney = safeMoney;
 	}
 }

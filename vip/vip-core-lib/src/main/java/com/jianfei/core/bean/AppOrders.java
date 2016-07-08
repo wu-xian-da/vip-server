@@ -62,10 +62,22 @@ public class AppOrders implements Serializable{
     private AppCustomer customer;
 
     /**
+     * 发票 1:1
+     */
+    private AppInvoice invoice;
+
+    /**
+     * 退卡信息 1:1
+     */
+    private AppCardBack cardBack;
+
+    /**
      * 卡 1:d
      */
     private List<AppVipcard> vipCards = Lists.newArrayList();
-    
+
+
+
     /**
 	 * operation
 	 *
@@ -229,5 +241,22 @@ public class AppOrders implements Serializable{
 
     public void setVipCards(List<AppVipcard> vipCards) {
         this.vipCards = vipCards;
+    }
+
+
+    public AppInvoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(AppInvoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public AppCardBack getCardBack() {
+        return cardBack;
+    }
+
+    public void setCardBack(AppCardBack cardBack) {
+        this.cardBack = cardBack;
     }
 }
