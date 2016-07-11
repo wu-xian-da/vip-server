@@ -214,7 +214,7 @@
 		function plupload() {
 			$("#uploader").pluploadQueue({
 				runtimes : 'flash,html5,gears,browserplus,silverlight,html4',
-				url : "/vip/viproom/dumifileupload",
+				url : "../dumifileupload",
 				//unique_names: true,  
 				chunk_size : '1mb',
 				//rename : true,  
