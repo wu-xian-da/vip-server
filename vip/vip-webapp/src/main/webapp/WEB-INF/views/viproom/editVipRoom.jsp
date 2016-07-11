@@ -106,7 +106,7 @@
 
 		<div id="clerk-footer">
 			<input  class="btn btn-save" type="button" value="保存" onclick="editVipRoomInfoFun()"/>
-			<button class="btn btn-cancel" onClick="javascript:history.go(-1);">取消</button>
+			<input type="button" value="取消" class="btn btn-cancel" onClick="history.go(-1)"/>
 		</div>
 	</form>
 	</div>

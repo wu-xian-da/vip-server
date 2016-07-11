@@ -240,7 +240,7 @@
 
 				<div id="clerk-footer">
 			<input  class="btn btn-save" type="button" onclick="addVipInfo()" value="保存"/>
-			<button class="btn btn-cancel" onClick="javascript:history.go(-1);">取消</button>
+			<input type="button" class="btn btn-cancel" onClick="javascript:history.go(-1);" value="取消"/>
 		</div>
 	</form>
 	</div>
