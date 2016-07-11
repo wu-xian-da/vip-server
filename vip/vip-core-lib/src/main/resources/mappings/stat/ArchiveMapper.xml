@@ -74,7 +74,7 @@
 		LIMIT 0,3
 	</select>
 
-	<!-- 为经理角色绘图 -->
+	<!-- 主管|经理角色绘图 -->
 	<select id="masterDraw" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		<![CDATA[	
@@ -100,19 +100,19 @@
 		GROUP BY archie.`province`,archie.pid
 	</select>
 
-	<!-- 统计-主管首页统计的订单数 -->
+	<!-- 统计 主管|经理角色绘图 -->
 	<select id="zhuGuanTotal" resultType="java.util.Map"
 		parameterType="java.util.Map">
-		SELECT CASE WHEN
-		SUM(a.`order_num`) IS NULL THEN
-		0
-		ELSE
-		SUM(a.`order_num`)
-		END AS total
-		FROM `app_order_archive` a WHERE
-		a.`year`=#{year} and a.`month`=#{month}
+		SELECT 
+			 CASE WHEN
+				COUNT(*) IS NULL THEN
+				0
+			 ELSE
+				COUNT(*)
+			 END AS total
+		FROM `app_orders` ao WHERE ao.`order_state` IN (1,2,3,4)
 		<if test="ariportIds!=null">
-			and a.`airport_id` in
+			and ao.`airport_id` in
 			<foreach item="item" index="index" collection="ariportIds"
 				open="(" separator="," close=")">
 				#{item}

@@ -27,6 +27,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.mapper.AriPortMapper;
 import com.jianfei.core.mapper.UserMapper;
 import com.jianfei.core.service.base.AriPortManager;
@@ -259,5 +260,25 @@ public class AriPortManagerImpl implements AriPortManager<AriPort> {
 			return true;
 		}
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.base.AriPortManager#forbitAirport(java.lang.
+	 * String)
+	 */
+	@Override
+	public MessageDto<String> forbitAirport(Map<String, Object> map) {
+		MessageDto<String> messageDto = new MessageDto<String>();
+		try {
+			ariPortMapper.forbitAirport(map);
+			messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
+		} catch (Exception e) {
+			logger.error("逻辑删除场站失败。。。");
+			messageDto.setMsgBody(MsgFlag.ERROR);
+		}
+		return messageDto;
 	}
 }

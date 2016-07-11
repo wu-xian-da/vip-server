@@ -90,4 +90,13 @@ public interface AriPortManager<T extends Serializable> extends BaseService<T> {
 	 * @return
 	 */
 	boolean validateAirPortExist(Map<String, Object> map);
+
+	/**
+	 * 逻辑删除|开启场站
+	 * 
+	 * @param map
+	 *            参数， key>>> id 主键，dtflag: 0:开启，1：禁用 void
+	 * @version 1.0.0
+	 */
+	MessageDto<String> forbitAirport(Map<String, Object> map);
 }

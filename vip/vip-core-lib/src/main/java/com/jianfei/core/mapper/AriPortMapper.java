@@ -28,6 +28,22 @@ import org.apache.ibatis.annotations.Param;
 @MyBatisDao
 public interface AriPortMapper extends BaseMapper<AriPort> {
 
+	/**
+	 * 逻辑删除|开启场站
+	 * 
+	 * @param map
+	 *            参数， key>>> id 主键，dtflag: 0:开启，1：禁用 void
+	 * @version 1.0.0
+	 */
+	void forbitAirport(Map<String, Object> map);
+
+	/**
+	 * 删除指定用户关联的场站
+	 * 
+	 * @param userId
+	 *            void
+	 * @version 1.0.0
+	 */
 	public void deleteAriport(Long userId);
 
 	void batchInsertUserAriport(List<Map<String, Object>> list);

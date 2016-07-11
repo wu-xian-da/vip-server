@@ -1,27 +1,6 @@
 package com.jianfei.core.service.stat.impl;
 
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.google.gson.JsonObject;
-import com.jianfei.core.bean.AppAirportArchive;
-import com.jianfei.core.bean.AppOrderArchive;
-import com.jianfei.core.common.cache.JedisUtils;
-import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.common.utils.StringUtils;
-import com.jianfei.core.dto.*;
-import com.jianfei.core.mapper.AppOrderArchiveMapper;
-import com.jianfei.core.mapper.AppOrdersMapper;
-import com.jianfei.core.mapper.ArchiveMapper;
-import com.jianfei.core.service.stat.StatManager;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +9,26 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppOrderArchive;
+import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.CharData;
+import com.jianfei.core.dto.GraphDto;
+import com.jianfei.core.dto.OrderAppDetailInfo;
+import com.jianfei.core.dto.OrderPageDto;
+import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.SalesRankingDto;
+import com.jianfei.core.dto.UserProvince;
+import com.jianfei.core.mapper.AppOrderArchiveMapper;
+import com.jianfei.core.mapper.AppOrdersMapper;
+import com.jianfei.core.service.stat.StatManager;
 
 /**
  * TODO
