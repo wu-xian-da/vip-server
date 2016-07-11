@@ -26,4 +26,9 @@ public interface AppCardBackMapper {
     int updateByPrimaryKeySelective(AppCardBack record);
 
     int updateByPrimaryKey(AppCardBack record);
+
+    AppCardBack selectByOrderId(String orderId);
+
+    int deleteByOrderId(String orderId);
+
 }
