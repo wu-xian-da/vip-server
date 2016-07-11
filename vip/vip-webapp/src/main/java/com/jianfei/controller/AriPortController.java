@@ -10,11 +10,15 @@ package com.jianfei.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.http.HttpRequest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +32,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.impl.HttpServiceRequest;
 import com.jianfei.core.service.base.AriPortManager;
 
 /**
@@ -59,11 +64,16 @@ public class AriPortController extends BaseController {
 	public Grid<Map<String, Object>> list(
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
-			@RequestParam(value = "name", required = false) String name) {
+			@RequestParam(value = "name", required = false) String name,
+			HttpServletRequest request) {
 		PageHelper.startPage(page, rows);
+		// searchParams.put("sort", sortCplumn(request));
 		List<Map<String, Object>> maps = ariPortManager
 				.mapList(new MapUtils.Builder().setKeyValue("name", name)
-						.setKeyValue("dtflag", GloabConfig.OPEN).build());
+						.setKeyValue("dtflag", GloabConfig.OPEN)
+						.setKeyValue("order", request.getParameter("order"))
+						.setKeyValue("sort", request.getParameter("sort"))
+						.build());
 		if (!CollectionUtils.isEmpty(maps)) {
 			return bindGridData(new PageInfo<Map<String, Object>>(maps));
 		}
@@ -95,11 +105,12 @@ public class AriPortController extends BaseController {
 		return messageDto;
 	}
 
-	@RequestMapping(value = "delete", method = RequestMethod.POST)
+	@RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public MessageDto<AriPort> delete(AriPort ariPort) {
-		ariPort.setDtflag(GloabConfig.FORBIT);
-		MessageDto<AriPort> messageDto = ariPortManager.update(ariPort);
+	public MessageDto<String> delete(@PathVariable(value = "id") String id) {
+		MessageDto<String> messageDto = ariPortManager
+				.forbitAirport(new MapUtils.Builder().setKeyValue("id", id)
+						.setKeyValue("dtflag", GloabConfig.FORBIT).build());
 		return messageDto;
 	}
 
