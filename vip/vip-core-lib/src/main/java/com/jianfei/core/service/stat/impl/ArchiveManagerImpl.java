@@ -56,17 +56,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.jianfei.core.service.stat.ArchiveManager#masterTotal(java.util.Map)
-	 */
-	@Override
-	public Map<String, Object> masterTotal(Map<String, Object> map) {
-		return archiveMapper.masterTotal(map);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * com.jianfei.core.service.stat.ArchiveManager#masterTop(java.util.Map)
 	 */
 	@SuppressWarnings("unchecked")
@@ -120,9 +109,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * com.jianfei.core.service.stat.ArchiveManager#zhuGuanTotal(java.util.Map)
 	 */
 	@Override
-	public Map<String, Object> zhuGuanTotal(Map<String, Object> map,
-			String cacheKey) {
-
+	public Map<String, Object> zhuGuanTotal(Map<String, Object> map) {
 		return archiveMapper.zhuGuanTotal(map);
 	}
 
@@ -188,7 +175,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			return;
 		}
 		// 查询管辖区域内总的开卡数
-		Map<String, Object> map = masterTotal(new MapUtils.Builder()
+		Map<String, Object> map = zhuGuanTotal(new MapUtils.Builder()
 				.setKeyValue("ariportIds", list).build());
 		if (MapUtils.isEmpty(map)) {
 			model.addAttribute("total", 0);
@@ -247,8 +234,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		}
 		lastMoth.put("ariportIds", list);
 		// 管辖区域范围内总的订单数
-		Map<String, Object> map = zhuGuanTotal(lastMoth,
-				CacheCons.Sys.SYS_HISTORY_ORDERS_ZHUGUAN);
+		Map<String, Object> map = zhuGuanTotal(lastMoth);
 
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
 		if (MapUtils.isEmpty(map)) {

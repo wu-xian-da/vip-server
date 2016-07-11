@@ -26,16 +26,6 @@ import com.jianfei.core.bean.User;
 public interface ArchiveManager {
 
 	/**
-	 * masterTotal(全国的订单数)
-	 * 
-	 * @param map
-	 *            查询条件
-	 * @return Map<String,Object>
-	 * @version 1.0.0
-	 */
-	Map<String, Object> masterTotal(Map<String, Object> map);
-
-	/**
 	 * masterTop(top级别的省开卡信息)
 	 * 
 	 * @param map
@@ -61,7 +51,7 @@ public interface ArchiveManager {
 	 * @return Map<String,Object>
 	 * @version 1.0.0
 	 */
-	Map<String, Object> zhuGuanTotal(Map<String, Object> map, String cacheKey);
+	Map<String, Object> zhuGuanTotal(Map<String, Object> map);
 
 	/**
 	 * zhuGuanAllAirPort(主管查看管辖区销售情况)
@@ -99,7 +89,7 @@ public interface ArchiveManager {
 	 *            void
 	 * @version 1.0.0
 	 */
-	void masterHome(Model model,User user);
+	void masterHome(Model model, User user);
 
 	/**
 	 * chargeHome(主管首页)
