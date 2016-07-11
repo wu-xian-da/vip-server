@@ -585,7 +585,7 @@ public class OrderManagerImpl implements OrderManager {
         if (!flag)
             return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
         //2、查询卡状态及卡对应的订单状态
-        AppOrders orders=appOrdersMapper.selectByPrimaryKey(orderId);
+        AppOrders orders=getOrderDetailByOrderId(orderId);
 
         //3、如果订单状态时已退款 则提示用户退卡申请失败 已退卡
         if (orders == null || orders.getOrderState() == VipOrderState.ALREADY_REFUND.getName()) {
@@ -601,10 +601,15 @@ public class OrderManagerImpl implements OrderManager {
         //5、更改订单状态为已付款 逻辑删除退卡信息
         orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
         appOrdersMapper.updateByPrimaryKeySelective(orders);
-
+        cardBackManager.deleteCardBackInfo(orderId);
 
         //6、给用户发送取消退卡成功短信
-
+        ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
+                setVipCardNo(vipCardNo).setUserName(orders.getCustomer().getCustomerName());
+        msgBuilder.setMsgType(MsgType.REMOVE_BACK_CARD.getName());
+        log.info("发送消息");
+        log.info(msgBuilder);
+        queueManager.sendMessage(msgBuilder);
         return BaseMsgInfo.success(true);
     }
 
