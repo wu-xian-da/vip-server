@@ -162,7 +162,7 @@
 		<!-- 用户名或者手机号码 -->
 		<if test="phoneOrUserName != null">
 			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
-			and concat(customer.customer_name,customer.customer_phone) like
+			and concat(customer.customer_name,customer.customer_phone,agent.name,ord.order_id) like
 			CONCAT('%','${phoneOrUserName}','%' )
 		</if>
 		<!-- 机场列表 -->
