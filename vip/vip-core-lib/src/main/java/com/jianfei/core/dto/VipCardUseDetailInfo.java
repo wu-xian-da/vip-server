@@ -41,6 +41,10 @@ public class VipCardUseDetailInfo {
      */
     private String customerPhone;
     /**
+     * 用户身份类型
+     */
+    private int customerCardType;
+    /**
      * 用户身份证号
      */
     private String customerIdNo;
@@ -73,6 +77,11 @@ public class VipCardUseDetailInfo {
      * 打折比例
      */
     private String saleRate;
+
+    /**
+     * 保险费
+     */
+    private float safeMoney;
 
     /**
      * VIP卡使用记录
@@ -236,5 +245,21 @@ public class VipCardUseDetailInfo {
 
     public void setRealMoney(float realMoney) {
         this.realMoney = realMoney;
+    }
+
+    public float getSafeMoney() {
+        return safeMoney;
+    }
+
+    public void setSafeMoney(float safeMoney) {
+        this.safeMoney = safeMoney;
+    }
+
+    public int getCustomerCardType() {
+        return customerCardType;
+    }
+
+    public void setCustomerCardType(int customerCardType) {
+        this.customerCardType = customerCardType;
     }
 }
