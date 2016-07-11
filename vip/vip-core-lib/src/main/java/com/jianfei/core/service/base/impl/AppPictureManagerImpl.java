@@ -48,6 +48,7 @@ public class AppPictureManagerImpl implements AppPictureManager {
 	 * @see
 	 * com.jianfei.core.service.base.AppPictureService#save(com.jianfei.core
 	 * .bean.AppPicture)
+	 * 
 	 */
 	@Override
 	public MessageDto<String> save(AppPicture appPicture) {
@@ -57,6 +58,7 @@ public class AppPictureManagerImpl implements AppPictureManager {
 			// 清除缓存
 			JedisUtils.delObject("APP_PICTURE_" + appPicture.getImagetype());
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("保存图片", e.getMessage());
 			return messageDto.setMsgBody(MessageDto.MsgFlag.ERROR);
 		}

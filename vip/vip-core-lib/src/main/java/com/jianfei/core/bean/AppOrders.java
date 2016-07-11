@@ -43,7 +43,6 @@ public class AppOrders implements Serializable{
     private String operation;
 
     private String saleNo;
-
     /**
      * 机场ID
      */
@@ -55,6 +54,11 @@ public class AppOrders implements Serializable{
      * 支付时间
      */
     private Date payTime;
+
+    /**
+     * 退卡申请途径
+     */
+    private int applyType;
 
     /**
      * 顾客 1:1
@@ -75,8 +79,6 @@ public class AppOrders implements Serializable{
      * 卡 1:d
      */
     private List<AppVipcard> vipCards = Lists.newArrayList();
-
-
 
     /**
 	 * operation
@@ -258,5 +260,13 @@ public class AppOrders implements Serializable{
 
     public void setCardBack(AppCardBack cardBack) {
         this.cardBack = cardBack;
+    }
+
+    public int getApplyType() {
+        return applyType;
+    }
+
+    public void setApplyType(int applyType) {
+        this.applyType = applyType;
     }
 }
