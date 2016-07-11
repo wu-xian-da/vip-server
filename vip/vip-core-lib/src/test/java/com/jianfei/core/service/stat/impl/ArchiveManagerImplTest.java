@@ -155,10 +155,32 @@ public class ArchiveManagerImplTest {
 
 	@Test
 	public void testDailyOrderArchice() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		Date date = DateUtil.getDate("2016-07-04", "yyyy-MM-dd");
-		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
-		archiveManager.baseDailyExtract(map);
+		List<String> list = dateList();
+		for (String str : list) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			Date date = DateUtil.getDate(str, "yyyy-MM-dd");
+			map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
+			archiveManager.baseDailyExtract(map);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public List<String> dateList() {
+		List<String> list = new ArrayList<String>();
+		Date date = DateUtil.getDate("2016-06-01", DateUtil.NORMAL_DATE_FORMAT);
+		for (int i = 0; i < 30; i++) {
+			Date d = DateUtil.addDays(date, i);
+			list.add(DateUtil.getDateStr(d, DateUtil.NORMAL_DATE_FORMAT));
+		}
+		for (String str : list) {
+			System.out.println(str);
+		}
+
+		return list;
 	}
 
 }
