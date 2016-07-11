@@ -29,7 +29,6 @@ import org.springframework.web.util.WebUtils;
 
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppPicture;
-import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.DtFlagType;
 import com.jianfei.core.common.utils.GloabConfig;
@@ -38,8 +37,8 @@ import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.PluploadUtil;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
-import com.jianfei.core.service.base.AppPictureManager;
 import com.jianfei.core.service.base.AriPortManager;
+import com.jianfei.core.service.base.impl.AppPictureManagerImpl;
 import com.jianfei.core.service.base.impl.VipRoomManagerImpl;
 import com.jianfei.core.bean.Plupload;
 /**
@@ -64,7 +63,7 @@ public class VipRoomController extends BaseController {
 	@Autowired
 	private AriPortManager ariPortService;
 	@Autowired
-	private AppPictureManager appPictureManager;
+	private AppPictureManagerImpl appPictureManager;
 
 	
 	/**
@@ -106,7 +105,6 @@ public class VipRoomController extends BaseController {
 	@RequestMapping(value = "delVipRoomById", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageDto<SysViproom> delVipRoomById(SysViproom viproom) {
-
 		vipRoomManagerImp.delVipRoom(viproom.getViproomId());
 		return new MessageDto<SysViproom>().setOk(true).setMsgBody(MessageDto.MsgFlag.SUCCESS);
 	}
@@ -201,6 +199,7 @@ public class VipRoomController extends BaseController {
 			AppPicture appPicture = new AppPicture();
 			appPicture.setViproomId(viproomId);
 			appPicture.setPictureUrl(FileDir+"/"+newFileUrl);
+			appPicture.setDtflag(DtFlagType.NOT_DELETE.getName());
 			appPictureManager.save(appPicture);
 		
 		}
@@ -233,9 +232,7 @@ public class VipRoomController extends BaseController {
 		//2、根据vip室编号返回vip室信息
 		SysViproom viproom = vipRoomManagerImp.selVipRoomById(viproomId);
 		List<AppPicture> pictureList = viproom.getPictures();
-		for(AppPicture appPicture : pictureList){
-			appPicture.setPictureUrl(GloabConfig.getConfig("static.resource.server.address")+appPicture.getPictureUrl());
-		}
+		AppPicture.getStaticAdderss(pictureList);
 		model.addAttribute("viproom", viproom);
 		model.addAttribute("pictureList", pictureList);
 		
@@ -246,7 +243,25 @@ public class VipRoomController extends BaseController {
 		model.addAttribute("airPortlist",airPortlist);
 		return "viproom/editVipRoom";
 	}
-
+	
+	/**
+	 * 根据图片id删除vip室图片信息
+	 * @param pictureId
+	 * @return
+	 */
+	@RequestMapping("delVipPhotoByPhotoId")
+	@ResponseBody
+	public Map<String,Object> delVipPhotoByPhotoId(@RequestParam(value="pictureId",required=true)String pictureId){
+		MessageDto<String> messageDto = appPictureManager.deleteByPrimaryKey(Integer.parseInt(pictureId));
+		Map<String,Object> repMap = new HashMap<String,Object>();
+		if(messageDto.isOk()){
+			repMap.put("status", "1");
+		}else{
+			repMap.put("status", "0");
+		}
+		return repMap;
+	} 
+	
 	/**
 	 * 编辑vip室信息 editVipRoomById
 	 * 
@@ -255,50 +270,27 @@ public class VipRoomController extends BaseController {
 	 * @version 1.0.0
 	 */
 	@RequestMapping(value = "editVipRoomInfo", method = RequestMethod.POST)
-	public String editVipRoomById(@RequestParam(value = "file", required = false) MultipartFile file, SysViproom room) {
-		// 文件上传
-		String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "//viproomPhoto";
-		String fileName = file.getOriginalFilename();
-		// 用户上传图片
-		if (!StringUtils.isEmpty(fileName)) {
-			String newFileName = UUIDUtils.returnNewFileName(fileName);
-			File targetFile = new File(path, newFileName);
-			if (!targetFile.exists()) {
-				targetFile.mkdirs();
-			}
-			try {
-				file.transferTo(targetFile);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			String relativePath = "/viproomPhoto/" + newFileName;
-			/**
-			 * 更新vip室图片信息前，
-			 * 1、先检查数据表中是否有数据，没有则插入（用户添加vip室时没有添加图片）
-			 * 2、有则更新
-			 */
-			Map<String, Object> resMap = new HashMap<String, Object>();
-			String viproomId = room.getViproomId();
-			List<AppPicture> list = appPictureManager.selByVipRoomId(viproomId);
-			if(list != null && list.size() > 0){//更新
-				resMap.put("viproomId", viproomId);
-				resMap.put("pictureUrl", relativePath);
-				appPictureManager.updateByVipRoomId(resMap);
-			}else{//保存
-				AppPicture appPicture = new AppPicture();
-				appPicture.setViproomId(viproomId);
-				appPicture.setPictureUrl(relativePath);
-				appPictureManager.save(appPicture);
-			}
-			
-		}
-
+	@ResponseBody
+	public Map<String,Object> editVipRoomById(SysViproom room) {
 		// 更新vip室信息
 		room.setDtflag(DtFlagType.NOT_DELETE.getName());
 		room.setCreateTime(new Date());
 		vipRoomManagerImp.updateVipRoom(room);
-
-		return "redirect:gotoVipRoomView";
+		//添加图片信息
+		String[] newFileUrls = room.getNewFileUrl();
+		if(newFileUrls != null && newFileUrls.length >0){
+			for(String newFileUrl : newFileUrls){
+				AppPicture appPicture = new AppPicture();
+				appPicture.setViproomId(room.getViproomId());
+				appPicture.setPictureUrl(FileDir+"/"+newFileUrl);
+				appPicture.setDtflag(DtFlagType.NOT_DELETE.getName());
+				appPictureManager.save(appPicture);
+			}
+		}
+		
+		Map<String,Object> repMap = new HashMap<String,Object>();
+		repMap.put("result", "1");
+		return repMap;
 	}
 
 	/**

@@ -30,7 +30,7 @@
 <body>
 	<div id="clerk-wrap">
 		<div id="clerk-container" class="clerk-container-viproom">
-		<form action="addVipRoomInfo" method="post" id="fm" enctype="multipart/form-data">
+		<form method="post" id="fm">
 			<div class="clerk-container-item">
 				<label>vip室名称：</label>
 				<input class="easyui-validatebox" type="text" name="viproomName" value="" data-options="missingMessage:'必填项',required:true"/>
@@ -248,7 +248,10 @@
 </body>
 
 <script>
-<!-- 实例化编辑器 -->
+	/*防重复提交 */
+	var submitFlag = true;
+	
+	/* 实例化编辑器 */
 	var editor = UE.getEditor('container', {
 		//最大500个字符
 		maximumWords : 500
@@ -271,7 +274,7 @@
 		function plupload() {
 			$("#uploader").pluploadQueue({
 				runtimes : 'flash,html5,gears,browserplus,silverlight,html4',
-				url : "/vip/viproom/dumifileupload",
+				url : "../dumifileupload",
 				//unique_names: true,  
 				chunk_size : '1mb',
 				//rename : true,  
@@ -333,56 +336,39 @@
 	//添加vip室信息
 	function addVipInfo() {
 		var uploader = $('#uploader').pluploadQueue();
-		// When all files are uploaded ,submit form
-		if(uploader.total.uploaded == uploader.files.length){
-			$('#fm').form('submit', {
-      			url : "addVipRoomInfo",
-      			onSubmit : function() {
-      				return $(this).form('validate');
-      			},
-      			success : function(_d) {
-      				console.log("_d:" + _d);
-      				if (_d.result == 0) {
-      					$.messager.show({
-      						title : 'Error',
-      						msg : "数据格式出错"
-      					});
-      				} else {
-      					history.go(-1);
-      				}
-      			}
-      		});
-		}
-		else{
-	        if (uploader.files.length > 0) {
+		if (uploader.files.length > 0) {
 	            // When all files are uploaded ,submit form
 	            uploader.bind('UploadComplete', function(up,file) {
-	                if ((uploader.total.uploaded + uploader.total.failed) == uploader.files.length)
-	                	$('#fm').form('submit', {
-	          			url : "addVipRoomInfo",
-	          			onSubmit : function() {
-	          				return $(this).form('validate');
-	          			},
-	          			success : function(_d) {
-	          				console.log("_d:" + _d);
-	          				if (_d.result == 0) {
-	          					$.messager.show({
-	          						title : 'Error',
-	          						msg : "数据格式出错"
-	          					});
-	          				} else {
-	          					history.go(-1);
-	          				}
-	          			}
-	          		});
-	               
-	             });
-	            uploader.start();
+	            	 if ((uploader.total.uploaded + uploader.total.failed) == uploader.files.length){
+	            		if(submitFlag){
+	            			submitFlag = false;
+	            			$('#fm').form('submit', {
+	    	          			url : "addVipRoomInfo",
+	    	          			onSubmit : function() {
+	    	          				return $(this).form('validate');
+	    	          			},
+	    	          			success : function(_d) {
+	    	          				console.log("_d:" + _d);
+	    	          				if (_d.result == 0) {
+	    	          					$.messager.show({
+	    	          						title : 'Error',
+	    	          						msg : "数据格式出错"
+	    	          					});
+	    	          				} else {
+	    	          					history.go(-1);
+	    	          				}
+	    	          			}
+	    	          		});
+	            		}
+	                	
+	           	 }
+	           });
+	           uploader.start();
 	        } else
-	            alert('请至少选择一个上次的图片');
+	        	$.messager.alert("提示信息","请添加vip室图片！");
 
 	   }
-	}
+
 	
 </script>
 </html>
