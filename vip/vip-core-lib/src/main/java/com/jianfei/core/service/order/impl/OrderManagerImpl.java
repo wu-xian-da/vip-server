@@ -16,6 +16,8 @@ import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.base.AppCustomerManager;
+import com.jianfei.core.service.base.AppInvoiceManager;
+import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
@@ -24,6 +26,7 @@ import com.jianfei.core.service.order.CardBackManager;
 import com.jianfei.core.service.order.OrderManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
+import com.jianfei.core.service.user.SaleUserManager;
 import com.jianfei.core.service.user.VipUserManager;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.tencent.protocol.native_protocol.NativePayReqData;
@@ -59,9 +62,9 @@ public class OrderManagerImpl implements OrderManager {
     @Autowired
     private VipCardManager vipCardManager;
     @Autowired
-    private AppInvoiceManagerImpl invoiceManager;
+    private AppInvoiceManager invoiceManager;
     @Autowired
-    private ValidateCodeManagerImpl validateCodeManager;
+    private ValidateCodeManager validateCodeManager;
     @Autowired
     private ConsumeManagerImpl consumeManager;
 
@@ -71,6 +74,8 @@ public class OrderManagerImpl implements OrderManager {
     private VipUserManager vipUserManager;
     @Autowired
     private CardBackManager cardBackManager;
+    @Autowired
+    private SaleUserManager saleUserManager;
 
     /**
      * 添加订单信息
@@ -440,7 +445,7 @@ public class OrderManagerImpl implements OrderManager {
         log.info("提交退卡信息");
         log.info(appCardBack);
         //1、根据订单号查询订单信息
-        AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(appCardBack.getOrderId());
+        AppOrders orders = getOrderDetailByOrderId(appCardBack.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
@@ -456,13 +461,16 @@ public class OrderManagerImpl implements OrderManager {
         log.info("重新计算可退余额 校验是否正确");
         VipCardUseDetailInfo useDetailInfo=new VipCardUseDetailInfo();
         useDetailInfo.setOrderMoney(orders.getPayMoney());
-        useDetailInfo.setVipCardNo(orders.getVipCards().get(0).getCardNo());
+        useDetailInfo.setVipCardNo(appCardBack.getCardNo());
         getVipCardUseInfo(useDetailInfo);
-         if(useDetailInfo.getReturnMoney()!=appCardBack.getMoney()){
-			return BaseMsgInfo.fail("退款金额有误，请重新查询使用");
-		}
+        appCardBack.setMoney(useDetailInfo.getReturnMoney());
+        appCardBack.setServiceMoney(useDetailInfo.getUsedMoney());
+        appCardBack.setSafeMoney(100);
+        User user=saleUserManager.getSaleUser(appCardBack.getCreaterId());
+        appCardBack.setCustomerName(user.getName());
+
         //3、插入数据库
-     boolean  temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
+       boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
@@ -486,7 +494,10 @@ public class OrderManagerImpl implements OrderManager {
         vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
         log.info("更改用户状态为不可用");
         vipCardManager.updateVipCard(vipcard);
+        //APP申请
+        orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         appOrdersMapper.updateByPrimaryKeySelective(orders);
+
         log.info("发送消息");
         log.info(msgBuilder);
         queueManager.sendMessage(msgBuilder);

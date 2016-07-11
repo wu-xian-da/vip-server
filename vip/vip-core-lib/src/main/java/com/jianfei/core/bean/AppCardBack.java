@@ -23,6 +23,7 @@ public class AppCardBack {
 	private String customerPhone;//消费者手机号
 	private float serviceMoney;//服务费
 	private float safeMoney;//保险费
+	private String createName;//创建人名称
 	/**
 	 * backId
 	 *
@@ -281,5 +282,13 @@ public class AppCardBack {
 
 	public void setSafeMoney(float safeMoney) {
 		this.safeMoney = safeMoney;
+	}
+
+	public String getCreateName() {
+		return createName;
+	}
+
+	public void setCreateName(String createName) {
+		this.createName = createName;
 	}
 }

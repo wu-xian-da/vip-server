@@ -17,6 +17,7 @@
 		<result column="dtflag" property="dtflag" jdbcType="INTEGER" />
 		<result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
 		<result column="airport_id" property="airportId" jdbcType="VARCHAR" />
+		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!--订单列表展示返回类型 -->
@@ -242,7 +243,7 @@
 	<sql id="Base_Column_List">
 		order_id, id, customer_id, order_time, order_state, pay_type, serial_id,
 		pay_money,
-		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id
+		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id,apply_type
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
