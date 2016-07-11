@@ -124,14 +124,14 @@ public class AppPicture implements Serializable {
 		this.descr = descr;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return JSONObject.toJSONString(this);
+		return "AppPicture [pictureId=" + pictureId + ", viproomId=" + viproomId + ", pictureUrl=" + pictureUrl
+				+ ", clickUrl=" + clickUrl + ", priority=" + priority + ", dtflag=" + dtflag + ", imagetype="
+				+ imagetype + ", descr=" + descr + ", updatetime=" + updatetime + "]";
 	}
 
 	/**
@@ -148,4 +148,5 @@ public class AppPicture implements Serializable {
 					+ picture.getPictureUrl());
 		}
 	}
+	
 }

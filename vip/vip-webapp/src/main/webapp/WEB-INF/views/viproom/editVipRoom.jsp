@@ -71,13 +71,16 @@
 			</div>
 			<div class="clerk-container-item">
 				<label>vip室图片：</label>
-				<img width="300px" src="${viproom.pictureUrl}"/>
+				<c:forEach items="${pictureList}" var="appPicture">
+					<img width="100px" src="${appPicture.pictureUrl}"/>
+				</c:forEach>
+				
 			</div>
 			
-			<div class="clerk-container-item">
+			<!-- <div class="clerk-container-item">
 				<label>编辑vip室图片：</label>
 				<input type="file" name="file" /> 
-			</div>
+			</div> -->
 			
 			<div class="clerk-container-item">
 				<label style="margin-bottom: 15px;">vip室信息编辑：</label>
