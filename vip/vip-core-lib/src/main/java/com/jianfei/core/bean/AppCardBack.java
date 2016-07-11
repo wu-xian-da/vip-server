@@ -2,6 +2,7 @@ package com.jianfei.core.bean;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jianfei.core.common.utils.GloabConfig;
 
 public class AppCardBack {
@@ -46,7 +47,7 @@ public class AppCardBack {
 	 * @return  the createTime
 	 * @version   1.0.0
 	*/
-	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getCreateTime() {
 		return createTime;
 	}
