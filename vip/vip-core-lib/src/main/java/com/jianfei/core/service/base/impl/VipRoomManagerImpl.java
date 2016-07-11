@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.AppPicture;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,6 +123,9 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	public PageInfo<SysViproom> pageVipRoom(PageDto pageDto, SysAirport airport) {
 		PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize());
 		List<SysViproom> list = sysViproomMapper.getVipRoomList(airport);
+		for (SysViproom viproom:list){
+			AppPicture.getStaticAdderss(viproom.getPictures());
+		}
 		PageInfo<SysViproom> pageInfo = new PageInfo(list);
 		return pageInfo;
 	}

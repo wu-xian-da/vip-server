@@ -1,7 +1,7 @@
 package com.jianfei.core.bean;
 
-import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -92,7 +92,7 @@ public class SysViproom {
 		this.activeState = activeState;
 	}
 
-	private List<AppPicture> pictures= Lists.newArrayList();
+	private List<AppPicture> pictures= new ArrayList<>();
 
     public String getViproomId() {
         return viproomId;
@@ -270,7 +270,6 @@ public class SysViproom {
 
 	
     public List<AppPicture> getPictures() {
-    	//AppPicture.getStaticAdderss(this.pictures);
         return pictures;
     }
 
@@ -307,6 +306,4 @@ public class SysViproom {
 				+ pictures + "]";
 	}
 
-	
-    
 }

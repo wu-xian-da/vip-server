@@ -1,12 +1,11 @@
 package com.jianfei.core.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jianfei.core.common.utils.GloabConfig;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jianfei.core.common.utils.GloabConfig;
 
 public class AppPicture implements Serializable {
 
@@ -142,11 +141,11 @@ public class AppPicture implements Serializable {
 	public static void getStaticAdderss(List<AppPicture> pictures) {
 		if (pictures == null || pictures.isEmpty())
 			return;
-		for (AppPicture picture : pictures) {
-			picture.setPictureUrl(GloabConfig
-					.getConfig("static.resource.server.address")
-					+ picture.getPictureUrl());
+	    String url=	GloabConfig
+				.getConfig("static.resource.server.address");
+		for (AppPicture picture:pictures) {
+			picture.setPictureUrl(url+picture.getPictureUrl());
 		}
 	}
-	
+
 }
