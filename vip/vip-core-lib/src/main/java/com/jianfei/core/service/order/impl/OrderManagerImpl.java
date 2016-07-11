@@ -24,6 +24,8 @@ import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
 import com.jianfei.core.service.order.CardBackManager;
 import com.jianfei.core.service.order.OrderManager;
+import com.jianfei.core.service.thirdpart.AirportEasyManager;
+import com.jianfei.core.service.thirdpart.MsgInfoManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
 import com.jianfei.core.service.user.SaleUserManager;
@@ -36,7 +38,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.util.*;
 
 /**
@@ -77,6 +84,11 @@ public class OrderManagerImpl implements OrderManager {
     @Autowired
     private SaleUserManager saleUserManager;
 
+    @Autowired
+    private AirportEasyManager airportEasyManager;
+
+    @Autowired
+    private MsgInfoManager msgInfoManager;
     /**
      * 添加订单信息
      *
@@ -621,10 +633,45 @@ public class OrderManagerImpl implements OrderManager {
      * @param orderId   订单ID
      */
     @Override
-    public BaseMsgInfo activeCard(String phone, String vipCardNo, String orderId) {
-        //TODO 查询订单详细信息 订单是否付款
-        //TODO 查询卡状态是否为激活失败
-        //TODO 重新发送激活消息
-        return BaseMsgInfo.success(true);
+    public BaseMsgInfo activeCard(String phone, String vipCardNo, String orderId) throws UnrecoverableKeyException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        //查询订单详细信息 订单是否付款
+        AppOrders orders = getOrderDetailByOrderId(orderId);
+        //如果订单状态时不是已付款 则提示
+        if (orders == null || !(orders.getOrderState() == VipOrderState.ALREADY_PAY.getName())) {
+            return BaseMsgInfo.msgFail("订单不存在或未付款");
+        }
+        if (!(vipCardNo.equals(orders.getVipCards().get(0).getCardNo()))) {
+            return BaseMsgInfo.msgFail("订单号和VIP卡号不对应");
+        }
+        //查询卡状态是否为激活失败
+        AppVipcard vipcard = vipCardManager.getVipCardByNo(vipCardNo);
+        if (vipcard == null) {
+            return BaseMsgInfo.msgFail("VIP卡号不存在");
+        }
+        if (vipcard.getCardState() != VipCardState.ACTIVATE_FAIL.getName()) {
+            return BaseMsgInfo.msgFail("本VIP卡不是激活失败状态");
+        }
+        //调取易行接口激活
+        if (airportEasyManager.activeVipCard(vipCardNo, orders.getCustomer().getPhone(),
+                orders.getCustomer().getCustomerName())) {
+            //如果激活成功 发送激活成功短信
+            // 计算卡的有效期
+            Date expireDate = DateUtil.addDays(new Date(),
+                    vipcard.getValideTime());
+            vipcard.setExpiryTime(expireDate);
+            vipcard.setCardState(VipCardState.ACTIVE.getName());
+            vipCardManager.updateVipCard(vipcard);
+            Map map = new HashMap();
+            map.put("userPhone", orders.getCustomer().getPhone());
+            map.put("userName", orders.getCustomer().getCustomerName());
+            map.put("vipCardNo", vipCardNo);
+            String msgBody = MsgAuxiliary.buildMsgBody(map, "005");
+            if (!(msgInfoManager.sendMsgInfo(orders.getCustomer().getPhone(), msgBody))) {
+                return BaseMsgInfo.msgFail("激活成功，给用户发送激活短信失败");
+            }
+            return BaseMsgInfo.success(true);
+        } else {
+            return BaseMsgInfo.msgFail("激活失败");
+        }
     }
 }

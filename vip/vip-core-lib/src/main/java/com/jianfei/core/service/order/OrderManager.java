@@ -1,6 +1,11 @@
 package com.jianfei.core.service.order;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.util.List;
 import java.util.Map;
 
@@ -216,6 +221,6 @@ public interface OrderManager {
      * @param orderId 订单ID
      * @return
      */
-    BaseMsgInfo  activeCard(String phone,String vipCardNo,String orderId);
+    BaseMsgInfo  activeCard(String phone,String vipCardNo,String orderId) throws UnrecoverableKeyException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException;
     
 }
