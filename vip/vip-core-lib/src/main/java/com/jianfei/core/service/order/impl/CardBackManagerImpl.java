@@ -40,6 +40,7 @@ public class CardBackManagerImpl implements CardBackManager {
             cardBack.setDtflag(0);
              i= appCardBackMapper.insertSelective(cardBack);
         }else {
+            cardBack.setDtflag(0);
             i= appCardBackMapper.updateByPrimaryKeySelective(cardBack);
         }
         return i == 1;
