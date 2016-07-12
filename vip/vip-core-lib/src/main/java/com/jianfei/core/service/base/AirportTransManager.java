@@ -35,4 +35,11 @@ public interface AirportTransManager {
      */
     BaseMsgInfo getAirportTransNum(String phone);
 
+
+    /**
+     * 根据城市获取易道城市列表
+     * @return
+     */
+    BaseMsgInfo getTransCityList();
+
 }
