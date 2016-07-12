@@ -413,7 +413,7 @@ public class OrderController extends BaseController {
 				//是否有最终退款查看的权限
 				boolean flag = subject.isPermitted("system:order:refundsel");
 				if(flag){
-					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
 				}else{
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 				}
@@ -535,7 +535,7 @@ public class OrderController extends BaseController {
 					//是否有最终退款查看的权限
 					boolean flag = subject.isPermitted("system:order:refundsel");
 					if(flag){
-						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
 					}else{
 						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 					}
@@ -709,7 +709,7 @@ public class OrderController extends BaseController {
 		//是否有退款查看的权限
 		boolean flag = subject.isPermitted("system:order:refundsel");
 		if(flag){
-			resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-refund' onclick='finalBackMoneyToUser(500)'>退款</button>");
+			resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='finalBackMoneyToUser(500)'>退款</button>");
 		}else{
 			resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 		}
