@@ -232,7 +232,9 @@ public class VipRoomController extends BaseController {
 		//2、根据vip室编号返回vip室信息
 		SysViproom viproom = vipRoomManagerImp.selVipRoomById(viproomId);
 		List<AppPicture> pictureList = viproom.getPictures();
-		AppPicture.getStaticAdderss(pictureList);
+		if(pictureList !=null && pictureList.size()>0){
+			AppPicture.getStaticAdderss(pictureList);
+		}
 		model.addAttribute("viproom", viproom);
 		model.addAttribute("pictureList", pictureList);
 		
