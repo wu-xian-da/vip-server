@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="order-card-info">
-			<!-- 订单信息 -->
+			<!-- 订单信息
 			<c:if test="${!empty orderInfo}">
 				<c:forEach items="${orderInfo }" var="order">
 					<div class="order-list-title">
@@ -38,8 +38,9 @@
 					</ul>
 				</c:forEach>
 			</c:if>
+			 -->
 			
-			<!--卡信息  -->
+			<!--卡信息 
 			<c:if test="${!empty vipCardInfo }">
 				<c:forEach items="${ vipCardInfo}" var="card">
 					<div class="order-list-title">
@@ -54,6 +55,7 @@
 					</ul>
 				</c:forEach>
 			</c:if>
+			 -->
 			
 			<!--个人资料  -->
 			<div class="order-list-title">个人资料</div>
@@ -73,7 +75,7 @@
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
 
-			<!-- 发票信息 -->
+			<!-- 发票信息
 			<c:if test="${!empty postInfo }">
 				<c:forEach items="${postInfo}" var="postInfo">
 
@@ -90,10 +92,11 @@
 						</c:if>
 						）
 					</div>
-					
+					 -->
+					 <!--
 					<c:if test="${postInfo.invoice_flag != '0'}">
 						<ul>
-							<!--普通发票  -->
+							普通发票 
 							<c:if test="${postInfo.invoice_kind =='0'}">
 								<li>发票类型：普通发票</li>
 								<li>邮寄地址：${postInfo.province} ${postInfo.city}
@@ -107,7 +110,7 @@
 								</c:if>
 							</c:if>
 
-							<!--专用发票 -->
+							专用发票 
 							<c:if test="${postInfo.invoice_kind =='1'}">
 								<li>发票类型：专用发票</li>
 								<li>邮寄地址：${postInfo.province} ${postInfo.city}
@@ -131,8 +134,9 @@
 
 				</c:forEach>
 			</c:if>
+			  -->
 
-			<!-- 退款金额 -->
+			<!-- 退款金额 
 			<c:if test="${!empty backMoneyInfo }">
 				<div class="order-list-title">
 					退款信息 <span class="order-tips-red"></span>
@@ -160,8 +164,8 @@
 					</ul>
 				</c:forEach>
 			</c:if>
-			
-			<!-- vip卡使用记录 -->
+			-->
+			<!-- vip卡使用记录 
 			<c:if test="${!empty vipCardRescordInfo }">
 				<div class="order-list-title">VIP卡使用记录</div>
 				<ul>
@@ -171,6 +175,7 @@
 				</ul>
 				
 			</c:if>
+			-->
 			
 			<!-- 反馈信息 -->
 			<div class="order-list-title">

@@ -56,7 +56,7 @@ public class AppUserFeedbackController {
 		//根据反馈id号获取该条反馈信息
 		AppUserFeedback appUserFeedbackInfo = appUserFeedbackImpl.getFeedBackInfoById(feedBackId);
 		model.addAttribute("appUserFeedbackInfo", appUserFeedbackInfo);
-		appCustomerManager.batchDealMsg(userId, model);
+		//appCustomerManager.batchDealMsg(userId, model);
 		return "feedback/feedBackDetail";
 	}
 	
@@ -79,7 +79,7 @@ public class AppUserFeedbackController {
 		//--反馈id
 		model.addAttribute("feedbackId", feedbackId);
 		
-		appCustomerManager.batchDealMsg(userId, model);
+		//appCustomerManager.batchDealMsg(userId, model);
 		return "feedback/handfeedbackView";
 	}
 	
