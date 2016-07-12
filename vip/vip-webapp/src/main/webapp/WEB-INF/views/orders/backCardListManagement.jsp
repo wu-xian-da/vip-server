@@ -51,7 +51,7 @@
 				</div>
 				
 				<div class="order-condition-item" style="width: 165px">
-			          <input id="phoneOrUserName" type="text" placeholder="订单号/用户名/手机号" style="width: 140px;height:16px">
+			          <input id="phoneOrUserName" type="text" placeholder="订单号/用户名/手机号" style="width: 140px;height:20px">
 			    </div>
 			            
 				<div class="order-condition-item" style="text-align: left">
