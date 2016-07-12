@@ -22,7 +22,8 @@
 			var url = sy.contextPath + '/app/updateDeliveryState/'+id;
 			$.post(url, function(result) {
 				if (result.ok) {
-					 window.location.reload();
+					// window.location.reload();
+					$('#grid').datagrid('reload');    // 重新载入当前页面数据 
 				} else {
 					layer.alert(result.msgBody, {
 						icon : 2,
