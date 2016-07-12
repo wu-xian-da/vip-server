@@ -85,7 +85,7 @@
 			            </div>
 			
 			            <div class="order-condition-item" style="width: 210px">
-			                <input id="phoneOrUserName" type="text" placeholder="手机号/姓名/订单号">
+			                <input id="phoneOrUserName" type="text" placeholder="订单号/姓名/手机号">
 			                <button id="searchBt">查询</button>
 			            </div>
 			            

@@ -79,7 +79,7 @@
 				<label>vip室图片：</label>
 				<c:forEach items="${pictureList}" var="appPicture">
 					<img width="100px" src="${appPicture.pictureUrl}" id="img${appPicture.pictureId}"/>
-					<input type="button" id="but${appPicture.pictureId}" value="X" style="background: red;border-radius: 15px" onclick="delPhoto(${appPicture.pictureId})">
+					<input type="button" id="but${appPicture.pictureId}" value="X" style="background: red;border-radius: 15px;border: medium none" onclick="delPhoto(${appPicture.pictureId})">
 				</c:forEach>
 				
 			</div>

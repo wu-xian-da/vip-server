@@ -29,9 +29,15 @@
   		select * from app_user_feedback auf,app_customer ac
   		<where>
   			auf.user_id = ac.customer_id
-			<if test="feedbackState !=2">
+  			<!--反馈状态  -->
+			<if test="feedbackState != null">
 				and auf.feedback_state = #{feedbackState}
 			</if>
+			<!--搜索关键字  -->
+			<if test="phoneOrUserName != null">
+				and concat(ac.customer_name,ac.customer_phone) like
+			CONCAT('%','${phoneOrUserName}','%' )
+		</if>
 			
 			and auf.dtflag=0
 		</where>

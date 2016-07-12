@@ -30,6 +30,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -188,7 +189,7 @@ public class OrderController extends BaseController {
 					outData.put("companyName", invoiceInfo.getCompanyName());
 					outData.put("companyAddress", invoiceInfo.getCompanyAddress());
 					outData.put("companyPhone", invoiceInfo.getCompanyPhone());
-					outData.put("businessLicenseUrl", invoiceInfo.getBusinessLicenseUrl());
+					outData.put("businessLicenseUrl",GloabConfig.getInstance().getConfig("upload.home.dir")+invoiceInfo.getBusinessLicenseUrl());
 					outData.put("companyTaxNo", invoiceInfo.getCompanyTaxNo());
 				}
 				//订单编号
@@ -450,7 +451,8 @@ public class OrderController extends BaseController {
 			@RequestParam(value="rows",defaultValue="20") Integer pageSize,
 			@RequestParam(value="backType",defaultValue="") String backType,
 			@RequestParam(value="applyType",defaultValue="") String applyType,
-			@RequestParam(value="orderState",defaultValue="") String orderState){
+			@RequestParam(value="orderState",defaultValue="") String orderState,
+			@RequestParam(value="phoneOrUserName",defaultValue="") String phoneOrUserName){
 		
 		//用户可以看到机场列表
 		List<String> aiportIdList = returnAirportIdList();
@@ -467,6 +469,10 @@ public class OrderController extends BaseController {
 		//订单状态
 		if(!orderState.equals("")){
 			paramsMap.put("orderState", orderState);
+		}
+		//搜索关键字
+		if(!phoneOrUserName.equals("")){
+			paramsMap.put("phoneOrUserName", phoneOrUserName);
 		}
 		//机场id列表
 		if(aiportIdList !=null && aiportIdList.size() >0){

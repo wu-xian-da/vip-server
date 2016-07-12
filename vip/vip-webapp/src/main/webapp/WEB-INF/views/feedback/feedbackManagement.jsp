@@ -23,11 +23,14 @@
 			<div style="padding-left:20px; padding-top:15px;">
 				<div class="order-condition-item">
 					<select name="" id="feedbackStateSelect">
-						<option value="2">全部处理状态</option>
+						<option value="">全部处理状态</option>
 						<option value="0">未处理</option>
 						<option value="1">已处理</option>
 					</select>
 				</div>
+				<div class="order-condition-item" style="width: 160px">
+			          <input id="phoneOrUserName" type="text" placeholder="用户名/用户手机号" style="width: 130px;height:20px">
+			    </div>
 				<div class="order-condition-item" style="text-align: left">
 					<button id="searchBt" style="height: 20px">查询</button>
 				</div>
@@ -71,7 +74,8 @@
 
 	<script type="text/javascript">
         $(function(){
-        	$("#feedbackStateSelect").val("2");
+        	$("#feedbackStateSelect").val("");
+        	$("#phoneOrUserName").val("");
             $('#tt').datagrid();
         });
 
@@ -100,7 +104,9 @@
         $("#searchBt").click(function(){
         	//处理状态
         	var feedbackState = $("#feedbackStateSelect option:selected").val();
-        	var url = "feedbackList?feedbackState="+feedbackState;
+        	//用户搜索关键字
+        	var phoneOrUserName = $("#phoneOrUserName").val();
+        	var url = "feedbackList?feedbackState="+feedbackState+"&phoneOrUserName="+phoneOrUserName;
         	$('#tt').datagrid({url:url});
         	
         })
