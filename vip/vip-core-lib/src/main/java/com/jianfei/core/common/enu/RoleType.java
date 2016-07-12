@@ -16,8 +16,7 @@ public enum RoleType {
 	/**
 	 * 客服
 	 */
-	serviceType("4", "人力"),
-	caiwuType("5", "财务"), ;
+	serviceType("4", "人力"), caiwuType("5", "财务"), ;
 
 	private String type;
 	private String value;

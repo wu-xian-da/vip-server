@@ -120,14 +120,21 @@
 		SELECT u.* FROM `sys_users` u INNER JOIN `sys_use_role` r ON u.`id`=r.`user_id` WHERE  u.`dtflag`=0 AND r.`role_id`=#{id}
 		]]>
 	</select>
-
+	<!-- 更具用户Id查询角色 -->
 	<select id="selectRoleByUserId" parameterType="Long" resultMap="roleResult">
 		<![CDATA[
 			SELECT role.* FROM `sys_roles` role INNER JOIN `sys_use_role` sur ON role.`id`=sur.`role_id` WHERE sur.`user_id`=#{id}
 		]]>
 	</select>
-	
-	<select id="selectRoleById" parameterType="Long" resultType="java.util.Map" >
+	<!-- 根据工号查询角色 -->
+	<select id="selectRoleByUserUno" parameterType="String"
+		resultType="java.util.Map">
+		<![CDATA[
+			SELECT role.* FROM `sys_roles` role INNER JOIN `sys_use_role` sur ON role.`id`=sur.`role_id` INNER JOIN `sys_users` su ON su.`id`=sur.`user_id` WHERE su.`code`=#{code}
+		]]>
+	</select>
+	<!-- 根据roleId查询角色 -->
+	<select id="selectRoleById" parameterType="Long" resultType="java.util.Map">
 		<![CDATA[
 			SELECT 
 			  `id`,
