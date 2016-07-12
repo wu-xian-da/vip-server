@@ -94,10 +94,18 @@ public class AppUserFeedbackController {
 	@ResponseBody
 	public Map<String,Object> pageList(@RequestParam(value="page",defaultValue="1") Integer pageNo,
 			@RequestParam(value="rows",defaultValue="20") Integer pageSize, 
-			@RequestParam(value="feedbackState",defaultValue="2") Integer feedbackState ){
-		//设置刷选条件
+			@RequestParam(value="feedbackState",defaultValue="") String feedbackState,
+			@RequestParam(value="phoneOrUserName",defaultValue="") String phoneOrUserName){
+		
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
-		paramsMap.put("feedbackState", feedbackState);
+		//反馈状态
+		if(!feedbackState.equals("")){
+			paramsMap.put("feedbackState", feedbackState);
+		}
+		//搜索关键字
+		if(!phoneOrUserName.equals("")){
+			paramsMap.put("phoneOrUserName", phoneOrUserName);
+		}
 		
 		PageInfo<AppUserFeedback> page = appUserFeedbackImpl.pageList(pageNo, pageSize, paramsMap);
 		//出参
