@@ -599,11 +599,14 @@ public class OrderManagerImpl implements OrderManager {
         //2、查询卡状态及卡对应的订单状态
         AppOrders orders=getOrderDetailByOrderId(orderId);
 
+
         //3、如果订单状态时已退款 则提示用户退卡申请失败 已退卡
         if (orders == null || orders.getOrderState() == VipOrderState.ALREADY_REFUND.getName()) {
             return BaseMsgInfo.msgFail("订单不存在 或已退款");
         }
-
+        if (!phone.equals(orders.getCustomer().getPhone())){
+            return BaseMsgInfo.msgFail("订单对应的下单用户和本手机号不一致");
+        }
         //4、判断订单状态是否在可取消退卡范围内
         if (!(orders.getOrderState() == VipOrderState.BEING_AUDITED.getName() ||
                 orders.getOrderState() == VipOrderState.AUDIT_PASS.getName())){
@@ -614,6 +617,13 @@ public class OrderManagerImpl implements OrderManager {
         orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
         appOrdersMapper.updateByPrimaryKeySelective(orders);
         cardBackManager.deleteCardBackInfo(orderId);
+        //卡状态为已激活
+        AppVipcard vipcard=new AppVipcard();
+        vipcard.setCardNo(vipCardNo);
+        vipcard.setCardState(VipCardState.ACTIVE.getName());
+        vipCardManager.updateVipCard(vipcard);
+        //用户状态为已激活
+        vipUserManager.updateUserSate(phone,VipUserSate.ACTIVE);
 
         //6、给用户发送取消退卡成功短信
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
