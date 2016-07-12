@@ -152,7 +152,7 @@ public class ArchiveManagerImplTest {
 	public void testSelectAirportByProvinceIds() {
 		List<Map<String, Object>> list = archiveManager
 				.selectAirportByProvinceIds(new MapUtils.Builder().setKeyValue(
-						"code", "123").build());
+						"code", "004").build());
 		System.out.println(JSONObject.toJSONString(list));
 	}
 

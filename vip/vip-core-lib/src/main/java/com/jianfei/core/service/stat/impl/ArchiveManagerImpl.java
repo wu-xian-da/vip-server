@@ -377,6 +377,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 				result.add(rsMap);
 			}
 		}
-		return null;
+		return result;
 	}
 }
