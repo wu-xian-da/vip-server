@@ -77,7 +77,7 @@ import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 @Controller
 public class OrderController extends BaseController {
 	private Logger logger = Logger.getLogger(LoginController.class);
-	
+	private static String staticPath =  GloabConfig.getConfig("static.resource.server.address");
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
@@ -189,7 +189,7 @@ public class OrderController extends BaseController {
 					outData.put("companyName", invoiceInfo.getCompanyName());
 					outData.put("companyAddress", invoiceInfo.getCompanyAddress());
 					outData.put("companyPhone", invoiceInfo.getCompanyPhone());
-					outData.put("businessLicenseUrl",GloabConfig.getInstance().getConfig("upload.home.dir")+invoiceInfo.getBusinessLicenseUrl());
+					outData.put("businessLicenseUrl",staticPath+invoiceInfo.getBusinessLicenseUrl());
 					outData.put("companyTaxNo", invoiceInfo.getCompanyTaxNo());
 				}
 				//订单编号
@@ -270,7 +270,7 @@ public class OrderController extends BaseController {
 		}
 		if(appCardBack != null){
 			if(appCardBack.getAgreementUrl() !=null){
-				appCardBack.setAgreementUrl(GloabConfig.getConfig("static.resource.server.address")+appCardBack.getAgreementUrl());
+				appCardBack.setAgreementUrl(staticPath+appCardBack.getAgreementUrl());
 			}
 			model.addAttribute("appCardBack", appCardBack);
 		}
