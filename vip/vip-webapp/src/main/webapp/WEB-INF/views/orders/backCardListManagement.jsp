@@ -49,7 +49,11 @@
 						<option value="4">已退款</option>
 					</select>
 				</div>
-	
+				
+				<div class="order-condition-item" style="width: 165px">
+			          <input id="phoneOrUserName" type="text" placeholder="订单号/用户名/手机号" style="width: 140px;height:16px">
+			    </div>
+			            
 				<div class="order-condition-item" style="text-align: left">
 					<button id="searchBt" style="height: 20px">查询</button>
 				</div>
@@ -183,8 +187,10 @@
         	var applyType = $("#applyTypeSelect option:selected").val();
         	//退款状态
         	var orderState = $("#orderStateSelect option:selected").val();
+        	//搜索关键字
+        	var phoneOrUserName = $("#phoneOrUserName").val();
         	
-        	var url = "backCardList?backType="+backType+"&applyType="+applyType+"&orderState="+orderState;
+        	var url = "backCardList?backType="+backType+"&applyType="+applyType+"&orderState="+orderState+"&phoneOrUserName="+phoneOrUserName;
         	$('#tt').datagrid({url:url});
         	
         })

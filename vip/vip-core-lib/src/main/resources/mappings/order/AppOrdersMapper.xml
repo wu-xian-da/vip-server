@@ -212,6 +212,12 @@
 		<if test="orderState != null">
 			and ord.order_state = #{orderState}
 		</if>
+		<!-- 用户名或者手机号码 -->
+		<if test="phoneOrUserName != null">
+			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
+			and concat(customer.customer_name,customer.customer_phone,ord.order_id) like
+			CONCAT('%','${phoneOrUserName}','%' )
+		</if>
 		<!-- 机场列表 -->
 		<if test="aiportIdList !=null">
 			and ord.airport_id in
