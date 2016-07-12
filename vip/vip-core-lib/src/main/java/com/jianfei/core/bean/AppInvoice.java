@@ -808,7 +808,7 @@ public class AppInvoice {
      * @mbggenerated Tue Jul 05 14:19:02 CST 2016
      */
     public String getBusinessLicenseUrl() {
-        return  GloabConfig.getConfig("static.resource.server.address")+businessLicenseUrl;
+        return  businessLicenseUrl;
     }
 
     /**

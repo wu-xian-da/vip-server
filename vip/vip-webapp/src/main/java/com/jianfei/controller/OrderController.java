@@ -189,7 +189,7 @@ public class OrderController extends BaseController {
 					outData.put("companyName", invoiceInfo.getCompanyName());
 					outData.put("companyAddress", invoiceInfo.getCompanyAddress());
 					outData.put("companyPhone", invoiceInfo.getCompanyPhone());
-					outData.put("businessLicenseUrl", invoiceInfo.getBusinessLicenseUrl());
+					outData.put("businessLicenseUrl",GloabConfig.getInstance().getConfig("upload.home.dir")+invoiceInfo.getBusinessLicenseUrl());
 					outData.put("companyTaxNo", invoiceInfo.getCompanyTaxNo());
 				}
 				//订单编号
