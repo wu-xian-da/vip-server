@@ -340,12 +340,11 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		if (StringUtils.isEmpty(StringUtils.obj2String(userNo))) {
 			throw new IllegalArgumentException("工号不能为空....");
 		}
-		List<Map<String, Object>> listMap = roleManager
-				.selectRoleByUserUno(userNo.toString());
-		if (CollectionUtils.isEmpty(listMap)) {
-			throw new IllegalArgumentException("工号" + userNo + "对应的用户没有角色。。。");
-		}
-		Map<String, Object> role = listMap.get(0);
+		// List<Map<String, Object>> listMap = roleManager
+		// .selectRoleByUserUno(userNo.toString());
+		// if (CollectionUtils.isEmpty(listMap)) {
+		// throw new IllegalArgumentException("工号" + userNo + "对应的用户没有角色。。。");
+		// }
 		Object cid = map.get("cid");
 		// TODO
 		List<Map<String, Object>> list = archiveMapper
