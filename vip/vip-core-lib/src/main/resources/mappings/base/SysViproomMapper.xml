@@ -33,7 +33,7 @@
   		and vr.dtflag=0  and ap.state=0 and ap.dtflag=0 
   		<!-- 搜索条件 -->
   	    <if test="searchContent != null">
-  	    	and concat(vr.viproom_id,vr.viproom_name,ap.header_name,ap.header_phone,ap.airport_name) like CONCAT('%','${searchContent}','%' )
+  	    	and concat(vr.viproom_name,ap.airport_name) like CONCAT('%','${searchContent}','%' )
   	    </if>
   	    order by vr.create_time desc
   </select>
