@@ -44,14 +44,15 @@
 					customer.card_type,
 					customer.`customer_identi`,
 					DATE_FORMAT(customer.birth_day,'%Y%m%d') as birthday,
-					insured,
+					ao.insured,
+					ao.order_id,
 					case 
 						when ao.order_state=1 or ao.order_state=3 or ao.order_state=2 THEN '已支付'
 						when ao.order_state=4 THEN '已退卡'
 					ELSE
 						'未支付'
 					end as orderstate,
-					insured as action
+					ao.insured as action
 				FROM
 					`app_customer` customer
 				inner join app_orders ao on customer.customer_id=ao.customer_id
@@ -66,17 +67,17 @@
 				and orderstate=#{orderstate}
 			</if>
 			<if test="insured!=null and insured!=''">
-				and insured=#{insured}
+				and ao.insured=#{insured}
 			</if>
 		</where>
 	</select>
 	
 	<update id="updateDeliveryState" parameterType="String">
 			UPDATE 
-			   app_customer
+			   app_orders
 			SET
 			  insured = 1
-			WHERE customer_id = #{id} ;
+			WHERE order_id = #{id} ;
 	</update>
 
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"

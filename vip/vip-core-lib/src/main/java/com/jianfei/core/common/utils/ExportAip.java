@@ -35,6 +35,7 @@ public class ExportAip {
 	private Object isTb;
 
 	private Object orderstate;
+	private Object orderId;
 
 	/**
 	 * 创建一个新的实例 ExportAip.
@@ -44,7 +45,8 @@ public class ExportAip {
 	}
 
 	public ExportAip(Object name, Object phone, Object sex, Object cardType,
-			Object identity, Object birthday, Object isTb, Object orderstate) {
+			Object identity, Object birthday, Object isTb, Object orderstate,
+			Object orderId) {
 		super();
 		this.name = StringUtils.isEmpty(StringUtils.obj2String(name)) ? StringUtils.EMPTY
 				: name;
@@ -94,6 +96,8 @@ public class ExportAip {
 		}
 		this.orderstate = StringUtils.isEmpty(StringUtils
 				.obj2String(orderstate)) ? StringUtils.EMPTY : orderstate;
+		this.orderId = StringUtils.isEmpty(StringUtils.obj2String(orderId)) ? StringUtils.EMPTY
+				: orderId;
 	}
 
 	/**
@@ -246,6 +250,25 @@ public class ExportAip {
 	 */
 	public void setOrderstate(Object orderstate) {
 		this.orderstate = orderstate;
+	}
+
+	/**
+	 * orderId
+	 *
+	 * @return the orderId
+	 * @version 1.0.0
+	 */
+
+	public Object getOrderId() {
+		return orderId;
+	}
+
+	/**
+	 * @param orderId
+	 *            the orderId to set
+	 */
+	public void setOrderId(Object orderId) {
+		this.orderId = orderId;
 	}
 
 }

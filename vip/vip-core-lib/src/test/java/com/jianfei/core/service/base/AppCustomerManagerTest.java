@@ -68,12 +68,12 @@ public class AppCustomerManagerTest {
 		if (messageDto.isOk()) {
 			List<ExportAip> dataset = new ArrayList<ExportAip>();
 			for (Map<String, Object> map : messageDto.getData()) {
-				ExportAip exportAip = new ExportAip(map.get("customer_name"),
-						map.get("customer_phone"), map.get("sex"),
-						map.get("card_type"), map.get("customer_identi"),
-						map.get("birthday"), map.get("insured"),
-						map.get("orderstate"));
-				dataset.add(exportAip);
+//				ExportAip exportAip = new ExportAip(map.get("customer_name"),
+//						map.get("customer_phone"), map.get("sex"),
+//						map.get("card_type"), map.get("customer_identi"),
+//						map.get("birthday"), map.get("insured"),
+//						map.get("orderstate"));
+//				dataset.add(exportAip);
 			}
 			File file = new File("E:\\a.xls");
 			OutputStream output = new FileOutputStream(file);
