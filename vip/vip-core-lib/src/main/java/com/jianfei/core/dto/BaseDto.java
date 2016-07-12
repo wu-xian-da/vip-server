@@ -1,13 +1,16 @@
 package com.jianfei.core.dto;
 
+import java.io.Serializable;
+
 /**
- * TODO
+ *
  *
  * @version 1.0.0
  * @author : liu.dongsong@jianfeitech.com
  * @date: 2016/6/1 17:29
  */
-public class BaseDto {
+public class BaseDto implements Serializable {
+    private static final long serialVersionUID = -7975560916136341355L;
     /**
      * id
      */

@@ -164,6 +164,23 @@ public class VipUserController {
     }
 
     /**
+     * 接送机城市列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/cityList")
+    @ResponseBody
+    public BaseMsgInfo cityList(
+    ) {
+        try {
+            return transManager.getTransCityList();
+        }catch (Exception e){
+            log.error("接送机城市列表失败",e);
+            return BaseMsgInfo.msgFail("接送机城市列表失败");
+        }
+    }
+
+    /**
      * 接送机机场列表信息
      *
      * @return
@@ -173,13 +190,7 @@ public class VipUserController {
     public BaseMsgInfo airportList(@RequestParam(value = "city", required = false) String city
     ) {
         try {
-            JSONObject object=new JSONObject();
-            object.put("airportId","23456");
-            object.put("airportName","合肥新桥机场");
-            object.put("city","合肥");
-            List list=new ArrayList();
-            list.add(object);
-            return BaseMsgInfo.success(list);
+            return transManager.getTransAirportList(city);
         }catch (Exception e){
             log.error("接送机机场列表失败",e);
             return BaseMsgInfo.msgFail("接送机机场列表失败");

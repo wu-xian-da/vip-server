@@ -2,19 +2,25 @@ package com.jianfei.core.service.base.impl;
 
 import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.bean.AppVersion;
+import com.jianfei.core.bean.YdycAirports;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.StringUtils;
+import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.mapper.AppAirportTransMapper;
+import com.jianfei.core.mapper.YdycAirportsMapper;
 import com.jianfei.core.service.base.AirportTransManager;
 import com.jianfei.core.service.user.VipUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 接送机相关服务
@@ -32,6 +38,9 @@ public class AirportTransManagerImpl implements AirportTransManager {
 
     @Autowired
     private VipUserManager vipUserManager;
+
+    @Autowired
+    YdycAirportsMapper ydycAirportsMapper;
     /**
      * 添加接送机相关信息
      *
@@ -66,10 +75,43 @@ public class AirportTransManagerImpl implements AirportTransManager {
      */
     @Override
     public BaseMsgInfo getTransAirportList(String city) {
-        List<Object> objectList = JedisUtils.getObjectList("YONGCHEAIRPORTLIST");
+        YdycAirports airports = new YdycAirports();
+        List<YdycAirports> objectList;
+        if (StringUtils.isBlank(city)) {
+            //查询缓存是否存在
+            objectList = (List<YdycAirports>) JedisUtils.getObject("YDYC_AIRPORT_LIST");
+            //不存在查询数据库
+            if (objectList == null) {
+                objectList = ydycAirportsMapper.selectAirports(airports);
+                //数据库无论是否存在都设置值 防止缓存穿透
+                JedisUtils.setObject("YDYC_AIRPORT_LIST", objectList, 0);
+            }
+        } else {
+            airports.setCity(city);
+            objectList = ydycAirportsMapper.selectAirports(airports);
+        }
         return BaseMsgInfo.success(objectList);
     }
 
+
+    /**
+     * 根据城市获取易道城市列表
+     *
+     * @return
+     */
+    @Override
+    public BaseMsgInfo getTransCityList() {
+        //KEY为:YDYC_CITY
+        //查询缓存是否存在
+        List<BaseDto> objectList = (List<BaseDto>) JedisUtils.getObject("YDYC_CITY");
+        //不存在查询数据库
+        if (objectList == null) {
+            objectList = ydycAirportsMapper.getCityList();
+            //数据库无论是否存在都设置值 防止缓存穿透
+            JedisUtils.setObject("YDYC_CITY", objectList, 0);
+        }
+        return BaseMsgInfo.success(objectList);
+    }
 
     /**
      * 根据手机号获取接送机次数
