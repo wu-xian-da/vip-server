@@ -96,8 +96,8 @@
     select 
     vr.viproom_id,vr.airport_id, vr.viproom_name,vr.singleconsume_money, vr.room_num, vr.open_time, vr.end_time,
     vr.longitude, vr.province, vr.city, vr.country, vr.address, vr.remark1, pe.click_url,pe.picture_id,pe.picture_url,pe.priority
-    from sys_viproom vr LEFT JOIN app_picture  pe ON vr.viproom_id=pe.viproom_id
-    where pe.dtflag=0 and vr.viproom_id = #{viproomId,jdbcType=VARCHAR}
+    from sys_viproom vr LEFT JOIN app_picture  pe ON vr.viproom_id=pe.viproom_id and pe.dtflag=0
+    where  vr.viproom_id = #{viproomId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from sys_viproom
