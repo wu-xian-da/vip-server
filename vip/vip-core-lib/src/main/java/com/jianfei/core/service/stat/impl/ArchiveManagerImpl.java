@@ -26,6 +26,7 @@ import com.jianfei.core.bean.User;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.CacheCons.Sys;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.RoleType;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
@@ -340,18 +341,32 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		if (StringUtils.isEmpty(StringUtils.obj2String(userNo))) {
 			throw new IllegalArgumentException("工号不能为空....");
 		}
-		// List<Map<String, Object>> listMap = roleManager
-		// .selectRoleByUserUno(userNo.toString());
-		// if (CollectionUtils.isEmpty(listMap)) {
-		// throw new IllegalArgumentException("工号" + userNo + "对应的用户没有角色。。。");
-		// }
+		List<Map<String, Object>> listMap = roleManager
+				.selectRoleByUserUno(userNo.toString());
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		// 判断是不是经理
+		if (!CollectionUtils.isEmpty(listMap)) {
+			Map<String, Object> mapRole = listMap.get(0);
+			if (RoleType.managerType.getType().equals(
+					StringUtils.obj2String(mapRole.get("role_type")))) {
+				Map<String, Object> mAllp = new HashMap<String, Object>();
+				mAllp.put("pname", "所有省份");
+				mAllp.put("pid", StringUtils.EMPTY);
+				List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+				Map<String, Object> inner = new HashMap<String, Object>();
+				inner.put("anames", "所有场站");
+				inner.put("aids", StringUtils.EMPTY);
+				list.add(inner);
+				mAllp.put("airPortList", list);
+				result.add(mAllp);
+			}
+		}
 		Object cid = map.get("cid");
-		// TODO
 		List<Map<String, Object>> list = archiveMapper
 				.selectAirportByProvinceIds(new MapUtils.Builder()
 						.setKeyValue("code", userNo).setKeyValue("cid", cid)
 						.build());
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+
 		for (Map<String, Object> m : list) {
 			Map<String, Object> rsMap = new HashMap<String, Object>();
 			rsMap.put("pid", m.get("pid"));
@@ -367,6 +382,20 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			if (aidsArrays.length != anamesArrays.length) {
 				logger.error("根据省Id查询机场信息，机场ids和机场names数量不匹配...");
 			} else {
+				// 判断是不是经理
+				if (!CollectionUtils.isEmpty(listMap)) {
+					Map<String, Object> mapRole = listMap.get(0);
+					if (RoleType.managerType.getType().equals(
+							StringUtils.obj2String(mapRole.get("role_type")))
+							|| RoleType.masterType.getType().equals(
+									StringUtils.obj2String(mapRole
+											.get("role_type")))) {
+						Map<String, Object> innerRsMap = new HashMap<String, Object>();
+						innerRsMap.put("aids", StringUtils.EMPTY);
+						innerRsMap.put("anames", "所有场站");
+						maps.add(innerRsMap);
+					}
+				}
 				for (int i = 0; i < aidsArrays.length; i++) {
 					Map<String, Object> innerRsMap = new HashMap<String, Object>();
 					innerRsMap.put("aids", aidsArrays[i]);
