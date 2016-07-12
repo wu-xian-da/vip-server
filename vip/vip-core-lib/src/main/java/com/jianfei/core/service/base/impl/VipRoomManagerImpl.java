@@ -163,7 +163,11 @@ public class VipRoomManagerImpl implements VipRoomManager {
 	 */
 	@Override
 	public SysViproom getVipRoomInfo(String vipRoomId) {
-		return sysViproomMapper.selectByPrimaryKey(vipRoomId);
+		SysViproom vipRoom = sysViproomMapper.selectByPrimaryKey(vipRoomId);
+		if (vipRoom != null) {
+			AppPicture.getStaticAdderss(vipRoom.getPictures());
+		}
+		return vipRoom;
 	}
 	
 	/**
