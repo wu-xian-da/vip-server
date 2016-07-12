@@ -353,6 +353,4 @@
 				group by city.CID,city.`name`
 		]]>
 	</select>
-
-
 </mapper>

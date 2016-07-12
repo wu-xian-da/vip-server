@@ -8,7 +8,6 @@
 package com.jianfei.core.service.stat.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +32,7 @@ import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.ArchiveManager;
+import com.jianfei.core.service.sys.RoleManager;
 
 /**
  *
@@ -50,6 +50,8 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Autowired
 	private ArchiveMapper archiveMapper;
 
+	@Autowired
+	private RoleManager roleManager;
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
@@ -332,15 +334,23 @@ public class ArchiveManagerImpl implements ArchiveManager {
 
 	@Override
 	public List<Map<String, Object>> selectAirportByProvinceIds(
-			Map<String, Object> map) {
-		Object pids = map.get("pids");
-		if (null != pids) {
-			List<String> list = Arrays.asList(StringUtils.split(
-					pids.toString(), GloabConfig.SPLIT));
-			map.put("pids", list);
+			Map<String, Object> map) throws IllegalArgumentException {
+		Object userNo = map.get("code");
+
+		if (StringUtils.isEmpty(StringUtils.obj2String(userNo))) {
+			throw new IllegalArgumentException("工号不能为空....");
 		}
+		// List<Map<String, Object>> listMap = roleManager
+		// .selectRoleByUserUno(userNo.toString());
+		// if (CollectionUtils.isEmpty(listMap)) {
+		// throw new IllegalArgumentException("工号" + userNo + "对应的用户没有角色。。。");
+		// }
+		Object cid = map.get("cid");
+		// TODO
 		List<Map<String, Object>> list = archiveMapper
-				.selectAirportByProvinceIds(map);
+				.selectAirportByProvinceIds(new MapUtils.Builder()
+						.setKeyValue("code", userNo).setKeyValue("cid", cid)
+						.build());
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		for (Map<String, Object> m : list) {
 			Map<String, Object> rsMap = new HashMap<String, Object>();
@@ -367,6 +377,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 				result.add(rsMap);
 			}
 		}
-		return result;
+		return null;
 	}
 }

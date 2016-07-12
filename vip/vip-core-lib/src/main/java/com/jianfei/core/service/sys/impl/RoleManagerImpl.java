@@ -197,4 +197,16 @@ public class RoleManagerImpl implements RoleManager {
 		}
 		return messageDto.getData();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jianfei.core.service.sys.RoleManager#selectRoleByUserUno(java.lang
+	 * .String)
+	 */
+	@Override
+	public List<Map<String, Object>> selectRoleByUserUno(String uno) {
+		return roleMapper.selectRoleByUserUno(uno);
+	}
 }

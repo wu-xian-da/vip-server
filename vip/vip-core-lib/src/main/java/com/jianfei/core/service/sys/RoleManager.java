@@ -75,4 +75,13 @@ public interface RoleManager {
 	Map<String, Object> selectRoleById(Long id);
 
 	List<Role> getAll();
+
+	/**
+	 * 根据用户工号查询用户角色信息
+	 * 
+	 * @param uno
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> selectRoleByUserUno(String uno);
 }

@@ -82,6 +82,7 @@
 			order by ${sort} ${order}
 		</if>
 	</select>
+
 	<select id="getUserByName" resultMap="userRs" parameterType="String">
 		SELECT * from sys_users where login_name =#{loginName} and
 		(user_type=1 or user_type=2) AND state=0 and dtflag=0
@@ -235,6 +236,7 @@
 	</update>
 	<select id="findEntityById" resultMap="userRs" parameterType="Long">
 		SELECT * from sys_users where id =#{id} and
-		(user_type=1 or user_type=2) AND state=0 and dtflag=0
+		(user_type=1 or
+		user_type=2) AND state=0 and dtflag=0
 	</select>
 </mapper>

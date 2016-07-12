@@ -41,7 +41,6 @@ public class ArchiveManagerImplTest {
 	@Autowired
 	private ArchiveManager archiveManager;
 
-
 	/**
 	 * Test method for
 	 * {@link com.jianfei.core.service.stat.impl.ArchiveManagerImpl#masterTop(java.util.Map)}
@@ -54,7 +53,6 @@ public class ArchiveManagerImplTest {
 						new Date()).build());
 		System.out.println(JSONObject.toJSONString(map));
 	}
-
 
 	@Test
 	public void testZhuGuanAllAirPort() {
@@ -148,6 +146,14 @@ public class ArchiveManagerImplTest {
 		}
 
 		return list;
+	}
+
+	@Test
+	public void testSelectAirportByProvinceIds() {
+		List<Map<String, Object>> list = archiveManager
+				.selectAirportByProvinceIds(new MapUtils.Builder().setKeyValue(
+						"code", "123").build());
+		System.out.println(JSONObject.toJSONString(list));
 	}
 
 }

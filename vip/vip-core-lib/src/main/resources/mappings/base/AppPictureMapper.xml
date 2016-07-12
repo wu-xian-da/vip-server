@@ -28,7 +28,7 @@
 		from app_picture
 		<where>
 			<if test="1==1">
-				dtflag=0
+				dtflag=0 and viproom_id is null
 			</if>
 			<if test="timagetype!=null">
 				and imagetype=#{imagetype}
