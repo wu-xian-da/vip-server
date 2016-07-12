@@ -40,7 +40,7 @@
 			rownumbers : true,
 			pagination : true,
 			singleSelect : true,
-			idField : 'customer_id',
+			idField : 'order_id',
 			pageSize : 20,
 			pageList : [20, 30, 40, 50, ],
 		
@@ -49,7 +49,7 @@
 				title : '姓名',
 				field : 'customer_name'
 			},{
-				width : '150',
+				width : '100',
 				title : '手机号',
 				field : 'customer_phone'
 			},{
@@ -65,7 +65,7 @@
 					}
 				}
 			},{
-				width : '150',
+				width : '100',
 				title : '证件类型',
 				field : 'card_type',
 				formatter : function(value, row, index) {
@@ -89,6 +89,10 @@
 				title : '出生日期',
 				field : 'birthday'
 			},{
+				width : '150',
+				title : '订单号',
+				field : 'order_id'
+			},{
 				width : '80',
 				title : '投保状态',
 				field : 'insured',
@@ -111,9 +115,9 @@
 				formatter : function(value, row) {
 					switch (value) {
 					case 0:
-						return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.customer_id);
+						return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.order_id);
 					case 1:
-						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> 查看&nbsp;', row.customer_id);
+						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> 查看&nbsp;', row.order_id);
 					//default: 
 						// return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.id);
 					}
