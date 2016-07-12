@@ -16,13 +16,17 @@
 <script src="public/js/jquery.easyui.min.js"></script>
 <script src="public/js/plugins/datagrid-scrollview.js"></script>
 <script src="${pageContext.request.contextPath}/public/js/locale/easyui-lang-zh_CN.js"></script>
-
+<style type="text/css">
+	#order-container #order-condition-box select {
+	height: 26px;
+}
+</style>
 </head>
 <body style="height:100%;margin:0;">
 	<div id="order-container"  style="height:99%;">
 		<div id="order-condition-box" style="height:10%; margin:0; padding:0;">
 		<div style="width:1000px; overflow:hidden;">
-			<div style="padding-top:16px; padding-left:20px;width:1200px">
+			<div style="padding-top:12px; padding-left:20px;width:1200px">
 				<div class="order-condition-item">
 					<select name="" id="backTypeSelect">
 						<option value="">全部退款方式</option>
@@ -51,11 +55,11 @@
 				</div>
 				
 				<div class="order-condition-item" style="width: 165px">
-			          <input id="phoneOrUserName" type="text" placeholder="订单号/用户名/手机号" style="width: 140px;height:20px">
+			          <input id="phoneOrUserName" type="text" placeholder="订单号/用户名/手机号" style="width: 140px">
 			    </div>
 			            
 				<div class="order-condition-item" style="text-align: left">
-					<button id="searchBt" style="height: 20px">查询</button>
+					<button id="searchBt">查询</button>
 				</div>
 			</div>
 			
