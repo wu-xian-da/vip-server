@@ -48,6 +48,7 @@ import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
+import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.GloabConfig;
@@ -717,11 +718,19 @@ public class OrderController extends BaseController {
 		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		// 4、将用户状态变为禁用
 		vipUserManager.updateUserSate(orderDetailInfos.getCustomerPhone(),VipUserSate.NOT_ACTIVE);
-		//3.3调用发送短信接口
+		//3.3调用发送短信接口 现金 006 其他：009
 		try {
+			//3.3.1支付方式
+			int payTypes = orderDetailInfos.getPayMethod();
+			String msgType = "";
+			if(payTypes == PayType.CASHPAY.getName()){
+				msgType = MsgType.BACK_CARD_APPLY.getName();
+			}else{
+				msgType = MsgType.QT_BACK_CARD_APPLY.getName();
+			}
 			ServiceMsgBuilder msgBuilder = new ServiceMsgBuilder().setUserPhone(orderDetailInfos.getCustomerPhone()).
 					setUserName(orderDetailInfos.getCustomerName()).setVipCardNo(orderDetailInfos.getVipCardNo()).
-					setMsgType(MsgType.BACK_CARD_APPLY.getName());
+					setMsgType(msgType);
 			orderManagerImpl.sendMessageOfOrder(msgBuilder);
 		} catch (Exception e) {
 			logger.error("退卡申请-发送短信失败");
