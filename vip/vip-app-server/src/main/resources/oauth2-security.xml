@@ -134,8 +134,6 @@
 
 
 
-
-
     <http disable-url-rewriting="true" use-expressions="false"
           authentication-manager-ref="authenticationManager">
         <intercept-url pattern="/oauth/**" access="ROLE_USER,ROLE_UNITY,ROLE_MOBILE"/>
