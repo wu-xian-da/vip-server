@@ -150,6 +150,9 @@
   			<if test="expiryTime!=null">
   				expiry_time = #{expiryTime} ,
   			</if>
+  			<if test="activeTime!=null and activeTime!=''">
+  				active_time = #{activeTime} ,
+  			</if>
   		card_state=#{card_state}  where card_no = #{cardNo}
   </update>
   

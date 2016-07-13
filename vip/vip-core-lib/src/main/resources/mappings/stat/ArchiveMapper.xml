@@ -232,7 +232,12 @@
 				su.sex,
 				su.photo,
 				COUNT(ao.order_id) AS total_nums,
-				acc.back_order_num,
+				CASE
+				WHEN acc.back_order_num IS NULL THEN
+					0
+				ELSE
+					acc.back_order_num
+				END AS order_num_back,
 				#{maxTime},
 				DATE_FORMAT(#{maxTime},'%Y') AS YEAR,
 				DATE_FORMAT(#{maxTime},'%m') AS MONTH,
