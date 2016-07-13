@@ -667,6 +667,7 @@ public class OrderManagerImpl implements OrderManager {
             // 计算卡的有效期
             Date expireDate = DateUtil.addDays(new Date(),
                     vipcard.getValideTime());
+            vipcard.setActiveTime(new Date());
             vipcard.setExpiryTime(expireDate);
             vipcard.setCardState(VipCardState.ACTIVE.getName());
             vipCardManager.updateVipCard(vipcard);
