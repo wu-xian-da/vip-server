@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -30,8 +31,10 @@ import com.jianfei.core.common.enu.RoleType;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
+import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.ArchiveMapper;
+import com.jianfei.core.service.order.OrderManager;
 import com.jianfei.core.service.stat.ArchiveManager;
 import com.jianfei.core.service.sys.RoleManager;
 
@@ -53,6 +56,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 
 	@Autowired
 	private RoleManager roleManager;
+
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
@@ -407,5 +411,27 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			}
 		}
 		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.core.service.stat.ArchiveManager#
+	 * validateOrdereIsEfectiveAndHadnle(java.lang.String)
+	 */
+	@Override
+	public int validateOrdereIsEfectiveAndHadnle(String endTime) {
+		List<Map<String, Object>> maps = archiveMapper
+				.validateOrdereIsEfective(endTime);
+		ArrayList<String> list = new ArrayList<String>();
+		for (Map<String, Object> map : maps) {
+			if (!ObjectUtils.isEmpty(map.get("order_id"))) {
+				list.add(map.get("order_id").toString());
+			}
+		}
+		if (!CollectionUtils.isEmpty(list)) {
+			return archiveMapper.updateOrderStatuIsValidate(list);
+		}
+		return 0;
 	}
 }
