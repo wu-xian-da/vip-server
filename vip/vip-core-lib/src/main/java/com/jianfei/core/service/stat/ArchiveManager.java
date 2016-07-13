@@ -128,4 +128,12 @@ public interface ArchiveManager {
 	 */
 	List<Map<String, Object>> selectAirportByProvinceIds(Map<String, Object> map);
 
+	/**
+	 * 每隔30分钟扫描并更新无效订单
+	 * 
+	 * @param endTime
+	 *            void
+	 * @version 1.0.0
+	 */
+	int validateOrdereIsEfectiveAndHadnle(String endTime);
 }

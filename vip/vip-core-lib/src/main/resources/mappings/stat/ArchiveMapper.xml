@@ -368,4 +368,17 @@
 				group by city.CID,city.`name`
 		]]>
 	</select>
+	<!-- 每30分钟验证订单是否有效 -->
+	<select id="validateOrdereIsEfective" parameterType="string" resultType="java.util.Map">
+		<![CDATA[
+			SELECT ao.`order_id` FROM `app_orders` ao WHERE ao.`order_state`=0 AND ao.`order_time`<#{endtime}
+		]]>
+	</select>
+	<!-- 订单无效，更改订单状态为无效 -->
+	<update id="updateOrderStatuIsValidate" parameterType="ArrayList">
+		UPDATE `app_orders` SET order_state=5 WHERE order_id IN 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach>
+	</update>
 </mapper>

@@ -7,6 +7,7 @@
  */
 package com.jianfei.core.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +89,6 @@ public interface ArchiveMapper {
 	 */
 	void baseDailyExtract(Map<String, Object> map);
 
-
 	/******************************************* 分割线 **********************************************************/
 	/**
 	 * dateProvinceIdRedisCache(缓存key:date+provinceId)
@@ -115,4 +115,22 @@ public interface ArchiveMapper {
 	 * @return
 	 */
 	List<Map<String, Object>> selectAirportByProvinceIds(Map<String, Object> map);
+
+	/**
+	 * 验证订单的有效性，30分钟验证一次
+	 * 
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> validateOrdereIsEfective(String endTime);
+
+	/**
+	 * 更新订单状态为无效状态
+	 * 
+	 * @param arrayList
+	 *            订单id集合
+	 * @return int
+	 * @version 1.0.0
+	 */
+	int updateOrderStatuIsValidate(ArrayList<String> arrayList);
+	
 }

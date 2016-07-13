@@ -1,7 +1,5 @@
 package com.jianfei.core.common.utils;
 
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,9 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
-
-import com.alibaba.fastjson.JSONObject;
 
 /**
  *
@@ -471,8 +466,26 @@ public class DateUtil {
 		return map;
 	}
 
-	public static void main(String[] args) throws Exception {
-		Date date = DateUtil.addDays(new Date(), 1);
-		System.out.println(date.toLocaleString());
+	/**
+	 * 增加日期中某类型的某数值。如增加日期
+	 * 
+	 * @param date
+	 *            日期
+	 * @param dateType
+	 *            类型
+	 * @param amount
+	 *            数值
+	 * @return 计算后日期
+	 */
+	public static Date addInteger(Date date, int dateType, int amount) {
+		Date myDate = null;
+		if (date != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			calendar.add(dateType, amount);
+			myDate = calendar.getTime();
+		}
+		return myDate;
 	}
+
 }
