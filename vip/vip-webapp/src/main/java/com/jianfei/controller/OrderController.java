@@ -740,6 +740,8 @@ public class OrderController extends BaseController {
 	@RequestMapping(value="/finalRefundMoney")
 	@ResponseBody
 	public Map<String,Object> refundMoney(String orderId,Integer opr){
+		
+		
 		//1、更新订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
 		//写退款流水
@@ -750,6 +752,8 @@ public class OrderController extends BaseController {
 		
 		//2、更新退卡表状态
 		Map<String,Object> parMap = new HashMap<String,Object>();
+		double finalBackMoney = orderManagerImpl.remainMoney(orderId);
+		parMap.put("finalBackMoney", finalBackMoney);
 		parMap.put("finishTime", new Date());
 		parMap.put("orderId", orderId);
 		parMap.put("checkId", userId);
@@ -762,7 +766,7 @@ public class OrderController extends BaseController {
 		
 		//根据订单编号返回订单详情
 		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		
+				
 		//3、更新卡状态 将开状态变为已退卡
 		AppVipcard appVipcard = new AppVipcard();
 		appVipcard.setCardNo(orderDetailInfos.getVipCardNo());
