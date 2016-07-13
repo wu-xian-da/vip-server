@@ -277,14 +277,14 @@ where file_id = #{fileId,jdbcType=INTEGER}
   </select>
   
   <resultMap id="SalesRankingMap" type="com.jianfei.core.dto.SalesRankingDto">
-    <id column="bid" jdbcType="VARCHAR" property="uno" />
+    <id column="sale_no" jdbcType="VARCHAR" property="uno" />
     <result column="photo" jdbcType="VARCHAR" property="imgUrl" />
     <result column="bname" jdbcType="VARCHAR" property="bname" />
     <result column="sex" jdbcType="INTEGER" property="sex" />
     <result column="order_num" jdbcType="INTEGER" property="amout" />
   </resultMap>
   <select id="salesRanking" resultMap="SalesRankingMap" parameterType="java.util.Map" >
-  	SELECT aoa.bid,aoa.photo,aoa.bname,aoa.sex,count(aoa.order_num) as order_num FROM app_order_archive aoa 
+  	SELECT aoa.sale_no,aoa.photo,aoa.bname,aoa.sex,count(aoa.order_num) as order_num FROM app_order_archive aoa 
 	WHERE  <![CDATA[ aoa.file_time >= #{startTime} AND aoa.file_time <=  #{endTime} ]]>
 	<if test="pid != null">
 		AND aoa.pid = #{pid}
