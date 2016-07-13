@@ -338,14 +338,16 @@ public class StatManagerImpl implements StatManager {
 			String airportId, String begin, String end, int pageNo, int pageSize) {
 		Map<String,Object> param = new HashMap<String, Object>();
 		
-		param.put("pageStart", pageNo * pageSize);
+		param.put("pageStart", (pageNo - 1) * pageSize);
 		param.put("pageSize", pageSize);
 		param.put("startTime", begin);
 		param.put("endTime", end);
 		if (airportId != null)
-			param.put("airport_id", airportId);
+			if (!airportId.equals(""))
+				param.put("airport_id", airportId);
 		if (pid != null)
-			param.put("pid", pid);
+			if (!pid.equals(""))
+				param.put("pid", pid);
 		
 		return appOrderArchiveMapper.salesRanking(param);
 	}

@@ -117,7 +117,7 @@ public class HttpServiceRequest implements ServiceRequest {
 		String result = null;
 		HttpGet httpGet = new HttpGet(url);  
         try {  
-            System.out.println("executing request " + httpGet.getURI());  
+            //System.out.println("executing request " + httpGet.getURI());  
             httpGet.setConfig(requestConfig);
             CloseableHttpResponse response = httpClient.execute(httpGet);  
             try {  
