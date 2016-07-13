@@ -245,7 +245,7 @@ public class AppCustomer implements Serializable {
 	public void setCardType(int cardType) {
 		this.cardType = cardType;
 	}
-
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getBirthDay() {
 		return birthDay;
 	}

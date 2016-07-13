@@ -40,8 +40,13 @@
 		latitude,
 		dtflag, header_name, header_phone
 	</sql>
+	<!-- 禁用机场，逻辑删除 -->
+	<update id="forbitAirport" parameterType="java.util.Map">
+		update sys_airport set dtflag=#{dtflag}  where airport_id=#{id}
+	</update>
 
 	<select id="mapList" resultType="java.util.Map" parameterType="java.util.Map">
+	select * from (
 		<![CDATA[
 			SELECT
 				t1.airport_id,
@@ -59,7 +64,8 @@
 				t1.header_phone,
 				ct.cid as cid,
 				GROUP_CONCAT(t2.order_id) AS orderIds,
-				count(t2.order_id) as total
+				count(t2.order_id) as total,
+				updatetime
 			FROM
 				sys_airport t1
 			LEFT JOIN app_orders t2 ON t1.airport_id = t2.airport_id and t2.pay_money is not null
@@ -70,7 +76,7 @@
 				t1.dtflag=#{dtflag}
 			</if>
 			<if test="state!=null and state!=''">
-			   and	t1.state=#{state}
+				and t1.state=#{state}
 			</if>
 			<if test="id!=null">
 				and t1.airport_id =#{id}
@@ -100,7 +106,10 @@
 				and header_phone =#{headerPhone}
 			</if>
 		</where>
-		group by t1.airport_id order by t1.updatetime desc
+		group by t1.airport_id ) A
+		<if test="sort!=null">
+			order by ${sort} ${order}
+		</if>
 	</select>
 
 	<insert id="save" parameterType="AriPort">
@@ -222,8 +231,11 @@
 		<result property="name" column="name" />
 	</resultMap>
 
-	<select id="getAriPortProvince" resultMap="province" >
-			SELECT c.CID as 'id',c.`name` as 'name' FROM  sys_city c JOIN (SELECT DISTINCT(a.province) FROM sys_airport a where a.dtflag=0 AND a.state=0  ) s ON s.province=c.CID;
+	<select id="getAriPortProvince" resultMap="province">
+		SELECT c.CID as
+		'id',c.`name` as 'name' FROM sys_city c JOIN (SELECT
+		DISTINCT(a.province) FROM sys_airport a where a.dtflag=0 AND a.state=0
+		) s ON s.province=c.CID;
 	</select>
 
 	<select id="getAirPortByProvince" resultMap="BaseResultMap"
@@ -240,12 +252,12 @@
 
 	<select id="selectCityById" parameterType="java.util.Map"
 		resultType="java.util.Map">
-			SELECT
-				pid,
-				cid,
-				name
-				FROM
-			`sys_city`
+		SELECT
+		pid,
+		cid,
+		name
+		FROM
+		`sys_city`
 		<where>
 			<if test="pid!=null">
 				pid=#{pid}
@@ -258,14 +270,18 @@
 			</if>
 		</where>
 	</select>
-	
+
 	<!--根据场站id获取场站信息 -->
-	<select id="selectAirPortInfoById" resultMap="airportRs" parameterType="java.lang.String">
-		select * from sys_airport where airport_id = #{airPortId}
+	<select id="selectAirPortInfoById" resultMap="airportRs"
+		parameterType="java.lang.String">
+		select * from sys_airport where airport_id =
+		#{airPortId}
 	</select>
-	
-	<select id="validateAirPortExist" resultType="java.util.Map"  parameterType="java.util.Map">
-		select `airport_id`,`airport_name` from sys_airport sa where sa.airport_name =#{name} 
+
+	<select id="validateAirPortExist" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		select `airport_id`,`airport_name` from sys_airport sa where
+		sa.airport_name =#{name}
 		<if test="id!=null">
 			and sa.airport_id!=#{id};
 		</if>

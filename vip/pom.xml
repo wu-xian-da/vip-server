@@ -5,7 +5,6 @@
 	<artifactId>vip</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>jianfei</name>
 	<url>http://maven.apache.org</url>
 	<!-- 设定主仓库，按设定顺序进行查找�? -->
 	<repositories>

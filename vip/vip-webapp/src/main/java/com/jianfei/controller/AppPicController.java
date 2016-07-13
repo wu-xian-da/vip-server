@@ -18,12 +18,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCustomer;
@@ -120,7 +122,7 @@ public class AppPicController extends BaseController {
 	public MessageDto<String> save(AppPicture appPicture) {
 		appPicture.setUpdatetime(new Date());
 		if (ObjectUtils.isEmpty(appPicture.getPriority())) {
-			appPicture.setPictureId(0);
+			appPicture.setPriority(0);
 		}
 		appPicture.setDtflag(GloabConfig.OPEN);
 		if (null != appPicture.getPictureId() && 0 != appPicture.getPictureId()) {
@@ -162,10 +164,11 @@ public class AppPicController extends BaseController {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
 				request, "_");
 		PageHelper.startPage(page, rows);
-		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
+		MessageDto<List<Map<String, Object>>> messageDto = appCustomerManager
 				.get(searchParams);
 		if (messageDto.isOk()) {
-			return bindGridData(new PageInfo<AppCustomer>(messageDto.getData()));
+			return bindGridData(new PageInfo<Map<String, Object>>(
+					messageDto.getData()));
 		}
 		return bindGridData(new PageInfo<AppCustomer>());
 	}
@@ -181,23 +184,32 @@ public class AppPicController extends BaseController {
 		return "app/vipInfo";
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/updateDeliveryState/{id}")
+	public MessageDto<String> updateDeliveryState(
+			@PathVariable(value = "id") String id) {
+		return appCustomerManager.updateDeliveryState(id);
+
+	}
+
 	@RequestMapping(value = "/download")
 	public void export(HttpServletRequest request, HttpServletResponse response) {
-		MessageDto<List<AppCustomer>> messageDto = appCustomerManager
-				.get(new MapUtils.Builder().build());
+		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(
+				request, "_");
+		MessageDto<List<Map<String, Object>>> messageDto = appCustomerManager
+				.get(searchParams);
 		if (messageDto.isOk()) {
 			List<ExportAip> dataset = new ArrayList<ExportAip>();
-			for (AppCustomer appCustomer : messageDto.getData()) {
-				ExportAip exportAip = new ExportAip(
-						StringUtils.obj2String(appCustomer.getCustomerName()),
-						StringUtils.obj2String(appCustomer.getPhone()),
-						StringUtils.obj2String(DateUtil.dateToString(
-								appCustomer.getCreateTime(), "yyyy-MM-dd")),
-						StringUtils.obj2String(appCustomer.getEmail()));
+			for (Map<String, Object> map : messageDto.getData()) {
+				ExportAip exportAip = new ExportAip(map.get("customer_name"),
+						map.get("customer_phone"), map.get("sex"),
+						map.get("card_type"), map.get("customer_identi"),
+						map.get("birthday"), map.get("insured"),
+						map.get("orderstate"), map.get("order_id"));
 				dataset.add(exportAip);
 			}
-			download(response, new String[] { "姓名", "手机号", "日期", "邮箱" },
-					dataset, "vip用户.xls");
+			download(response, new String[] { "姓名", "手机号", "性别", "证件类型",
+					"证件号码", "出生日期", "投保状态", "用户状态", "订单号"  }, dataset, "vip用户.xls");
 		}
 	}
 }

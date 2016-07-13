@@ -426,7 +426,7 @@ public class OrderShowInfoDto implements Serializable {
 	 * @return the businessLicenseUrl
 	 */
 	public String getBusinessLicenseUrl() {
-		return GloabConfig.getConfig("static.resource.server.address")+businessLicenseUrl;
+		return businessLicenseUrl;
 	}
 	/**
 	 * @param businessLicenseUrl the businessLicenseUrl to set

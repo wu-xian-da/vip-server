@@ -17,6 +17,7 @@
 		<result column="dtflag" property="dtflag" jdbcType="INTEGER" />
 		<result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
 		<result column="airport_id" property="airportId" jdbcType="VARCHAR" />
+		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!--订单列表展示返回类型 -->
@@ -90,7 +91,7 @@
 	<!--查询需要开发票的订单信息 -->
 	<select id="invoicePageList" parameterType="java.util.Map"
 		resultMap="OrderShowInfoDto">
-		select ord.order_id,ord.invoice_flag,
+		select ord.order_id,ord.invoice_flag,ord.order_state,
 		inv.invoice_no,inv.invoice_id,inv.invoice_kind,inv.company_name,inv.company_address,
 		inv.company_phone,inv.business_license_url,inv.company_tax_no,inv.invoice_content,
 		inv.province,inv.city,inv.country,inv.address,inv.invoice_title,inv.postcode,
@@ -127,7 +128,7 @@
 
 	<!--订单列表信息展示 -->
 	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,
+		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
 		ap.airport_name,agent.name,
 		customer.customer_name,customer.customer_phone
 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer
@@ -161,7 +162,7 @@
 		<!-- 用户名或者手机号码 -->
 		<if test="phoneOrUserName != null">
 			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
-			and concat(customer.customer_name,customer.customer_phone) like
+			and concat(customer.customer_name,customer.customer_phone,agent.name,ord.order_id) like
 			CONCAT('%','${phoneOrUserName}','%' )
 		</if>
 		<!-- 机场列表 -->
@@ -211,6 +212,12 @@
 		<if test="orderState != null">
 			and ord.order_state = #{orderState}
 		</if>
+		<!-- 用户名或者手机号码 -->
+		<if test="phoneOrUserName != null">
+			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
+			and concat(customer.customer_name,customer.customer_phone,ord.order_id) like
+			CONCAT('%','${phoneOrUserName}','%' )
+		</if>
 		<!-- 机场列表 -->
 		<if test="aiportIdList !=null">
 			and ord.airport_id in
@@ -225,7 +232,11 @@
 
 	<!--更新订单状态 -->
 	<update id="updateOrderState" parameterType="java.util.Map">
-		update app_orders set order_state=#{orderState} where order_id = #{orderId}
+		update app_orders set order_state=#{orderState}
+		<if test="applyType !=null">
+		,apply_type=#{applyType} 
+		</if>
+		where order_id = #{orderId}
 	</update>
 
 	<!--支付回调通知 -->
@@ -238,7 +249,7 @@
 	<sql id="Base_Column_List">
 		order_id, id, customer_id, order_time, order_state, pay_type, serial_id,
 		pay_money,
-		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id
+		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id,apply_type
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -445,17 +456,59 @@
 	<resultMap id="ResultMapWithDetail" type="com.jianfei.core.bean.AppOrders" extends="BaseResultMap" >
 		<collection property="vipCards" column="id" javaType="com.jianfei.core.bean.AppVipcard">
 			<id column="card_no" property="cardNo" jdbcType="VARCHAR" />
+			<result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+			<result column="card_type" property="cardType" jdbcType="INTEGER" />
 		</collection>
 		<collection property="customer" column="id" javaType="com.jianfei.core.bean.AppCustomer">
+			<result column="au.customer_id" property="customerId" jdbcType="VARCHAR" />
 			<result column="customer_name" property="customerName"
 					jdbcType="VARCHAR" />
+			<result column="customer_identi" property="customerIdenti"
+					jdbcType="VARCHAR" />
 			<result column="customer_phone" property="phone" jdbcType="VARCHAR" />
+			<result column="sex" property="sex" jdbcType="INTEGER" />
+			<result column="email" property="email" jdbcType="VARCHAR" />
+			<result column="address" property="address" jdbcType="VARCHAR" />
+			<result column="password" property="password" jdbcType="VARCHAR" />
+			<result column="use_type" property="useType" jdbcType="INTEGER" />
+			<result column="remark1" property="remark1" jdbcType="VARCHAR" />
+			<result column="dtflag" property="dtflag" jdbcType="INTEGER" />
+			<result column="province" property="province" jdbcType="VARCHAR" />
+			<result column="city" property="city" jdbcType="VARCHAR" />
+			<result column="country" property="country" jdbcType="VARCHAR" />
+			<result column="orderStatu" property="orderStatu" />
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+			<result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+			<result column="city_name" property="cityName" jdbcType="VARCHAR" />
+			<result column="card_type" property="cardType" jdbcType="INTEGER" />
+			<result column="birth_day" property="birthDay" jdbcType="TIMESTAMP" />
 		</collection>
+		<collection property="invoice" column="id" javaType="com.jianfei.core.bean.AppInvoice">
+			<result column="invoice_kind" jdbcType="INTEGER" property="invoiceKind" />
+		</collection>
+		<collection property="cardBack" column="id" javaType="com.jianfei.core.bean.AppCardBack">
+			<result column="create_time" property="createTime"/>
+			<result column="back_type" property="backType"/>
+			<result column="customer_name" property="customerName"/>
+			<result column="customer_card" property="customerCard"/>
+			<result column="money" property="money"/>
+			<result column="finish_time" property="finishTime"/>
+			<result column="order_id" property="orderId"/>
+			<result column="creater_id" property="createrId"/>
+			<result column="check_id" property="checkId"/>
+			<result column="agreement_url" property="agreementUrl"/>
+			<result column="card_no" property="cardNo"/>
+			<result column="bank_name" property="bankName"/>
+			<result column="service_money" property="serviceMoney" jdbcType="REAL" />
+			<result column="safe_money" property="safeMoney" jdbcType="REAL" />
+		</collection>
+
 	</resultMap>
 	<!-- 根据订单号返回订单信息 -->
 	<select id="getOrderDetailByOrderId" parameterType="java.lang.String"
 			resultMap="ResultMapWithDetail">
-		select o.*,au.customer_name ,au.customer_phone,ac.card_id as card_no from app_orders o join app_customer au on o.customer_id=au.customer_id  join app_order_card ac on  o.order_id=ac.order_id WHERE o.order_id= #{orderId}
+		select o.*,au.*,av.*,acb.*,ai.* from app_orders o join app_customer au on o.customer_id=au.customer_id  join app_order_card ac on  o.order_id=ac.order_id join app_vipcard av on ac.card_id=av.card_no left join app_card_back acb on o.order_id=acb.order_id left join app_invoice ai on o.order_id=ai.order_id
+		 WHERE o.order_id= #{orderId}
 	</select>
 
 
@@ -468,10 +521,48 @@
 	<!-- 根据工号获取业务员需要处理的数据 -->
 	<select id="getSaleToDoData" parameterType="java.lang.String"
 			resultMap="GraphResultMap">
-		select count(*) as 'value', 'TO_PAY' as 'name' from app_orders where order_state=0
+		select count(*) as 'value', 'TO_PAY' as 'name' from app_orders where order_state=0 and sale_no=#{uno}
 union
-select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_order_card oc on o.order_id=oc.order_id join app_vipcard v on oc.card_id=v.card_no  where order_state=1 and  v.card_state in (3,4)
+select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_order_card oc on o.order_id=oc.order_id join app_vipcard v on oc.card_id=v.card_no  where order_state=1 and  v.card_state in (3,4) and sale_no=#{uno}
 union
-select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3)
+select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3) and sale_no=#{uno}
+	</select>
+
+
+
+	<resultMap id="OrderListResultMap" type="com.jianfei.core.dto.OrderPageDto" >
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+		<result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="order_state" property="orderState" jdbcType="INTEGER" />
+		<result column="card_state" property="cardState" jdbcType="INTEGER" />
+
+	</resultMap>
+
+	<!-- 根据工号获取业务员需要处理的数据 -->
+	<select id="orderListBySale" parameterType="java.lang.String"
+			resultMap="OrderListResultMap">
+	select o.order_id,o.order_state,o.order_time,c.customer_name,c.customer_phone,av.card_state  from app_orders o join app_customer c on o.customer_id=c.customer_id join app_order_card aoc on o.order_id=aoc.order_id join app_vipcard av on aoc.card_id=av.card_no
+	   WHERE o.sale_no = (#{uno})
+
+			<if test="orderState!=null ">
+				and  o.order_state in
+				<foreach item="item" index="index" collection="orderState"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="cardState!=null">
+				and  av.card_state in
+				<foreach item="cardItem" index="index" collection="cardState"
+						 open="(" separator="," close=")">
+					#{cardItem}
+				</foreach>
+			</if>
+		<if test="key!=null and key!=''">
+			and concat(c.customer_name,c.customer_phone) like
+			CONCAT('%','${key}','%' )
+		</if>
 	</select>
 </mapper>

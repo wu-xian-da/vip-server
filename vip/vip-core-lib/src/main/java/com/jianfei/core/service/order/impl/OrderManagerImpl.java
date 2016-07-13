@@ -16,13 +16,19 @@ import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.mapper.AppOrderCardMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.base.AppCustomerManager;
+import com.jianfei.core.service.base.AppInvoiceManager;
+import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.AppInvoiceManagerImpl;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
 import com.jianfei.core.service.base.impl.VipCardManagerImpl;
+import com.jianfei.core.service.order.CardBackManager;
 import com.jianfei.core.service.order.OrderManager;
+import com.jianfei.core.service.thirdpart.AirportEasyManager;
+import com.jianfei.core.service.thirdpart.MsgInfoManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 import com.jianfei.core.service.thirdpart.ThirdPayManager;
+import com.jianfei.core.service.user.SaleUserManager;
 import com.jianfei.core.service.user.VipUserManager;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.tencent.protocol.native_protocol.NativePayReqData;
@@ -32,7 +38,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.util.*;
 
 /**
@@ -58,9 +69,9 @@ public class OrderManagerImpl implements OrderManager {
     @Autowired
     private VipCardManager vipCardManager;
     @Autowired
-    private AppInvoiceManagerImpl invoiceManager;
+    private AppInvoiceManager invoiceManager;
     @Autowired
-    private ValidateCodeManagerImpl validateCodeManager;
+    private ValidateCodeManager validateCodeManager;
     @Autowired
     private ConsumeManagerImpl consumeManager;
 
@@ -68,7 +79,16 @@ public class OrderManagerImpl implements OrderManager {
     private QueueManager queueManager;
     @Autowired
     private VipUserManager vipUserManager;
+    @Autowired
+    private CardBackManager cardBackManager;
+    @Autowired
+    private SaleUserManager saleUserManager;
 
+    @Autowired
+    private AirportEasyManager airportEasyManager;
+
+    @Autowired
+    private MsgInfoManager msgInfoManager;
     /**
      * 添加订单信息
      *
@@ -215,6 +235,10 @@ public class OrderManagerImpl implements OrderManager {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("orderState", orderState);
         params.put("orderId", orderId);
+        //审核通过
+        if(operationType == 3){
+        	params.put("applyType", ApplyBackCardMethod.CUSTOMER_SERVICE_APPLY.getName());
+        }
 
         return appOrdersMapper.updateOrderState(params);
 
@@ -233,7 +257,7 @@ public class OrderManagerImpl implements OrderManager {
             //2、app_consume表中返回vip消费次数
             int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
             //3、计算用户vip卡剩余金额
-            remainMoney = (float) (appOrderCard.getInitMoney() - count * 200 * 0.8 - 100);
+            remainMoney = (float) (appOrderCard.getInitMoney() - count * 150 - 100);
             if (remainMoney < 0) {
                 remainMoney = 0.00;
             }
@@ -429,11 +453,11 @@ public class OrderManagerImpl implements OrderManager {
      * @return
      */
     @Override
-    public BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
+    public synchronized BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
         log.info("提交退卡信息");
         log.info(appCardBack);
         //1、根据订单号查询订单信息
-        AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(appCardBack.getOrderId());
+        AppOrders orders = getOrderDetailByOrderId(appCardBack.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
@@ -449,15 +473,16 @@ public class OrderManagerImpl implements OrderManager {
         log.info("重新计算可退余额 校验是否正确");
         VipCardUseDetailInfo useDetailInfo=new VipCardUseDetailInfo();
         useDetailInfo.setOrderMoney(orders.getPayMoney());
-        useDetailInfo.setVipCardNo(orders.getVipCards().get(0).getCardNo());
+        useDetailInfo.setVipCardNo(appCardBack.getCardNo());
         getVipCardUseInfo(useDetailInfo);
-         if(useDetailInfo.getReturnMoney()!=appCardBack.getMoney()){
-			return BaseMsgInfo.fail("退款金额有误，请重新查询使用");
-		}
+        appCardBack.setMoney(useDetailInfo.getReturnMoney());
+        appCardBack.setServiceMoney(useDetailInfo.getUsedMoney());
+        appCardBack.setSafeMoney(100);
+        User user=saleUserManager.getSaleUser(appCardBack.getCreaterId());
+        appCardBack.setCustomerName(user.getName());
+
         //3、插入数据库
-        appCardBack.setBackId(IdGen.uuid());
-        appCardBack.setCreateTime(new Date());
-        int i = appCardBackMapper.insertBackCard(appCardBack);
+       boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
@@ -465,13 +490,13 @@ public class OrderManagerImpl implements OrderManager {
         msgBuilder.setMsgBody(object.toJSONString());
         //添加订单状态为已退款
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
-            //更改订单状态为已退款 和申请方式为
+            //紧急退卡 更改订单状态为已退款 和申请方式为紧急
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
-            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
+            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
-            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
+            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
         }
         log.info("更改VIP卡状态");
         AppVipcard vipcard=new AppVipcard();
@@ -481,11 +506,14 @@ public class OrderManagerImpl implements OrderManager {
         vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
         log.info("更改用户状态为不可用");
         vipCardManager.updateVipCard(vipcard);
+        //APP申请
+        orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         appOrdersMapper.updateByPrimaryKeySelective(orders);
+
         log.info("发送消息");
         log.info(msgBuilder);
         queueManager.sendMessage(msgBuilder);
-        return i > 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败");
+        return temp ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败");
     }
 
     /**
@@ -553,4 +581,107 @@ public class OrderManagerImpl implements OrderManager {
 	public void sendMessageOfOrder(ServiceMsgBuilder msgBuilder){
 		 queueManager.sendMessage(msgBuilder);
 	}
+
+    /**
+     * 取消VIP卡退卡记录
+     *
+     * @param phone     手机号
+     * @param code      验证码
+     * @param vipCardNo
+     * @return
+     */
+    @Override
+    public BaseMsgInfo removeBackCard(String phone, String code, String vipCardNo,String orderId) {
+        //1、校验用户和手机验证码
+        boolean flag = validateCodeManager.validateSendCode(phone, MsgType.SELECT, code);
+        if (!flag)
+            return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
+        //2、查询卡状态及卡对应的订单状态
+        AppOrders orders=getOrderDetailByOrderId(orderId);
+
+
+        //3、如果订单状态时已退款 则提示用户退卡申请失败 已退卡
+        if (orders == null || orders.getOrderState() == VipOrderState.ALREADY_REFUND.getName()) {
+            return BaseMsgInfo.msgFail("订单不存在 或已退款");
+        }
+        if (!phone.equals(orders.getCustomer().getPhone())){
+            return BaseMsgInfo.msgFail("订单对应的下单用户和本手机号不一致");
+        }
+        //4、判断订单状态是否在可取消退卡范围内
+        if (!(orders.getOrderState() == VipOrderState.BEING_AUDITED.getName() ||
+                orders.getOrderState() == VipOrderState.AUDIT_PASS.getName())){
+            return BaseMsgInfo.msgFail("订单无法取消退卡");
+        }
+
+        //5、更改订单状态为已付款 逻辑删除退卡信息
+        orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
+        appOrdersMapper.updateByPrimaryKeySelective(orders);
+        cardBackManager.deleteCardBackInfo(orderId);
+        //卡状态为已激活
+        AppVipcard vipcard=new AppVipcard();
+        vipcard.setCardNo(vipCardNo);
+        vipcard.setCardState(VipCardState.ACTIVE.getName());
+        vipCardManager.updateVipCard(vipcard);
+        //用户状态为已激活
+        vipUserManager.updateUserSate(phone,VipUserSate.ACTIVE);
+
+        //6、给用户发送取消退卡成功短信
+        ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
+                setVipCardNo(vipCardNo).setUserName(orders.getCustomer().getCustomerName());
+        msgBuilder.setMsgType(MsgType.REMOVE_BACK_CARD.getName());
+        log.info("发送消息");
+        log.info(msgBuilder);
+        queueManager.sendMessage(msgBuilder);
+        return BaseMsgInfo.success(true);
+    }
+
+    /**
+     * 重新激活VIP卡
+     *
+     * @param phone     手机号
+     * @param vipCardNo
+     * @param orderId   订单ID
+     */
+    @Override
+    public BaseMsgInfo activeCard(String phone, String vipCardNo, String orderId) throws UnrecoverableKeyException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        //查询订单详细信息 订单是否付款
+        AppOrders orders = getOrderDetailByOrderId(orderId);
+        //如果订单状态时不是已付款 则提示
+        if (orders == null || !(orders.getOrderState() == VipOrderState.ALREADY_PAY.getName())) {
+            return BaseMsgInfo.msgFail("订单不存在或未付款");
+        }
+        if (!(vipCardNo.equals(orders.getVipCards().get(0).getCardNo()))) {
+            return BaseMsgInfo.msgFail("订单号和VIP卡号不对应");
+        }
+        //查询卡状态是否为激活失败
+        AppVipcard vipcard = vipCardManager.getVipCardByNo(vipCardNo);
+        if (vipcard == null) {
+            return BaseMsgInfo.msgFail("VIP卡号不存在");
+        }
+        if (vipcard.getCardState() != VipCardState.ACTIVATE_FAIL.getName()) {
+            return BaseMsgInfo.msgFail("本VIP卡不是激活失败状态");
+        }
+        //调取易行接口激活
+        if (airportEasyManager.activeVipCard(vipCardNo, orders.getCustomer().getPhone(),
+                orders.getCustomer().getCustomerName())) {
+            //如果激活成功 发送激活成功短信
+            // 计算卡的有效期
+            Date expireDate = DateUtil.addDays(new Date(),
+                    vipcard.getValideTime());
+            vipcard.setExpiryTime(expireDate);
+            vipcard.setCardState(VipCardState.ACTIVE.getName());
+            vipCardManager.updateVipCard(vipcard);
+            Map map = new HashMap();
+            map.put("userPhone", orders.getCustomer().getPhone());
+            map.put("userName", orders.getCustomer().getCustomerName());
+            map.put("vipCardNo", vipCardNo);
+            String msgBody = MsgAuxiliary.buildMsgBody(map, "005");
+            if (!(msgInfoManager.sendMsgInfo(orders.getCustomer().getPhone(), msgBody))) {
+                return BaseMsgInfo.msgFail("激活成功，给用户发送激活短信失败");
+            }
+            return BaseMsgInfo.success(true);
+        } else {
+            return BaseMsgInfo.msgFail("激活失败");
+        }
+    }
 }

@@ -225,6 +225,6 @@
 		INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
 		INNER JOIN sys_airport sa ON sa.airport_id = sua.airport_id
 		INNER JOIN sys_city city ON city.CID = sa.province
-		where u.id=#{uNo}
+		where u.id=#{id}
 	</select>
 </mapper>

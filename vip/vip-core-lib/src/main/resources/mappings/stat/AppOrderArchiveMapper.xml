@@ -298,13 +298,14 @@ where file_id = #{fileId,jdbcType=INTEGER}
   
   <!--根据业务人员id号查询某个时间段内的销售情况 -->
   <select id="selectCharDataByUserId" resultMap="charDataMap" parameterType="java.util.Map">
-  	select sum(order_num) as order_num,sum(order_num_back) as order_num_back,file_time from app_order_archive aoa where aoa.bid=#{saleNo} group by file_time
+  	select sum(order_num) as order_num,sum(order_num_back) as order_num_back,file_time from app_order_archive aoa where aoa.bid=#{saleNo} 
   	<if test="beginTime!=null">
     	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')]]>
     </if>
     <if test="endTime!=null">
-    	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+    	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d') ]]>
     </if>
+    group by file_time
   </select>
 
 

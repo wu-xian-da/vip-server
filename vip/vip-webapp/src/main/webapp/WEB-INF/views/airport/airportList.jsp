@@ -74,6 +74,19 @@
 			} ]
 		});
 	};
+	var removeFun = function(id) {
+		parent.$.messager.confirm('询问', '您确定要删除该场站？', function(r) {
+			if (r) {
+				$.post(sy.contextPath + '/airport/delete/'+id, function(dataObj) {
+					if(!dataObj.ok){
+			    		$.messager.alert('msg',dataObj.msgBody,'error');
+			    		return ;
+			    	};
+					grid.datagrid('reload');
+				}, 'json');
+			}
+		});
+	};
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
@@ -83,17 +96,20 @@
 			pagination : true,
 			singleSelect : true,
 			idField : 'airport_id',
-			sortName : 'update_time',
-			sortOrder : 'asc',
+			pageSize : 20,
+			pageList : [ 20, 30, 40, 50],
+			sortName : 'updatetime',
+			sortOrder : 'desc',
 			columns : [ [{
 				width : '100',
 				title : '所属省市',
 				field : 'province',
 				sortable : true
 			} , {
-				width : '150',
+				width : '200',
 				title : '场站名称',
-				field : 'airport_name'
+				field : 'airport_name',
+				sortable : true
 			},{
 				width : '100',
 				title : '负责人',
@@ -105,11 +121,13 @@
 			},{
 				width : '100',
 				title : '业务员人数',
-				field : 'agent_num'
+				field : 'agent_num',
+				sortable : true
 			},{
 				width : '100',
 				title : '开卡总量',
-				field : 'total'
+				field : 'total',
+				sortable : true
 			},{
 				width : '60',
 				title : '状态',
@@ -131,6 +149,9 @@
 					var str = '';
 					<%if (anyPermissionsTag.showTagBody("system:station:update")) {%>
 						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑', row.airport_id);
+					<%}%>
+					<%if (anyPermissionsTag.showTagBody("system:station:delete")) {%>
+						str += sy.formatString('&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.airport_id);
 					<%}%>
 					return str;
 				}

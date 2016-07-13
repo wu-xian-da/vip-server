@@ -30,6 +30,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -76,7 +77,7 @@ import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 @Controller
 public class OrderController extends BaseController {
 	private Logger logger = Logger.getLogger(LoginController.class);
-	
+	private static String staticPath =  GloabConfig.getConfig("static.resource.server.address");
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
@@ -161,6 +162,9 @@ public class OrderController extends BaseController {
 			resMap.put("total", 0);
 		}else{
 			for(OrderShowInfoDto invoiceInfo : invoiceList){
+				//订单状态
+				int ordersState = invoiceInfo.getOrderState();
+				invoiceInfo.setOrderStateName(returnOrderStateName(ordersState));
 				//发票状态
 				int invoiceState = invoiceInfo.getInvoiceFlag();
 				//发票种类
@@ -185,14 +189,20 @@ public class OrderController extends BaseController {
 					outData.put("companyName", invoiceInfo.getCompanyName());
 					outData.put("companyAddress", invoiceInfo.getCompanyAddress());
 					outData.put("companyPhone", invoiceInfo.getCompanyPhone());
-					outData.put("businessLicenseUrl", invoiceInfo.getBusinessLicenseUrl());
+					outData.put("businessLicenseUrl",staticPath+invoiceInfo.getBusinessLicenseUrl());
 					outData.put("companyTaxNo", invoiceInfo.getCompanyTaxNo());
 				}
 				//订单编号
 				String orderId = invoiceInfo.getOrderId();
 				if(invoiceState == 1){//发票未邮寄
 					invoiceInfo.setInvoiceFlagName("发票未邮寄");
-					invoiceInfo.setOperation("<button class='btn btn-back' onclick='drawBill("+outData+")'>开发票</button>");
+					if(ordersState == 3 || ordersState == 4){
+						invoiceInfo.setOperation("<button class='btn'onclick='lookOverInvoiceInfo("+outData+")'>查看</button>");
+					}else{
+						
+						invoiceInfo.setOperation("<button class='btn btn-back' onclick='drawBill("+outData+")'>开发票</button>");
+					}
+					
 				}
 				if(invoiceState == 2){//发票已邮寄
 					outData.put("invoiceNo", invoiceInfo.getInvoiceNo());
@@ -260,7 +270,7 @@ public class OrderController extends BaseController {
 		}
 		if(appCardBack != null){
 			if(appCardBack.getAgreementUrl() !=null){
-				appCardBack.setAgreementUrl(GloabConfig.getConfig("static.resource.server.address")+appCardBack.getAgreementUrl());
+				appCardBack.setAgreementUrl(staticPath+appCardBack.getAgreementUrl());
 			}
 			model.addAttribute("appCardBack", appCardBack);
 		}
@@ -394,7 +404,7 @@ public class OrderController extends BaseController {
 				outData.put("backType", appCardBack.getBackType());
 				outData.put("backName", appCardBack.getBankName());
 				outData.put("customerName", appCardBack.getCustomerName());
-				
+				outData.put("applyBackCardMethod",appOrder.getApplyType());
 				//发票状态
 				AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
 				outData.put("invoice", orderInfo.getInvoiceFlag());
@@ -403,7 +413,7 @@ public class OrderController extends BaseController {
 				//是否有最终退款查看的权限
 				boolean flag = subject.isPermitted("system:order:refundsel");
 				if(flag){
-					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
 				}else{
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 				}
@@ -441,7 +451,8 @@ public class OrderController extends BaseController {
 			@RequestParam(value="rows",defaultValue="20") Integer pageSize,
 			@RequestParam(value="backType",defaultValue="") String backType,
 			@RequestParam(value="applyType",defaultValue="") String applyType,
-			@RequestParam(value="orderState",defaultValue="") String orderState){
+			@RequestParam(value="orderState",defaultValue="") String orderState,
+			@RequestParam(value="phoneOrUserName",defaultValue="") String phoneOrUserName){
 		
 		//用户可以看到机场列表
 		List<String> aiportIdList = returnAirportIdList();
@@ -458,6 +469,10 @@ public class OrderController extends BaseController {
 		//订单状态
 		if(!orderState.equals("")){
 			paramsMap.put("orderState", orderState);
+		}
+		//搜索关键字
+		if(!phoneOrUserName.equals("")){
+			paramsMap.put("phoneOrUserName", phoneOrUserName);
 		}
 		//机场id列表
 		if(aiportIdList !=null && aiportIdList.size() >0){
@@ -486,19 +501,24 @@ public class OrderController extends BaseController {
 					outData.put("backMoneyCard",appCardBack.getCustomerCard());
 					outData.put("backType", appCardBack.getBackType());
 					outData.put("phone", appOrder.getCustomerPhone());
-					appOrder.setOrderStateName("审核通过");
 					outData.put("backName", appCardBack.getBankName());
 					outData.put("customerName", appCardBack.getCustomerName());
+					
+					int applyTypes = appOrder.getApplyType();
+					outData.put("applyBackCardMethod", appOrder.getApplyType());
+					
 					//发票状态
 					AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
 					outData.put("invoice", orderInfo.getInvoiceFlag());
 					//申请方式
-					int applyTypes = appOrder.getApplyType();
-					if(applyTypes == 0){
+					if(applyTypes == 1){
 						appOrder.setApplyTypeName("客服");
 					}else{
 						appOrder.setApplyTypeName("现场");
 					}
+					
+					//订单状态
+					appOrder.setOrderStateName("审核通过");
 					//退卡方式
 					int backCardTypes = appOrder.getBackType();
 					if(backCardTypes == 1){
@@ -508,14 +528,14 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现金");
+						appOrder.setBackTypeName("紧急退款");
 					}
 					//权限校验
 					org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
 					//是否有最终退款查看的权限
 					boolean flag = subject.isPermitted("system:order:refundsel");
 					if(flag){
-						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-refund' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
+						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='finalBackMoneyToUser("+outData+")'>退款</button>");
 					}else{
 						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 					}
@@ -527,7 +547,7 @@ public class OrderController extends BaseController {
 					appOrder.setOrderStateName("已退款");
 					//申请方式
 					int applyTypes = appOrder.getApplyType();
-					if(applyTypes == 0){
+					if(applyTypes == 1){
 						appOrder.setApplyTypeName("客服");
 					}else{
 						appOrder.setApplyTypeName("现场");
@@ -541,7 +561,7 @@ public class OrderController extends BaseController {
 					}else if(backCardTypes == 3){
 						appOrder.setBackTypeName("银行卡");
 					}else{
-						appOrder.setBackTypeName("现金");
+						appOrder.setBackTypeName("紧急退款");
 					}
 					if(cardState == 5){
 						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><a href='unbundCard?vipCardNo="+appOrder.getVipCardNo()+"'><button class='btn' style='background:#698DC3'>解绑</button></a>");
@@ -553,7 +573,7 @@ public class OrderController extends BaseController {
 				}
 			}
 			if(resList !=null && resList.size()>0){
-				map.put("total", resList.size());
+				map.put("total", pageinfo.getTotal());
 			}else{
 				map.put("total", 0);
 			}
@@ -661,7 +681,7 @@ public class OrderController extends BaseController {
 	public Map<String,Object> onRefund(String orderId,String backCardNo,String remainMoney,String payMethod,Integer opr,
 			@RequestParam(value="userNames",defaultValue="",required=false) String userNames,
 			@RequestParam(value="banckName",defaultValue="",required=false) String banckName){
-		//1、将订单状态有'正在审核'变成'审核通过'
+		//1、将订单状态有'正在审核'变成'审核通过'，退款申请变成客服
 		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
 		
 		//2、将退款信息录入到流水表中
@@ -689,7 +709,7 @@ public class OrderController extends BaseController {
 		//是否有退款查看的权限
 		boolean flag = subject.isPermitted("system:order:refundsel");
 		if(flag){
-			resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-refund' onclick='finalBackMoneyToUser(500)'>退款</button>");
+			resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='finalBackMoneyToUser(500)'>退款</button>");
 		}else{
 			resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 		}
@@ -1023,11 +1043,11 @@ public class OrderController extends BaseController {
 	public String returnInvoiceFlagName(Integer invoiceFlag){
 		String invoiceFlagName = "";
 		if(invoiceFlag == 0){
-			invoiceFlagName = "未开";
+			invoiceFlagName = "不需要";
 		}else if(invoiceFlag == 1){
-			invoiceFlagName = "发票未邮寄"; 
+			invoiceFlagName = "未邮寄"; 
 		}else{
-			invoiceFlagName = "发票已邮寄";
+			invoiceFlagName = "已邮寄";
 		}
 		return invoiceFlagName;
 	}

@@ -1,5 +1,6 @@
 package com.jianfei.core.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
@@ -42,7 +43,6 @@ public class AppOrders implements Serializable{
     private String operation;
 
     private String saleNo;
-
     /**
      * 机场ID
      */
@@ -56,15 +56,30 @@ public class AppOrders implements Serializable{
     private Date payTime;
 
     /**
+     * 退卡申请途径
+     */
+    private int applyType;
+
+    /**
      * 顾客 1:1
      */
     private AppCustomer customer;
 
     /**
+     * 发票 1:1
+     */
+    private AppInvoice invoice;
+
+    /**
+     * 退卡信息 1:1
+     */
+    private AppCardBack cardBack;
+
+    /**
      * 卡 1:d
      */
     private List<AppVipcard> vipCards = Lists.newArrayList();
-    
+
     /**
 	 * operation
 	 *
@@ -106,7 +121,7 @@ public class AppOrders implements Serializable{
     public void setCustomerId(String customerId) {
         this.customerId = customerId == null ? null : customerId.trim();
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public Date getOrderTime() {
         return orderTime;
     }
@@ -204,7 +219,7 @@ public class AppOrders implements Serializable{
         this.payUserId = payUserId;
         return this;
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public Date getPayTime() {
         return payTime;
     }
@@ -228,5 +243,30 @@ public class AppOrders implements Serializable{
 
     public void setVipCards(List<AppVipcard> vipCards) {
         this.vipCards = vipCards;
+    }
+
+
+    public AppInvoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(AppInvoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public AppCardBack getCardBack() {
+        return cardBack;
+    }
+
+    public void setCardBack(AppCardBack cardBack) {
+        this.cardBack = cardBack;
+    }
+
+    public int getApplyType() {
+        return applyType;
+    }
+
+    public void setApplyType(int applyType) {
+        this.applyType = applyType;
     }
 }

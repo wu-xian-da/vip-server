@@ -8,7 +8,6 @@
 package com.jianfei.core.service.stat.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +26,14 @@ import com.jianfei.core.bean.User;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.CacheCons.Sys;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.RoleType;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.ArchiveMapper;
 import com.jianfei.core.service.stat.ArchiveManager;
+import com.jianfei.core.service.sys.RoleManager;
 
 /**
  *
@@ -50,18 +51,9 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Autowired
 	private ArchiveMapper archiveMapper;
 
+	@Autowired
+	private RoleManager roleManager;
 	protected Logger logger = LoggerFactory.getLogger(getClass());
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.stat.ArchiveManager#masterTotal(java.util.Map)
-	 */
-	@Override
-	public Map<String, Object> masterTotal(Map<String, Object> map) {
-		return archiveMapper.masterTotal(map);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -120,9 +112,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * com.jianfei.core.service.stat.ArchiveManager#zhuGuanTotal(java.util.Map)
 	 */
 	@Override
-	public Map<String, Object> zhuGuanTotal(Map<String, Object> map,
-			String cacheKey) {
-
+	public Map<String, Object> zhuGuanTotal(Map<String, Object> map) {
 		return archiveMapper.zhuGuanTotal(map);
 	}
 
@@ -188,7 +178,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			return;
 		}
 		// 查询管辖区域内总的开卡数
-		Map<String, Object> map = masterTotal(new MapUtils.Builder()
+		Map<String, Object> map = zhuGuanTotal(new MapUtils.Builder()
 				.setKeyValue("ariportIds", list).build());
 		if (MapUtils.isEmpty(map)) {
 			model.addAttribute("total", 0);
@@ -247,8 +237,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		}
 		lastMoth.put("ariportIds", list);
 		// 管辖区域范围内总的订单数
-		Map<String, Object> map = zhuGuanTotal(lastMoth,
-				CacheCons.Sys.SYS_HISTORY_ORDERS_ZHUGUAN);
+		Map<String, Object> map = zhuGuanTotal(lastMoth);
 
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
 		if (MapUtils.isEmpty(map)) {
@@ -336,7 +325,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			return maps;
 		}
 		for (Map<String, Object> m : maps) {
-			JedisUtils.set(m.get("cacheKey").toString(),
+			JedisUtils.setObject(m.get("cacheKey").toString(),
 					JSONObject.toJSONString(m), 0);
 			logger.info("按照省和机场归档key:" + m.get("cacheKey").toString()
 					+ " value:" + JSONObject.toJSONString(m));
@@ -346,16 +335,38 @@ public class ArchiveManagerImpl implements ArchiveManager {
 
 	@Override
 	public List<Map<String, Object>> selectAirportByProvinceIds(
-			Map<String, Object> map) {
-		Object pids = map.get("pids");
-		if (null != pids) {
-			List<String> list = Arrays.asList(StringUtils.split(
-					pids.toString(), GloabConfig.SPLIT));
-			map.put("pids", list);
+			Map<String, Object> map) throws IllegalArgumentException {
+		Object userNo = map.get("code");
+
+		if (StringUtils.isEmpty(StringUtils.obj2String(userNo))) {
+			throw new IllegalArgumentException("工号不能为空....");
 		}
-		List<Map<String, Object>> list = archiveMapper
-				.selectAirportByProvinceIds(map);
+		List<Map<String, Object>> listMap = roleManager
+				.selectRoleByUserUno(userNo.toString());
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		// 判断是不是经理
+		if (!CollectionUtils.isEmpty(listMap)) {
+			Map<String, Object> mapRole = listMap.get(0);
+			if (RoleType.managerType.getType().equals(
+					StringUtils.obj2String(mapRole.get("role_type")))) {
+				Map<String, Object> mAllp = new HashMap<String, Object>();
+				mAllp.put("pname", "所有省份");
+				mAllp.put("pid", StringUtils.EMPTY);
+				List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+				Map<String, Object> inner = new HashMap<String, Object>();
+				inner.put("anames", "所有场站");
+				inner.put("aids", StringUtils.EMPTY);
+				list.add(inner);
+				mAllp.put("airPortList", list);
+				result.add(mAllp);
+			}
+		}
+		Object cid = map.get("cid");
+		List<Map<String, Object>> list = archiveMapper
+				.selectAirportByProvinceIds(new MapUtils.Builder()
+						.setKeyValue("code", userNo).setKeyValue("cid", cid)
+						.build());
+
 		for (Map<String, Object> m : list) {
 			Map<String, Object> rsMap = new HashMap<String, Object>();
 			rsMap.put("pid", m.get("pid"));
@@ -371,6 +382,20 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			if (aidsArrays.length != anamesArrays.length) {
 				logger.error("根据省Id查询机场信息，机场ids和机场names数量不匹配...");
 			} else {
+				// 判断是不是经理
+				if (!CollectionUtils.isEmpty(listMap)) {
+					Map<String, Object> mapRole = listMap.get(0);
+					if (RoleType.managerType.getType().equals(
+							StringUtils.obj2String(mapRole.get("role_type")))
+							|| RoleType.masterType.getType().equals(
+									StringUtils.obj2String(mapRole
+											.get("role_type")))) {
+						Map<String, Object> innerRsMap = new HashMap<String, Object>();
+						innerRsMap.put("aids", StringUtils.EMPTY);
+						innerRsMap.put("anames", "所有场站");
+						maps.add(innerRsMap);
+					}
+				}
 				for (int i = 0; i < aidsArrays.length; i++) {
 					Map<String, Object> innerRsMap = new HashMap<String, Object>();
 					innerRsMap.put("aids", aidsArrays[i]);

@@ -199,13 +199,13 @@ a {
 				<!-- <td><button><a href="gotoAddVipRoomView">添加VIP室</a></button></td> -->
 
 				<td><a href="gotoAddVipRoomView" class="easyui-linkbutton"
-					data-options="iconCls:'ext-icon-note_add',plain:true">添加VIP室</a></td>
+					data-options="iconCls:'ext-icon-note_add',plain:true">添加</a></td>
 				<td>
 					<!-- 搜索条件框 -->
 					<form id="searchForm">
 						<table>
 							<tr>
-								<td>输入搜索关键字</td>
+								<td>关键字</td>
 								<td><input id="_searchContent" name="_searchContent" style="width: 125px;"
 									placeholder="场站名称/VIP室名称" /></td>
 								<td><input type="button" value="查询"

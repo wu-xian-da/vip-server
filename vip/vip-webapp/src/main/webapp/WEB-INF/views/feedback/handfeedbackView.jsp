@@ -25,90 +25,24 @@
 		</div>
 
 		<div class="order-card-info">
-			<!-- 订单信息 -->
-			<c:if test="${!empty orderInfo}">
-				<c:forEach items="${orderInfo }" var="order">
-					<div class="order-list-title">
-					订单编号：<span>${order.order_id}</span>
-					</div>
-					<ul>
-						<li><label>开卡时间：</label>${order.order_time}</li>
-						<li><label>开卡场站：</label>${order.airport_name}</li>
-						<li><label>业务员：</label>${order.name}</li>
-						<li><label>业务员电话：</label>${order.phone}</li>
-					</ul>
-				</c:forEach>
-			</c:if>
-			
-			<!--卡信息  -->
-			<c:if test="${!empty vipCardInfo }">
-				<c:forEach items="${ vipCardInfo}" var="card">
-					<div class="order-list-title">
-						VIP卡编号：<span>${card.card_no}</span>
-					</div>
-					<ul>
-						<li><label>有效期：</label>${card.valide_time }年</li>
-						<li><label>vip卡金额：</label>${card.remain_money}￥</li>
-						<li><label>支付方式：</label>${card.pay_type }</li>
-						<li><label>支付时间：</label>${card.pay_time}</li>
-						<li><label>卡片激活短信发送时间：</label>${card.activat_time}</li>
-					</ul>
-				</c:forEach>
-			</c:if>
-			
 			<!--个人资料  -->
-			<div class="order-list-title">用户资料</div>
+			<div class="order-list-title">个人资料</div>
 			<ul>
-				<li>姓名：${customer.customerName}</li>
-				<li>身份证：${customer.customerIdenti }</li>
-				<li>手机号：${customer.phone }</li>
-				<li>性别：${customer.sex ==1 ? '男' : '女' }</li>
-				<li>常住城市：${customer.address }</li>
+				<li>用户姓名：${customer.customerName}</li>
+				<li>证件类型：
+					<c:if test="${customer.cardType == 1}">身份证</c:if>
+					<c:if test="${customer.cardType == 2}">护照</c:if>
+					<c:if test="${customer.cardType == 3}">军官证</c:if>
+					<c:if test="${customer.cardType == 4}">回乡证</c:if>
+				</li>
+				<li>证件号：${customer.customerIdenti }</li>
+				<li>出生日期：</li>
+				<li>用户手机号：${customer.phone }</li>
+				<li>用户性别：${customer.sex ==1 ? '男' : '女' }</li>
+				<li>常住地址：${customer.provinceName} ${customer.cityName} ${customer.address }</li>
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
 
-			<!-- 发票信息 -->
-			<c:if test="${empty postInfo }">
-			<div class="order-list-title">发票信息（未开）</div>
-			</c:if>
-			
-			<c:if test="${!empty postInfo }">
-				<c:forEach items="${postInfo }" var="post">
-					<div class="order-list-title">发票信息（已开）</div>
-					<ul>
-						<li></li>
-						<li>邮寄地址：${post.address }</li>
-						<li>发票类型：${post.invoice_type==1? '个人':'公司'}</li>
-						<li>发票抬头：${post.invoice_title }</li>
-					</ul>
-
-				</c:forEach>
-			</c:if>
-
-			<!-- 退款金额 -->
-			<c:if test="${!empty backMoneyInfo }">
-				<div class="order-list-title">
-					退款信息 <span class="order-tips-red"></span>
-				</div>
-				<c:forEach items="${backMoneyInfo }" var="backMoneyInfo">
-					<ul>
-						<li>退款金额：${backMoneyInfo.money }<</li>
-						<li>退款方式：${backMoneyInfo.back_type }</li>
-					</ul>
-				</c:forEach>
-				
-			</c:if>
-			
-			<!-- vip卡使用记录 -->
-			<c:if test="${!empty vipCardRescordInfo }">
-				<div class="order-list-title">VIP卡使用记录</div>
-				<ul>
-					<c:forEach items="${vipCardRescordInfo }" var="vip">
-						<li>${vip.viproom_name }&nbsp;&nbsp;${vip.consume_money }&nbsp;&nbsp;${vip.consume_time }</li>
-					</c:forEach>
-				</ul>
-				
-			</c:if>
 			
 			<div class="order-list-title">用户反馈信息</div>
 			<ul>

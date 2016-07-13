@@ -1,26 +1,6 @@
 package com.jianfei.core.service.stat.impl;
 
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.google.gson.JsonObject;
-import com.jianfei.core.bean.AppAirportArchive;
-import com.jianfei.core.bean.AppOrderArchive;
-import com.jianfei.core.common.cache.JedisUtils;
-import com.jianfei.core.common.utils.PageDto;
-import com.jianfei.core.dto.*;
-import com.jianfei.core.mapper.AppOrderArchiveMapper;
-import com.jianfei.core.mapper.AppOrdersMapper;
-import com.jianfei.core.mapper.ArchiveMapper;
-import com.jianfei.core.service.stat.StatManager;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +9,26 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.jianfei.core.bean.AppOrderArchive;
+import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.dto.CharData;
+import com.jianfei.core.dto.GraphDto;
+import com.jianfei.core.dto.OrderAppDetailInfo;
+import com.jianfei.core.dto.OrderPageDto;
+import com.jianfei.core.dto.ReturnCardDto;
+import com.jianfei.core.dto.SalesRankingDto;
+import com.jianfei.core.dto.UserProvince;
+import com.jianfei.core.mapper.AppOrderArchiveMapper;
+import com.jianfei.core.mapper.AppOrdersMapper;
+import com.jianfei.core.service.stat.StatManager;
 
 /**
  * TODO
@@ -146,27 +146,47 @@ public class StatManagerImpl implements StatManager {
 	
 	/**
      * 销售榜单-详细图表接口
-     * x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
+     * x轴：日期  y轴：该场站在所选时间段内所有的开卡总数
      * @throws ParseException 
      */
-	public List<Map<String, Object>> returnCardNumByDate(List<Map<String,Object>> proIdApIdList, 
+	public Map<String,Object> returnCardNumByDate(List<Map<String,Object>> proIdApIdList, 
 			String begin,String end) throws ParseException {
 		// TODO Auto-generated method stub
 		int days = returnDays(begin,end);
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		//1、返回数据----x轴：日期  y轴：该场站在所选时间段内所有的开卡总数
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		//天数
+		//2、返回数据----所选期间所有的开卡总数和退卡总数
+		Map<String,Object> totalMap = new HashMap<String,Object>();
+		
+		//在所选期间所有的开卡总数
+		int sumAllDay = 0;
+		//在所选期间所有的退卡总数
+		int backTotalAllDay = 0;
+		
+		//间隔天数
 		for(int index =0;index <= days; index ++){
 			Map<String,Object> mapItem = new HashMap<String,Object>();
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(sf.parse(begin));
 			calendar.add(Calendar.DATE, index);
 			String date = sf.format(calendar.getTime());
+			//每天的开卡总数
 			int sum = 0;
+			//每天的退卡总数
 			int backTotal = 0;
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
-				Object obj = JedisUtils.getObject(date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId"));
+				Object obj = null;
+				String test = date+"$"+proIdApIdMap.get("pid")+"$"+proIdApIdMap.get("airportId");
+				try {
+					obj = JedisUtils.getObject(test);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				
 				if(obj == null){
 					sum +=0;
 					backTotal +=0;
@@ -178,10 +198,23 @@ public class StatManagerImpl implements StatManager {
 			}
 			mapItem.put("date", date);
 			mapItem.put("total", sum);
-			mapItem.put("backTotal", backTotal);
+			mapItem.put("back_total", backTotal);
+			mapItem.put("avgNum", formatNum( (double)sum/proIdApIdList.size()) );
+			mapItem.put("avgNum_back", formatNum( (double)backTotal/proIdApIdList.size()) );
 			list.add(mapItem);
+			
+			sumAllDay += sum;
+			backTotalAllDay += backTotal;
 		}
-		return list;
+		
+		totalMap.put("saleCardNumTotal", sumAllDay);
+		totalMap.put("backCardNumTotal", backTotalAllDay);
+		
+		Map<String,Object> resList = new HashMap<String,Object>();
+		resList.put("cardNumList", list);
+		resList.put("total", totalMap);
+		
+		return resList;
 	}
 		
 	/** 所属省份平均开卡数
@@ -341,25 +374,35 @@ public class StatManagerImpl implements StatManager {
 	 * 分页查询订单相关状态
 	 *
 	 * @param uno 销售员工号
-	 * @param orderState 订单状态
+	 * @param state 订单状态
 	 * @return
 	 */
 	@Override
-	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,int orderState,int pageNo,int pageSize) {
-		//TODO
-		List<OrderPageDto> orderPageDtos=new ArrayList<>();
-		OrderPageDto dto=new OrderPageDto();
-		dto.setOrderId("0467615151402953");
-		dto.setCardState(2);
-		dto.setOrderState(0);
-		dto.setCustomerName("杨蕾");
-		dto.setCustomerName("13456784567");
-		dto.setOrderTime(new Date());
-		orderPageDtos.add(dto);
-		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<OrderPageDto>();
-		pageDtoPageInfo.setList(orderPageDtos);
+	public PageInfo<OrderPageDto> pageOrderInfoBySale(String uno,String state,int pageNo,int pageSize,String key) {
+		// state 1 全部 2 代付款 3 未激活 4 退款中 5 已退卡
+		PageHelper.startPage(pageNo, pageSize);
+		//订单状态
+		List<Integer> orderStates=null;
+		List<Integer> cardStates=null;
+		if ("2".equals(state)){
+			orderStates=new ArrayList<>();
+			orderStates.add(0);
+		}else if ("3".equals(state)){
+			orderStates=new ArrayList<>();
+			cardStates=new ArrayList<>();
+			orderStates.add(1);
+			cardStates.add(3);
+			cardStates.add(4);
+		}else if ("4".equals(state)){
+			orderStates=new ArrayList<>();
+			orderStates.add(2);
+			orderStates.add(3);
+		}else if ("5".equals(state)){
+			orderStates=new ArrayList<>();
+			orderStates.add(4);
+		}
+		List<OrderPageDto> list=ordersMapper.orderListBySale(uno,orderStates,cardStates,key);
+		PageInfo<OrderPageDto> pageDtoPageInfo=new PageInfo<>(list);
 		return pageDtoPageInfo;
-
-		/*return ordersMapper.pageOrderInfoBySale(uno, orderState, cardState);*/
 	}
 }

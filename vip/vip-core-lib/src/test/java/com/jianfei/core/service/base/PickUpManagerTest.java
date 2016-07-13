@@ -9,11 +9,20 @@ package com.jianfei.core.service.base;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.common.utils.MessageDto;
+import com.sun.swing.internal.plaf.metal.resources.metal;
 
 /**
  *
@@ -29,24 +38,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PickUpManagerTest {
 
+	@Autowired
+	AppAirportTransManager pickUpManager;
+
 	/**
 	 * Test method for
-	 * {@link com.jianfei.core.service.base.PickUpManager#resultMapList(java.util.Map)}
+	 * {@link com.jianfei.core.service.base.AppAirportTransManager#resultMapList(java.util.Map)}
 	 * .
 	 */
 	@Test
 	public void testResultMapList() {
-		fail("Not yet implemented");
+		MessageDto<List<Map<String, Object>>> messageDto = pickUpManager
+				.resultMapList(new com.jianfei.core.common.utils.MapUtils.Builder()
+						.setKeyValue("pickup_type", 2).build());
+		System.out.println(JSONObject.toJSONString(messageDto));
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.jianfei.core.service.base.PickUpManager#updateState(java.util.Map)}
+	 * {@link com.jianfei.core.service.base.AppAirportTransManager#updateState(java.util.Map)}
 	 * .
 	 */
 	@Test
 	public void testUpdateState() {
-		fail("Not yet implemented");
+		pickUpManager
+				.updateState(new com.jianfei.core.common.utils.MapUtils.Builder()
+						.setKeyValue("submit", 2).setKeyValue("id", 99).build());
 	}
 
 }

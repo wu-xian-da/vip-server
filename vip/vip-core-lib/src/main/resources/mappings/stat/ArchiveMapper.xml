@@ -67,14 +67,14 @@
 				</foreach>
 			</if>
 		</where>
-			GROUP BY
-				aoa.pid
-			ORDER BY
-				sum_order DESC
-			LIMIT 0,3
+		GROUP BY
+		aoa.pid
+		ORDER BY
+		sum_order DESC
+		LIMIT 0,3
 	</select>
 
-	<!-- 为经理角色绘图 -->
+	<!-- 主管|经理角色绘图 -->
 	<select id="masterDraw" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		<![CDATA[	
@@ -100,26 +100,26 @@
 		GROUP BY archie.`province`,archie.pid
 	</select>
 
-	<!-- 统计-主管首页统计的订单数 -->
+	<!-- 统计 主管|经理角色绘图 -->
 	<select id="zhuGuanTotal" resultType="java.util.Map"
 		parameterType="java.util.Map">
-		SELECT CASE WHEN
-		SUM(a.`order_num`) IS NULL THEN
-		0
-		ELSE
-		SUM(a.`order_num`)
-		END AS total
-		FROM `app_order_archive` a WHERE
-		a.`year`=#{year} and a.`month`=#{month}
+		SELECT 
+			 CASE WHEN
+				COUNT(*) IS NULL THEN
+				0
+			 ELSE
+				COUNT(*)
+			 END AS total
+		FROM `app_orders` ao WHERE ao.`order_state` IN (1,2,3,4)
 		<if test="ariportIds!=null">
-			and a.`airport_id` in
+			and ao.`airport_id` in
 			<foreach item="item" index="index" collection="ariportIds"
 				open="(" separator="," close=")">
 				#{item}
 			</foreach>
 		</if>
 	</select>
-	
+
 	<!-- 统计-主管首页统计的订单数和最优业务员统计 -->
 	<select id="zhuGuanAllAirPort" resultType="java.util.Map"
 		parameterType="java.util.Map">
@@ -203,77 +203,67 @@
 	<!-- 日归档表抽取 -->
 	<select id="baseDailyExtract" parameterType="java.util.Map">
 		<![CDATA[
-			INSERT INTO `app_order_archive` (
+			INSERT INTO  app_order_archive (
 			  `bid`,
-			  `file_time`,
-			  `order_num`,
-			  `dflag`,
+			  `sale_no`,
 			  `bname`,
-			  `airportname`,
 			  `airport_id`,
+			  `airportname`,
+			  `pid`,
+			  `province`,
+			  `sex`,
+			  `photo`,
+			  `order_num`,
+			  `order_num_back`,
+			  `file_time`,
 			  `year`,
 			  `month`,
 			  `day`,
-			  `province`,
-			  `dayweek`,
-			  `sex`,
-			  `photo`,
-			  `pid`,
-			  order_num_back
-			)  SELECT
-				u.id,
+			  `dayweek`
+			) 
+			SELECT
+				su.id,
+				ao.sale_no,
+				su.`name`,
+				ao.airport_id,
+				sa.airport_name,
+				sc.CID,
+				sc.`name`,
+				su.sex,
+				su.photo,
+				COUNT(ao.order_id) AS total_nums,
+				acc.back_order_num,
 				#{maxTime},
-				CASE
-				WHEN count(ao.order_id) IS NULL THEN
-					0
-				ELSE
-					count(ao.order_id)
-				END AS order_num,
-				ao.dtflag,
-				u.`name` AS bname,
-				a.airport_name,
-				a.airport_id,
 				DATE_FORMAT(#{maxTime},'%Y') AS YEAR,
 				DATE_FORMAT(#{maxTime},'%m') AS MONTH,
 				DATE_FORMAT(#{maxTime},'%d') AS DAY,
-				c.name,
-				WEEKDAY(#{maxTime})+1,
-				u.sex,
-				u.photo,
-				c.CID as pid,
-				CASE
-				WHEN ab.back_order_num IS NULL THEN
-					0
-				ELSE
-					ab.back_order_num
-				END
-				 as order_num_back
+				WEEKDAY(#{maxTime})+1
 			FROM
-				sys_users u
-			INNER JOIN app_orders ao ON ao.sale_no = u.`code` and DATE_FORMAT(ao.pay_time, '%Y-%m-%d') =#{maxTime}
-			INNER JOIN sys_airport a ON a.airport_id=ao.airport_id and a.dtflag=0 and a.state=0
-			inner join sys_city c on a.province=c.CID
+				app_orders ao
+			INNER JOIN sys_users su ON ao.sale_no = su.`code`
+			INNER JOIN sys_airport sa ON sa.airport_id = ao.airport_id
+			LEFT JOIN sys_city sc ON sc.CID = sa.province
 			LEFT JOIN (
 				SELECT
 					ao.sale_no,
-					ao.airport_id as airport_id,
-					count(card.back_id) as back_order_num
+					ao.airport_id AS airport_id,
+					count(card.back_id) AS back_order_num
 				FROM
 					`app_card_back` card
-				INNER JOIN `app_orders` ao ON card.order_id = ao.id
+				INNER JOIN `app_orders` ao ON card.order_id = ao.order_id
 				WHERE
-					DATE_FORMAT(card.finish_time,'%Y-%m-%d')  =#{maxTime}
+					DATE_FORMAT(card.finish_time,'%Y-%m-%d') =#{maxTime}
 				GROUP BY
 					ao.sale_no,
 					ao.airport_id
-			) ab ON ab.sale_no = u.`code` and ab.airport_id=a.airport_id
+			) acc on acc.sale_no=ao.sale_no and acc.airport_id=ao.airport_id
+			WHERE
+				DATE_FORMAT(ao.order_time,'%Y-%m-%d') =#{maxTime}
+			AND ao.pay_time IS NOT NULL
 			GROUP BY
-			u.id,
-			u.`name`,
-			a.airport_id,
-			a.airport_name,
-			c.CID,
-			c.`name`
+				ao.sale_no,
+				ao.airport_id
+			
 		]]>
 	</select>
 	<!-- *******************************************************华丽的分割线****************************************************************** -->
@@ -309,9 +299,29 @@
 		<![CDATA[
 			select 
 				concat(#{currentTime},"$",aoa.pid,'$',aoa.airport_id) as cacheKey, 
-				sum(aoa.order_num) as total,
-				sum(aoa.order_num_back) as total_back
+					sum(aoa.order_num) AS total,
+					CASE
+					WHEN sum(aoa.order_num_back) IS NULL THEN
+						0
+					ELSE
+						sum(aoa.order_num_back)
+					END AS back_order_total,
+					 B.pcount,
+					 sum(aoa.order_num) / pcount AS avgNum,
+					 sum(aoa.order_num_back) / pcount AS avgNum_back
 		    from app_order_archive aoa 
+		    LEFT JOIN (
+				SELECT
+					sua.airport_id,
+					count(su.id) AS pcount
+				FROM
+					sys_users su
+				INNER JOIN sys_user_airport sua ON su.id = sua.sys_id
+				WHERE
+					su.user_type = 3
+				GROUP BY
+					sua.airport_id
+			) B ON aoa.airport_id = B.airport_id
 			    where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
 			group by aoa.pid,aoa.airport_id 
 		]]>
@@ -343,6 +353,4 @@
 				group by city.CID,city.`name`
 		]]>
 	</select>
-
-
 </mapper>

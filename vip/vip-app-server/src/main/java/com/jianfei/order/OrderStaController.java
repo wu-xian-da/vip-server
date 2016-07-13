@@ -3,12 +3,15 @@ package com.jianfei.order;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrderArchive;
 import com.jianfei.core.bean.AriPort;
+import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.PageDto;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.service.base.AriPortManager;
 import com.jianfei.core.service.base.impl.BusizzManagerImpl;
 import com.jianfei.core.service.stat.ArchiveManager;
 import com.jianfei.core.service.stat.impl.StatManagerImpl;
+import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +44,9 @@ public class OrderStaController {
     private ArchiveManager archiveManager;
 
     @Autowired
-	private BusizzManagerImpl busizzManagerImpl;
+	private BusizzManagerImpl busizzManagerImpl; 
+    @Autowired
+    private SaleUserManagerImpl saleUserManagerImpl;
 
     /**
      * 分页获取
@@ -120,7 +125,7 @@ public class OrderStaController {
     }
     
     /**
-     * 根据用户id查询所拥有省份的机场
+     * 根据用户工号查询所拥有省份的机场
      * @param provinceId
      * @return
      */
@@ -138,11 +143,12 @@ public class OrderStaController {
             return new BaseMsgInfo().setCode(-1).setMsg("查询失败");
 		}
     }
+    
     /**
 	 * 个人中心销售榜单获取接口
 	 * 
 	 * @param uno
-	 *            用户编号
+	 *            用户工号
 	 * @param begin
 	 *            开始时间
 	 * @param end
@@ -154,19 +160,25 @@ public class OrderStaController {
 	public BaseMsgInfo getSaleCurveByUserId(@RequestParam(value = "uno", required = true) String uno,
 			@RequestParam(value = "begin", required = true) String begin,
 			@RequestParam(value = "end", required = true) String end) {
+		
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
+			
+			User user = saleUserManagerImpl.getSaleUserDetail(uno);
+			//根据用户编号获取用户id
+			long  userId = user.getId();
+			
 			// 1、从归档表中查询该业务员某个时间段内的销售业绩
 			Map<String, Object> paraMap = new HashMap<String, Object>();
-			paraMap.put("saleNo", uno);
+			paraMap.put("saleNo", userId);
 			paraMap.put("beginTime", begin);
 			paraMap.put("endTime", end);
-			// 1.1业务人员某个时间段内每天的开卡数量
+			// 1.1业务人员某个时间段内每天的开卡数量、退卡数量
 			List<CharData> listBycustomer = statManager.selectCharDataByUserId(paraMap);
-
+			
 			// 2、业务人员所属省份该时间段内的平均开卡人数
 			// 2.1根据销售人员id获取该用户所属的省份id
-			List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(uno);
+			List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(userId+"");
 			List<Map<String, Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList, begin, end);
 
 			// 3将两个list合并为一个list
@@ -200,6 +212,24 @@ public class OrderStaController {
 				}
 				resMap.put("cardNumList", provinceList);
 			}
+			
+			//4 根据 listBycustomer计算业务员某个月份总的开卡总数和退款总数
+			Map<String,Object> totalCardNumMap = new HashMap<String,Object>();
+			if (listBycustomer != null && listBycustomer.size() > 0) {
+				float saleCardNumTotal = 0;
+				float backCardNumTotal = 0;
+				for(CharData charData : listBycustomer){
+					saleCardNumTotal += Float.parseFloat(charData.getTotal());
+					backCardNumTotal += Float.parseFloat(charData.getBack_order_total());
+				}
+				totalCardNumMap.put("saleCardNumTotal", saleCardNumTotal);
+				totalCardNumMap.put("backCardNumTotal", backCardNumTotal);
+			}else{
+				totalCardNumMap.put("saleCardNumTotal", "0");
+				totalCardNumMap.put("backCardNumTotal", "0");
+			}
+			resMap.put("total", totalCardNumMap);
+			
 			return BaseMsgInfo.success(resMap);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -259,10 +289,8 @@ public class OrderStaController {
 			}
 
 			// 2 ****** x轴：日期 y轴：当日所有场站的开卡总和
-			List<Map<String, Object>> carNumByDateList = statManager.returnCardNumByDate(proIdApIdList, begin, end);
-			Map<String, Object> dateMap = new HashMap<String, Object>();
-			dateMap.put("carNumByDate", carNumByDateList);
-			resList.add(dateMap);
+			Map<String, Object> repMap = statManager.returnCardNumByDate(proIdApIdList, begin, end);
+			resList.add(repMap);
 			// 3 ****** x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
 			List<Map<String, Object>> cardNumByAirPortList = statManager.getSticCardData(proIdApIdList, begin, end);
 			Map<String, Object> airPortMap = new HashMap<String, Object>();
@@ -350,10 +378,11 @@ public class OrderStaController {
 	 */
 	@RequestMapping(value="pageOrderInfoBySale")
 	@ResponseBody
-	public BaseMsgInfo pageOrderByUno(@RequestParam(value="uno",required=true) String uno,@RequestParam(value="orderState",required=true) int orderState,
+	public BaseMsgInfo pageOrderByUno(@RequestParam(value="uno",required=true) String uno,@RequestParam(value="state",required=true) String orderState,
 									  @RequestParam(value="pageNo") int pageNo,
-									  @RequestParam(value="pageSize") int pageSize){
-		return BaseMsgInfo.success(statManager.pageOrderInfoBySale(uno,orderState,pageNo,pageSize));
+									  @RequestParam(value="pageSize") int pageSize,
+									  @RequestParam(value="key",required=true) String key){
+		return BaseMsgInfo.success(statManager.pageOrderInfoBySale(uno,orderState,pageNo,pageSize,key));
 	}
 
 }

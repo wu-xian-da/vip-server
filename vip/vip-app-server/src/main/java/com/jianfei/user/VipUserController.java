@@ -1,9 +1,13 @@
 package com.jianfei.user;
 
+import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.service.base.AirportTransManager;
 import com.jianfei.core.service.base.AppConfigManager;
 import com.jianfei.core.service.base.impl.AppConfigManagerImpl;
+import com.jianfei.core.service.order.OrderPayManager;
 import com.jianfei.core.service.order.impl.ConsumeManagerImpl;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Vip用户Controller
@@ -35,6 +42,8 @@ public class VipUserController {
     @Autowired
     private ConsumeManagerImpl consumeManager;
 
+    @Autowired
+    private AirportTransManager transManager;
 
     /**
      * VIP 用户登录
@@ -118,5 +127,73 @@ public class VipUserController {
     public BaseMsgInfo loginOut(@RequestParam(value = "token ", required = false) String token
     ) {
         return BaseMsgInfo.success(true);
+    }
+
+    /**
+     * 接送机信息添加
+     *
+     * @return
+     */
+    @RequestMapping(value = "/airportTransInfo")
+    @ResponseBody
+    public BaseMsgInfo addAppAirportTrans(AppAirportTrans airportTrans
+    ) {
+        try {
+            return transManager.addAirportTransInfo(airportTrans);
+        }catch (Exception e){
+            log.error("添加接送机信息失败",e);
+            return BaseMsgInfo.msgFail("接送机信息添加失败");
+        }
+    }
+
+    /**
+     *  接送机次数统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/airportTransNum")
+    @ResponseBody
+    public BaseMsgInfo airportTransNum(@RequestParam(value = "phone", required = true) String phone
+    ) {
+        try {
+            return transManager.getAirportTransNum(phone);
+        }catch (Exception e){
+            log.error("接送机次数统计错误",e);
+            return BaseMsgInfo.msgFail("接送机次数统计失败");
+        }
+    }
+
+    /**
+     * 接送机城市列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/cityList")
+    @ResponseBody
+    public BaseMsgInfo cityList(
+    ) {
+        try {
+            return transManager.getTransCityList();
+        }catch (Exception e){
+            log.error("接送机城市列表失败",e);
+            return BaseMsgInfo.msgFail("接送机城市列表失败");
+        }
+    }
+
+    /**
+     * 接送机机场列表信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/airportList")
+    @ResponseBody
+    public BaseMsgInfo airportList(@RequestParam(value = "city", required = false) String city
+    ) {
+        try {
+            return transManager.getTransAirportList(city);
+        }catch (Exception e){
+            log.error("接送机机场列表失败",e);
+            return BaseMsgInfo.msgFail("接送机机场列表失败");
+        }
     }
 }

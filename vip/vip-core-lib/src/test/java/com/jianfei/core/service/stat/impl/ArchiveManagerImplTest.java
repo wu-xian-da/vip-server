@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.utils.DateUtil;
-import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.service.stat.ArchiveManager;
 
@@ -45,20 +43,6 @@ public class ArchiveManagerImplTest {
 
 	/**
 	 * Test method for
-	 * {@link com.jianfei.core.service.stat.impl.ArchiveManagerImpl#masterTotal(java.util.Map)}
-	 * .
-	 */
-	@Test
-	public void testMasterTotal() {
-		Map<String, Object> map = archiveManager
-				.masterTotal(new MapUtils.Builder()
-						.setKeyValue("start", "2016-01-02")
-						.setKeyValue("end", new Date()).build());
-		System.out.println(JSONObject.toJSONString(map));
-	}
-
-	/**
-	 * Test method for
 	 * {@link com.jianfei.core.service.stat.impl.ArchiveManagerImpl#masterTop(java.util.Map)}
 	 * .
 	 */
@@ -68,27 +52,6 @@ public class ArchiveManagerImplTest {
 				.masterTop(new MapUtils.Builder().setKeyValue("start",
 						new Date()).build());
 		System.out.println(JSONObject.toJSONString(map));
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.service.stat.impl.ArchiveManagerImpl#masterDraw(java.util.Map)}
-	 * .
-	 */
-	@Test
-	public void testzhuGuanTotal() {
-		Map<String, Object> lastMoth = DateUtil.getDelayDate(1);
-		List<String> list = new ArrayList<String>();
-		list.add("068ccfa912914ad9bd1b72a4c0b8b879");
-		list.add("c76c31bad8b647d9a9a44b64a86f56b6");
-		list.add("43778dcfcb4542ce80b3588dd759e530");
-		lastMoth.put("ariportIds", list);
-		Map<String, Object> map = archiveManager.zhuGuanTotal(lastMoth, "");
-		if (null == map) {
-			System.out.println(".......................");
-		} else {
-			System.out.println(map.get("total"));
-		}
 	}
 
 	@Test
@@ -131,11 +94,14 @@ public class ArchiveManagerImplTest {
 	}
 
 	@Test
-	public void testKitty() {
-		SimpleHash simpleHash = new SimpleHash("md5",
-				GloabConfig.getConfig("defalut.passwd"),
-				"f6e537de-04a6-47e1-834a-c6177295b327");
-		System.out.println(simpleHash.toString());
+	public void testDateProvinceIdAirport() {
+		Map<String, Object> mapCon = new HashMap<String, Object>();
+		mapCon.put("currentTime", "2016-06-27");
+		List<Map<String, Object>> maps = archiveManager
+				.dateProvinceIdApportIds(mapCon);
+		for (Map<String, Object> map : maps) {
+			System.out.println(JSONObject.toJSONString(map));
+		}
 	}
 
 	@Test
@@ -154,10 +120,40 @@ public class ArchiveManagerImplTest {
 
 	@Test
 	public void testDailyOrderArchice() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		Date date = DateUtil.getDate("2016-06-27", "yyyy-MM-dd");
-		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
-		archiveManager.baseDailyExtract(map);
+		List<String> list = dateList();
+		for (String str : list) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			Date date = DateUtil.getDate(str, "yyyy-MM-dd");
+			map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
+			archiveManager.baseDailyExtract(map);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public List<String> dateList() {
+		List<String> list = new ArrayList<String>();
+		Date date = DateUtil.getDate("2016-06-01", DateUtil.NORMAL_DATE_FORMAT);
+		for (int i = 0; i < 30; i++) {
+			Date d = DateUtil.addDays(date, i);
+			list.add(DateUtil.getDateStr(d, DateUtil.NORMAL_DATE_FORMAT));
+		}
+		for (String str : list) {
+			System.out.println(str);
+		}
+
+		return list;
+	}
+
+	@Test
+	public void testSelectAirportByProvinceIds() {
+		List<Map<String, Object>> list = archiveManager
+				.selectAirportByProvinceIds(new MapUtils.Builder().setKeyValue(
+						"code", "900").build());
+		System.out.println(JSONObject.toJSONString(list));
 	}
 
 }

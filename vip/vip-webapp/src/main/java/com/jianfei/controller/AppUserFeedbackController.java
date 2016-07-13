@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppUserFeedback;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.service.base.AppCustomerManager;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
@@ -56,7 +57,7 @@ public class AppUserFeedbackController {
 		//根据反馈id号获取该条反馈信息
 		AppUserFeedback appUserFeedbackInfo = appUserFeedbackImpl.getFeedBackInfoById(feedBackId);
 		model.addAttribute("appUserFeedbackInfo", appUserFeedbackInfo);
-		appCustomerManager.batchDealMsg(userId, model);
+		//appCustomerManager.batchDealMsg(userId, model);
 		return "feedback/feedBackDetail";
 	}
 	
@@ -70,14 +71,16 @@ public class AppUserFeedbackController {
 	 */
 	@RequestMapping("goHandFeedbackView")
 	public String goHandFeedbackView(String userId,String feedbackId,String feedbackContent,Model model){
-		MessageDto<AppCustomer> messageDto = appCustomerManager
-				.selectByPrimaryKey(userId);
+		MessageDto<AppCustomer> messageDto = appCustomerManager.selectByPrimaryKey(userId);
 		if (messageDto.isOk()) {
 			model.addAttribute("customer", messageDto.getData());
 		}
+		//--反馈信息
 		model.addAttribute("feedbackContent", feedbackContent);
+		//--反馈id
 		model.addAttribute("feedbackId", feedbackId);
-		appCustomerManager.batchDealMsg(userId, model);
+		
+		//appCustomerManager.batchDealMsg(userId, model);
 		return "feedback/handfeedbackView";
 	}
 	
@@ -92,10 +95,18 @@ public class AppUserFeedbackController {
 	@ResponseBody
 	public Map<String,Object> pageList(@RequestParam(value="page",defaultValue="1") Integer pageNo,
 			@RequestParam(value="rows",defaultValue="20") Integer pageSize, 
-			@RequestParam(value="feedbackState",defaultValue="2") Integer feedbackState ){
-		//设置刷选条件
+			@RequestParam(value="feedbackState",defaultValue="") String feedbackState,
+			@RequestParam(value="phoneOrUserName",defaultValue="") String phoneOrUserName){
+		
 		Map<String,Object> paramsMap = new HashMap<String,Object>();
-		paramsMap.put("feedbackState", feedbackState);
+		//反馈状态
+		if(!feedbackState.equals("")){
+			paramsMap.put("feedbackState", feedbackState);
+		}
+		//搜索关键字
+		if(!phoneOrUserName.equals("")){
+			paramsMap.put("phoneOrUserName", phoneOrUserName);
+		}
 		
 		PageInfo<AppUserFeedback> page = appUserFeedbackImpl.pageList(pageNo, pageSize, paramsMap);
 		//出参

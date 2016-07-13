@@ -1,7 +1,7 @@
 package com.jianfei.core.bean;
 
-import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +47,8 @@ public class SysViproom {
     private Date createTime;//创建时间
     
     private String pictureUrl;
+    //一个vip室对应的多个图片url
+    private String[] newFileUrl;
     
     /**
 	 * @return the pictureUrl
@@ -90,7 +92,7 @@ public class SysViproom {
 		this.activeState = activeState;
 	}
 
-	private List<AppPicture> pictures= Lists.newArrayList();
+	private List<AppPicture> pictures= new ArrayList<>();
 
     public String getViproomId() {
         return viproomId;
@@ -268,13 +270,26 @@ public class SysViproom {
 
 	
     public List<AppPicture> getPictures() {
-        AppPicture.getStaticAdderss(pictures);
         return pictures;
     }
 
     public void setPictures(List<AppPicture> pictures) {
         this.pictures = pictures;
     }
+
+	/**
+	 * @return the newFileUrl
+	 */
+	public String[] getNewFileUrl() {
+		return newFileUrl;
+	}
+
+	/**
+	 * @param newFileUrl the newFileUrl to set
+	 */
+	public void setNewFileUrl(String[] newFileUrl) {
+		this.newFileUrl = newFileUrl;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -286,9 +301,9 @@ public class SysViproom {
 				+ ", singleconsumeMoney=" + singleconsumeMoney + ", roomNum=" + roomNum + ", openTime=" + openTime
 				+ ", endTime=" + endTime + ", longitude=" + longitude + ", province=" + province + ", city=" + city
 				+ ", country=" + country + ", address=" + address + ", remark1=" + remark1 + ", dtflag=" + dtflag
-				+ ", latitude=" + latitude + ", activeState=" + activeState + ", pictures=" + pictures + "]";
+				+ ", latitude=" + latitude + ", activeState=" + activeState + ", createTime=" + createTime
+				+ ", pictureUrl=" + pictureUrl + ", newFileUrl=" + Arrays.toString(newFileUrl) + ", pictures="
+				+ pictures + "]";
 	}
 
-	
-    
 }

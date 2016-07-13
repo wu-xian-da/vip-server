@@ -31,37 +31,54 @@
 		email, address, password,
 		use_type, remark1,
 		dtflag, province, city,
-		country,province_name,city_name
+		country,province_name,city_name,card_type
 	</sql>
-	<select id="get" resultMap="BaseResultMap" parameterType="java.util.Map">
+	<select id="get" resultType="java.util.Map" parameterType="java.util.Map">
 		<![CDATA[
-			SELECT 
-			  `customer_id`,
-			  `customer_name`,
-			  `customer_identi`,
-			  `customer_phone`,
-			  `sex`,
-			  `email`,
-			  `address`,
-			  `password`,
-			  `use_type`,
-			  `remark1`,
-			  `dtflag`,
-			  `province`,
-			  `city`,
-			  `country`,
-			  `create_time`,
-			  `province_name`,
-			  `city_name`  
-			FROM `app_customer` customer 
+			select B.* from(
+				SELECT
+					customer.`customer_id`,
+					customer.`customer_name`,
+					customer.`customer_phone`,
+					customer.`sex`,
+					customer.card_type,
+					customer.`customer_identi`,
+					DATE_FORMAT(customer.birth_day,'%Y%m%d') as birthday,
+					ao.insured,
+					ao.order_id,
+					case 
+						when ao.order_state=1 or ao.order_state=3 or ao.order_state=2 THEN '已支付'
+						when ao.order_state=4 THEN '已退卡'
+					ELSE
+						'未支付'
+					end as orderstate,
+					ao.insured as action
+				FROM
+					`app_customer` customer
+				inner join app_orders ao on customer.customer_id=ao.customer_id
+			)B
 		 ]]>
 		<where>
 			<if test="namephone!=null and namephone!=''">
-				and (customer_name like CONCAT('%', #{namephone}, '%') or
+			    (customer_name like CONCAT('%', #{namephone}, '%') or
 				customer_phone like CONCAT('%', #{namephone}, '%') )
+			</if>
+			<if test="orderstate!=null and orderstate!=''">
+				and orderstate=#{orderstate}
+			</if>
+			<if test="insured!=null and insured!=''">
+				and ao.insured=#{insured}
 			</if>
 		</where>
 	</select>
+	
+	<update id="updateDeliveryState" parameterType="String">
+			UPDATE 
+			   app_orders
+			SET
+			  insured = 1
+			WHERE order_id = #{id} ;
+	</update>
 
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -87,7 +104,7 @@
 		SELECT
 		ac.customer_id,ac.customer_name,ac.customer_identi,ac.customer_phone,ac.sex,ac.email,ac.address,ac.use_type,ac.remark1,ac.dtflag,ac.province,ac.city,ac.country,
 		ac.province_name,ac.city_name,av.active_time,av.card_no,av.expiry_time,av.card_state,av.card_name FROM app_customer ac left join app_orders o on ac.customer_id=o.customer_id join app_order_card aoc on o.order_id=aoc.order_id join app_vipcard av on aoc.card_id=av.card_no
-		where ac.customer_phone = #{phone,jdbcType=VARCHAR} AND ac.dtflag=0 AND o.order_state!=0
+		where ac.customer_phone = #{phone,jdbcType=VARCHAR} AND ac.dtflag=1 AND o.order_state in(1,2,3)
 	</select>
 
 	<select id="selectByPhone" resultMap="BaseResultMap"
@@ -131,7 +148,7 @@
 	<select id="postInfo" resultType="java.util.HashMap"
 		parameterType="String">
 		<![CDATA[
-			SELECT v.`address`,v.`invoice_type`,v.`invoice_title`,ao.`invoice_flag` FROM `app_invoice`  v 
+			SELECT v.*,ao.`invoice_flag` FROM `app_invoice`  v 
 			INNER JOIN `app_orders` ao ON v.`order_id`=ao.`order_id` 
 			WHERE ao.`customer_id`=#{id}
 		 ]]>
@@ -140,8 +157,10 @@
 	<select id="backMoneyInfo" resultType="java.util.HashMap"
 		parameterType="String">
 		<![CDATA[
-			SELECT  back.`money`,back.`back_type` FROM `app_card_back` back 
+			SELECT  back.`money`,back.`back_type`,back.order_id,ord.order_state
+			FROM `app_card_back` back 
 			INNER JOIN `app_vipcard` vip ON back.`card_no`=vip.`card_no` 
+			INNER JOIN app_orders ord ON ord.order_id=back.order_id
 			WHERE vip.`customer_id`=#{id}
 		 ]]>
 	</select>
