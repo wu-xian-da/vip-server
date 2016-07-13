@@ -409,7 +409,6 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public BaseMsgInfo updatePayState(AppOrders appOrders) {
-        log.info("更新订单状态:"+appOrders.getOrderId());
         if (StringUtils.isBlank(appOrders.getOrderId())){
             return BaseMsgInfo.msgFail("订单号不存在");
         }
@@ -423,9 +422,8 @@ public class OrderManagerImpl implements OrderManager {
         }
         //2、选择性更新订单信息
         appOrders.setOrderState(VipOrderState.ALREADY_PAY.getName());
-       // appOrders.setPayTime(new Date());
         int num = appOrdersMapper.updateByPrimaryKeySelective(appOrders);
-
+        log.info("更新订单："+order.getOrderId()+"支付状态为已支付，订单详细信息为:"+order.toString());
         //更新VIP用户激活
         vipUserManager.updateUserSate(order.getCustomer().getPhone(),VipUserSate.ACTIVE);
         //更新VIP卡状态为待激活
@@ -433,11 +431,12 @@ public class OrderManagerImpl implements OrderManager {
         vipcard.setCardNo(order.getVipCards().get(0).getCardNo());
         vipcard.setCardState(VipCardState.TO_ACTIVATE.getName());
         vipCardManager.updateVipCard(vipcard);
+        log.info("更新VIP卡为待激活状态,卡号为:"+vipcard.getCardNo());
         //构建消息体 并放入消息队列
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(order.getCustomer().getPhone()).setMsgType(MsgType.ACTIVE_CARD.getName()).
                 setVipCardNo(order.getVipCards().get(0).getCardNo()).setUserName(order.getCustomer().getCustomerName());
         //放入消息队列
-        log.info(msgBuilder);
+        log.info("给手机号"+msgBuilder.getUserPhone()+"发送激活信息:"+msgBuilder);
          queueManager.sendMessage(msgBuilder);
         if (num > 0) {
             return BaseMsgInfo.success(true);
