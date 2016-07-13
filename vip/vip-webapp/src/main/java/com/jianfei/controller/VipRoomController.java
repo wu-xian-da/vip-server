@@ -241,6 +241,8 @@ public class VipRoomController extends BaseController {
 		//3、根据vip所属省份id返回该省份下机场列表
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("province", viproom.getProvince());
+		paramMap.put("dtflag", "0");
+		paramMap.put("state", "0");
 		List<Map<String, Object>> airPortlist = ariPortService.mapList(paramMap);
 		model.addAttribute("airPortlist",airPortlist);
 		return "viproom/editVipRoom";
@@ -306,6 +308,7 @@ public class VipRoomController extends BaseController {
 	public List<Map<String, Object>> getAirPortList(@RequestParam(value = "provinceId") String provinceId) {
 		Map<String, Object> reqMap = new HashMap<String, Object>();
 		reqMap.put("province", provinceId);
+		reqMap.put("dtflag", "0");
 		reqMap.put("state", "0");
 		List<Map<String, Object>> list = ariPortService.mapList(reqMap);
 		return list;

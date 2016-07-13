@@ -67,7 +67,7 @@ public class AppCustomer implements Serializable {
 	 * @return the createTime
 	 * @version 1.0.0
 	 */
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -245,7 +245,7 @@ public class AppCustomer implements Serializable {
 	public void setCardType(int cardType) {
 		this.cardType = cardType;
 	}
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
 	public Date getBirthDay() {
 		return birthDay;
 	}

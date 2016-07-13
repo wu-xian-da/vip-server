@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.http.HttpRequest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +31,6 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
-import com.jianfei.core.common.utils.impl.HttpServiceRequest;
 import com.jianfei.core.service.base.AriPortManager;
 
 /**
@@ -66,14 +64,13 @@ public class AriPortController extends BaseController {
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			@RequestParam(value = "name", required = false) String name,
 			HttpServletRequest request) {
+		Map<String, Object> map = new MapUtils.Builder()
+				.setKeyValue("name", name)
+				.setKeyValue("dtflag", GloabConfig.OPEN)
+				.setKeyValue("order", request.getParameter("order"))
+				.setKeyValue("sort", request.getParameter("sort")).build();
 		PageHelper.startPage(page, rows);
-		// searchParams.put("sort", sortCplumn(request));
-		List<Map<String, Object>> maps = ariPortManager
-				.mapList(new MapUtils.Builder().setKeyValue("name", name)
-						.setKeyValue("dtflag", GloabConfig.OPEN)
-						.setKeyValue("order", request.getParameter("order"))
-						.setKeyValue("sort", request.getParameter("sort"))
-						.build());
+		List<Map<String, Object>> maps = ariPortManager.mapList(map);
 		if (!CollectionUtils.isEmpty(maps)) {
 			return bindGridData(new PageInfo<Map<String, Object>>(maps));
 		}

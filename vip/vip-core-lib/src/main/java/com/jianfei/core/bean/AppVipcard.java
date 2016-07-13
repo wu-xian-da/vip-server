@@ -87,7 +87,7 @@ public class AppVipcard {
         this.valideTime = valideTime;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     public Date getActiveTime() {
         return activeTime;
     }
@@ -150,7 +150,7 @@ public class AppVipcard {
 				+ ", nfcId=" + nfcId + ", dtflag=" + dtflag + "]";
 	}
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     public Date getExpiryTime() {
         return expiryTime;
     }

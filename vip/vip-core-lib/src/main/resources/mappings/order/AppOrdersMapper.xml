@@ -458,6 +458,7 @@
 			<id column="card_no" property="cardNo" jdbcType="VARCHAR" />
 			<result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
 			<result column="card_type" property="cardType" jdbcType="INTEGER" />
+			<result column="card_state" property="cardState" jdbcType="INTEGER" />
 		</collection>
 		<collection property="customer" column="id" javaType="com.jianfei.core.bean.AppCustomer">
 			<result column="au.customer_id" property="customerId" jdbcType="VARCHAR" />

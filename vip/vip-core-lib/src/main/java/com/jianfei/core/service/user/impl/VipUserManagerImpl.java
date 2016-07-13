@@ -9,7 +9,10 @@ import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.mapper.AppCustomerMapper;
 import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
+import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.user.VipUserManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +30,7 @@ import java.util.List;
  */
 @Service
 public class VipUserManagerImpl implements VipUserManager {
-
+    private static Log log = LogFactory.getLog(VipUserManagerImpl.class);
     @Autowired
    private ValidateCodeManager validateCodeManager;
     @Autowired
@@ -48,12 +51,14 @@ public class VipUserManagerImpl implements VipUserManager {
             vipUser.setDtflag(VipUserSate.NOT_ACTIVE.getName());
             //用户ID关联上
             vipUser.setCustomerId(appCustomer.getCustomerId());
+            log.info("更新VIP用户状态为初始化状态:手机号:" + vipUser.getPhone() + "，姓名:" + vipUser.getCustomerName());
             return updateUser(vipUser);
         } else {
             vipUser.setCustomerId(IdGen.uuid());
             vipUser.setCreateTime(new Date());
             vipUser.setDtflag(VipUserSate.NOT_ACTIVE.getName());
             int num = customerMapper.insertSelective(vipUser);
+            log.info("添加VIP用户:手机号:" + vipUser.getPhone() + "，姓名:" + vipUser.getCustomerName());
             return num == 1 ? true : false;
         }
     }

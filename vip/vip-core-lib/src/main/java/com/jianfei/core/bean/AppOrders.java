@@ -121,7 +121,7 @@ public class AppOrders implements Serializable{
     public void setCustomerId(String customerId) {
         this.customerId = customerId == null ? null : customerId.trim();
     }
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     public Date getOrderTime() {
         return orderTime;
     }
@@ -219,7 +219,7 @@ public class AppOrders implements Serializable{
         this.payUserId = payUserId;
         return this;
     }
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     public Date getPayTime() {
         return payTime;
     }
@@ -268,5 +268,29 @@ public class AppOrders implements Serializable{
 
     public void setApplyType(int applyType) {
         this.applyType = applyType;
+    }
+
+    @Override
+    public String toString() {
+        return "AppOrders{" +
+                "orderId='" + orderId + '\'' +
+                ", id='" + id + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", orderTime=" + orderTime +
+                ", orderState=" + orderState +
+                ", payType=" + payType +
+                ", serialId='" + serialId + '\'' +
+                ", payMoney=" + payMoney +
+                ", invoiceFlag=" + invoiceFlag +
+                ", remark1='" + remark1 + '\'' +
+                ", remark2='" + remark2 + '\'' +
+                ", dtflag=" + dtflag +
+                ", operation='" + operation + '\'' +
+                ", saleNo='" + saleNo + '\'' +
+                ", airportId='" + airportId + '\'' +
+                ", payUserId='" + payUserId + '\'' +
+                ", payTime=" + payTime +
+                ", applyType=" + applyType +
+                '}';
     }
 }

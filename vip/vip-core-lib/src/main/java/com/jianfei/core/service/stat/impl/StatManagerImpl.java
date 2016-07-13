@@ -129,8 +129,8 @@ public class StatManagerImpl implements StatManager {
 					backTotal +=0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
-					sum += Float.parseFloat(charData.getTotal());
-					backTotal += Float.parseFloat(charData.getBack_order_total());
+					sum += Float.parseFloat(charData.getTotal() == null ? "0" : charData.getTotal());
+					backTotal += Float.parseFloat(charData.getBack_order_total() == null ? "0" : charData.getBack_order_total());
 				}
 			}
 			//场站名称
@@ -192,8 +192,8 @@ public class StatManagerImpl implements StatManager {
 					backTotal +=0;
 				}else{
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
-					sum += Float.parseFloat(charData.getTotal());
-					backTotal += Float.parseFloat(charData.getBack_order_total());
+					sum += Float.parseFloat(charData.getTotal() == null ? "0" :charData.getTotal());
+					backTotal += Float.parseFloat(charData.getBack_order_total() ==null ? "0" : charData.getBack_order_total());
 				}
 			}
 			mapItem.put("date", date);
@@ -246,8 +246,8 @@ public class StatManagerImpl implements StatManager {
 					}else{
 						//将json字符串转换为CharDate对象
 						CharData charData = JSON.parseObject(obj.toString(), CharData.class);
-						sum += Float.parseFloat(charData.getAvgNum());
-						sum_back += Float.parseFloat(charData.getAvgNum_back());
+						sum += Float.parseFloat(charData.getAvgNum()==null ? "0.00": charData.getAvgNum());
+						sum_back += Float.parseFloat(charData.getAvgNum_back() ==null ? "0.00" : charData.getAvgNum_back());
 
 					}
 				}
