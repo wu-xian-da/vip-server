@@ -192,8 +192,8 @@ public class OrderStaController {
 						// 归档日期
 						String fileTime = formatDate(charData.getDate());
 						if (fileTime.equals(dateStr)) {
-							map.put("total", charData.getTotal());
-							map.put("back_total", charData.getBack_order_total());
+							map.put("total", charData.getTotal() ==null ? "0" : charData.getTotal());
+							map.put("back_total", charData.getBack_order_total() == null ? "0" : charData.getBack_order_total());
 							flag = 1;
 							break;
 						}
@@ -219,8 +219,8 @@ public class OrderStaController {
 				float saleCardNumTotal = 0;
 				float backCardNumTotal = 0;
 				for(CharData charData : listBycustomer){
-					saleCardNumTotal += Float.parseFloat(charData.getTotal());
-					backCardNumTotal += Float.parseFloat(charData.getBack_order_total());
+					saleCardNumTotal += Float.parseFloat(charData.getTotal() == null ? "0" : charData.getTotal());
+					backCardNumTotal += Float.parseFloat(charData.getBack_order_total() == null ? "0" : charData.getBack_order_total());
 				}
 				totalCardNumMap.put("saleCardNumTotal", saleCardNumTotal);
 				totalCardNumMap.put("backCardNumTotal", backCardNumTotal);
