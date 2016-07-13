@@ -42,11 +42,12 @@
 	</sql>
 	<!-- 禁用机场，逻辑删除 -->
 	<update id="forbitAirport" parameterType="java.util.Map">
-		update sys_airport set dtflag=#{dtflag}  where airport_id=#{id}
+		update sys_airport set
+		dtflag=#{dtflag} where airport_id=#{id}
 	</update>
 
 	<select id="mapList" resultType="java.util.Map" parameterType="java.util.Map">
-	select * from (
+		select * from (
 		<![CDATA[
 			SELECT
 				t1.airport_id,
@@ -277,13 +278,13 @@
 		select * from sys_airport where airport_id =
 		#{airPortId}
 	</select>
-
+	<!-- 验证机场是否存在 -->
 	<select id="validateAirPortExist" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		select `airport_id`,`airport_name` from sys_airport sa where
-		sa.airport_name =#{name}
+		sa.airport_name =#{name} and dtflag=0
 		<if test="id!=null">
-			and sa.airport_id!=#{id};
+			and sa.airport_id!=#{id}
 		</if>
 	</select>
 </mapper>

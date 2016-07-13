@@ -107,7 +107,7 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void cacheDate() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("currentTime", "2016-06-28");
+		map.put("currentTime", "2016-07-12");
 		List<Map<String, Object>> datePid = archiveManager
 				.dateProvinceIdRedisCache(map);
 		System.out.println("~~~~~~~~~~~~datePid->"

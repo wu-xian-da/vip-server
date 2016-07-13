@@ -307,8 +307,18 @@
 						sum(aoa.order_num_back)
 					END AS back_order_total,
 					 B.pcount,
-					 sum(aoa.order_num) / pcount AS avgNum,
-					 sum(aoa.order_num_back) / pcount AS avgNum_back
+					CASE 
+					WHEN  sum(aoa.order_num) / pcount IS  NULL THEN
+						0
+					ELSE
+						sum(aoa.order_num) / pcount
+					END AS avgNum,
+					CASE
+					WHEN sum(aoa.order_num_back) / pcount IS NULL THEN
+						0
+					ELSE
+					    sum(aoa.order_num) / pcount
+					END AS avgNum_back
 		    from app_order_archive aoa 
 		    LEFT JOIN (
 				SELECT
