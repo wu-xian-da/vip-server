@@ -102,8 +102,7 @@
 	<select id="selectCustomerDetailByPhone" resultMap="ResultMapWithDetail"
 		parameterType="java.lang.String">
 		SELECT
-		ac.customer_id,ac.customer_name,ac.customer_identi,ac.customer_phone,ac.sex,ac.email,ac.address,ac.use_type,ac.remark1,ac.dtflag,ac.province,ac.city,ac.country,
-		ac.province_name,ac.city_name,av.active_time,av.card_no,av.expiry_time,av.card_state,av.card_name FROM app_customer ac left join app_orders o on ac.customer_id=o.customer_id join app_order_card aoc on o.order_id=aoc.order_id join app_vipcard av on aoc.card_id=av.card_no
+		ac.*,av.active_time,av.card_no,av.expiry_time,av.card_state,av.card_name FROM app_customer ac left join app_orders o on ac.customer_id=o.customer_id join app_order_card aoc on o.order_id=aoc.order_id join app_vipcard av on aoc.card_id=av.card_no
 		where ac.customer_phone = #{phone,jdbcType=VARCHAR} AND ac.dtflag=1 AND o.order_state in(1,2,3)
 	</select>
 

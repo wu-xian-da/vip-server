@@ -121,7 +121,7 @@ public class AppOrders implements Serializable{
     public void setCustomerId(String customerId) {
         this.customerId = customerId == null ? null : customerId.trim();
     }
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     public Date getOrderTime() {
         return orderTime;
     }
@@ -219,7 +219,7 @@ public class AppOrders implements Serializable{
         this.payUserId = payUserId;
         return this;
     }
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     public Date getPayTime() {
         return payTime;
     }
