@@ -18,6 +18,8 @@
 		<result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
 		<result column="airport_id" property="airportId" jdbcType="VARCHAR" />
 		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="pay_user_id" property="payUserId" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!--订单列表展示返回类型 -->
@@ -249,7 +251,7 @@
 	<sql id="Base_Column_List">
 		order_id, id, customer_id, order_time, order_state, pay_type, serial_id,
 		pay_money,
-		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id,apply_type
+		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id,apply_type,pay_time,pay_user_id
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -459,6 +461,7 @@
 			<result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
 			<result column="card_type" property="cardType" jdbcType="INTEGER" />
 			<result column="card_state" property="cardState" jdbcType="INTEGER" />
+			<result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
 		</collection>
 		<collection property="customer" column="id" javaType="com.jianfei.core.bean.AppCustomer">
 			<result column="au.customer_id" property="customerId" jdbcType="VARCHAR" />
