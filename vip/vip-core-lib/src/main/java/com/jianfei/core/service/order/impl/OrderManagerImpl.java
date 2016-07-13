@@ -123,7 +123,6 @@ public class OrderManagerImpl implements OrderManager {
         BeanUtils.copyProperties(customer, addInfoDto);
         vipUserManager.addORUpdateUser(customer);
 
-
         //4、添加订单信息
         AppOrders orders = new AppOrders();
         BeanUtils.copyProperties(orders, addInfoDto);
@@ -152,6 +151,7 @@ public class OrderManagerImpl implements OrderManager {
 
         addInfoDto.setOrderId(orders.getOrderId());
         addInfoDto.setMoney(vipCard.getInitMoney());
+        log.info("订单添加:订单ID:" + orders.getOrderId() + ",用户手机号:" + customer.getPhone() + ",用户姓名:" + customer.getCustomerName());
         return BaseMsgInfo.success(addInfoDto);
 
     }
