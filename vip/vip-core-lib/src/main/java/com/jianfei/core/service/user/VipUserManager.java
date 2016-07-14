@@ -3,6 +3,7 @@ package com.jianfei.core.service.user;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.dto.exception.GetQrcodeException;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -66,4 +67,11 @@ public interface VipUserManager {
      * @return
      */
     boolean updateUserSate(String phone,VipUserSate vipUserSate);
+
+    /**
+     * 获取用户二维码
+     * @param phone
+     * @return
+     */
+    BaseMsgInfo getQRCode(String phone) throws GetQrcodeException;
 }
