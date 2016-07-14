@@ -488,7 +488,8 @@ public class OrderManagerImpl implements OrderManager {
         appCardBack.setServiceMoney(useDetailInfo.getUsedMoney());
         appCardBack.setSafeMoney(100);
         User user=saleUserManager.getSaleUser(appCardBack.getCreaterId());
-        appCardBack.setCustomerName(user.getName());
+        appCardBack.setCreateName(user.getName());
+        appCardBack.setCustomerName(orders.getCustomer().getCustomerName());
 
         //3、插入数据库
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
