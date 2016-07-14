@@ -47,12 +47,10 @@ public class VipUserManagerImpl implements VipUserManager {
         //查询是否存在相应的顾客
         AppCustomer appCustomer = getUser(vipUser.getPhone());
         if (StringUtils.isNotBlank(appCustomer.getCustomerId())) {
-            //用户状态未未激活状态
-            vipUser.setDtflag(VipUserSate.NOT_ACTIVE.getName());
             //用户ID关联上
             vipUser.setCustomerId(appCustomer.getCustomerId());
-            log.info("更新VIP用户状态为初始化状态:手机号:" + vipUser.getPhone() + "，姓名:" + vipUser.getCustomerName());
-            return updateUser(vipUser);
+            log.info("关联已存在用户:手机号:" + vipUser.getPhone() + "，姓名:" + vipUser.getCustomerName());
+            return true;
         } else {
             vipUser.setCustomerId(IdGen.uuid());
             vipUser.setCreateTime(new Date());
