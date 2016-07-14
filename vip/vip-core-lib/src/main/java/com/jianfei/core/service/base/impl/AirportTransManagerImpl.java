@@ -122,6 +122,6 @@ public class AirportTransManagerImpl implements AirportTransManager {
     @Override
     public BaseMsgInfo getAirportTransNum(String phone) {
         List<AppAirportTrans> appAirportTranses = appAirportTransMapper.selectByPhone(phone);
-        return appAirportTranses == null || appAirportTranses.size() == 0 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
+        return appAirportTranses == null || appAirportTranses.size() <= 2 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
     }
 }
