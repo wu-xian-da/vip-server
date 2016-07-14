@@ -404,7 +404,7 @@ public class OrderController extends BaseController {
 				outData.put("backMoneyCard",appCardBack.getCustomerCard());
 				outData.put("backType", appCardBack.getBackType());
 				outData.put("backName", appCardBack.getBankName());
-				outData.put("customerName", appCardBack.getCustomerName());
+				outData.put("customerName", appOrder.getCustomerName());
 				outData.put("applyBackCardMethod",appOrder.getApplyType());
 				//发票状态
 				AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
@@ -503,7 +503,7 @@ public class OrderController extends BaseController {
 					outData.put("backType", appCardBack.getBackType());
 					outData.put("phone", appOrder.getCustomerPhone());
 					outData.put("backName", appCardBack.getBankName());
-					outData.put("customerName", appCardBack.getCustomerName());
+					outData.put("customerName", appOrder.getCustomerName());
 					
 					int applyTypes = appOrder.getApplyType();
 					outData.put("applyBackCardMethod", appOrder.getApplyType());
