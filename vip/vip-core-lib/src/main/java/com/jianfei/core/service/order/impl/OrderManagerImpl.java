@@ -481,7 +481,6 @@ public class OrderManagerImpl implements OrderManager {
         appCardBack.setCustomerName(user.getName());
 
         //3、插入数据库
-       boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
@@ -491,6 +490,7 @@ public class OrderManagerImpl implements OrderManager {
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
             //紧急退卡 更改订单状态为已退款 和申请方式为紧急
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
+            appCardBack.setFinishTime(new Date());
             msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
         } else {
             //审核通过
@@ -501,6 +501,7 @@ public class OrderManagerImpl implements OrderManager {
                 msgBuilder.setMsgType(MsgType.QT_BACK_CARD_APPLY.getName());
             }
         }
+        boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         log.info("更改VIP卡状态");
         AppVipcard vipcard=new AppVipcard();
         vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
