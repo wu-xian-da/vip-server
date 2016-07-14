@@ -112,6 +112,7 @@ public class OrderManagerImpl implements OrderManager {
 
         //2、校验空港易行的姓名接口及VIP卡
         flag=airportEasyManager.vipuserStatus(addInfoDto.getCustomerName(),addInfoDto.getPhone());
+        log.info("验证空港易行用户名:"+addInfoDto.getCustomerName()+",手机号:"+addInfoDto.getPhone()+"验证结果:"+flag);
         if (!flag){
             return BaseMsgInfo.msgFail("本用户已限制购买");
         }
