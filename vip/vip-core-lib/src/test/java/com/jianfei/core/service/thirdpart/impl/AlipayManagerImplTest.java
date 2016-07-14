@@ -30,6 +30,7 @@ import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.common.utils.DateUtil;
+import com.jianfei.core.dto.exception.GetQrcodeException;
 import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.tencent.protocol.native_protocol.NativePayReqData;
@@ -125,7 +126,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_getcardcode(){
 		try {
-			for (Long ii = 25779l;ii<25779l + 20 ;ii++)
+			for (Long ii = 55789l;ii<55789l + 2 ;ii++)
 				airportEasyManager.getCardCode(ii.toString());
 			
 //			airportEasyManager.getCardCode("31213413415");
@@ -230,6 +231,27 @@ public class AlipayManagerImplTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testkonggang_vipuserStatus(){
+		airportEasyManager.vipuserStatus("刘磊", "13900990099");
+	}
+	
+	@Test
+	public void testkonggang_cardBindStatus(){
+		airportEasyManager.cardBindStatus("13900990099");
+	}
+	
+	@Test
+	public void testkonggang_getQrcode(){
+		try {
+			String result = airportEasyManager.getQrcode("13900990099");
+			System.out.println(result);
+		} catch (GetQrcodeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

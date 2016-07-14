@@ -25,6 +25,7 @@ import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.impl.HttpServiceRequest;
 import com.jianfei.core.dto.AirportEasyUseInfo;
+import com.jianfei.core.dto.exception.GetQrcodeException;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.tencent.common.MD5;
 
@@ -186,11 +187,73 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 													"&sign=" + ackSign);
 		JSONObject obj = JSON.parseObject(ack);
 		return obj.get("code").equals("00")?true:false;
-//		if (obj.get("code").equals("00"))
-//			return true;
-//		else
-//			return false;
     }
+    
+    /**
+     * 判定手机号和姓名状态
+     * @param userName 姓名
+     * @param userPhone 手机号
+     * @return
+     */
+	@Override
+	public boolean vipuserStatus(String userName, String userPhone) {
+    	GloabConfig.getInstance();
+		String sign = sign("partner="+GloabConfig.getConfig("konggang.partner")+"&mobile="+userPhone + GloabConfig.getConfig("konggang.key"));
+    	String result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"VerifyUser?"+
+    															"partner="+ GloabConfig.getConfig("konggang.partner") + 
+    															"&mobile="+userPhone + 
+    															"&name="+userName + 
+    															"&sign=" + sign);
+    	
+    	logger.info("vipuserStatus:"+result);
+    	System.out.println("vipuserStatus:"+result);
+		JSONObject obj = JSON.parseObject(result);
+		return obj.get("code").equals("00")?true:false;
+	}
+	
+    /**
+     * 判定VIP卡是否已绑定
+     * @param vipCardNo 卡号
+     * @return
+     */
+	@Override
+	public boolean cardBindStatus(String vipCardNo) {
+    	String result = null;
+    	String sign = sign("partner="+GloabConfig.getConfig("konggang.partner")+"&verify_code="+vipCardNo+GloabConfig.getConfig("konggang.key"));
+    	result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"VerifyCard?"+
+    													"partner="+GloabConfig.getConfig("konggang.partner")+
+    													"&verify_code="+vipCardNo +
+    													"&sign=" + sign);
+    	
+    	logger.info("cardBindStatus:"+result);
+    	System.out.println("cardBindStatus:"+result);
+		JSONObject obj = JSON.parseObject(result);
+		return obj.get("code").equals("00")?true:false;
+	}
+
+    /**
+     * 获取核销二维码
+     * @param vipCardNo 卡号
+     * @return 
+     * @throws Exception 
+     */
+	@Override
+	public String getQrcode(String vipCardNo) throws GetQrcodeException {
+    	String result = null;
+    	String sign = sign("partner="+GloabConfig.getConfig("konggang.partner")+"&verify_code="+vipCardNo+GloabConfig.getConfig("konggang.key"));
+    	result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"GetCardUuid?"+
+    													"partner="+GloabConfig.getConfig("konggang.partner")+
+    													"&verify_code="+vipCardNo +
+    													"&sign=" + sign);
+    	
+    	logger.info("getQrcode:"+result);
+    	System.out.println("getQrcode:"+result);
+		JSONObject obj = JSON.parseObject(result);
+		if (obj.get("code").equals("00"))
+			return obj.get("uuid").toString();
+		else
+			throw new GetQrcodeException("获取核销码失败");
+	}
     
     public String sign(String str){
     	return MD5.MD5Encode(str).toUpperCase();
@@ -234,4 +297,6 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 //		else
 //			return false;
 	}
+	
+
 }

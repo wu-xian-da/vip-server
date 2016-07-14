@@ -105,7 +105,7 @@ public class OrderManagerImpl implements OrderManager {
             return BaseMsgInfo.success(addInfoDto);
         }
         //1、校验用户和手机验证码
-        boolean flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
+        boolean flag = true;//validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
         if (!flag) {
             return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
         }

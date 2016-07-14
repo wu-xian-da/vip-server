@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 
 import com.jianfei.core.dto.AirportEasyUseInfo;
+import com.jianfei.core.dto.exception.GetQrcodeException;
 
 
 /**
@@ -59,4 +60,26 @@ public interface AirportEasyManager {
      */
     boolean sendConfirmInfo(String batchNo) throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException;
 
+    /**
+     * 判定手机号和姓名状态
+     * @param userName 姓名
+     * @param userPhone 手机号
+     * @return
+     */
+    boolean vipuserStatus(String userName,String userPhone);
+    
+    /**
+     * 判定VIP卡是否已绑定
+     * @param vipCardNo 卡号
+     * @return
+     */
+    boolean cardBindStatus(String vipCardNo);
+    
+    /**
+     * 获取核销二维码
+     * @param vipCardNo 卡号
+     * @return 
+     * @throws Exception 
+     */
+    String getQrcode(String vipCardNo) throws GetQrcodeException;
 }

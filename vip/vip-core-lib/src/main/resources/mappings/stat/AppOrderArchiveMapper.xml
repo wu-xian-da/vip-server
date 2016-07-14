@@ -293,6 +293,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
 		AND aoa.airport_id = #{airport_id}
 	</if>
 	GROUP BY aoa.bid
+	ORDER BY order_num desc
 	LIMIT #{pageStart},#{pageSize}
   </select>
   
