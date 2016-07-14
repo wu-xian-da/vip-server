@@ -124,8 +124,8 @@ public class OrderManagerImpl implements OrderManager {
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
         if (vipCard == null) {
             return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
-        } else if (VipCardState.ACTIVE.getName() == vipCard.getCardState()) {
-            return BaseMsgInfo.msgFail("VIP卡已使用");
+        } else if (VipCardState.NOT_ACTIVE.getName() != vipCard.getCardState()) {
+            return BaseMsgInfo.msgFail("此VIP卡已使用或其他状态");
         }
 
         //3、添加或修改用户信息
