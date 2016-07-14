@@ -110,7 +110,16 @@ public class OrderManagerImpl implements OrderManager {
             return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
         }
 
-        //2、根据查询VIP号查询卡片信息
+        //2、校验空港易行的姓名接口及VIP卡
+        flag=airportEasyManager.vipuserStatus(addInfoDto.getCustomerName(),addInfoDto.getPhone());
+        if (!flag){
+            return BaseMsgInfo.msgFail("本用户已限制购买");
+        }
+        flag=airportEasyManager.cardBindStatus(addInfoDto.getVipCardNo());
+        if (flag){
+            return BaseMsgInfo.msgFail("本VIP卡号已经使用请更换VIP卡号");
+        }
+        //3、根据查询VIP号查询卡片信息
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
         if (vipCard == null) {
             return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
