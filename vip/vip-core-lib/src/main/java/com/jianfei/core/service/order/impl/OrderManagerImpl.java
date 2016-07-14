@@ -115,10 +115,10 @@ public class OrderManagerImpl implements OrderManager {
         if (!flag){
             return BaseMsgInfo.msgFail("本用户已限制购买");
         }
-        flag=airportEasyManager.cardBindStatus(addInfoDto.getVipCardNo());
+      /*  flag=airportEasyManager.cardBindStatus(addInfoDto.getVipCardNo());
         if (flag){
             return BaseMsgInfo.msgFail("本VIP卡号已经使用请更换VIP卡号");
-        }
+        }*/
         //3、根据查询VIP号查询卡片信息
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
         if (vipCard == null) {
