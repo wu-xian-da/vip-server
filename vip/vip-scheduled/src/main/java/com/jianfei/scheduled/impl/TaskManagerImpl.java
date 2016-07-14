@@ -5,6 +5,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +130,22 @@ public class TaskManagerImpl implements ITaskManager {
 						JSONObject.toJSONString(messageDto));
 			}
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.scheduled.ITaskManager#validateOrdereIsEfective()
+	 */
+	@Scheduled(fixedRate = 1800000)
+	@Override
+	public void validateOrdereIsEfective() {
+		logger.info(DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+				+ "<<<<<<开始扫描无效订单>>>>>>>");
+		Date d = DateUtil.addInteger(new Date(), Calendar.MINUTE, -30);
+		String endTime = DateUtil.dateToString(d, DateUtil.ALL_FOMAT);
+		int result = archiveManager.validateOrdereIsEfectiveAndHadnle(endTime);
+		logger.info("<<<<<<每隔30分钟扫描订单是否有效:发现" + result + "条无效订单。>>>>>>>");
 	}
 
 }

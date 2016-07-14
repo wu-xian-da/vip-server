@@ -107,6 +107,7 @@ public class QueueManagerImplTest {
 	public void vipCardState() {
 		// 修改卡的状态
 		if (vipCardManager.activeAppCard(new MapUtils.Builder()
+				.setKeyValue("activeTime", new Date())
 				.setKeyValue("card_state",
 						VipCardState.UNBUNDLING_FAIL.getName())// 更改VIP卡状态
 				.setKeyValue("cardNo", "07927752083").build())) {

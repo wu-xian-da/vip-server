@@ -33,7 +33,7 @@ public enum MsgType {
      */
     ACTIVE_CARD("005"),
     /**
-     * 退卡申请后短信
+     * 现金支付 退卡申请后短信
      */
     BACK_CARD_APPLY("006"),
     /**
@@ -43,7 +43,11 @@ public enum MsgType {
     /**
      * 取消退卡短信
      */
-    REMOVE_BACK_CARD("008");
+    REMOVE_BACK_CARD("008"),
+    /**
+     * 其他支付 退卡申请后短信
+     */
+    QT_BACK_CARD_APPLY("009");
 
     private String name;
 

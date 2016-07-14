@@ -495,7 +495,11 @@ public class OrderManagerImpl implements OrderManager {
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
-            msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
+            if (PayType.CASHPAY.getName() == orders.getPayType()) {
+                msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
+            } else {
+                msgBuilder.setMsgType(MsgType.QT_BACK_CARD_APPLY.getName());
+            }
         }
         log.info("更改VIP卡状态");
         AppVipcard vipcard=new AppVipcard();
@@ -667,6 +671,7 @@ public class OrderManagerImpl implements OrderManager {
             // 计算卡的有效期
             Date expireDate = DateUtil.addDays(new Date(),
                     vipcard.getValideTime());
+            vipcard.setActiveTime(new Date());
             vipcard.setExpiryTime(expireDate);
             vipcard.setCardState(VipCardState.ACTIVE.getName());
             vipCardManager.updateVipCard(vipcard);

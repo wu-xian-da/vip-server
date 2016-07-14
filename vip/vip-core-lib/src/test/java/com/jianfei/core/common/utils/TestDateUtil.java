@@ -84,7 +84,6 @@ public class TestDateUtil {
 		System.out.println("上个月第一天：" + format.format(calendar.getTime()));
 	}
 
-
 	// 5、获取上个月的最后一天
 	@Test
 	public void getBeforeLastMonthdate() throws Exception {
@@ -95,5 +94,15 @@ public class TestDateUtil {
 		calendar.set(Calendar.DAY_OF_MONTH,
 				calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		System.out.println("上个月最后一天：" + sf.format(calendar.getTime()));
+	}
+
+	// 6、获取上个月的最后一天
+
+	@Test
+	public void addMinute() throws Exception {
+		Date date = new Date();
+		System.out.println(DateUtil.dateToString(date, DateUtil.ALL_FOMAT));
+		Date d = DateUtil.addInteger(date, Calendar.MINUTE, -35);
+		System.out.println(DateUtil.dateToString(d ,DateUtil.ALL_FOMAT));
 	}
 }

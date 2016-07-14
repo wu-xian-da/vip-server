@@ -8,6 +8,7 @@
 package com.jianfei.core.service.stat.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -154,6 +155,14 @@ public class ArchiveManagerImplTest {
 				.selectAirportByProvinceIds(new MapUtils.Builder().setKeyValue(
 						"code", "900").build());
 		System.out.println(JSONObject.toJSONString(list));
+	}
+
+	@Test
+	public void testValidateOrdereIsEfectiveAndHadnle() {
+		Date d = DateUtil.addInteger(new Date(), Calendar.MINUTE, -30);
+		String dataStr = DateUtil.dateToString(d, DateUtil.ALL_FOMAT);
+		int a = archiveManager.validateOrdereIsEfectiveAndHadnle(dataStr);
+		System.out.println(a);
 	}
 
 }

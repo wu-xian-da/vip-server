@@ -118,7 +118,7 @@ public class QueueManagerImpl implements QueueManager {
 			return activeCard(map, msgBody, userPhone);
 
 		} else if (MsgType.BACK_CARD_FINISH.getName().equals(msgType)// 退卡完成后短信
-																	// 紧急退卡完成
+																		// 紧急退卡完成
 				|| MsgType.RIGHT_BACK_CARD.getName().equals(msgType)) {
 
 			return backCard(msgBody, userPhone, vipCardNo, map);
@@ -221,7 +221,8 @@ public class QueueManagerImpl implements QueueManager {
 
 		// 判断卡号是否存在
 		if (ObjectUtils.isEmpty(vipcard)) {
-			logger.error("vipjinfei:vip激活:卡号为" + map.get("vipCardNo") + "的卡不存在...");
+			logger.error("vipjinfei:vip激活:卡号为" + map.get("vipCardNo")
+					+ "的卡不存在...");
 			return messageDto.setData(map).setMsgBody(
 					"vipjianfei:vip激活:卡号为" + map.get("vipCardNo") + "的卡不存在...");
 		}
@@ -232,24 +233,23 @@ public class QueueManagerImpl implements QueueManager {
 				map.get("userName"))) {
 			System.out.println("vipjianfei:vipactivesuccess:"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-					+ "->激活成功。。。>" + msgBody + "  手机号:" + userPhone
-					+ "  卡号：" + cardNo);
+					+ "->激活成功。。。>" + msgBody + "  手机号:" + userPhone + "  卡号："
+					+ cardNo);
 			// 计算卡的有效期
 			Date expireDate = DateUtil.addDays(new Date(),
 					vipcard.getValideTime());
 			// 更新激活时间和卡的有效期
 			boolean isOk = vipCardManager.activeAppCard(new MapUtils.Builder()
+					.setKeyValue("activeTime", new Date())
 					.setKeyValue("expiryTime", expireDate)
 					.setKeyValue("card_state", VipCardState.ACTIVE.getName())// 更改VIP卡状态
 					.setKeyValue("cardNo", cardNo).build());
 
 			if (isOk) {
-				System.out.println("vipjinfei:"+DateUtil.dateToString(new Date(),
-						DateUtil.ALL_FOMAT)
-						+ "->激活短信->"
-						+ msgBody
-						+ "  手机号："
-						+ userPhone + "  卡号：" + cardNo);
+				System.out.println("vipjinfei:"
+						+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+						+ "->激活短信->" + msgBody + "  手机号：" + userPhone + "  卡号："
+						+ cardNo);
 				if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {// 激活短信
 					messageDto.setOk(true).setMsgBody(
 							"调用空港接口激活卡号为" + cardNo + "卡成功,发送短信成功。。。");
