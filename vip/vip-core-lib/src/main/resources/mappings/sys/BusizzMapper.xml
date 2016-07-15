@@ -43,11 +43,11 @@
 				GROUP_CONCAT(DISTINCT ap.`airport_name`) AS 'ariPortsNames',
 				u.phone,
 				u.update_time,
-				ao.tmonth,
+				case when ao.tmonth is null then 0 else ao.tmonth end as tmonth,
 				u.state,
 				u.job,
 				case when lmonth is null then 0 else lmonth end as lmonth,
-			    (case when lmonth is null then 0 else lmonth end  + tmonth) AS total
+			    (case when lmonth is null then 0 else lmonth end  + case when tmonth is null then 0 else tmonth end) AS total
 			FROM
 				`sys_users` u
 			LEFT JOIN `sys_user_airport` ua ON ua.`sys_id` = u.`id`
