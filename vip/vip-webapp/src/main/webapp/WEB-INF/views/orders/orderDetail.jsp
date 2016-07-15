@@ -76,7 +76,7 @@
 					<c:if test="${orderDetailInfo.indentType == 4}">回乡证</c:if>
 				</li>
 				<li>证件号：${orderDetailInfo.customerIdent }</li>
-				<li>出生日期：${orderDetailInfo.birthDay}</li>
+				<li>出生日期：<fmt:formatDate value="${orderDetailInfo.birthDay}" pattern="yyyy-MM-dd"/></li>
 				<li>用户手机号：${orderDetailInfo.customerPhone }</li>
 				<li>用户性别：${orderDetailInfo.sex ==1 ? '男' : '女' }</li>
 				<li>常住地址：${orderDetailInfo.customerProvinceName} ${orderDetailInfo.customerCityName} ${orderDetailInfo.address}</li>
