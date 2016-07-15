@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.common.utils.GloabConfig;
+import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.common.utils.impl.HttpServiceRequest;
 import com.jianfei.core.dto.AirportEasyUseInfo;
 import com.jianfei.core.dto.exception.GetQrcodeException;
@@ -120,6 +121,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     													"random="+randomStr+
     													"&partner="+GloabConfig.getConfig("konggang.partner")+
     													"&sign=" + sign);
+    	System.out.println("定时核销数据："+result);
 
    		JSONObject obj = JSON.parseObject(result);
 		int return_result = (Integer)obj.get("result");
@@ -144,6 +146,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     			String info = (String)data.get("info");//核销地点
     			String checkintime = (String)data.get("checkintime");//核销时间
     			AppConsume ac = new AppConsume();
+    			ac.setConsumeId(UUIDUtils.getPrimaryKey());
     			ac.setCardNo(code);
     			ac.setConsumeMoney(200f);
     			Date checkinDate = null;

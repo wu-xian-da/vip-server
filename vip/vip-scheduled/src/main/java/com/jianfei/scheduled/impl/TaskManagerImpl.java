@@ -60,6 +60,7 @@ public class TaskManagerImpl implements ITaskManager {
 	@Scheduled(cron = "0 58 23 * * ? ")
 	public void dailyOrderArchice() {
 		logger.info("<<<<<<开始执行订单归档任务>>>>>>");
+		System.out.println("<<<<<<开始执行订单归档任务了>>>>>>");
 		archiveManager.baseDailyExtract(DateUtil.dailyExtractDate());
 		archiveManager.dateProvinceIdRedisCache(DateUtil.getCurrentTime());
 		archiveManager.dateProvinceIdApportIds(DateUtil.getCurrentTime());
@@ -69,6 +70,7 @@ public class TaskManagerImpl implements ITaskManager {
 	 * 定时获取空港的核销数据 每小时获取一次
 	 */
 	@Scheduled(cron = "0 0 * * * *")
+	//@Scheduled(cron = "0 */1 * * * ?")
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
 		try {

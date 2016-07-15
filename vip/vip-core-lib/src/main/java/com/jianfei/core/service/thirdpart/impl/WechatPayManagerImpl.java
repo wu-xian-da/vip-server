@@ -117,6 +117,12 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 					if (nativePayQueryResData.getTrade_state().equals("SUCCESS")){
 						payQueryResult.setCode("0");
 						payQueryResult.setMsg("已支付");
+					    try {
+							Date payTime = DateUtils.parseDate(nativePayQueryResData.getTime_end(), "yyyyMMddHHmmss");
+							payQueryResult.setPayTime(DateUtil.dateToString(payTime, "yyyy-MM-dd HH:mm:ss"));
+						} catch (ParseException e2) {
+							e2.printStackTrace();
+						}
 					}else if (nativePayQueryResData.getTrade_state().equals("NOTPAY")){
 						payQueryResult.setCode("1");
 						payQueryResult.setMsg("未支付");	
@@ -129,12 +135,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 					}
 								
 					payQueryResult.setOutTradeNo(nativePayQueryResData.getTransaction_id());
-				    try {
-						Date payTime = DateUtils.parseDate(nativePayQueryResData.getTime_end(), "yyyyMMddHHmmss");
-						payQueryResult.setPayTime(DateUtil.dateToString(payTime, "yyyy-MM-dd HH:mm:ss"));
-					} catch (ParseException e2) {
-						e2.printStackTrace();
-					}
+
 					payQueryResult.setPayUserId(nativePayQueryResData.getOpenid());
 					
 				}else{
