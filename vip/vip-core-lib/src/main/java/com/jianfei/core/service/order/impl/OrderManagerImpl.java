@@ -105,17 +105,27 @@ public class OrderManagerImpl implements OrderManager {
             return BaseMsgInfo.success(addInfoDto);
         }
         //1、校验用户和手机验证码
-        boolean flag = true;//validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
+        boolean flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
         if (!flag) {
             return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
         }
 
-        //2、根据查询VIP号查询卡片信息
+        //2、校验空港易行的姓名接口及VIP卡
+        flag=airportEasyManager.vipuserStatus(addInfoDto.getCustomerName(),addInfoDto.getPhone());
+        log.info("验证空港易行用户名:"+addInfoDto.getCustomerName()+",手机号:"+addInfoDto.getPhone()+"验证结果:"+flag);
+        if (!flag){
+            return BaseMsgInfo.msgFail("本用户已限制购买");
+        }
+      /*  flag=airportEasyManager.cardBindStatus(addInfoDto.getVipCardNo());
+        if (flag){
+            return BaseMsgInfo.msgFail("本VIP卡号已经使用请更换VIP卡号");
+        }*/
+        //3、根据查询VIP号查询卡片信息
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
         if (vipCard == null) {
             return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
-        } else if (VipCardState.ACTIVE.getName() == vipCard.getCardState()) {
-            return BaseMsgInfo.msgFail("VIP卡已使用");
+        } else if (VipCardState.NOT_ACTIVE.getName() != vipCard.getCardState()) {
+            return BaseMsgInfo.msgFail("此VIP卡已使用或其他状态");
         }
 
         //3、添加或修改用户信息
@@ -478,10 +488,10 @@ public class OrderManagerImpl implements OrderManager {
         appCardBack.setServiceMoney(useDetailInfo.getUsedMoney());
         appCardBack.setSafeMoney(100);
         User user=saleUserManager.getSaleUser(appCardBack.getCreaterId());
-        appCardBack.setCustomerName(user.getName());
+        appCardBack.setCreateName(user.getName());
+        appCardBack.setCustomerName(orders.getCustomer().getCustomerName());
 
         //3、插入数据库
-       boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
@@ -491,6 +501,7 @@ public class OrderManagerImpl implements OrderManager {
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
             //紧急退卡 更改订单状态为已退款 和申请方式为紧急
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
+            appCardBack.setFinishTime(new Date());
             msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
         } else {
             //审核通过
@@ -501,6 +512,7 @@ public class OrderManagerImpl implements OrderManager {
                 msgBuilder.setMsgType(MsgType.QT_BACK_CARD_APPLY.getName());
             }
         }
+        boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         log.info("更改VIP卡状态");
         AppVipcard vipcard=new AppVipcard();
         vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());

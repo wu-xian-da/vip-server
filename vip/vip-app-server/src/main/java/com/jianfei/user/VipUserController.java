@@ -196,4 +196,22 @@ public class VipUserController {
             return BaseMsgInfo.msgFail("接送机机场列表失败");
         }
     }
+
+
+    /**
+     * 获取用户二维码
+     *
+     * @return
+     */
+    @RequestMapping(value = "/qrCode")
+    @ResponseBody
+    public BaseMsgInfo getUserQRCode(@RequestParam(value = "phone", required = true) String phone
+    ) {
+        try {
+            return vipUserManager.getQRCode(phone);
+        }catch (Exception e){
+            log.error("获取易行二维码异常",e);
+            return BaseMsgInfo.msgFail("获取用户二维码失败");
+        }
+    }
 }
