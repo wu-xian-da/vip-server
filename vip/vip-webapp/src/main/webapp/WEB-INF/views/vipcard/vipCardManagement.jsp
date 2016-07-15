@@ -182,7 +182,7 @@
 					<form id="fm" name="excelImportForm"
 						action="${pageContext.request.contextPath}/vipCard/importExcel"
 						method="post" enctype="multipart/form-data">
-						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 190px" data-options="required:true"/> 
+						<input class="easyui-validatebox" id="excel_file" type="file"	name="filename" accept="xls" style="width: 190px" data-options="missingMessage:'必填项',required:true"/> 
 						<input class="btn btn_ex" id="excel_button" type="button" onclick="importExcel();" value="导入" />
 					</form> 
 				</td>
