@@ -123,31 +123,31 @@ a {
 				width : '200',
 				title : '所属场站',
 				field : 'airportName',
-				align : 'center',
+				align : 'left',
 				sortable : true
 			} ,{
 				width : '300',
 				title : 'vip室名称',
-				align : 'center',
+				align : 'left',
 				field : 'viproomName',
 				
 			}, {
-				width : '180',
+				width : '150',
 				title : '场站负责人',
 				field : 'headerName',
-				align : 'center',
+				align : 'left',
 				
 			}, {
-				width : '180',
+				width : '140',
 				title : '负责人电话',
 				field : 'headerPhone',
-				align : 'center',
+				align : 'left',
 				
 			},{
 				width : '100',
 				title : 'vip室状态',
 				field : 'activeState',
-				align : 'center',
+				align : 'left',
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
