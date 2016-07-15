@@ -127,7 +127,7 @@ public class QueueManagerImpl implements QueueManager {
 			// 登入，注册，退卡申请短信
 			System.out.println("jianfei->"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-					+ "->登入，注册，退卡完成短信->" + msgBody + "  手机号：" + userPhone);
+					+ "->登入|注册|退卡申请|取消退卡短信|其他支付 退卡申请后短信。。。->" + msgBody + "  手机号：" + userPhone);
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		if (!isOk) {
@@ -160,20 +160,7 @@ public class QueueManagerImpl implements QueueManager {
 		messageDto.setData(map);
 
 		// 调用空港绑定接口
-		if (airportEasyManager.disabledVipCard(vipCardNo)) {
-			System.out.println("vipjianfei:vipbacksuccess:"
-					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
-					+ "  卡号：" + vipCardNo);
-			if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
-				messageDto.setOk(true).setMsgBody(
-						"调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到" + userPhone
-								+ "成功");
-			} else {
-				messageDto.setMsgBody("调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到"
-						+ userPhone + "失败");
-			}
-		} else {
+		if (!airportEasyManager.disabledVipCard(vipCardNo)){
 			System.out.println("vipjianfei:解绑失败:"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
@@ -189,6 +176,20 @@ public class QueueManagerImpl implements QueueManager {
 				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
 						+ "卡失败，数据库更新卡号状态为解除绑定状态失败");
 			}
+		}
+		
+		System.out.println("vipjianfei:vipbacksuccess:"
+				+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+				+ "->退卡完成短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
+				+ "  卡号：" + vipCardNo);
+		if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
+			messageDto.setOk(true)
+					.setMsgBody(
+							"调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到"
+									+ userPhone + "成功");
+		} else {
+			messageDto.setMsgBody("调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到"
+					+ userPhone + "失败");
 		}
 
 		return messageDto;

@@ -246,7 +246,7 @@
 			FROM
 				app_orders ao
 			INNER JOIN sys_users su ON ao.sale_no = su.`code`
-			INNER JOIN sys_airport sa ON sa.airport_id = ao.airport_id
+			INNER JOIN sys_airport sa ON sa.airport_id = ao.airport_id 
 			LEFT JOIN sys_city sc ON sc.CID = sa.province
 			LEFT JOIN (
 				SELECT
@@ -264,7 +264,7 @@
 			) acc on acc.sale_no=ao.sale_no and acc.airport_id=ao.airport_id
 			WHERE
 				DATE_FORMAT(ao.order_time,'%Y-%m-%d') =#{maxTime}
-			AND ao.pay_time IS NOT NULL
+			AND ao.pay_time IS NOT NULL and sa.state=0 and sa.dtflag=0
 			GROUP BY
 				ao.sale_no,
 				ao.airport_id

@@ -1,15 +1,18 @@
 package com.jianfei.core.service.user.impl;
 
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.dto.exception.GetQrcodeException;
 import com.jianfei.core.mapper.AppCustomerMapper;
 import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
+import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.jianfei.core.service.user.VipUserManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +40,8 @@ public class VipUserManagerImpl implements VipUserManager {
    private AppCustomerMapper customerMapper;
     @Autowired
     private AppUserFeedbackImpl userFeedback;
+    @Autowired
+    private AirportEasyManager airportEasyManager;
     /**
      * 添加Vip用户
      *
@@ -47,12 +52,10 @@ public class VipUserManagerImpl implements VipUserManager {
         //查询是否存在相应的顾客
         AppCustomer appCustomer = getUser(vipUser.getPhone());
         if (StringUtils.isNotBlank(appCustomer.getCustomerId())) {
-            //用户状态未未激活状态
-            vipUser.setDtflag(VipUserSate.NOT_ACTIVE.getName());
             //用户ID关联上
             vipUser.setCustomerId(appCustomer.getCustomerId());
-            log.info("更新VIP用户状态为初始化状态:手机号:" + vipUser.getPhone() + "，姓名:" + vipUser.getCustomerName());
-            return updateUser(vipUser);
+            log.info("关联已存在用户:手机号:" + vipUser.getPhone() + "，姓名:" + vipUser.getCustomerName());
+            return true;
         } else {
             vipUser.setCustomerId(IdGen.uuid());
             vipUser.setCreateTime(new Date());
@@ -142,5 +145,25 @@ public class VipUserManagerImpl implements VipUserManager {
         appCustomer.setPhone(phone);
         appCustomer.setDtflag(vipUserSate.getName());
         return updateUser(appCustomer);
+    }
+
+    /**
+     * 获取用户二维码
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public BaseMsgInfo getQRCode(String phone) throws GetQrcodeException {
+        AppCustomer appCustomer=getUserDetail(phone);
+        if (appCustomer==null || appCustomer.getVipCards()==null || appCustomer.getVipCards().isEmpty()){
+            return BaseMsgInfo.msgFail("此用户暂无可用VIP卡");
+        }
+        AppVipcard card=appCustomer.getVipCards().get(0);
+        if (card==null || StringUtils.isBlank(card.getCardNo())){
+            return BaseMsgInfo.msgFail("此用户暂无可用VIP卡");
+        }
+        String code=  airportEasyManager.getQrcode(card.getCardNo());
+        return BaseMsgInfo.success(code);
     }
 }

@@ -215,7 +215,7 @@
 			$('#payBackCardNo').text('');
 			
 			//-----是否需要提示信息
-			if(args.invoice == 1){
+			if(args.invoice == 2){
 				$("#promptMessage").text("请确认是否收到发票！");
 			}
 			

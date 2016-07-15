@@ -57,7 +57,7 @@ public class AppCustomer implements Serializable {
 
 	private String cityName;
 
-	private int cardType;
+	private Integer cardType;
 
 	private Date birthDay;
 
@@ -238,13 +238,14 @@ public class AppCustomer implements Serializable {
 		this.vipCards = vipCards;
 	}
 
-	public int getCardType() {
+	public Integer getCardType() {
 		return cardType;
 	}
 
-	public void setCardType(int cardType) {
+	public void setCardType(Integer cardType) {
 		this.cardType = cardType;
 	}
+
 	@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
 	public Date getBirthDay() {
 		return birthDay;

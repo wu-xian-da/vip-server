@@ -93,6 +93,9 @@ public class OrderPayManagerImpl implements OrderPayManager {
         if (appOrders == null || StringUtils.isBlank(appOrders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
+        if (VipOrderState.NOT_PAY.getName() != appOrders.getOrderState()) {
+            return BaseMsgInfo.msgFail("订单已失效或已成功付款");
+        }
         PreCreateResult preCreateResult = new PreCreateResult();
         if (PayType.WXPAY.equals(payType)) {
             /**
