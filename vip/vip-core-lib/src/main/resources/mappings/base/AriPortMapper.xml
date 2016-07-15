@@ -53,7 +53,7 @@
 				t1.airport_id,
 				t1.airport_name,
 				t1.state,
-				t1.agent_num,
+				case when t1.agent_num is null then 0 else t1.agent_num end as agent_num,
 				ct.`name` AS province,
 				t1.city,
 				t1.country,
