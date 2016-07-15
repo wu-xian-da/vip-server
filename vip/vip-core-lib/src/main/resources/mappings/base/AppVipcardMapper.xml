@@ -49,7 +49,7 @@
   
   <!-- 将数据导入到excel表格中 -->
   <select id="selAllVipCard" resultMap="BaseResultMap">
-      select * from app_vipcard
+      select * from app_vipcard where dtflag=0 order by import_time desc
   </select>
 
   

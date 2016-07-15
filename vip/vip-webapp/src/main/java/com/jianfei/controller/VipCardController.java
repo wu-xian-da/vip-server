@@ -138,7 +138,7 @@ public class VipCardController extends BaseController {
 		OutputStream fOut = null;
 		try {
 			// 进行转码，使其支持中文文件名
-			codedFileName = java.net.URLEncoder.encode("vip卡信息", "UTF-8");
+			codedFileName = java.net.URLEncoder.encode("vip卡信息", "utf-8");
 			response.setHeader("content-disposition", "attachment;filename=" + codedFileName + ".xls");
 			// 产生工作簿对象
 			HSSFWorkbook workbook = new HSSFWorkbook();
@@ -193,6 +193,8 @@ public class VipCardController extends BaseController {
 					activeState.setCellValue("激活失败");
 				}else if(vipCard.getCardState() == 4){
 					activeState.setCellValue("待激活");
+				}else{
+					activeState.setCellValue("解绑失败");
 				}
 				index ++;
 				
