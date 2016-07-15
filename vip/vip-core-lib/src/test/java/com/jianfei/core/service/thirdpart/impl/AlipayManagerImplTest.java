@@ -81,7 +81,7 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void test_wechat_query(){
-		wechatiPayManager.tradeQuery("0465698721450400"); 
+		wechatiPayManager.tradeQuery("0468545568911462"); 
 	}
 	
 	@Test
@@ -126,7 +126,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_getcardcode(){
 		try {
-			for (Long ii = 55789l;ii<55789l + 2 ;ii++)
+			for (Long ii = 115789l;ii<115789l + 20 ;ii++)
 				airportEasyManager.getCardCode(ii.toString());
 			
 //			airportEasyManager.getCardCode("31213413415");
@@ -238,12 +238,12 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void testkonggang_vipuserStatus(){
-		airportEasyManager.vipuserStatus("刘磊", "13900990099");
+		airportEasyManager.vipuserStatus("郭建", "13965011405");
 	}
 	
 	@Test
 	public void testkonggang_cardBindStatus(){
-		airportEasyManager.cardBindStatus("13900990099");
+		airportEasyManager.cardBindStatus("07986949743");
 	}
 	
 	@Test
