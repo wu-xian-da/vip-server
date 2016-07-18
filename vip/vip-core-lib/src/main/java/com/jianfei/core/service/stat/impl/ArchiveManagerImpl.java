@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -34,7 +33,6 @@ import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.ArchiveMapper;
-import com.jianfei.core.service.order.OrderManager;
 import com.jianfei.core.service.stat.ArchiveManager;
 import com.jianfei.core.service.sys.RoleManager;
 

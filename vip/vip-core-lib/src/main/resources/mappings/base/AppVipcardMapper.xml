@@ -160,7 +160,14 @@
   			<if test="activeTime!=null and activeTime!=''">
   				active_time = #{activeTime} ,
   			</if>
-  		card_state=#{card_state}  where card_no = #{cardNo}
+  			<if test="fst!=null and fst!=''">
+  				first_service_time=#{fst},
+  			</if>
+  			<if test="card_state!=null and card_state!=''">
+  				card_state=#{card_state},
+  			</if>
+  			card_no=#{cardNo}
+  		  where card_no = #{cardNo}
   </update>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppVipcard" >
