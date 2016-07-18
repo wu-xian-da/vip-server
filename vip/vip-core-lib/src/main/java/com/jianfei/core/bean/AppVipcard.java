@@ -31,6 +31,11 @@ public class AppVipcard {
 
     private Integer dtflag;
 
+    /**
+     * 首次使用时间
+     */
+    private Date firstServiceTime;
+
     public String getCardNo() {
         return cardNo;
     }
@@ -157,5 +162,13 @@ public class AppVipcard {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Date getFirstServiceTime() {
+        return firstServiceTime;
+    }
+
+    public void setFirstServiceTime(Date firstServiceTime) {
+        this.firstServiceTime = firstServiceTime;
     }
 }
