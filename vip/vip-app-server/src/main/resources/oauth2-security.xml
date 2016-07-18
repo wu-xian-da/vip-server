@@ -69,20 +69,25 @@
         <oauth2:client client-id="mobile_vip_app_ios"
                        authorized-grant-types="password,authorization_code,refresh_token,implicit"
                        secret="secret_vip_app_ios" scope="read,write,trust"  />
-        <oauth2:client client-id="mobile_vip_app_and"
+        <oauth2:client client-id="mobile_vip_app_android"
                        authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                       secret="secret_vip_app_and" scope="read,write,trust"  />
+                       secret="secret_vip_app_android" scope="read,write,trust"  />
     </oauth2:client-details-service>
 
 
+    <!-- 国际化 -->
+    <beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <!-- value值表示引用spring-security-core-3.0.5.jar中的messages_zh_CN.properties文件 -->
+        <beans:property name="basename" value="classpath:messages" />
+    </beans:bean>
+    <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
 
+    <!--    <global-method-security pre-post-annotations="enabled" proxy-target-class="true">
+        <expression-handler ref="oauth2ExpressionHandler"/>
+        </global-method-security>
 
-    <!--<global-method-security pre-post-annotations="enabled" proxy-target-class="true">-->
-    <!--<expression-handler ref="oauth2ExpressionHandler"/>-->
-    <!--</global-method-security>-->
-
-    <!--<oauth2:expression-handler id="oauth2ExpressionHandler"/>-->
-    <!--<oauth2:web-expression-handler id="oauth2WebExpressionHandler"/>-->
+        <oauth2:expression-handler id="oauth2ExpressionHandler"/>
+        <oauth2:web-expression-handler id="oauth2WebExpressionHandler"/>-->
 
     <beans:bean class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory"
                 id="oAuth2RequestFactory">
@@ -133,7 +138,6 @@
     </beans:bean>
 
 
-
     <http disable-url-rewriting="true" use-expressions="false"
           authentication-manager-ref="authenticationManager">
         <intercept-url pattern="/oauth/**" access="ROLE_USER,ROLE_UNITY,ROLE_MOBILE"/>
@@ -146,10 +150,6 @@
         <anonymous/>
         <csrf disabled="true"/>
     </http>
-
-
-
-
 
 
 
