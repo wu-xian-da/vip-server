@@ -49,6 +49,7 @@ public class OrderShowInfoDto implements Serializable {
 	private String vipCardNo;//卡号
     private int cardState;//卡状态
     private String cardStateName;//卡状态的中文提示
+    private int payType;//支付方式
     
     private String invoiceId; //发票id
     private String invoiceNo;//发票单号
@@ -529,6 +530,18 @@ public class OrderShowInfoDto implements Serializable {
 	 */
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
+	}
+	/**
+	 * @return the payType
+	 */
+	public int getPayType() {
+		return payType;
+	}
+	/**
+	 * @param payType the payType to set
+	 */
+	public void setPayType(int payType) {
+		this.payType = payType;
 	}
 	
 	

@@ -232,7 +232,7 @@
 					$("#backMethod").text('退款方式');
 					$("#payBackCardNo").text('银行卡转账');
 				}else{
-					$("#backMethod").text('银行卡号');
+					$("#backMethod").text('退款方式 银行卡号');
 					$("#payBackCardNo").text(args.backMoneyCard);
 					$("#banckName2div").show();
 					$("#banckName2").text(args.backName);

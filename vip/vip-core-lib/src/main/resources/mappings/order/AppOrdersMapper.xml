@@ -38,6 +38,7 @@
 		<result column="invoice_no" property="invoiceNo"/>
 		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
 		<result column="back_type" property="backType" jdbcType="INTEGER" />
+		<result column="pay_type" property="payType"/>
 		<result column="money" property="remainMoney" />
 		<result column="card_no" property="vipCardNo" />
 		<result column="card_state" property="cardState"/>
@@ -130,7 +131,7 @@
 
 	<!--订单列表信息展示 -->
 	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
+		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,ord.pay_type,
 		ap.airport_name,agent.name,
 		customer.customer_name,customer.customer_phone
 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer

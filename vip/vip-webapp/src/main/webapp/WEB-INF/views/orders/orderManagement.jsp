@@ -138,6 +138,11 @@
             style="width:500px;height:300px;padding:10px;">
        	<div class="easy-window-item">
             <div class="easy-window-radio-tab">
+            	<!-- 支付方式提示 -->
+            	<div class="radio-tab-content" style="font-weight:bolder ;color: red;font-size:large;">
+                                               支付方式&nbsp;<label id="orderPayMethod" >测试一下</label>
+                </div>
+                
                 <div class="radio-tab-head">
                     <label><input type="radio" name="card-radio" checked id="1">微信转账</label>
                     <label><input type="radio" name="card-radio" id="2">支付宝转账</label>
@@ -310,7 +315,7 @@
 					$("#backMethod").text('退款方式');
 					$("#payBackCardNo").text('银行卡转账');
 				}else{
-					$("#backMethod").text('银行卡号');
+					$("#backMethod").text('退款方式 银行卡号');
 					$("#payBackCardNo").text(args.backMoneyCard);
 					$("#banckName2div").show();
 					$("#banckName2").text(args.backName);
@@ -365,6 +370,17 @@
         */
 		//1、审核通过时，输入用户的账户信息（已完成）
         function onRefund(args){
+			//支付方式
+			var payType = args.payType;
+			if(payType == 1){
+				$('#orderPayMethod').text('微信支付');
+			}else if(payType == 2){
+				$('#orderPayMethod').text('支付宝支付');
+			}else if(payType == 3){
+				$('#orderPayMethod').text('银行卡支付');
+			}else{
+				$('#orderPayMethod').text('现金支付');
+			}
         	$("#remainMoney").text(args.remainMoney);
         	$("#hideOrderId").val(args.orderId);
         	$("#w").window('open');

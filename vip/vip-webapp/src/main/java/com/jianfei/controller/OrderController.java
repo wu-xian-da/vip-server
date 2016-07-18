@@ -77,7 +77,7 @@ import com.jianfei.core.service.user.impl.VipUserManagerImpl;
  */
 @Controller
 public class OrderController extends BaseController {
-	private Logger logger = Logger.getLogger(LoginController.class);
+	private Logger logger = Logger.getLogger(OrderController.class);
 	private static String staticPath =  GloabConfig.getConfig("static.resource.server.address");
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
@@ -379,6 +379,7 @@ public class OrderController extends BaseController {
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", appOrder.getOrderId());
 				outData.put("phone", appOrder.getCustomerPhone());
+				outData.put("payType", appOrder.getPayType());//支付方式
 				//2、获取验证码
 				String smsCode = validateCodeManager.getSendValidateCode(appOrder.getCustomerPhone(), MsgType.SELECT);
 				if(smsCode == null){
@@ -597,6 +598,8 @@ public class OrderController extends BaseController {
 	@RequestMapping(value="/applyBackCard")
 	@ResponseBody
 	public Map<String,Object> applyBackCard(String orderId,Integer operationType,String phone){
+		//订单基本信息
+		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		//1、改变订单状态
 		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
 		//2、获取验证码
@@ -614,7 +617,7 @@ public class OrderController extends BaseController {
 		outData.put("remainMoney", remainMoney);
 		outData.put("orderId",orderId);
 		outData.put("phone", phone);
-		
+		outData.put("payType", orderDetailInfo.getPayMethod());//支付方式
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("result", "1");
 		map.put("orderStateName", "正在审核");
