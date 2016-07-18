@@ -143,7 +143,7 @@ public class AppCardBack {
 	 * @return  the finishTime
 	 * @version   1.0.0
 	*/
-	
+	@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
 	public Date getFinishTime() {
 		return finishTime;
 	}

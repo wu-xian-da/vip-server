@@ -67,7 +67,7 @@
 				title : '机场',
 				field : 'airport_name'
 			},{
-				width : '150',
+				width : '100',
 				title : '用车类型',
 				field : 'pickup_type',
 				formatter : function(value, row, index) {
@@ -93,12 +93,12 @@
 					}
 				}
 			},{
-				width : '120',
+				width : '180',
 				title : '航班日期',
 				field : 'flight_date',
 				sortable : true,
 			}, {
-				width : '120',
+				width : '160',
 				title : '出发时间',
 				field : 'gooff_date',
 				sortable : true,

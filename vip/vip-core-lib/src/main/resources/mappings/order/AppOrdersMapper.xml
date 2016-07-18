@@ -505,6 +505,7 @@
 			<result column="bank_name" property="bankName"/>
 			<result column="service_money" property="serviceMoney" jdbcType="REAL" />
 			<result column="safe_money" property="safeMoney" jdbcType="REAL" />
+			<result column="create_name" property="createName"/>
 		</collection>
 
 	</resultMap>
