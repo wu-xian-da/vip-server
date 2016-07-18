@@ -365,6 +365,9 @@ public class OrderManagerImpl implements OrderManager {
         if (!flag)
             return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
         //2、查询用户信息和订单信息
+        if (StringUtils.isBlank(vipCardNo)) {
+            vipCardNo = null;
+        }
         List<VipCardUseDetailInfo> vipCardUseDetailInfoList = appOrderCardMapper.getVipCardUseDetailInfo(phone, vipCardNo);
         VipCardUseDetailInfo vipCardUseDetailInfo = vipCardUseDetailInfoList == null || vipCardUseDetailInfoList.isEmpty() ? new VipCardUseDetailInfo()
                 : vipCardUseDetailInfoList.get(0);
