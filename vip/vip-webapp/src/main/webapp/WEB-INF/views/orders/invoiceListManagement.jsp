@@ -73,7 +73,10 @@
 		<div style="clear: both; height: 93%;" id="data-grid-wrap"
 			data-options="region:'center',fit:true,border:false">
 			<table id="tt" title=""
-				data-options="singleSelect:true,collapsible:true,
+				data-options="
+									rownumbers:true,
+									singleSelect:true,
+									collapsible:true,
 	                                url:'invoiceList',
 	                                method:'get',
 	                                remoteSort:false,
@@ -82,7 +85,7 @@
 	                                pagination:true">
 				<thead>
 					<tr>
-						<th data-options="align:'center', field:'orderId',width:200">订单号</th>
+						<th data-options="align:'center', field:'orderId',width:150">订单号</th>
 						<th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 						<th data-options="align:'center', field:'customerPhone',width:100">用户手机号</th>
 						<th data-options="align:'center', field:'invoiceNo',width:200">发票单号</th>

@@ -48,6 +48,7 @@
 		</style>
 			<table id="tt" title="" style="height:99%"
 				data-options="
+							rownumbers:true,
 							singleSelect:true,
 							collapsible:true,
 	                                url:'feedbackList',

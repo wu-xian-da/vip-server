@@ -72,7 +72,10 @@
 				}
 		</style>
 		<div style="clear:both; height:92%;" id="data-grid-wrap" data-options="region:'center',fit:true,border:false">
-				<table id="tt" data-options="singleSelect:true,collapsible:true,
+				<table id="tt" data-options="
+										rownumbers:true,
+										singleSelect:true,
+										collapsible:true,
 		                                url:'backCardList',
 		                                method:'get',
 		                                remoteSort:false,
