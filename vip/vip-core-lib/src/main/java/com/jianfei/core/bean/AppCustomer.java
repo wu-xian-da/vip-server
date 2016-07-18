@@ -206,8 +206,7 @@ public class AppCustomer implements Serializable {
 
 
 	public String getCode() {
-		//TODO 用户二维码生成规则
-		return "111111";
+		return code;
 	}
 
 	public void setCode(String code) {

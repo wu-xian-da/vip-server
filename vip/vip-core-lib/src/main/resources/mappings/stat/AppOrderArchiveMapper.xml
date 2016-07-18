@@ -284,7 +284,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
     <result column="order_number" jdbcType="INTEGER" property="amout" />
   </resultMap>
   <select id="salesRanking" resultMap="SalesRankingMap" parameterType="java.util.Map" >
-  	SELECT aoa.sale_no,aoa.photo,aoa.bname,aoa.sex,count(aoa.order_num) as order_number FROM app_order_archive aoa 
+  	SELECT aoa.sale_no,aoa.photo,aoa.bname,aoa.sex,sum(aoa.order_num) as order_number FROM app_order_archive aoa 
 	WHERE  <![CDATA[ aoa.file_time >= #{startTime} AND aoa.file_time <=  #{endTime} ]]>
 	<if test="pid != null">
 		AND aoa.pid = #{pid}

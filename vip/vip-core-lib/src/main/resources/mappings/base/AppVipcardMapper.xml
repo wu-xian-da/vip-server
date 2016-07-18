@@ -15,6 +15,7 @@
     <result column="card_name" property="cardName" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="first_service_time" property="firstServiceTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
   <!--分页查询  -->
@@ -110,6 +111,9 @@
       <if test="dtflag != null" >
         dtflag,
       </if>
+      <if test="firstServiceTime != null" >
+        first_service_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="cardNo != null" >
@@ -141,6 +145,9 @@
       </if>
       <if test="dtflag != null" >
         #{dtflag,jdbcType=INTEGER},
+      </if>
+      <if test="firstServiceTime != null" >
+        #{firstServiceTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -192,6 +199,9 @@
       </if>
       <if test="dtflag != null" >
         dtflag = #{dtflag,jdbcType=INTEGER},
+      </if>
+      <if test="firstServiceTime != null" >
+        first_service_time= #{firstServiceTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where card_no = #{cardNo,jdbcType=VARCHAR}
