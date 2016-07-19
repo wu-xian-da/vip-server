@@ -197,8 +197,12 @@ public class JedisUtilsTest {
 		if (1 == result) {// 第一次消费
 			// 更新卡的第一次消费时间和卡有效期到期时间
 			if (vipCardManager.activeAppCard(new MapUtils.Builder()
-					.setKeyValue("fst", new Date())
+					.setKeyValue("activeTime", appConsume.getConsumeTime())
+					// 更改激活时间为第一次消费时间
 					.setKeyValue("cardNo", appConsume.getCardNo())
+					.setKeyValue("card_state",
+							VipCardState.ACTIVE_USE.getName())// 更改VIP卡状态为
+																// 绑定成功已激活
 					.setKeyValue("expiryTime", expireDate).build())) {
 				String infoMsg = "卡号为"
 						+ appConsume.getCardNo()
