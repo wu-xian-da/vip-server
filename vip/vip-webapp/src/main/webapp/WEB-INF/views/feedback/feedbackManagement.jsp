@@ -22,17 +22,17 @@
 		<div id="order-condition-box" style="height:10%; padding:0;">
 			<div style="padding-left:20px; padding-top:15px;">
 				<div class="order-condition-item">
-					<select name="" id="feedbackStateSelect">
+					<select name="" id="feedbackStateSelect" style="height: 26px">
 						<option value="">全部处理状态</option>
 						<option value="0">未处理</option>
 						<option value="1">已处理</option>
 					</select>
 				</div>
 				<div class="order-condition-item" style="width: 160px">
-			          <input id="phoneOrUserName" type="text" placeholder="用户名/用户手机号" style="width: 130px;height:20px">
+			          <input id="phoneOrUserName" type="text" placeholder="用户名/用户手机号" style="width: 130px">
 			    </div>
 				<div class="order-condition-item" style="text-align: left">
-					<button id="searchBt" style="height: 20px">查询</button>
+					<button id="searchBt">查询</button>
 				</div>
 			</div>
 			

@@ -160,7 +160,7 @@ public class VipCardController extends BaseController {
 			
 			HSSFCell activeStateCell = head.createCell((int) 3);
 			activeStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
-			activeStateCell.setCellValue("激活状态");
+			activeStateCell.setCellValue("vip卡状态");
 			
 			//返回表中所有的数据
 			List<AppVipcard> list = vipCardManagerImpl.getAllAppVipcardInfo();
@@ -184,17 +184,21 @@ public class VipCardController extends BaseController {
 				HSSFCell activeState = row.createCell((int) 3);
 				activeState.setCellType(HSSFCell.CELL_TYPE_STRING);
 				if(vipCard.getCardState() == 0){
-					activeState.setCellValue("未激活");
+					activeState.setCellValue("未绑定");
 				}else if(vipCard.getCardState() == 1){
-					activeState.setCellValue("激活成功");
+					activeState.setCellValue("绑定成功未激活");
 				}else if(vipCard.getCardState() == 2){
 					activeState.setCellValue("已退卡");
 				}else if(vipCard.getCardState() == 3){
-					activeState.setCellValue("激活失败");
+					activeState.setCellValue("绑定失败");
 				}else if(vipCard.getCardState() == 4){
-					activeState.setCellValue("待激活");
-				}else{
+					activeState.setCellValue("待绑定");
+				}else if(vipCard.getCardState() == 5){
 					activeState.setCellValue("解绑失败");
+				}else if(vipCard.getCardState() == 6){
+					activeState.setCellValue("绑定成功已激活");
+				}else{
+					activeState.setCellValue("已过期");
 				}
 				index ++;
 				

@@ -222,8 +222,7 @@
 									</select>
 								</td>
 								<td style="width: 10px"></td>
-								<td>请输入卡号</td>
-								<td><input id="_cardNo" name="_cardNo" value="" style="width: 120px;" /></td>
+								<td><input id="_cardNo" name="_cardNo" value="" style="width: 120px;" placeholder="请输入卡号" /></td>
 								<td><input type="button" value="查询" class="btn" onclick="searchByCondition();"></td>
 							</tr>
 						</table>
