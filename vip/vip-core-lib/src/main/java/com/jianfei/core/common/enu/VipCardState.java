@@ -37,7 +37,12 @@ public enum VipCardState {
     /**
      * 绑定成功已激活
      */
-    ACTIVE_USE(6);
+    ACTIVE_USE(6),
+	
+    /**
+     * 已过期
+     */
+	CARD_EXPIRED(7);
 
 
     private Integer name;
