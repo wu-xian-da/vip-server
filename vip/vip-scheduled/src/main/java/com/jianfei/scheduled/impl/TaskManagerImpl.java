@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -77,10 +76,12 @@ public class TaskManagerImpl implements ITaskManager {
 		archiveManager.dateProvinceIdApportIds(DateUtil.getCurrentTime());
 	}
 
-	/**
-	 * 定时获取空港的核销数据 每小时获取一次
+	/*每10分钟执行一次，启动后推迟10分钟执行
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.scheduled.ITaskManager#checkinDataSchedule()
 	 */
-	@Scheduled(cron = "0 0 * * * *")
+	@Scheduled(fixedRate = 600000,initialDelay=600000)
 	// @Scheduled(cron = "0 */1 * * * ?")
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
@@ -227,27 +228,27 @@ public class TaskManagerImpl implements ITaskManager {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * 每天0点0分0秒检查一次
-	 * 检查vip卡的是否已过期
-	 * 过期将vip卡的状态改为 VipCardState.CARD_EXPIRED
+	 * 每天0点0分0秒检查一次 检查vip卡的是否已过期 过期将vip卡的状态改为 VipCardState.CARD_EXPIRED
 	 */
 	@Scheduled(cron = "0 0 0 * * *")
 	public void checkExpiredOfCard() {
 		// TODO Auto-generated method stub
-		logger.info(DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)+ "<<<<<<检查是否有过期的vip卡>>>>>>>");
-		Map<String,Object> reqMap = new HashMap<String,Object>();
+		logger.info(DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+				+ "<<<<<<检查是否有过期的vip卡>>>>>>>");
+		Map<String, Object> reqMap = new HashMap<String, Object>();
 		reqMap.put("checkFlag", "check");
-		List<AppVipcard> vipCardList = vipCardManager.showCardListNotPage(reqMap);
-		if(vipCardList != null && vipCardList.size() > 0){
-			for(AppVipcard vipCard : vipCardList){
-				if(vipCard.getExpiryTime().before(new Date())){//过期
+		List<AppVipcard> vipCardList = vipCardManager
+				.showCardListNotPage(reqMap);
+		if (vipCardList != null && vipCardList.size() > 0) {
+			for (AppVipcard vipCard : vipCardList) {
+				if (vipCard.getExpiryTime().before(new Date())) {// 过期
 					vipCard.setCardState(VipCardState.CARD_EXPIRED.getName());
 					vipCardManager.updateByPrimaryKeySelective(vipCard);
 				}
 			}
 		}
-		
+
 	}
 }

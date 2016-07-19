@@ -76,6 +76,8 @@
 				sys_airport t1
 			LEFT JOIN app_orders t2 ON t1.airport_id = t2.airport_id and t2.pay_money is not null
 			LEFT JOIN sys_city ct ON ct.CID = t1.province
+			left join sys_user_airport sua on sua.airport_id=t1.airport_id
+			left join sys_users su on su.id=sua.sys_id and su.dtflag=0
 		]]>
 		<where>
 			<if test="dtflag!=null">
