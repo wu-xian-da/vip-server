@@ -245,7 +245,6 @@ public class AppCustomer implements Serializable {
 		this.cardType = cardType;
 	}
 
-	@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
 	public Date getBirthDay() {
 		return birthDay;
 	}
