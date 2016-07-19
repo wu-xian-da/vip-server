@@ -226,4 +226,13 @@ public class VipCardManagerImpl implements VipCardManager {
 		// TODO Auto-generated method stub
 		return appVipcardMapper.updateByPrimaryKeySelective(record);
 	}
+	
+	/**
+	 * 不分页查询
+	 */
+	@Override
+	public List<AppVipcard> showCardListNotPage(Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		return appVipcardMapper.pageList(params);
+	}
 }

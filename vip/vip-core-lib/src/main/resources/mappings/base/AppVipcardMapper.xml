@@ -32,6 +32,10 @@
 			<if test="cardNo!=null">
 				and card_no like CONCAT('%','${cardNo}','%' )
 			</if>
+			<!-- 检查vip卡是否过期查询 -->
+			<if test="checkFlag != null">
+				and expiry_time IS NOT NULL
+			</if>
 			and dtflag=0 order by import_time desc
 		</where>
 		

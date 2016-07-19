@@ -3,7 +3,9 @@ package com.jianfei.core.service.base;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppVipcard;
 
+
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,7 +44,13 @@ public interface VipCardManager {
 	 */
 	PageInfo<AppVipcard> showCardListPage(int pageNo, int pageSize,
 			Map<String, Object> params);
-
+	
+	/**
+	 * 不分页查询
+	 * @param params
+	 * @return
+	 */
+	List<AppVipcard> showCardListNotPage(Map<String, Object> params);
 	/**
 	 * 根据vip卡逻辑删除vip卡信息 deleteVipCardByCardNo
 	 * 
@@ -74,6 +82,7 @@ public interface VipCardManager {
 	
 	//更新卡记录
 	int updateByPrimaryKeySelective(AppVipcard record);
+	
 	
 
 }

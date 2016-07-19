@@ -37,4 +37,9 @@ public interface ITaskManager {
 	 * 验证订单状态是否有效，如果无效更改订单状态为无效状态，每隔30分钟扫描一次
 	 */
 	void validateOrdereIsEfective();
+	
+	/**
+	 * 检查vip卡是否已过期
+	 */
+	void checkExpiredOfCard();
 }

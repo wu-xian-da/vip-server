@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,12 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
@@ -219,5 +222,28 @@ public class TaskManagerImpl implements ITaskManager {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * 每天0点0分0秒检查一次
+	 * 检查vip卡的是否已过期
+	 * 过期将vip卡的状态改为 VipCardState.CARD_EXPIRED
+	 */
+	@Scheduled(cron = "0 0 0 * * *")
+	public void checkExpiredOfCard() {
+		// TODO Auto-generated method stub
+		logger.info(DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)+ "<<<<<<检查是否有过期的vip卡>>>>>>>");
+		Map<String,Object> reqMap = new HashMap<String,Object>();
+		reqMap.put("checkFlag", "check");
+		List<AppVipcard> vipCardList = vipCardManager.showCardListNotPage(reqMap);
+		if(vipCardList != null && vipCardList.size() > 0){
+			for(AppVipcard vipCard : vipCardList){
+				if(vipCard.getExpiryTime().before(new Date())){//过期
+					vipCard.setCardState(VipCardState.CARD_EXPIRED.getName());
+					vipCardManager.updateByPrimaryKeySelective(vipCard);
+				}
+			}
+		}
+		
 	}
 }
