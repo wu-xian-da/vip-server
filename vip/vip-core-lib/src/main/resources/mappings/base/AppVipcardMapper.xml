@@ -160,13 +160,8 @@
   			<if test="activeTime!=null and activeTime!=''">
   				active_time = #{activeTime} ,
   			</if>
-<<<<<<< HEAD
   			<if test="saleTime!=null and saleTime!=''">
   				sale_time=#{saleTime},
-=======
-  			<if test="fst!=null and fst!=''">
-              sale_time=#{fst},
->>>>>>> e12037fd0dceefffa77d0afee84b679c746aab84
   			</if>
   			<if test="card_state!=null and card_state!=''">
   				card_state=#{card_state},
