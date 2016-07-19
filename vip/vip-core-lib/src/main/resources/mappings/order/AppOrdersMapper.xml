@@ -559,5 +559,6 @@ select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_stat
 			and concat(c.customer_name,c.customer_phone) like
 			CONCAT('%','${key}','%' )
 		</if>
+		 order by o.order_time desc
 	</select>
 </mapper>
