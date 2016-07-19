@@ -48,7 +48,7 @@
 					ao.order_id,
 					case 
 						when ao.order_state=1 or ao.order_state=3 or ao.order_state=2 THEN '已支付'
-						when ao.order_state=4 THEN '已退卡'
+						when ao.order_state=4 THEN '已退款'
 					ELSE
 						'未支付'
 					end as orderstate,

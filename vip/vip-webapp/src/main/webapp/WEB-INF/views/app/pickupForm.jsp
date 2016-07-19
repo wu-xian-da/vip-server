@@ -65,16 +65,12 @@
 					<td>${pk.card_no }</td>
 				</tr>
 				<tr>
-					<th>号码</th>
+					<th>手机号码</th>
 					<td>${pk.customer_phone }</td>
 				</tr>
 				<tr>
 					<th>机场</th>
 					<td>${pk.airport_name }</td>
-				</tr>
-				<tr>
-					<th>航站楼</th>
-					<td>${pk.flight_lou }</td>
 				</tr>
 				<tr>
 					<th>航班号</th>
@@ -93,14 +89,8 @@
 					<td>${pk.number_peers }</td>
 				</tr>
 				<tr>
-					<c:if test="${pk.pickup_type==1 }">
-						<th>出发地址</th>
-						<td>(接机)${pk.pname }${pk.sname }${pk.cname }</td>
-					</c:if>
-					<c:if test="${pk.pickup_type==2 }">
-						<th>到达地址</th>
-						<td>(送机)${pk.pname }${pk.sname }${pk.cname }</td>
-					</c:if>
+						<th>详细地址</th>
+						<td>${pk.detail_address }</td>
 				</tr>
 			</table>
 		</fieldset>
