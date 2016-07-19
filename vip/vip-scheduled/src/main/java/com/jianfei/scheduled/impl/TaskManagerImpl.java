@@ -195,7 +195,7 @@ public class TaskManagerImpl implements ITaskManager {
 			throw new IllegalArgumentException("数据查询不到卡号为"
 					+ appConsume.getCardNo() + "的信息，无法获取卡的有效期，请排查");
 		}
-		// 计算有效时间
+		// 计算卡的有效时间
 		Date expireDate = DateUtil.addDays(appConsume.getConsumeTime(),
 				vipcard.getValideTime());
 		// 消费次数计算
@@ -203,9 +203,13 @@ public class TaskManagerImpl implements ITaskManager {
 		if (1 == result) {// 第一次消费
 			// 更新卡的第一次消费时间和卡有效期到期时间
 			if (vipCardManager.activeAppCard(new MapUtils.Builder()
-					.setKeyValue("fst", new Date())
+					.setKeyValue("activeTime", appConsume.getConsumeTime())
+					// 更改激活时间为第一次消费时间
 					.setKeyValue("cardNo", appConsume.getCardNo())
-					.setKeyValue("expiryTime", expireDate).build())) {
+					.setKeyValue("card_state",
+							VipCardState.ACTIVE_USE.getName())// 更改VIP卡状态为
+																// 绑定成功已激活
+					.setKeyValue("expiryTime", expireDate).build())) {// 更改卡的有效期
 				String infoMsg = "卡号为"
 						+ appConsume.getCardNo()
 						+ "第一次消费时间为:"
