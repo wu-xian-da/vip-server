@@ -44,12 +44,12 @@
 				width : '350',
 				title : '标题',
 				field : 'title',
-				align : 'center',
+				align : 'left',
 				sortable : true
 			} ,{
 				width : '200',
 				title : '类型',
-				align : 'center',
+				align : 'left',
 				field : 'type',
 				formatter : function(value, row, index) {
 					switch (value) {
@@ -68,7 +68,7 @@
 				title : '操作',
 				field : 'action',
 				width : '180',
-				align : 'center',
+				align : 'left',
 				formatter : function(value, row) {
 					var str = '';
 					str += "<a href='gotoUpdateRightView?id="+row.id+"'><img class='iconImg ext-icon-note_edit title='编辑'/> 编辑&nbsp;</a>";

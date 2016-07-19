@@ -161,7 +161,7 @@ a {
 				title : '操作',
 				field : 'action',
 				width : '200',
-				align : 'center',
+				align : 'left',
 				formatter : function(value, row,index) {
 					var str = '';
 					switch (row.activeState){

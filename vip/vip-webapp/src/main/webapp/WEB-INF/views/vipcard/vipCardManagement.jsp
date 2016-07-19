@@ -63,36 +63,36 @@
 										width : '200',
 										title : '卡号',
 										field : 'cardNo',
-										align : 'center',
+										align : 'left',
 										sortable : true
 									},
 
 									{
-										width : '200',
+										width : '150',
 										title : 'NFC号',
 										field : 'nfcId',
-										align : 'center',
+										align : 'left',
 										sortable : true
 									},
 									{
-										width : '150',
+										width : '180',
 										title : '导入时间',
 										field : 'importTime',
-										align : 'center',
+										align : 'left',
 										sortable : true,
 									},
 									{
 										width : '150',
 										title : '过期时间',
 										field : 'expiryTime',
-										align : 'center',
+										align : 'left',
 										sortable : true,
 									},
 									{
 										width : '150',
 										title : 'vip卡状态',
 										field : 'cardState',
-										align : 'center',
+										align : 'left',
 										sortable : true,
 										formatter : function(value, row, index) {
 											switch (value) {
@@ -120,7 +120,7 @@
 										title : '操作',
 										field : 'action',
 										width : '90',
-										align : 'center',
+										align : 'left',
 										formatter : function(value, row) {
 											var str = '';
 											str += sy
