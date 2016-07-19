@@ -700,7 +700,7 @@ public class OrderManagerImpl implements OrderManager {
             }
             return BaseMsgInfo.success(true);
         } else {
-            return BaseMsgInfo.msgFail("激活失败");
+            return BaseMsgInfo.msgFail("绑定失败");
         }
     }
 }
