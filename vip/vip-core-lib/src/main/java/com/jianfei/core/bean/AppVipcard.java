@@ -32,9 +32,9 @@ public class AppVipcard {
     private Integer dtflag;
 
     /**
-     * 首次使用时间
+     * 销售时间
      */
-    private Date firstServiceTime;
+    private Date saleTime;
 
     public String getCardNo() {
         return cardNo;
@@ -164,11 +164,12 @@ public class AppVipcard {
         this.expiryTime = expiryTime;
     }
 
-    public Date getFirstServiceTime() {
-        return firstServiceTime;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
+    public Date getSaleTime() {
+        return saleTime;
     }
 
-    public void setFirstServiceTime(Date firstServiceTime) {
-        this.firstServiceTime = firstServiceTime;
+    public void setSaleTime(Date saleTime) {
+        this.saleTime = saleTime;
     }
 }
