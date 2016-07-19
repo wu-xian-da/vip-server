@@ -84,8 +84,8 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item" style="width: 210px">
-			                <input id="phoneOrUserName" type="text" placeholder="订单号/姓名/手机号">
+			            <div class="order-condition-item" style="width: 230px">
+			                <input id="phoneOrUserName" type="text" placeholder="订单号/卡号/姓名/手机号" style="width: 150px">
 			                <button id="searchBt">查询</button>
 			            </div>
 			            
@@ -117,14 +117,14 @@
 	                <tr>
 	                <th data-options="align:'center', field:'orderId',width:130">订单编号</th>
 	                <th data-options="align:'center', field:'orderTime',width:150">订单日期</th>
-	                
+	                <th data-options="align:'center', field:'vipCardNo',width:130">卡号</th>
 	                <th data-options="align:'center', field:'airportName',width:150">场站</th>
 	                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
 	                
 	                <th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 	                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 	                
-	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
+	                <th data-options="align:'center', field:'invoiceFlagName',width:80">发票状态</th>
 	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 	                <th data-options="align:'center', field:'operation',width:230">操作</th>
 	                </tr>

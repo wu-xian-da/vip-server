@@ -41,6 +41,7 @@
 		<result column="pay_type" property="payType"/>
 		<result column="money" property="remainMoney" />
 		<result column="card_no" property="vipCardNo" />
+		<result column="card_id" property="vipCardNo"/>
 		<result column="card_state" property="cardState"/>
 		<result column="invoice_kind" property="invoiceKind"/>
 		<result column="company_name" property="companyName"/>
@@ -132,11 +133,11 @@
 	<!--订单列表信息展示 -->
 	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
 		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,ord.pay_type,
-		ap.airport_name,agent.name,
+		ap.airport_name,agent.name,aoc.card_id,
 		customer.customer_name,customer.customer_phone
-		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer
+		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer,app_order_card aoc
 		where ord.sale_no=agent.code and ord.customer_id = customer.customer_id
-		and ord.airport_id = ap.airport_id
+		and ord.airport_id = ap.airport_id and ord.order_id=aoc.order_id
 
 		<if test="startTime != null">
 			and DATE_FORMAT(ord.order_time,'%Y-%m-%d') <![CDATA[  >=]]>
@@ -165,7 +166,7 @@
 		<!-- 用户名或者手机号码 -->
 		<if test="phoneOrUserName != null">
 			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
-			and concat(customer.customer_name,customer.customer_phone,agent.name,ord.order_id) like
+			and concat(customer.customer_name,customer.customer_phone,agent.name,ord.order_id,aoc.card_id) like
 			CONCAT('%','${phoneOrUserName}','%' )
 		</if>
 		<!-- 机场列表 -->
@@ -183,18 +184,6 @@
 
 	<!--退款订单分页查询 -->
 	<select id="page" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-		<!--  
-		select
-		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
-		ap.airport_name,
-		agent.name,
-		customer.customer_name,customer.customer_phone,
-		acb.back_type,acb.money
-		from app_orders ord,sys_airport ap,sys_users agent,app_customer
-		customer,app_card_back acb
-		where ord.sale_no=agent.code and ord.customer_id = customer.customer_id and
-		ord.airport_id = ap.airport_id and ord.order_id = acb.order_id
-		-->
 		select
 		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
 		ap.airport_name,
