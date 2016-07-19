@@ -252,7 +252,10 @@ public class OrderController extends BaseController {
 		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		//2 发票信息
 		AppInvoice appInvoice = appInvoiceManagerImpl.selInvoiceInfoByOrderId(orderId);
-		appInvoice.setBusinessLicenseUrl(appInvoice.getBusinessLicenseUrl()==null ? "": staticPath+appInvoice.getBusinessLicenseUrl());
+		if(appInvoice !=null){
+			appInvoice.setBusinessLicenseUrl(appInvoice.getBusinessLicenseUrl()==null ? "": staticPath+appInvoice.getBusinessLicenseUrl());
+		}
+		
 		//3 退卡余额信息
 		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
 		
