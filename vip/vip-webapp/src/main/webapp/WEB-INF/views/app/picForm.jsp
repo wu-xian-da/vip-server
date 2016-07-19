@@ -55,7 +55,7 @@ var checksubmit = function(){
 			runtimes : 'html5,flash',//设置运行环境，会按设置的顺序，可以选择的值有html5,gears,flash,silverlight,browserplus,html4
 			//flash_swf_url : sy.contextPath + '/jslib/plupload_1_5_7/plupload/js/plupload.flash.swf',// Flash环境路径设置
 			url : sy.contextPath + '/plupload?fileFolder=/userPhoto',//上传文件路径
-			max_file_size : '5mb',//100b, 10kb, 10mb, 1gb
+			max_file_size : '600mb',//100b, 10kb, 10mb, 1gb
 			chunk_size : '10mb',//分块大小，小于这个大小的不分块
 			unique_names : true,//生成唯一文件名
 			// 如果可能的话，压缩图片大小
@@ -103,7 +103,7 @@ var checksubmit = function(){
 			});
 		});
 		uploader.bind('Error', function(up, err) {//出现错误
-			$('#filelist').append("<div>错误代码: " + err.code + ", 描述信息: " + err.message + (err.file ? ", 文件名称: " + err.file.name : "") + "</div>");
+			$('#filelist').append("<div>描述信息: " + err.message + (err.file ? "文件名称: " + err.file.name : "") + "</div>");
 			up.refresh();
 		});
 		uploader.bind('FileUploaded', function(up, file, info) {//上传完毕

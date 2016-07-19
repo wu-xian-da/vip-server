@@ -67,7 +67,7 @@
 				and orderstate=#{orderstate}
 			</if>
 			<if test="insured!=null and insured!=''">
-				and ao.insured=#{insured}
+				and insured=#{insured}
 			</if>
 		</where>
 	</select>
