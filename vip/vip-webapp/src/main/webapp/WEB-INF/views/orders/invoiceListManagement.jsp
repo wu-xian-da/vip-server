@@ -103,7 +103,7 @@
 	<!--发票信息录入 -->
 	<div id="w" class="easyui-window" title="发票页面"
 		data-options="modal:'true',closed:'true'"
-		style="width: 500px; height: 600px; padding: 10px;">
+		style="width: 500px; height: 500px; padding: 10px;">
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab" style="padding-left: 100px;padding-top: 20px;">
 				<div class="radio-tab-content">
