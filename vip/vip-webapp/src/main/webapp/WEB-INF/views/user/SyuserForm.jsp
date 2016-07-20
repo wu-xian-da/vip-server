@@ -38,6 +38,7 @@
 					$grid.datagrid('load');
 					$dialog.dialog('destroy');
 				} else {
+					checksubmitflg = false; 
 					layer.alert(result.msgBody, {
 						icon : 2,
 						skin : 'layer-ext-moon' 
@@ -123,7 +124,7 @@
 				</tr>
 				<tr>
 					<th>工号</th>
-					<td><input name="code" value="${user.code }"   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true,validType:'codeRex'"  /></td>
+					<td><input name="code" value="${user.code }" <c:if test="${!empty user.code }">readonly="readonly" </c:if>   class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true,validType:'codeRex'"  /></td>
 					<th>用户角色</th>
 					<td>
 						<select id="cc" class="easyui-combobox" name="roleids" style="width:200px;">

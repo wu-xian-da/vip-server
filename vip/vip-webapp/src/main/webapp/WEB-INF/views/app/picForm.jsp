@@ -26,6 +26,7 @@ var checksubmit = function(){
 					$grid.datagrid('load');
 					$dialog.dialog('destroy');
 				} else {
+					checksubmitflg = false; 
 					layer.alert(result.msgBody, {
 						icon : 2,
 						skin : 'layer-ext-moon' 

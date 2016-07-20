@@ -29,6 +29,7 @@ var checksubmit = function(){
 						$grid.datagrid('load');
 						$dialog.dialog('destroy');
 					} else {
+						checksubmitflg = false; 
 						$pjq.messager.alert('提示', result.msgBody, 'error');
 					}
 				}, 'json');
