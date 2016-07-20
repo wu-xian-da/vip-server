@@ -502,6 +502,11 @@ public class OrderManagerImpl implements OrderManager {
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
             appCardBack.setFinishTime(new Date());
             msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
+            AppVipcard vipcard=new AppVipcard();
+            vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
+            vipcard.setCardState(VipCardState.BACK_CARD.getName());
+            log.info("更改VIP"+vipcard.getCardNo()+"卡未已退卡");
+            vipCardManager.updateVipCard(vipcard);
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
@@ -512,18 +517,11 @@ public class OrderManagerImpl implements OrderManager {
             }
         }
         boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
-        log.info("更改VIP卡状态");
-        AppVipcard vipcard=new AppVipcard();
-        vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
-        vipcard.setCardState(VipCardState.BACK_CARD.getName());
-        log.info(vipcard);
-        vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
         log.info("更改用户状态为不可用");
-        vipCardManager.updateVipCard(vipcard);
+        vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
         //APP申请
         orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         appOrdersMapper.updateByPrimaryKeySelective(orders);
-
         log.info("发送消息");
         log.info(msgBuilder);
         queueManager.sendMessage(msgBuilder);
@@ -632,10 +630,10 @@ public class OrderManagerImpl implements OrderManager {
         appOrdersMapper.updateByPrimaryKeySelective(orders);
         cardBackManager.deleteCardBackInfo(orderId);
         //卡状态为已激活
-        AppVipcard vipcard=new AppVipcard();
+       /* AppVipcard vipcard=new AppVipcard();
         vipcard.setCardNo(vipCardNo);
         vipcard.setCardState(VipCardState.ACTIVE.getName());
-        vipCardManager.updateVipCard(vipcard);
+        vipCardManager.updateVipCard(vipcard);*/
         //用户状态为已激活
         vipUserManager.updateUserSate(phone,VipUserSate.ACTIVE);
 
