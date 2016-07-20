@@ -235,4 +235,10 @@ public class VipCardManagerImpl implements VipCardManager {
 		// TODO Auto-generated method stub
 		return appVipcardMapper.pageList(params);
 	}
+
+	@Override
+	public AppVipcard selVipCardInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appVipcardMapper.selVipCardInfoByOrderId(orderId);
+	}
 }

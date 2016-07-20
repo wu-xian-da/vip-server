@@ -38,11 +38,11 @@
 
 
 			<div class="order-list-title">
-				VIP卡编号：<span>${orderDetailInfo.vipCardNo}</span>
+				VIP卡编号：<span>${cardInfo.cardNo}</span>
 			</div>
 			<ul>
 				<li><label>有效期：</label>1年</li>
-				<li><label>vip卡金额：</label><fmt:formatNumber value="${orderDetailInfo.initMoney}" pattern="0.00"/> 元</li>
+				<li><label>vip卡金额：</label><fmt:formatNumber value="${cardInfo.initMoney}" pattern="0.00"/> 元</li>
 				<li><label>支付方式：
 				      <c:choose>
 				      	<c:when test="${orderDetailInfo.payMethod == 1}">
@@ -63,7 +63,7 @@
 				
 				</li>
 				<li><label>支付时间：</label><fmt:formatDate value="${orderDetailInfo.payTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
-				<li><label>卡片激活短信发送时间：</label><fmt:formatDate value="${orderDetailInfo.activatTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+				<li><label>卡片激活时间：</label><fmt:formatDate value="${cardInfo.activeTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 			</ul>
 
 			<div class="order-list-title">个人资料</div>

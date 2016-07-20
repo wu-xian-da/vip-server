@@ -80,8 +80,19 @@ public interface VipCardManager {
 
 	boolean activeAppCard(Map<String, Object> map);
 	
-	//更新卡记录
+	/**
+	 * 更新卡记录
+	 * @param record
+	 * @return
+	 */
 	int updateByPrimaryKeySelective(AppVipcard record);
+	
+	/**
+	 * 根据订单号查询对应的卡片信息
+	 * @param orderId
+	 * @return
+	 */
+	AppVipcard selVipCardInfoByOrderId(String orderId);
 	
 	
 
