@@ -151,11 +151,19 @@
 								银行卡转账
 							</c:when>
 							<c:otherwise>
-								现金转账
+								银行卡转账（现金支付）
 							</c:otherwise>
 						</c:choose>
 					</li>
-					<li>转账账号：${appCardBack.customerCard}</li>
+					<c:if test="${appCardBack.backType ==3 || appCardBack.backType ==4}">
+						<li>银行账号：${appCardBack.customerCard}</li>
+						<li>开户行名称：${appCardBack.bankName}</li>
+						<li>持卡人姓名：${appCardBack.customerName}</li>
+					</c:if>
+					<c:if test="${appCardBack.backType ==1 || appCardBack.backType ==2}">
+						<li>转账账号：${appCardBack.customerCard}</li>
+					</c:if>
+					
 				</c:if>
 			</ul>
 
