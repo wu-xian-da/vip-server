@@ -99,9 +99,9 @@
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
-						return '未投';
+						return '未投保';
 					case 1:
-						return '已投';
+						return '已投保';
 					}
 				}
 			},{

@@ -193,8 +193,6 @@ public class OrderController extends BaseController {
 					outData.put("businessLicenseUrl",staticPath+invoiceInfo.getBusinessLicenseUrl());
 					outData.put("companyTaxNo", invoiceInfo.getCompanyTaxNo());
 				}
-				//订单编号
-				String orderId = invoiceInfo.getOrderId();
 				if(invoiceState == 1){//发票未邮寄
 					invoiceInfo.setInvoiceFlagName("发票未邮寄");
 					if(ordersState == 3 || ordersState == 4){
@@ -248,28 +246,30 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value="/returnOrderDetailInfoByOrderId")
 	public String returnOrderDetailInfoByOrderId(String orderId,Model model){
-		//1 订单基本信息
+		//1、订单基本信息
 		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		//2 发票信息
+		//2、订单对应卡片基本信息
+		AppVipcard vipCardInfo = vipCardManagerImpl.selVipCardInfoByOrderId(orderId);
+		//3、 发票信息
 		AppInvoice appInvoice = appInvoiceManagerImpl.selInvoiceInfoByOrderId(orderId);
 		if(appInvoice !=null){
 			appInvoice.setBusinessLicenseUrl(appInvoice.getBusinessLicenseUrl()==null ? "": staticPath+appInvoice.getBusinessLicenseUrl());
 		}
-		
-		//3 退卡余额信息
+		//4 退卡余额信息
 		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
 		
-		//4 反馈信息 根据用户id
-		//4.1 根据orderId获取用户id
+		//5 反馈信息 根据用户id
+		//5.1 根据orderId获取用户id
 		AppOrders appOrders = orderManagerImpl.selectByPrimaryKey(orderId); 
 		List<AppUserFeedback> appuserFeedBackInfoList  = appUserFeedbackImpl.getFeedBackInfoListByUserId(appOrders.getCustomerId());
 		
-		//5 vip使用记录 根据cardno
-		//5.1 根据orderId 获取carNo
+		//6 vip使用记录 根据cardno
+		//6.1 根据orderId 获取carNo
 		AppOrderCard appOrderCard = orderManagerImpl.selectByOrderId(orderId);
 		List<AppConsume> consumeList = orderManagerImpl.selectByVipCardNo(appOrderCard.getCardNo());
 		
 		model.addAttribute("orderDetailInfo", orderDetailInfo);
+		model.addAttribute("cardInfo", vipCardInfo);
 		if(appInvoice !=null){
 			model.addAttribute("invoice", appInvoice);
 		}

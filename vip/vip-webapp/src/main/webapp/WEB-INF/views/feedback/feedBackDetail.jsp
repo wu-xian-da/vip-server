@@ -68,7 +68,7 @@
 					<c:if test="${customer.cardType == 4}">回乡证</c:if>
 				</li>
 				<li>证件号：${customer.customerIdenti }</li>
-				<li>出生日期：</li>
+				<li>出生日期：<fmt:formatDate value="${customer.birthDay}" pattern="yyyy-MM-dd"/> </li>
 				<li>用户手机号：${customer.phone }</li>
 				<li>用户性别：${customer.sex ==1 ? '男' : '女' }</li>
 				<li>常住地址：${customer.provinceName} ${customer.cityName} ${customer.address }</li>

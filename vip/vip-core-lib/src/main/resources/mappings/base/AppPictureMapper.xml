@@ -38,7 +38,7 @@
 	</select>
 
 	<sql id="Base_Column_List">
-		picture_id, viproom_id, picture_url, click_url, priority,
+		picture_id, viproom_id, picture_url, click_url, priority,name,
 		dtflag,imagetype,descr,updatetime
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
@@ -57,13 +57,13 @@
 		insert into app_picture
 		(picture_id, viproom_id, picture_url,
 		click_url, priority,
-		dtflag,imagetype,descr,updatetime
+		dtflag,imagetype,descr,updatetime,name
 		)
 		values (#{pictureId,jdbcType=INTEGER},
 		#{viproomId,jdbcType=VARCHAR},
 		#{pictureUrl,jdbcType=VARCHAR},
 		#{clickUrl,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER},
-		#{dtflag,jdbcType=INTEGER},#{imagetype},#{descr},#{updatetime}
+		#{dtflag,jdbcType=INTEGER},#{imagetype},#{descr},#{updatetime},#{name}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.jianfei.core.bean.AppPicture">
@@ -144,6 +144,9 @@
 			</if>
 			<if test="updatetime != null">
 				updatetime = #{updatetime},
+			</if>
+			<if test="name != null">
+				name = #{name},
 			</if>
 			<if test="descr != null">
 				descr = #{descr},

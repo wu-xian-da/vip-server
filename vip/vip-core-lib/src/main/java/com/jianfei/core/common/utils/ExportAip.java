@@ -29,13 +29,10 @@ public class ExportAip {
 	private Object cardType;
 
 	private Object identity;
-
 	private Object birthday;
-
-	private Object isTb;
-
-	private Object orderstate;
 	private Object orderId;
+	private Object isTb;
+	private Object orderstate;
 
 	/**
 	 * 创建一个新的实例 ExportAip.
@@ -45,8 +42,8 @@ public class ExportAip {
 	}
 
 	public ExportAip(Object name, Object phone, Object sex, Object cardType,
-			Object identity, Object birthday, Object isTb, Object orderstate,
-			Object orderId) {
+			Object identity, Object birthday, Object orderId, Object isTb,
+			Object orderstate) {
 		super();
 		this.name = StringUtils.isEmpty(StringUtils.obj2String(name)) ? StringUtils.EMPTY
 				: name;
@@ -85,9 +82,9 @@ public class ExportAip {
 		String isTbParams = StringUtils.obj2String(isTb);
 		if (!StringUtils.isEmpty(isTbParams)) {
 			if ("0".equals(isTbParams)) {
-				this.isTb = "未投";
+				this.isTb = "未投保";
 			} else if ("1".equals(isTbParams)) {
-				this.isTb = "已投";
+				this.isTb = "已投保";
 			} else {
 				this.isTb = StringUtils.EMPTY;
 			}

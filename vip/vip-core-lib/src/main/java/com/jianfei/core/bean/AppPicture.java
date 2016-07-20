@@ -29,6 +29,8 @@ public class AppPicture implements Serializable {
 
 	private Date updatetime;
 
+	private String name;
+
 	public Integer getPictureId() {
 		return pictureId;
 	}
@@ -123,14 +125,37 @@ public class AppPicture implements Serializable {
 		this.descr = descr;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * name
+	 *
+	 * @return the name
+	 * @version 1.0.0
+	 */
+
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "AppPicture [pictureId=" + pictureId + ", viproomId=" + viproomId + ", pictureUrl=" + pictureUrl
-				+ ", clickUrl=" + clickUrl + ", priority=" + priority + ", dtflag=" + dtflag + ", imagetype="
-				+ imagetype + ", descr=" + descr + ", updatetime=" + updatetime + "]";
+		return "AppPicture [pictureId=" + pictureId + ", viproomId="
+				+ viproomId + ", pictureUrl=" + pictureUrl + ", clickUrl="
+				+ clickUrl + ", priority=" + priority + ", dtflag=" + dtflag
+				+ ", imagetype=" + imagetype + ", descr=" + descr
+				+ ", updatetime=" + updatetime + "]";
 	}
 
 	/**
@@ -141,10 +166,9 @@ public class AppPicture implements Serializable {
 	public static void getStaticAdderss(List<AppPicture> pictures) {
 		if (pictures == null || pictures.isEmpty())
 			return;
-	    String url=	GloabConfig
-				.getConfig("static.resource.server.address");
-		for (AppPicture picture:pictures) {
-			picture.setPictureUrl(url+picture.getPictureUrl());
+		String url = GloabConfig.getConfig("static.resource.server.address");
+		for (AppPicture picture : pictures) {
+			picture.setPictureUrl(url + picture.getPictureUrl());
 		}
 	}
 
