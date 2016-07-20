@@ -151,19 +151,25 @@
 								银行卡转账
 							</c:when>
 							<c:otherwise>
-								银行卡转账（现金支付）
+								紧急退款
 							</c:otherwise>
 						</c:choose>
 					</li>
-					<c:if test="${appCardBack.backType ==3 || appCardBack.backType ==4}">
-						<li>银行账号：${appCardBack.customerCard}</li>
-						<li>开户行名称：${appCardBack.bankName}</li>
-						<li>持卡人姓名：${appCardBack.customerName}</li>
-					</c:if>
-					<c:if test="${appCardBack.backType ==1 || appCardBack.backType ==2}">
-						<li>转账账号：${appCardBack.customerCard}</li>
-					</c:if>
 					
+					<!--申请方式为现场，客服 -->
+					<c:if test="${orderDetailInfo.applyType !=2}">
+						<c:choose>
+							<c:when test="${appCardBack.backType ==3}">
+								<li>银行账号：${appCardBack.customerCard}</li>
+								<li>开户行名称：${appCardBack.bankName}</li>
+								<li>持卡人姓名：${appCardBack.customerName}</li>
+							</c:when>
+							<c:otherwise>
+								<li>转账账号：${appCardBack.customerCard}</li>
+							</c:otherwise>
+						</c:choose>
+					</c:if>
+
 				</c:if>
 			</ul>
 

@@ -31,7 +31,11 @@ public class OrderShowInfoDto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private String orderId;//订单编号
+	
 	private Date orderTime;//订单日期
+	private Date backApplyTime;//退款申请日期
+	private Date backFinishTime;//退款完成时间
+	
 	private String airportName;//场站名称
 	private String agentName;//业务员名称
 	private String customerName;//用户名称
@@ -41,7 +45,7 @@ public class OrderShowInfoDto implements Serializable {
 	private int invoiceFlag;//是否需要发票 0代表不需要
 	private String invoiceFlagName;//是否需要发票的中文提示
 	private String operation;//操作项
-	private int applyType;//申请方式
+	private int applyType;//申请退卡方式
 	private String applyTypeName;
 	private String backTypeName;
 	private int backType;//退卡方式
@@ -542,6 +546,32 @@ public class OrderShowInfoDto implements Serializable {
 	 */
 	public void setPayType(int payType) {
 		this.payType = payType;
+	}
+	/**
+	 * @return the backApplyTime
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	public Date getBackApplyTime() {
+		return backApplyTime;
+	}
+	/**
+	 * @param backApplyTime the backApplyTime to set
+	 */
+	public void setBackApplyTime(Date backApplyTime) {
+		this.backApplyTime = backApplyTime;
+	}
+	/**
+	 * @return the backFinishTime
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	public Date getBackFinishTime() {
+		return backFinishTime;
+	}
+	/**
+	 * @param backFinishTime the backFinishTime to set
+	 */
+	public void setBackFinishTime(Date backFinishTime) {
+		this.backFinishTime = backFinishTime;
 	}
 	
 	

@@ -30,7 +30,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,6 +52,7 @@ import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.StateChangeUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
@@ -165,7 +165,7 @@ public class OrderController extends BaseController {
 			for(OrderShowInfoDto invoiceInfo : invoiceList){
 				//订单状态
 				int ordersState = invoiceInfo.getOrderState();
-				invoiceInfo.setOrderStateName(returnOrderStateName(ordersState));
+				invoiceInfo.setOrderStateName(StateChangeUtils.returnOrderStateName(ordersState));
 				//发票状态
 				int invoiceState = invoiceInfo.getInvoiceFlag();
 				//发票种类
@@ -350,7 +350,7 @@ public class OrderController extends BaseController {
 		
 		for(OrderShowInfoDto appOrder : list){
 			int invoiceFlag = appOrder.getInvoiceFlag();
-			appOrder.setInvoiceFlagName(returnInvoiceFlagName(invoiceFlag));
+			appOrder.setInvoiceFlagName(StateChangeUtils.returnInvoiceFlagName(invoiceFlag));
 			if(appOrder.getOrderState() ==0){
 				//未支付
 				orderId = appOrder.getOrderId();
@@ -492,9 +492,16 @@ public class OrderController extends BaseController {
 		String orderId = null;
 		if(list != null && list.size() >0){
 			for(OrderShowInfoDto appOrder : list){
-				//卡状态
+				//1、申请方式
+				int applyTypes = appOrder.getApplyType();
+				//1.1、申请方式的中文名称
+				appOrder.setApplyTypeName(StateChangeUtils.returnApplyBackCardMethodName(applyTypes));
+				//2、卡状态
 				int cardState =  appOrder.getCardState();
-				appOrder.setCardStateName(returnCardStateName(cardState)); 
+				appOrder.setCardStateName(StateChangeUtils.returnCardStateName(cardState)); 
+				//3、退卡方式
+				int backCardTypes = appOrder.getBackType();
+				appOrder.setBackTypeName(StateChangeUtils.returnBackMoneyMethodName(backCardTypes));
 				
 				if(appOrder.getOrderState() ==3){
 					//退款
@@ -509,33 +516,15 @@ public class OrderController extends BaseController {
 					outData.put("phone", appOrder.getCustomerPhone());
 					outData.put("backName", appCardBack.getBankName());
 					outData.put("customerName", appOrder.getCustomerName());
-					
-					int applyTypes = appOrder.getApplyType();
+					//申请方式
 					outData.put("applyBackCardMethod", appOrder.getApplyType());
-					
 					//发票状态
 					AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
 					outData.put("invoice", orderInfo.getInvoiceFlag());
-					//申请方式
-					if(applyTypes == 1){
-						appOrder.setApplyTypeName("客服");
-					}else{
-						appOrder.setApplyTypeName("现场");
-					}
 					
 					//订单状态
 					appOrder.setOrderStateName("审核通过");
-					//退卡方式
-					int backCardTypes = appOrder.getBackType();
-					if(backCardTypes == 1){
-						appOrder.setBackTypeName("微信");
-					}else if(backCardTypes == 2){
-						appOrder.setBackTypeName("支付宝");
-					}else if(backCardTypes == 3){
-						appOrder.setBackTypeName("银行卡");
-					}else{
-						appOrder.setBackTypeName("紧急退款");
-					}
+					
 					//权限校验
 					org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
 					//是否有最终退款查看的权限
@@ -551,24 +540,8 @@ public class OrderController extends BaseController {
 					//退款成功
 					orderId = appOrder.getOrderId();
 					appOrder.setOrderStateName("已退款");
-					//申请方式
-					int applyTypes = appOrder.getApplyType();
-					if(applyTypes == 1){
-						appOrder.setApplyTypeName("客服");
-					}else{
-						appOrder.setApplyTypeName("现场");
-					}
-					//退卡方式
-					int backCardTypes = appOrder.getBackType();
-					if(backCardTypes == 1){
-						appOrder.setBackTypeName("微信");
-					}else if(backCardTypes == 2){
-						appOrder.setBackTypeName("支付宝");
-					}else if(backCardTypes == 3){
-						appOrder.setBackTypeName("银行卡");
-					}else{
-						appOrder.setBackTypeName("紧急退款");
-					}
+					
+					//卡片状态
 					if(cardState == 5){
 						appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><a href='unbundCard?vipCardNo="+appOrder.getVipCardNo()+"'><button class='btn' style='background:#698DC3'>解绑</button></a>");
 					}else{
@@ -986,12 +959,12 @@ public class OrderController extends BaseController {
 				//发票状态
 				HSSFCell invoiceStatesCell = row.createCell((int) 7);
 				invoiceStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
-				invoiceStatesCell.setCellValue(returnInvoiceFlagName(orderShowInfoDto.getInvoiceFlag()));
+				invoiceStatesCell.setCellValue(StateChangeUtils.returnInvoiceFlagName(orderShowInfoDto.getInvoiceFlag()));
 				
 				//订单状态
 				HSSFCell orderStatesCell = row.createCell((int) 8);
 				orderStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
-				orderStatesCell.setCellValue(returnOrderStateName(orderShowInfoDto.getOrderState()));
+				orderStatesCell.setCellValue(StateChangeUtils.returnOrderStateName(orderShowInfoDto.getOrderState()));
 				index++;
 
 			}
@@ -1030,69 +1003,6 @@ public class OrderController extends BaseController {
 			e.printStackTrace();
 		}
 		return "redirect:goBackCardListManagementView";
-	}
-	
-	/**
-	 * 根据订单状态返回中文名称
-	 * @param orderState
-	 * @return
-	 */
-	public String returnOrderStateName(Integer orderState){
-		String orderStateName = "";
-		if(orderState == 0){
-			orderStateName = "未支付";
-		}else if(orderState == 1){
-			orderStateName = "已支付";
-		}else if(orderState == 2){
-			orderStateName = "正在审核";
-		}else if(orderState == 3){
-			orderStateName = "审核通过";
-		}else if(orderState == 4){
-			orderStateName = "已退款";
-		}else{
-			orderStateName = "已失效";
-		}
-		return orderStateName;
-	}
-	
-	/**
-	 * 根据发票状态返回发票的中文名称
-	 * @param invoiceFlag
-	 * @return
-	 */
-	public String returnInvoiceFlagName(Integer invoiceFlag){
-		String invoiceFlagName = "";
-		if(invoiceFlag == 0){
-			invoiceFlagName = "不需要";
-		}else if(invoiceFlag == 1){
-			invoiceFlagName = "未邮寄"; 
-		}else{
-			invoiceFlagName = "已邮寄";
-		}
-		return invoiceFlagName;
-	}
-	
-	/**
-	 * 根据卡状态返回卡状态的中文提示
-	 * @param cardState
-	 * @return
-	 */
-	public String returnCardStateName(Integer cardState){
-		String cardStateName = "";
-		if(cardState == 0){
-			cardStateName = "未激活";
-		}else if(cardState == 1){
-			cardStateName = "激活成功";
-		}else if(cardState == 2){
-			cardStateName = "已退卡";
-		}else if(cardState == 3){
-			cardStateName = "激活失败";
-		}else if(cardState == 4){
-			cardStateName = "待激活";
-		}else{
-			cardStateName = "解绑失败";
-		}
-		return cardStateName;
 	}
 	
 	/**

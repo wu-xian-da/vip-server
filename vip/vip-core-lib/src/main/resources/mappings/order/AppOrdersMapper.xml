@@ -26,6 +26,9 @@
 	<resultMap id="OrderShowInfoDto" type="com.jianfei.core.dto.OrderShowInfoDto">
 		<id column="order_id" property="orderId" jdbcType="VARCHAR" />
 		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="backApplyTime" jdbcType="TIMESTAMP" />
+		<result column="finish_time" property="backFinishTime" jdbcType="TIMESTAMP" />
+		
 		<result column="airport_name" property="airportName" jdbcType="VARCHAR" />
 		<result column="name" property="agentName" jdbcType="VARCHAR" />
 		<result column="customer_name" property="customerName"
@@ -56,6 +59,7 @@
 		<result column="address" property="address"/>
 		<result column="invoice_title" property="invoiceTitle"/>
 		<result column="postcode" property="postCode"/>
+		<result column="finish_time" property="backFinishTime"/>
 	</resultMap>
 
 	<!--订单详细信息展示返回类型 -->
@@ -69,6 +73,7 @@
 		<result column="activat_time" property="activatTime" />
 		<result column="invoice_flag" property="invoiceFlag" />
 		<result column="pay_money" property="payMoney" />
+		<result column="apply_type" property="applyType"/>
 		<!--2、 机场表 -->
 		<result column="airport_name" property="airportName" />
 		<!--3、业务人员表 -->
@@ -113,7 +118,7 @@
 		parameterType="java.lang.String">
 		select
 		ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,ord.pay_money,
-		sa.airport_name,
+		ord.apply_type,sa.airport_name,
 		agent.name,agent.phone,
 		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.province_name,cus.city_name,cus.address,cus.email,
 		cus.card_type,cus.birth_day
@@ -182,7 +187,7 @@
 		agent.name,
 		avp.card_no,avp.card_state,
 		customer.customer_name,customer.customer_phone,
-		acb.back_type,acb.money
+		acb.back_type,acb.money,acb.finish_time,acb.create_time
 		from app_orders ord,sys_airport ap,sys_users agent,app_customer
 		customer,app_card_back acb,app_order_card aoc,app_vipcard avp
 		where ord.sale_no=agent.code and ord.customer_id = customer.customer_id and
