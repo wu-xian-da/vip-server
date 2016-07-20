@@ -133,8 +133,12 @@ var checksubmit = function(){
 					<td><input class="easyui-numberspinner" name="priority"  value="${appPicture.priority } data-options="increment:1,min:1,editable:false" style="width:120px;" ></td>
 				</tr>
 				<tr>
+					<th>名称:</th>
+					<td><input  name="name"  value="${appPicture.name }" style="width: 156px;"/></td>
+				</tr>
+				<tr>
 					<th>类型:</th>
-					<td><select class="easyui-combobox" name=imagetype data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+					<td><select class="easyui-combobox" name=imagetype data-options="panelHeight:'auto',editable:false" style="width: 160px;">
 							<option value="0" <c:if test="${appPicture.imagetype==0 }">selected="selected"</c:if> >业务APP轮播图</option>
 							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >用户APP轮播图</option>
 							<option value="2" <c:if test="${appPicture.imagetype==2 }">selected="selected"</c:if> >用户APP合作按钮</option>
