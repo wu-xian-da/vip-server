@@ -361,7 +361,7 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public BaseMsgInfo getVipCardUseAndOrder(String phone, String code, String vipCardNo) {
         //1、校验用户和手机验证码
-        boolean flag = validateCodeManager.validateSendCode(phone, MsgType.SELECT, code);
+        boolean flag = true;//validateCodeManager.validateSendCode(phone, MsgType.SELECT, code);
         if (!flag)
             return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
         //2、查询用户信息和订单信息
@@ -386,20 +386,16 @@ public class OrderManagerImpl implements OrderManager {
     private void getVipCardUseInfo(VipCardUseDetailInfo vipCardUseDetailInfo) {
         //3、查询VIP使用信息
         List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
-        float usedMoney = 0;
-        if (list != null && list.isEmpty()) {
-            for (AppConsume appConsume : list) {
-                usedMoney = usedMoney + appConsume.getConsumeMoney();
-            }
-        }
-        float realMoney = (float) (usedMoney * 0.8);
+        int num = list == null ? 0 : list.size();
+        float usedMoney = num * 200;
+        float realMoney = num * 150;
         float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney - 100;
-        if (remainMoney < 0) {
-            remainMoney = 0;
-        }
+        vipCardUseDetailInfo.setSafeMoney(100);
         vipCardUseDetailInfo.setReturnMoney(remainMoney);
         vipCardUseDetailInfo.setRealMoney(realMoney);
-        vipCardUseDetailInfo.setReturnInfo("您已免费享受了价值" + usedMoney + "元的VIP室服务,若退卡需扣除该费用。亿出行仅收取该费用的80%作为服务费。");
+        vipCardUseDetailInfo.setReturnInfo("由于开卡当日亿出行已为您投保，保费100元，若退卡，需扣除保费。" +
+                "您已免费享受了价值" + usedMoney + "元的VIP室服务，若退卡需扣除该费用，亿出行仅收取150元/次的服务费，总计" + realMoney + "元。" +
+                "现在申请退款，可以退给用户" + remainMoney + " 元");
         vipCardUseDetailInfo.setUsedMoney(usedMoney);
         vipCardUseDetailInfo.setCardUseList(list);
         vipCardUseDetailInfo.setSaleRate("80%");
