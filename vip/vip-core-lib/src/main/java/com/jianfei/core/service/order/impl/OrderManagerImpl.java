@@ -507,6 +507,7 @@ public class OrderManagerImpl implements OrderManager {
             vipcard.setCardState(VipCardState.BACK_CARD.getName());
             log.info("更改VIP"+vipcard.getCardNo()+"卡未已退卡");
             vipCardManager.updateVipCard(vipcard);
+            orders.setApplyType(ApplyBackCardMethod.SCENE_EMERGENT_APPLY.getName());
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
@@ -515,12 +516,13 @@ public class OrderManagerImpl implements OrderManager {
             } else {
                 msgBuilder.setMsgType(MsgType.QT_BACK_CARD_APPLY.getName());
             }
+            //APP申请
+            orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         }
         boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
         log.info("更改用户状态为不可用");
         vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
-        //APP申请
-        orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
+
         appOrdersMapper.updateByPrimaryKeySelective(orders);
         log.info("发送消息");
         log.info(msgBuilder);

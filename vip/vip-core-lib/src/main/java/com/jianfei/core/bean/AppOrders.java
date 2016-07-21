@@ -56,6 +56,11 @@ public class AppOrders implements Serializable{
     private int applyType;
 
     /**
+     * 销售人员姓名
+     */
+    private String saleName;
+
+    /**
      * 顾客 1:1
      */
     private AppCustomer customer;
@@ -93,7 +98,15 @@ public class AppOrders implements Serializable{
 		this.operation = operation;
 	}
 
-	public String getOrderId() {
+    public String getSaleName() {
+        return saleName;
+    }
+
+    public void setSaleName(String saleName) {
+        this.saleName = saleName;
+    }
+
+    public String getOrderId() {
         return orderId;
     }
 
