@@ -10,6 +10,7 @@
 		<result column="dtflag" property="dtflag" jdbcType="INTEGER" />
 		<result column="imagetype" property="imagetype" />
 		<result column="descr" property="descr" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<!--更新vip室图片信息  -->
