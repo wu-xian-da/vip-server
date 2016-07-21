@@ -45,7 +45,6 @@ import com.jianfei.core.bean.AppUserFeedback;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.enu.InvoiceState;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.VipCardState;
@@ -857,7 +856,6 @@ public class OrderController extends BaseController {
 				index++;
 
 			}
-			System.out.println("index ="+index);
 			fOut = response.getOutputStream();
 			workbook.write(fOut);
 		} catch (UnsupportedEncodingException e1) {
