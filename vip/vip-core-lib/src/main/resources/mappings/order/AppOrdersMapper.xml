@@ -20,6 +20,7 @@
 		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
 		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
 		<result column="pay_user_id" property="payUserId" jdbcType="VARCHAR" />
+		<result column="sale_name" property="saleName" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!--订单列表展示返回类型 -->
@@ -239,7 +240,7 @@
 	<sql id="Base_Column_List">
 		order_id, id, customer_id, order_time, order_state, pay_type, serial_id,
 		pay_money,
-		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id,apply_type,pay_time,pay_user_id
+		invoice_flag, remark1, remark2, dtflag, sale_no,airport_id,apply_type,pay_time,pay_user_id,sale_name
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -312,7 +313,9 @@
 			<if test="airportId != null">
 				airport_id,
 			</if>
-
+			<if test="saleName != null">
+				sale_name,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="orderId != null">
@@ -356,6 +359,9 @@
 			</if>
 			<if test="airportId != null">
 				#{airportId,jdbcType=VARCHAR},
+			</if>
+			<if test="saleName != null">
+				#{saleName,jdbcType=VARCHAR},
 			</if>
 
 		</trim>
@@ -504,8 +510,6 @@
 		 WHERE o.order_id= #{orderId}
 	</select>
 
-
-
 	<resultMap id="GraphResultMap" type="com.jianfei.core.dto.GraphDto" >
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="value" property="value" jdbcType="INTEGER" />
@@ -520,7 +524,6 @@ select count(*) as 'value', 'TO_ACTIVE' as 'name' from app_orders o join app_ord
 union
 select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_state in (2,3) and sale_no=#{uno}
 	</select>
-
 
 
 	<resultMap id="OrderListResultMap" type="com.jianfei.core.dto.OrderPageDto" >

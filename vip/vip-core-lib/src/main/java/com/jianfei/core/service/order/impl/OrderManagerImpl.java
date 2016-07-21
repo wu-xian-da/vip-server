@@ -127,7 +127,10 @@ public class OrderManagerImpl implements OrderManager {
         } else if (VipCardState.NOT_ACTIVE.getName() != vipCard.getCardState()) {
             return BaseMsgInfo.msgFail("此VIP卡已使用或其他状态");
         }
-
+        User user=saleUserManager.getSaleUser(addInfoDto.getUno());
+        if (user == null || StringUtils.isBlank(user.getName())) {
+            return BaseMsgInfo.msgFail("人员工号不存在");
+        }
         //3、添加或修改用户信息
         AppCustomer customer = new AppCustomer();
         BeanUtils.copyProperties(customer, addInfoDto);
@@ -137,6 +140,7 @@ public class OrderManagerImpl implements OrderManager {
         AppOrders orders = new AppOrders();
         BeanUtils.copyProperties(orders, addInfoDto);
         orders.setSaleNo(addInfoDto.getUno());
+        orders.setSaleName(user.getName());
         orders.setCustomerId(customer.getCustomerId());
         orders.setPayMoney(vipCard.getInitMoney());
         orders.setOrderId(IdGen.uuid());
