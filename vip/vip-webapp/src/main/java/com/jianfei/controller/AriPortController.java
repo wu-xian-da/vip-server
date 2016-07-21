@@ -63,9 +63,9 @@ public class AriPortController extends BaseController {
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
 			@RequestParam(value = "name", required = false) String name,
-			HttpServletRequest request) {
+			String state, HttpServletRequest request) {
 		Map<String, Object> map = new MapUtils.Builder()
-				.setKeyValue("name", name)
+				.setKeyValue("name", name).setKeyValue("state", state)
 				.setKeyValue("dtflag", GloabConfig.OPEN)
 				.setKeyValue("order", request.getParameter("order"))
 				.setKeyValue("sort", request.getParameter("sort")).build();
