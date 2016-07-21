@@ -60,6 +60,7 @@
 		<result column="invoice_title" property="invoiceTitle"/>
 		<result column="postcode" property="postCode"/>
 		<result column="finish_time" property="backFinishTime"/>
+		<result column="update_time" property="updateTime"/>
 	</resultMap>
 
 	<!--订单详细信息展示返回类型 -->
@@ -98,7 +99,7 @@
 		select ord.order_id,ord.invoice_flag,ord.order_state,
 		inv.invoice_no,inv.invoice_id,inv.invoice_kind,inv.company_name,inv.company_address,
 		inv.company_phone,inv.business_license_url,inv.company_tax_no,inv.invoice_content,
-		inv.province,inv.city,inv.country,inv.address,inv.invoice_title,inv.postcode,
+		inv.province,inv.city,inv.country,inv.address,inv.invoice_title,inv.postcode,inv.update_time,
 		cus.customer_name,cus.customer_phone
 		from app_orders ord inner join app_invoice inv on ord.order_id =
 		inv.order_id

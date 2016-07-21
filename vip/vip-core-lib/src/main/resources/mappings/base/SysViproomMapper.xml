@@ -32,8 +32,11 @@
   		where vr.airport_id = ap.airport_id 
   		and vr.dtflag=0  and ap.state=0 and ap.dtflag=0 
   		<!-- 搜索条件 -->
-  	    <if test="searchContent != null">
+  	    <if test="searchContent != null and searchContent != ''">
   	    	and concat(vr.viproom_name,ap.airport_name) like CONCAT('%','${searchContent}','%' )
+  	    </if>
+  	    <if test="viproomState != null and viproomState !=''">
+  	    	and vr.active_state = #{viproomState}
   	    </if>
   	    order by vr.create_time desc
   </select>

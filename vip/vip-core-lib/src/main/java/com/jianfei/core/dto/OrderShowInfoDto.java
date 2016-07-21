@@ -70,6 +70,7 @@ public class OrderShowInfoDto implements Serializable {
     private String address;
     private String invoiceTitle;
     private String postCode;
+    private Date updateTime;
     
 	/**
 	 * @return the cardStateName
@@ -572,6 +573,19 @@ public class OrderShowInfoDto implements Serializable {
 	 */
 	public void setBackFinishTime(Date backFinishTime) {
 		this.backFinishTime = backFinishTime;
+	}
+	/**
+	 * @return the updateTime
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	/**
+	 * @param updateTime the updateTime to set
+	 */
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 	
 	

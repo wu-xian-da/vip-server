@@ -90,8 +90,9 @@
 						<th data-options="align:'center', field:'customerPhone',width:100">用户手机号</th>
 						<th data-options="align:'center', field:'invoiceNo',width:200">发票单号</th>
 						<th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
+						<th data-options="align:'center', field:'updateTime',width:150">开具发票时间</th>
 						<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
-						<th data-options="align:'center', field:'operation',width:210">操作</th>
+						<th data-options="align:'center', field:'operation',width:180">操作</th>
 					</tr>
 				</thead>
 
