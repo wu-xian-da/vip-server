@@ -69,8 +69,8 @@ public class TaskManagerImpl implements ITaskManager {
 	/**
 	 * 定时获取空港的核销数据 每小时获取一次
 	 */
-	@Scheduled(cron = "0 0 * * * *")
-	//@Scheduled(cron = "0 */1 * * * ?")
+	//@Scheduled(cron = "0 0 * * * *")
+	@Scheduled(cron = "0 */10 * * * ?")
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
 		try {
