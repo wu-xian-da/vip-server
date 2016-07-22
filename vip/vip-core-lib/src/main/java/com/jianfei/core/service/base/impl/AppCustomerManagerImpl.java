@@ -105,45 +105,6 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.jianfei.core.service.base.AppCustomerManager#batchDealMsg(java.lang
-	 * .String, org.springframework.ui.Model)
-	 */
-	@Override
-	public void batchDealMsg(String id, String orderId, Model model) {
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(orderId)) {
-			throw new IllegalArgumentException("订单号或者客户主键必须存在...");
-		}
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("id", id);
-		params.put("orderId", orderId);
-		// 订单详情
-		List<Map<String, Object>> orderInfo = appCustomerMapper
-				.orderInfo(params);
-		if (!CollectionUtils.isEmpty(orderInfo)) {
-			model.addAttribute("orderInfo", orderInfo);
-		}
-		// vip卡信息
-		List<Map<String, Object>> vipCardInfos = appCustomerMapper
-				.vipCardInfo(params);
-		if (!CollectionUtils.isEmpty(vipCardInfos)) {
-			model.addAttribute("vipCardInfo", vipCardInfos);
-		}
-		// 发票信息
-		List<Map<String, Object>> postInfo = appCustomerMapper.postInfo(params);
-		if (!CollectionUtils.isEmpty(postInfo)) {
-			model.addAttribute("postInfo", postInfo);
-		}
-		//退款信息
-		List<Map<String, Object>> backMoneyInfo = appCustomerMapper.backMoneyInfo(params);
-		if (!CollectionUtils.isEmpty(backMoneyInfo)) {
-			model.addAttribute("backMoneyInfo", backMoneyInfo);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * com.jianfei.core.service.base.AppCustomerManager#updateDeliveryState(
 	 * java.lang.String)
 	 */

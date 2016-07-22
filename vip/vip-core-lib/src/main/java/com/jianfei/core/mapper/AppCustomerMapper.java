@@ -44,47 +44,6 @@ public interface AppCustomerMapper {
 	List<Map<String, Object>> get(Map<String, Object> map);
 
 	/**
-	 * 用户订单信息
-	 * 
-	 * @param params
-	 *            key(id:客户id，orderId:订单卡)
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> orderInfo(Map<String, String> params);
-
-	/**
-	 * vip卡信息
-	 * 
-	 * @param params
-	 *            key(id:客户id，orderId:订单卡)
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> vipCardInfo(Map<String, String> params);
-
-	/**
-	 * 发票信息
-	 * 
-	 * @param params
-	 *            key(id:客户id，orderId:订单卡)
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> postInfo(Map<String, String> params);
-
-	/**
-	 * 退款信息
-	 * 
-	 * @param params
-	 *            key(id:客户id，orderId:订单卡)
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> backMoneyInfo(Map<String, String> params);
-
-
-	/**
 	 * updateDeliveryState(更新投递状态为已投递)
 	 * 
 	 * @param id

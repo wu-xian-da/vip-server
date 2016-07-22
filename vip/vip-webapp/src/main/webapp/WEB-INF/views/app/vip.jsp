@@ -11,13 +11,6 @@
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
 	var grid;
-	var look = function(id,order_id) {
-		parent.$.customerFrame({
-			title:"查看VIP用户记录",
-			height : '600px',
-			wight : '700px',
-			url : sy.contextPath + '/app/look?id=' + id+"&orderId="+order_id});
-	};
 	var delivery = function(id) {
 			var url = sy.contextPath + '/app/updateDeliveryState/'+id;
 			$.post(url, function(result) {

@@ -169,17 +169,6 @@ public class AppPicController extends BaseController {
 		return bindGridData(new PageInfo<AppCustomer>());
 	}
 
-	@RequestMapping(value = "/look")
-	public String lookVipInfo(String id, String orderId, Model model) {
-		MessageDto<AppCustomer> messageDto = appCustomerManager
-				.selectByPrimaryKey(id);
-		if (messageDto.isOk()) {
-			model.addAttribute("customer", messageDto.getData());
-		}
-		appCustomerManager.batchDealMsg(id, orderId, model);
-		return "app/vipInfo";
-	}
-
 	@ResponseBody
 	@RequestMapping(value = "/updateDeliveryState/{id}")
 	public MessageDto<String> updateDeliveryState(

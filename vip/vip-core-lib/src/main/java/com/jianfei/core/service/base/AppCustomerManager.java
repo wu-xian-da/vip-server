@@ -53,17 +53,6 @@ public interface AppCustomerManager {
 	 */
 	MessageDto<AppCustomer> selectByPrimaryKey(String id);
 
-
-	/**
-	 * batchDealMsg(这里用一句话描述这个方法的作用)
-	 * 
-	 * @param id
-	 * @param model
-	 *            void
-	 * @version 1.0.0
-	 */
-	void batchDealMsg(String id, String orderId, Model model);
-
 	/**
 	 * updateDeliveryState(更新投递状态未已投递)
 	 * 
