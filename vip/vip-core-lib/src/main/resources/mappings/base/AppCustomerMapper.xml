@@ -123,53 +123,44 @@
 
 	<!-- 订单信息 -->
 	<select id="orderInfo" resultType="java.util.HashMap"
-		parameterType="String">
+		parameterType="java.util.Map">
 		<![CDATA[
 			SELECT ao.`order_id`,DATE_FORMAT(ao.`order_time`,'%Y-%m-%d %H:%i:%s') as order_time, airport.`airport_name`,suser.`name`,suser.`phone` FROM `app_orders` ao 
 			INNER JOIN `sys_airport` airport ON airport.`airport_id`=ao.`airport_id`
 			INNER JOIN `sys_users` suser ON suser.code = ao.sale_no
-			WHERE ao.`customer_id`=#{id}
+			WHERE ao.`customer_id`=#{id} and ao.`order_id`=#{orderId}
 		 ]]>
 	</select>
 	<!-- vip卡的信息 -->
 	<select id="vipCardInfo" resultType="java.util.HashMap"
-		parameterType="String">
+			parameterType="java.util.Map">
 		<![CDATA[
 			SELECT card.`card_no`,card.`valide_time`,card.`remain_money`,card.`init_money` ,ao.`pay_type`,ao.`pay_time`,DATE_FORMAT(ao.`activat_time`,'%Y-%m-%d %H:%i:%s') as activat_time
 			FROM `app_vipcard` card
 			INNER JOIN `app_order_card` aoc ON card.`card_no`=aoc.`card_id`
 			INNER JOIN `app_orders` ao ON ao.`order_id`=aoc.`card_id`
-			WHERE ao.`customer_id`
+			WHERE ao.`customer_id` and ao.`order_id`=#{orderId}
 		 ]]>
 	</select>
 
 	<!-- 发票信息 -->
 	<select id="postInfo" resultType="java.util.HashMap"
-		parameterType="String">
+			parameterType="java.util.Map">
 		<![CDATA[
 			SELECT v.*,ao.`invoice_flag` FROM `app_invoice`  v 
 			INNER JOIN `app_orders` ao ON v.`order_id`=ao.`order_id` 
-			WHERE ao.`customer_id`=#{id}
+			WHERE ao.`customer_id`=#{id} and ao.`order_id`=#{orderId}
 		 ]]>
 	</select>
 	<!-- 退款信息 -->
 	<select id="backMoneyInfo" resultType="java.util.HashMap"
-		parameterType="String">
+		parameterType="java.util.Map">
 		<![CDATA[
 			SELECT  back.`money`,back.`back_type`,back.order_id,ord.order_state
 			FROM `app_card_back` back 
 			INNER JOIN `app_vipcard` vip ON back.`card_no`=vip.`card_no` 
 			INNER JOIN app_orders ord ON ord.order_id=back.order_id
-			WHERE vip.`customer_id`=#{id}
-		 ]]>
-	</select>
-	<!-- 卡的消费记录 -->
-	<select id="vipCardRescordInfo" resultType="java.util.HashMap"
-		parameterType="String">
-		<![CDATA[
-			SELECT consume.`viproom_name`,consume.`consume_money`,DATE_FORMAT(consume.`consume_time`,'%Y-%m-%d %H:%i:%s') as consume_time FROM `app_consume` consume 
-			INNER JOIN `app_vipcard` vip ON consume.`card_no`=vip.`card_no` 
-			WHERE vip.`customer_id`=#{id}
+			WHERE vip.`customer_id`=#{id} and ord.`order_id`=#{orderId}
 		 ]]>
 	</select>
 

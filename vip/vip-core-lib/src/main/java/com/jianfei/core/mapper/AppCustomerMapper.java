@@ -44,53 +44,45 @@ public interface AppCustomerMapper {
 	List<Map<String, Object>> get(Map<String, Object> map);
 
 	/**
-	 * orderInfo(用户订单信息)
+	 * 用户订单信息
 	 * 
-	 * @param id
-	 *            vip用户ID
+	 * @param params
+	 *            key(id:客户id，orderId:订单卡)
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> orderInfo(String id);
+	List<Map<String, Object>> orderInfo(Map<String, String> params);
 
 	/**
-	 * vipCardInfo(vip卡信息)
+	 * vip卡信息
 	 * 
-	 * @param id
-	 *            vip用户ID
+	 * @param params
+	 *            key(id:客户id，orderId:订单卡)
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> vipCardInfo(String id);
+	List<Map<String, Object>> vipCardInfo(Map<String, String> params);
 
 	/**
-	 * postInfo(发票信息)
+	 * 发票信息
 	 * 
-	 * @param id
-	 *            vip用户ID
+	 * @param params
+	 *            key(id:客户id，orderId:订单卡)
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> postInfo(String id);
+	List<Map<String, Object>> postInfo(Map<String, String> params);
 
 	/**
-	 * backMoneyInfo(退款信息)
+	 * 退款信息
 	 * 
-	 * @param id
-	 *            vip用户ID
+	 * @param params
+	 *            key(id:客户id，orderId:订单卡)
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> backMoneyInfo(String id);
+	List<Map<String, Object>> backMoneyInfo(Map<String, String> params);
 
-	/**
-	 * vipCardRescordInfo(卡的消费记入)
-	 * 
-	 * @param id
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> vipCardRescordInfo(String id);
 
 	/**
 	 * updateDeliveryState(更新投递状态为已投递)
