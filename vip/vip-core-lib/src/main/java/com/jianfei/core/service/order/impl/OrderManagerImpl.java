@@ -217,6 +217,7 @@ public class OrderManagerImpl implements OrderManager {
         invoiceManager.insert(appInvoice);
         orders.setInvoiceFlag(InvoiceState.NEED_INVOICE.getName());
         AppCustomer customer = orders.getCustomer();
+        customer.setDtflag(null);
         customer.setAddress(appInvoice.getProvince() + appInvoice.getCity() + appInvoice.getCountry() + appInvoice.getAddress());
         vipUserManager.updateUser(customer);
         int flag = appOrdersMapper.updateByPrimaryKeySelective(orders);
