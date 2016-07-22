@@ -81,8 +81,9 @@ public class TaskManagerImpl implements ITaskManager {
 	 * 
 	 * @see com.jianfei.scheduled.ITaskManager#checkinDataSchedule()
 	 */
+	//@Scheduled(cron = "0 0 * * * *")
+	//@Scheduled(cron = "0 */10 * * * ?")
 	@Scheduled(fixedRate = 600000,initialDelay=600000)
-	// @Scheduled(cron = "0 */1 * * * ?")
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
 		try {
