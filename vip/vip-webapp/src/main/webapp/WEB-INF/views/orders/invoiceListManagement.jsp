@@ -111,7 +111,7 @@
 					<!--根据发票类型不同显示不同的数据 -->
 					<div class="easy-common-content" id="commonInvoiceDiv">
 						<div class="div-content-item">
-							<label>发票类型</label><label class="label-content-item" id="cmInvoiceKind"></label>
+							<label>发票种类</label><label class="label-content-item" id="cmInvoiceKind"></label>
 						</div>
 						<div class="div-content-item">
 							<label>发票抬头</label><label class="label-content-item" id="cmInvoiceTitle"></label>
@@ -139,7 +139,7 @@
 					
 					<div class="easy-common-content" id="specialInvoiceDiv">
 						<div class="div-content-item">
-							<label>发票类型</label><label class="label-content-item" id="spInvoiceKind"></label>
+							<label>发票种类</label><label class="label-content-item" id="spInvoiceKind"></label>
 						</div>
 						<div class="div-content-item">
 							<label>发票内容</label><label class="label-content-item" id="spInvoiceContent"></label>

@@ -113,7 +113,7 @@
 					
 					<!--专用发票 -->
 					<c:if test="${invoice.invoiceKind ==1}">
-						<li>发票类型：专用发票</li>
+						<li>发票种类：专用发票</li>
 						<li>邮寄地址：${invoice.province} ${invoice.city} ${invoice.country} ${invoice.address }</li>
 						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
 						<li>发票抬头：${invoice.invoiceTitle}</li>
@@ -123,7 +123,7 @@
 						<li>公司税号：${invoice.companyTaxNo }</li>
 						<li>公司地址：${invoice.companyAddress }</li>
 						<li>公司电话：${invoice.companyPhone }</li>
-						<li>营业执照：<img src="${invoice.businessLicenseUrl}" style="width: 400px"></li>
+						<li>营业执照：<img src="${invoice.businessLicenseUrl}" style="width: 350px;height: 300px"></li>
 						<c:if test="${orderDetailInfo.invoiceFlag == 2}">
 						<li>发票编号：${invoice.invoiceNo}</li>
 						</c:if>
@@ -196,7 +196,7 @@
 			
 			<c:if test="${!empty appCardBack.agreementUrl}">	
 				<div class="order-list-title">紧急退款照片</div>
-				<div><img width="400px" src="${appCardBack.agreementUrl}"></div>
+				<div><img style="width:350px;height: 300px" src="${appCardBack.agreementUrl}"></div>
 			</c:if>
 			
 		</div>
