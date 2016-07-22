@@ -210,12 +210,16 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public BaseMsgInfo addOrderMailInfo(AppInvoice appInvoice) {
-        AppOrders orders = appOrdersMapper.selectByPrimaryKey(appInvoice.getOrderId());
+        AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(appInvoice.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
         invoiceManager.insert(appInvoice);
         orders.setInvoiceFlag(InvoiceState.NEED_INVOICE.getName());
+        AppCustomer customer = orders.getCustomer();
+        customer.setDtflag(null);
+        customer.setAddress(appInvoice.getProvince() + appInvoice.getCity() + appInvoice.getCountry() + appInvoice.getAddress());
+        vipUserManager.updateUser(customer);
         int flag = appOrdersMapper.updateByPrimaryKeySelective(orders);
         if (flag < 0)
             return BaseMsgInfo.msgFail("订单邮寄信息状态更新失败");
