@@ -22,8 +22,12 @@
 				<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFuns();">添加</a></td>
 				<td><div class="datagrid-btn-separator"></div></td>
 			</shiro:hasPermission>
-				<td>场站名称：</td>
-				<td><input type="text" id="name" style="width: 150px" ></input></td>
+				<td><select id="state" name="state" >
+										<option value="" selected="selected">请选择状态</option>
+										<option value="0">运营</option>
+										<option value="1">冻结</option>
+									</select>&nbsp;&nbsp;</td>
+				<td><input type="text" id="name" style="width: 200px" placeholder='请输入场站名称 '></input></td>
 				<td>
 					<input type="button" value="查询" style="width: 60px;height: 20px;
 				    border: none;
@@ -40,7 +44,7 @@
 	
 	<script type="text/javascript">
 	function search(){
-		grid.datagrid('load',{'name':$("#name").val()});
+		grid.datagrid('load',{'name':$("#name").val(),state:$("#state").val()});
 	};
 	var grid;
 	var addFuns = function() {

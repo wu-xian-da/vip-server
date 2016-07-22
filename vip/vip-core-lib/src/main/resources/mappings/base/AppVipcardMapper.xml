@@ -15,6 +15,7 @@
     <result column="card_name" property="cardName" jdbcType="VARCHAR" />
     <result column="dtflag" property="dtflag" jdbcType="INTEGER" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="sale_time" property="saleTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
   <!--分页查询  -->
@@ -30,6 +31,10 @@
 			</if>
 			<if test="cardNo!=null">
 				and card_no like CONCAT('%','${cardNo}','%' )
+			</if>
+			<!-- 检查vip卡是否过期查询 -->
+			<if test="checkFlag != null">
+				and expiry_time IS NOT NULL
 			</if>
 			and dtflag=0 order by import_time desc
 		</where>
@@ -51,7 +56,14 @@
   <select id="selAllVipCard" resultMap="BaseResultMap">
       select * from app_vipcard where dtflag=0 order by import_time desc
   </select>
-
+  
+  <!--根据订单号查询对应卡片的基本信息 -->
+  <select id="selVipCardInfoByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	  select card.* from 
+  	  app_order_card aoc inner join app_vipcard card 
+  	  on aoc.card_id = card.card_no 
+  	  where aoc.order_id=#{orderId}
+  </select>
   
   <sql id="Base_Column_List" >
     card_no, customer_id, init_money, remain_money, card_type, card_state, valide_time, 
@@ -110,6 +122,9 @@
       <if test="dtflag != null" >
         dtflag,
       </if>
+      <if test="saleTime != null" >
+        sale_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="cardNo != null" >
@@ -142,6 +157,9 @@
       <if test="dtflag != null" >
         #{dtflag,jdbcType=INTEGER},
       </if>
+      <if test="saleTime != null" >
+        #{saleTime,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
   
@@ -153,7 +171,14 @@
   			<if test="activeTime!=null and activeTime!=''">
   				active_time = #{activeTime} ,
   			</if>
-  		card_state=#{card_state}  where card_no = #{cardNo}
+  			<if test="saleTime!=null and saleTime!=''">
+  				sale_time=#{saleTime},
+  			</if>
+  			<if test="card_state!=null and card_state!=''">
+  				card_state=#{card_state},
+  			</if>
+  			card_no=#{cardNo}
+  		  where card_no = #{cardNo}
   </update>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.jianfei.core.bean.AppVipcard" >
@@ -185,6 +210,9 @@
       </if>
       <if test="dtflag != null" >
         dtflag = #{dtflag,jdbcType=INTEGER},
+      </if>
+      <if test="saleTime != null" >
+        sale_time= #{saleTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where card_no = #{cardNo,jdbcType=VARCHAR}

@@ -38,11 +38,11 @@
 
 
 			<div class="order-list-title">
-				VIP卡编号：<span>${orderDetailInfo.vipCardNo}</span>
+				VIP卡编号：<span>${cardInfo.cardNo}</span>
 			</div>
 			<ul>
 				<li><label>有效期：</label>1年</li>
-				<li><label>vip卡金额：</label><fmt:formatNumber value="${orderDetailInfo.initMoney}" pattern="0.00"/> 元</li>
+				<li><label>vip卡金额：</label><fmt:formatNumber value="${cardInfo.initMoney}" pattern="0.00"/> 元</li>
 				<li><label>支付方式：
 				      <c:choose>
 				      	<c:when test="${orderDetailInfo.payMethod == 1}">
@@ -63,7 +63,7 @@
 				
 				</li>
 				<li><label>支付时间：</label><fmt:formatDate value="${orderDetailInfo.payTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
-				<li><label>卡片激活短信发送时间：</label><fmt:formatDate value="${orderDetailInfo.activatTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+				<li><label>卡片激活时间：</label><fmt:formatDate value="${cardInfo.activeTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 			</ul>
 
 			<div class="order-list-title">个人资料</div>
@@ -151,11 +151,25 @@
 								银行卡转账
 							</c:when>
 							<c:otherwise>
-								现金转账
+								紧急退款
 							</c:otherwise>
 						</c:choose>
 					</li>
-					<li>转账账号：${appCardBack.customerCard}</li>
+					
+					<!--申请方式为现场，客服 -->
+					<c:if test="${orderDetailInfo.applyType !=2}">
+						<c:choose>
+							<c:when test="${appCardBack.backType ==3}">
+								<li>银行账号：${appCardBack.customerCard}</li>
+								<li>开户行名称：${appCardBack.bankName}</li>
+								<li>持卡人姓名：${appCardBack.customerName}</li>
+							</c:when>
+							<c:otherwise>
+								<li>转账账号：${appCardBack.customerCard}</li>
+							</c:otherwise>
+						</c:choose>
+					</c:if>
+
 				</c:if>
 			</ul>
 

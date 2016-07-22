@@ -31,6 +31,11 @@ public class AppVipcard {
 
     private Integer dtflag;
 
+    /**
+     * 销售时间
+     */
+    private Date saleTime;
+
     public String getCardNo() {
         return cardNo;
     }
@@ -157,5 +162,14 @@ public class AppVipcard {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
+    public Date getSaleTime() {
+        return saleTime;
+    }
+
+    public void setSaleTime(Date saleTime) {
+        this.saleTime = saleTime;
     }
 }

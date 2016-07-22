@@ -31,9 +31,6 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	private static final long serialVersionUID = 1L;
 	
 	private String agentPhone;//业务人员手机号
-	private String vipCardNo;//vip卡号
-	private int cardType;//卡类型 1->1年卡
-	private float initMoney;//卡初始金额
 	private float payMoney;//订单金额
 	private int payMethod;//支付方式
 	private Date payTime;//支付时间
@@ -48,8 +45,6 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	private String email;//邮箱地址
 	private int invoiceType;//发票类型
 	private String invoiceTitle;//发票抬头
-	
-	
 	
 	/**
 	 * @return the customerProvinceName
@@ -91,54 +86,7 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	public void setAgentPhone(String agentPhone) {
 		this.agentPhone = agentPhone;
 	}
-	/**
-	 * vipCardNo
-	 *
-	 * @return  the vipCardNo
-	 * @version   1.0.0
-	*/
 	
-	public String getVipCardNo() {
-		return vipCardNo;
-	}
-	/**
-	 * @param vipCardNo the vipCardNo to set
-	 */
-	public void setVipCardNo(String vipCardNo) {
-		this.vipCardNo = vipCardNo;
-	}
-	/**
-	 * cardType
-	 *
-	 * @return  the cardType
-	 * @version   1.0.0
-	*/
-	
-	public int getCardType() {
-		return cardType;
-	}
-	/**
-	 * @param cardType the cardType to set
-	 */
-	public void setCardType(int cardType) {
-		this.cardType = cardType;
-	}
-	/**
-	 * initMoney
-	 *
-	 * @return  the initMoney
-	 * @version   1.0.0
-	*/
-	
-	public float getInitMoney() {
-		return initMoney;
-	}
-	/**
-	 * @param initMoney the initMoney to set
-	 */
-	public void setInitMoney(float initMoney) {
-		this.initMoney = initMoney;
-	}
 	/**
 	 * payMethod
 	 *
@@ -323,21 +271,5 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "OrderDetailInfo [agentPhone=" + agentPhone + ", vipCardNo=" + vipCardNo + ", cardType=" + cardType
-				+ ", initMoney=" + initMoney + ", payMoney=" + payMoney + ", payMethod=" + payMethod + ", payTime="
-				+ payTime + ", activatTime=" + activatTime + ", customerIdent=" + customerIdent + ", sex=" + sex
-				+ ", indentType=" + indentType + ", customerProvinceName=" + customerProvinceName
-				+ ", customerCityName=" + customerCityName + ", birthDay=" + birthDay + ", address=" + address
-				+ ", email=" + email + ", invoiceType=" + invoiceType + ", invoiceTitle=" + invoiceTitle + "]";
-	}
-	
-	
-	
-	
 	
 }

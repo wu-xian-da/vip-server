@@ -25,19 +25,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.AppPicture;
-import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.ExportAip;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
-import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.ObjectUtils;
-import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.AppCustomerManager;
 import com.jianfei.core.service.base.AppPictureManager;
 
@@ -203,13 +199,14 @@ public class AppPicController extends BaseController {
 			for (Map<String, Object> map : messageDto.getData()) {
 				ExportAip exportAip = new ExportAip(map.get("customer_name"),
 						map.get("customer_phone"), map.get("sex"),
-						map.get("card_type"), map.get("customer_identi"),
-						map.get("birthday"), map.get("insured"),
-						map.get("orderstate"), map.get("order_id"));
+						map.get("card_type"), map.get("customer_identi"), map.get("birthday"),
+						map.get("order_id"), map.get("insured"),
+						map.get("orderstate"));
 				dataset.add(exportAip);
 			}
 			download(response, new String[] { "姓名", "手机号", "性别", "证件类型",
-					"证件号码", "出生日期", "投保状态", "用户状态", "订单号"  }, dataset, "vip用户.xls");
+					"证件号码", "出生日期", "订单号", "投保状态", "用户状态" }, dataset,
+					"vip用户.xls");
 		}
 	}
 }

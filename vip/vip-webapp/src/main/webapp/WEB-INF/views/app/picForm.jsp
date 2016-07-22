@@ -26,6 +26,7 @@ var checksubmit = function(){
 					$grid.datagrid('load');
 					$dialog.dialog('destroy');
 				} else {
+					checksubmitflg = false; 
 					layer.alert(result.msgBody, {
 						icon : 2,
 						skin : 'layer-ext-moon' 
@@ -55,7 +56,7 @@ var checksubmit = function(){
 			runtimes : 'html5,flash',//设置运行环境，会按设置的顺序，可以选择的值有html5,gears,flash,silverlight,browserplus,html4
 			//flash_swf_url : sy.contextPath + '/jslib/plupload_1_5_7/plupload/js/plupload.flash.swf',// Flash环境路径设置
 			url : sy.contextPath + '/plupload?fileFolder=/userPhoto',//上传文件路径
-			max_file_size : '5mb',//100b, 10kb, 10mb, 1gb
+			max_file_size : '600mb',//100b, 10kb, 10mb, 1gb
 			chunk_size : '10mb',//分块大小，小于这个大小的不分块
 			unique_names : true,//生成唯一文件名
 			// 如果可能的话，压缩图片大小
@@ -103,7 +104,7 @@ var checksubmit = function(){
 			});
 		});
 		uploader.bind('Error', function(up, err) {//出现错误
-			$('#filelist').append("<div>错误代码: " + err.code + ", 描述信息: " + err.message + (err.file ? ", 文件名称: " + err.file.name : "") + "</div>");
+			$('#filelist').append("<div>描述信息: " + err.message + (err.file ? "文件名称: " + err.file.name : "") + "</div>");
 			up.refresh();
 		});
 		uploader.bind('FileUploaded', function(up, file, info) {//上传完毕
@@ -133,8 +134,12 @@ var checksubmit = function(){
 					<td><input class="easyui-numberspinner" name="priority"  value="${appPicture.priority } data-options="increment:1,min:1,editable:false" style="width:120px;" ></td>
 				</tr>
 				<tr>
+					<th>名称:</th>
+					<td><input  name="name"  value="${appPicture.name }" style="width: 156px;"/></td>
+				</tr>
+				<tr>
 					<th>类型:</th>
-					<td><select class="easyui-combobox" name=imagetype data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+					<td><select class="easyui-combobox" name=imagetype data-options="panelHeight:'auto',editable:false" style="width: 160px;">
 							<option value="0" <c:if test="${appPicture.imagetype==0 }">selected="selected"</c:if> >业务APP轮播图</option>
 							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >用户APP轮播图</option>
 							<option value="2" <c:if test="${appPicture.imagetype==2 }">selected="selected"</c:if> >用户APP合作按钮</option>

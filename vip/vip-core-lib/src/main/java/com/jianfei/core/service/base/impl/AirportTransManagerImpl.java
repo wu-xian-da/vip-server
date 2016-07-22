@@ -52,7 +52,7 @@ public class AirportTransManagerImpl implements AirportTransManager {
         //查找下相关用户
         AppCustomer customer= vipUserManager.getUser(airportTrans.getPhone());
         if (customer==null || StringUtils.isBlank(customer.getCustomerId())){
-            BaseMsgInfo.msgFail("用户不存在，接送机信息添加失败");
+            return BaseMsgInfo.msgFail("用户不存在，接送机信息添加失败");
         }
         //转换前台传入日期
         Date flightDate= DateUtil.parseDateTime(airportTrans.getFlightDateStr());
@@ -122,6 +122,6 @@ public class AirportTransManagerImpl implements AirportTransManager {
     @Override
     public BaseMsgInfo getAirportTransNum(String phone) {
         List<AppAirportTrans> appAirportTranses = appAirportTransMapper.selectByPhone(phone);
-        return appAirportTranses == null || appAirportTranses.size() <= 2 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
+        return appAirportTranses == null || appAirportTranses.size() <= 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
     }
 }

@@ -19,6 +19,9 @@ public interface AppVipcardMapper {
 
 	// 将excel表格中的数据到到数据表中
 	int importExcelToDB(AppVipcard record);
+	
+	//根据订单号查询对应的卡片信息
+	AppVipcard selVipCardInfoByOrderId(String orderId);
 
 	int deleteByPrimaryKey(String cardNo);
 

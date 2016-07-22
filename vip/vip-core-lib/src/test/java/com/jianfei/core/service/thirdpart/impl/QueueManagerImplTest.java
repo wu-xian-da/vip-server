@@ -119,8 +119,8 @@ public class QueueManagerImplTest {
 	public void vipCardState2() {
 		// 更新激活时间和卡的有效期
 		boolean isOk = vipCardManager.activeAppCard(new MapUtils.Builder()
-				.setKeyValue("expiryTime", new Date())
-				.setKeyValue("card_state", VipCardState.ACTIVE.getName())// 更改VIP卡状态
+				.setKeyValue("saleTime", new Date())
+				.setKeyValue("card_state", VipCardState.ACTIVE.getName())// 更改VIP卡状态为绑定成功未激活
 				.setKeyValue("cardNo", "07927752083").build());
 		if (isOk) {
 			System.out.println("*****************8");

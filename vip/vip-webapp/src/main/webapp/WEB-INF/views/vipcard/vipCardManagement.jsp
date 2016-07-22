@@ -63,44 +63,55 @@
 										width : '200',
 										title : '卡号',
 										field : 'cardNo',
-										align : 'center',
+										align : 'left',
 										sortable : true
 									},
 
 									{
-										width : '200',
+										width : '150',
 										title : 'NFC号',
 										field : 'nfcId',
-										align : 'center',
+										align : 'left',
 										sortable : true
 									},
 									{
-										width : '150',
+										width : '180',
 										title : '导入时间',
 										field : 'importTime',
-										align : 'center',
+										align : 'left',
+										sortable : true,
+									},
+									{
+										width : '150',
+										title : '过期时间',
+										field : 'expiryTime',
+										align : 'left',
 										sortable : true,
 									},
 									{
 										width : '150',
 										title : 'vip卡状态',
 										field : 'cardState',
-										align : 'center',
+										align : 'left',
 										sortable : true,
 										formatter : function(value, row, index) {
 											switch (value) {
 											case 0:
-												return '未激活';
+												return '未绑定';
 											case 1:
-												return '激活成功';
+												return '绑定成功未激活';
 											case 2:
 												return '已退卡';
 											case 3:
-												return '激活失败';
+												return '绑定失败';
 											case 4:
-												return '待激活';
+												return '待绑定';
 											case 5:
 												return '解绑失败';
+											case 6:
+												return '绑定成功已激活';
+											case 7:
+												return '已过期';
 											}
 											
 										}
@@ -109,7 +120,7 @@
 										title : '操作',
 										field : 'action',
 										width : '90',
-										align : 'center',
+										align : 'left',
 										formatter : function(value, row) {
 											var str = '';
 											str += sy
@@ -200,18 +211,18 @@
 								<td>
 									<select name="_cardState" id="cardStateSel">
 										<option value="">全部vip卡状态</option>
-										<option value="0">未激活</option>
-										<option value="1">激活成功</option>
+										<option value="0">未绑定</option>
+										<option value="1">绑定成功未激活</option>
 										<option value="2">已退卡</option>
-										<option value="3">激活失败</option>
-										<option value="4">待激活</option>
+										<option value="3">绑定失败</option>
+										<option value="4">待绑定</option>
 										<option value="5">解绑失败</option>
-
+										<option value="6">绑定成功已激活</option>
+                                        <option value="7">已过期</option>
 									</select>
 								</td>
 								<td style="width: 10px"></td>
-								<td>请输入卡号</td>
-								<td><input id="_cardNo" name="_cardNo" value="" style="width: 120px;" /></td>
+								<td><input id="_cardNo" name="_cardNo" value="" style="width: 120px;" placeholder="请输入卡号" /></td>
 								<td><input type="button" value="查询" class="btn" onclick="searchByCondition();"></td>
 							</tr>
 						</table>

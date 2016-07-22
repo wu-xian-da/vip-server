@@ -32,8 +32,11 @@
   		where vr.airport_id = ap.airport_id 
   		and vr.dtflag=0  and ap.state=0 and ap.dtflag=0 
   		<!-- 搜索条件 -->
-  	    <if test="searchContent != null">
+  	    <if test="searchContent != null and searchContent != ''">
   	    	and concat(vr.viproom_name,ap.airport_name) like CONCAT('%','${searchContent}','%' )
+  	    </if>
+  	    <if test="viproomState != null and viproomState !=''">
+  	    	and vr.active_state = #{viproomState}
   	    </if>
   	    order by vr.create_time desc
   </select>
@@ -76,8 +79,10 @@
     select vr.viproom_id,vr.viproom_name,ap.airport_name,ap.header_name,ap.header_phone,vr.singleconsume_money,
     pe.click_url,pe.picture_id,pe.picture_url,pe.priority
     from sys_viproom vr LEFT JOIN  sys_airport ap
-    ON vr.airport_id = ap.airport_id LEFT JOIN app_picture  pe ON vr.viproom_id=pe.viproom_id and pe.dtflag=0
-    where ap.dtflag=0 and vr.active_state=0 and vr.dtflag=0 and ap.state=0 
+    ON vr.airport_id = ap.airport_id  left join  (
+    select viproom_id,MAX(picture_id) as picture_id from app_picture where dtflag=0 and imagetype is null GROUP BY viproom_id
+    ) ped on vr.viproom_id=ped.viproom_id LEFT JOIN app_picture  pe ON pe.picture_id=ped.picture_id
+    where ap.dtflag=0 and vr.active_state=0 and vr.dtflag=0 and ap.state=0
     <if test="province!=null">
       and ap.province =#{province}
     </if>

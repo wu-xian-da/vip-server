@@ -29,6 +29,7 @@ var checksubmit = function(){
 						$grid.datagrid('load');
 						$dialog.dialog('destroy');
 					} else {
+						checksubmitflg = false; 
 						$pjq.messager.alert('提示', result.msgBody, 'error');
 					}
 				}, 'json');
@@ -78,26 +79,13 @@ var checksubmit = function(){
 			<table class="table" style="width: 100%;">
 				<tr style="padding-top: 5px;">
 					<th style="width: 20%;">场站名称 </th>
-					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" style="text-align: left;"/></td>
+					<td><input name="name"  value="${ariPort.airport_name }" class="easyui-validatebox"  data-options="missingMessage:'必填项',required:true" style="text-align: left;"/></td>
 						<th>场站负责人</th>
 					<td><input style="text-align: left;" name="headerName" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true" value="${ariPort.header_name }" /></td>
 				</tr>
 				<tr>
 					<th>负责人联系方式</th>
-					<td><input style="text-align: left;" name="headerPhone" class="easyui-validatebox" data-options="validType:'phoneRex'" value="${ariPort.header_phone }" /></td>
-					<th>业务员人数</th>
-					<td>
-					<input class="easyui-numberspinner" name="agentNum"  value="${ariPort.agent_num } data-options="increment:1" style="width:120px;" ></input>
-				</tr>
-				<tr >
-					<th>所属省份</th>
-					<td>
-						<select id="cc" class="easyui-combobox" name="province" style="width:200px;text-align: left;">
-							<c:forEach items="${citys }" var="city">
-								<option style="text-align: left;"  value="${city.cid }" <c:if test="${!empty ariPort and ariPort.cid==city.cid }">selected="selected"</c:if> >${city.name }</option>
-							</c:forEach>
-						</select>
-					</td>
+					<td><input style="text-align: left;" name="headerPhone" class="easyui-validatebox" data-options="missingMessage:'必填项',required:true,validType:'phoneRex'" value="${ariPort.header_phone }" /></td>
 					<th>场站状态</th>
 					<c:choose>
 						<c:when test="${!empty ariPort and ariPort.state==0}">
@@ -110,6 +98,16 @@ var checksubmit = function(){
 							<td><input type="radio" value="0" name="state" checked >运营<input type="radio" value="1" name="state"  >冻结</td>
 						</c:otherwise>
 					</c:choose>
+				</tr>
+				<tr >
+					<th>所属省份</th>
+					<td>
+						<select id="cc" class="easyui-combobox" name="province" style="width:153px;text-align: left;">
+							<c:forEach items="${citys }" var="city">
+								<option style="text-align: left;"  value="${city.cid }" <c:if test="${!empty ariPort and ariPort.cid==city.cid }">selected="selected"</c:if> >${city.name }</option>
+							</c:forEach>
+						</select>
+					</td>
 				</tr>
 			</table>
 		</fieldset>

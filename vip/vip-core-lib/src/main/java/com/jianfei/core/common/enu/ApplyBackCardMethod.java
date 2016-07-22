@@ -9,15 +9,19 @@ package com.jianfei.core.common.enu;
  */
 public enum ApplyBackCardMethod {
 	/**
-	 * 现场申请
+	 * 现场-正常
 	 */
 	SCENE_APPLY(0),
 	
 	/**
 	 * 客服申请
 	 */
-	CUSTOMER_SERVICE_APPLY(1);
+	CUSTOMER_SERVICE_APPLY(1),
 	
+	/**
+	 * 现场-紧急
+	 */
+	SCENE_EMERGENT_APPLY(2);
 	
 	private int name;
 

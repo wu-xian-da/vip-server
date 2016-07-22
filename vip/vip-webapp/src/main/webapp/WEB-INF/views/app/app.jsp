@@ -63,7 +63,11 @@
 			pageSize : 10,
 			pageList : [5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 		
-			columns : [ [ {
+			columns : [ [{
+				width : '120',
+				title : '名称',
+				field : 'name'
+			}, {
 				width : '150',
 				title : '类型',
 				align : 'center',
@@ -101,10 +105,10 @@
 				align : 'center',
 				formatter : function(value, row) {
 					var str = '';
-					<%if (anyPermissionsTag.showTagBody("system:user:update")) {%>
+					<%if (anyPermissionsTag.showTagBody("system:app:update")) {%>
 						str += sy.formatString('<img class="iconImg ext-icon-note_edit" title="编辑" onclick="editFun(\'{0}\');"/> 编辑', row.pictureId);
 					<%}%>
-					<%if (anyPermissionsTag.showTagBody("system:user:delete")) {%>
+					<%if (anyPermissionsTag.showTagBody("system:app:delete")) {%>
 						str += sy.formatString('&nbsp;&nbsp;<img class="iconImg ext-icon-note_delete" title="删除" onclick="removeFun(\'{0}\');"/> 删除', row.pictureId);
 					<%}%>
 						return str;
@@ -131,7 +135,7 @@
 				<td>
 					<table>
 						<tr>
-						<shiro:hasPermission name="system:user:add">
+						<shiro:hasPermission name="system:app:add">
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
 						</shiro:hasPermission>

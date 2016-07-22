@@ -11,30 +11,38 @@ package com.jianfei.core.common.enu;
 public enum VipCardState {
 
     /**
-     * 未激活
+     * 未绑定
      */
     NOT_ACTIVE(0),
     /**
-     * 激活
+     * 绑定成功未激活
      */
     ACTIVE(1),
     /**
-     * 退卡
+     * 已退卡
      */
     BACK_CARD(2),
     /**
-     * 激活失败
+     * 绑定失败
      */
     ACTIVATE_FAIL(3),
     /**
-     * 待激活
+     * 待绑定
      */
     TO_ACTIVATE(4),
-    
     /**
      * 解绑失败
      */
-	UNBUNDLING_FAIL(5);
+	UNBUNDLING_FAIL(5),
+    /**
+     * 绑定成功已激活
+     */
+    ACTIVE_USE(6),
+	
+    /**
+     * 已过期
+     */
+	CARD_EXPIRED(7);
 
 
     private Integer name;

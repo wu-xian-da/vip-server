@@ -78,15 +78,15 @@
 				field : 'name'
 			} ] ],
 			columns : [ [  {
-				width : '440',
+				width : '130',
 				title : '所属场站',
 				field : 'ariPortsNames'
 			},{
-				width : '120',
+				width : '80',
 				title : '职位',
 				field : 'job'
 			}, {
-				width : '120',
+				width : '100',
 				title : '手机号码',
 				field : 'phone'
 			}, {
@@ -94,17 +94,17 @@
 				title : '入职时间',
 				field : 'create_time'
 			}, {
-				width : '80',
+				width : '70',
 				title : '上月开卡数',
 				field : 'lmonth',
 				sortable : true
 			}, {
-				width : '80',
+				width : '70',
 				title : '本月开卡数',
 				field : 'tmonth',
 				sortable : true
 			}, {
-				width : '120',
+				width : '70',
 				title : '开卡总量',
 				field : 'total',
 				sortable : true
@@ -165,7 +165,7 @@
 				<td>
 					<table>
 						<tr>
-						<shiro:hasPermission name="system:user:add">
+						<shiro:hasPermission name="system:busizz:add">
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
 						</shiro:hasPermission>
@@ -174,7 +174,7 @@
 								<table>
 									<tr>
 										<td>姓名：</td>
-										<td><input id="name" style="width: 150px" placeholder='输入业务员名字'></input></td>
+										<td><input id="name" style="width: 200px" placeholder='输入业务员名字'></input></td>
 										<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;
 						    border: none;

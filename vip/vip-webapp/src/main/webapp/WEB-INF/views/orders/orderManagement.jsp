@@ -84,8 +84,8 @@
 			                </select>
 			            </div>
 			
-			            <div class="order-condition-item" style="width: 210px">
-			                <input id="phoneOrUserName" type="text" placeholder="订单号/姓名/手机号">
+			            <div class="order-condition-item" style="width: 230px">
+			                <input id="phoneOrUserName" type="text" placeholder="订单号/卡号/姓名/手机号" style="width: 150px">
 			                <button id="searchBt">查询</button>
 			            </div>
 			            
@@ -103,7 +103,10 @@
 		</div>        
         <div style="clear:both; height:93%;" id="data-grid-wrap" data-options="region:'center',fit:true,border:false">
 	        <table id="tt" title=""
-	                data-options="singleSelect:true,collapsible:true,
+	                data-options="
+	               					rownumbers:true,
+	                				singleSelect:true,
+	               					collapsible:true,
 	                                url:'orderList',
 	                                method:'get',
 	                                remoteSort:false,
@@ -114,14 +117,14 @@
 	                <tr>
 	                <th data-options="align:'center', field:'orderId',width:130">订单编号</th>
 	                <th data-options="align:'center', field:'orderTime',width:150">订单日期</th>
-	                
+	                <th data-options="align:'center', field:'vipCardNo',width:130">卡号</th>
 	                <th data-options="align:'center', field:'airportName',width:150">场站</th>
 	                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
 	                
 	                <th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 	                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 	                
-	                <th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
+	                <th data-options="align:'center', field:'invoiceFlagName',width:80">发票状态</th>
 	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 	                <th data-options="align:'center', field:'operation',width:230">操作</th>
 	                </tr>
@@ -138,6 +141,11 @@
             style="width:500px;height:300px;padding:10px;">
        	<div class="easy-window-item">
             <div class="easy-window-radio-tab">
+            	<!-- 支付方式提示 -->
+            	<div class="radio-tab-content" style="font-weight:bolder ;color: red;font-size:large;">
+                                               支付方式&nbsp;<label id="orderPayMethod" >测试一下</label>
+                </div>
+                
                 <div class="radio-tab-head">
                     <label><input type="radio" name="card-radio" checked id="1">微信转账</label>
                     <label><input type="radio" name="card-radio" id="2">支付宝转账</label>
@@ -310,7 +318,7 @@
 					$("#backMethod").text('退款方式');
 					$("#payBackCardNo").text('银行卡转账');
 				}else{
-					$("#backMethod").text('银行卡号');
+					$("#backMethod").text('退款方式 银行卡号');
 					$("#payBackCardNo").text(args.backMoneyCard);
 					$("#banckName2div").show();
 					$("#banckName2").text(args.backName);
@@ -365,6 +373,17 @@
         */
 		//1、审核通过时，输入用户的账户信息（已完成）
         function onRefund(args){
+			//支付方式
+			var payType = args.payType;
+			if(payType == 1){
+				$('#orderPayMethod').text('微信支付');
+			}else if(payType == 2){
+				$('#orderPayMethod').text('支付宝支付');
+			}else if(payType == 3){
+				$('#orderPayMethod').text('银行卡支付');
+			}else{
+				$('#orderPayMethod').text('现金支付');
+			}
         	$("#remainMoney").text(args.remainMoney);
         	$("#hideOrderId").val(args.orderId);
         	$("#w").window('open');

@@ -31,7 +31,7 @@
 		email, address, password,
 		use_type, remark1,
 		dtflag, province, city,
-		country,province_name,city_name,card_type
+		country,province_name,city_name,card_type,birth_day
 	</sql>
 	<select id="get" resultType="java.util.Map" parameterType="java.util.Map">
 		<![CDATA[
@@ -48,7 +48,7 @@
 					ao.order_id,
 					case 
 						when ao.order_state=1 or ao.order_state=3 or ao.order_state=2 THEN '已支付'
-						when ao.order_state=4 THEN '已退卡'
+						when ao.order_state=4 THEN '已退款'
 					ELSE
 						'未支付'
 					end as orderstate,
@@ -67,7 +67,7 @@
 				and orderstate=#{orderstate}
 			</if>
 			<if test="insured!=null and insured!=''">
-				and ao.insured=#{insured}
+				and insured=#{insured}
 			</if>
 		</where>
 	</select>

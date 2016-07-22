@@ -42,7 +42,7 @@
 						<option value="">全部申请途径</option>
 						<option value="0">现场</option>
 						<option value="1">客服</option>
-						
+						<option value="2">紧急</option>
 					</select>
 				</div>
 	
@@ -72,7 +72,10 @@
 				}
 		</style>
 		<div style="clear:both; height:92%;" id="data-grid-wrap" data-options="region:'center',fit:true,border:false">
-				<table id="tt" data-options="singleSelect:true,collapsible:true,
+				<table id="tt" data-options="
+										rownumbers:true,
+										singleSelect:true,
+										collapsible:true,
 		                                url:'backCardList',
 		                                method:'get',
 		                                remoteSort:false,
@@ -87,14 +90,14 @@
 							<th data-options="align:'center', field:'orderId',width:130">订单号</th>
 							<th data-options="align:'center', field:'customerName',width:100">用户名</th>
 							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-							<th data-options="align:'center', field:'orderTime',width:150">申请日期</th>
-		
+							<th data-options="align:'center', field:'backApplyTime',width:150">退款申请日期</th>
+							<th data-options="align:'center', field:'backFinishTime',width:150">退款完成日期</th>
 							<th data-options="align:'center', field:'applyTypeName',width:120">申请途径</th>
 							<th data-options="align:'center', field:'backTypeName',width:80">退款方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
 							<th data-options="align:'center', field:'cardStateName',width:100">卡状态</th>
-							<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
-							<th data-options="align:'center', field:'operation',width:200">操作</th>
+							<th data-options="align:'center', field:'orderStateName',width:80">订单状态</th>
+							<th data-options="align:'center', field:'operation',width:180">操作</th>
 						</tr>
 					</thead>
 		
@@ -232,7 +235,7 @@
 					$("#backMethod").text('退款方式');
 					$("#payBackCardNo").text('银行卡转账');
 				}else{
-					$("#backMethod").text('银行卡号');
+					$("#backMethod").text('退款方式 银行卡号');
 					$("#payBackCardNo").text(args.backMoneyCard);
 					$("#banckName2div").show();
 					$("#banckName2").text(args.backName);

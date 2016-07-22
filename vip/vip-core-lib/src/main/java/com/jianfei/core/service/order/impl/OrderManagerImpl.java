@@ -127,7 +127,10 @@ public class OrderManagerImpl implements OrderManager {
         } else if (VipCardState.NOT_ACTIVE.getName() != vipCard.getCardState()) {
             return BaseMsgInfo.msgFail("此VIP卡已使用或其他状态");
         }
-
+        User user=saleUserManager.getSaleUser(addInfoDto.getUno());
+        if (user == null || StringUtils.isBlank(user.getName())) {
+            return BaseMsgInfo.msgFail("人员工号不存在");
+        }
         //3、添加或修改用户信息
         AppCustomer customer = new AppCustomer();
         BeanUtils.copyProperties(customer, addInfoDto);
@@ -137,6 +140,7 @@ public class OrderManagerImpl implements OrderManager {
         AppOrders orders = new AppOrders();
         BeanUtils.copyProperties(orders, addInfoDto);
         orders.setSaleNo(addInfoDto.getUno());
+        orders.setSaleName(user.getName());
         orders.setCustomerId(customer.getCustomerId());
         orders.setPayMoney(vipCard.getInitMoney());
         orders.setOrderId(IdGen.uuid());
@@ -386,20 +390,18 @@ public class OrderManagerImpl implements OrderManager {
     private void getVipCardUseInfo(VipCardUseDetailInfo vipCardUseDetailInfo) {
         //3、查询VIP使用信息
         List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
-        float usedMoney = 0;
-        if (list != null && list.isEmpty()) {
-            for (AppConsume appConsume : list) {
-                usedMoney = usedMoney + appConsume.getConsumeMoney();
-            }
-        }
-        float realMoney = (float) (usedMoney * 0.8);
+        int num = list == null ? 0 : list.size();
+        float usedMoney = num * 200;
+        float realMoney = num * 150;
         float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney - 100;
-        if (remainMoney < 0) {
+        if (realMoney < 0)
             remainMoney = 0;
-        }
+        vipCardUseDetailInfo.setSafeMoney(100);
         vipCardUseDetailInfo.setReturnMoney(remainMoney);
         vipCardUseDetailInfo.setRealMoney(realMoney);
-        vipCardUseDetailInfo.setReturnInfo("您已免费享受了价值" + usedMoney + "元的VIP室服务,若退卡需扣除该费用。亿出行仅收取该费用的80%作为服务费。");
+        vipCardUseDetailInfo.setReturnInfo("由于开卡当日亿出行已为您投保，保费100元，若退卡，需扣除保费。" +
+                "您已免费享受了价值" + usedMoney + "元的VIP室服务，若退卡需扣除该费用，亿出行仅收取150元/次的服务费，总计" + realMoney + "元。" +
+                "现在申请退款，可以退给用户" + remainMoney + " 元");
         vipCardUseDetailInfo.setUsedMoney(usedMoney);
         vipCardUseDetailInfo.setCardUseList(list);
         vipCardUseDetailInfo.setSaleRate("80%");
@@ -506,6 +508,12 @@ public class OrderManagerImpl implements OrderManager {
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
             appCardBack.setFinishTime(new Date());
             msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
+            AppVipcard vipcard=new AppVipcard();
+            vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
+            vipcard.setCardState(VipCardState.BACK_CARD.getName());
+            log.info("更改VIP"+vipcard.getCardNo()+"卡未已退卡");
+            vipCardManager.updateVipCard(vipcard);
+            orders.setApplyType(ApplyBackCardMethod.SCENE_EMERGENT_APPLY.getName());
         } else {
             //审核通过
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
@@ -514,20 +522,14 @@ public class OrderManagerImpl implements OrderManager {
             } else {
                 msgBuilder.setMsgType(MsgType.QT_BACK_CARD_APPLY.getName());
             }
+            //APP申请
+            orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         }
         boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
-        log.info("更改VIP卡状态");
-        AppVipcard vipcard=new AppVipcard();
-        vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
-        vipcard.setCardState(VipCardState.BACK_CARD.getName());
-        log.info(vipcard);
-        vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
         log.info("更改用户状态为不可用");
-        vipCardManager.updateVipCard(vipcard);
-        //APP申请
-        orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
-        appOrdersMapper.updateByPrimaryKeySelective(orders);
+        vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
 
+        appOrdersMapper.updateByPrimaryKeySelective(orders);
         log.info("发送消息");
         log.info(msgBuilder);
         queueManager.sendMessage(msgBuilder);
@@ -636,10 +638,10 @@ public class OrderManagerImpl implements OrderManager {
         appOrdersMapper.updateByPrimaryKeySelective(orders);
         cardBackManager.deleteCardBackInfo(orderId);
         //卡状态为已激活
-        AppVipcard vipcard=new AppVipcard();
+       /* AppVipcard vipcard=new AppVipcard();
         vipcard.setCardNo(vipCardNo);
         vipcard.setCardState(VipCardState.ACTIVE.getName());
-        vipCardManager.updateVipCard(vipcard);
+        vipCardManager.updateVipCard(vipcard);*/
         //用户状态为已激活
         vipUserManager.updateUserSate(phone,VipUserSate.ACTIVE);
 
@@ -700,7 +702,7 @@ public class OrderManagerImpl implements OrderManager {
             }
             return BaseMsgInfo.success(true);
         } else {
-            return BaseMsgInfo.msgFail("激活失败");
+            return BaseMsgInfo.msgFail("绑定失败");
         }
     }
 }

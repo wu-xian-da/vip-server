@@ -15,20 +15,7 @@ a {
 	var grid;
 	
 	function searchByCondition(){
-		grid.datagrid('load',{'_searchContent':$("#_searchContent").val()});
-	};
-	
-	var editFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '编辑用户信息',
-			url : sy.contextPath + '/user/form?id=' + id,
-			buttons : [ {
-				text : '编辑',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
-		});
+		grid.datagrid('load',{'_searchContent':$("#_searchContent").val(),"_viproomState":$("#_viproomStateSel").val()});
 	};
 	
 	//逻辑删除vip室
@@ -82,30 +69,6 @@ a {
 		});
 	};
 	
-	var grantRoleFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '修改角色',
-			url : sy.contextPath + '/user/grant?id=' + id,
-			buttons : [ {
-				text : '修改',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
-		});
-	};
-	var grantOrganizationFun = function(id) {
-		var dialog = parent.sy.modalDialog({
-			title : '修改机构',
-			url : sy.contextPath + '/securityJsp/base/SyuserOrganizationGrant.jsp?id=' + id,
-			buttons : [ {
-				text : '修改',
-				handler : function() {
-					dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-				}
-			} ]
-		});
-	};
 	
 	//页面初始化时进行渲染
 	$(function() {
@@ -126,7 +89,7 @@ a {
 				align : 'left',
 				sortable : true
 			} ,{
-				width : '300',
+				width : '240',
 				title : 'vip室名称',
 				align : 'left',
 				field : 'viproomName',
@@ -161,7 +124,7 @@ a {
 				title : '操作',
 				field : 'action',
 				width : '200',
-				align : 'center',
+				align : 'left',
 				formatter : function(value, row,index) {
 					var str = '';
 					switch (row.activeState){
@@ -205,7 +168,13 @@ a {
 					<form id="searchForm">
 						<table>
 							<tr>
-								<td>关键字</td>
+								<td  style="width:120px;">
+									<select id="_viproomStateSel">
+										<option value="">全部vip室状态</option>
+										<option value="0">启用</option>
+										<option value="1">禁用</option>
+									</select>
+								</td>
 								<td><input id="_searchContent" name="_searchContent" style="width: 125px;"
 									placeholder="场站名称/VIP室名称" /></td>
 								<td><input type="button" value="查询"

@@ -395,7 +395,7 @@
 				and aat.pickup_type=#{pickup_type}
 			</if>
 			<if test="nameandphone!=null and nameandphone!=''">
-				and ( name like CONCAT('%', #{nameandphone}, '%') or phone=#{nameandphone})
+				and ( name like CONCAT('%', #{nameandphone}, '%') or phone like CONCAT('%', #{nameandphone}, '%'))
 			</if>
 		</where>
 		<if test="sort==null or sort==''">
@@ -422,12 +422,13 @@
 			 aat.airport_name,
 			 aat.flight_lou,
 			 aat.flight_num,
-			 aat.flight_date,
-			 aat.gooff_date,
+			 DATE_FORMAT( aat.flight_date,'%Y-%m-%d %H:%i') as flight_date,
+			 DATE_FORMAT( aat.gooff_date,'%Y-%m-%d %H:%i') as gooff_date,
 			 aat.number_peers,
 			 aat.pname,
 			 aat.sname,
 			 aat.cname,
+			 aat.detail_address,
 			 aat.pickup_type
 			FROM
 				app_airport_trans aat

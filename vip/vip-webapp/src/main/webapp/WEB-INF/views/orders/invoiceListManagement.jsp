@@ -73,7 +73,10 @@
 		<div style="clear: both; height: 93%;" id="data-grid-wrap"
 			data-options="region:'center',fit:true,border:false">
 			<table id="tt" title=""
-				data-options="singleSelect:true,collapsible:true,
+				data-options="
+									rownumbers:true,
+									singleSelect:true,
+									collapsible:true,
 	                                url:'invoiceList',
 	                                method:'get',
 	                                remoteSort:false,
@@ -82,13 +85,14 @@
 	                                pagination:true">
 				<thead>
 					<tr>
-						<th data-options="align:'center', field:'orderId',width:200">订单号</th>
+						<th data-options="align:'center', field:'orderId',width:150">订单号</th>
 						<th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 						<th data-options="align:'center', field:'customerPhone',width:100">用户手机号</th>
 						<th data-options="align:'center', field:'invoiceNo',width:200">发票单号</th>
 						<th data-options="align:'center', field:'invoiceFlagName',width:100">发票状态</th>
+						<th data-options="align:'center', field:'updateTime',width:150">开具发票时间</th>
 						<th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
-						<th data-options="align:'center', field:'operation',width:210">操作</th>
+						<th data-options="align:'center', field:'operation',width:180">操作</th>
 					</tr>
 				</thead>
 
@@ -100,7 +104,7 @@
 	<!--发票信息录入 -->
 	<div id="w" class="easyui-window" title="发票页面"
 		data-options="modal:'true',closed:'true'"
-		style="width: 500px; height: 600px; padding: 10px;">
+		style="width: 500px; height: 500px; padding: 10px;">
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab" style="padding-left: 100px;padding-top: 20px;">
 				<div class="radio-tab-content">

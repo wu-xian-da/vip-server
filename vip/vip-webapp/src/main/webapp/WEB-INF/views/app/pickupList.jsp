@@ -161,7 +161,7 @@
 										</select>&nbsp;&nbsp;</td>
 										<td><select id="submit" name="submit">
 											<option value="" selected="selected">请选择用车状态</option>
-											<option value="1">未递交</option>
+											<option value="1">未投递</option>
 											<option value="2">已递交</option>
 										</select>&nbsp;&nbsp;</td>
 										<td><input id="nameandphone" name="nameandphone" style="width: 150px" placeholder='输入手机号/姓名'></input></td>

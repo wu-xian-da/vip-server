@@ -10,14 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
 public class AppCustomer implements Serializable {
-	/**
-	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）
-	 *
-	 * @version 1.0.0
-	 */
 
-	private static final long serialVersionUID = 1590028943359497362L;
 
+	private static final long serialVersionUID = -4798488066307862378L;
 	private String customerId;
 
 	private String customerName;
@@ -206,8 +201,7 @@ public class AppCustomer implements Serializable {
 
 
 	public String getCode() {
-		//TODO 用户二维码生成规则
-		return "111111";
+		return code;
 	}
 
 	public void setCode(String code) {
@@ -246,7 +240,6 @@ public class AppCustomer implements Serializable {
 		this.cardType = cardType;
 	}
 
-	@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
 	public Date getBirthDay() {
 		return birthDay;
 	}

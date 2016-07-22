@@ -40,7 +40,7 @@
 			rownumbers : true,
 			pagination : true,
 			singleSelect : true,
-			idField : 'order_id',
+			idField : 'customer_id',
 			pageSize : 20,
 			pageList : [20, 30, 40, 50, ],
 		
@@ -99,9 +99,9 @@
 				formatter : function(value, row, index) {
 					switch (value) {
 					case 0:
-						return '未投';
+						return '未投保';
 					case 1:
-						return '已投';
+						return '已投保';
 					}
 				}
 			},{
@@ -117,7 +117,7 @@
 					case 0:
 						return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.order_id);
 					case 1:
-						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> 查看&nbsp;', row.id);
+						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> 查看&nbsp;', row.customer_id);
 					//default: 
 						// return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.id);
 					}
@@ -166,7 +166,7 @@
 											<option value="0">未投保</option>
 											<option value="1">已投保</option>
 										</select>&nbsp;&nbsp;</td>
-				<td><input id="searchBox" class="easyui-validatebox" style="width: 150px" placeholder='输入手机号/姓名'></input></td>
+				<td><input id="searchBox" class="easyui-validatebox" style="width: 200px" placeholder='输入手机号/姓名'></input></td>
 				<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;
 						    border: none;

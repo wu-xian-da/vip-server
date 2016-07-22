@@ -237,13 +237,12 @@ public class QueueManagerImpl implements QueueManager {
 					+ "->激活成功。。。>" + msgBody + "  手机号:" + userPhone + "  卡号："
 					+ cardNo);
 			// 计算卡的有效期
-			Date expireDate = DateUtil.addDays(new Date(),
-					vipcard.getValideTime());
+//			Date expireDate = DateUtil.addDays(new Date(),
+//					vipcard.getValideTime());
 			// 更新激活时间和卡的有效期
 			boolean isOk = vipCardManager.activeAppCard(new MapUtils.Builder()
-					.setKeyValue("activeTime", new Date())
-					.setKeyValue("expiryTime", expireDate)
-					.setKeyValue("card_state", VipCardState.ACTIVE.getName())// 更改VIP卡状态
+					.setKeyValue("saleTime", new Date())
+					.setKeyValue("card_state", VipCardState.ACTIVE.getName())// 更改VIP卡状态为绑定成功未激活
 					.setKeyValue("cardNo", cardNo).build());
 
 			if (isOk) {

@@ -103,6 +103,11 @@ public class VipCardUseDetailInfo {
      */
     private int InvoiceSate;
 
+    /**
+     * 销售员姓名
+     */
+    private String saleName;
+
     public String getVipCardNo() {
         return vipCardNo;
     }
@@ -261,5 +266,13 @@ public class VipCardUseDetailInfo {
 
     public void setCustomerCardType(int customerCardType) {
         this.customerCardType = customerCardType;
+    }
+
+    public String getSaleName() {
+        return saleName;
+    }
+
+    public void setSaleName(String saleName) {
+        this.saleName = saleName;
     }
 }

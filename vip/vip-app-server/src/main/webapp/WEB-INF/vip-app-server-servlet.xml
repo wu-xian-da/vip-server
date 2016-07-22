@@ -32,7 +32,7 @@
 		default-servlet-name="default" />
 	<!--配置直接转发的页面 可以直接相应转发的页面, 而无需再经过 Handler 的方法. -->
 	<mvc:view-controller path="/success" view-name="login" />
-	<mvc:annotation-driven></mvc:annotation-driven>
+
 	<mvc:resources mapping="/images/**" location="/images/" />
 	<aop:config proxy-target-class="true"></aop:config>
 	<!--	<bean
@@ -48,4 +48,23 @@
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10485760" />
 	</bean>
+
+	<!-- 启用默认配置 -->
+	<mvc:annotation-driven>
+				<!--处理responseBody 里面日期类型-->
+                    <mvc:message-converters>
+                        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                            <property name="objectMapper">
+                                <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                                    <property name="dateFormat">
+                                        <bean class="java.text.SimpleDateFormat">
+                                            <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+                                        </bean>
+                                    </property>
+                                </bean>
+                            </property>
+                        </bean>
+                </mvc:message-converters>
+	</mvc:annotation-driven>
+
 </beans>

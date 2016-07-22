@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +19,16 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppConsume;
+import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.DateUtil;
+import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.ObjectUtils;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.AirportEasyUseInfo;
+import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.order.ConsumeManager;
 import com.jianfei.core.service.stat.ArchiveManager;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
@@ -51,6 +59,8 @@ public class TaskManagerImpl implements ITaskManager {
 	private ConsumeManager consumeManager;
 	@Autowired
 	private QueueManager queueManager;
+	@Autowired
+	private VipCardManager vipCardManager;
 
 	/**
 	 * dailyOrderArchice(每天23点58分执行定时任务) void
@@ -66,11 +76,14 @@ public class TaskManagerImpl implements ITaskManager {
 		archiveManager.dateProvinceIdApportIds(DateUtil.getCurrentTime());
 	}
 
-	/**
-	 * 定时获取空港的核销数据 每小时获取一次
+	/*每10分钟执行一次，启动后推迟10分钟执行
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jianfei.scheduled.ITaskManager#checkinDataSchedule()
 	 */
 	//@Scheduled(cron = "0 0 * * * *")
-	@Scheduled(cron = "0 */10 * * * ?")
+	//@Scheduled(cron = "0 */10 * * * ?")
+	@Scheduled(fixedRate = 600000,initialDelay=600000)
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
 		try {
@@ -83,6 +96,14 @@ public class TaskManagerImpl implements ITaskManager {
 					for (int i = 0; i < size; i++) {
 						AppConsume appConsume = clist.get(i);
 						consumeManager.addConsume(appConsume);
+
+						// 判断是否是第一次使用，如果是，redis计时加1，更新卡的第一次使用时间和有效时间，如果不是,redis计时累计加1
+						try {
+							firstServiceHandle(appConsume);
+						} catch (Exception e) {
+							logger.error("对卡信息使用次数统计异常:" + e.getMessage());
+						}
+						return;
 					}
 				}
 
@@ -139,7 +160,7 @@ public class TaskManagerImpl implements ITaskManager {
 	 * 
 	 * @see com.jianfei.scheduled.ITaskManager#validateOrdereIsEfective()
 	 */
-	@Scheduled(fixedRate = 1800000)
+	@Scheduled(fixedRate = 1800000, initialDelay = 1800000)
 	@Override
 	public void validateOrdereIsEfective() {
 		logger.info(DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
@@ -150,4 +171,85 @@ public class TaskManagerImpl implements ITaskManager {
 		logger.info("<<<<<<每隔30分钟扫描订单是否有效:发现" + result + "条无效订单。>>>>>>>");
 	}
 
+	/**
+	 * 判断卡是否的hi第一次消费<br>
+	 * A.如果是<br>
+	 * 1.更改卡的第一次消费时间<br>
+	 * 2。根据卡的有效期计算卡的到期时间<br>
+	 * 3.redis内存计数器对该卡的消费次数统计<br>
+	 * B.如果不是<br>
+	 * 3.redis内存计数器对该卡的消费次数统计<br>
+	 * 
+	 * @param appConsume
+	 *            卡的信息
+	 * @return true:是第一次消费，false:不是第一次消费
+	 */
+	private boolean firstServiceHandle(AppConsume appConsume) {
+		if (ObjectUtils.isEmpty(appConsume)
+				|| ObjectUtils.isEmpty(appConsume.getConsumeTime())
+				|| StringUtils.isEmpty(appConsume.getCardNo())) {
+			throw new IllegalArgumentException("参数不为空为空|消费时间不能为空|卡号不能为空...");
+		}
+		// 根据卡号从数据库中获取卡的信息
+		AppVipcard vipcard = vipCardManager.getVipCardByNo(appConsume
+				.getCardNo());
+		if (ObjectUtils.isEmpty(vipcard)) {
+			throw new IllegalArgumentException("数据查询不到卡号为"
+					+ appConsume.getCardNo() + "的信息，无法获取卡的有效期，请排查");
+		}
+		// 计算卡的有效时间
+		Date expireDate = DateUtil.addDays(appConsume.getConsumeTime(),
+				vipcard.getValideTime());
+		// 消费次数计算
+		Long result = JedisUtils.incr(appConsume.getCardNo());
+		if (1 == result) {// 第一次消费
+			// 更新卡的第一次消费时间和卡有效期到期时间
+			if (vipCardManager.activeAppCard(new MapUtils.Builder()
+					.setKeyValue("activeTime", appConsume.getConsumeTime())
+					// 更改激活时间为第一次消费时间
+					.setKeyValue("cardNo", appConsume.getCardNo())
+					.setKeyValue("card_state",
+							VipCardState.ACTIVE_USE.getName())// 更改VIP卡状态为
+																// 绑定成功已激活
+					.setKeyValue("expiryTime", expireDate).build())) {// 更改卡的有效期
+				String infoMsg = "卡号为"
+						+ appConsume.getCardNo()
+						+ "第一次消费时间为:"
+						+ DateUtil.dateToString(appConsume.getConsumeTime(),
+								DateUtil.ALL_FOMAT);
+				logger.info(infoMsg);
+				System.out.println(infoMsg);
+			} else {
+				String erroMsg = "卡号为" + appConsume.getCardNo()
+						+ "第一次消费信息保存到数据库失败。。。";
+				logger.error(erroMsg);
+				System.out.println(erroMsg);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 每天0点0分0秒检查一次 检查vip卡的是否已过期 过期将vip卡的状态改为 VipCardState.CARD_EXPIRED
+	 */
+	@Scheduled(cron = "0 0 0 * * *")
+	public void checkExpiredOfCard() {
+		// TODO Auto-generated method stub
+		logger.info(DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
+				+ "<<<<<<检查是否有过期的vip卡>>>>>>>");
+		Map<String, Object> reqMap = new HashMap<String, Object>();
+		reqMap.put("checkFlag", "check");
+		List<AppVipcard> vipCardList = vipCardManager
+				.showCardListNotPage(reqMap);
+		if (vipCardList != null && vipCardList.size() > 0) {
+			for (AppVipcard vipCard : vipCardList) {
+				if (vipCard.getExpiryTime().before(new Date())) {// 过期
+					vipCard.setCardState(VipCardState.CARD_EXPIRED.getName());
+					vipCardManager.updateByPrimaryKeySelective(vipCard);
+				}
+			}
+		}
+
+	}
 }

@@ -1,4 +1,5 @@
 package com.jianfei.core.common.cache;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -996,5 +997,19 @@ public class JedisUtils {
 		return result;
 	}
 
+	public static Long incr(String key) {
+		Long result = null;
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			result = jedis.incr(key);
+			logger.debug("lpushObject {}", key);
+		} catch (Exception e) {
+			logger.warn("incr {}", key, e);
+		} finally {
+			returnResource(jedis);
+		}
+		return result;
+	}
 
 }
