@@ -250,12 +250,10 @@
 		parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from sys_airport
-		<where>
+		from sys_airport WHERE  dtflag=0  and state=0
 			<if test="province!= null">
 				and province= #{province}
 			</if>
-		</where>
 	</select>
 
 	<select id="selectCityById" parameterType="java.util.Map"
