@@ -235,7 +235,7 @@
         	if(args.invoiceKind ==0){//--普通发票
 				$('#commonInvoiceDiv').show();
 				$('#specialInvoiceDiv').hide();
-				$('#cmInvoiceKind').text('普通发票');
+				$('#cmInvoiceKind').text('增值税普通发票');
 				$('#cmInvoiceTitle').text(args.invoiceTitle);
 				$('#cmInvoiceContent').text(args.invoiceContent);
 				$('#cmCustomerName').text(args.customerName);
@@ -247,7 +247,7 @@
 			}else{//--专用发票
 				$('#commonInvoiceDiv').hide();
 				$('#specialInvoiceDiv').show();
-				$('#spInvoiceKind').text('专用发票');
+				$('#spInvoiceKind').text('增值税专用发票');
 				$('#spInvoiceContent').text(args.invoiceContent);
 				$('#spCompanyName').text(args.companyName);
 				$('#spCompanyTaxNo').text(args.companyTaxNo);
@@ -273,7 +273,7 @@
 			if(args.invoiceKind ==0){//--普通发票
 				$('#commonInvoiceDiv').show();
 				$('#specialInvoiceDiv').hide();
-				$('#cmInvoiceKind').text('普通发票');
+				$('#cmInvoiceKind').text('增值税普通发票');
 				$('#cmInvoiceTitle').text(args.invoiceTitle);
 				$('#cmInvoiceContent').text(args.invoiceContent);
 				$('#cmCustomerName').text(args.customerName);
@@ -284,7 +284,7 @@
 			}else{//--专用发票
 				$('#commonInvoiceDiv').hide();
 				$('#specialInvoiceDiv').show();
-				$('#spInvoiceKind').text('专用发票');
+				$('#spInvoiceKind').text('增值税专用发票');
 				$('#spInvoiceContent').text(args.invoiceContent);
 				$('#spCompanyName').text(args.companyName);
 				$('#spCompanyTaxNo').text(args.companyTaxNo);

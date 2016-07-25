@@ -100,7 +100,7 @@
 				<ul>
 					<!--普通发票  -->
 					<c:if test="${invoice.invoiceKind ==0}">
-						<li>发票类型：普通发票</li>
+						<li>发票类型：增值税普通发票</li>
 						<li>邮寄地址：${invoice.province} ${invoice.city} ${invoice.country} ${invoice.address }</li>
 						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
 						<li>发票抬头：${invoice.invoiceTitle}</li>
@@ -113,10 +113,8 @@
 					
 					<!--专用发票 -->
 					<c:if test="${invoice.invoiceKind ==1}">
-						<li>发票种类：专用发票</li>
+						<li>发票种类：增值税专用发票</li>
 						<li>邮寄地址：${invoice.province} ${invoice.city} ${invoice.country} ${invoice.address }</li>
-						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
-						<li>发票抬头：${invoice.invoiceTitle}</li>
 						<li>发票内容：${invoice.invoiceContent}</li>
 						<li>邮　　编：${invoice.postcode }</li>
 						<li>公司名称：${invoice.companyName}</li>
