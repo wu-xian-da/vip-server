@@ -52,17 +52,21 @@ public class StateChangeUtils {
 	public static String returnCardStateName(Integer cardState){
 		String cardStateName = "";
 		if(cardState == 0){
-			cardStateName = "未激活";
+			cardStateName = "未绑定";
 		}else if(cardState == 1){
-			cardStateName = "激活成功";
+			cardStateName = "绑定成功未激活";
 		}else if(cardState == 2){
 			cardStateName = "已退卡";
 		}else if(cardState == 3){
-			cardStateName = "激活失败";
+			cardStateName = "绑定失败";
 		}else if(cardState == 4){
-			cardStateName = "待激活";
-		}else{
+			cardStateName = "待绑定";
+		}else if(cardState == 5){
 			cardStateName = "解绑失败";
+		}else if(cardState == 6){
+			cardStateName = "绑定成功已激活";
+		}else{
+			cardStateName = "已过期";
 		}
 		return cardStateName;
 	}

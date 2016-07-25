@@ -92,7 +92,7 @@
 							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 							<th data-options="align:'center', field:'backApplyTime',width:150">退款申请日期</th>
 							<th data-options="align:'center', field:'backFinishTime',width:150">退款完成日期</th>
-							<th data-options="align:'center', field:'applyTypeName',width:120">申请途径</th>
+							<th data-options="align:'center', field:'applyTypeName',width:100">申请途径</th>
 							<th data-options="align:'center', field:'backTypeName',width:80">退款方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
 							<th data-options="align:'center', field:'cardStateName',width:100">卡状态</th>
