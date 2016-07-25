@@ -117,6 +117,10 @@
                     <label id="promptMessage" style="font-weight:bolder ;color: red;font-size:large;"></label>
                 </div>
                 
+                 <div class="radio-tab-content">
+                    <label>支付方式&nbsp;</label><span id="orderPayType"></span>
+                </div>
+                
                 <div class="radio-tab-content">
                     <label>申请退卡途径&nbsp;</label><span id="applyBackCardMethod"></span>
                 </div>
@@ -216,12 +220,24 @@
 			$("#userName2").text('');
 			//----3、转账卡号
 			$('#payBackCardNo').text('');
+			//----4、支付返方式
+			$("#orderPayType").text('');
 			
 			//-----是否需要提示信息
 			if(args.invoice == 2){
 				$("#promptMessage").text("请确认是否收到发票！");
 			}
 			
+			//支付方式
+			if(args.orderPayType == 1){
+				$("#orderPayType").text('微信支付');
+			}else if(args.orderPayType ==2){
+				$("#orderPayType").text('支付宝支付');
+			}else if(args.orderPayType == 3){
+				$("#orderPayType").text('银行卡支付');
+			}else{
+				$("#orderPayType").text('现金支付');
+			}
 			//申请途径
 			if(args.applyBackCardMethod == 0){
 				$('#applyBackCardMethod').text('现场');

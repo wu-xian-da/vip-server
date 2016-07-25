@@ -299,6 +299,7 @@ public class OrderController extends BaseController {
 				outData.put("backName", appCardBack.getBankName());
 				outData.put("customerName", appOrder.getCustomerName());
 				outData.put("applyBackCardMethod",appOrder.getApplyType());
+				outData.put("orderPayType",appOrder.getPayType());
 				//发票状态
 				AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(appOrder.getOrderId());
 				outData.put("invoice", orderInfo.getInvoiceFlag());
@@ -404,6 +405,7 @@ public class OrderController extends BaseController {
 					outData.put("phone", appOrder.getCustomerPhone());
 					outData.put("backName", appCardBack.getBankName());
 					outData.put("customerName", appOrder.getCustomerName());
+					outData.put("orderPayType",appOrder.getPayType());
 					//申请方式
 					outData.put("applyBackCardMethod", appOrder.getApplyType());
 					//发票状态
