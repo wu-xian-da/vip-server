@@ -33,7 +33,7 @@ public interface AirportTransManager {
      * @param phone
      * @return
      */
-    BaseMsgInfo getAirportTransNum(String phone,String cardNo);
+    BaseMsgInfo getAirportTransNum(String phone);
 
 
     /**

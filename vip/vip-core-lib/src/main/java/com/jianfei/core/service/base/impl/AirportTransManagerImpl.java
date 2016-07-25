@@ -1,9 +1,6 @@
 package com.jianfei.core.service.base.impl;
 
-import com.jianfei.core.bean.AppAirportTrans;
-import com.jianfei.core.bean.AppCustomer;
-import com.jianfei.core.bean.AppVersion;
-import com.jianfei.core.bean.YdycAirports;
+import com.jianfei.core.bean.*;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.IdGen;
@@ -14,6 +11,7 @@ import com.jianfei.core.mapper.AppAirportTransMapper;
 import com.jianfei.core.mapper.YdycAirportsMapper;
 import com.jianfei.core.service.base.AirportTransManager;
 import com.jianfei.core.service.user.VipUserManager;
+import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +48,14 @@ public class AirportTransManagerImpl implements AirportTransManager {
     @Override
     public BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans) throws Exception {
         //查找下相关用户
-        AppCustomer customer= vipUserManager.getUser(airportTrans.getPhone());
+        AppCustomer customer= vipUserManager.getUserDetail(airportTrans.getPhone());
         if (customer==null || StringUtils.isBlank(customer.getCustomerId())){
             return BaseMsgInfo.msgFail("用户不存在，接送机信息添加失败");
         }
+        if(customer.getVipCards()==null ||customer.getVipCards().isEmpty()){
+            return BaseMsgInfo.msgFail("用户未购买VIP卡");
+        }
+        AppVipcard vipcard = customer.getVipCards().get(0);
         //转换前台传入日期
         Date flightDate= DateUtil.parseDateTime(airportTrans.getFlightDateStr());
         Date goofDate=DateUtil.parseDateTime(airportTrans.getGooffDateStr());
@@ -62,6 +64,7 @@ public class AirportTransManagerImpl implements AirportTransManager {
         airportTrans.setName(customer.getCustomerName());
         airportTrans.setId(IdGen.uuid());
         airportTrans.setCreateDate(new Date());
+        airportTrans.setCardNo(vipcard.getCardNo());
         int i = appAirportTransMapper.insertSelective(airportTrans);
         return i == 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("接送机信息添加失败");
     }
@@ -120,8 +123,13 @@ public class AirportTransManagerImpl implements AirportTransManager {
      * @return
      */
     @Override
-    public BaseMsgInfo getAirportTransNum(String phone,String cardNo) {
-        List<AppAirportTrans> appAirportTranses = appAirportTransMapper.selectByPhone(phone,cardNo);
+    public BaseMsgInfo getAirportTransNum(String phone) {
+        AppCustomer customer=vipUserManager.getUserDetail(phone);
+        if(customer==null || customer.getVipCards()==null ||customer.getVipCards().isEmpty()){
+            return BaseMsgInfo.msgFail("用户不存在或未购买VIP卡");
+        }
+        AppVipcard vipcard = customer.getVipCards().get(0);
+        List<AppAirportTrans> appAirportTranses = appAirportTransMapper.selectByPhone(phone, vipcard.getCardNo());
         return appAirportTranses == null || appAirportTranses.size() < 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
     }
 }
