@@ -43,7 +43,7 @@
 					customer.`sex`,
 					customer.card_type,
 					customer.`customer_identi`,
-					DATE_FORMAT(customer.birth_day,'%Y%m%d') as birthday,
+					DATE_FORMAT(customer.birth_day,'%Y-%m-%d') as birthday,
 					ao.insured,
 					ao.order_id,
 					case 
