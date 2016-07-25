@@ -398,7 +398,7 @@ public class OrderManagerImpl implements OrderManager {
         float usedMoney = num * 200;
         float realMoney = num * 150;
         float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney - 100;
-        if (realMoney < 0)
+        if (remainMoney < 0)
             remainMoney = 0;
         vipCardUseDetailInfo.setSafeMoney(100);
         vipCardUseDetailInfo.setReturnMoney(remainMoney);
