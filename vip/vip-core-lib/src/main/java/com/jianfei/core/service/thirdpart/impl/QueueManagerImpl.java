@@ -127,7 +127,8 @@ public class QueueManagerImpl implements QueueManager {
 			// 登入，注册，退卡申请短信
 			System.out.println("jianfei->"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-					+ "->登入|注册|退卡申请|取消退卡短信|其他支付 退卡申请后短信。。。->" + msgBody + "  手机号：" + userPhone);
+					+ "->登入|注册|退卡申请|取消退卡短信|其他支付 退卡申请后短信。。。->" + msgBody
+					+ "  手机号：" + userPhone);
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		if (!isOk) {
@@ -160,7 +161,7 @@ public class QueueManagerImpl implements QueueManager {
 		messageDto.setData(map);
 
 		// 调用空港绑定接口
-		if (!airportEasyManager.disabledVipCard(vipCardNo)){
+		if (!airportEasyManager.disabledVipCard(vipCardNo)) {
 			System.out.println("vipjianfei:解绑失败:"
 					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
@@ -176,8 +177,19 @@ public class QueueManagerImpl implements QueueManager {
 				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
 						+ "卡失败，数据库更新卡号状态为解除绑定状态失败");
 			}
+		} else {
+			// 修改卡的状态
+			if (vipCardManager.activeAppCard(new MapUtils.Builder()
+					.setKeyValue("card_state",
+							VipCardState.BACK_CARD)// 更改VIP卡状态
+					.setKeyValue("cardNo", vipCardNo).build())) {
+				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
+						+ "卡成功，数据库更新卡号状态为退卡成功状态成功");
+			} else {
+				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
+						+ "卡卡成功，数据库更新卡号状态为退卡成功状态失败");
+			}
 		}
-		
 		System.out.println("vipjianfei:vipbacksuccess:"
 				+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
 				+ "->退卡完成短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
@@ -237,8 +249,8 @@ public class QueueManagerImpl implements QueueManager {
 					+ "->激活成功。。。>" + msgBody + "  手机号:" + userPhone + "  卡号："
 					+ cardNo);
 			// 计算卡的有效期
-//			Date expireDate = DateUtil.addDays(new Date(),
-//					vipcard.getValideTime());
+			// Date expireDate = DateUtil.addDays(new Date(),
+			// vipcard.getValideTime());
 			// 更新激活时间和卡的有效期
 			boolean isOk = vipCardManager.activeAppCard(new MapUtils.Builder()
 					.setKeyValue("saleTime", new Date())
