@@ -153,10 +153,11 @@ public class VipUserController {
      */
     @RequestMapping(value = "/airportTransNum")
     @ResponseBody
-    public BaseMsgInfo airportTransNum(@RequestParam(value = "phone", required = true) String phone
+    public BaseMsgInfo airportTransNum(@RequestParam(value = "phone", required = true) String phone,
+                                       @RequestParam(value = "cardNo", required = false) String cardNo
     ) {
         try {
-            return transManager.getAirportTransNum(phone);
+            return transManager.getAirportTransNum(phone,cardNo);
         }catch (Exception e){
             log.error("接送机次数统计错误",e);
             return BaseMsgInfo.msgFail("接送机次数统计失败");

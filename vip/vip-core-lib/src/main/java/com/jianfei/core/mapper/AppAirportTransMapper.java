@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.common.persistence.MyBatisDao;
+import org.apache.ibatis.annotations.Param;
 
 @MyBatisDao
 public interface AppAirportTransMapper {
@@ -88,5 +89,5 @@ public interface AppAirportTransMapper {
 	 * @param phone
 	 * @return
      */
-	List<AppAirportTrans> selectByPhone(String phone);
+	List<AppAirportTrans> selectByPhone(@Param(value = "phone")String phone, @Param(value = "cardNo")String cardNo);
 }

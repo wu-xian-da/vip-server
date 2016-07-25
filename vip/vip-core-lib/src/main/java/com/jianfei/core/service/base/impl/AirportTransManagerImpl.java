@@ -120,8 +120,8 @@ public class AirportTransManagerImpl implements AirportTransManager {
      * @return
      */
     @Override
-    public BaseMsgInfo getAirportTransNum(String phone) {
-        List<AppAirportTrans> appAirportTranses = appAirportTransMapper.selectByPhone(phone);
-        return appAirportTranses == null || appAirportTranses.size() <= 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
+    public BaseMsgInfo getAirportTransNum(String phone,String cardNo) {
+        List<AppAirportTrans> appAirportTranses = appAirportTransMapper.selectByPhone(phone,cardNo);
+        return appAirportTranses == null || appAirportTranses.size() < 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.success(false);
     }
 }
