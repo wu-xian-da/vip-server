@@ -568,6 +568,7 @@ public class OrderController extends BaseController {
 		appCardBack.setMoney(Float.parseFloat(remainMoney));
 		appCardBack.setBackType(Integer.parseInt(payMethod));
 		appCardBack.setCreaterId(userId);
+		appCardBack.setCreateName(user.getName());
 		appCardBack.setBankName(banckName);//开户行
 		appCardBack.setCustomerName(userNames);//开户者姓名
 		orderManagerImpl.insertBackCardInfo(appCardBack);
