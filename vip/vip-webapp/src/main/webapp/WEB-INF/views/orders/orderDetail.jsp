@@ -153,7 +153,8 @@
 							</c:otherwise>
 						</c:choose>
 					</li>
-					
+					<li>退款申请时间：<fmt:formatDate value="${appCardBack.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+					<li>退款完成时间：<fmt:formatDate value="${appCardBack.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/> </li>
 					<!--申请方式为现场，客服 -->
 					<c:if test="${orderDetailInfo.applyType !=2}">
 						<c:choose>

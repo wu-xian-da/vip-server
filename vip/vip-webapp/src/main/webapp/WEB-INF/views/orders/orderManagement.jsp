@@ -117,13 +117,12 @@
 	                <tr>
 	                <th data-options="align:'center', field:'orderId',width:130">订单编号</th>
 	                <th data-options="align:'center', field:'orderTime',width:150">订单日期</th>
-	                <th data-options="align:'center', field:'vipCardNo',width:130">卡号</th>
 	                <th data-options="align:'center', field:'airportName',width:150">场站</th>
 	                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
 	                
 	                <th data-options="align:'center', field:'customerName',width:100">用户姓名</th>
 	                <th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
-	                
+	                <th data-options="align:'center', field:'vipCardNo',width:100">vip卡号</th>
 	                <th data-options="align:'center', field:'invoiceFlagName',width:80">发票状态</th>
 	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
 	                <th data-options="align:'center', field:'operation',width:230">操作</th>
@@ -205,7 +204,7 @@
     <!-- 退款确认 -->
 	<div id="refund" class="easyui-window" title="退款"
 		data-options="modal:'true',closed:'true'"
-		style="width: 500px; height: 300px; padding: 10px;">
+		style="width: 500px; height: 350px; padding: 10px;">
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab">
 				<!-- 需要开发票的提示信息 -->
@@ -303,6 +302,8 @@
 			$('#payBackCardNo').text('');
 			//----4、支付返方式
 			$("#orderPayType").text('');
+			//提示信息
+			$("#promptMessage").text('');
 			
 			//-----是否需要提示信息
 			if(args.invoice == 2){

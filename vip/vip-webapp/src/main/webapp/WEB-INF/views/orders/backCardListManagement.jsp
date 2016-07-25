@@ -109,7 +109,7 @@
 	<!-- 退款确认 -->
 	<div id="refund" class="easyui-window" title="退款"
 		data-options="modal:'true',closed:'true'"
-		style="width: 500px; height: 300px; padding: 10px;">
+		style="width: 500px; height: 350px; padding: 10px;">
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab">
 				<!-- 需要开发票的提示信息 -->
@@ -222,6 +222,8 @@
 			$('#payBackCardNo').text('');
 			//----4、支付返方式
 			$("#orderPayType").text('');
+			//提示信息
+			$("#promptMessage").text('');
 			
 			//-----是否需要提示信息
 			if(args.invoice == 2){
