@@ -54,9 +54,10 @@
 				      	<c:when test="${orderDetailInfo.payMethod == 3}">
 				      		银行卡支付
 				      	</c:when>
-				      	<c:otherwise>
+				      	<c:when test="${orderDetailInfo.payMethod == 4}">
 				      		现金支付
-				      	</c:otherwise>
+				      	</c:when>
+				      	<c:otherwise></c:otherwise>
 				      </c:choose>
 					</label>
 				

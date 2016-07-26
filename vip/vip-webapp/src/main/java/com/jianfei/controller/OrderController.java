@@ -78,6 +78,7 @@ import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 public class OrderController extends BaseController {
 	private Logger logger = Logger.getLogger(OrderController.class);
 	private static String staticPath =  GloabConfig.getConfig("static.resource.server.address");
+	
 	@Autowired
 	private OrderManagerImpl orderManagerImpl;
 	@Autowired
@@ -94,6 +95,7 @@ public class OrderController extends BaseController {
 	private AirportEasyManagerImpl airportEasyManagerImpl;
 	@Autowired
 	private VipUserManagerImpl vipUserManager;
+	
 	/**
 	 * 跳转到订单列表页面
 	 * @param response
