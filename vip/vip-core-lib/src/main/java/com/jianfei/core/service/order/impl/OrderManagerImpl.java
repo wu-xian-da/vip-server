@@ -118,7 +118,7 @@ public class OrderManagerImpl implements OrderManager {
         }
         flag = airportEasyManager.cardBindStatus(addInfoDto.getVipCardNo());
         log.info("验证空港易行VIP卡号是否绑定:"+addInfoDto.getVipCardNo()+"验证结果:"+flag);
-        if (flag) {
+        if (!flag) {
             return BaseMsgInfo.msgFail("卡号无效请更换");
         }
         //3、根据查询VIP号查询卡片信息
