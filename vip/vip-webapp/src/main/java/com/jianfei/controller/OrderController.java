@@ -478,7 +478,7 @@ public class OrderController extends BaseController {
 			validateCodeManager.sendMsgInfo(phone, MsgType.SELECT, smsCode);
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("发送短信失败");
+			logger.error("【订单模块-申请退款操作】发送验证码短信出错："+e.getMessage());
 		}
 		
 		JSONObject outData = new JSONObject(); 
@@ -606,7 +606,7 @@ public class OrderController extends BaseController {
 					setMsgType(msgType);
 			orderManagerImpl.sendMessageOfOrder(msgBuilder);
 		} catch (Exception e) {
-			logger.error("退卡申请-发送短信失败");
+			logger.error("【订单模块-退卡申请完成】发送短信失败："+e.getMessage());
 		}
 		
 		resMap.put("orderStateName", "审核通过");
@@ -667,7 +667,7 @@ public class OrderController extends BaseController {
 					setMsgType(MsgType.BACK_CARD_FINISH.getName()).setMsgBody(object.toJSONString());
 			orderManagerImpl.sendMessageOfOrder(msgBuilder);
 		} catch (Exception e) {
-			logger.error("发送短信失败");
+			logger.error("【订单模块-最终退款】发送短信失败："+e.getMessage());
 		}
 		return resMap;
 	}
