@@ -42,6 +42,7 @@
 					customer.`customer_phone`,
 					customer.`sex`,
 					customer.card_type,
+					customer.create_time,
 					customer.`customer_identi`,
 					DATE_FORMAT(customer.birth_day,'%Y-%m-%d') as birthday,
 					ao.insured,
@@ -70,6 +71,8 @@
 				and insured=#{insured}
 			</if>
 		</where>
+		
+		order by create_time desc
 	</select>
 	
 	<update id="updateDeliveryState" parameterType="String">
