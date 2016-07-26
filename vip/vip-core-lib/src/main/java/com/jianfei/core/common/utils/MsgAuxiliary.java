@@ -10,6 +10,8 @@ package com.jianfei.core.common.utils;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.text.MaskFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,28 +61,33 @@ public class MsgAuxiliary {
 	 * @version 1.0.0
 	 */
 	public static String buildMsgBody(Map<String, String> map, String msgType) {
+		// 获取模板类型
 		String cacheKey = StringUtils.EMPTY;
 		for (MsgType mType : MsgType.values()) {
 			if (mType.getName().equals(msgType)) {
 				cacheKey = CacheCons.getMsgTemplateKey(mType);
 			}
 		}
+		// 判断消息类型是否有效
 		if (StringUtils.isEmpty(cacheKey)) {
 			LoggerFactory.getLogger(MsgAuxiliary.class).error("短信信息类型错误...");
 			return StringUtils.EMPTY;
 		}
+		// 从缓存中获取短信模板
 		String msgBody = JedisUtils.get(cacheKey);
 
+		// 验证短信模板是否有效
 		if (StringUtils.isEmpty(msgBody)) {
 			LoggerFactory.getLogger(MsgAuxiliary.class).error(
 					"从缓存中获取短信消息模版为空...");
 			return StringUtils.EMPTY;
 		}
 		// 解析模版
-		msgBody = msgBody.replaceAll("\\[userPhone\\]", map.get("userPhone"))
-				.replaceAll("\\[vipCardNo\\]", map.get("vipCardNo"));
+		msgBody = msgBody.replaceAll("\\[userPhone\\]",
+				returnValue(map, "userPhone")).replaceAll("\\[vipCardNo\\]",
+				returnValue(map, "vipCardNo"));
 
-		if (!StringUtils.isEmpty(map.get("userName"))) {
+		if (!StringUtils.isEmpty(returnValue(map, "userName"))) {
 			msgBody = msgBody.replaceAll("\\[userName\\]", map.get("userName"));
 		}
 
@@ -98,5 +105,12 @@ public class MsgAuxiliary {
 		}
 
 		return msgBody;
+	}
+
+	public static String returnValue(Map<String, String> map, String key) {
+		if (null != map.get(key)) {
+			return map.get(key);
+		}
+		return StringUtils.EMPTY;
 	}
 }
