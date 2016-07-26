@@ -181,7 +181,7 @@ public class QueueManagerImpl implements QueueManager {
 			// 修改卡的状态
 			if (vipCardManager.activeAppCard(new MapUtils.Builder()
 					.setKeyValue("card_state",
-							VipCardState.BACK_CARD)// 更改VIP卡状态
+							VipCardState.BACK_CARD.getName())// 更改VIP卡状态
 					.setKeyValue("cardNo", vipCardNo).build())) {
 				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
 						+ "卡成功，数据库更新卡号状态为退卡成功状态成功");
