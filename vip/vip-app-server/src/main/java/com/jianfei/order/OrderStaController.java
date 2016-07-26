@@ -168,16 +168,16 @@ public class OrderStaController {
 			//根据用户编号获取用户id
 			long  userId = user.getId();
 			
-			// 1、从归档表中查询该业务员某个时间段内的销售业绩
+			// 1、从归档表中查询该业务员某个时间段内的销售业绩(***工号查询***)
 			Map<String, Object> paraMap = new HashMap<String, Object>();
-			paraMap.put("saleNo", userId);
+			paraMap.put("saleNo", uno);
 			paraMap.put("beginTime", begin);
 			paraMap.put("endTime", end);
 			// 1.1业务人员某个时间段内每天的开卡数量、退卡数量
 			List<CharData> listBycustomer = statManager.selectCharDataByUserId(paraMap);
 			
 			// 2、业务人员所属省份该时间段内的平均开卡人数
-			// 2.1根据销售人员id获取该用户所属的省份id
+			// 2.1根据销售人员id获取该用户所属的省份id(***id查询**)
 			List<UserProvince> userProvinceList = busizzManagerImpl.getProvinceIdByUserId(userId+"");
 			List<Map<String, Object>> provinceList = statManager.getSaleCurveByUserId(userProvinceList, begin, end);
 

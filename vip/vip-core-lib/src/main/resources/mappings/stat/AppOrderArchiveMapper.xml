@@ -297,14 +297,26 @@ where file_id = #{fileId,jdbcType=INTEGER}
 	LIMIT #{pageStart},#{pageSize}
   </select>
   
-  <!--根据业务人员id号查询某个时间段内的销售情况 -->
-  <select id="selectCharDataByUserId" resultMap="charDataMap" parameterType="java.util.Map">
-  	select sum(order_num) as order_num,sum(order_num_back) as order_num_back,file_time from app_order_archive aoa where aoa.bid=#{saleNo} 
+  <!--根据业务人员工号查询某个时间段内每天的开卡数 -->
+  <select id="selectOrderNumByUserId" resultMap="charDataMap" parameterType="java.util.Map">
+  	select sum(order_num) as order_num,file_time from app_order_archive aoa where aoa.sale_no=#{saleNo} 
   	<if test="beginTime!=null">
     	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')]]>
     </if>
     <if test="endTime!=null">
     	<![CDATA[   and DATE_FORMAT(aoa.file_time, '%Y-%m-%d')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d') ]]>
+    </if>
+    group by file_time
+  </select>
+  
+  <!--根据业务人员工号查询某个时间段内每天的退卡数 -->
+  <select id="selectBackCardByUserId" resultMap="charDataMap" parameterType="java.util.Map">
+  	select sum(order_num_back) as order_num_back,file_time from app_back_archive aba where aba.sale_no=#{saleNo} 
+  	<if test="beginTime!=null">
+    	<![CDATA[   and DATE_FORMAT(aba.file_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')]]>
+    </if>
+    <if test="endTime!=null">
+    	<![CDATA[   and DATE_FORMAT(aba.file_time, '%Y-%m-%d')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d') ]]>
     </if>
     group by file_time
   </select>
