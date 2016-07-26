@@ -459,44 +459,55 @@ public class OrderController extends BaseController {
 	
 	/**
 	 * 退单申请,给用户发送短信验证码，并将短信验证码回显
+	 * 
 	 * @param orderId
 	 * @param operationType
 	 * @param phone
 	 * @return
 	 */
-	@RequestMapping(value="/applyBackCard")
+	@RequestMapping(value = "/applyBackCard")
 	@ResponseBody
-	public Map<String,Object> applyBackCard(String orderId,Integer operationType,String phone){
-		//订单基本信息
+	public Map<String, Object> applyBackCard(String orderId, Integer operationType, String phone) {
+		User user = getCurrentUser();
+		// 订单基本信息
 		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-		//1、改变订单状态
-		orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
-		//2、获取验证码
+		// 1、改变订单状态
+		try {
+			orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
+			logger.info(">>>>>订单模块-退款申请，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【" + phone + "】，用户姓名【"
+					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【订单状态已支付->正在审核】");
+		} catch (Exception e) {
+			logger.error(">>>>>订单模块-退款申请】更改订单" + orderId + "】状态由【已支付->正在审核】出错：" + e.getMessage());
+		}
+
+		// 2、获取验证码
 		String smsCode = validateCodeManager.getValidateCode(phone, MsgType.SELECT);
-		//发送短信****
+		// 发送短信****
 		try {
 			validateCodeManager.sendMsgInfo(phone, MsgType.SELECT, smsCode);
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("【订单模块-申请退款操作】发送验证码短信出错："+e.getMessage());
+			logger.error("【订单模块-申请退款操作】发送验证码短信出错：" + e.getMessage());
 		}
-		
-		JSONObject outData = new JSONObject(); 
+
+		JSONObject outData = new JSONObject();
 		double remainMoney = orderManagerImpl.remainMoney(orderId);
 		outData.put("remainMoney", remainMoney);
-		outData.put("orderId",orderId);
+		outData.put("orderId", orderId);
 		outData.put("phone", phone);
-		outData.put("payType", orderDetailInfo.getPayMethod());//支付方式
-		Map<String,Object> map = new HashMap<String,Object>();
+		outData.put("payType", orderDetailInfo.getPayMethod());// 支付方式
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", "1");
 		map.put("orderStateName", "正在审核");
-		//权限校验
+		// 权限校验
 		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
-		//是否有审核的权限
+		// 是否有审核的权限
 		boolean flag = subject.isPermitted("system:order:audit");
-		if(flag){
-			map.put("data", "<input style='width:50px' type='text' value='"+smsCode+"' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
-		}else{
+		if (flag) {
+			map.put("data", "<input style='width:50px' type='text' value='" + smsCode
+					+ "' /> <button class='btn btn-confirm' onclick='onRefund(" + outData
+					+ ")'>✓</button><button class='btn btn-close' onclick='onError(" + outData + ",this)'>✕</button>");
+		} else {
 			map.put("data", "");
 		}
 		return map;
@@ -512,9 +523,17 @@ public class OrderController extends BaseController {
 	@RequestMapping(value="/applyBackCardaAudit")
 	@ResponseBody
 	public Map<String,Object> auditPass(String orderId,Integer opType,String phone){
-		Map<String,Object> resMap = new HashMap<String,Object>();
-		System.out.println("orderId="+orderId+"  opType="+opType);
-		orderManagerImpl.updateOrderStateByOrderId(orderId, opType);
+		User user = getCurrentUser();
+		try {
+			orderManagerImpl.updateOrderStateByOrderId(orderId, opType);
+			
+			logger.info(">>>>>订单模块-审核不通过，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【" + phone + "】，用户姓名【"
+					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【订单状态正在审核->已支付】");
+			
+		} catch (Exception e) {
+			logger.error(">>>>>订单模块-审核不通过，更改订单【" + orderId + "】状态由【正在审核->已支付】出错：" + e.getMessage());
+		}
+		
 		AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(orderId);
 		JSONObject outData = new JSONObject(); 
 		outData.put("orderId", orderId);
@@ -522,18 +541,18 @@ public class OrderController extends BaseController {
 		outData.put("phone", phone);
 		outData.put("invoice", orderInfo.getInvoiceFlag());
 		
-		resMap.put("result", "1");
-		
 		//权限校验
 		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
 		//是否有退款申请的权限
 		boolean flag = subject.isPermitted("system:order:applyBackMoney");
+		Map<String,Object> resMap = new HashMap<String,Object>();
 		if(flag){
 			resMap.put("data", "<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
 		}else{
 			resMap.put("data", "<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 		}
 		resMap.put("orderStateName", "已支付");
+		resMap.put("result", "1");
 		return resMap;	
 		
 	}
@@ -554,14 +573,21 @@ public class OrderController extends BaseController {
 	public Map<String,Object> onRefund(String orderId,String backCardNo,String remainMoney,String payMethod,Integer opr,
 			@RequestParam(value="userNames",defaultValue="",required=false) String userNames,
 			@RequestParam(value="banckName",defaultValue="",required=false) String banckName){
-		//1、将订单状态有'正在审核'变成'审核通过'，退款申请变成客服
-		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
-		
-		//2、将退款信息录入到流水表中
 		User user = getCurrentUser();
 		//****审批人员id
 		String userId = user.getId()+"";
 		
+		//1、将订单状态有'正在审核'变成'审核通过'，退款申请变成客服
+		try {
+			orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
+			logger.info(">>>>>订单模块-审核通过，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【】，用户姓名【"
+					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【正在审核->审核通过】");
+			
+		} catch (Exception e) {
+			logger.error(">>>>>订单模块-审核通过，更改订单【" + orderId + "】状态由【正在审核->审核通过】出错：" + e.getMessage());
+		}
+		
+		//2、将退款信息录入到流水表中
 		AppCardBack appCardBack = new AppCardBack();
 		appCardBack.setBackId(UUIDUtils.getPrimaryKey());
 		appCardBack.setCreateTime(new Date());
@@ -622,16 +648,20 @@ public class OrderController extends BaseController {
 	@RequestMapping(value="/finalRefundMoney")
 	@ResponseBody
 	public Map<String,Object> refundMoney(String orderId,Integer opr){
-		
-		
-		//1、更新订单状态
-		orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
-		//写退款流水
-
 		User user = getCurrentUser();
 		//****审核员id
 		String userId = user.getId()+"";
 		
+		//1、更新订单状态
+		try {
+			orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
+			logger.info(">>>>>订单模块-退款完成，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【】，用户姓名【"
+					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【订单模块-退款完成】");
+		} catch (Exception e) {
+			logger.error(">>>>>订单模块-退款完成，更改订单【" + orderId + "】状态由【审核通过->已退款】出错：" + e.getMessage());
+		}
+		
+		//写退款流水
 		//2、更新退卡表状态
 		Map<String,Object> parMap = new HashMap<String,Object>();
 		double finalBackMoney = orderManagerImpl.remainMoney(orderId);

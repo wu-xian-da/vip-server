@@ -210,7 +210,7 @@
 		*==================最终退款页面===============
 		*/
         function finalBackMoneyToUser(args){
-			var backMethod = "";
+        	var backMethod = "";
 			//----初始化页面
 			$("#banckName2div").hide();
 			$("#userName2div").hide();
@@ -240,28 +240,30 @@
 			}else{
 				$("#orderPayType").text('现金支付');
 			}
-			//申请途径
+			//申请途径-现场正常申请
 			if(args.applyBackCardMethod == 0){
 				$('#applyBackCardMethod').text('现场');
-				if(args.backType ==1){
-					$("#backMethod").text('退款方式');
-					$("#payBackCardNo").text('微信转账');
-				}else if(args.backType ==2){
-					$("#backMethod").text('退款方式');
-					$("#payBackCardNo").text('支付宝转账');
-				}else if(args.backType == 3){
-					$("#backMethod").text('退款方式');
-					$("#payBackCardNo").text('银行卡转账');
-				}else{
+				if(args.orderPayType == 4){//现金支付
 					$("#backMethod").text('退款方式 银行卡号');
 					$("#payBackCardNo").text(args.backMoneyCard);
 					$("#banckName2div").show();
 					$("#banckName2").text(args.backName);
 					$("#userName2div").show();
 					$("#userName2").text(args.customerName);
+				}else{
+					if(args.backType ==1){
+						$("#backMethod").text('退款方式');
+						$("#payBackCardNo").text('微信转账');
+					}else if(args.backType ==2){
+						$("#backMethod").text('退款方式');
+						$("#payBackCardNo").text('支付宝转账');
+					}else if(args.backType == 3){
+						$("#backMethod").text('退款方式');
+						$("#payBackCardNo").text('银行卡转账');
+					}
 				}
 				
-			} else{
+			} else{//申请途径-客服
 				$('#applyBackCardMethod').text('客服');
 				if(args.backType == 1){
 					backMethod="微信账号";
