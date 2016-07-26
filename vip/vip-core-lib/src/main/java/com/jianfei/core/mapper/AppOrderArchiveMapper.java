@@ -83,10 +83,18 @@ public interface AppOrderArchiveMapper {
      * @return
      */
     public List<SalesRankingDto> salesRanking(Map<String, Object> param);
+    
     /**
-     * 根据业务人员id号查询某个时间段内的销售情况
+     * 根据业务人员工号查询某个时间段内每天的开卡数
      * @param map
      * @return
      */
-    List<CharData> selectCharDataByUserId(Map<String,Object> map);
+    List<CharData> selectOrderNumByUserId(Map<String,Object> map);
+    
+    /**
+     * 根据业务人员工号查询某个时间段内每天的退卡数 
+     * @param map
+     * @return
+     */
+    List<CharData> selectBackCardByUserId(Map<String,Object> map);
 }
