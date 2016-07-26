@@ -17,8 +17,10 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.utils.DateUtil;
@@ -37,6 +39,7 @@ import com.jianfei.core.service.stat.ArchiveManager;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:persistence.xml",
 		"classpath:spring-context-jedis.xml" })
+@Transactional
 public class ArchiveManagerImplTest {
 
 	@Autowired
@@ -84,39 +87,24 @@ public class ArchiveManagerImplTest {
 	}
 
 	@Test
-	public void testDateProvinceIdRedisCache() {
-		Map<String, Object> mapCon = new HashMap<String, Object>();
-		mapCon.put("currentTime", "2016-05-04");
-		List<Map<String, Object>> maps = archiveManager
-				.dateProvinceIdRedisCache(mapCon);
-		for (Map<String, Object> map : maps) {
-			System.out.println(JSONObject.toJSONString(map));
-		}
-	}
-
-	@Test
 	public void testDateProvinceIdAirport() {
 		Map<String, Object> mapCon = new HashMap<String, Object>();
-		mapCon.put("currentTime", "2016-06-27");
-		List<Map<String, Object>> maps = archiveManager
-				.dateProvinceIdApportIds(mapCon);
-		for (Map<String, Object> map : maps) {
-			System.out.println(JSONObject.toJSONString(map));
-		}
+		mapCon.put("currentTime", "2016-07-22");
+		archiveManager.dateProvinceIdApportIds(mapCon);
+
 	}
 
 	@Test
 	public void cacheDate() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("currentTime", "2016-07-12");
-		List<Map<String, Object>> datePid = archiveManager
-				.dateProvinceIdRedisCache(map);
-		System.out.println("~~~~~~~~~~~~datePid->"
-				+ JSONObject.toJSONString(datePid));
-		List<Map<String, Object>> datePidAid = archiveManager
-				.dateProvinceIdApportIds(map);
-		System.out.println("~~~~~~~~~~~~datePidAid->"
-				+ JSONObject.toJSONString(datePidAid));
+		map.put("currentTime", "2016-07-22");
+		archiveManager.dateProvinceIdCache(map);
+		// System.out.println("~~~~~~~~~~~~datePid->"
+		// + JSONObject.toJSONString(datePid));
+		// List<Map<String, Object>> datePidAid = archiveManager
+		// .dateProvinceIdApportIds(map);
+		// System.out.println("~~~~~~~~~~~~datePidAid->"
+		// + JSONObject.toJSONString(datePidAid));
 	}
 
 	@Test
@@ -133,6 +121,15 @@ public class ArchiveManagerImplTest {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Rollback(value = false)
+	@Test
+	public void testDailyOrderArchice2() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Date date = DateUtil.getDate("2016-07-22", "yyyy-MM-dd");
+		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
+		archiveManager.baseDailyExtract(map);
 	}
 
 	public List<String> dateList() {

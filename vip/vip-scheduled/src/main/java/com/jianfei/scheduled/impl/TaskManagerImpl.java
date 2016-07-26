@@ -72,7 +72,7 @@ public class TaskManagerImpl implements ITaskManager {
 		logger.info("<<<<<<开始执行订单归档任务>>>>>>");
 		System.out.println("<<<<<<开始执行订单归档任务了>>>>>>");
 		archiveManager.baseDailyExtract(DateUtil.dailyExtractDate());
-		archiveManager.dateProvinceIdRedisCache(DateUtil.getCurrentTime());
+		archiveManager.dateProvinceIdCache(DateUtil.getCurrentTime());
 		archiveManager.dateProvinceIdApportIds(DateUtil.getCurrentTime());
 	}
 

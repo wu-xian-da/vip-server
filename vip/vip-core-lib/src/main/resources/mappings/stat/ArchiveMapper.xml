@@ -103,14 +103,15 @@
 	<!-- 统计 主管|经理角色绘图 -->
 	<select id="zhuGuanTotal" resultType="java.util.Map"
 		parameterType="java.util.Map">
-		SELECT 
-			 CASE WHEN
-				COUNT(*) IS NULL THEN
-				0
-			 ELSE
-				COUNT(*)
-			 END AS total
-		FROM `app_orders` ao WHERE ao.`order_state` IN (1,2,3,4)
+		SELECT
+		CASE WHEN
+		COUNT(*) IS NULL THEN
+		0
+		ELSE
+		COUNT(*)
+		END AS total
+		FROM
+		`app_orders` ao WHERE ao.`order_state` IN (1,2,3,4)
 		<if test="ariportIds!=null">
 			and ao.`airport_id` in
 			<foreach item="item" index="index" collection="ariportIds"
@@ -214,7 +215,6 @@
 			  `sex`,
 			  `photo`,
 			  `order_num`,
-			  `order_num_back`,
 			  `file_time`,
 			  `year`,
 			  `month`,
@@ -232,12 +232,6 @@
 				su.sex,
 				su.photo,
 				COUNT(ao.order_id) AS total_nums,
-				CASE
-				WHEN acc.back_order_num IS NULL THEN
-					0
-				ELSE
-					acc.back_order_num
-				END AS order_num_back,
 				#{maxTime},
 				DATE_FORMAT(#{maxTime},'%Y') AS YEAR,
 				DATE_FORMAT(#{maxTime},'%m') AS MONTH,
@@ -248,20 +242,6 @@
 			INNER JOIN sys_users su ON ao.sale_no = su.`code`
 			INNER JOIN sys_airport sa ON sa.airport_id = ao.airport_id 
 			LEFT JOIN sys_city sc ON sc.CID = sa.province
-			LEFT JOIN (
-				SELECT
-					ao.sale_no,
-					ao.airport_id AS airport_id,
-					count(card.back_id) AS back_order_num
-				FROM
-					`app_card_back` card
-				INNER JOIN `app_orders` ao ON card.order_id = ao.order_id
-				WHERE
-					DATE_FORMAT(card.finish_time,'%Y-%m-%d') =#{maxTime}
-				GROUP BY
-					ao.sale_no,
-					ao.airport_id
-			) acc on acc.sale_no=ao.sale_no and acc.airport_id=ao.airport_id
 			WHERE
 				DATE_FORMAT(ao.order_time,'%Y-%m-%d') =#{maxTime}
 			AND ao.pay_time IS NOT NULL and sa.state=0 and sa.dtflag=0
@@ -271,74 +251,140 @@
 			
 		]]>
 	</select>
+	<!-- 退卡日归档表抽取 -->
+	<select id="baseDailyBackExtract" parameterType="java.util.Map">
+		<![CDATA[
+		INSERT INTO app_back_archive (
+				  `file_time`,
+				  `order_num_back`,
+				  `sale_no`,
+				  `airport_id`,
+				   pid
+				) 
+				SELECT
+					#{maxTime},
+					count(card.back_id) AS back_order_num,
+					ao.sale_no,
+					ao.airport_id AS airport_id,
+					sa.`province`
+				FROM
+					`app_card_back` card
+				INNER JOIN `app_orders` ao ON card.order_id = ao.order_id
+				INNER JOIN `sys_airport` sa ON sa.`airport_id`=ao.`airport_id` 
+				WHERE
+					DATE_FORMAT(
+						card.finish_time,
+						'%Y-%m-%d'
+					) = #{maxTime}
+				GROUP BY
+					ao.sale_no,
+					ao.airport_id
+		]]>
+	</select>
 	<!-- *******************************************************华丽的分割线****************************************************************** -->
 
 
-	<!--缓存:key-> date+pid -->
-	<select id="dateProvinceIdRedisCache" parameterType="java.util.Map"
+	<!--按照日期和省份id对订单数统计并放入缓存 -->
+	<select id="dateProvinceIdOderCache" parameterType="java.util.Map"
 		resultType="java.util.Map">
 		<![CDATA[
+			SELECT
+			concat(#{currentTime},'$',pid) as cacheKey,
+				pcount,
+				case when SUM(aoa.order_num) is null then 0 else SUM(aoa.order_num) end AS total,
+				case when SUM(aoa.order_num) / pcount is null then 0 else SUM(aoa.order_num) / pcount end AS avgNum,
+				aoa.pid
+			FROM
+				app_order_archive aoa
+			left join (
 				SELECT
-					concat(#{currentTime},'$',pid) as cacheKey,
-					count(DISTINCT aoa.bid) AS pcount,
-					sum(aoa.order_num) AS total,
-					sum(aoa.order_num) / count(DISTINCT aoa.bid) AS avgNum,
-					aoa.pid,
-					CASE
-					WHEN sum(aoa.order_num_back) IS NULL THEN
-						0
-					ELSE
-						sum(aoa.order_num_back)
-					END AS back_order_total,
-					sum(aoa.order_num_back) / count(DISTINCT aoa.bid) as avgNum_back
+					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
 				FROM
-					app_order_archive aoa
-					where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
-				GROUP BY
-					aoa.pid
+					sys_airport sa
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id  group by sa.airport_id 
+			) A on  A.airport_id=aoa.airport_id
+			WHERE
+				DATE_FORMAT(aoa.file_time, '%Y-%m-%d') =#{currentTime}
+			GROUP BY
+				aoa.pid
 		]]>
 	</select>
-	<!--缓存 :key-> date+pid+airportId -->
+	<!--按照日期和省份id对退卡数统计并放入缓存 -->
+	<select id="dateProvinceIdOderBackCache" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<![CDATA[
+			SELECT
+				concat(#{currentTime},'$',pid) as cacheKey,
+				pcount,
+				case when SUM(aba.order_num_back) is null then 0 else SUM(aba.order_num_back) end AS back_order_total,
+				case when SUM(aba.order_num_back) / pcount is null then 0 else SUM(aba.order_num_back) / pcount end AS avgNum_back,
+				aba.pid
+			FROM
+				app_back_archive aba
+			left join (
+				SELECT
+					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
+				FROM
+					sys_airport sa
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id  group by sa.airport_id 
+			) A on  A.airport_id=aba.airport_id
+			WHERE
+				DATE_FORMAT(aba.file_time, '%Y-%m-%d') = #{currentTime}
+			GROUP BY
+				aba.pid
+		]]>
+	</select>
+	
+	
+	<!-- *************************分割************************* -->
+	<!--按照日期和省份id和机场id对订单数统计并放入缓存 -->
 	<select id="dateProvinceIdApportIds" parameterType="java.util.Map"
 		resultType="java.util.Map">
 		<![CDATA[
-			select 
-				concat(#{currentTime},"$",aoa.pid,'$',aoa.airport_id) as cacheKey, 
-					sum(aoa.order_num) AS total,
-					CASE
-					WHEN sum(aoa.order_num_back) IS NULL THEN
-						0
-					ELSE
-						sum(aoa.order_num_back)
-					END AS back_order_total,
-					 B.pcount,
-					CASE 
-					WHEN  sum(aoa.order_num) / pcount IS  NULL THEN
-						0
-					ELSE
-						sum(aoa.order_num) / pcount
-					END AS avgNum,
-					CASE
-					WHEN sum(aoa.order_num_back) / pcount IS NULL THEN
-						0
-					ELSE
-					    sum(aoa.order_num) / pcount
-					END AS avgNum_back
-		    from app_order_archive aoa 
-		    LEFT JOIN (
+			SELECT
+				concat(#{currentTime},"$",aoa.pid,'$',aoa.airport_id) AS cacheKey,
+				sum(aoa.order_num) AS total,
+			 	 B.pcount,
+			 	CASE WHEN sum(aoa.order_num) / pcount IS NULL THEN 0 ELSE sum(aoa.order_num) / pcount END AS avgNum
+			FROM
+				app_order_archive aoa
+			LEFT JOIN (
 				SELECT
-					sua.airport_id,
-					count(su.id) AS pcount
+					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
 				FROM
-					sys_users su
-				INNER JOIN sys_user_airport sua ON su.id = sua.sys_id
-				WHERE
-					su.user_type = 3
-				GROUP BY
-					sua.airport_id
+					sys_airport sa
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id  group by sa.airport_id 
 			) B ON aoa.airport_id = B.airport_id
-			    where DATE_FORMAT(aoa.file_time,'%Y-%m-%d') = #{currentTime}
-			group by aoa.pid,aoa.airport_id 
+			WHERE
+				DATE_FORMAT(aoa.file_time, '%Y-%m-%d') = #{currentTime}
+			GROUP BY
+				aoa.pid,
+				aoa.airport_id
+		]]>
+	</select>
+	<!--按照日期和省份id和机场id对退卡数统计并放入缓存 -->
+	<select id="dateProvinceIdApportIdsBack" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<![CDATA[
+			SELECT
+				concat(#{currentTime},"$",aba.pid,'$',aba.airport_id) AS cacheKey,
+				sum(aba.order_num_back) AS back_order_total,
+			 	B.pcount,
+			 	CASE WHEN sum(aba.order_num_back) / pcount IS NULL THEN 0 ELSE sum(aba.order_num_back)/ pcount END AS avgNum_back
+			FROM
+				app_back_archive aba
+			LEFT JOIN (
+				SELECT
+					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
+				FROM
+					sys_airport sa
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id group by sa.airport_id 
+			) B ON aba.airport_id = B.airport_id
+			WHERE
+				DATE_FORMAT(aba.file_time, '%Y-%m-%d') = #{currentTime}
+			GROUP BY
+				aba.pid,
+				aba.airport_id
 		]]>
 	</select>
 
@@ -369,16 +415,18 @@
 		]]>
 	</select>
 	<!-- 每30分钟验证订单是否有效 -->
-	<select id="validateOrdereIsEfective" parameterType="string" resultType="java.util.Map">
+	<select id="validateOrdereIsEfective" parameterType="string"
+		resultType="java.util.Map">
 		<![CDATA[
 			SELECT ao.`order_id` FROM `app_orders` ao WHERE ao.`order_state`=0 AND ao.`order_time`<#{endtime}
 		]]>
 	</select>
 	<!-- 订单无效，更改订单状态为无效 -->
 	<update id="updateOrderStatuIsValidate" parameterType="ArrayList">
-		UPDATE `app_orders` SET order_state=5 WHERE order_id IN 
-		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
-		  #{item}  
-		 </foreach>
+		UPDATE `app_orders` SET order_state=5 WHERE order_id IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
 	</update>
 </mapper>

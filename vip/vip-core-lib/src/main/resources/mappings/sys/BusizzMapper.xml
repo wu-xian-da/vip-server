@@ -75,7 +75,7 @@
 		</if>
 		<![CDATA[
 			GROUP BY
-			u.`name`]]>)
+			u.`code`]]>)
 		A
 		<if test="sort!=null">
 			order by ${sort} ${order}
