@@ -473,8 +473,7 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public synchronized BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
-        log.info("提交退卡信息");
-        log.info(appCardBack);
+
         //1、根据订单号查询订单信息
         AppOrders orders = getOrderDetailByOrderId(appCardBack.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
@@ -489,7 +488,6 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         // 2、重新计算可退余额 校验是否正确
-        log.info("重新计算可退余额 校验是否正确");
         VipCardUseDetailInfo useDetailInfo=new VipCardUseDetailInfo();
         useDetailInfo.setOrderMoney(orders.getPayMoney());
         useDetailInfo.setVipCardNo(appCardBack.getCardNo());
@@ -516,7 +514,7 @@ public class OrderManagerImpl implements OrderManager {
             AppVipcard vipcard=new AppVipcard();
             vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
             vipcard.setCardState(VipCardState.BACK_CARD.getName());
-            log.info("更改VIP"+vipcard.getCardNo()+"卡未已退卡");
+            log.info("更改VIP"+vipcard.getCardNo()+"卡为已退卡");
             vipCardManager.updateVipCard(vipcard);
             orders.setApplyType(ApplyBackCardMethod.SCENE_EMERGENT_APPLY.getName());
         } else {
@@ -531,7 +529,7 @@ public class OrderManagerImpl implements OrderManager {
             orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         }
         boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
-        log.info("更改用户状态为不可用");
+
         vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
 
         appOrdersMapper.updateByPrimaryKeySelective(orders);
@@ -690,11 +688,6 @@ public class OrderManagerImpl implements OrderManager {
         if (airportEasyManager.activeVipCard(vipCardNo, orders.getCustomer().getPhone(),
                 orders.getCustomer().getCustomerName())) {
             //如果激活成功 发送激活成功短信
-            // 计算卡的有效期
-            Date expireDate = DateUtil.addDays(new Date(),
-                    vipcard.getValideTime());
-            vipcard.setActiveTime(new Date());
-            vipcard.setExpiryTime(expireDate);
             vipcard.setCardState(VipCardState.ACTIVE.getName());
             vipCardManager.updateVipCard(vipcard);
             Map map = new HashMap();

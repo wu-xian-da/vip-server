@@ -81,4 +81,10 @@ public interface AppOrdersMapper {
 	 */
 	List<OrderPageDto> orderListBySale(@Param(value = "uno")String uno, @Param(value = "orderState")List<Integer> orderState, @Param(value = "cardState")List<Integer> cardState,@Param(value = "key")String key);
 
+	/**
+	 * 根据手机号获取订单列表
+	 * @param phone
+	 * @return
+     */
+	List<AppOrders> orderListByPhone(@Param(value = "phone")String phone);
 }

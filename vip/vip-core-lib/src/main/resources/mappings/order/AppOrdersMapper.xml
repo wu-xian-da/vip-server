@@ -571,5 +571,12 @@ select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_stat
 		</if>
 		 order by o.order_time desc
 	</select>
-	
+
+
+	<!-- 根据用户的手机号 查询用户的可处理订单 -->
+	<select id="orderListByPhone" parameterType="java.lang.String"
+			resultMap="BaseResultMap">
+	select o.* from  app_orders o join app_customer u on o.customer_id=u.customer_id where o.order_state in(0,1,2,3)
+	and u.customer_phone=(#{phone})
+	</select>
 </mapper>
