@@ -524,19 +524,17 @@ public class OrderController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> auditPass(String orderId,Integer opType,String phone){
 		User user = getCurrentUser();
-		// 订单基本信息
-		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		//1、审核不通过
 		try {
 			orderManagerImpl.updateOrderStateByOrderId(orderId, opType);
 			//***日志记录（正常）
 			SmartLog.info(ModuleType.ORDER_MODULE.getName(),phone,
-					"【订单模块-审核不通过】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"【订单模块-审核不通过】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名：【】"+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 正在审核->已支付】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
 			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),phone,
-					"【订单模块-审核不通过】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"【订单模块-审核不通过】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名：【】"+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 正在审核->已支付】，操作结果：【失败】");
 		}
 		
