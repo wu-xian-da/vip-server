@@ -48,6 +48,8 @@ public class SmartLog {
 	}
 
 	/**
+	 * 暂时不用
+	 * 
 	 * @return 获得日志，自动判定日志发出者
 	 */
 	public static Logger get() {
@@ -56,35 +58,13 @@ public class SmartLog {
 	}
 
 	/**
-	 * @return 获得日志，自动判定日志发出者
-	 */
-	private static Logger innerGet() {
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		return LoggerFactory.getLogger(stackTrace[3].getClassName());
-	}
-
-	/**
 	 * Trace等级日志，小于debug<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
 	 *            module_type,search_key,operate_content
 	 */
 	public static void trace(Object... arguments) {
-		get().trace(
-				format(arguments),
-				union(arguments,
-						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
-	}
-
-	/**
-	 * Trace等级日志，小于debug<br>
-	 * 
-	 * @param arguments
-	 *            module_type,search_key,operate_content
-	 */
-	public static void trace(Logger logger, Object... arguments) {
-		logger.trace(
+		get(SmartLog.class).trace(
 				format(arguments),
 				union(arguments,
 						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
@@ -92,29 +72,13 @@ public class SmartLog {
 
 	/**
 	 * Debug等级日志，小于Info<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
 	 *            module_type,search_key,operate_content
 	 * @version 1.0.0
 	 */
 	public static void debug(Object... arguments) {
-		String format = format(arguments);
-		innerGet().debug(
-				format,
-				union(arguments,
-						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
-	}
-
-	/**
-	 * Debug等级日志，小于Info<br>
-	 * 
-	 * @param arguments
-	 *            module_type,search_key,operate_content
-	 * @version 1.0.0
-	 */
-	public static void debug(Logger logger, Object... arguments) {
-		logger.debug(
+		get(SmartLog.class).debug(
 				format(arguments),
 				union(arguments,
 						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
@@ -122,26 +86,12 @@ public class SmartLog {
 
 	/**
 	 * Info等级日志，小于Warn<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
 	 *            module_type,search_key,operate_content
 	 */
 	public static void info(Object... arguments) {
-		get().info(
-				format(arguments),
-				union(arguments,
-						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
-	}
-
-	/**
-	 * Info等级日志，小于Warn<br>
-	 * 
-	 * @param arguments
-	 *            module_type,search_key,operate_content
-	 */
-	public static void info(Logger logger, Object... arguments) {
-		logger.info(
+		get(SmartLog.class).info(
 				format(arguments),
 				union(arguments,
 						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
@@ -149,13 +99,12 @@ public class SmartLog {
 
 	/**
 	 * Warn等级日志，小于Error<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
 	 *            module_type,search_key,operate_content
 	 */
 	public static void warn(Object... arguments) {
-		get().warn(
+		get(SmartLog.class).warn(
 				format(arguments),
 				union(arguments,
 						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
@@ -163,20 +112,6 @@ public class SmartLog {
 
 	/**
 	 * Warn等级日志，小于Error<br>
-	 * 
-	 * @param arguments
-	 *            module_type,search_key,operate_content
-	 */
-	public static void warn(Logger logger, Object... arguments) {
-		logger.warn(
-				format(arguments),
-				union(arguments,
-						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
-	}
-
-	/**
-	 * Warn等级日志，小于Error<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param e
 	 *            需在日志中堆栈打印的异常
@@ -184,22 +119,7 @@ public class SmartLog {
 	 *            module_type,search_key,operate_content
 	 */
 	public static void warn(Throwable e, Object... arguments) {
-		get().warn(
-				format(format(arguments),
-						union(arguments, DateUtil.dateToString(new Date(),
-								DateUtil.ALL_FOMAT))), e);
-	}
-
-	/**
-	 * Warn等级日志，小于Error<br>
-	 * 
-	 * @param e
-	 *            需在日志中堆栈打印的异常
-	 * @param arguments
-	 *            module_type,search_key,operate_content
-	 */
-	public static void warn(Logger logger, Throwable e, Object... arguments) {
-		logger.warn(
+		get(SmartLog.class).warn(
 				format(format(arguments),
 						union(arguments, DateUtil.dateToString(new Date(),
 								DateUtil.ALL_FOMAT))), e);
@@ -207,13 +127,12 @@ public class SmartLog {
 
 	/**
 	 * Error等级日志<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
 	 *            module_type,search_key,operate_content
 	 */
 	public static void error(Object... arguments) {
-		get().error(
+		get(SmartLog.class).error(
 				format(arguments),
 				union(arguments,
 						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
@@ -221,20 +140,6 @@ public class SmartLog {
 
 	/**
 	 * Error等级日志<br>
-	 * 
-	 * @param arguments
-	 *            module_type,search_key,operate_content
-	 */
-	public static void error(Logger logger, Object... arguments) {
-		logger.error(
-				format(arguments),
-				union(arguments,
-						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
-	}
-
-	/**
-	 * Error等级日志<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param e
 	 *            需在日志中堆栈打印的异常
@@ -242,22 +147,7 @@ public class SmartLog {
 	 *            module_type,search_key,operate_content
 	 */
 	public static void error(Throwable e, Object... arguments) {
-		get().error(
-				format(format(arguments),
-						union(arguments, DateUtil.dateToString(new Date(),
-								DateUtil.ALL_FOMAT))), e);
-	}
-
-	/**
-	 * Error等级日志<br>
-	 * 
-	 * @param e
-	 *            需在日志中堆栈打印的异常
-	 * @param arguments
-	 *            module_type,search_key,operate_content
-	 */
-	public static void error(Logger logger, Throwable e, Object... arguments) {
-		logger.error(
+		get(SmartLog.class).error(
 				format(format(arguments),
 						union(arguments, DateUtil.dateToString(new Date(),
 								DateUtil.ALL_FOMAT))), e);
