@@ -45,12 +45,14 @@ import com.jianfei.core.bean.AppUserFeedback;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
+import com.jianfei.core.common.enu.ModuleType;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.MessageDto;
+import com.jianfei.core.common.utils.SmartLog;
 import com.jianfei.core.common.utils.StateChangeUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.OrderDetailInfo;
@@ -474,10 +476,16 @@ public class OrderController extends BaseController {
 		// 1、改变订单状态
 		try {
 			orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
-			logger.info(">>>>>订单模块-退款申请，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【" + phone + "】，用户姓名【"
-					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【订单状态已支付->正在审核】");
+			
+			//**日志记录（正常）
+			SmartLog.info(ModuleType.ORDER_MODULE.getName(),phone,
+					"【订单模块-退款申请】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 已支付->正在审核】，操作结果：【成功】");
 		} catch (Exception e) {
-			logger.error(">>>>>订单模块-退款申请】更改订单" + orderId + "】状态由【已支付->正在审核】出错：" + e.getMessage());
+			//**日志记录（异常）
+			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),phone,
+					"【订单模块-退款申请】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 已支付->正在审核】，操作结果：【失败】");
 		}
 
 		// 2、获取验证码
@@ -524,14 +532,20 @@ public class OrderController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> auditPass(String orderId,Integer opType,String phone){
 		User user = getCurrentUser();
+		// 订单基本信息
+		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		//1、审核不通过
 		try {
 			orderManagerImpl.updateOrderStateByOrderId(orderId, opType);
-			
-			logger.info(">>>>>订单模块-审核不通过，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【" + phone + "】，用户姓名【"
-					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【订单状态正在审核->已支付】");
-			
+			//***日志记录（正常）
+			SmartLog.info(ModuleType.ORDER_MODULE.getName(),phone,
+					"【订单模块-审核不通过】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 正在审核->已支付】，操作结果：【成功】");
 		} catch (Exception e) {
-			logger.error(">>>>>订单模块-审核不通过，更改订单【" + orderId + "】状态由【正在审核->已支付】出错：" + e.getMessage());
+			//***日志记录（异常）
+			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),phone,
+					"【订单模块-审核不通过】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 正在审核->已支付】，操作结果：【失败】");
 		}
 		
 		AppOrders orderInfo = orderManagerImpl.getOrderInfoByOrderId(orderId);
@@ -574,17 +588,22 @@ public class OrderController extends BaseController {
 			@RequestParam(value="userNames",defaultValue="",required=false) String userNames,
 			@RequestParam(value="banckName",defaultValue="",required=false) String banckName){
 		User user = getCurrentUser();
+		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		//****审批人员id
 		String userId = user.getId()+"";
 		
 		//1、将订单状态有'正在审核'变成'审核通过'，退款申请变成客服
 		try {
 			orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
-			logger.info(">>>>>订单模块-审核通过，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【】，用户姓名【"
-					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【正在审核->审核通过】");
-			
+			//***日志记录（正常）
+			SmartLog.info(ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
+					"【订单模块-审核通过】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 正在审核->审核通过，将订单】，操作结果：【成功】");
 		} catch (Exception e) {
-			logger.error(">>>>>订单模块-审核通过，更改订单【" + orderId + "】状态由【正在审核->审核通过】出错：" + e.getMessage());
+			//***日志记录（异常）
+			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
+					"【订单模块-审核通过】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 正在审核->审核通过】，操作结果：【失败】");
 		}
 		
 		//2、将退款信息录入到流水表中
@@ -599,7 +618,18 @@ public class OrderController extends BaseController {
 		appCardBack.setCreateName(user.getName());
 		appCardBack.setBankName(banckName);//开户行
 		appCardBack.setCustomerName(userNames);//开户者姓名
-		orderManagerImpl.insertBackCardInfo(appCardBack);
+		try {
+			orderManagerImpl.insertBackCardInfo(appCardBack);
+			//***日志记录（正常）
+			SmartLog.info(ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
+					"【订单模块-审核通过-记录退款信息】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额，并将退款申请信息记录到退款表中】，操作结果：【成功】");
+		} catch (Exception e) {
+			//***日志记录（异常）
+			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
+					"【订单模块-审核通过-记录退款信息】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额，并将退款申请信息记录到退款表中】，操作结果：【失败】");
+		}
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();
 		resMap.put("result", 1);//1代表成功
@@ -617,9 +647,9 @@ public class OrderController extends BaseController {
 		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		// 4、将用户状态变为禁用
 		vipUserManager.updateUserSate(orderDetailInfos.getCustomerPhone(),VipUserSate.NOT_ACTIVE);
-		//3.3调用发送短信接口 现金 006 其他：009
+		//5.1调用发送短信接口 现金 006 其他：009
 		try {
-			//3.3.1支付方式
+			//5.2支付方式
 			int payTypes = orderDetailInfos.getPayMethod();
 			String msgType = "";
 			if(payTypes == PayType.CASHPAY.getName()){
@@ -649,16 +679,23 @@ public class OrderController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> refundMoney(String orderId,Integer opr){
 		User user = getCurrentUser();
+		//根据订单编号返回订单详情
+		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
 		//****审核员id
 		String userId = user.getId()+"";
 		
 		//1、更新订单状态
 		try {
 			orderManagerImpl.updateOrderStateByOrderId(orderId, opr);
-			logger.info(">>>>>订单模块-退款完成，操作时间【" + new Date() + "】，订单编号【" + orderId + "】，用户手机号：" + "【】，用户姓名【"
-					+ "】，操作员编号【" + user.getId() + "】，操作员姓名【" + user.getName() + "】，操作内容【订单模块-退款完成】");
+			//***日志记录（正常）
+			SmartLog.info(ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
+					"【订单模块-最终退款】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 审核通过->已退款】，操作结果：【成功】");
 		} catch (Exception e) {
-			logger.error(">>>>>订单模块-退款完成，更改订单【" + orderId + "】状态由【审核通过->已退款】出错：" + e.getMessage());
+			//***日志记录（异常）
+			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
+					"【订单模块-最终退款】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 审核通过->已退款】，操作结果：【失败】");
 		}
 		
 		//写退款流水
@@ -669,28 +706,42 @@ public class OrderController extends BaseController {
 		parMap.put("finishTime", new Date());
 		parMap.put("orderId", orderId);
 		parMap.put("checkId", userId);
-		orderManagerImpl.updateBackCardByOrderId(parMap);
+		try {
+			orderManagerImpl.updateBackCardByOrderId(parMap);
+			//***日志记录（正常）
+			SmartLog.info(ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
+					"【订单模块-最终退款-更新退款流水表】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表】，操作结果：【成功】");
+		} catch (Exception e) {
+			//***日志记录（异常）
+			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
+					"【订单模块-最终退款-更新退款流水表】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表】，操作结果：【失败】");
+		}
 		
-		Map<String,Object> resMap = new HashMap<String,Object>();
-		resMap.put("result", "1");
-		resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
-		resMap.put("orderStateName", "已退款");
-		
-		//根据订单编号返回订单详情
-		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
-				
 		//3、更新卡状态 将开状态变为已退卡
 		AppVipcard appVipcard = new AppVipcard();
 		appVipcard.setCardNo(orderDetailInfos.getVipCardNo());
 		appVipcard.setCardState(VipCardState.BACK_CARD.getName());
-		vipCardManagerImpl.updateByPrimaryKeySelective(appVipcard);
+		try {
+			vipCardManagerImpl.updateByPrimaryKeySelective(appVipcard);
+			//***日志记录（正常）
+			SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),orderDetailInfos.getVipCardNo(),
+					"【订单模块-最终退款-更改卡状态】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将卡状态变为-已退卡】，操作结果：【成功】");
+		} catch (Exception e) {
+			//***日志记录（异常）
+			SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),orderDetailInfos.getVipCardNo(),
+					"【订单模块-最终退款-更改卡状态】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将卡状态变为-已退卡】，操作结果：【失败】");
+		}
 		
-		// 2发送短信  内容如下：用户名+卡号+退款金额
-		// 2.1退款金额
+		// 4发送短信  内容如下：用户名+卡号+退款金额
+		// 4.1退款金额
 		double remainMoneys = orderManagerImpl.remainMoney(orderId);
 		JSONObject object=new JSONObject();
 	    object.put("returnMoney",remainMoneys);
-		// 2.2发送短信
+		// 4.2发送短信
 		try {
 			ServiceMsgBuilder msgBuilder = new ServiceMsgBuilder().setUserPhone(orderDetailInfos.getCustomerPhone()).
 					setUserName(orderDetailInfos.getCustomerName()).setVipCardNo(orderDetailInfos.getVipCardNo()).
@@ -699,6 +750,11 @@ public class OrderController extends BaseController {
 		} catch (Exception e) {
 			logger.error("【订单模块-最终退款】发送短信失败："+e.getMessage());
 		}
+		
+		Map<String,Object> resMap = new HashMap<String,Object>();
+		resMap.put("result", "1");
+		resMap.put("data","<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
+		resMap.put("orderStateName", "已退款");
 		return resMap;
 	}
 	
