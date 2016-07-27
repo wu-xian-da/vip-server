@@ -1,5 +1,8 @@
 package com.jianfei.core.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.jianfei.core.common.utils.CustomFloatSerialize;
+
 /**
  * 用户提交订单信息
  *
@@ -165,6 +168,7 @@ public class OrderAddInfoDto {
         this.orderId = orderId;
     }
 
+    @JsonSerialize(using = CustomFloatSerialize.class)
     public float getMoney() {
         return money;
     }

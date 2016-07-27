@@ -1,7 +1,9 @@
 package com.jianfei.core.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Lists;
+import com.jianfei.core.common.utils.CustomFloatSerialize;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -163,6 +165,7 @@ public class AppOrders implements Serializable{
         this.serialId = serialId == null ? null : serialId.trim();
     }
 
+    @JsonSerialize(using = CustomFloatSerialize.class)
     public Float getPayMoney() {
         return payMoney;
     }
