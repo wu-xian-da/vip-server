@@ -487,5 +487,12 @@ public class DateUtil {
 		}
 		return myDate;
 	}
-
+	
+	/**
+	 * 将日期转成特定的格式
+	 */
+	public static String formatterDate(Date date){
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sf.format(date);
+	}
 }

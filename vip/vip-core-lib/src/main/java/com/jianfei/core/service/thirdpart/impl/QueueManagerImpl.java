@@ -17,9 +17,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.ModuleType;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipCardState;
-import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
@@ -61,10 +61,6 @@ public class QueueManagerImpl implements QueueManager {
 		if (StringUtils.isEmpty(result)) { // 结果为空直接返回
 			return null;
 		}
-		System.out.println(DateUtil
-				.dateToString(new Date(), DateUtil.ALL_FOMAT)
-				+ "->messageBody->队列消息体->:" + result);
-		SmartLog.info("消息体", "");
 		try {
 			// 反序列化结果
 			@SuppressWarnings({ "unchecked" })
@@ -74,8 +70,8 @@ public class QueueManagerImpl implements QueueManager {
 			return logicalProcessing(returnMap);
 		} catch (UnrecoverableKeyException | KeyManagementException
 				| NoSuchAlgorithmException | KeyStoreException | IOException e) {
-			LoggerFactory.getLogger(getClass()).error("处理短信消息队列:{}",
-					e.getMessage());
+			SmartLog.error(e, ModuleType.MESSAGE_MODULE.getName(),
+					StringUtils.EMPTY, "反序列消息体，反序列化消息体异常，消息体为:" + result);
 		}
 		return new MessageDto<Map<String, String>>().setMsgBody(MsgFlag.ERROR);
 	}
@@ -97,25 +93,31 @@ public class QueueManagerImpl implements QueueManager {
 			KeyManagementException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
 
+		// 手机号
+		String userPhone = map.get("userPhone");
+		// 接受到消息体，打印日志
+		SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+				",获取并反序列化消息体成功，获取消息体:" + JSONObject.toJSONString(map)
+						+ ",准备获取并解析短信模板...");
+
 		MessageDto<Map<String, String>> messageDto = new MessageDto<Map<String, String>>();
 		String msgType = map.get("msgType");
 
+		// 根据消息类型获取消息模板
 		String msgBody = MsgAuxiliary.buildMsgBody(map, msgType);
-		System.out.println("vipjianfei:template:"
-				+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-				+ "->templateAnalysis->" + msgBody);
 		if (StringUtils.isEmpty(msgBody)) {
-			return messageDto.setData(map).setMsgBody("从缓存中获取指定类型的短信消息模版为空...");
+			String message = "获取并解析短信模板失败,消息类型为" + msgType
+					+ "的短信解析失败,请审查短息模板解析日志.....";
+			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					message);
+			return messageDto.setData(map).setMsgBody(message);
 		}
 
-		map.put("templateAnalysisBody", msgBody);
-
-		String userPhone = map.get("userPhone");
 		String vipCardNo = map.get("vipCardNo");
 		boolean isOk = false;// 操作结果状态
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
-
+			// 激活卡号
 			return activeCard(map, msgBody, userPhone);
 
 		} else if (MsgType.BACK_CARD_FINISH.getName().equals(msgType)// 退卡完成后短信
@@ -125,19 +127,19 @@ public class QueueManagerImpl implements QueueManager {
 			return backCard(msgBody, userPhone, vipCardNo, map);
 
 		} else {
-			// 登入，注册，退卡申请短信
-			System.out.println("jianfei->"
-					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-					+ "->登入|注册|退卡申请|取消退卡短信|其他支付 退卡申请后短信。。。->" + msgBody
-					+ "  手机号：" + userPhone);
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"准备发送短信，(非激活操作非退卡完成和紧急退卡操作),消息类型为+" + msgType);
 			isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
 		}
 		if (!isOk) {
-			messageDto.setOk(isOk).setMsgBody("调用短信接口失败...");
+			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"发送短信，(非激活操作非退卡完成和紧急退卡操作),消息类型为+" + msgType
+							+ ",调用短信接口失败，请稍后重试...");
 		} else {
-			messageDto.setMsgBody("发送短信成功...").setOk(isOk);
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"发送短信，(非激活操作非退卡完成和紧急退卡操作),消息类型为+" + msgType + ",发送短信成功...");
 		}
-		return messageDto.setData(map);
+		return messageDto;
 	}
 
 	/**
@@ -160,23 +162,28 @@ public class QueueManagerImpl implements QueueManager {
 
 		MessageDto<Map<String, String>> messageDto = new MessageDto<Map<String, String>>();
 		messageDto.setData(map);
-
+		String msgType = map.get("msgType");
+		SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+				"退卡操作，消息类型为" + msgType + "，准备开始退卡的解绑操作...");
 		// 调用空港绑定接口
 		if (!airportEasyManager.disabledVipCard(vipCardNo)) {
-			System.out.println("vipjianfei:解绑失败:"
-					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-					+ "->退卡申请后短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
-					+ "  卡号：" + vipCardNo);
+			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"退卡操作，解绑失败，调用第三方接口失败，消息类型为" + msgType + "，准备更改卡号为"
+							+ vipCardNo + "的卡状态为‘解绑失败’...");
 			// 修改卡的状态
 			if (vipCardManager.activeAppCard(new MapUtils.Builder()
 					.setKeyValue("card_state",
 							VipCardState.UNBUNDLING_FAIL.getName())// 更改VIP卡状态
 					.setKeyValue("cardNo", vipCardNo).build())) {
-				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
-						+ "卡失败，数据库更新卡号状态为解除绑定状态成功");
+
+				SmartLog.warn(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+						"退卡操作，调用空港接口解除绑定卡号为" + vipCardNo
+								+ "卡失败，数据库更新卡号状态为‘解绑失败’状态成功");
+
 			} else {
-				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
-						+ "卡失败，数据库更新卡号状态为解除绑定状态失败");
+				SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+						"调用空港接口解除绑定卡号为" + vipCardNo
+								+ "卡失败，数据库更新卡号状态为‘解绑失败’状态失败");
 			}
 		} else {
 			// 修改卡的状态
@@ -185,25 +192,22 @@ public class QueueManagerImpl implements QueueManager {
 							.setKeyValue("card_state",
 									VipCardState.BACK_CARD.getName())// 更改VIP卡状态
 							.setKeyValue("cardNo", vipCardNo).build())) {
-				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
-						+ "卡成功，数据库更新卡号状态为退卡成功状态成功");
+				SmartLog.info(ModuleType.MESSAGE_MODULE.getClass(), userPhone,
+						"退卡操作，调用空港接口解除绑定卡号为" + vipCardNo
+								+ "卡成功，数据库更新卡号状态为退卡成功状态成功，准备发送短信...");
 			} else {
-				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
-						+ "卡卡成功，数据库更新卡号状态为退卡成功状态失败");
+				SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+						"退卡操作,调用空港接口解除绑定卡号为" + vipCardNo
+								+ "卡卡成功，数据库更新卡号状态为退卡成功状态失败，准备发送短信...");
 			}
 		}
-		System.out.println("vipjianfei:vipbacksuccess:"
-				+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-				+ "->退卡完成短信, 紧急退卡完成短信>" + msgBody + "  手机号:" + userPhone
-				+ "  卡号：" + vipCardNo);
+
 		if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
-			messageDto.setOk(true)
-					.setMsgBody(
-							"调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到"
-									+ userPhone + "成功");
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"退卡操作,卡号为" + vipCardNo + "，发送短信成功...");
 		} else {
-			messageDto.setMsgBody("调用空港接口，杰出卡号为" + vipCardNo + "卡成功，发送短信到"
-					+ userPhone + "失败");
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"退卡操作,卡号为" + vipCardNo + "，发送短信失败，请稍后再试...");
 		}
 
 		return messageDto;
@@ -230,53 +234,74 @@ public class QueueManagerImpl implements QueueManager {
 			KeyStoreException, IOException {
 
 		MessageDto<Map<String, String>> messageDto = new MessageDto<Map<String, String>>();
-		messageDto.setData(map);
+
+		String card = map.get("vipCardNo");
+		SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+				"激活卡操作，准备开始对卡号为" + card + "的卡激活操作...");
+
 		AppVipcard vipcard = vipCardManager
 				.getVipCardByNo(map.get("vipCardNo"));// 根据卡号从数据库中获取卡的信息
 
 		// 判断卡号是否存在
 		if (ObjectUtils.isEmpty(vipcard)) {
-			logger.error("vipjinfei:vip激活:卡号为" + map.get("vipCardNo")
-					+ "的卡不存在...");
-			return messageDto.setData(map).setMsgBody(
-					"vipjianfei:vip激活:卡号为" + map.get("vipCardNo") + "的卡不存在...");
+			String message = "激活卡操作，从数据库获取卡号为" + card
+					+ "的卡信息失败，有可能是数据库操作失败或者卡不存在，请排查定位问题...";
+			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					message);
+			return messageDto.setData(map).setMsgBody(message);
 		}
+		// 卡号
 		String cardNo = vipcard.getCardNo();
+		SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+				"激活卡操作,从数据库中获取卡号为" + cardNo + "的卡信息成功,开始激活该卡,请稍等....");
 
 		// 激活VIP卡
 		if (airportEasyManager.activeVipCard(map.get("vipCardNo"), userPhone,
 				map.get("userName"))) {
-			System.out.println("vipjianfei:vipactivesuccess:"
-					+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-					+ "->激活成功。。。>" + msgBody + "  手机号:" + userPhone + "  卡号："
-					+ cardNo);
-			// 计算卡的有效期
-			// Date expireDate = DateUtil.addDays(new Date(),
-			// vipcard.getValideTime());
-			// 更新激活时间和卡的有效期
+
+			SmartLog.info(
+					ModuleType.MESSAGE_MODULE.getName(),
+					userPhone,
+					"激活卡操作,卡号为"
+							+ cardNo
+							+ "的卡激活成功，恭喜你，准备更新该卡的saleTime字段为当前时间和更新该卡的状态为‘绑定成功未激活状态’");
+			// 更新卡的销售时间和该卡的状态为‘绑定成功未激活状态’
 			boolean isOk = vipCardManager.activeAppCard(new MapUtils.Builder()
 					.setKeyValue("saleTime", new Date())
 					.setKeyValue("card_state", VipCardState.ACTIVE.getName())// 更改VIP卡状态为绑定成功未激活
 					.setKeyValue("cardNo", cardNo).build());
 
 			if (isOk) {
-				System.out.println("vipjinfei:"
-						+ DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)
-						+ "->激活短信->" + msgBody + "  手机号：" + userPhone + "  卡号："
-						+ cardNo);
+
+				SmartLog.info(
+						ModuleType.MESSAGE_MODULE.getName(),
+						userPhone,
+						"激活卡操作，更新卡操作，更新卡号为"
+								+ cardNo
+								+ "的卡的saleTime字段为当前时间和更新该卡的状态为‘绑定成功未激活状态’成功，恭喜你，准备发送短信，告知客户...");
+
 				if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {// 激活短信
-					messageDto.setOk(true).setMsgBody(
-							"调用空港接口激活卡号为" + cardNo + "卡成功,发送短信成功。。。");
+					SmartLog.info(ModuleType.MESSAGE_MODULE.getName(),
+							userPhone, "激活卡操作,激活卡" + cardNo + "成功，发送激活短信成功,谢谢");
 				} else {
-					messageDto.setMsgBody("调用空港接口激活卡号为" + cardNo
-							+ "卡成功,发送短信成功。。。");
+					SmartLog.error(ModuleType.MESSAGE_MODULE.getName(),
+							userPhone, "激活卡操作，激活卡" + cardNo
+									+ "成功，但是发送激活短信失败,sorry...");
+
 				}
 			} else {
-				messageDto.setOk(true).setMsgBody(
-						"调用空港接口激活卡号为" + cardNo + "卡成功,数据库更新卡的状态为激活状态失败。。");
+				SmartLog.error(
+						ModuleType.MESSAGE_MODULE.getName(),
+						userPhone,
+						"激活操作，调用空港激活接口激活卡"
+								+ cardNo
+								+ "成功，但是数据库更新卡的状态为‘绑定成功未激活状态’失败，请确认数据库现在是可用的？谢谢");
 			}
 			return messageDto;
 		}
+
+		SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+				"激活卡操作，调用空港接口,激活卡" + cardNo + "失败，请联系空港,准备更改该卡的状态为激活失败状态...");
 
 		// 更改VIP卡绑定失败
 		boolean rs = vipCardManager
@@ -284,12 +309,14 @@ public class QueueManagerImpl implements QueueManager {
 						.setKeyValue("card_state",
 								VipCardState.ACTIVATE_FAIL.getName())// 更改VIP卡状态为激活未绑定
 						.setKeyValue("cardNo", vipcard.getCardNo()).build());
+
 		if (rs) {
-			messageDto.setMsgBody("调用空港接口激活卡号为" + vipcard.getCardNo()
-					+ "卡失败,数据库更改卡为激活失败状态成功...");
+			SmartLog.warn(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"激活卡操作，调用空港接口,激活卡" + cardNo + "失败，请联系空港,数据库更改卡为激活失败状态成功...");
 		} else {
-			messageDto.setMsgBody("调用空港接口激活卡号为" + vipcard.getCardNo()
-					+ "卡失败,并且数据库更改卡为激活失败状态失败...");
+			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"激活卡操作，调用空港接口,激活卡" + cardNo
+							+ "失败，请联系空港,数据库更改卡为激活失败状态失败,请确认数据库是可用的...");
 		}
 		return messageDto;
 	}

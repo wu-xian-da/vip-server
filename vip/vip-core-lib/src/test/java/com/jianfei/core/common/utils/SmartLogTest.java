@@ -34,13 +34,14 @@ public class SmartLogTest {
 		SmartLog.debug("module_type", "search_key", "operate_content");
 		SmartLog.info("module_type", "search_key", "operate_content");
 		SmartLog.warn("module_type", "search_key", "operate_content");
-		SmartLog.error("module_type", "search_key", "operate_content");
+		SmartLog.error("module_type", StringUtils.EMPTY, "operate_content");
 
 		// 需在日志中堆栈打印的异常 ，如果使用此方法，异常信息也为记入在新的日志文件中
-		Exception exception = new RuntimeException("ceshi...");
-		SmartLog.warn(exception, "module_type", "search_key", "operate_content");
-		SmartLog.error(exception, "module_type", "search_key",
-				"operate_content");
+		// Exception exception = new RuntimeException("ceshi...");
+		// SmartLog.warn(exception, "module_type", "search_key",
+		// "operate_content");
+		// SmartLog.error(exception, "module_type", "search_key",
+		// "operate_content");
 
 	}
 

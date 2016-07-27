@@ -92,6 +92,8 @@
 		<result column="email" property="email" />
 		<result column="card_type" property="indentType"/>
 		<result column="birth_day" property="birthDay"/>
+		<!--卡表  -->
+		<result column="card_id" property="vipCardNo"/>
 	</resultMap>
 	
 	<!--查询需要开发票的订单信息 -->
@@ -128,6 +130,20 @@
 		where ord.airport_id = sa.airport_id and ord.sale_no = agent.code
 		and ord.customer_id = cus.customer_id and ord.order_id=#{orderId}
 	</select>
+	
+	<!-- 日志信息 -->
+	<select id="selLogInfoByOrderId" resultMap="orderDetailInfo"
+		parameterType="java.lang.String">
+		select
+		ord.order_id,ord.order_state,ord.pay_type,ord.apply_type,
+		cus.customer_name,cus.customer_phone,
+        aoc.card_id
+        from 
+        app_orders ord inner join app_customer cus on ord.customer_id=cus.customer_id
+        inner join app_order_card aoc on ord.order_id = aoc.order_id
+        where ord.order_id=#{orderId}
+	</select>
+	
 
 	<!--订单列表信息展示 -->
 	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">

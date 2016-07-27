@@ -34,17 +34,26 @@ import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.tencent.protocol.native_protocol.NativePayReqData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * TODO
@@ -588,16 +597,6 @@ public class OrderManagerImpl implements OrderManager {
 	}
 
 	/**
-	 * 不分页，返回所有满足条件的数据
-	 */
-	@Override
-	public List<OrderShowInfoDto> simplePage(Map<String, Object> params) {
-		// TODO Auto-generated method stub
-		List<OrderShowInfoDto> list = appOrdersMapper.get(params);
-		return list;
-	}
-	
-	/**
 	 * 发送短信（录入退款信息、完成退款信息）
 	 * @param msgBuilder
 	 */
@@ -703,4 +702,138 @@ public class OrderManagerImpl implements OrderManager {
             return BaseMsgInfo.msgFail("绑定失败");
         }
     }
+    
+    /**
+     * 将符合筛选条件的订单信息导出到excel表格中
+     * @param map
+     * @param request
+     * @param response
+     */
+    public void exportOrderInfo(Map<String,Object> map,HttpServletRequest request, HttpServletResponse response){
+    	List<OrderShowInfoDto> list = appOrdersMapper.get(map);
+		//3 生成提示信息，
+		response.setContentType("application/vnd.ms-excel");
+		String codedFileName = null;
+		OutputStream fOut = null;
+		try {
+			// 进行转码，使其支持中文文件名
+			codedFileName = java.net.URLEncoder.encode("订单信息", "UTF-8");
+			response.setHeader("content-disposition", "attachment;filename=" + codedFileName + ".xls");
+			// 产生工作簿对象
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			// 产生工作表对象
+			HSSFSheet sheet = workbook.createSheet();
+			// 设置表头
+			HSSFRow head = sheet.createRow((int) 0);
+			HSSFCell idCell = head.createCell((int) 0);
+			idCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			idCell.setCellValue("序号");
+			
+			HSSFCell orderIdCell = head.createCell((int) 1);
+			orderIdCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderIdCell.setCellValue("订单编号");
+			
+			HSSFCell orderTimeCell = head.createCell((int) 2);
+			orderTimeCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderTimeCell.setCellValue("订单日期");
+
+			HSSFCell airportStateCell = head.createCell((int) 3);
+			airportStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			airportStateCell.setCellValue("所属场站");
+
+			HSSFCell activeStateCell = head.createCell((int) 4);
+			activeStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			activeStateCell.setCellValue("业务员");
+			
+			HSSFCell userNameCell = head.createCell((int) 5);
+			userNameCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			userNameCell.setCellValue("用户姓名");
+			
+			HSSFCell userPhoneCell = head.createCell((int) 6);
+			userPhoneCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			userPhoneCell.setCellValue("用户手机");
+			
+			HSSFCell invoiceStateCell = head.createCell((int) 7);
+			invoiceStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			invoiceStateCell.setCellValue("发票状态");
+			
+			HSSFCell orderStateCell = head.createCell((int) 8);
+			orderStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderStateCell.setCellValue("订单状态");
+
+			// 返回表中所有的数据
+			int index = 1;
+			for (OrderShowInfoDto orderShowInfoDto : list) {
+				// 创建一行
+				HSSFRow row = sheet.createRow((int) index);
+				
+				//序号
+				HSSFCell id = row.createCell((int) 0);
+				id.setCellType(HSSFCell.CELL_TYPE_STRING);
+				id.setCellValue(index);
+				
+				//订单号
+				HSSFCell orderIdCells = row.createCell((int) 1);
+				orderIdCells.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderIdCells.setCellValue(orderShowInfoDto.getOrderId());
+				
+				//订单日期
+				HSSFCell orderTimesCell = row.createCell((int) 2);
+				orderTimesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderTimesCell.setCellValue(DateUtil.formatterDate(orderShowInfoDto.getOrderTime()));
+				
+				//场站
+				HSSFCell apNamesCell = row.createCell((int) 3);
+				apNamesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				apNamesCell.setCellValue(orderShowInfoDto.getAirportName());
+				
+				//业务员
+				HSSFCell agentNameCell = row.createCell((int) 4);
+				agentNameCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				agentNameCell.setCellValue(orderShowInfoDto.getAgentName());
+				
+				//用户名
+				HSSFCell userNamesCell = row.createCell((int) 5);
+				userNamesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				userNamesCell.setCellValue(orderShowInfoDto.getCustomerName());
+				
+				//用户手机号码
+				HSSFCell userPhonesCell = row.createCell((int) 6);
+				userPhonesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				userPhonesCell.setCellValue(orderShowInfoDto.getCustomerPhone());
+				
+				//发票状态
+				HSSFCell invoiceStatesCell = row.createCell((int) 7);
+				invoiceStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				invoiceStatesCell.setCellValue(StateChangeUtils.returnInvoiceFlagName(orderShowInfoDto.getInvoiceFlag()));
+				
+				//订单状态
+				HSSFCell orderStatesCell = row.createCell((int) 8);
+				orderStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderStatesCell.setCellValue(StateChangeUtils.returnOrderStateName(orderShowInfoDto.getOrderState()));
+				index++;
+
+			}
+			fOut = response.getOutputStream();
+			workbook.write(fOut);
+		} catch (UnsupportedEncodingException e1) {
+		} catch (Exception e) {
+		} finally {
+			try {
+				fOut.flush();
+				fOut.close();
+			} catch (IOException e) {
+			}
+
+		}
+    }
+
+    /**
+     * 日志信息
+     */
+	@Override
+	public OrderDetailInfo selLogInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.selLogInfoByOrderId(orderId);
+	}
 }

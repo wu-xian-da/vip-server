@@ -25,6 +25,9 @@ public interface AppOrdersMapper {
 
 	// 根据订单编号返回订单详细信息
 	OrderDetailInfo selOrderDetailInfo(String orderId);
+	
+	//根据订单号查询日志信息
+	OrderDetailInfo selLogInfoByOrderId(String orderId);
 
 	int deleteByPrimaryKey(String orderId);
 
