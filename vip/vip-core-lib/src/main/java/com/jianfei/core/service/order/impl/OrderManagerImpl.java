@@ -827,4 +827,13 @@ public class OrderManagerImpl implements OrderManager {
 
 		}
     }
+
+    /**
+     * 日志信息
+     */
+	@Override
+	public OrderDetailInfo selLogInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.selLogInfoByOrderId(orderId);
+	}
 }

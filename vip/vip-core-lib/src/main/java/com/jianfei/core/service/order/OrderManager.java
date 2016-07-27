@@ -217,4 +217,10 @@ public interface OrderManager {
      */
     BaseMsgInfo  activeCard(String phone,String vipCardNo,String orderId) throws UnrecoverableKeyException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException;
     
+    /**
+     * 日志信息
+     * @param orderId
+     * @return
+     */
+    OrderDetailInfo selLogInfoByOrderId(String orderId);
 }

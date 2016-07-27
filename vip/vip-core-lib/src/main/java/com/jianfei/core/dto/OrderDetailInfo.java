@@ -271,5 +271,16 @@ public class OrderDetailInfo extends OrderShowInfoDto{
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "OrderDetailInfo [agentPhone=" + agentPhone + ", payMoney=" + payMoney + ", payMethod=" + payMethod
+				+ ", payTime=" + payTime + ", activatTime=" + activatTime + ", customerIdent=" + customerIdent
+				+ ", sex=" + sex + ", indentType=" + indentType + ", customerProvinceName=" + customerProvinceName
+				+ ", customerCityName=" + customerCityName + ", birthDay=" + birthDay + ", address=" + address
+				+ ", email=" + email + ", invoiceType=" + invoiceType + ", invoiceTitle=" + invoiceTitle + "]";
+	}
 	
 }

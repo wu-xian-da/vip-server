@@ -464,7 +464,7 @@ public class OrderController extends BaseController {
 	public Map<String, Object> applyBackCard(String orderId, Integer operationType, String phone) {
 		User user = getCurrentUser();
 		// 订单基本信息
-		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		OrderDetailInfo orderDetailInfo = orderManagerImpl.selLogInfoByOrderId(orderId);
 		// 1、改变订单状态
 		try {
 			orderManagerImpl.updateOrderStateByOrderId(orderId, operationType);
@@ -578,7 +578,7 @@ public class OrderController extends BaseController {
 			@RequestParam(value="userNames",defaultValue="",required=false) String userNames,
 			@RequestParam(value="banckName",defaultValue="",required=false) String banckName){
 		User user = getCurrentUser();
-		OrderDetailInfo orderDetailInfo = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		OrderDetailInfo orderDetailInfo = orderManagerImpl.selLogInfoByOrderId(orderId);
 		//****审批人员id
 		String userId = user.getId()+"";
 		
@@ -670,7 +670,7 @@ public class OrderController extends BaseController {
 	public Map<String,Object> refundMoney(String orderId,Integer opr){
 		User user = getCurrentUser();
 		//根据订单编号返回订单详情
-		OrderDetailInfo orderDetailInfos = orderManagerImpl.returnOrderDetailInfoByOrderId(orderId);
+		OrderDetailInfo orderDetailInfos = orderManagerImpl.selLogInfoByOrderId(orderId);
 		//****审核员id
 		String userId = user.getId()+"";
 		
