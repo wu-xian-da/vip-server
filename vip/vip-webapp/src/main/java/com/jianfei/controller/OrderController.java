@@ -535,7 +535,7 @@ public class OrderController extends BaseController {
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 正在审核->已支付】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
-			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),phone,
+			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),phone,
 					"【订单模块-审核不通过】，订单编号："+orderId+"，用户手机号："+phone+"，用户姓名："+orderDetailInfo.getCustomerName()+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态 正在审核->已支付】，操作结果：【失败】");
 		}
@@ -593,7 +593,7 @@ public class OrderController extends BaseController {
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 正在审核->审核通过，将订单】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
-			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
+			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
 					"【订单模块-审核通过】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 正在审核->审核通过】，操作结果：【失败】");
 		}
@@ -618,7 +618,7 @@ public class OrderController extends BaseController {
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额，并将退款申请信息记录到退款表中】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
-			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
+			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
 					"【订单模块-审核通过-记录退款信息】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额，并将退款申请信息记录到退款表中】，操作结果：【失败】");
 		}
@@ -685,7 +685,7 @@ public class OrderController extends BaseController {
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 审核通过->已退款】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
-			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
+			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
 					"【订单模块-最终退款】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将订单状态由 审核通过->已退款】，操作结果：【失败】");
 		}
@@ -706,7 +706,7 @@ public class OrderController extends BaseController {
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
-			SmartLog.info(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
+			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
 					"【订单模块-最终退款-更新退款流水表】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表】，操作结果：【失败】");
 		}
@@ -723,7 +723,7 @@ public class OrderController extends BaseController {
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将卡状态变为-已退卡】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
-			SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),orderDetailInfos.getVipCardNo(),
+			SmartLog.error(ModuleType.VIPCARD_MODULE.getName(),orderDetailInfos.getVipCardNo(),
 					"【订单模块-最终退款-更改卡状态】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
 					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将卡状态变为-已退卡】，操作结果：【失败】");
 		}
@@ -843,13 +843,25 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping("unbundCard")
 	public String unbundCard(@RequestParam(value="vipCardNo",required=true) String vipCardNo){
+		User user = getCurrentUser();
 		try {
 			if(airportEasyManagerImpl.disabledVipCard(vipCardNo)){
 				//更新卡状态，将解绑失败变成已退卡
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("card_state", VipCardState.BACK_CARD.getName());
 				map.put("cardNo", vipCardNo);
-				vipCardManagerImpl.activeAppCard(map);
+				try {
+					vipCardManagerImpl.activeAppCard(map);
+					//***日志记录（正常）
+					SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),vipCardNo,
+							"【退款列表-手动解绑】，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将卡状态变为-已退卡】，操作结果：【成功】");
+				} catch (Exception e) {
+					//****日志记录（异常）
+					SmartLog.error(e,ModuleType.VIPCARD_MODULE.getName(),vipCardNo,
+							"【退款列表-手动解绑】，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【将卡状态变为-已退卡】，操作结果：【失败】");
+				}
+				
+				
 			};
 			
 		} catch (Exception e) {
