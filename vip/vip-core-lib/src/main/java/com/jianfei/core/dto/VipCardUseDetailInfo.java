@@ -1,8 +1,10 @@
 package com.jianfei.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.common.utils.CustomFloatSerialize;
 
 import java.util.Date;
 import java.util.List;
@@ -211,6 +213,8 @@ public class VipCardUseDetailInfo {
         this.customerSex = customerSex;
     }
 
+    // 序列化指定格式的double格式
+    @JsonSerialize(using = CustomFloatSerialize.class)
     public float getOrderMoney() {
         return orderMoney;
     }
@@ -219,6 +223,8 @@ public class VipCardUseDetailInfo {
         this.orderMoney = orderMoney;
     }
 
+    // 序列化指定格式的double格式
+    @JsonSerialize(using = CustomFloatSerialize.class)
     public float getUsedMoney() {
         return usedMoney;
     }
@@ -227,6 +233,8 @@ public class VipCardUseDetailInfo {
         this.usedMoney = usedMoney;
     }
 
+    // 序列化指定格式的double格式
+    @JsonSerialize(using = CustomFloatSerialize.class)
     public float getReturnMoney() {
         return returnMoney;
     }
@@ -243,6 +251,8 @@ public class VipCardUseDetailInfo {
         this.returnInfo = returnInfo;
     }
 
+    // 序列化指定格式的double格式
+    @JsonSerialize(using = CustomFloatSerialize.class)
     public float getRealMoney() {
         return realMoney;
     }
@@ -251,6 +261,8 @@ public class VipCardUseDetailInfo {
         this.realMoney = realMoney;
     }
 
+    // 序列化指定格式的double格式
+    @JsonSerialize(using = CustomFloatSerialize.class)
     public float getSafeMoney() {
         return safeMoney;
     }
