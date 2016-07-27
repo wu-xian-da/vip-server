@@ -57,12 +57,6 @@ public interface OrderManager {
     PageInfo<OrderShowInfoDto> simplePage(int pageNo, int pageSize,
                                    Map<String, Object> params);
     
-    /**
-     * 不分页，返回所有满足条件的数据
-     * @param params
-     * @return
-     */
-    List<OrderShowInfoDto> simplePage(Map<String, Object> params);
     
     /**
      * guo.jian
