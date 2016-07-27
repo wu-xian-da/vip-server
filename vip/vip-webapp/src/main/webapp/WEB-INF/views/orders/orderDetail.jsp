@@ -30,7 +30,7 @@
 				订单编号：<span>${orderDetailInfo.orderId}</span>
 			</div>
 			<ul>
-				<li><label>订单日期：</label><fmt:formatDate value="${orderDetailInfo.orderTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+				<li><label>订单创建日期：</label><fmt:formatDate value="${orderDetailInfo.orderTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 				<li><label>开卡场站：</label>${orderDetailInfo.airportName}</li>
 				<li><label>业务员：</label>${orderDetailInfo.agentName}</li>
 				<li><label>业务员电话：</label>${orderDetailInfo.agentPhone}</li>

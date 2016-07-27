@@ -116,7 +116,7 @@
 	            <thead>
 	                <tr>
 	                <th data-options="align:'center', field:'orderId',width:130">订单编号</th>
-	                <th data-options="align:'center', field:'orderTime',width:150">订单日期</th>
+	                <th data-options="align:'center', field:'orderTime',width:150">订单创建日期</th>
 	                <th data-options="align:'center', field:'airportName',width:150">场站</th>
 	                <th data-options="align:'center', field:'agentName',width:100">业务员</th>
 	                
