@@ -7,6 +7,10 @@
  */
 package com.jianfei.core.common.utils;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,48 +64,60 @@ public class SmartLog {
 	}
 
 	/**
+	 * Trace等级日志，小于debug<br>
+	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
+	 * 
+	 * @param arguments
+	 *            module_type,search_key,operate_content
+	 */
+	public static void trace(Object... arguments) {
+		get().trace(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
+	}
+
+	/**
+	 * Trace等级日志，小于debug<br>
+	 * 
+	 * @param arguments
+	 *            module_type,search_key,operate_content
+	 */
+	public static void trace(Logger logger, Object... arguments) {
+		logger.trace(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
+	}
+
+	/**
 	 * Debug等级日志，小于Info<br>
 	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 * @version 1.0.0
 	 */
 	public static void debug(Object... arguments) {
 		String format = format(arguments);
-		innerGet().debug(format, arguments);
+		innerGet().debug(
+				format,
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
 	 * Debug等级日志，小于Info<br>
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 * @version 1.0.0
 	 */
 	public static void debug(Logger logger, Object... arguments) {
-		logger.debug(format(arguments), arguments);
-	}
-
-	/**
-	 * Trace等级日志，小于debug<br>
-	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
-	 * 
-	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
-	 */
-	public static void trace(Object... arguments) {
-		get().trace(format(arguments), arguments);
-	}
-
-	/**
-	 * Trace等级日志，小于debug<br>
-	 * 
-	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
-	 */
-	public static void trace(Logger logger, Object... arguments) {
-		logger.trace(format(arguments), arguments);
+		logger.debug(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
@@ -109,20 +125,26 @@ public class SmartLog {
 	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void info(Object... arguments) {
-		get().info(format(arguments), arguments);
+		get().info(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
 	 * Info等级日志，小于Warn<br>
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void info(Logger logger, Object... arguments) {
-		logger.info(format(arguments), arguments);
+		logger.info(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
@@ -130,20 +152,26 @@ public class SmartLog {
 	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void warn(Object... arguments) {
-		get().warn(format(arguments), arguments);
+		get().warn(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
 	 * Warn等级日志，小于Error<br>
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void warn(Logger logger, Object... arguments) {
-		logger.warn(format(arguments), arguments);
+		logger.warn(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
@@ -153,10 +181,13 @@ public class SmartLog {
 	 * @param e
 	 *            需在日志中堆栈打印的异常
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void warn(Throwable e, Object... arguments) {
-		get().warn(format(format(arguments), arguments), e);
+		get().warn(
+				format(format(arguments),
+						union(arguments, DateUtil.dateToString(new Date(),
+								DateUtil.ALL_FOMAT))), e);
 	}
 
 	/**
@@ -165,10 +196,13 @@ public class SmartLog {
 	 * @param e
 	 *            需在日志中堆栈打印的异常
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void warn(Logger logger, Throwable e, Object... arguments) {
-		logger.warn(format(format(arguments), arguments), e);
+		logger.warn(
+				format(format(arguments),
+						union(arguments, DateUtil.dateToString(new Date(),
+								DateUtil.ALL_FOMAT))), e);
 	}
 
 	/**
@@ -176,20 +210,26 @@ public class SmartLog {
 	 * 由于动态获取Logger，效率较低，建议在非频繁调用的情况下使用！！
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void error(Object... arguments) {
-		get().error(format(arguments), arguments);
+		get().error(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
 	 * Error等级日志<br>
 	 * 
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void error(Logger logger, Object... arguments) {
-		logger.error(format(arguments), arguments);
+		logger.error(
+				format(arguments),
+				union(arguments,
+						DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)));
 	}
 
 	/**
@@ -199,10 +239,13 @@ public class SmartLog {
 	 * @param e
 	 *            需在日志中堆栈打印的异常
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void error(Throwable e, Object... arguments) {
-		get().error(format(format(arguments), arguments), e);
+		get().error(
+				format(format(arguments),
+						union(arguments, DateUtil.dateToString(new Date(),
+								DateUtil.ALL_FOMAT))), e);
 	}
 
 	/**
@@ -211,10 +254,13 @@ public class SmartLog {
 	 * @param e
 	 *            需在日志中堆栈打印的异常
 	 * @param arguments
-	 *            module_type,search_key,operate_content,operate_time
+	 *            module_type,search_key,operate_content
 	 */
 	public static void error(Logger logger, Throwable e, Object... arguments) {
-		logger.error(format(format(arguments), arguments), e);
+		logger.error(
+				format(format(arguments),
+						union(arguments, DateUtil.dateToString(new Date(),
+								DateUtil.ALL_FOMAT))), e);
 	}
 
 	/**
@@ -243,10 +289,25 @@ public class SmartLog {
 		for (Object object : arguments) {
 			formatBuffer.append("{}|");
 		}
-		String format = formatBuffer.toString();
-		if (format.endsWith("|")) {
-			format = format.substring(0, format.length() - 1);
+		return formatBuffer.append("{}").toString();
+	}
+
+	/**
+	 * 合并参数
+	 * 
+	 * @param arguments
+	 * @param obj
+	 * @return Object[]
+	 * @version 1.0.0
+	 */
+	private static Object[] union(Object[] arguments, Object... obj) {
+		List<Object> list = new ArrayList<Object>();
+		for (Object o : arguments) {
+			list.add(o);
 		}
-		return format;
+		for (Object o : obj) {
+			list.add(o);
+		}
+		return list.toArray(new Object[] {});
 	}
 }
