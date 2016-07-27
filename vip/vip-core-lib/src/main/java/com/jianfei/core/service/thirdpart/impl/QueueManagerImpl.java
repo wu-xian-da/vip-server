@@ -25,6 +25,7 @@ import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
 import com.jianfei.core.common.utils.MsgAuxiliary;
 import com.jianfei.core.common.utils.ObjectUtils;
+import com.jianfei.core.common.utils.SmartLog;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.ServiceMsgBuilder;
 import com.jianfei.core.service.base.VipCardManager;
@@ -63,7 +64,7 @@ public class QueueManagerImpl implements QueueManager {
 		System.out.println(DateUtil
 				.dateToString(new Date(), DateUtil.ALL_FOMAT)
 				+ "->messageBody->队列消息体->:" + result);
-
+		SmartLog.info("消息体", "");
 		try {
 			// 反序列化结果
 			@SuppressWarnings({ "unchecked" })
@@ -179,10 +180,11 @@ public class QueueManagerImpl implements QueueManager {
 			}
 		} else {
 			// 修改卡的状态
-			if (vipCardManager.activeAppCard(new MapUtils.Builder()
-					.setKeyValue("card_state",
-							VipCardState.BACK_CARD.getName())// 更改VIP卡状态
-					.setKeyValue("cardNo", vipCardNo).build())) {
+			if (vipCardManager
+					.activeAppCard(new MapUtils.Builder()
+							.setKeyValue("card_state",
+									VipCardState.BACK_CARD.getName())// 更改VIP卡状态
+							.setKeyValue("cardNo", vipCardNo).build())) {
 				messageDto.setMsgBody("调用空港接口解除绑定卡号为" + vipCardNo
 						+ "卡成功，数据库更新卡号状态为退卡成功状态成功");
 			} else {
@@ -280,7 +282,7 @@ public class QueueManagerImpl implements QueueManager {
 		boolean rs = vipCardManager
 				.activeAppCard(new MapUtils.Builder()
 						.setKeyValue("card_state",
-								VipCardState.ACTIVATE_FAIL.getName())// 更改VIP卡状态
+								VipCardState.ACTIVATE_FAIL.getName())// 更改VIP卡状态为激活未绑定
 						.setKeyValue("cardNo", vipcard.getCardNo()).build());
 		if (rs) {
 			messageDto.setMsgBody("调用空港接口激活卡号为" + vipcard.getCardNo()
