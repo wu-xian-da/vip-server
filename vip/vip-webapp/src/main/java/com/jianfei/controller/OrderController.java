@@ -613,12 +613,12 @@ public class OrderController extends BaseController {
 			//***日志记录（正常）
 			SmartLog.info(ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
 					"【订单模块-审核通过-记录退款信息】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
-					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额，并将退款申请信息记录到退款表中】，操作结果：【成功】");
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额："+remainMoney+"，并将退款申请信息记录到退款表中】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
 			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfo.getCustomerPhone(),
 					"【订单模块-审核通过-记录退款信息】，订单编号："+orderId+"，用户手机号："+orderDetailInfo.getCustomerPhone()+"，用户姓名："+orderDetailInfo.getCustomerName()+
-					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额，并将退款申请信息记录到退款表中】，操作结果：【失败】");
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【核算金额："+remainMoney+"，并将退款申请信息记录到退款表中】，操作结果：【失败】");
 		}
 		
 		Map<String,Object> resMap = new HashMap<String,Object>();
@@ -701,12 +701,12 @@ public class OrderController extends BaseController {
 			//***日志记录（正常）
 			SmartLog.info(ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
 					"【订单模块-最终退款-更新退款流水表】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
-					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表】，操作结果：【成功】");
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表，最终退款金额为："+finalBackMoney+"】，操作结果：【成功】");
 		} catch (Exception e) {
 			//***日志记录（异常）
 			SmartLog.error(e,ModuleType.ORDER_MODULE.getName(),orderDetailInfos.getCustomerPhone(),
 					"【订单模块-最终退款-更新退款流水表】，订单编号："+orderId+"，用户手机号："+orderDetailInfos.getCustomerPhone()+"，用户姓名："+orderDetailInfos.getCustomerName()+
-					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表】，操作结果：【失败】");
+					"，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【更新退款流水表，最终退款金额为："+finalBackMoney+"】，操作结果：【失败】");
 		}
 		
 		//3、更新卡状态 将开状态变为已退卡
