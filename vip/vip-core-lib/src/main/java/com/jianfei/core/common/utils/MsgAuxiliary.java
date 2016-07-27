@@ -10,8 +10,6 @@ package com.jianfei.core.common.utils;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.text.MaskFormatter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

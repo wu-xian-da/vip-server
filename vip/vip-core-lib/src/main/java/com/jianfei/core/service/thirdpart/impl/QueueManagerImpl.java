@@ -280,7 +280,7 @@ public class QueueManagerImpl implements QueueManager {
 		boolean rs = vipCardManager
 				.activeAppCard(new MapUtils.Builder()
 						.setKeyValue("card_state",
-								VipCardState.ACTIVATE_FAIL.getName())// 更改VIP卡状态
+								VipCardState.ACTIVATE_FAIL.getName())// 更改VIP卡状态为激活未绑定
 						.setKeyValue("cardNo", vipcard.getCardNo()).build());
 		if (rs) {
 			messageDto.setMsgBody("调用空港接口激活卡号为" + vipcard.getCardNo()

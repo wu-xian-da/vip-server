@@ -47,37 +47,51 @@
 	</update>
 
 	<select id="mapList" resultType="java.util.Map" parameterType="java.util.Map">
-		select * from (
 		<![CDATA[
 			SELECT
 				t1.airport_id,
 				t1.airport_name,
 				t1.state,
 				CASE
-				WHEN count(DISTINCT su.id) IS NULL THEN
-					0
-				ELSE
-					count(DISTINCT su.id)
-				END AS agent_num,
-				ct.`name` AS province,
-				t1.city,
-				t1.country,
-				t1.address,
-				t1.longitude,
-				t1.latitude,
-				t1.dtflag,
-				t1.header_name,
-				t1.header_phone,
-				ct.cid as cid,
-				GROUP_CONCAT(t2.order_id) AS orderIds,
-				count(t2.order_id) as total,
-				updatetime
+			WHEN B.agent_num IS NULL THEN
+				0
+			ELSE
+				B.agent_num
+			END AS agent_num,
+			 ct.`name` AS province,
+			 t1.city,
+			 t1.country,
+			 t1.address,
+			 t1.longitude,
+			 t1.latitude,
+			 t1.dtflag,
+			 t1.header_name,
+			 t1.header_phone,
+			 ct.cid AS cid,
+			 total,
+			 updatetime
 			FROM
 				sys_airport t1
-			LEFT JOIN app_orders t2 ON t1.airport_id = t2.airport_id and t2.pay_money is not null
+			LEFT JOIN (
+				SELECT
+					ao.airport_id,
+					count(DISTINCT ao.order_id) AS total
+				FROM
+					app_orders ao
+				INNER JOIN sys_airport sa ON ao.airport_id = sa.airport_id 
+				where ao.order_state in(1,2,3,4)
+				GROUP BY
+					ao.airport_id ) A on A.airport_id=t1.airport_id
 			LEFT JOIN sys_city ct ON ct.CID = t1.province
-			left join sys_user_airport sua on sua.airport_id=t1.airport_id
-			left join sys_users su on su.id=sua.sys_id and su.dtflag=0
+			LEFT JOIN (
+				SELECT
+					sua.airport_id,
+					count(DISTINCT su.id) agent_num
+				FROM
+					sys_users su
+				INNER JOIN sys_user_airport sua ON su.id = sua.sys_id
+				where su.user_type=3 and su.dtflag=0 and su.state=0
+				GROUP BY sua.airport_id) B on B.airport_id=t1.airport_id
 		]]>
 		<where>
 			<if test="dtflag!=null">
@@ -114,7 +128,7 @@
 				and header_phone =#{headerPhone}
 			</if>
 		</where>
-		group by t1.airport_id ) A
+		group by t1.airport_id 
 		<if test="sort!=null">
 			order by ${sort} ${order}
 		</if>
