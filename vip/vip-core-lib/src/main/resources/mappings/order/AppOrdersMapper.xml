@@ -189,7 +189,7 @@
 	<!--退款订单分页查询 -->
 	<select id="page" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
 		select
-		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
+		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,ord.pay_type,
 		ap.airport_name,
 		avp.card_no,avp.card_state,
 		customer.customer_name,customer.customer_phone,

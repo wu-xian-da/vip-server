@@ -40,8 +40,7 @@ public class AppConsume {
     public void setConsumeMoney(Float consumeMoney) {
         this.consumeMoney = consumeMoney;
     }
-    
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+
     public Date getConsumeTime() {
         return consumeTime;
     }
