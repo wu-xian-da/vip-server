@@ -175,7 +175,10 @@ public class OrderManagerImpl implements OrderManager {
 
         addInfoDto.setOrderId(orders.getOrderId());
         addInfoDto.setMoney(vipCard.getInitMoney());
-        log.info("订单添加:订单ID:" + orders.getOrderId() + ",用户手机号:" + customer.getPhone() + ",用户姓名:" + customer.getCustomerName());
+        //**日志记录（正常）
+        SmartLog.info(ModuleType.ORDER_MODULE.getName(),customer.getPhone(),
+                "【订单模块-订单添加】，订单编号："+orders.getOrderId()+"，用户手机号："+customer.getPhone()+"，用户姓名："+customer.getCustomerName()+
+                        "，操作员编号："+user.getId()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态:未支付】，操作结果：【成功】");
         return BaseMsgInfo.success(addInfoDto);
 
     }
@@ -231,6 +234,9 @@ public class OrderManagerImpl implements OrderManager {
         customer.setAddress(appInvoice.getProvince() + appInvoice.getCity() + appInvoice.getCountry() + appInvoice.getAddress());
         vipUserManager.updateUser(customer);
         int flag = appOrdersMapper.updateByPrimaryKeySelective(orders);
+        SmartLog.info(ModuleType.ORDER_MODULE.getName(),customer.getPhone(),
+                "【订单模块-订单发票信息添加】，订单编号："+orders.getOrderId()+"，用户手机号："+customer.getPhone()+"，用户姓名："+customer.getCustomerName()+
+                        "，操作员编号："+orders.getSaleNo()+"，操作员姓名："+orders.getSaleName()+"，操作内容：【订单发票信息添加】，操作结果：【成功】");
         if (flag < 0)
             return BaseMsgInfo.msgFail("订单邮寄信息状态更新失败");
         return BaseMsgInfo.success(true);
@@ -452,7 +458,10 @@ public class OrderManagerImpl implements OrderManager {
         //2、选择性更新订单信息
         appOrders.setOrderState(VipOrderState.ALREADY_PAY.getName());
         int num = appOrdersMapper.updateByPrimaryKeySelective(appOrders);
-        log.info("更新订单："+order.getOrderId()+"支付状态为已支付，订单详细信息为:"+order.toString());
+        //**日志记录（正常）
+        SmartLog.info(ModuleType.ORDER_MODULE.getName(),order.getCustomer().getPhone(),
+                "【订单模块-订单支付】，订单编号："+order.getOrderId()+"，用户手机号："+order.getCustomer().getPhone()+"，用户姓名："+order.getCustomer().getCustomerName()+
+                        "，操作员编号："+appOrders.getPayUserId()+"，操作员姓名："+appOrders.getPayUserId()+"，操作内容：【订单状态:未支付-->已支付】，操作结果：【成功】");
         //更新VIP用户激活
         vipUserManager.updateUserSate(order.getCustomer().getPhone(),VipUserSate.ACTIVE);
         //更新VIP卡状态为待激活
@@ -460,16 +469,23 @@ public class OrderManagerImpl implements OrderManager {
         vipcard.setCardNo(order.getVipCards().get(0).getCardNo());
         vipcard.setCardState(VipCardState.TO_ACTIVATE.getName());
         vipCardManager.updateVipCard(vipcard);
-        log.info("更新VIP卡为待激活状态,卡号为:"+vipcard.getCardNo());
+
+        SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),vipcard.getCardNo(),
+                "【订单模块-支付成功-更改卡状态】，订单编号："+order.getOrderId()+"，用户手机号："+order.getCustomer().getPhone()+"，用户姓名："+order.getCustomer().getCustomerName()+
+                        "，操作员编号："+appOrders.getPayUserId()+"，操作员姓名："+appOrders.getPayUserId()+"，操作内容：【将卡状态变为-待绑定】，操作结果：【成功】");
         //构建消息体 并放入消息队列
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(order.getCustomer().getPhone()).setMsgType(MsgType.ACTIVE_CARD.getName()).
                 setVipCardNo(order.getVipCards().get(0).getCardNo()).setUserName(order.getCustomer().getCustomerName());
         //放入消息队列
-        log.info("给手机号"+msgBuilder.getUserPhone()+"发送激活信息:"+msgBuilder);
+        SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), msgBuilder.getUserPhone(),
+                "给用户手机号:"+msgBuilder.getUserPhone()+"发送购卡成功短信");
          queueManager.sendMessage(msgBuilder);
         if (num > 0) {
             return BaseMsgInfo.success(true);
         } else {
+            SmartLog.info(ModuleType.ORDER_MODULE.getName(),order.getCustomer().getPhone(),
+                    "【订单模块-订单支付】，订单编号："+order.getOrderId()+"，用户手机号："+order.getCustomer().getPhone()+"，用户姓名："+order.getCustomer().getCustomerName()+
+                            "，操作员编号："+appOrders.getPayUserId()+"，操作员姓名："+appOrders.getPayUserId()+"，操作内容：【订单状态:未支付-->已支付】，操作结果：【失败】");
             return BaseMsgInfo.msgFail("确认付款失败");
         }
     }
