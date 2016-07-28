@@ -667,12 +667,11 @@ public class OrderManagerImpl implements OrderManager {
         //5、更改订单状态为已付款 逻辑删除退卡信息
         orders.setOrderState(VipOrderState.ALREADY_PAY.getName());
         appOrdersMapper.updateByPrimaryKeySelective(orders);
+        SmartLog.info(ModuleType.ORDER_MODULE.getName(),orders.getCustomer().getPhone(),
+                "【订单模块-取消退卡】，订单编号："+orders.getOrderId()+"，用户手机号："+orders.getCustomer().getPhone()+"，用户姓名："+orders.getCustomer().getCustomerName()+
+                        "，操作员编号："+"，操作员姓名："+"，操作内容：【订单状态:退款已审核通过-->已支付】，操作结果：【成功】");
         cardBackManager.deleteCardBackInfo(orderId);
-        //卡状态为已激活
-       /* AppVipcard vipcard=new AppVipcard();
-        vipcard.setCardNo(vipCardNo);
-        vipcard.setCardState(VipCardState.ACTIVE.getName());
-        vipCardManager.updateVipCard(vipcard);*/
+
         //用户状态为已激活
         vipUserManager.updateUserSate(phone,VipUserSate.ACTIVE);
 
@@ -680,8 +679,8 @@ public class OrderManagerImpl implements OrderManager {
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(vipCardNo).setUserName(orders.getCustomer().getCustomerName());
         msgBuilder.setMsgType(MsgType.REMOVE_BACK_CARD.getName());
-        log.info("发送消息");
-        log.info(msgBuilder);
+        SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), msgBuilder.getUserPhone(),
+                "给用户手机号："+msgBuilder.getUserPhone()+"发送取消退卡申请相关短信");
         queueManager.sendMessage(msgBuilder);
         return BaseMsgInfo.success(true);
     }
