@@ -26,54 +26,6 @@ import com.jianfei.core.bean.User;
 public interface ArchiveManager {
 
 	/**
-	 * masterTop(top级别的省开卡信息)
-	 * 
-	 * @param map
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> masterTop(Map<String, Object> map);
-
-	/**
-	 * masterDraw(为经理角色绘图 )
-	 * 
-	 * @param map
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> masterDraw(Map<String, Object> map,
-			String cacheKey);
-
-	/**
-	 * zhuGuanTotal(主管查看指定区域的总的销售量)
-	 * 
-	 * @param map
-	 * @return Map<String,Object>
-	 * @version 1.0.0
-	 */
-	Map<String, Object> zhuGuanTotal(Map<String, Object> map);
-
-	/**
-	 * zhuGuanAllAirPort(主管查看管辖区销售情况)
-	 * 
-	 * @param map
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> zhuGuanAllAirPort(Map<String, Object> map,
-			String cacheKey);
-
-	/**
-	 * zhuGuanDraw(绘主管管辖区下的销售柱状图)
-	 * 
-	 * @param map
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> zhuGuanDraw(Map<String, Object> map,
-			String cacheKey);
-
-	/**
 	 * baseDailyExtract(订单日基础表数据抽取)
 	 * 
 	 * @param map

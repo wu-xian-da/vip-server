@@ -17,20 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.enu.VipCardState;
 import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.MapUtils;
-import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.ObjectUtils;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.AirportEasyUseInfo;
 import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.order.ConsumeManager;
 import com.jianfei.core.service.stat.ArchiveManager;
+import com.jianfei.core.service.sys.CacheManager;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.jianfei.core.service.thirdpart.QueueManager;
 import com.jianfei.scheduled.ITaskManager;
@@ -61,6 +60,8 @@ public class TaskManagerImpl implements ITaskManager {
 	private QueueManager queueManager;
 	@Autowired
 	private VipCardManager vipCardManager;
+	@Autowired
+	private CacheManager cacheManger;
 
 	/**
 	 * dailyOrderArchice(每天23点58分执行定时任务) void
@@ -70,10 +71,14 @@ public class TaskManagerImpl implements ITaskManager {
 	@Scheduled(cron = "0 58 23 * * ? ")
 	public void dailyOrderArchice() {
 		logger.info("<<<<<<开始执行订单归档任务>>>>>>");
-		System.out.println("<<<<<<开始执行订单归档任务了>>>>>>");
+		// 归档订单数据和退卡数据
 		archiveManager.baseDailyExtract(DateUtil.dailyExtractDate());
+		// 根据日期和省份，归档订单数据和退卡数据
 		archiveManager.dateProvinceIdCache(DateUtil.getCurrentTime());
+		// 根据日期+省份+场站，归档订单数据和退卡数据
 		archiveManager.dateProvinceIdApportIds(DateUtil.getCurrentTime());
+		// 清理经理首页收据
+		cacheManger.cleanHomePageCache();
 	}
 
 	/*
@@ -81,8 +86,6 @@ public class TaskManagerImpl implements ITaskManager {
 	 * 
 	 * @see com.jianfei.scheduled.ITaskManager#checkinDataSchedule()
 	 */
-	// @Scheduled(cron = "0 0 * * * *")
-	// @Scheduled(cron = "0 */10 * * * ?")
 	@Scheduled(fixedRate = 600000, initialDelay = 600000)
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
@@ -157,7 +160,7 @@ public class TaskManagerImpl implements ITaskManager {
 	 * 判断卡是否的hi第一次消费<br>
 	 * A.如果是<br>
 	 * 1.更改卡的第一次消费时间<br>
-	 * 2。根据卡的有效期计算卡的到期时间<br>
+	 * 2.根据卡的有效期计算卡的到期时间<br>
 	 * 3.redis内存计数器对该卡的消费次数统计<br>
 	 * B.如果不是<br>
 	 * 3.redis内存计数器对该卡的消费次数统计<br>
@@ -200,12 +203,10 @@ public class TaskManagerImpl implements ITaskManager {
 						+ DateUtil.dateToString(appConsume.getConsumeTime(),
 								DateUtil.ALL_FOMAT);
 				logger.info(infoMsg);
-				System.out.println(infoMsg);
 			} else {
 				String erroMsg = "卡号为" + appConsume.getCardNo()
 						+ "第一次消费信息保存到数据库失败。。。";
 				logger.error(erroMsg);
-				System.out.println(erroMsg);
 			}
 			return true;
 		}
