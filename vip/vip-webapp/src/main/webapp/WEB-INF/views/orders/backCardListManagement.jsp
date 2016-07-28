@@ -92,7 +92,7 @@
 							<th data-options="align:'center', field:'customerPhone',width:100">用户手机</th>
 							<th data-options="align:'center', field:'backApplyTime',width:150">退款申请日期</th>
 							<th data-options="align:'center', field:'backFinishTime',width:150">退款完成日期</th>
-							<th data-options="align:'center', field:'applyTypeName',width:120">申请途径</th>
+							<th data-options="align:'center', field:'applyTypeName',width:100">申请途径</th>
 							<th data-options="align:'center', field:'backTypeName',width:80">退款方式</th>
 							<th data-options="align:'center', field:'remainMoney',width:100">退卡金额</th>
 							<th data-options="align:'center', field:'cardStateName',width:100">卡状态</th>
@@ -109,12 +109,16 @@
 	<!-- 退款确认 -->
 	<div id="refund" class="easyui-window" title="退款"
 		data-options="modal:'true',closed:'true'"
-		style="width: 500px; height: 300px; padding: 10px;">
+		style="width: 500px; height: 350px; padding: 10px;">
 		<div class="easy-window-item">
 			<div class="easy-window-radio-tab">
 				<!-- 需要开发票的提示信息 -->
 				<div class="radio-tab-content">
                     <label id="promptMessage" style="font-weight:bolder ;color: red;font-size:large;"></label>
+                </div>
+                
+                 <div class="radio-tab-content">
+                    <label>支付方式&nbsp;</label><span id="orderPayType"></span>
                 </div>
                 
                 <div class="radio-tab-content">
@@ -206,7 +210,7 @@
 		*==================最终退款页面===============
 		*/
         function finalBackMoneyToUser(args){
-			var backMethod = "";
+        	var backMethod = "";
 			//----初始化页面
 			$("#banckName2div").hide();
 			$("#userName2div").hide();
@@ -216,34 +220,50 @@
 			$("#userName2").text('');
 			//----3、转账卡号
 			$('#payBackCardNo').text('');
+			//----4、支付返方式
+			$("#orderPayType").text('');
+			//提示信息
+			$("#promptMessage").text('');
 			
 			//-----是否需要提示信息
 			if(args.invoice == 2){
 				$("#promptMessage").text("请确认是否收到发票！");
 			}
 			
-			//申请途径
+			//支付方式
+			if(args.orderPayType == 1){
+				$("#orderPayType").text('微信支付');
+			}else if(args.orderPayType ==2){
+				$("#orderPayType").text('支付宝支付');
+			}else if(args.orderPayType == 3){
+				$("#orderPayType").text('银行卡支付');
+			}else{
+				$("#orderPayType").text('现金支付');
+			}
+			//申请途径-现场正常申请
 			if(args.applyBackCardMethod == 0){
 				$('#applyBackCardMethod').text('现场');
-				if(args.backType ==1){
-					$("#backMethod").text('退款方式');
-					$("#payBackCardNo").text('微信转账');
-				}else if(args.backType ==2){
-					$("#backMethod").text('退款方式');
-					$("#payBackCardNo").text('支付宝转账');
-				}else if(args.backType == 3){
-					$("#backMethod").text('退款方式');
-					$("#payBackCardNo").text('银行卡转账');
-				}else{
+				if(args.orderPayType == 4){//现金支付
 					$("#backMethod").text('退款方式 银行卡号');
 					$("#payBackCardNo").text(args.backMoneyCard);
 					$("#banckName2div").show();
 					$("#banckName2").text(args.backName);
 					$("#userName2div").show();
 					$("#userName2").text(args.customerName);
+				}else{
+					if(args.backType ==1){
+						$("#backMethod").text('退款方式');
+						$("#payBackCardNo").text('微信转账');
+					}else if(args.backType ==2){
+						$("#backMethod").text('退款方式');
+						$("#payBackCardNo").text('支付宝转账');
+					}else if(args.backType == 3){
+						$("#backMethod").text('退款方式');
+						$("#payBackCardNo").text('银行卡转账');
+					}
 				}
 				
-			} else{
+			} else{//申请途径-客服
 				$('#applyBackCardMethod').text('客服');
 				if(args.backType == 1){
 					backMethod="微信账号";

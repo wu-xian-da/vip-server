@@ -9,8 +9,10 @@ package com.jianfei.core.service.stat.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -155,6 +157,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Override
 	public void baseDailyExtract(Map<String, Object> map) {
 		archiveMapper.baseDailyExtract(map);
+		archiveMapper.baseDailyBackExtract(map);
 	}
 
 	/*
@@ -291,22 +294,74 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * (java.util.Map)
 	 */
 	@Override
-	public List<Map<String, Object>> dateProvinceIdRedisCache(
-			Map<String, Object> map) {
+	public void dateProvinceIdCache(Map<String, Object> map) {
 
-		List<Map<String, Object>> maps = archiveMapper
-				.dateProvinceIdRedisCache(map);
-		if (CollectionUtils.isEmpty(maps)) {
-			logger.error(map.get("currentTime").toString() + ":按照省的归档数据为空。。。");
-			return maps;
+		Set<String> cacheKeys = new HashSet<String>();
+		// 指定日期下的订单统计
+		List<Map<String, Object>> orderMaps = archiveMapper
+				.dateProvinceIdOderCache(map);
+		// 指定日期下的退卡数统计
+		List<Map<String, Object>> backOrderMaps = archiveMapper
+				.dateProvinceIdOderBackCache(map);
+		if (CollectionUtils.isEmpty(orderMaps)) {
+			orderMaps = new ArrayList<Map<String, Object>>();
 		}
-		for (Map<String, Object> m : maps) {
-			JedisUtils.setObject(m.get("cacheKey").toString(),
-					JSONObject.toJSONString(m), 0);
-			logger.info("按照省归档key:" + m.get("cacheKey").toString() + "  value:"
-					+ JSONObject.toJSONString(m));
+		if (CollectionUtils.isEmpty(backOrderMaps)) {
+			backOrderMaps = new ArrayList<Map<String, Object>>();
 		}
-		return maps;
+		Map<String, Map<String, Object>> orderMap = new HashMap<String, Map<String, Object>>();
+		for (Map<String, Object> m : orderMaps) {
+			String cacheKey = StringUtils.obj2String(m.get("cacheKey"));
+			cacheKeys.add(cacheKey);
+			orderMap.put(
+					cacheKey,
+					new MapUtils.Builder()
+							.setKeyValue("pcount", m.get("pcount"))
+							.setKeyValue("pid", m.get("pid"))
+							.setKeyValue("total", m.get("total"))
+							.setKeyValue("avgNum", m.get("avgNum")).build());
+		}
+		Map<String, Map<String, Object>> backOrderMap = new HashMap<String, Map<String, Object>>();
+		for (Map<String, Object> m : backOrderMaps) {
+
+			String cacheKey = StringUtils.obj2String(m.get("cacheKey"));
+			cacheKeys.add(cacheKey);
+			backOrderMap.put(
+					cacheKey,
+					new MapUtils.Builder()
+							.setKeyValue("pcount", m.get("pcount"))
+							.setKeyValue("pid", m.get("pid"))
+							.setKeyValue("back_order_total",
+									m.get("back_order_total"))
+							.setKeyValue("avgNum_back", m.get("avgNum_back"))
+							.build());
+		}
+		for (String cacheKey : cacheKeys) {
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("cacheKey", cacheKey);
+			if (orderMap.containsKey(cacheKey)) {
+				result.put("pcount", orderMap.get(cacheKey).get("pcount"));
+				result.put("pid", orderMap.get(cacheKey).get("pid"));
+			} else {
+				result.put("pcount", backOrderMap.get("pcount"));
+				result.put("pid", backOrderMap.get("pid"));
+			}
+			result.put("total", getValue(cacheKey, orderMap, "total"));
+			result.put("avgNum", getValue(cacheKey, orderMap, "avgNum"));
+			result.put("back_order_total",
+					getValue(cacheKey, backOrderMap, "back_order_total"));
+			result.put("avgNum_back",
+					getValue(cacheKey, backOrderMap, "avgNum_back"));
+			JedisUtils.setObject(cacheKey, JSONObject.toJSONString(result), 0);
+		}
+	}
+
+	public Object getValue(String cacheKey,
+			Map<String, Map<String, Object>> map, String key) {
+		if (map.containsKey(cacheKey)) {
+			return map.get(cacheKey).get(key);
+		}
+		return 0;
 	}
 
 	/*
@@ -317,22 +372,63 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * java.util.Map)
 	 */
 	@Override
-	public List<Map<String, Object>> dateProvinceIdApportIds(
-			Map<String, Object> map) {
-		List<Map<String, Object>> maps = archiveMapper
+	public void dateProvinceIdApportIds(Map<String, Object> map) {
+		Set<String> cacheKeys = new HashSet<String>();
+		// 日期+省份+场站（订单数）
+		List<Map<String, Object>> orderMaps = archiveMapper
 				.dateProvinceIdApportIds(map);
+		// 日期+省份+场站（退卡数）
+		List<Map<String, Object>> backOrderMaps = archiveMapper
+				.dateProvinceIdApportIdsBack(map);
+		if (CollectionUtils.isEmpty(orderMaps)) {
+			orderMaps = new ArrayList<Map<String, Object>>();
+		}
+		if (CollectionUtils.isEmpty(backOrderMaps)) {
+			backOrderMaps = new ArrayList<Map<String, Object>>();
+		}
+		Map<String, Map<String, Object>> orderMap = new HashMap<String, Map<String, Object>>();
+		for (Map<String, Object> m : orderMaps) {
+			String cacheKey = StringUtils.obj2String(m.get("cacheKey"));
+			cacheKeys.add(cacheKey);
+			orderMap.put(
+					cacheKey,
+					new MapUtils.Builder()
+							.setKeyValue("pcount", m.get("pcount"))
+							.setKeyValue("pid", m.get("pid"))
+							.setKeyValue("total", m.get("total"))
+							.setKeyValue("avgNum", m.get("avgNum")).build());
+		}
+		Map<String, Map<String, Object>> backOrderMap = new HashMap<String, Map<String, Object>>();
+		for (Map<String, Object> m : backOrderMaps) {
 
-		if (CollectionUtils.isEmpty(maps)) {
-			logger.error(map.get("currentTime").toString() + ":按照省和机场归档数据为空。。。");
-			return maps;
+			String cacheKey = StringUtils.obj2String(m.get("cacheKey"));
+			cacheKeys.add(cacheKey);
+			backOrderMap.put(
+					cacheKey,
+					new MapUtils.Builder()
+							.setKeyValue("pcount", m.get("pcount"))
+							.setKeyValue("pid", m.get("pid"))
+							.setKeyValue("back_order_total",
+									m.get("back_order_total"))
+							.setKeyValue("avgNum_back", m.get("avgNum_back"))
+							.build());
 		}
-		for (Map<String, Object> m : maps) {
-			JedisUtils.setObject(m.get("cacheKey").toString(),
-					JSONObject.toJSONString(m), 0);
-			logger.info("按照省和机场归档key:" + m.get("cacheKey").toString()
-					+ " value:" + JSONObject.toJSONString(m));
+		for (String cacheKey : cacheKeys) {
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("cacheKey", cacheKey);
+			if (orderMap.containsKey(cacheKey)) {
+				result.put("pcount", orderMap.get(cacheKey).get("pcount"));
+			} else {
+				result.put("pcount", backOrderMap.get(cacheKey).get("pcount"));
+			}
+			result.put("total", getValue(cacheKey, orderMap, "total"));
+			result.put("avgNum", getValue(cacheKey, orderMap, "avgNum"));
+			result.put("back_order_total",
+					getValue(cacheKey, backOrderMap, "back_order_total"));
+			result.put("avgNum_back",
+					getValue(cacheKey, backOrderMap, "avgNum_back"));
+			JedisUtils.setObject(cacheKey, JSONObject.toJSONString(result), 0);
 		}
-		return maps;
 	}
 
 	@Override

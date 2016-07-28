@@ -74,4 +74,12 @@ public interface VipUserManager {
      * @return
      */
     BaseMsgInfo getQRCode(String phone) throws GetQrcodeException;
+
+
+    /**
+     * 根据手机号查询是否有下订单的权利
+     * @param phone 用户手机号
+     * @return true 有
+     */
+    boolean haveAddOrderRight(String phone);
 }

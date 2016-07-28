@@ -96,7 +96,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         AppCustomer customer = vipUserManager.getUser(phone);
         if (MsgType.REGISTER.equals(msgType)) {
             //注册 先查找用户是否存在 如果存在 判断是否是激活状态 如果是不能开卡
-            if (customer != null && StringUtils.isNotBlank(customer.getCustomerId())&& (VipUserSate.ACTIVE.getName() == customer.getDtflag())) {
+            if (!vipUserManager.haveAddOrderRight(phone)) {
                 return BaseMsgInfo.msgFail("该会员已存在");
             }
         }else {

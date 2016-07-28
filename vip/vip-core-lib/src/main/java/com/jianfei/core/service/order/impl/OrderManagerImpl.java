@@ -34,17 +34,26 @@ import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.tencent.protocol.native_protocol.NativePayReqData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * TODO
@@ -114,12 +123,13 @@ public class OrderManagerImpl implements OrderManager {
         flag=airportEasyManager.vipuserStatus(addInfoDto.getCustomerName(),addInfoDto.getPhone());
         log.info("验证空港易行用户名:"+addInfoDto.getCustomerName()+",手机号:"+addInfoDto.getPhone()+"验证结果:"+flag);
         if (!flag){
-            return BaseMsgInfo.msgFail("本用户已限制购买");
+            return BaseMsgInfo.msgFail("请输入正确的用户姓名");
         }
-      /*  flag=airportEasyManager.cardBindStatus(addInfoDto.getVipCardNo());
-        if (flag){
-            return BaseMsgInfo.msgFail("本VIP卡号已经使用请更换VIP卡号");
-        }*/
+        flag = airportEasyManager.cardBindStatus(addInfoDto.getVipCardNo());
+        log.info("验证空港易行VIP卡号是否绑定:"+addInfoDto.getVipCardNo()+"验证结果:"+flag);
+        if (!flag) {
+            return BaseMsgInfo.msgFail("卡号无效请更换");
+        }
         //3、根据查询VIP号查询卡片信息
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
         if (vipCard == null) {
@@ -210,12 +220,16 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public BaseMsgInfo addOrderMailInfo(AppInvoice appInvoice) {
-        AppOrders orders = appOrdersMapper.selectByPrimaryKey(appInvoice.getOrderId());
+        AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(appInvoice.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
         invoiceManager.insert(appInvoice);
         orders.setInvoiceFlag(InvoiceState.NEED_INVOICE.getName());
+        AppCustomer customer = orders.getCustomer();
+        customer.setDtflag(null);
+        customer.setAddress(appInvoice.getProvince() + appInvoice.getCity() + appInvoice.getCountry() + appInvoice.getAddress());
+        vipUserManager.updateUser(customer);
         int flag = appOrdersMapper.updateByPrimaryKeySelective(orders);
         if (flag < 0)
             return BaseMsgInfo.msgFail("订单邮寄信息状态更新失败");
@@ -394,7 +408,7 @@ public class OrderManagerImpl implements OrderManager {
         float usedMoney = num * 200;
         float realMoney = num * 150;
         float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney - 100;
-        if (realMoney < 0)
+        if (remainMoney < 0)
             remainMoney = 0;
         vipCardUseDetailInfo.setSafeMoney(100);
         vipCardUseDetailInfo.setReturnMoney(remainMoney);
@@ -468,8 +482,7 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public synchronized BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
-        log.info("提交退卡信息");
-        log.info(appCardBack);
+
         //1、根据订单号查询订单信息
         AppOrders orders = getOrderDetailByOrderId(appCardBack.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
@@ -484,7 +497,6 @@ public class OrderManagerImpl implements OrderManager {
         }
 
         // 2、重新计算可退余额 校验是否正确
-        log.info("重新计算可退余额 校验是否正确");
         VipCardUseDetailInfo useDetailInfo=new VipCardUseDetailInfo();
         useDetailInfo.setOrderMoney(orders.getPayMoney());
         useDetailInfo.setVipCardNo(appCardBack.getCardNo());
@@ -511,7 +523,7 @@ public class OrderManagerImpl implements OrderManager {
             AppVipcard vipcard=new AppVipcard();
             vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
             vipcard.setCardState(VipCardState.BACK_CARD.getName());
-            log.info("更改VIP"+vipcard.getCardNo()+"卡未已退卡");
+            log.info("更改VIP"+vipcard.getCardNo()+"卡为已退卡");
             vipCardManager.updateVipCard(vipcard);
             orders.setApplyType(ApplyBackCardMethod.SCENE_EMERGENT_APPLY.getName());
         } else {
@@ -526,7 +538,7 @@ public class OrderManagerImpl implements OrderManager {
             orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         }
         boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
-        log.info("更改用户状态为不可用");
+
         vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
 
         appOrdersMapper.updateByPrimaryKeySelective(orders);
@@ -584,16 +596,6 @@ public class OrderManagerImpl implements OrderManager {
 		return appConsumeMapper.selectByVipCardNo(cardNo);
 	}
 
-	/**
-	 * 不分页，返回所有满足条件的数据
-	 */
-	@Override
-	public List<OrderShowInfoDto> simplePage(Map<String, Object> params) {
-		// TODO Auto-generated method stub
-		List<OrderShowInfoDto> list = appOrdersMapper.get(params);
-		return list;
-	}
-	
 	/**
 	 * 发送短信（录入退款信息、完成退款信息）
 	 * @param msgBuilder
@@ -685,11 +687,6 @@ public class OrderManagerImpl implements OrderManager {
         if (airportEasyManager.activeVipCard(vipCardNo, orders.getCustomer().getPhone(),
                 orders.getCustomer().getCustomerName())) {
             //如果激活成功 发送激活成功短信
-            // 计算卡的有效期
-            Date expireDate = DateUtil.addDays(new Date(),
-                    vipcard.getValideTime());
-            vipcard.setActiveTime(new Date());
-            vipcard.setExpiryTime(expireDate);
             vipcard.setCardState(VipCardState.ACTIVE.getName());
             vipCardManager.updateVipCard(vipcard);
             Map map = new HashMap();
@@ -705,4 +702,138 @@ public class OrderManagerImpl implements OrderManager {
             return BaseMsgInfo.msgFail("绑定失败");
         }
     }
+    
+    /**
+     * 将符合筛选条件的订单信息导出到excel表格中
+     * @param map
+     * @param request
+     * @param response
+     */
+    public void exportOrderInfo(Map<String,Object> map,HttpServletRequest request, HttpServletResponse response){
+    	List<OrderShowInfoDto> list = appOrdersMapper.get(map);
+		//3 生成提示信息，
+		response.setContentType("application/vnd.ms-excel");
+		String codedFileName = null;
+		OutputStream fOut = null;
+		try {
+			// 进行转码，使其支持中文文件名
+			codedFileName = java.net.URLEncoder.encode("订单信息", "UTF-8");
+			response.setHeader("content-disposition", "attachment;filename=" + codedFileName + ".xls");
+			// 产生工作簿对象
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			// 产生工作表对象
+			HSSFSheet sheet = workbook.createSheet();
+			// 设置表头
+			HSSFRow head = sheet.createRow((int) 0);
+			HSSFCell idCell = head.createCell((int) 0);
+			idCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			idCell.setCellValue("序号");
+			
+			HSSFCell orderIdCell = head.createCell((int) 1);
+			orderIdCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderIdCell.setCellValue("订单编号");
+			
+			HSSFCell orderTimeCell = head.createCell((int) 2);
+			orderTimeCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderTimeCell.setCellValue("订单日期");
+
+			HSSFCell airportStateCell = head.createCell((int) 3);
+			airportStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			airportStateCell.setCellValue("所属场站");
+
+			HSSFCell activeStateCell = head.createCell((int) 4);
+			activeStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			activeStateCell.setCellValue("业务员");
+			
+			HSSFCell userNameCell = head.createCell((int) 5);
+			userNameCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			userNameCell.setCellValue("用户姓名");
+			
+			HSSFCell userPhoneCell = head.createCell((int) 6);
+			userPhoneCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			userPhoneCell.setCellValue("用户手机");
+			
+			HSSFCell invoiceStateCell = head.createCell((int) 7);
+			invoiceStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			invoiceStateCell.setCellValue("发票状态");
+			
+			HSSFCell orderStateCell = head.createCell((int) 8);
+			orderStateCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+			orderStateCell.setCellValue("订单状态");
+
+			// 返回表中所有的数据
+			int index = 1;
+			for (OrderShowInfoDto orderShowInfoDto : list) {
+				// 创建一行
+				HSSFRow row = sheet.createRow((int) index);
+				
+				//序号
+				HSSFCell id = row.createCell((int) 0);
+				id.setCellType(HSSFCell.CELL_TYPE_STRING);
+				id.setCellValue(index);
+				
+				//订单号
+				HSSFCell orderIdCells = row.createCell((int) 1);
+				orderIdCells.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderIdCells.setCellValue(orderShowInfoDto.getOrderId());
+				
+				//订单日期
+				HSSFCell orderTimesCell = row.createCell((int) 2);
+				orderTimesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderTimesCell.setCellValue(DateUtil.formatterDate(orderShowInfoDto.getOrderTime()));
+				
+				//场站
+				HSSFCell apNamesCell = row.createCell((int) 3);
+				apNamesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				apNamesCell.setCellValue(orderShowInfoDto.getAirportName());
+				
+				//业务员
+				HSSFCell agentNameCell = row.createCell((int) 4);
+				agentNameCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				agentNameCell.setCellValue(orderShowInfoDto.getAgentName());
+				
+				//用户名
+				HSSFCell userNamesCell = row.createCell((int) 5);
+				userNamesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				userNamesCell.setCellValue(orderShowInfoDto.getCustomerName());
+				
+				//用户手机号码
+				HSSFCell userPhonesCell = row.createCell((int) 6);
+				userPhonesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				userPhonesCell.setCellValue(orderShowInfoDto.getCustomerPhone());
+				
+				//发票状态
+				HSSFCell invoiceStatesCell = row.createCell((int) 7);
+				invoiceStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				invoiceStatesCell.setCellValue(StateChangeUtils.returnInvoiceFlagName(orderShowInfoDto.getInvoiceFlag()));
+				
+				//订单状态
+				HSSFCell orderStatesCell = row.createCell((int) 8);
+				orderStatesCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				orderStatesCell.setCellValue(StateChangeUtils.returnOrderStateName(orderShowInfoDto.getOrderState()));
+				index++;
+
+			}
+			fOut = response.getOutputStream();
+			workbook.write(fOut);
+		} catch (UnsupportedEncodingException e1) {
+		} catch (Exception e) {
+		} finally {
+			try {
+				fOut.flush();
+				fOut.close();
+			} catch (IOException e) {
+			}
+
+		}
+    }
+
+    /**
+     * 日志信息
+     */
+	@Override
+	public OrderDetailInfo selLogInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		return appOrdersMapper.selLogInfoByOrderId(orderId);
+	}
 }

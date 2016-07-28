@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jianfei</groupId>
 	<artifactId>vip</artifactId>
@@ -437,7 +438,8 @@
 				<!-- updload config -->
 				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>D:\vip.log</log.home.dir>
+				<log.home.dir>E:\vip.log</log.home.dir>
+				<log.flume.home.dir>E:\flume.log</log.flume.home.dir>
 				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
@@ -491,6 +493,7 @@
 				<upload.home.dir>/workspcae/uploadPath</upload.home.dir>
 				<!-- log path -->
 				<log.home.dir>/workspace/vip.log</log.home.dir>
+				<log.flume.home.dir>/workspace/flume.log</log.flume.home.dir>
 				<static.resource.server.address>http://hftest.wiplatform.com:9010</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
@@ -581,6 +584,6 @@
 		<module>vip-core-lib</module>
 		<module>vip-webapp</module>
 		<module>vip-app-server</module>
-    <module>vip-scheduled</module>
-  </modules>
+		<module>vip-scheduled</module>
+	</modules>
 </project>

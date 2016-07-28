@@ -169,17 +169,6 @@ public class AppPicController extends BaseController {
 		return bindGridData(new PageInfo<AppCustomer>());
 	}
 
-	@RequestMapping(value = "/look")
-	public String lookVipInfo(String id, Model model) {
-		MessageDto<AppCustomer> messageDto = appCustomerManager
-				.selectByPrimaryKey(id);
-		if (messageDto.isOk()) {
-			model.addAttribute("customer", messageDto.getData());
-		}
-		appCustomerManager.batchDealMsg(id, model);
-		return "app/vipInfo";
-	}
-
 	@ResponseBody
 	@RequestMapping(value = "/updateDeliveryState/{id}")
 	public MessageDto<String> updateDeliveryState(
@@ -199,9 +188,9 @@ public class AppPicController extends BaseController {
 			for (Map<String, Object> map : messageDto.getData()) {
 				ExportAip exportAip = new ExportAip(map.get("customer_name"),
 						map.get("customer_phone"), map.get("sex"),
-						map.get("card_type"), map.get("customer_identi"), map.get("birthday"),
-						map.get("order_id"), map.get("insured"),
-						map.get("orderstate"));
+						map.get("card_type"), map.get("customer_identi"),
+						map.get("birthday"), map.get("order_id"),
+						map.get("insured"), map.get("orderstate"));
 				dataset.add(exportAip);
 			}
 			download(response, new String[] { "姓名", "手机号", "性别", "证件类型",

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.ModuleType;
 import com.jianfei.core.common.enu.MsgType;
 
 /**
@@ -59,33 +60,44 @@ public class MsgAuxiliary {
 	 * @version 1.0.0
 	 */
 	public static String buildMsgBody(Map<String, String> map, String msgType) {
+		// 获取模板类型
 		String cacheKey = StringUtils.EMPTY;
 		for (MsgType mType : MsgType.values()) {
 			if (mType.getName().equals(msgType)) {
 				cacheKey = CacheCons.getMsgTemplateKey(mType);
 			}
 		}
+		// 手机号
+		String userPhone = map.get("userPhone");
+		// 判断消息类型是否有效
 		if (StringUtils.isEmpty(cacheKey)) {
-			LoggerFactory.getLogger(MsgAuxiliary.class).error("短信信息类型错误...");
+			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"判断消息类型：很抱歉，该消息类型是无效的消息类型...");
 			return StringUtils.EMPTY;
 		}
+		// 从缓存中获取短信模板
 		String msgBody = JedisUtils.get(cacheKey);
 
+		// 验证短信模板是否有效
 		if (StringUtils.isEmpty(msgBody)) {
-			LoggerFactory.getLogger(MsgAuxiliary.class).error(
-					"从缓存中获取短信消息模版为空...");
+			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"该消息类型有效，但是消息类型为" + cacheKey
+							+ ",从缓存中获取短信您模板为空，请确认redis是否宕机还是没有改消息模板...");
 			return StringUtils.EMPTY;
 		}
-		// 解析模版
-		msgBody = msgBody.replaceAll("\\[userPhone\\]", map.get("userPhone"))
-				.replaceAll("\\[vipCardNo\\]", map.get("vipCardNo"));
 
-		if (!StringUtils.isEmpty(map.get("userName"))) {
+		SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+				"获取消息模板成功，根据消息类型" + cacheKey + ",从缓存中获取短信模板成功,准备开始解析短信模板....");
+		// 解析模版
+		msgBody = msgBody.replaceAll("\\[userPhone\\]",
+				returnValue(map, "userPhone")).replaceAll("\\[vipCardNo\\]",
+				returnValue(map, "vipCardNo"));
+
+		if (!StringUtils.isEmpty(returnValue(map, "userName"))) {
 			msgBody = msgBody.replaceAll("\\[userName\\]", map.get("userName"));
 		}
 
 		if (!StringUtils.isEmpty(map.get("msgBody"))) {
-			// 激活帐号信息
 			String msgBodyRs = map.get("msgBody");
 			@SuppressWarnings("unchecked")
 			Map<String, Object> msgMap = JSONObject.parseObject(msgBodyRs,
@@ -97,6 +109,16 @@ public class MsgAuxiliary {
 			}
 		}
 
+		SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+				"模板解析成功，消息类型" + cacheKey + "的短信模板解析成功，恭喜你，,待发送短信内容为：" + msgBody);
+
 		return msgBody;
+	}
+
+	public static String returnValue(Map<String, String> map, String key) {
+		if (null != map.get(key)) {
+			return map.get(key);
+		}
+		return StringUtils.EMPTY;
 	}
 }

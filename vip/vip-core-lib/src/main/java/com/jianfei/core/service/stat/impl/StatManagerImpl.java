@@ -325,14 +325,35 @@ public class StatManagerImpl implements StatManager {
 	}
 	
 	/**
-	 *  根据业务人员id号查询某个时间段内的销售情况
+	 *  根据业务人员工号查询某个时间段内的销售情况
 	 */
 	@Override
 	public List<CharData> selectCharDataByUserId(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return appOrderArchiveMapper.selectCharDataByUserId(map);
+		//1、每天的开卡列表
+		List<CharData> orderNumList = appOrderArchiveMapper.selectOrderNumByUserId(map);
+		//2、每天的退卡列表
+		List<CharData> backNUmList = appOrderArchiveMapper.selectBackCardByUserId(map);
+		//3、按查询时间合并两个列表
+		for(CharData orderNum : orderNumList){
+			int flag = 0;//--0代表没有相同的时间
+			Date orderFileTime = orderNum.getDate();
+			
+			for(CharData backNum : backNUmList){
+				//如果两个归档时间相同，则合并到一条记录中
+				if(orderFileTime.compareTo(backNum.getDate())==0){
+					backNum.setTotal(orderNum.getTotal());
+					flag = 1;
+					break;
+				}
+			}
+			
+			if(flag == 0){
+				backNUmList.add(orderNum);
+			}
+		}
+		return backNUmList;
 	}
-
+	
 	@Override
 	public List<SalesRankingDto> salesRanking(String uno, String pid,
 			String airportId, String begin, String end, int pageNo, int pageSize) {

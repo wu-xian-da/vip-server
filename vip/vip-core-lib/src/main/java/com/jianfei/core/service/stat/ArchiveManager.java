@@ -103,13 +103,14 @@ public interface ArchiveManager {
 
 	/******************************************* 分割线 **********************************************************/
 	/**
-	 * dateProvinceIdRedisCache(缓存key:date+provinceId)
+	 * 日期+省份缓存：订单数统计和退卡数据统计
 	 * 
 	 * @param map
-	 * @return List<Map<String,Object>>
+	 *            key:currentTime <br>
+	 *            value:yyyy-MM-dd
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> dateProvinceIdRedisCache(Map<String, Object> map);
+	void dateProvinceIdCache(Map<String, Object> map);
 
 	/**
 	 * dateProvinceIdApportIds(缓存key:date+省Id+场站Id)
@@ -118,7 +119,7 @@ public interface ArchiveManager {
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> dateProvinceIdApportIds(Map<String, Object> map);
+	void dateProvinceIdApportIds(Map<String, Object> map);
 
 	/**
 	 * 根据省份获取场站

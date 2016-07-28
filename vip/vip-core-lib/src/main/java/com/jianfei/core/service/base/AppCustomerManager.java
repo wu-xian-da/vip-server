@@ -54,65 +54,6 @@ public interface AppCustomerManager {
 	MessageDto<AppCustomer> selectByPrimaryKey(String id);
 
 	/**
-	 * orderInfo(用户订单信息)
-	 * 
-	 * @param id
-	 *            vip用户ID
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> orderInfo(String id);
-
-	/**
-	 * vipCardInfo(vip卡信息)
-	 * 
-	 * @param id
-	 *            vip用户ID
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> vipCardInfo(String id);
-
-	/**
-	 * postInfo(发票信息)
-	 * 
-	 * @param id
-	 *            vip用户ID
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> postInfo(String id);
-
-	/**
-	 * backMoneyInfo(退款信息)
-	 * 
-	 * @param id
-	 *            vip用户ID
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> backMoneyInfo(String id);
-
-	/**
-	 * vipCardRescordInfo(卡的消费记入)
-	 * 
-	 * @param id
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	List<Map<String, Object>> vipCardRescordInfo(String id);
-
-	/**
-	 * batchDealMsg(这里用一句话描述这个方法的作用)
-	 * 
-	 * @param id
-	 * @param model
-	 *            void
-	 * @version 1.0.0
-	 */
-	void batchDealMsg(String id, Model model);
-
-	/**
 	 * updateDeliveryState(更新投递状态未已投递)
 	 * 
 	 * @param id

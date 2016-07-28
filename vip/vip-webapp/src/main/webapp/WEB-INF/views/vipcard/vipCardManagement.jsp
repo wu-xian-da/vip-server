@@ -60,7 +60,7 @@
 							pageList : [20, 30, 40, 50 ],
 							columns : [ [
 									{
-										width : '200',
+										width : '180',
 										title : '卡号',
 										field : 'cardNo',
 										align : 'left',
@@ -68,7 +68,7 @@
 									},
 
 									{
-										width : '150',
+										width : '120',
 										title : 'NFC号',
 										field : 'nfcId',
 										align : 'left',

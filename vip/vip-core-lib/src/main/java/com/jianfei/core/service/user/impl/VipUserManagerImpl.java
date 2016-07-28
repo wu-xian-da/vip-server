@@ -1,6 +1,7 @@
 package com.jianfei.core.service.user.impl;
 
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.bean.AppVipcard;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
@@ -9,9 +10,9 @@ import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.dto.exception.GetQrcodeException;
 import com.jianfei.core.mapper.AppCustomerMapper;
+import com.jianfei.core.mapper.AppOrdersMapper;
 import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.impl.AppUserFeedbackImpl;
-import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.jianfei.core.service.user.VipUserManager;
 import org.apache.commons.logging.Log;
@@ -42,6 +43,8 @@ public class VipUserManagerImpl implements VipUserManager {
     private AppUserFeedbackImpl userFeedback;
     @Autowired
     private AirportEasyManager airportEasyManager;
+    @Autowired
+    private AppOrdersMapper appOrdersMapper;
     /**
      * 添加Vip用户
      *
@@ -165,5 +168,17 @@ public class VipUserManagerImpl implements VipUserManager {
         }
         String code=  airportEasyManager.getQrcode(card.getCardNo());
         return BaseMsgInfo.success(code);
+    }
+
+    /**
+     * 根据手机号查询是否有下订单的权利
+     *
+     * @param phone 用户手机号
+     * @return true 有
+     */
+    @Override
+    public boolean haveAddOrderRight(String phone) {
+        List<AppOrders> list = appOrdersMapper.orderListByPhone(phone);
+        return list.isEmpty();
     }
 }

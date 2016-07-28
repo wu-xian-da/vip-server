@@ -89,24 +89,53 @@ public interface ArchiveMapper {
 	 */
 	void baseDailyExtract(Map<String, Object> map);
 
+	/**
+	 * baseDailyExtract(退卡日基础表数据抽取)
+	 * 
+	 * @param map
+	 *            void
+	 * @version 1.0.0
+	 */
+	void baseDailyBackExtract(Map<String, Object> map);
+
 	/******************************************* 分割线 **********************************************************/
 	/**
-	 * dateProvinceIdRedisCache(缓存key:date+provinceId)
+	 * 按照日期和省份id对订单数统计并放入缓存
 	 * 
 	 * @param map
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
-	List<Map<String, Object>> dateProvinceIdRedisCache(Map<String, Object> map);
+	List<Map<String, Object>> dateProvinceIdOderCache(Map<String, Object> map);
 
 	/**
-	 * dateProvinceIdApportIds(缓存key:date+省Id+场站Id)
+	 * 按照日期和省份id对退卡数统计并放入缓存
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> dateProvinceIdOderBackCache(
+			Map<String, Object> map);
+
+	/**
+	 * 按照日期和省份id和机场id对订单数统计并放入缓存
 	 * 
 	 * @param map
 	 * @return List<Map<String,Object>>
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> dateProvinceIdApportIds(Map<String, Object> map);
+
+	/**
+	 * 按照日期和省份id和机场id对退卡数统计并放入缓存
+	 * 
+	 * @param map
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	List<Map<String, Object>> dateProvinceIdApportIdsBack(
+			Map<String, Object> map);
 
 	/**
 	 * 根据省份获取场站
@@ -132,5 +161,5 @@ public interface ArchiveMapper {
 	 * @version 1.0.0
 	 */
 	int updateOrderStatuIsValidate(ArrayList<String> arrayList);
-	
+
 }

@@ -7,6 +7,7 @@
  */
 package com.jianfei.core.service.base.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.MessageDto.MsgFlag;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.mapper.AppCustomerMapper;
 import com.jianfei.core.service.base.AppCustomerManager;
 
@@ -96,92 +99,7 @@ public class AppCustomerManagerImpl implements AppCustomerManager {
 		return messageDto.setOk(true).setMsgBody(MsgFlag.SUCCESS);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.base.AppCustomerManager#orderInfo(java.lang.
-	 * String)
-	 */
-	@Override
-	public List<Map<String, Object>> orderInfo(String id) {
-		return appCustomerMapper.orderInfo(id);
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.base.AppCustomerManager#vipCardInfo(java.lang
-	 * .String)
-	 */
-	@Override
-	public List<Map<String, Object>> vipCardInfo(String id) {
-		return appCustomerMapper.vipCardInfo(id);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.base.AppCustomerManager#postInfo(java.lang.String
-	 * )
-	 */
-	@Override
-	public List<Map<String, Object>> postInfo(String id) {
-		return appCustomerMapper.postInfo(id);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.base.AppCustomerManager#backMoneyInfo(java.lang
-	 * .String)
-	 */
-	@Override
-	public List<Map<String, Object>> backMoneyInfo(String id) {
-		return appCustomerMapper.backMoneyInfo(id);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.base.AppCustomerManager#vipCardRescordInfo(java
-	 * .lang.String)
-	 */
-	@Override
-	public List<Map<String, Object>> vipCardRescordInfo(String id) {
-		return appCustomerMapper.vipCardRescordInfo(id);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.base.AppCustomerManager#batchDealMsg(java.lang
-	 * .String, org.springframework.ui.Model)
-	 */
-	@Override
-	public void batchDealMsg(String id, Model model) {
-		List<Map<String, Object>> orderInfo = orderInfo(id);
-		if (!CollectionUtils.isEmpty(orderInfo)) {
-			model.addAttribute("orderInfo", orderInfo);
-		}
-		List<Map<String, Object>> vipCardInfos = vipCardInfo(id);
-		if (!CollectionUtils.isEmpty(vipCardInfos)) {
-			model.addAttribute("vipCardInfo", vipCardInfos);
-		}
-		List<Map<String, Object>> postInfo = postInfo(id);
-		if (!CollectionUtils.isEmpty(postInfo)) {
-			model.addAttribute("postInfo", postInfo);
-		}
-		List<Map<String, Object>> backMoneyInfo = backMoneyInfo(id);
-		if (!CollectionUtils.isEmpty(backMoneyInfo)) {
-			model.addAttribute("backMoneyInfo", backMoneyInfo);
-		}
-	}
 
 	/*
 	 * (non-Javadoc)

@@ -12,6 +12,7 @@ import com.jianfei.core.dto.OrderAddInfoDto;
 import com.jianfei.core.service.base.ValidateCodeManager;
 import com.jianfei.core.service.base.VipCardManager;
 import com.jianfei.core.service.base.impl.ValidateCodeManagerImpl;
+import com.jianfei.core.service.order.OrderManager;
 import com.jianfei.core.service.order.OrderPayManager;
 import com.jianfei.core.service.order.impl.OrderManagerImpl;
 import com.jianfei.core.service.user.VipUserManager;
@@ -39,7 +40,7 @@ import java.util.Date;
 public class OrderController {
 	private static Log log = LogFactory.getLog(OrderController.class);
 	@Autowired
-	private OrderManagerImpl orderManager;
+	private OrderManager orderManager;
 
 	@Autowired
 	private OrderPayManager orderPayManager;

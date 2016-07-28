@@ -92,6 +92,8 @@
 		<result column="email" property="email" />
 		<result column="card_type" property="indentType"/>
 		<result column="birth_day" property="birthDay"/>
+		<!--卡表  -->
+		<result column="card_id" property="vipCardNo"/>
 	</resultMap>
 	
 	<!--查询需要开发票的订单信息 -->
@@ -128,16 +130,35 @@
 		where ord.airport_id = sa.airport_id and ord.sale_no = agent.code
 		and ord.customer_id = cus.customer_id and ord.order_id=#{orderId}
 	</select>
+	
+	<!-- 日志信息 -->
+	<select id="selLogInfoByOrderId" resultMap="orderDetailInfo"
+		parameterType="java.lang.String">
+		select
+		ord.order_id,ord.order_state,ord.pay_type,ord.apply_type,
+		cus.customer_name,cus.customer_phone,
+        aoc.card_id
+        from 
+        app_orders ord inner join app_customer cus on ord.customer_id=cus.customer_id
+        inner join app_order_card aoc on ord.order_id = aoc.order_id
+        where ord.order_id=#{orderId}
+	</select>
+	
 
 	<!--订单列表信息展示 -->
 	<select id="get" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
-		select ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,ord.pay_type,
-		ap.airport_name,agent.name,aoc.card_id,
-		customer.customer_name,customer.customer_phone
+		select 
+		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,ord.pay_type,
+		ap.airport_name,agent.name,
+		customer.customer_name,customer.customer_phone,
+		aoc.card_id
 		from app_orders ord,sys_airport ap,sys_users agent,app_customer customer,app_order_card aoc
-		where ord.sale_no=agent.code and ord.customer_id = customer.customer_id
-		and ord.airport_id = ap.airport_id and ord.order_id=aoc.order_id
-
+		where 
+		ord.sale_no=agent.code 
+		and ord.customer_id = customer.customer_id
+		and ord.airport_id = ap.airport_id 
+		and ord.order_id = aoc.order_id
+		
 		<if test="startTime != null">
 			and DATE_FORMAT(ord.order_time,'%Y-%m-%d') <![CDATA[  >=]]>
 			#{startTime}
@@ -165,7 +186,7 @@
 		<!-- 用户名或者手机号码 -->
 		<if test="phoneOrUserName != null">
 			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->
-			and concat(customer.customer_name,customer.customer_phone,agent.name,ord.order_id,aoc.card_id) like
+			and concat(customer.customer_name,agent.name,customer.customer_phone,ord.order_id,aoc.card_id) like
 			CONCAT('%','${phoneOrUserName}','%' )
 		</if>
 		<!-- 机场列表 -->
@@ -184,16 +205,20 @@
 	<!--退款订单分页查询 -->
 	<select id="page" resultMap="OrderShowInfoDto" parameterType="java.util.Map">
 		select
-		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,
+		ord.order_id,ord.order_time,ord.order_state,ord.invoice_flag,ord.apply_type,ord.pay_type,
 		ap.airport_name,
-		agent.name,
 		avp.card_no,avp.card_state,
 		customer.customer_name,customer.customer_phone,
 		acb.back_type,acb.money,acb.finish_time,acb.create_time
-		from app_orders ord,sys_airport ap,sys_users agent,app_customer
-		customer,app_card_back acb,app_order_card aoc,app_vipcard avp
-		where ord.sale_no=agent.code and ord.customer_id = customer.customer_id and
-		ord.airport_id = ap.airport_id and ord.order_id = acb.order_id and ord.order_id=aoc.order_id and avp.card_no=aoc.card_id
+		from app_orders ord,sys_airport ap,app_customer
+		customer,app_card_back acb,app_order_card aoc,app_vipcard avp,sys_users agent
+		where 
+		ord.sale_no=agent.code 
+		and ord.customer_id = customer.customer_id 
+		and ord.airport_id = ap.airport_id 
+		and ord.order_id = acb.order_id 
+		and ord.order_id=aoc.order_id 
+		and avp.card_no=aoc.card_id
 		<if test="backType != null">
 			and acb.back_type = #{backType}
 		</if>
@@ -218,7 +243,7 @@
 			</foreach>
 
 		</if>
-		 order by ord.order_time desc
+		 order by acb.create_time desc
 	</select>
 
 	<!--更新订单状态 -->
@@ -561,5 +586,13 @@ select count(*) as 'value', 'TO_BACK' as 'name' from app_orders where order_stat
 			CONCAT('%','${key}','%' )
 		</if>
 		 order by o.order_time desc
+	</select>
+
+
+	<!-- 根据用户的手机号 查询用户的可处理订单 -->
+	<select id="orderListByPhone" parameterType="java.lang.String"
+			resultMap="BaseResultMap">
+	select o.* from  app_orders o join app_customer u on o.customer_id=u.customer_id where o.order_state in(0,1,2,3)
+	and u.customer_phone=(#{phone})
 	</select>
 </mapper>

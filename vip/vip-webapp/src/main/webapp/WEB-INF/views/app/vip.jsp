@@ -11,13 +11,6 @@
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
 	var grid;
-	var look = function(id) {
-		parent.$.customerFrame({
-			title:"查看VIP用户记录",
-			height : '600px',
-			wight : '700px',
-			url : sy.contextPath + '/app/look?id=' + id});
-	};
 	var delivery = function(id) {
 			var url = sy.contextPath + '/app/updateDeliveryState/'+id;
 			$.post(url, function(result) {
@@ -117,7 +110,7 @@
 					case 0:
 						return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.order_id);
 					case 1:
-						return sy.formatString('<img class="iconImg ext-icon-note_edit" title="查看" onclick="look(\'{0}\');"/> 查看&nbsp;', row.customer_id);
+						return '<a href="${ctx }/returnOrderDetailInfoByOrderId?orderId='+row.order_id+'"><img class="iconImg ext-icon-note_edit" title="查看" /></a> 查看&nbsp;';
 					//default: 
 						// return  sy.formatString('<img class="iconImg ext-icon-note_edit" title="投保" onclick="delivery(\'{0}\');"/> 投保&nbsp;', row.id);
 					}

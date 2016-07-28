@@ -30,7 +30,7 @@
 				订单编号：<span>${orderDetailInfo.orderId}</span>
 			</div>
 			<ul>
-				<li><label>订单日期：</label><fmt:formatDate value="${orderDetailInfo.orderTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+				<li><label>订单创建日期：</label><fmt:formatDate value="${orderDetailInfo.orderTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 				<li><label>开卡场站：</label>${orderDetailInfo.airportName}</li>
 				<li><label>业务员：</label>${orderDetailInfo.agentName}</li>
 				<li><label>业务员电话：</label>${orderDetailInfo.agentPhone}</li>
@@ -54,9 +54,10 @@
 				      	<c:when test="${orderDetailInfo.payMethod == 3}">
 				      		银行卡支付
 				      	</c:when>
-				      	<c:otherwise>
+				      	<c:when test="${orderDetailInfo.payMethod == 4}">
 				      		现金支付
-				      	</c:otherwise>
+				      	</c:when>
+				      	<c:otherwise></c:otherwise>
 				      </c:choose>
 					</label>
 				
@@ -100,7 +101,7 @@
 				<ul>
 					<!--普通发票  -->
 					<c:if test="${invoice.invoiceKind ==0}">
-						<li>发票类型：普通发票</li>
+						<li>发票类型：增值税普通发票</li>
 						<li>邮寄地址：${invoice.province} ${invoice.city} ${invoice.country} ${invoice.address }</li>
 						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
 						<li>发票抬头：${invoice.invoiceTitle}</li>
@@ -113,17 +114,15 @@
 					
 					<!--专用发票 -->
 					<c:if test="${invoice.invoiceKind ==1}">
-						<li>发票类型：专用发票</li>
+						<li>发票种类：增值税专用发票</li>
 						<li>邮寄地址：${invoice.province} ${invoice.city} ${invoice.country} ${invoice.address }</li>
-						<li>发票类型：${invoice.invoiceType ==0? '个人':'公司' }</li>
-						<li>发票抬头：${invoice.invoiceTitle}</li>
 						<li>发票内容：${invoice.invoiceContent}</li>
 						<li>邮　　编：${invoice.postcode }</li>
 						<li>公司名称：${invoice.companyName}</li>
 						<li>公司税号：${invoice.companyTaxNo }</li>
 						<li>公司地址：${invoice.companyAddress }</li>
 						<li>公司电话：${invoice.companyPhone }</li>
-						<li>营业执照：<img src="${invoice.businessLicenseUrl}" style="width: 400px"></li>
+						<li>营业执照：<img src="${invoice.businessLicenseUrl}" style="width: 350px;height: 300px"></li>
 						<c:if test="${orderDetailInfo.invoiceFlag == 2}">
 						<li>发票编号：${invoice.invoiceNo}</li>
 						</c:if>
@@ -155,7 +154,8 @@
 							</c:otherwise>
 						</c:choose>
 					</li>
-					
+					<li>退款申请时间：<fmt:formatDate value="${appCardBack.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+					<li>退款完成时间：<fmt:formatDate value="${appCardBack.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/> </li>
 					<!--申请方式为现场，客服 -->
 					<c:if test="${orderDetailInfo.applyType !=2}">
 						<c:choose>
@@ -196,7 +196,7 @@
 			
 			<c:if test="${!empty appCardBack.agreementUrl}">	
 				<div class="order-list-title">紧急退款照片</div>
-				<div><img width="400px" src="${appCardBack.agreementUrl}"></div>
+				<div><img style="width:350px;height: 300px" src="${appCardBack.agreementUrl}"></div>
 			</c:if>
 			
 		</div>

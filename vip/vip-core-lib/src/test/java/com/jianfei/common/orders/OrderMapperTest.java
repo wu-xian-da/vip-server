@@ -158,5 +158,11 @@ public class OrderMapperTest {
 		System.out.println(appUserFeedbackManager.getFeedBackInfoById("8"));
 	}
 	
+	//日志信息
+	@Test
+	public void testLogInfoByorderId(){
+		System.out.println(orderManagerImpl.selLogInfoByOrderId("0468466329716267").getVipCardNo());
+	}
+	
 
 }

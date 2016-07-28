@@ -72,18 +72,18 @@ public class TaskManagerImpl implements ITaskManager {
 		logger.info("<<<<<<开始执行订单归档任务>>>>>>");
 		System.out.println("<<<<<<开始执行订单归档任务了>>>>>>");
 		archiveManager.baseDailyExtract(DateUtil.dailyExtractDate());
-		archiveManager.dateProvinceIdRedisCache(DateUtil.getCurrentTime());
+		archiveManager.dateProvinceIdCache(DateUtil.getCurrentTime());
 		archiveManager.dateProvinceIdApportIds(DateUtil.getCurrentTime());
 	}
 
-	/*每10分钟执行一次，启动后推迟10分钟执行
-	 * (non-Javadoc)
+	/*
+	 * 每10分钟执行一次，启动后推迟10分钟执行 (non-Javadoc)
 	 * 
 	 * @see com.jianfei.scheduled.ITaskManager#checkinDataSchedule()
 	 */
-	//@Scheduled(cron = "0 0 * * * *")
-	//@Scheduled(cron = "0 */10 * * * ?")
-	@Scheduled(fixedRate = 600000,initialDelay=600000)
+	// @Scheduled(cron = "0 0 * * * *")
+	// @Scheduled(cron = "0 */10 * * * ?")
+	@Scheduled(fixedRate = 600000, initialDelay = 600000)
 	public void checkinDataSchedule() {
 		logger.info("<<<<<<获取空港核销数据>>>>>>");
 		try {
@@ -133,26 +133,8 @@ public class TaskManagerImpl implements ITaskManager {
 	 */
 	@Scheduled(fixedRate = 1000)
 	public void pullSmsMessage() {
-		MessageDto<Map<String, String>> messageDto = queueManager
-				.processMessage(QueueManager.MESSAGEKEY,
-						QueueManager.SMS_QUEUE_VIP_BAK);
-		if (null != messageDto) {
-			if (messageDto.isOk()) {
-				System.out.println(DateUtil.dateToString(new Date(),
-						DateUtil.ALL_FOMAT)
-						+ "->jianfei-info->"
-						+ JSONObject.toJSONString(messageDto));
-				LoggerFactory.getLogger(getClass()).info(
-						JSONObject.toJSONString(messageDto));
-			} else {
-				System.out.println(DateUtil.dateToString(new Date(),
-						DateUtil.ALL_FOMAT)
-						+ "->jianfei-error->"
-						+ JSONObject.toJSONString(messageDto));
-				LoggerFactory.getLogger(getClass()).error(
-						JSONObject.toJSONString(messageDto));
-			}
-		}
+		queueManager.processMessage(QueueManager.MESSAGEKEY,
+				QueueManager.SMS_QUEUE_VIP_BAK);
 	}
 
 	/*

@@ -25,6 +25,9 @@ public interface AppOrdersMapper {
 
 	// 根据订单编号返回订单详细信息
 	OrderDetailInfo selOrderDetailInfo(String orderId);
+	
+	//根据订单号查询日志信息
+	OrderDetailInfo selLogInfoByOrderId(String orderId);
 
 	int deleteByPrimaryKey(String orderId);
 
@@ -81,4 +84,10 @@ public interface AppOrdersMapper {
 	 */
 	List<OrderPageDto> orderListBySale(@Param(value = "uno")String uno, @Param(value = "orderState")List<Integer> orderState, @Param(value = "cardState")List<Integer> cardState,@Param(value = "key")String key);
 
+	/**
+	 * 根据手机号获取订单列表
+	 * @param phone
+	 * @return
+     */
+	List<AppOrders> orderListByPhone(@Param(value = "phone")String phone);
 }

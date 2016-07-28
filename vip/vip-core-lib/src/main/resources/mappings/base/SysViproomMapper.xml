@@ -91,7 +91,7 @@
     </if>
 
     <if test="airportName != null">
-      and ap.airport_name like CONCAT('%','${airportName}','%' )
+      and concat( ap.airport_name,vr.viproom_name)like CONCAT('%','${airportName}','%' )
     </if>
     order by ap.province,ap.airport_id,vr.viproom_id
   </select>
