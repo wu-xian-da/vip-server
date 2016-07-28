@@ -47,7 +47,8 @@ public class JedisUtilsTest {
 
 	@Test
 	public void consumer() {
-		
+		String reuslt = JedisUtils.get("2016-07-27$540$0468039808026577");
+		System.out.println(reuslt);
 	}
 
 	@Test
