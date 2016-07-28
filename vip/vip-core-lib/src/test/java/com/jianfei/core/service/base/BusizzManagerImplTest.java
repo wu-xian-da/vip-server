@@ -43,7 +43,16 @@ public class BusizzManagerImplTest {
 
 	@Test
 	public void testa() {
-		MessageDto<List<User>> dto = userManager.get(new MapUtils.Builder().setKeyValue("uno", "1111").build());
+		MessageDto<List<User>> dto = userManager.get(new MapUtils.Builder()
+				.setKeyValue("uno", "1111").build());
 		System.out.println(JSONObject.toJSONString(dto));
+	}
+
+	@Test
+	public void testab() {
+		List<Map<String, Object>> maps = busizzManagerImpl
+				.selectMap(new MapUtils.Builder().setKeyValue("state", "0")
+						.build());
+		System.out.println(JSONObject.toJSONString(maps));
 	}
 }
