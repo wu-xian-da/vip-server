@@ -48,15 +48,14 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDateProvinceIdAirport() {
 		Map<String, Object> mapCon = new HashMap<String, Object>();
-		mapCon.put("currentTime", "2016-07-27");
+		mapCon.put("currentTime", "2016-07-26");
 		archiveManager.dateProvinceIdApportIds(mapCon);
-
 	}
 
 	@Test
 	public void cacheDate() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("currentTime", "2016-07-27");
+		map.put("currentTime", "2016-07-26");
 		archiveManager.dateProvinceIdCache(map);
 	}
 

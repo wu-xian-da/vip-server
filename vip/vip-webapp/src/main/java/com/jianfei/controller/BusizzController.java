@@ -125,7 +125,7 @@ public class BusizzController extends BaseController {
 					.selectMap(new MapUtils.Builder().setKeyValue("id",
 							user.getId()).build());
 			if (!CollectionUtils.isEmpty(list)) {
-//				model.addAttribute("user", list.get(0));
+				model.addAttribute("user", list.get(0));
 			}
 		}
 		List<Map<String, Object>> list = ariPortManager
