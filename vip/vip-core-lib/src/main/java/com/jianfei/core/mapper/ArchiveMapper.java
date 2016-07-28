@@ -54,13 +54,17 @@ public interface ArchiveMapper {
 	List<Map<String, Object>> masterDraw(Map<String, Object> map);
 
 	/**
-	 * zhuGuanTotal(主管查看指定区域的总的销售量)
+	 * 主管|经理查看指定区域的总的销售量
 	 * 
 	 * @param map
+	 *            key:ariportIds value:场站ids<br>
+	 *            key:year value:yyyy<br>
+	 *            key:month value:MM<br>
+	 *            key:dataStr value:yyyy年MM月<br>
 	 * @return Map<String,Object>
 	 * @version 1.0.0
 	 */
-	Map<String, Object> zhuGuanTotal(Map<String, Object> map);
+	Map<String, Object> leaderLookTotal(Map<String, Object> map);
 
 	/**
 	 * zhuGuanAllAirPort(主管查看管辖区销售情况)

@@ -101,7 +101,7 @@
 	</select>
 
 	<!-- 统计 主管|经理角色绘图 -->
-	<select id="zhuGuanTotal" resultType="java.util.Map"
+	<select id="leaderLookTotal" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		SELECT
 		CASE WHEN
