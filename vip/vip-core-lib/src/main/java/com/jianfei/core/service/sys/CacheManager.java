@@ -1,7 +1,5 @@
 package com.jianfei.core.service.sys;
 
-import java.util.Map;
-
 import com.jianfei.core.common.utils.MessageDto;
 
 /**

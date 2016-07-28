@@ -47,6 +47,7 @@ public class JedisUtilsTest {
 
 	@Test
 	public void consumer() {
+		
 	}
 
 	@Test

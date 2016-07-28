@@ -63,94 +63,6 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.jianfei.core.service.stat.ArchiveManager#masterTop(java.util.Map)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Map<String, Object>> masterTop(Map<String, Object> map) {
-		List<Map<String, Object>> list = null;
-		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
-		try {
-			if (null != object) {
-				list = (List<Map<String, Object>>) object;
-				return list;
-			}
-		} catch (Exception e) {
-			logger.error("经理首页，从缓存获取top3失败....");
-		}
-		list = archiveMapper.masterTop(map);
-		JedisUtils.setObject(CacheCons.Sys.SYS_TOP3_MONTH, list, 0);
-
-		return list;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.stat.ArchiveManager#masterDraw(java.util.Map)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Map<String, Object>> masterDraw(Map<String, Object> map,
-			String cacheKey) {
-		List<Map<String, Object>> maps = null;
-		Object object = JedisUtils.getObject(cacheKey);
-		try {
-			if (null != object) {
-				maps = (List<Map<String, Object>>) object;
-				return maps;
-			}
-		} catch (Exception e) {
-			logger.error("经理首页，从缓存获取数据失败....");
-		}
-		maps = archiveMapper.masterDraw(map);
-		JedisUtils.setObject(cacheKey, maps, 0);
-		return maps;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.stat.ArchiveManager#zhuGuanTotal(java.util.Map)
-	 */
-	@Override
-	public Map<String, Object> zhuGuanTotal(Map<String, Object> map) {
-		return archiveMapper.zhuGuanTotal(map);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.stat.ArchiveManager#zhuGuanAllAirPort(java.util
-	 * .Map)
-	 */
-	@Override
-	public List<Map<String, Object>> zhuGuanAllAirPort(Map<String, Object> map,
-			String cacheKey) {
-		// TODO
-		return archiveMapper.zhuGuanAllAirPort(map);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jianfei.core.service.stat.ArchiveManager#zhuGuanDraw(java.util.Map)
-	 */
-	@Override
-	public List<Map<String, Object>> zhuGuanDraw(Map<String, Object> map,
-			String cacheKey) {
-		// TODO
-		return archiveMapper.zhuGuanDraw(map);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * com.jianfei.core.service.stat.ArchiveManager#baseDailyExtract(java.util
 	 * .Map)
 	 */
@@ -172,19 +84,17 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		// 获取所有的权限区域 经理
 		List<AriPort> ariPorts = user.getAripors();
 		List<String> list = new ArrayList<String>();
-		StringBuffer buffer = new StringBuffer();
 		for (AriPort ariPort : ariPorts) {
 			list.add(ariPort.getId());
-			buffer.append("'" + ariPort.getId() + "',");
 		}
-		System.out.println(buffer);
 		if (CollectionUtils.isEmpty(list)) {
 			model.addAttribute("error", "true");
 			return;
 		}
 		// 查询管辖区域内总的开卡数
-		Map<String, Object> map = zhuGuanTotal(new MapUtils.Builder()
-				.setKeyValue("ariportIds", list).build());
+		Map<String, Object> map = archiveMapper
+				.leaderLookTotal(new MapUtils.Builder().setKeyValue(
+						"ariportIds", list).build());
 		if (MapUtils.isEmpty(map)) {
 			model.addAttribute("total", 0);
 		} else {
@@ -198,31 +108,60 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
 
 		// 开卡数前top3的省份
-		model.addAttribute("top", masterTop(lastMoth));
+		model.addAttribute("top", jingliTop(lastMoth));
 		// 柱状图报表数据
 		model.addAttribute(
 				"draw1",
-				handDraw(masterDraw(lastMoth, CacheCons.Sys.LAST_1_MONTH),
-						"省份/月份开卡数", lastMoth.get("dataStr")));// 上个月各个省份的开卡数
+				handDraw(lastMoth, CacheCons.Sys.LAST_1_MONTH, "省份/月份开卡数",
+						lastMoth.get("dataStr")));// 上个月各个省份的开卡数
 
 		Map<String, Object> lastMoth2 = DateUtil.getDelayDate(2);
 		lastMoth2.put("ariportIds", list);
 		model.addAttribute(
 				"draw2",
-				handDraw(masterDraw(lastMoth2, Sys.LAST_2_MONTH), "省份/月份开卡数",
-						DateUtil.getDelayDate(2).get("dataStr")));// 上上个月各个省份开卡数
+				handDraw(lastMoth2, Sys.LAST_2_MONTH, "省份/月份开卡数", DateUtil
+						.getDelayDate(2).get("dataStr")));// 上上个月各个省份开卡数
 
 		Map<String, Object> lastMoth3 = DateUtil.getDelayDate(3);
 		lastMoth3.put("ariportIds", list);
 		model.addAttribute(
 				"draw3",
-				handDraw(masterDraw(lastMoth3, CacheCons.Sys.LAST_3_MONTH),
-						"省份/月份开卡数", DateUtil.getDelayDate(3).get("dataStr")));// 上上上个月各个省份的开卡数
+				handDraw(lastMoth3, CacheCons.Sys.LAST_3_MONTH, "省份/月份开卡数",
+						DateUtil.getDelayDate(3).get("dataStr")));// 上上上个月各个省份的开卡数
 
 	}
 
+	/**
+	 * 经理首页，开卡数前top3的省份
+	 * 
+	 * @param map
+	 *            key:ariportIds value:场站ids<br>
+	 *            key:year value:yyyy<br>
+	 *            key:month value:MM<br>
+	 *            key:dataStr value:yyyy年MM月<br>
+	 * 
+	 * @return List<Map<String,Object>>
+	 * @version 1.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	private List<Map<String, Object>> jingliTop(Map<String, Object> map) {
+		List<Map<String, Object>> list = null;
+		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
+		try {
+			if (null != object) {
+				list = (List<Map<String, Object>>) object;
+				return list;
+			}
+		} catch (Exception e) {
+			logger.error("经理首页，从缓存获取top3失败....");
+		}
+		list = archiveMapper.masterTop(map);
+		JedisUtils.setObject(CacheCons.Sys.SYS_TOP3_MONTH, list, 0);
+		return list;
+	}
+
 	/*
-	 * (non-Javadoc)
+	 * 主管 (non-Javadoc)
 	 * 
 	 * @see
 	 * com.jianfei.core.service.stat.ArchiveManager#chargeHome(org.springframework
@@ -242,7 +181,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		}
 		lastMoth.put("ariportIds", list);
 		// 管辖区域范围内总的订单数
-		Map<String, Object> map = zhuGuanTotal(lastMoth);
+		Map<String, Object> map = archiveMapper.leaderLookTotal(lastMoth);
 
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
 		if (MapUtils.isEmpty(map)) {
@@ -251,31 +190,56 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			model.addAttribute("total", map.get("total"));
 		}
 		// 上个月管辖区域内的开卡数
-		model.addAttribute(
-				"airPorts",
-				zhuGuanAllAirPort(lastMoth,
-						CacheCons.Sys.SYS_LASTMONTH_ORDERS_ZHUGUAN));
+		model.addAttribute("airPorts",
+				archiveMapper.zhuGuanAllAirPort(lastMoth));
 		// 管辖区域内每个场站每个业务员订单统计
-		List<Map<String, Object>> mapList = zhuGuanDraw(lastMoth, "");
+		List<Map<String, Object>> mapList = archiveMapper.zhuGuanDraw(lastMoth);
 		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
 		for (Map<String, Object> m : mapList) {
 			Map<String, Object> mb = new HashMap<String, Object>();
-			String xAxis = m.get("bnames") == "" ? "" : m.get("bnames")
-					.toString();
+			String xAxis = StringUtils.obj2String(m.get("bnames"));
 			mb.put("text", m.get("airportname") + ":横轴业务员,纵轴上月开卡数");
 			mb.put("xAxis", xAxis.split(","));
-			mb.put("series", StringUtils.stringArray2Long(
-					m.get("order_nums") == "" ? "" : m.get("order_nums")
-							.toString(), ","));
+			mb.put("series",
+					StringUtils.stringArray2Long(
+							StringUtils.obj2String(m.get("order_nums")), ","));
 			maps.add(mb);
 		}
 		model.addAttribute("draw", JSONObject.toJSONString(maps));
 	}
 
-	public Map<String, String> handDraw(List<Map<String, Object>> draw,
-			String text, Object title) {
+	/**
+	 * 经理首页，绘制图表数据
+	 * 
+	 * @param mapCons
+	 *            key:ariportIds value:场站ids<br>
+	 *            key:year value:yyyy<br>
+	 *            key:month value:MM<br>
+	 *            key:dataStr value:yyyy年MM月<br>
+	 * @param cacheKey
+	 * @param text
+	 * @param title
+	 * @return Map<String,String>
+	 * @version 1.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String, String> handDraw(Map<String, Object> mapCons,
+			String cacheKey, String text, Object title) {
+
+		List<Map<String, Object>> maps = null;
+		Object object = JedisUtils.getObject(cacheKey);
+		try {
+			if (null != object) {
+				maps = (List<Map<String, Object>>) object;
+			} else {
+				maps = archiveMapper.masterDraw(mapCons);
+				JedisUtils.setObject(cacheKey, maps, 0);
+			}
+		} catch (Exception e) {
+			logger.error("经理首页，从缓存获取数据失败....");
+		}
 		Map<Object, Object> drawMap = new HashMap<Object, Object>();
-		for (Map<String, Object> m1 : draw) {
+		for (Map<String, Object> m1 : maps) {
 			drawMap.put(m1.get("province"), m1.get("order_num"));
 		}
 		Map<String, String> map = new HashMap<String, String>();
@@ -306,9 +270,11 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		if (CollectionUtils.isEmpty(orderMaps)) {
 			orderMaps = new ArrayList<Map<String, Object>>();
 		}
+		// 判断退卡数是否为空
 		if (CollectionUtils.isEmpty(backOrderMaps)) {
 			backOrderMaps = new ArrayList<Map<String, Object>>();
 		}
+
 		Map<String, Map<String, Object>> orderMap = new HashMap<String, Map<String, Object>>();
 		for (Map<String, Object> m : orderMaps) {
 			String cacheKey = StringUtils.obj2String(m.get("cacheKey"));
@@ -321,7 +287,9 @@ public class ArchiveManagerImpl implements ArchiveManager {
 							.setKeyValue("total", m.get("total"))
 							.setKeyValue("avgNum", m.get("avgNum")).build());
 		}
+
 		Map<String, Map<String, Object>> backOrderMap = new HashMap<String, Map<String, Object>>();
+
 		for (Map<String, Object> m : backOrderMaps) {
 
 			String cacheKey = StringUtils.obj2String(m.get("cacheKey"));

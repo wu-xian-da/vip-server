@@ -48,39 +48,28 @@ public class CacheCons {
 		 * @version 1.0.0
 		 */
 		public static final String SYS_TOP3_MONTH = "sys:top3:month";
-		/**
-		 * LAST_MONTH_TOTAL_ZHUGUAN:TODO(主管管辖区域历史开卡总数，月底清除)
-		 *
-		 * @version 1.0.0
-		 */
-		public static final String SYS_HISTORY_ORDERS_ZHUGUAN = "sys:history:orders:zhuguan";
-		/**
-		 * LAST_MONTH_All_ZHUGUAN:TODO（主管查看上个月的订单统计）
-		 *
-		 * @version 1.0.0
-		 */
-		public static final String SYS_LASTMONTH_ORDERS_ZHUGUAN = "sys:lastmonth:orders:zhuguan";
 
 	}
 
 	/**
 	 * 获取手机验证码存储KEY
+	 * 
 	 * @param phone
 	 * @param msgType
-     * @return
-     */
-	public static String getVerifyPhoneKey(String phone, MsgType msgType){
-		return "PHONE:"+phone+":"+msgType.getName();
+	 * @return
+	 */
+	public static String getVerifyPhoneKey(String phone, MsgType msgType) {
+		return "PHONE:" + phone + ":" + msgType.getName();
 	}
 
 	/**
 	 * 获取消息存储模板KEY
+	 * 
 	 * @param msgType
 	 * @return
 	 */
-	public static String getMsgTemplateKey( MsgType msgType){
-		return "MSG:TEMPLATE"+msgType.getName();
+	public static String getMsgTemplateKey(MsgType msgType) {
+		return "MSG:TEMPLATE" + msgType.getName();
 	}
-
 
 }

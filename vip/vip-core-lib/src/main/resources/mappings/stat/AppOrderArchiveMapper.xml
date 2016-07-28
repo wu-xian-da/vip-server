@@ -288,7 +288,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
 			select 
 			aoa.sale_no,aoa.photo,aoa.bname,aoa.sex,sum(aoa.order_num) as order_number 
 			FROM app_order_archive aoa , sys_users su, sys_use_role sur,sys_roles sr
-			where aoa.bid = su.id and su.id = sur.user_id and sur.role_id = sr.id 
+			where aoa.bid = su.id and su.id = sur.user_id and sur.role_id = sr.id and sr.id != 11
 			and <![CDATA[ aoa.file_time >= #{startTime} AND aoa.file_time <=  #{endTime} ]]>
 			<if test="pid != null">
 				AND aoa.pid = #{pid}

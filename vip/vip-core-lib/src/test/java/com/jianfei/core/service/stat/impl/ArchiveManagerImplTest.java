@@ -45,47 +45,6 @@ public class ArchiveManagerImplTest {
 	@Autowired
 	private ArchiveManager archiveManager;
 
-	/**
-	 * Test method for
-	 * {@link com.jianfei.core.service.stat.impl.ArchiveManagerImpl#masterTop(java.util.Map)}
-	 * .
-	 */
-	@Test
-	public void testMasterTop() {
-		List<Map<String, Object>> map = archiveManager
-				.masterTop(new MapUtils.Builder().setKeyValue("start",
-						new Date()).build());
-		System.out.println(JSONObject.toJSONString(map));
-	}
-
-	@Test
-	public void testZhuGuanAllAirPort() {
-		Map<String, Object> lastMoth = DateUtil.getDelayDate(1);
-		List<String> list = new ArrayList<String>();
-		list.add("068ccfa912914ad9bd1b72a4c0b8b879");
-		list.add("c76c31bad8b647d9a9a44b64a86f56b6");
-		list.add("43778dcfcb4542ce80b3588dd759e530");
-		lastMoth.put("ariportIds", list);
-		List<Map<String, Object>> maps = archiveManager.zhuGuanAllAirPort(
-				lastMoth, "");
-		if (null == maps) {
-			System.out.println("....");
-		}
-	}
-
-	@Test
-	public void testZhuGuanDraw() {
-		Map<String, Object> lastMoth = DateUtil.getDelayDate(1);
-		List<String> list = new ArrayList<String>();
-		list.add("068ccfa912914ad9bd1b72a4c0b8b879");
-		list.add("c76c31bad8b647d9a9a44b64a86f56b6");
-		list.add("43778dcfcb4542ce80b3588dd759e530");
-		lastMoth.put("ariportIds", list);
-		List<Map<String, Object>> maps = archiveManager.zhuGuanDraw(lastMoth,
-				"");
-		System.out.println(maps);
-	}
-
 	@Test
 	public void testDateProvinceIdAirport() {
 		Map<String, Object> mapCon = new HashMap<String, Object>();
@@ -99,12 +58,6 @@ public class ArchiveManagerImplTest {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("currentTime", "2016-07-22");
 		archiveManager.dateProvinceIdCache(map);
-		// System.out.println("~~~~~~~~~~~~datePid->"
-		// + JSONObject.toJSONString(datePid));
-		// List<Map<String, Object>> datePidAid = archiveManager
-		// .dateProvinceIdApportIds(map);
-		// System.out.println("~~~~~~~~~~~~datePidAid->"
-		// + JSONObject.toJSONString(datePidAid));
 	}
 
 	@Test
