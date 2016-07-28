@@ -483,7 +483,7 @@ public class OrderManagerImpl implements OrderManager {
         if (num > 0) {
             return BaseMsgInfo.success(true);
         } else {
-            SmartLog.info(ModuleType.ORDER_MODULE.getName(),order.getCustomer().getPhone(),
+            SmartLog.error(ModuleType.ORDER_MODULE.getName(),order.getCustomer().getPhone(),
                     "【订单模块-订单支付】，订单编号："+order.getOrderId()+"，用户手机号："+order.getCustomer().getPhone()+"，用户姓名："+order.getCustomer().getCustomerName()+
                             "，操作员编号："+appOrders.getPayUserId()+"，操作员姓名："+appOrders.getPayUserId()+"，操作内容：【订单状态:未支付-->已支付】，操作结果：【失败】");
             return BaseMsgInfo.msgFail("确认付款失败");
@@ -499,13 +499,13 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public synchronized BaseMsgInfo addBackCardInfo(AppCardBack appCardBack) {
 
-        //1、根据订单号查询订单信息
+        //1、根据订单号查询订单信息和用户信息
         AppOrders orders = getOrderDetailByOrderId(appCardBack.getOrderId());
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
 
-        //2、查询用户信息和订单信息
+        //判断订单状态是否合法 只能是已付款的订单才能退款
         if (VipOrderState.NOT_PAY.getName() == orders.getOrderState()) {
             return BaseMsgInfo.msgFail("订单未付款");
         }else if (!(VipOrderState.ALREADY_PAY.getName() == orders.getOrderState())){
@@ -524,43 +524,56 @@ public class OrderManagerImpl implements OrderManager {
         appCardBack.setCreateName(user.getName());
         appCardBack.setCustomerName(orders.getCustomer().getCustomerName());
 
-        //3、插入数据库
+        //3、封装消息体 及更改订单状态 和 卡状态
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
                 setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
         object.put("returnMoney",useDetailInfo.getRealMoney());
         msgBuilder.setMsgBody(object.toJSONString());
-        //添加订单状态为已退款
+
         if (StringUtils.isNotBlank(appCardBack.getAgreementUrl())) {
-            //紧急退卡 更改订单状态为已退款 和申请方式为紧急
+
+            //紧急退卡 更改订单状态为已退款 \申请方式为紧急
             orders.setOrderState(VipOrderState.ALREADY_REFUND.getName());
             appCardBack.setFinishTime(new Date());
-            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
+            orders.setApplyType(ApplyBackCardMethod.SCENE_EMERGENT_APPLY.getName());
+
+            //紧急通道退卡 更改卡状态为已退卡
             AppVipcard vipcard=new AppVipcard();
             vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
             vipcard.setCardState(VipCardState.BACK_CARD.getName());
-            log.info("更改VIP"+vipcard.getCardNo()+"卡为已退卡");
             vipCardManager.updateVipCard(vipcard);
-            orders.setApplyType(ApplyBackCardMethod.SCENE_EMERGENT_APPLY.getName());
+            SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),vipcard.getCardNo(),
+                    "【订单模块-现场紧急退卡-更改卡状态】，订单编号："+orders.getOrderId()+"，用户手机号："+orders.getCustomer().getPhone()+"，用户姓名："+orders.getCustomer().getCustomerName()+
+                            "，操作员编号："+user.getCode()+"，操作员姓名："+user.getName()+"，操作内容：【将卡状态变为-已退卡】，操作结果：【成功】");
+
+            //消息体为紧急退卡
+            msgBuilder.setMsgType(MsgType.RIGHT_BACK_CARD.getName());
+
         } else {
-            //审核通过
+            //其他APP端申请退卡 更改订单状态为退卡审核已通过 \申请方式为APP端正常申请
             orders.setOrderState(VipOrderState.AUDIT_PASS.getName());
+            orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
+
+            //根据付款方式 封装给用户退卡短信 消息体 现金和其他付款方式不同
             if (PayType.CASHPAY.getName() == orders.getPayType()) {
                 msgBuilder.setMsgType(MsgType.BACK_CARD_APPLY.getName());
             } else {
                 msgBuilder.setMsgType(MsgType.QT_BACK_CARD_APPLY.getName());
             }
-            //APP申请
-            orders.setApplyType(ApplyBackCardMethod.SCENE_APPLY.getName());
         }
-        boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
-
-        vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
-
         appOrdersMapper.updateByPrimaryKeySelective(orders);
-        log.info("发送消息");
-        log.info(msgBuilder);
+        //记录日志
+        SmartLog.info(ModuleType.ORDER_MODULE.getName(),orders.getCustomer().getPhone(),
+                "【订单模块-订单现场申请退卡或紧急退卡】，订单编号："+orders.getOrderId()+"，用户手机号："+orders.getCustomer().getPhone()+"，用户姓名："+orders.getCustomer().getCustomerName()+
+                        "，操作员编号："+user.getCode()+"，操作员姓名："+user.getName()+"，操作内容：【订单状态:已支付-->退款审核通过 或 已退款】，操作结果：【成功】");
+
+        boolean temp= cardBackManager.addOrUpdateCardBackInfo(appCardBack);
+        //更改用户状态为禁用状态
+        vipUserManager.updateUserSate(orders.getCustomer().getPhone(),VipUserSate.NOT_ACTIVE);
         queueManager.sendMessage(msgBuilder);
+        SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), msgBuilder.getUserPhone(),
+                "给用户手机号："+msgBuilder.getUserPhone()+"发送退卡申请成功或紧急退卡相关短信");
         return temp ? BaseMsgInfo.success(true) : BaseMsgInfo.fail("退卡信息添加失败");
     }
 
