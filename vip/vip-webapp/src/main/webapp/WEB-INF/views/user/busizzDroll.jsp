@@ -6,10 +6,11 @@
 <title></title>
 <jsp:include page="/WEB-INF/include/inc.jsp"></jsp:include>
 <script type="text/javascript">
+	var state = '${state}';
 	$(function() {
 		grid = $('#grid').datagrid({
 			title : '',
-			url : sy.contextPath + '/busizz/droll?state=${state}',
+			url : sy.contextPath + '/busizz/droll?state='+state,
 			striped : true,
 			rownumbers : true,
 			pagination : true,
@@ -64,8 +65,17 @@
 		});
 	});
 	function search(){
-		grid.datagrid('load',{'name':$("#name").val()});
+		grid.datagrid('load',{'name':$("#name").val(),'state':state});
 	};
+	 function keyDown(e) {
+		  var ev= window.event||e;
+			//13是键盘上面固定的回车键
+		  if (ev.keyCode == 13) {
+			//你要执行的方法
+			 ev.stopPropagation();
+			return false;
+		  }
+		 }
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
@@ -78,16 +88,12 @@
 				<td>
 					<table>
 						<tr>
-						<shiro:hasPermission name="system:busizz:add">
-							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
-							<td><div class="datagrid-btn-separator"></div></td>
-						</shiro:hasPermission>
 						<td>
 							<form id="searchForm">
 								<table>
 									<tr>
 										<td>姓名：</td>
-										<td><input id="name" style="width: 200px" placeholder='输入业务员名字'></input></td>
+										<td><input id="name" style="width: 200px" placeholder='输入业务员名字' onkeydown="return false;" ></input></td>
 										<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;
 						    border: none;
