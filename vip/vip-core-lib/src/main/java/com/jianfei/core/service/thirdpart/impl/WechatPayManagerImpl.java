@@ -186,6 +186,7 @@ public class WechatPayManagerImpl extends ThirdPayManager {
 						appOrders.setPayTime(DateUtil.parseDateTime(req.getPayTime()));
 					}catch (Exception e){
 						log.error(e);
+						appOrders.setPayTime(new Date());
 					}
 					orderManager.updatePayState(appOrders);
 				}
