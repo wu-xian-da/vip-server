@@ -28,7 +28,7 @@
 				field : 'name'
 			} ] ],
 			columns : [ [ {
-				width : '80',
+				width : '100',
 				title : '职位',
 				field : 'job'
 			}, {
