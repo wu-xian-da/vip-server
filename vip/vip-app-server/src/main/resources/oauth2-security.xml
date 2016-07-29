@@ -143,7 +143,7 @@
           access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="false">
         <anonymous enabled="false"/>
 
-        <intercept-url pattern="/vipUser/**" access="ROLE_SALE,ROLE_VIP"/>
+        <intercept-url pattern="/vipUser/**" access="ROLE_VIP"/>
 
         <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
         <access-denied-handler ref="oauth2AccessDeniedHandler"/>
