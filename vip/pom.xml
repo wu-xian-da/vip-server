@@ -564,8 +564,8 @@
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
 				<redis.pool.minIdle>0</redis.pool.minIdle>
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
-				<redis.host>192.168.110.8</redis.host>
-				<redis.port>6379</redis.port>
+				<redis.host>120.26.136.124</redis.host>
+				<redis.port>26379</redis.port>
 				<!-- p12 cert location -->
 				<wechat.cert.location>/opt/apiclient_cert.p12</wechat.cert.location>
 				<!-- kongGang settings -->
