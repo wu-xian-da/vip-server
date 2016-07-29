@@ -45,26 +45,6 @@ public class VipUserController {
     @Autowired
     private AirportTransManager transManager;
 
-    /**
-     * VIP 用户登录
-     *
-     * @return
-     */
-    @RequestMapping(value = "/login")
-    @ResponseBody
-    public BaseMsgInfo vipRoomInfo(@RequestParam(value = "phone", required = true) String phone,
-                                   @RequestParam(value = "code", required = true) String code
-    ) {
-        boolean validate = vipUserManager.validateLoginCode(phone, code);
-        if (validate) {
-
-            VipTestVo vipTestVo = new VipTestVo("4219a91f-45d5-4a07-9e8e-3acbadd0c23e", "d41df9fd-3d36-4a20-b0b7-1a1883c7439d",
-                    "read write trust", "bearer", 43199);
-            return BaseMsgInfo.success(vipTestVo);
-        } else {
-            return new BaseMsgInfo().setCode(-1).setMsg("手机校验码错误");
-        }
-    }
 
     /**
      * VIP 获取用户信息
