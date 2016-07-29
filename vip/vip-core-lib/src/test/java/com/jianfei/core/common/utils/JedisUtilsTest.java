@@ -47,8 +47,10 @@ public class JedisUtilsTest {
 
 	@Test
 	public void consumer() {
-		String reuslt = JedisUtils.get("2016-07-27$540$0468039808026577");
+		String reuslt = JedisUtils.get("test");
 		System.out.println(reuslt);
+		JedisUtils.set("mm", "gg", 0);
+		System.out.println(JedisUtils.get("mm"));
 	}
 
 	@Test

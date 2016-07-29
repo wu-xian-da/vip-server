@@ -446,8 +446,8 @@
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
 				<redis.pool.minIdle>0</redis.pool.minIdle>
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
-				<redis.host>192.168.110.8</redis.host>
-				<redis.port>6379</redis.port>
+				<redis.host>120.26.136.124</redis.host>
+				<redis.port>26379</redis.port>
 				<!-- p12 cert location -->
 				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>
 				<!-- kongGang settings -->
@@ -532,6 +532,70 @@
 				</plugins>
 			</build>
 		</profile>
+		
+		
+		<profile>
+			<id>aliyun</id>
+			<properties>
+				<!-- Database settings -->
+				<hbm2ddl.drop>false</hbm2ddl.drop>
+				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
+				<dbunit.dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dbunit.dataTypeFactoryName>
+				<hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+				<jdbc.groupId>mysql</jdbc.groupId>
+				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
+				<jdbc.version>5.1.37</jdbc.version>
+				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+				<jdbc.url>jdbc:mysql://rm-bp1933ou3red8rpqu.mysql.rds.aliyuncs.com/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.username>vip</jdbc.username>
+				<jdbc.password>jfFlzx3kc</jdbc.password>
+				<jdbc.pool.init>10</jdbc.pool.init>
+				<jdbc.pool.minIdle>15</jdbc.pool.minIdle>
+				<jdb.pool.maxActive>30</jdb.pool.maxActive>
+
+				<!-- updload config -->
+				<upload.home.dir>/workspace/uploadPath</upload.home.dir>
+				<!-- log path -->
+				<log.home.dir>/workspace/vip.log</log.home.dir>
+				<log.flume.home.dir>/workspace/flume.log</log.flume.home.dir>
+				<static.resource.server.address>http://static.ycxvip.com</static.resource.server.address>
+				<!-- redis config -->
+				<redis.pool.maxTotal>8</redis.pool.maxTotal>
+				<redis.pool.maxIdle>8</redis.pool.maxIdle>
+				<redis.pool.minIdle>0</redis.pool.minIdle>
+				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
+				<redis.host>192.168.110.8</redis.host>
+				<redis.port>6379</redis.port>
+				<!-- p12 cert location -->
+				<wechat.cert.location>/opt/apiclient_cert.p12</wechat.cert.location>
+				<!-- kongGang settings -->
+				<konggang.url>http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/</konggang.url>
+				<konggang.partner>20160607001</konggang.partner>
+				<konggang.key>S1-L6-D0-T1-G2-S7</konggang.key>
+				<!-- yeepay settings -->
+				<yeepay.query.url>http://cod.yeepay.com/cod/callback/codOrderQueryAction.do</yeepay.query.url>
+				<yeepay.customerId>10001676182</yeepay.customerId>
+				<yeepay.key>DFE23HLAW198820SQWE1224SDAQQ3319203945</yeepay.key>
+				<yeepay.src.sysid>opsmart</yeepay.src.sysid>
+				<yeepay.dst.sysid>yeepay</yeepay.dst.sysid>
+				<yeepay.transaction.id>OPSMART</yeepay.transaction.id>
+				<!-- pay notify address -->
+				<pay.notify.address>http://api.ycxvip.com/vip-app-server</pay.notify.address>
+			</properties>
+			<build>
+				<plugins>
+					<!-- Override location of data file for DbUnit to load (doesn't have 
+						negative keys) -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>dbunit-maven-plugin</artifactId>
+						<configuration>
+							<src>src/main/resources/default-data.xml</src>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>		
 	</profiles>
 	<build>
 		<pluginManagement>

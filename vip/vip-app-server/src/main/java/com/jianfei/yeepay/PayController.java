@@ -542,6 +542,7 @@ public class PayController {
 			param.setPayTime(DateUtil.dateToString(payTime, "yyyy-MM-dd HH:mm:ss"));
 			
 		} catch (ParseException e2) {
+			param.setPayTime(DateUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 			e2.printStackTrace();
 		}
 	    result = wechatiPayManager.payNotify(param);
