@@ -227,6 +227,10 @@ public class OrderManagerImpl implements OrderManager {
         if (orders == null || StringUtils.isBlank(orders.getOrderId())) {
             return BaseMsgInfo.msgFail("订单不存在");
         }
+        AppInvoice invoice = invoiceManager.selInvoiceInfoByOrderId(appInvoice.getOrderId());
+        if (invoice != null && StringUtils.isNotBlank(invoice.getInvoiceId())) {
+            return BaseMsgInfo.msgFail("发票信息已经添加过");
+        }
         invoiceManager.insert(appInvoice);
         orders.setInvoiceFlag(InvoiceState.NEED_INVOICE.getName());
         AppCustomer customer = orders.getCustomer();

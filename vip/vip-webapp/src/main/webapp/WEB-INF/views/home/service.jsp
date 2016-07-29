@@ -22,7 +22,7 @@
 			<div class="dashboard">
 				<div class="bashboard-top"><img src="${ctx }/style/images/dashboard-1.jpg" alt=""></div>
 				<div class="bashboard-content">
-					<p>未完成的退卡申请有 <span>${unHandleOrder }</span> 条</p>
+					<p>未处理的退卡申请有 <span>${unHandleOrder }</span> 条</p>
 					<p>未查看的用户反馈有 <span>${unfeedBack }</span> 条</p>
 				</div>
 				<div class="bashboard-bottom"><img src="${ctx }/style/images/dashboard-2.jpg" alt=""></div>

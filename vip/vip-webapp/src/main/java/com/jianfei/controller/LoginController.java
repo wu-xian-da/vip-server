@@ -117,7 +117,7 @@ public class LoginController extends BaseController {
 	public String servicer(Model model) {
 		List<Map<String, Object>> list = orderManager
 				.selectOrder(new MapUtils.Builder().setKeyValue("orderState",
-						VipOrderState.BEING_AUDITED.getName()).build());
+						VipOrderState.AUDIT_PASS.getName()).build());
 		if (!CollectionUtils.isEmpty(list)) {
 			model.addAttribute("unHandleOrder", list.size());
 		} else {
@@ -139,8 +139,10 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/finance/home")
 	public String finance(Model model) {
 		List<Map<String, Object>> maps = orderManager
-				.selectOrder(new MapUtils.Builder().setKeyValue("dateTime",
-						DateUtil.dateToString(new Date(), "yyyy-MM")).build());
+				.selectOrder(new MapUtils.Builder()
+						.setKeyValue("dateTime",
+								DateUtil.dateToString(new Date(), "yyyy-MM"))
+						.setKeyValue("effective", "ok").build());
 		if (!CollectionUtils.isEmpty(maps)) {
 			model.addAttribute("nowMonthOrder", maps.size());
 		} else {
@@ -181,4 +183,12 @@ public class LoginController extends BaseController {
 	public String south() {
 		return "layout/south";
 	}
+
+	@RequestMapping(value = "/droll/home")
+	public String busizzDrollPage(String state, Model model) {
+		model.addAttribute("state", state);
+		System.out.println("**************************************" + state);
+		return "user/busizzDroll";
+	}
+
 }

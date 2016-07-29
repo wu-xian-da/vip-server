@@ -22,8 +22,8 @@ if (window != top)
 		<style>
 			html,body{ height: 100%; margin:0; background: #0d0d24; }
 			body{ background: url(${ctx }/style/images/login-bg.jpg) no-repeat center bottom; }
-			h1{ text-align: center; margin:0; height: 115px; line-height: 115px; color: #FFF; }
-			#login-wrap{ width: 605px; height: 290px; background: url(${ctx }/style/images/login-sprite.png) no-repeat -6px -6px; margin:0 auto; padding-top: 110px;  }
+			h1{ text-align: center; margin:0;  color: #FFF; background:url(${ctx }/style/images/logo3.png); height: 77px; width: 138px; position: absolute; left: 0; top: -77px;  }
+			#login-wrap{ width: 605px; height: 290px; background: url(${ctx }/style/images/login-sprite.png) no-repeat -6px -6px; margin:0 auto;margin-top: 120px; padding-top: 110px; position: relative;  }
 			
 			.input-item {text-align: center; margin-bottom: 30px;}
 			.input-item input{ background: url(${ctx }/style/images/login-sprite.png) no-repeat -6px -443px; width: 345px; height: 32px; padding: 10px; border: none; font-size:14px; }
@@ -31,8 +31,9 @@ if (window != top)
 			.submit-wrap{ text-align: center; }
 			.submit-wrap input{ background: url(${ctx }/style/images/login-sprite.png) no-repeat -6px -530px; width: 365px; border: none; height: 55px; padding: 0; cursor: pointer;}
 		</style>
-		<h1>Logo</h1>
+		
 		<div id="login-wrap">
+				<h1></h1>
 				<form action="${ctx }/login" method="POST" onsubmit="return submitFn();" id="formSub">
 					<div class="input-item">
 						<div style="margin: auto;color: red;" id="message">${shrio_error_message }</div>

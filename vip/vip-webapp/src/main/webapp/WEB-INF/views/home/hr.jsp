@@ -11,7 +11,12 @@
 	<script src="${ctx }/jslib/jquery-easyui-1.3.4/jquery.easyui.min.js"></script>
 	<title>Airport-Card</title>
 	<script type="text/javascript">
-		var data =eval("("+'${draw}'+")");
+		var subgo = function(state) {
+			var dialog = parent.sy.modalDialog({
+				title : '详情',
+				url : '${ctx}/droll/home?state='+state
+			});
+		};
 	</script>
 </head>
 <body>
@@ -20,9 +25,9 @@
 				.dashboard div img{ width: 100%; }
 			</style>
 			<div class="dashboard">
-				<div class="bashboard-top"><img src="${ctx }/style/images/dashboard-1.jpg" alt=""></div>
+				<div class="bashboard-top"><img src="${ctx }/style/images/hr.jpg" alt=""></div>
 				<div class="bashboard-content">
-					<p>上月入职新员工 <span>${come }</span> 人&nbsp;&nbsp;离职<span>${out }</span> 人</p>
+					<p>上月入职新员工 <span><a href="javascript:void(0)" onclick="subgo(0)">${come }</a> </span> 人&nbsp;&nbsp;离职<span><a href="javascript:void(0)" onclick="subgo(1)" >${out }</a> </span> 人</p>
 				</div>
 				<div class="bashboard-bottom"><img src="${ctx }/style/images/dashboard-2.jpg" alt=""></div>
 			</div>

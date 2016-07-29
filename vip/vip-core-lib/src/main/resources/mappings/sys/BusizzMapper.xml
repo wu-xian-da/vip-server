@@ -23,13 +23,13 @@
 		<result property="job" column="job" />
 		<result property="extraPasswd" column="extra_passwd" />
 	</resultMap>
-	
+
 	<!-- 业务人员id和所属省份id -->
-	<resultMap  id="userProvinceMap" type="UserProvince">
+	<resultMap id="userProvinceMap" type="UserProvince">
 		<result property="userId" column="id" />
 		<result property="provinceId" column="cid" />
 	</resultMap>
-	
+
 	<select id="listMap" parameterType="java.util.Map" resultType="java.util.Map">
 		select * from (
 		<![CDATA[
@@ -86,21 +86,21 @@
 	</select>
 	<select id="getUserByCode" resultMap="userRs" parameterType="String">
 		SELECT
-		  `id`,
-		  `name`,
-		  `phone`,
-		  `state`,
-		  `entry_time`,
-		  `sex`,
-		  `photo`,
-		  `user_type`,
-		  `login_name`,
-		  `create_time`,
-		  `update_time`,
-		  `salt`,
-		  `dtflag`,
-		  `code`,
-		  `job` from sys_users where code =#{code} ;
+		`id`,
+		`name`,
+		`phone`,
+		`state`,
+		`entry_time`,
+		`sex`,
+		`photo`,
+		`user_type`,
+		`login_name`,
+		`create_time`,
+		`update_time`,
+		`salt`,
+		`dtflag`,
+		`code`,
+		`job` from sys_users where code =#{code} ;
 	</select>
 
 	<insert id="save" parameterType="User">
@@ -181,31 +181,35 @@
 	</delete>
 
 	<update id="initpwd" parameterType="java.util.Map">
-		UPDATE sys_users u SET u.extra_passwd= #{pwd},u.password=#{password}
+		UPDATE sys_users u SET
+		u.extra_passwd= #{pwd},u.password=#{password}
 		where u.id=#{id}
 	</update>
 
 	<select id="selectMap" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT  `id`,
-			  `name`,
-			  `phone`,
-			  `state`,
-			  `entry_time` as entryTime ,
-			  `password`,
-			  `sex`,
-			  `photo`,
-			  `user_type` as userType,
-			  `login_name` as loginName,
-			  `create_time` as createdatetime,
-			  `update_time` as updatedatetime,
-			  `salt`,
-			  `dtflag`,
-			  `code`,
-			  `job`,
-			  `extra_passwd`  FROM `sys_users` u
+		SELECT `id`,
+		`name`,
+		`phone`,
+		`state`,
+		`password`,
+		`sex`,
+		`photo`,
+		DATE_FORMAT(`create_time`, '%Y-%m-%d') as createdatetime,
+		DATE_FORMAT(`update_time`, '%Y-%m-%d') as updatedatetime,
+		`salt`,
+		`dtflag`,
+		`code`,
+		`job`,
+		`extra_passwd` FROM `sys_users` u
 		<where>
 			<if test="id!=null and id!=''">
 				id=#{id}
+			</if>
+			<if test="1==1">
+				and user_type=3
+			</if>
+			<if test="name!=null and name!=''">
+				and name like CONCAT('%', #{name}, '%')
 			</if>
 			<if test="dtflag!=null and dtflag!=''">
 				and dtflag=#{dtflag}
@@ -219,14 +223,18 @@
 		</where>
 	</select>
 	<!--根据业务人员id获取所属省份id -->
-	<select id="getProvinceIdByUserId" resultMap="userProvinceMap" parameterType="java.lang.String">
+	<select id="getProvinceIdByUserId" resultMap="userProvinceMap"
+		parameterType="java.lang.String">
 		SELECT
 		distinct(city.cid),u.id
 		FROM
 		sys_users u
-		INNER JOIN sys_user_airport sua ON sua.sys_id = u.id
-		INNER JOIN sys_airport sa ON sa.airport_id = sua.airport_id
-		INNER JOIN sys_city city ON city.CID = sa.province
+		INNER JOIN
+		sys_user_airport sua ON sua.sys_id = u.id
+		INNER JOIN sys_airport sa ON
+		sa.airport_id = sua.airport_id
+		INNER JOIN sys_city city ON city.CID =
+		sa.province
 		where u.id=#{id}
 	</select>
 </mapper>

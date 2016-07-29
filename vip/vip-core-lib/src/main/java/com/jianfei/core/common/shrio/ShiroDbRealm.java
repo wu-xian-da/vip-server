@@ -116,7 +116,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			return null;
 		}
 		// 校验用户名密码
-		User user = userManaer.getUserByName(authcToken.getUsername());
+		User user = userManaer
+				.getUserByName(authcToken.getUsername() == null ? StringUtils.EMPTY
+						: authcToken.getUsername().trim());
 
 		if (null == user) {
 			return null;

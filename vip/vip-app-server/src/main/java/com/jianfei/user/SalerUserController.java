@@ -1,10 +1,13 @@
 package com.jianfei.user;
 
+import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.bean.User;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.service.user.VipUserManager;
 import com.jianfei.core.service.user.impl.SaleUserManagerImpl;
+import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,26 +33,20 @@ public class SalerUserController {
 
     @Autowired
     private SaleUserManagerImpl saleUserManager;
-
+    @Autowired
+    private VipUserManager vipUserManager;
 
     /**
-     * 用户登录
+     * VIP 获取用户信息
+     *
      * @return
      */
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/getVipUser")
     @ResponseBody
-    public BaseMsgInfo vipRoomInfo(@RequestParam(value = "uno", required = true) String uno,
-                                   @RequestParam(value = "password", required = true) String password
+    public BaseMsgInfo getVipUser(@RequestParam(value = "phone", required = true) String phone
     ) {
-        boolean validate= saleUserManager.validatePassword(uno,password);
-        if (validate){
-
-            VipTestVo vipTestVo=new VipTestVo("4219a91f-45d5-4a07-9e8e-3acbadd0c23e","d41df9fd-3d36-4a20-b0b7-1a1883c7439d",
-                    "read write trust","bearer",43199);
-            return BaseMsgInfo.success(vipTestVo);
-        }else {
-            return new BaseMsgInfo().setCode(-1).setMsg("账号或密码错误");
-        }
+        AppCustomer appCustomer = vipUserManager.getUserDetail(phone);
+        return BaseMsgInfo.success(appCustomer);
     }
 
     /**
@@ -90,37 +87,5 @@ public class SalerUserController {
 		return BaseMsgInfo.success(flag);
 	}
 
-
-
-    
-    @RequestMapping(value = "/photoUpdate")
-    @ResponseBody
-    public BaseMsgInfo salePhotoUpdate(@RequestParam(value = "file", required = false) MultipartFile file) {
-    	 if (!file.isEmpty()) {
-    		 String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "/salesPhoto";
-    		 String fileName = file.getOriginalFilename();
-    		 String newFileName = UUIDUtils.returnNewFileName(fileName);
- 			 File targetFile = new File(path, newFileName);
- 			 if (!targetFile.exists()) {
- 				 targetFile.mkdirs();
- 			 }
-
-        	 try {
-				file.transferTo(targetFile);
-			 } catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			 } catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			 }
-
-             return BaseMsgInfo.success( "/salesPhoto/" + newFileName);
-
-         } else {
-             return  BaseMsgInfo.fail("失败",false);
-         }
-    }
-    
 
 }
