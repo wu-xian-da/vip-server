@@ -67,15 +67,6 @@
 	function search(){
 		grid.datagrid('load',{'name':$("#name").val(),'state':state});
 	};
-	 function keyDown(e) {
-		  var ev= window.event||e;
-			//13是键盘上面固定的回车键
-		  if (ev.keyCode == 13) {
-			//你要执行的方法
-			 ev.stopPropagation();
-			return false;
-		  }
-		 }
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
