@@ -125,17 +125,6 @@
         <!-- <csrf disabled="true"/>-->
     </http>
 
-    <!--短信相关URL-->
-    <http pattern="/msg/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
-          access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="false">
-        <anonymous enabled="false"/>
-
-        <intercept-url pattern="/msg/**" access="ROLE_SALE,ROLE_VIP"/>
-
-        <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
-        <access-denied-handler ref="oauth2AccessDeniedHandler"/>
-        <!-- <csrf disabled="true"/>-->
-    </http>
 
     <!--销售员相关URL-->
     <http pattern="/saler/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
