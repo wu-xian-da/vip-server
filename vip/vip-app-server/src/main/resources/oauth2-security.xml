@@ -41,8 +41,8 @@
         <beans:property name="tokenStore" ref="tokenStore"/>
         <beans:property name="clientDetailsService" ref="clientDetailsService" />
         <beans:property name="supportRefreshToken" value="true"/>
-        <!--过期时间 60*10秒-->
-        <beans:property name="accessTokenValiditySeconds" value="300"/>
+        <!--过期时间 7天-->
+        <beans:property name="accessTokenValiditySeconds" value="604800"/>
     </beans:bean>
 
     <!--用户密码账号方式验证-->
