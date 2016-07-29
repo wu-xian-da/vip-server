@@ -43,7 +43,7 @@
         <beans:property name="clientDetailsService" ref="clientDetailsService" />
         <beans:property name="supportRefreshToken" value="true"/>
         <!--过期时间 60*10分钟-->
-        <beans:property name="accessTokenValiditySeconds" value="600"/>
+        <beans:property name="accessTokenValiditySeconds" value="6000"/>
     </beans:bean>
 
     <!--用户密码账号方式验证-->
@@ -110,7 +110,7 @@
 
          <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
         <access-denied-handler ref="oauth2AccessDeniedHandler"/>
-       <!-- <csrf disabled="true"/>-->
+        <csrf disabled="true"/>
     </http>
 
     <!--销售榜单相关URL-->
@@ -122,7 +122,7 @@
 
         <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
         <access-denied-handler ref="oauth2AccessDeniedHandler"/>
-        <!-- <csrf disabled="true"/>-->
+        <csrf disabled="true"/>
     </http>
 
 
@@ -135,7 +135,7 @@
 
         <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
         <access-denied-handler ref="oauth2AccessDeniedHandler"/>
-        <!-- <csrf disabled="true"/>-->
+         <csrf disabled="true"/>
     </http>
 
     <!--VIP用户相关URL-->
@@ -147,7 +147,7 @@
 
         <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
         <access-denied-handler ref="oauth2AccessDeniedHandler"/>
-        <!-- <csrf disabled="true"/>-->
+       <csrf disabled="true"/>
     </http>
 
     <!--mobile resource server filter-->
