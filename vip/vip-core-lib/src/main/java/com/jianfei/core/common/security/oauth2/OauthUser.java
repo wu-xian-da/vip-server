@@ -25,7 +25,7 @@ public class OauthUser implements UserDetails, CredentialsContainer {
     public OauthUser(String username, String password, List<SimpleGrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
-        authorities.addAll(authorities);
+        this.authorities.addAll(authorities);
     }
     public String getPassword() {
         return password;

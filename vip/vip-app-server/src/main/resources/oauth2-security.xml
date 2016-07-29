@@ -40,8 +40,10 @@
 
     <beans:bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
         <beans:property name="tokenStore" ref="tokenStore"/>
-      <!--  <beans:property name="clientDetailsService" ref="clientDetailsService"/>-->
+        <beans:property name="clientDetailsService" ref="clientDetailsService" />
         <beans:property name="supportRefreshToken" value="true"/>
+        <!--过期时间-->
+        <beans:property name="accessTokenValiditySeconds" value="30"/>
     </beans:bean>
 
     <!--用户密码账号方式验证-->
@@ -65,13 +67,16 @@
     <oauth2:client-details-service id="clientDetailsService" >
         <oauth2:client client-id="mobile_sale_app"
                        authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                       secret="secret_sale_app" scope="read,write,trust"  />
+                       secret="secret_sale_app" scope="read,write,trust"
+            resource-ids="mobile-resource" authorities="ROLE_CLIENT" autoapprove="false"/>
         <oauth2:client client-id="mobile_vip_app_ios"
                        authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                       secret="secret_vip_app_ios" scope="read,write,trust"  />
+                       secret="secret_vip_app_ios" scope="read,write,trust"
+                       resource-ids="mobile-resource" authorities="ROLE_CLIENT" autoapprove="false" />
         <oauth2:client client-id="mobile_vip_app_android"
                        authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                       secret="secret_vip_app_android" scope="read,write,trust"  />
+                       secret="secret_vip_app_android" scope="read,write,trust"
+                       resource-ids="mobile-resource" authorities="ROLE_CLIENT" autoapprove="false"/>
     </oauth2:client-details-service>
 
 
@@ -94,6 +99,70 @@
         <beans:constructor-arg name="clientDetailsService" ref="clientDetailsService"/>
     </beans:bean>
 
+
+    <!--mobile http configuration-->
+    <!--订单相关接口-->
+    <http pattern="/order/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
+          access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="false">
+        <anonymous enabled="false"/>
+
+        <intercept-url pattern="/order/**" access="ROLE_SALE"/>
+
+         <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
+        <access-denied-handler ref="oauth2AccessDeniedHandler"/>
+       <!-- <csrf disabled="true"/>-->
+    </http>
+
+    <!--销售榜单相关URL-->
+    <http pattern="/orderSta/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
+          access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="false">
+        <anonymous enabled="false"/>
+
+        <intercept-url pattern="/orderSta/**" access="ROLE_SALE"/>
+
+        <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
+        <access-denied-handler ref="oauth2AccessDeniedHandler"/>
+        <!-- <csrf disabled="true"/>-->
+    </http>
+
+    <!--短信相关URL-->
+    <http pattern="/msg/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
+          access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="false">
+        <anonymous enabled="false"/>
+
+        <intercept-url pattern="/msg/**" access="ROLE_SALE,ROLE_VIP"/>
+
+        <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
+        <access-denied-handler ref="oauth2AccessDeniedHandler"/>
+        <!-- <csrf disabled="true"/>-->
+    </http>
+
+    <!--销售员相关URL-->
+    <http pattern="/saler/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
+          access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="false">
+        <anonymous enabled="false"/>
+
+        <intercept-url pattern="/saler/**" access="ROLE_SALE"/>
+
+        <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
+        <access-denied-handler ref="oauth2AccessDeniedHandler"/>
+        <!-- <csrf disabled="true"/>-->
+    </http>
+
+    <!--VIP用户相关URL-->
+    <http pattern="/vipUser/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
+          access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="false">
+        <anonymous enabled="false"/>
+
+        <intercept-url pattern="/vipUser/**" access="ROLE_SALE,ROLE_VIP"/>
+
+        <custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
+        <access-denied-handler ref="oauth2AccessDeniedHandler"/>
+        <!-- <csrf disabled="true"/>-->
+    </http>
+
+    <!--mobile resource server filter-->
+    <oauth2:resource-server id="mobileResourceServer" resource-id="mobile-resource" token-services-ref="tokenServices"/>
 
 
     <!--处理访问成功-->
@@ -140,7 +209,7 @@
 
     <http disable-url-rewriting="true" use-expressions="false"
           authentication-manager-ref="authenticationManager">
-        <intercept-url pattern="/oauth/**" access="ROLE_USER,ROLE_UNITY,ROLE_MOBILE"/>
+        <intercept-url pattern="/oauth/**" access="ROLE_USER,ROLE_MOBILE,ROLE_SALE,ROLE_VIP"/>
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 
         <form-login authentication-failure-url="/login.jsp?authentication_error=1" default-target-url="/index.jsp"
