@@ -33,17 +33,16 @@
 
 
     <!--TokenServices 配置 services-->
-    <beans:bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore"/>
-   <!-- <beans:bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore">
-        <beans:constructor-arg index="0" ref="dataSource"/>
-    </beans:bean>-->
+   <!-- <beans:bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore"/>-->
+    <!--默认是内存实现 现在改为Redis存储-->
+    <beans:bean id="tokenStore" class="com.jianfei.core.common.security.oauth2.TokenStoreFactoryBean"/>
 
     <beans:bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
         <beans:property name="tokenStore" ref="tokenStore"/>
         <beans:property name="clientDetailsService" ref="clientDetailsService" />
         <beans:property name="supportRefreshToken" value="true"/>
-        <!--过期时间 60*10分钟-->
-        <beans:property name="accessTokenValiditySeconds" value="6000"/>
+        <!--过期时间 60*10秒-->
+        <beans:property name="accessTokenValiditySeconds" value="300"/>
     </beans:bean>
 
     <!--用户密码账号方式验证-->
