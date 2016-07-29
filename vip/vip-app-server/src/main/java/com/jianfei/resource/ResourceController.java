@@ -7,7 +7,9 @@ import com.jianfei.core.bean.SysAirport;
 import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.enu.RightType;
+import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.PageDto;
+import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseDto;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.base.*;
@@ -19,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -223,4 +228,39 @@ public class ResourceController  {
 			return BaseMsgInfo.msgFail("修改APP版本失败");
 		}
 	}
+
+	/**
+	 * 上传图片
+	 * @param file
+	 * @return
+     */
+	@RequestMapping(value = "/photoUpdate")
+	@ResponseBody
+	public BaseMsgInfo salePhotoUpdate(@RequestParam(value = "file", required = false) MultipartFile file) {
+		if (!file.isEmpty()) {
+			String path = GloabConfig.getInstance().getConfig("upload.home.dir") + "/salesPhoto";
+			String fileName = file.getOriginalFilename();
+			String newFileName = UUIDUtils.returnNewFileName(fileName);
+			File targetFile = new File(path, newFileName);
+			if (!targetFile.exists()) {
+				targetFile.mkdirs();
+			}
+
+			try {
+				file.transferTo(targetFile);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return BaseMsgInfo.success( "/salesPhoto/" + newFileName);
+
+		} else {
+			return  BaseMsgInfo.fail("失败",false);
+		}
+	}
+
 }
