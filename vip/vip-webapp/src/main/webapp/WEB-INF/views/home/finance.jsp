@@ -20,10 +20,10 @@
 				.dashboard div img{ width: 100%; }
 			</style>
 			<div class="dashboard">
-				<div class="bashboard-top"><img src="${ctx }/style/images/dashboard-1.jpg" alt=""></div>
+				<div class="bashboard-top"><img src="${ctx }/style/images/caiwu.jpg" alt=""></div>
 				<div class="bashboard-content">
 					<p>本月订单有 <span>${nowMonthOrder }</span> 条</p>
-					<p>未处理的订单申请有 <span>${unHandleOrder }</span> 条</p>
+					<p>未处理的退卡申请有 <span>${unHandleOrder }</span> 条</p>
 				</div>
 				<div class="bashboard-bottom"><img src="${ctx }/style/images/dashboard-2.jpg" alt=""></div>
 			</div>

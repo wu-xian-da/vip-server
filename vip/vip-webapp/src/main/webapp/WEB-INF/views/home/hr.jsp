@@ -25,7 +25,7 @@
 				.dashboard div img{ width: 100%; }
 			</style>
 			<div class="dashboard">
-				<div class="bashboard-top"><img src="${ctx }/style/images/dashboard-1.jpg" alt=""></div>
+				<div class="bashboard-top"><img src="${ctx }/style/images/hr.jpg" alt=""></div>
 				<div class="bashboard-content">
 					<p>上月入职新员工 <span><a href="javascript:void(0)" onclick="subgo(0)">${come }</a> </span> 人&nbsp;&nbsp;离职<span><a href="javascript:void(0)" onclick="subgo(1)" >${out }</a> </span> 人</p>
 				</div>
