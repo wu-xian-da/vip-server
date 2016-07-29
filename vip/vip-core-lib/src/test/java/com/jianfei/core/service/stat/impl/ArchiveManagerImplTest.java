@@ -48,39 +48,38 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDateProvinceIdAirport() {
 		Map<String, Object> mapCon = new HashMap<String, Object>();
-		mapCon.put("currentTime", "2016-07-22");
+		mapCon.put("currentTime", "2016-07-26");
 		archiveManager.dateProvinceIdApportIds(mapCon);
-
 	}
 
 	@Test
 	public void cacheDate() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("currentTime", "2016-07-22");
+		map.put("currentTime", "2016-07-26");
 		archiveManager.dateProvinceIdCache(map);
 	}
 
 	@Test
 	public void testDailyOrderArchice() {
-		List<String> list = dateList();
-		for (String str : list) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Date date = DateUtil.getDate(str, "yyyy-MM-dd");
-			map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
-			archiveManager.baseDailyExtract(map);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		List<String> list = dateList();
+//		for (String str : list) {
+//			Map<String, Object> map = new HashMap<String, Object>();
+//			Date date = DateUtil.getDate(str, "yyyy-MM-dd");
+//			map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
+//			archiveManager.baseDailyExtract(map);
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	@Rollback(value = false)
 	@Test
 	public void testDailyOrderArchice2() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Date date = DateUtil.getDate("2016-07-22", "yyyy-MM-dd");
+		Date date = DateUtil.getDate("2016-07-27", "yyyy-MM-dd");
 		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
 		archiveManager.baseDailyExtract(map);
 	}

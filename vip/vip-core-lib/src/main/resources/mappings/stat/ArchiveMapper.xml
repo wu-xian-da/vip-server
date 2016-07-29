@@ -301,7 +301,9 @@
 					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
 				FROM
 					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id  group by sa.airport_id 
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+				inner join sys_users su on su.id=sua.sys_id 
+				where su.dtflag=0 and su.state=0 group by sa.airport_id 
 			) A on  A.airport_id=aoa.airport_id
 			WHERE
 				DATE_FORMAT(aoa.file_time, '%Y-%m-%d') =#{currentTime}
@@ -326,7 +328,9 @@
 					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
 				FROM
 					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id  group by sa.airport_id 
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+				inner join sys_users su on su.id=sua.sys_id 
+				where su.dtflag=0 and su.state=0 group by sa.airport_id 
 			) A on  A.airport_id=aba.airport_id
 			WHERE
 				DATE_FORMAT(aba.file_time, '%Y-%m-%d') = #{currentTime}
@@ -353,7 +357,9 @@
 					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
 				FROM
 					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id  group by sa.airport_id 
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+				inner join sys_users su on su.id=sua.sys_id 
+				where su.dtflag=0 and su.state=0 group by sa.airport_id 
 			) B ON aoa.airport_id = B.airport_id
 			WHERE
 				DATE_FORMAT(aoa.file_time, '%Y-%m-%d') = #{currentTime}
@@ -378,7 +384,9 @@
 					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
 				FROM
 					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id group by sa.airport_id 
+				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+				inner join sys_users su on su.id=sua.sys_id 
+				where su.dtflag=0 and su.state=0 group by sa.airport_id 
 			) B ON aba.airport_id = B.airport_id
 			WHERE
 				DATE_FORMAT(aba.file_time, '%Y-%m-%d') = #{currentTime}

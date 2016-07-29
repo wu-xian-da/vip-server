@@ -311,8 +311,8 @@ public class ArchiveManagerImpl implements ArchiveManager {
 				result.put("pcount", orderMap.get(cacheKey).get("pcount"));
 				result.put("pid", orderMap.get(cacheKey).get("pid"));
 			} else {
-				result.put("pcount", backOrderMap.get("pcount"));
-				result.put("pid", backOrderMap.get("pid"));
+				result.put("pcount", backOrderMap.get(cacheKey).get("pcount"));
+				result.put("pid", backOrderMap.get(cacheKey).get("pid"));
 			}
 			result.put("total", getValue(cacheKey, orderMap, "total"));
 			result.put("avgNum", getValue(cacheKey, orderMap, "avgNum"));
@@ -386,8 +386,10 @@ public class ArchiveManagerImpl implements ArchiveManager {
 			result.put("cacheKey", cacheKey);
 			if (orderMap.containsKey(cacheKey)) {
 				result.put("pcount", orderMap.get(cacheKey).get("pcount"));
+				result.put("pid", orderMap.get(cacheKey).get("pid"));
 			} else {
 				result.put("pcount", backOrderMap.get(cacheKey).get("pcount"));
+				result.put("pid", backOrderMap.get(cacheKey).get("pid"));
 			}
 			result.put("total", getValue(cacheKey, orderMap, "total"));
 			result.put("avgNum", getValue(cacheKey, orderMap, "avgNum"));

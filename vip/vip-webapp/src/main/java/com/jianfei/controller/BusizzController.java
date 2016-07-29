@@ -8,6 +8,7 @@
 package com.jianfei.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,8 +82,7 @@ public class BusizzController extends BaseController {
 				request, "_");
 		searchParams.put("sort", sortCplumn(request));
 		searchParams.put("order", request.getParameter("order"));
-		searchParams.put("today",
-				DateUtil.dateToString(new Date(), "yyyy-MM"));
+		searchParams.put("today", DateUtil.dateToString(new Date(), "yyyy-MM"));
 		searchParams.put("name", request.getParameter("name"));
 		Map<String, Object> map = DateUtil.getDelayDate(1);
 		searchParams.put("year", map.get("year"));
@@ -125,7 +125,7 @@ public class BusizzController extends BaseController {
 					.selectMap(new MapUtils.Builder().setKeyValue("id",
 							user.getId()).build());
 			if (!CollectionUtils.isEmpty(list)) {
-//				model.addAttribute("user", list.get(0));
+				model.addAttribute("user", list.get(0));
 			}
 		}
 		List<Map<String, Object>> list = ariPortManager
@@ -158,26 +158,41 @@ public class BusizzController extends BaseController {
 		return sort;
 	}
 
-	/**
-	 * delete(删除用户信息)
-	 * 
-	 * @param user
-	 * @return MessageDto<User>
-	 * @version 1.0.0
-	 */
-	@RequestMapping(value = "delete")
-	@ResponseBody
-	public MessageDto<String> delete(User user) {
-		busizzManager.delete(user.getId());
-		return busizzManager.delete(user.getId());
-	}
-
 	@RequestMapping(value = "initPwd")
 	@ResponseBody
 	public MessageDto<String> initPwd(String id, String salt, String roleId) {
 		return busizzManager.initpwd(new MapUtils.Builder()
 				.setKeyValue("id", id).setKeyValue("salt", salt)
 				.setKeyValue("roleId", roleId).build());
+	}
+
+	/**
+	 * list(展示用户列表的数据)
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return Grid
+	 * @version 1.0.0
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/droll", method = RequestMethod.POST)
+	@ResponseBody
+	public Grid droll(
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,
+			String state,String name) {
+		Map<String, Object> map = DateUtil.getDelayDate(1);
+		String dateTime = map.get("year") + "-" + map.get("month");
+		PageHelper.startPage(page, rows);
+		List<Map<String, Object>> list = busizzManager
+				.selectMap(new MapUtils.Builder()
+						.setKeyValue("dateTime", dateTime)
+						.setKeyValue("name", name)
+						.setKeyValue("state", state).build());
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(
+				list);
+		return bindGridData(pageInfo);
 	}
 
 }

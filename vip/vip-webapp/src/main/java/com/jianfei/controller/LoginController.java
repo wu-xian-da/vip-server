@@ -181,4 +181,12 @@ public class LoginController extends BaseController {
 	public String south() {
 		return "layout/south";
 	}
+
+	@RequestMapping(value = "/droll/home")
+	public String busizzDrollPage(String state, Model model) {
+		model.addAttribute("state", state);
+		System.out.println("**************************************"+state);
+		return "user/busizzDroll";
+	}
+
 }

@@ -607,7 +607,14 @@ public class OrderController extends BaseController {
 		appCardBack.setCreaterId(userId);
 		appCardBack.setCreateName(user.getName());
 		appCardBack.setBankName(banckName);//开户行
-		appCardBack.setCustomerName(userNames);//开户者姓名
+		//开户者姓名
+		if(userNames.equals("")){
+			appCardBack.setCustomerName(orderDetailInfo.getCustomerName());
+		}else{
+			appCardBack.setCustomerName(userNames);
+		}
+		
+		appCardBack.setSafeMoney(100);//保险费
 		try {
 			orderManagerImpl.insertBackCardInfo(appCardBack);
 			//***日志记录（正常）

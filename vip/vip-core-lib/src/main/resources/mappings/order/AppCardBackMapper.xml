@@ -24,9 +24,9 @@
   <!-- 插入退卡流水号 -->
   <insert id="insertBackCard" parameterType="com.jianfei.core.bean.AppCardBack" >
   	insert into app_card_back(back_id,create_time,back_type,customer_name,customer_card,money,finish_time,order_id,
-  		creater_id,create_name,check_id,agreement_url,card_no,bank_name) 
+  		creater_id,create_name,check_id,agreement_url,card_no,bank_name,safe_money) 
   			values(#{backId},#{createTime},#{backType},#{customerName},#{customerCard},#{money}
-  		,#{finishTime},#{orderId},#{createrId},#{createName},#{checkId},#{agreementUrl},#{cardNo},#{bankName})
+  		,#{finishTime},#{orderId},#{createrId},#{createName},#{checkId},#{agreementUrl},#{cardNo},#{bankName},#{safeMoney})
   </insert>
   
   <!--通过订单编号查询用户退款账户 和退款方式-->
