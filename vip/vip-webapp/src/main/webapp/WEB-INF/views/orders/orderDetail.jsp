@@ -80,7 +80,7 @@
 				<li>出生日期：<fmt:formatDate value="${orderDetailInfo.birthDay}" pattern="yyyy-MM-dd"/></li>
 				<li>用户手机号：${orderDetailInfo.customerPhone }</li>
 				<li>用户性别：${orderDetailInfo.sex ==1 ? '男' : '女' }</li>
-				<li>常住地址：${orderDetailInfo.customerProvinceName} ${orderDetailInfo.customerCityName} ${orderDetailInfo.address}</li>
+				<li>常住地址：${orderDetailInfo.customerProvinceName} ${orderDetailInfo.customerCityName}</li>
 				<li>邮箱地址：${orderDetailInfo.email}</li>
 			</ul>
 			
