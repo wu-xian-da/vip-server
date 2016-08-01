@@ -31,9 +31,6 @@
 			</div>
 			</c:if>
 		</div>
-
-
-
 </body>
 <script src="${ctx }/jslib/echarts.min.js"></script>
 <script>
