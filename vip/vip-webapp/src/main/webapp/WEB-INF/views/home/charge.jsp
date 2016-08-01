@@ -55,6 +55,10 @@ console.info(data);
                 data:['开卡数']
             },
             xAxis: {
+            	axisLabel:{
+        			interval:'0',
+        			rotate:45
+        		},
                 data: data[i].xAxis
             },
             yAxis: {},

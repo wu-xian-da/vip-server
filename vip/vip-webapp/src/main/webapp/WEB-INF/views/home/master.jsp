@@ -70,6 +70,10 @@
                 data:[data[i].title]
             },
             xAxis: {
+            	axisLabel:{
+        			interval:'0',
+        			rotate:45
+        		},
                 data: data[i].xAxis
             },
             yAxis: {},
