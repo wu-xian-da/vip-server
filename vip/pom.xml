@@ -446,7 +446,7 @@
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
 				<redis.pool.minIdle>0</redis.pool.minIdle>
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
-				<redis.host>192.168.192.129</redis.host>
+				<redis.host>192.168.110.9</redis.host>
 				<redis.port>26379</redis.port>
 				<!-- p12 cert location -->
 				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>
@@ -500,7 +500,7 @@
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
 				<redis.pool.minIdle>0</redis.pool.minIdle>
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
-				<redis.host>192.168.192.129</redis.host>
+				<redis.host>192.168.110.9</redis.host>
 				<redis.port>26379</redis.port>
 				<!-- p12 cert location -->
 				<wechat.cert.location>/home/jianfei/apiclient_cert.p12</wechat.cert.location>
