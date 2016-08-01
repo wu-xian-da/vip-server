@@ -546,7 +546,7 @@
 				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
 				<jdbc.version>5.1.37</jdbc.version>
 				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-				<jdbc.url>jdbc:mysql://rm-bp1933ou3red8rpquo.mysql.rds.aliyuncs.com/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.url>jdbc:mysql://rm-bp1933ou3red8rpqu.mysql.rds.aliyuncs.com/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
 				<jdbc.username>vip</jdbc.username>
 				<jdbc.password>jfFlzx3kc</jdbc.password>
 				<jdbc.pool.init>10</jdbc.pool.init>
