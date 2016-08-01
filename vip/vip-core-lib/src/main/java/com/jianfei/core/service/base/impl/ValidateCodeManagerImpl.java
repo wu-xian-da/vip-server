@@ -44,7 +44,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
     public String getValidateCode(String phone, MsgType msgType) {
         // 1、根据配置规则生成验证码 6位
         String code = UUIDUtils.getRandomStringByLength(6);
-        if ("13856002692".equals(phone)) {
+        if ("18009694621".equals(phone)) {
             code = "123456";
         }
         String key = CacheCons.getVerifyPhoneKey(phone, msgType);
