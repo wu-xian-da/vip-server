@@ -37,10 +37,10 @@
 <script src="${ctx }/jslib/echarts.min.js"></script>
 <script>
 	var data = [{
-		text: '省份/月份开卡数',
-		xAxis: ['浙江省','西藏自治区','江苏省','内蒙古自治区','广东省','云南省','黑龙江省','北京','河北省','河南省'],
-		series: [6,1,1,3,3,1,1,3,4,1],
-		title: "2016年07月开卡数"
+		text: '${draw1.text}'.split(','),
+		xAxis: "${draw1.xAxis}".split(','),
+		series: "${draw1.series}".split(','),
+		title: "${draw1.title}"
 	},{
 		text: '${draw2.text}'.split(','),
 		xAxis: "${draw2.xAxis}".split(','),
