@@ -3,13 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
 	default-lazy-init="true">
-	<description>Shiro安全配置</description>
+	<description>Shiro</description>
 	<bean name="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"></property>
-		<!-- loginUrl认证提交地址，如果没有认证将会请求此地址进行认证，请求此地址将由formAuthenticationFilter进行表单认证 -->
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/main" />
-		<!-- 通过unauthorizedUrl指定没有权限操作时跳转页面 -->
 		<property name="unauthorizedUrl" value="/refuse.jsp" />
 		<property name="filters">
 			<map>
@@ -18,7 +16,6 @@
 		</property>
 		<property name="filterChainDefinitions">
 			<value>
-				<!-- 对静态资源设置匿名访问 -->
 				/jslib/** = anon
 				/cacheManager/** = anon
 				/druid/** = anon
@@ -31,7 +28,6 @@
 			</value>
 		</property>
 	</bean>
-
 	<!-- SecurityManager -->
 	<bean name="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm">
@@ -41,31 +37,23 @@
 		</property>
 		<property name="cacheManager" ref="cacheManagerShiro"></property>
 	</bean>
-
 	<!-- cacheManager -->
 	<bean name="cacheManagerShiro" class="org.apache.shiro.cache.ehcache.EhCacheManager">
 		<property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"></property>
 	</bean>
-	<!-- 凭证匹配器 -->
 	<bean id="credentialsMatcher"
 		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
 		<property name="hashAlgorithmName" value="md5" />
 		<property name="hashIterations" value="1" />
 	</bean>
 
-	<!-- 封装Form认证 -->
 	<bean name="myFormAuth"
 		class="com.jianfei.core.common.shrio.FormAuthenticationFilter">
 		<property name="usernameParam" value="loginName"></property>
 		<property name="passwordParam" value="password"></property>
 		<property name="rememberMeParam" value="rememberMe"></property>
 	</bean>
-
-
-
-	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-	<!-- AOP式方法级权限检查 -->
 	<bean
 		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
 		depends-on="lifecycleBeanPostProcessor">

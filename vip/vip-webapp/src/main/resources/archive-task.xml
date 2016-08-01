@@ -12,6 +12,5 @@
 	http://www.springframework.org/schema/util 
 	http://www.springframework.org/schema/util/spring-util-3.0.xsd"
 	default-lazy-init="true">
-	<!-- task任务扫描注解 -->
 	<task:annotation-driven />
 </beans>
