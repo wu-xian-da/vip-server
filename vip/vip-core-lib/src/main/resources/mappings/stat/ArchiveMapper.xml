@@ -38,7 +38,7 @@
 				sum(aoa.order_num) AS sum_order
 			FROM
 				app_order_archive aoa
-			INNER JOIN (
+			left JOIN (
 				SELECT
 					ao.pid,
 					max(ao.order_num) AS max_order
@@ -50,7 +50,6 @@
 				GROUP BY
 					ao.pid
 			) A ON aoa.pid = A.pid
-			AND A.max_order = aoa.order_num
 		]]>
 		<where>
 			<if test="year!=null">
