@@ -153,7 +153,8 @@ public class AppVipcard {
 				+ ", valideTime=" + valideTime + ", activeTime=" + activeTime + ", importTime=" + importTime
 				+ ", nfcId=" + nfcId + ", dtflag=" + dtflag + "]";
 	}
-
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     public Date getExpiryTime() {
         return expiryTime;
     }

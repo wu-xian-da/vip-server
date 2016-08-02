@@ -428,9 +428,9 @@
 				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
 				<jdbc.version>5.1.37</jdbc.version>
 				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-				<jdbc.url>jdbc:mysql://120.27.116.141/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
-				<jdbc.username>root</jdbc.username>
-				<jdbc.password>refineli</jdbc.password>
+				<jdbc.url>jdbc:mysql://rm-bp1933ou3red8rpquo.mysql.rds.aliyuncs.com/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.username>vip</jdbc.username>
+				<jdbc.password>jfFlzx3kc</jdbc.password>
 				<jdbc.pool.init>10</jdbc.pool.init>
 				<jdbc.pool.minIdle>15</jdbc.pool.minIdle>
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
@@ -560,8 +560,8 @@
 				<!-- updload config -->
 				<upload.home.dir>/opt/images/uploadPath</upload.home.dir>
 				<!-- log path -->
-				<log.home.dir>/workspace/vip.log</log.home.dir>
-				<log.flume.home.dir>/workspace/flume.log</log.flume.home.dir>
+				<log.home.dir>/workspace/logs/vip.log</log.home.dir>
+				<log.flume.home.dir>/workspace/logs/flume.log</log.flume.home.dir>
 				<static.resource.server.address>http://static.ycxvip.com</static.resource.server.address>
 				<!-- redis config -->
 				<redis.pool.maxTotal>8</redis.pool.maxTotal>
