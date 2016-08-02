@@ -472,6 +472,7 @@
 		<!-- =============================================================== -->
 		<profile>
 			<id>prod</id>
+			
 			<properties>
 				<!-- Database settings -->
 				<hbm2ddl.drop>false</hbm2ddl.drop>
@@ -536,6 +537,9 @@
 		
 		<profile>
 			<id>aliyun</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 			<properties>
 				<!-- Database settings -->
 				<hbm2ddl.drop>false</hbm2ddl.drop>
