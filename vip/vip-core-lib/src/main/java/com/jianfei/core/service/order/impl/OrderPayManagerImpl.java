@@ -7,6 +7,7 @@ import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.common.enu.VipOrderState;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
+import com.jianfei.core.common.utils.DateUtil;
 import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,6 +71,11 @@ public class OrderPayManagerImpl implements OrderPayManager {
             appOrders.setPayUserId(result.getPayUserId());
             appOrders.setSerialId( result.getTradeNo());
             appOrders.setPayType(payType.getName());
+            try {
+                appOrders.setPayTime(DateUtil.parseDateTime(result.getPayTime()));
+            } catch (Exception e) {
+                appOrders.setPayTime(new Date());
+            }
             BaseMsgInfo baseMsgInfo = orderManager.updatePayState(appOrders);
             if (baseMsgInfo.getCode() < 0) {
                 return baseMsgInfo;
