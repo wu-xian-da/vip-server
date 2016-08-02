@@ -297,13 +297,48 @@
 				app_order_archive aoa
 			left join (
 				SELECT
-					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
+					B.province,
+					SUM(pcount) AS pcount
 				FROM
-					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
-				inner join sys_users su on su.id=sua.sys_id 
-				where su.dtflag=0 and su.state=0 group by sa.airport_id 
-			) A on  A.airport_id=aoa.airport_id
+					(
+						SELECT DISTINCT
+							sa.province,
+							COUNT(DISTINCT su.id) AS pcount
+						FROM
+							sys_airport sa
+						INNER JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+						INNER JOIN sys_users su ON su.id = sua.sys_id
+						WHERE
+							su.dtflag = 0
+						AND su.state = 0
+						AND sa.state = 0
+						AND sa.dtflag = 0
+						AND su.user_type = 3
+						GROUP BY
+							sa.province
+						UNION
+							SELECT
+								sa.province,
+								COUNT(DISTINCT su.id) AS pcount
+							FROM
+								sys_users su
+							INNER JOIN sys_user_airport sua
+							INNER JOIN sys_airport sa ON sa.airport_id = sua.airport_id
+							INNER JOIN sys_use_role sur ON sur.user_id = su.id
+							INNER JOIN sys_roles sr ON sur.role_id = sr.id
+							WHERE
+								su.dtflag = 0
+							AND su.state = 0
+							AND sa.state = 0
+							AND sa.dtflag = 0
+							AND su.user_type != 3
+							AND sr.role_type IN (1, 2)
+							GROUP BY
+								sa.province
+					) B
+				GROUP BY
+					B.province
+			) A on  A.province=aoa.pid
 			WHERE
 				DATE_FORMAT(aoa.file_time, '%Y-%m-%d') =#{currentTime}
 			GROUP BY
@@ -324,13 +359,48 @@
 				app_back_archive aba
 			left join (
 				SELECT
-					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
+					B.province,
+					SUM(pcount) AS pcount
 				FROM
-					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
-				inner join sys_users su on su.id=sua.sys_id 
-				where su.dtflag=0 and su.state=0 group by sa.airport_id 
-			) A on  A.airport_id=aba.airport_id
+					(
+						SELECT DISTINCT
+							sa.province,
+							COUNT(DISTINCT su.id) AS pcount
+						FROM
+							sys_airport sa
+						INNER JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+						INNER JOIN sys_users su ON su.id = sua.sys_id
+						WHERE
+							su.dtflag = 0
+						AND su.state = 0
+						AND sa.state = 0
+						AND sa.dtflag = 0
+						AND su.user_type = 3
+						GROUP BY
+							sa.province
+						UNION
+							SELECT
+								sa.province,
+								COUNT(DISTINCT su.id) AS pcount
+							FROM
+								sys_users su
+							INNER JOIN sys_user_airport sua
+							INNER JOIN sys_airport sa ON sa.airport_id = sua.airport_id
+							INNER JOIN sys_use_role sur ON sur.user_id = su.id
+							INNER JOIN sys_roles sr ON sur.role_id = sr.id
+							WHERE
+								su.dtflag = 0
+							AND su.state = 0
+							AND sa.state = 0
+							AND sa.dtflag = 0
+							AND su.user_type != 3
+							AND sr.role_type IN (1, 2)
+							GROUP BY
+								sa.province
+					) B
+				GROUP BY
+					B.province
+			) A on  A.province=aba.pid
 			WHERE
 				DATE_FORMAT(aba.file_time, '%Y-%m-%d') = #{currentTime}
 			GROUP BY
@@ -353,12 +423,47 @@
 				app_order_archive aoa
 			LEFT JOIN (
 				SELECT
-					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
+					B.airport_id,
+					SUM(pcount) AS pcount
 				FROM
-					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
-				inner join sys_users su on su.id=sua.sys_id 
-				where su.dtflag=0 and su.state=0 group by sa.airport_id 
+					(
+						SELECT
+							sa.airport_id,
+							COUNT(DISTINCT su.id) AS pcount
+						FROM
+							sys_airport sa
+						INNER JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+						INNER JOIN sys_users su ON su.id = sua.sys_id
+						WHERE
+							su.dtflag = 0
+						AND su.state = 0
+						AND sa.state = 0
+						AND sa.dtflag = 0
+						AND su.user_type = 3
+						GROUP BY
+							sa.airport_id
+						UNION
+							SELECT
+								sa.airport_id,
+								COUNT(DISTINCT su.id) AS pcount
+							FROM
+								sys_users su
+							INNER JOIN sys_user_airport sua
+							INNER JOIN sys_airport sa ON sa.airport_id = sua.airport_id
+							INNER JOIN sys_use_role sur ON sur.user_id = su.id
+							INNER JOIN sys_roles sr ON sur.role_id = sr.id
+							WHERE
+								su.dtflag = 0
+							AND su.state = 0
+							AND sa.state = 0
+							AND sa.dtflag = 0
+							AND su.user_type != 3
+							AND sr.role_type IN (1, 2)
+							GROUP BY
+								sa.`airport_id`
+					) B
+				GROUP BY
+					B.airport_id
 			) B ON aoa.airport_id = B.airport_id
 			WHERE
 				DATE_FORMAT(aoa.file_time, '%Y-%m-%d') = #{currentTime}
@@ -380,12 +485,47 @@
 				app_back_archive aba
 			LEFT JOIN (
 				SELECT
-					sa.airport_id , case when count(DISTINCT sua.sys_id) is null then 0 else count(DISTINCT sua.sys_id) end as pcount
+					B.airport_id,
+					SUM(pcount) AS pcount
 				FROM
-					sys_airport sa
-				inner JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
-				inner join sys_users su on su.id=sua.sys_id 
-				where su.dtflag=0 and su.state=0 group by sa.airport_id 
+					(
+						SELECT
+							sa.airport_id,
+							COUNT(DISTINCT su.id) AS pcount
+						FROM
+							sys_airport sa
+						INNER JOIN sys_user_airport sua ON sa.airport_id = sua.airport_id
+						INNER JOIN sys_users su ON su.id = sua.sys_id
+						WHERE
+							su.dtflag = 0
+						AND su.state = 0
+						AND sa.state = 0
+						AND sa.dtflag = 0
+						AND su.user_type = 3
+						GROUP BY
+							sa.airport_id
+						UNION
+							SELECT
+								sa.airport_id,
+								COUNT(DISTINCT su.id) AS pcount
+							FROM
+								sys_users su
+							INNER JOIN sys_user_airport sua
+							INNER JOIN sys_airport sa ON sa.airport_id = sua.airport_id
+							INNER JOIN sys_use_role sur ON sur.user_id = su.id
+							INNER JOIN sys_roles sr ON sur.role_id = sr.id
+							WHERE
+								su.dtflag = 0
+							AND su.state = 0
+							AND sa.state = 0
+							AND sa.dtflag = 0
+							AND su.user_type != 3
+							AND sr.role_type IN (1, 2)
+							GROUP BY
+								sa.`airport_id`
+					) B
+				GROUP BY
+					B.airport_id
 			) B ON aba.airport_id = B.airport_id
 			WHERE
 				DATE_FORMAT(aba.file_time, '%Y-%m-%d') = #{currentTime}
