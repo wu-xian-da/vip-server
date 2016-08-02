@@ -126,7 +126,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_getcardcode(){
 		try {
-			for (Long ii = 1215790l;ii<1215790l + 50 ;ii++)
+			for (Long ii = 1515790l;ii<1515790l + 20 ;ii++)
 				airportEasyManager.getCardCode(ii.toString());
 			
 //			airportEasyManager.getCardCode("31213413415");
@@ -243,7 +243,7 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void testkonggang_cardBindStatus(){
-		airportEasyManager.cardBindStatus("07992660182");
+		airportEasyManager.cardBindStatus("07974134378");
 	}
 	
 	@Test

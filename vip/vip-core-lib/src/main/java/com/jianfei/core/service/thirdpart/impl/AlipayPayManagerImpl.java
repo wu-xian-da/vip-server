@@ -5,12 +5,14 @@
  */
 package com.jianfei.core.service.thirdpart.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.enu.PayType;
 import com.jianfei.core.service.order.OrderManager;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,6 +205,7 @@ public class AlipayPayManagerImpl extends ThirdPayManager {
             try {
                 appOrders.setPayTime(DateUtil.parseDateTime(req.getPayTime()));
             }catch (Exception e){
+            	appOrders.setPayTime(new Date());
                 log.error(e);
             }
             orderManager.updatePayState(appOrders);
