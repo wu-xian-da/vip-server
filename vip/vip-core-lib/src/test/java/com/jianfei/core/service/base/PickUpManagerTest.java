@@ -7,12 +7,8 @@
  */
 package com.jianfei.core.service.base;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.MapUtils;
+import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.common.utils.MessageDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSONObject;
-import com.jianfei.core.common.utils.MessageDto;
-import com.sun.swing.internal.plaf.metal.resources.metal;
+import java.util.List;
+import java.util.Map;
 
 /**
  *

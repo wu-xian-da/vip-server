@@ -31,9 +31,6 @@
 			</div>
 			</c:if>
 		</div>
-
-
-
 </body>
 <script src="${ctx }/jslib/echarts.min.js"></script>
 <script>
@@ -55,6 +52,10 @@ console.info(data);
                 data:['开卡数']
             },
             xAxis: {
+            	axisLabel:{
+        			interval:'0',
+        			rotate:45
+        		},
                 data: data[i].xAxis
             },
             yAxis: {},

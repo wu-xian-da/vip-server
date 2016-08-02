@@ -47,7 +47,7 @@ public class JedisUtilsTest {
 
 	@Test
 	public void consumer() {
-		String reuslt = JedisUtils.get("test");
+		String reuslt = JedisUtils.get("r");
 		System.out.println(reuslt);
 		JedisUtils.set("mm", "gg", 0);
 		System.out.println(JedisUtils.get("mm"));

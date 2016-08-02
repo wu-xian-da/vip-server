@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.provider.token.AuthenticationKeyGener
 import org.springframework.security.oauth2.provider.token.DefaultAuthenticationKeyGenerator;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -27,7 +27,7 @@ import java.util.Collection;
 public class RedisTokenStore implements TokenStore {
 	private static final Log LOG = LogFactory.getLog(RedisTokenStore.class);
 	
-	private JedisPool jedisPool;
+	private JedisSentinelPool jedisPool;
 	
 	private static final byte[] ACCESS_TOKEN_KEY = toBytes("access_token_key");
 	private static final byte[] ACCESS_TOKEN_AUTH_KEY = toBytes("access_token_auth_key");
@@ -42,7 +42,7 @@ public class RedisTokenStore implements TokenStore {
 	
 	private AuthenticationKeyGenerator authenticationKeyGenerator = new DefaultAuthenticationKeyGenerator();
 	
-	public RedisTokenStore(JedisPool jedisPool) {
+	public RedisTokenStore(JedisSentinelPool jedisPool) {
 		this.jedisPool = jedisPool;
 	}
 

@@ -25,8 +25,6 @@ import org.springframework.ui.Model;
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AriPort;
 import com.jianfei.core.bean.User;
-import com.jianfei.core.common.cache.CacheCons;
-import com.jianfei.core.common.cache.CacheCons.Sys;
 import com.jianfei.core.common.cache.JedisUtils;
 import com.jianfei.core.common.enu.RoleType;
 import com.jianfei.core.common.utils.DateUtil;
@@ -84,9 +82,12 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		// 获取所有的权限区域 经理
 		List<AriPort> ariPorts = user.getAripors();
 		List<String> list = new ArrayList<String>();
+		StringBuffer buffer = new StringBuffer();
 		for (AriPort ariPort : ariPorts) {
 			list.add(ariPort.getId());
+			buffer.append("'" + ariPort.getId() + "',");
 		}
+		System.out.println(buffer.toString());
 		if (CollectionUtils.isEmpty(list)) {
 			model.addAttribute("error", "true");
 			return;
@@ -108,56 +109,26 @@ public class ArchiveManagerImpl implements ArchiveManager {
 		model.addAttribute("dataStr", lastMoth.get("dataStr"));
 
 		// 开卡数前top3的省份
-		model.addAttribute("top", jingliTop(lastMoth));
+		List<Map<String, Object>> top3 = archiveMapper.masterTop(lastMoth);
+		model.addAttribute("top", top3);
 		// 柱状图报表数据
-		model.addAttribute(
-				"draw1",
-				handDraw(lastMoth, CacheCons.Sys.LAST_1_MONTH, "省份/月份开卡数",
-						lastMoth.get("dataStr")));// 上个月各个省份的开卡数
+		model.addAttribute("draw1",
+				handDraw(lastMoth, "省份/月份开卡数", lastMoth.get("dataStr")));// 上个月各个省份的开卡数
 
 		Map<String, Object> lastMoth2 = DateUtil.getDelayDate(2);
 		lastMoth2.put("ariportIds", list);
 		model.addAttribute(
 				"draw2",
-				handDraw(lastMoth2, Sys.LAST_2_MONTH, "省份/月份开卡数", DateUtil
-						.getDelayDate(2).get("dataStr")));// 上上个月各个省份开卡数
+				handDraw(lastMoth2, "省份/月份开卡数",
+						DateUtil.getDelayDate(2).get("dataStr")));// 上上个月各个省份开卡数
 
 		Map<String, Object> lastMoth3 = DateUtil.getDelayDate(3);
 		lastMoth3.put("ariportIds", list);
 		model.addAttribute(
 				"draw3",
-				handDraw(lastMoth3, CacheCons.Sys.LAST_3_MONTH, "省份/月份开卡数",
+				handDraw(lastMoth3, "省份/月份开卡数",
 						DateUtil.getDelayDate(3).get("dataStr")));// 上上上个月各个省份的开卡数
 
-	}
-
-	/**
-	 * 经理首页，开卡数前top3的省份
-	 * 
-	 * @param map
-	 *            key:ariportIds value:场站ids<br>
-	 *            key:year value:yyyy<br>
-	 *            key:month value:MM<br>
-	 *            key:dataStr value:yyyy年MM月<br>
-	 * 
-	 * @return List<Map<String,Object>>
-	 * @version 1.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	private List<Map<String, Object>> jingliTop(Map<String, Object> map) {
-		List<Map<String, Object>> list = null;
-		Object object = JedisUtils.getObject(CacheCons.Sys.SYS_TOP3_MONTH);
-		try {
-			if (null != object) {
-				list = (List<Map<String, Object>>) object;
-				return list;
-			}
-		} catch (Exception e) {
-			logger.error("经理首页，从缓存获取top3失败....");
-		}
-		list = archiveMapper.masterTop(map);
-		JedisUtils.setObject(CacheCons.Sys.SYS_TOP3_MONTH, list, 0);
-		return list;
 	}
 
 	/*
@@ -224,17 +195,11 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, String> handDraw(Map<String, Object> mapCons,
-			String cacheKey, String text, Object title) {
+			String text, Object title) {
 
 		List<Map<String, Object>> maps = null;
-		Object object = JedisUtils.getObject(cacheKey);
 		try {
-			if (null != object) {
-				maps = (List<Map<String, Object>>) object;
-			} else {
-				maps = archiveMapper.masterDraw(mapCons);
-				JedisUtils.setObject(cacheKey, maps, 0);
-			}
+			maps = archiveMapper.masterDraw(mapCons);
 		} catch (Exception e) {
 			logger.error("经理首页，从缓存获取数据失败....");
 		}
