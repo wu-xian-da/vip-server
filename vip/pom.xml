@@ -558,7 +558,7 @@
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
 
 				<!-- updload config -->
-				<upload.home.dir>/opt/images/uploadPath</upload.home.dir>
+				<upload.home.dir>/workspace/uploadPath</upload.home.dir>
 				<!-- log path -->
 				<log.home.dir>/workspace/logs/vip.log</log.home.dir>
 				<log.flume.home.dir>/workspace/logs/flume.log</log.flume.home.dir>
