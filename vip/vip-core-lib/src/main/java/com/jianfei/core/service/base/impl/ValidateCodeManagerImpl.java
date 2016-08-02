@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppCustomer;
 import com.jianfei.core.common.cache.CacheCons;
 import com.jianfei.core.common.cache.JedisUtils;
+import com.jianfei.core.common.enu.ModuleType;
 import com.jianfei.core.common.enu.MsgType;
 import com.jianfei.core.common.enu.VipUserSate;
+import com.jianfei.core.common.utils.SmartLog;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
@@ -108,7 +110,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         }else {
             if (customer == null || StringUtils.isBlank(customer.getCustomerId())) {
                 return BaseMsgInfo.msgFail("手机号尚未注册");
-            }else if (MsgType.LOGIN.equals(msgType) && !(VipUserSate.ACTIVE.getName() == customer.getDtflag())) {
+            }else if (MsgType.LOGIN.equals(msgType) && (vipUserManager.haveAddOrderRight(phone))) {
                 return BaseMsgInfo.msgFail("手机号暂未激活或已经退卡");
             }
         }
@@ -133,6 +135,9 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         object.put("code",code);
         object.put("time",time);
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(phone).setMsgType(msgType.getName()).setMsgBody(object.toJSONString());
+        //**日志记录（正常）
+        SmartLog.info(ModuleType.MESSAGE_MODULE.getName(),phone,
+                "【短信模块-发送验证码】，用户手机号："+phone+"，消息类型："+msgType.getName()+"，验证码："+code+"，操作内容：【发送验证码】，操作结果：【成功】");
         return queueManager.sendMessage(msgBuilder);
     }
 }
