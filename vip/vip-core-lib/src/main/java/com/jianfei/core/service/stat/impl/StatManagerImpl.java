@@ -173,9 +173,9 @@ public class StatManagerImpl implements StatManager {
 			calendar.add(Calendar.DATE, index);
 			String date = sf.format(calendar.getTime());
 			//每天的开卡总数
-			int sum = 0;
+			float sum = 0;
 			//每天的退卡总数
-			int backTotal = 0;
+			float backTotal = 0;
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
 				Object obj = null;
@@ -235,10 +235,11 @@ public class StatManagerImpl implements StatManager {
 			mapItem.put("date", date);
 			
 			float sum=0;
-			int sum_back = 0;
+			float sum_back = 0;
 			//计算多个省份某天的平均值
 			if(UserProvinceList !=null && UserProvinceList.size()>=1){
 				for(int i =0 ;i <UserProvinceList.size(); i ++){
+					
 					Object obj = JedisUtils.getObject(date+"$"+UserProvinceList.get(i).getProvinceId());
 					if(obj == null){
 						sum +=0;
@@ -322,6 +323,11 @@ public class StatManagerImpl implements StatManager {
 		java.text.DecimalFormat   df   =new   java.text.DecimalFormat("0.00");
 		return df.format(num);
 
+	}
+	public static void main(String[] args){
+		
+		StatManagerImpl a = new StatManagerImpl();
+		System.out.println(a.formatNum(Float.parseFloat("0.2500")));
 	}
 	
 	/**
