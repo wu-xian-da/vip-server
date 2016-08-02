@@ -224,7 +224,6 @@ public class JedisUtilsTest {
 		return false;
 	}
 
-
 	@Test
 	public void msgSet() {
 		JedisUtils.set("MSG:TEMPLATE001", "【亿出行】您好，您的验证码是：[code]。客服热线：40040080660，祝您旅途愉快！", 0);
