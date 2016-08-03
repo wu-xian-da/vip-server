@@ -239,10 +239,10 @@ public class StatManagerImpl implements StatManager {
 			
 			float sum=0;
 			float sum_back = 0;
+			int agentNum = 0;
 			//计算多个省份某天的平均值
 			if(UserProvinceList !=null && UserProvinceList.size()>=1){
 				for(int i =0 ;i <UserProvinceList.size(); i ++){
-					
 					Object obj = JedisUtils.getObject(date+"$"+UserProvinceList.get(i).getProvinceId());
 					if(obj == null){
 						sum +=0;
@@ -250,15 +250,16 @@ public class StatManagerImpl implements StatManager {
 					}else{
 						//将json字符串转换为CharDate对象
 						CharData charData = JSON.parseObject(obj.toString(), CharData.class);
-						sum += Float.parseFloat(charData.getAvgNum()==null ? "0.00": charData.getAvgNum());
-						sum_back += Float.parseFloat(charData.getAvgNum_back() ==null ? "0.00" : charData.getAvgNum_back());
+						sum += Float.parseFloat(charData.getAvgNum()==null ? "0.00": charData.getTotal());
+						sum_back += Float.parseFloat(charData.getAvgNum_back() ==null ? "0.00" : charData.getBack_order_total());
+						agentNum += Integer.parseInt(charData.getPcount() == null ? "0" : charData.getPcount());
 
 					}
 				}
-				//多个省份的平均开卡数
-				mapItem.put("avgNum", formatNum(sum/UserProvinceList.size()));
-				//多个省份的平均退卡数
-				mapItem.put("avgNum_back", formatNum(sum_back/UserProvinceList.size()));
+				//平均开卡数
+				mapItem.put("avgNum",agentNum==0 ? 0 : formatNum(sum/agentNum));
+				//平均退卡数
+				mapItem.put("avgNum_back",agentNum == 0 ? 0 : formatNum(sum_back/agentNum));
 			}else{
 				mapItem.put("avgNum", "0.00");
 				mapItem.put("avgNum_back", "0.00");
