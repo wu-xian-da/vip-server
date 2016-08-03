@@ -55,7 +55,7 @@ public class AppOrders implements Serializable{
     /**
      * 退卡申请途径
      */
-    private int applyType;
+    private Integer applyType;
 
     /**
      * 销售人员姓名
@@ -272,11 +272,11 @@ public class AppOrders implements Serializable{
         this.cardBack = cardBack;
     }
 
-    public int getApplyType() {
+    public Integer getApplyType() {
         return applyType;
     }
 
-    public void setApplyType(int applyType) {
+    public void setApplyType(Integer applyType) {
         this.applyType = applyType;
     }
 
