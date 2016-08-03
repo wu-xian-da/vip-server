@@ -292,10 +292,10 @@ public class OrderStaController {
 			Map<String, Object> repMap = statManager.returnCardNumByDate(proIdApIdList, begin, end);
 			resList.add(repMap);
 			// 3 ****** x轴：场站名称  y轴：该场站在所选时间段内所有的开卡总数
-			List<Map<String, Object>> cardNumByAirPortList = statManager.getSticCardData(proIdApIdList, begin, end);
-			Map<String, Object> airPortMap = new HashMap<String, Object>();
-			airPortMap.put("cardNumByAirPort", cardNumByAirPortList);
-			resList.add(airPortMap);
+//			List<Map<String, Object>> cardNumByAirPortList = statManager.getSticCardData(proIdApIdList, begin, end);
+//			Map<String, Object> airPortMap = new HashMap<String, Object>();
+//			airPortMap.put("cardNumByAirPort", cardNumByAirPortList);
+//			resList.add(airPortMap);
 
 			return BaseMsgInfo.success(resList);
 		} catch (Exception e) {

@@ -176,6 +176,8 @@ public class StatManagerImpl implements StatManager {
 			float sum = 0;
 			//每天的退卡总数
 			float backTotal = 0;
+			//业务人员数量
+			int agentNum = 0;
 			//场站列表
 			for(Map<String,Object> proIdApIdMap:proIdApIdList){
 				Object obj = null;
@@ -194,13 +196,14 @@ public class StatManagerImpl implements StatManager {
 					CharData charData = JSON.parseObject(obj.toString(), CharData.class);
 					sum += Float.parseFloat(charData.getTotal() == null ? "0" :charData.getTotal());
 					backTotal += Float.parseFloat(charData.getBack_order_total() ==null ? "0" : charData.getBack_order_total());
+					agentNum += Integer.parseInt(charData.getPcount() == null ? "0" : charData.getPcount());
 				}
 			}
 			mapItem.put("date", date);
 			mapItem.put("total", sum);
 			mapItem.put("back_total", backTotal);
-			mapItem.put("avgNum", formatNum( (double)sum/proIdApIdList.size()) );
-			mapItem.put("avgNum_back", formatNum( (double)backTotal/proIdApIdList.size()) );
+			mapItem.put("avgNum",agentNum== 0 ? 0 : formatNum( (double)sum/agentNum) );
+			mapItem.put("avgNum_back",agentNum== 0 ? 0 : formatNum( (double)backTotal/agentNum) );
 			list.add(mapItem);
 			
 			sumAllDay += sum;
