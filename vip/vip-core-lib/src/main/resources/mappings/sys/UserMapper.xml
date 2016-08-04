@@ -172,7 +172,7 @@
 			update sys_users set dtflag =1 where id=#{id};
 		]]>
 	</delete>
-
+	<!-- 批量删除角色信息 -->
 	<delete id="deleteRolesFromUser" parameterType="Long">
 		<![CDATA[
 			DELETE FROM `sys_use_role`  WHERE user_id=#{userId}
@@ -199,7 +199,7 @@
 		UPDATE sys_users SET
 		photo=#{photoPath} WHERE `code`=#{userNo}
 	</update>
-
+	<!-- 验证用户账号是否可用 -->
 	<select id="validateAccount" parameterType="java.util.Map"
 		resultType="java.util.Map">
 		SELECT

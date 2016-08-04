@@ -23,12 +23,7 @@ var checksubmit = function(){
 					ids.push(nodes[i].id);
 				}
 				$("#ids").val(ids);
-				var url;
-				if ($(':input[name="id"]').val()!= '') {
-					url = sy.contextPath + '/role/saveAndgrant';
-				} else {
-					url = sy.contextPath + '/role/saveAndgrant';
-				}
+				var url = sy.contextPath + '/role/saveAndgrant';
 				$.post(url, sy.serializeObject($('form')), function(result) {
 					if (result.ok) {
 						$grid.datagrid('load');

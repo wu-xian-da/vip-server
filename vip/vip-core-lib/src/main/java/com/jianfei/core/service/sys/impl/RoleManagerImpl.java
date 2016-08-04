@@ -73,7 +73,7 @@ public class RoleManagerImpl implements RoleManager {
 	 * .Role)
 	 */
 	@Override
-	public MessageDto<String> update(Role role) {
+	public MessageDto<String> delete(Role role) {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
 			List<Map<String, Object>> maps = roleMapper.selectUserByRoleId(role
