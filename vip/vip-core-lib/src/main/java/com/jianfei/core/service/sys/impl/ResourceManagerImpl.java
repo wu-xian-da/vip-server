@@ -192,6 +192,11 @@ public class ResourceManagerImpl implements ResourceManager {
 	public MessageDto<String> delete(Long id) {
 		MessageDto<String> messageDto = new MessageDto<String>();
 		try {
+			List<Resource> resources = resourceMapper
+					.selectChildResorceByPid(id);
+			if (!CollectionUtils.isEmpty(resources)) {
+				return messageDto.setMsgBody("该资源存在子节点，请先删除子节点...");
+			}
 			resourceMapper.delete(id);
 			JedisUtils.delObject(CacheCons.Sys.SYS_RESOURCE_LIST);
 			shiroDbRealm.cleanCache();

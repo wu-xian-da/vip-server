@@ -222,9 +222,9 @@
 			) 
 			SELECT
 				su.id,
-				ao.sale_no,
+				su.`code`,
 				su.`name`,
-				ao.airport_id,
+				sa.airport_id,
 				sa.airport_name,
 				sc.CID,
 				sc.`name`,
@@ -237,17 +237,19 @@
 				DATE_FORMAT(#{maxTime},'%d') AS DAY,
 				WEEKDAY(#{maxTime})+1
 			FROM
-				app_orders ao
-			INNER JOIN sys_users su ON ao.sale_no = su.`code`
-			INNER JOIN sys_airport sa ON sa.airport_id = ao.airport_id 
+				sys_airport sa
+			INNER JOIN sys_user_airport sua ON sua.airport_id = sa.airport_id
+			INNER JOIN sys_users su ON su.id = sua.sys_id
 			LEFT JOIN sys_city sc ON sc.CID = sa.province
+			LEFT JOIN app_orders ao ON su.`code` = ao.sale_no
+			AND DATE_FORMAT(ao.order_time, '%Y-%m-%d') = #{maxTime}
+			AND ao.pay_time IS NOT NULL
 			WHERE
-				DATE_FORMAT(ao.order_time,'%Y-%m-%d') =#{maxTime}
-			AND ao.pay_time IS NOT NULL and sa.state=0 and sa.dtflag=0
+				sa.state = 0
+			AND sa.dtflag = 0
 			GROUP BY
-				ao.sale_no,
+				su.`code`,
 				ao.airport_id
-			
 		]]>
 	</select>
 	<!-- 退卡日归档表抽取 -->

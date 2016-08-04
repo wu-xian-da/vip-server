@@ -40,7 +40,7 @@ public interface RoleManager {
 	 * @return MessageDto<String>
 	 * @version 1.0.0
 	 */
-	MessageDto<String> update(Role role);
+	MessageDto<String> delete(Role role);
 
 	/**
 	 * updateRoleResource(更新角色权限)

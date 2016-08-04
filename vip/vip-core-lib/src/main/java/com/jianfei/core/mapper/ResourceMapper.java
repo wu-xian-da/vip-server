@@ -17,10 +17,17 @@ import com.jianfei.core.common.persistence.MyBatisDao;
 @MyBatisDao
 public interface ResourceMapper extends BaseMapper<Resource> {
 
-
 	List<Resource> findResourceByRoleId(Long roleId);
 
 	List<Resource> findResourceByUserId(Long userId);
-	
+
+	/**
+	 * 根据父节点查找所有的子节点
+	 * 
+	 * @param pid
+	 * @return List<Resource>
+	 * @version 1.0.0
+	 */
+	List<Resource> selectChildResorceByPid(Long pid);
 
 }

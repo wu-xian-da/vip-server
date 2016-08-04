@@ -79,7 +79,7 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDailyOrderArchice2() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Date date = DateUtil.getDate("2016-08-01", "yyyy-MM-dd");
+		Date date = DateUtil.getDate("2016-08-03", "yyyy-MM-dd");
 		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
 		archiveManager.baseDailyExtract(map);
 	}

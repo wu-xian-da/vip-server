@@ -10,6 +10,7 @@ package com.jianfei.core.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.jianfei.core.bean.Resource;
 import com.jianfei.core.bean.Role;
 import com.jianfei.core.common.persistence.MyBatisDao;
 
