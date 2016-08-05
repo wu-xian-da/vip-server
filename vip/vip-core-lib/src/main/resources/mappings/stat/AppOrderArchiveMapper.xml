@@ -284,35 +284,68 @@ where file_id = #{fileId,jdbcType=INTEGER}
     <result column="order_number" jdbcType="INTEGER" property="amout" />
   </resultMap>
   <select id="salesRanking" resultMap="SalesRankingMap" parameterType="java.util.Map" >
-		select * from (
-			select 
-			aoa.sale_no,aoa.photo,aoa.bname,aoa.sex,sum(aoa.order_num) as order_number 
-			FROM app_order_archive aoa , sys_users su, sys_use_role sur,sys_roles sr
-			where aoa.bid = su.id and su.id = sur.user_id and sur.role_id = sr.id and sr.id != 11
-			and <![CDATA[ aoa.file_time >= #{startTime} AND aoa.file_time <=  #{endTime} ]]>
-			<if test="pid != null">
-				AND aoa.pid = #{pid}
-			</if>
-			<if test="airport_id != null">
-				AND aoa.airport_id = #{airport_id}
-			</if>
-			GROUP BY aoa.bid
+		<![CDATA[select * from (
+		   			SELECT
+						aoa.sale_no,
+						aoa.photo,
+						aoa.bname,
+						aoa.sex,
+						sum(aoa.order_num) AS order_number
+					FROM
+						app_order_archive aoa,
+						sys_users su,
+						sys_use_role sur,
+						sys_roles sr
+					WHERE
+						aoa.bid = su.id
+					AND su.id = sur.user_id
+					AND sur.role_id = sr.id
+					AND sr.role_type = 2
+				 ]]>
+					<if test="startTime!=null and startTime!=''">
+					   <![CDATA[and aoa.file_time >= #{startTime}]]>
+					</if>
+					<if test="endTime!=null and endTime!=''">
+					    <![CDATA[AND aoa.file_time <= #{endTime}]]>
+					</if>
+					<if test="pid != null and pid!=''">
+						AND aoa.pid = #{pid}
+					</if>
+					<if test="airport_id != null and airport_id!=''">
+						AND aoa.airport_id = #{airport_id}
+					</if>
+				GROUP BY aoa.bid
 			union
-			select 
-			aoa.sale_no,aoa.photo,aoa.bname,aoa.sex,sum(aoa.order_num) as order_number 
-			FROM app_order_archive aoa , sys_users su
-			where aoa.bid = su.id and su.user_type=3
-			and <![CDATA[ aoa.file_time >= #{startTime} AND aoa.file_time <=  #{endTime} ]]>
-			<if test="pid != null">
-				AND aoa.pid = #{pid}
-			</if>
-			<if test="airport_id != null">
-				AND aoa.airport_id = #{airport_id}
-			</if>
-			GROUP BY aoa.bid
+				<![CDATA[ 
+				SELECT
+					aoa.sale_no,
+					aoa.photo,
+					aoa.bname,
+					aoa.sex,
+					SUM(aoa.order_num) AS order_number
+				FROM
+					app_order_archive aoa,
+					sys_users su
+				WHERE
+					aoa.bid = su.id
+				AND su.user_type = 3
+				]]>
+				<if test="startTime!=null and startTime!=''">
+				   <![CDATA[and aoa.file_time >= #{startTime}]]>
+				</if>
+				<if test="endTime!=null and endTime!=''">
+				    <![CDATA[AND aoa.file_time <= #{endTime}]]>
+				</if>
+				<if test="pid != null and pid!=''">
+					AND aoa.pid = #{pid}
+				</if>
+				<if test="airport_id != null and airport_id!=''">
+					AND aoa.airport_id = #{airport_id}
+				</if>
+		<![CDATA[GROUP BY aoa.bid
 		) as ranking
 		order by ranking.order_number desc
-		LIMIT #{pageStart},#{pageSize}
+		LIMIT #{pageStart},#{pageSize}]]>
   </select>
   
   <!--根据业务人员工号查询某个时间段内每天的开卡数 -->
