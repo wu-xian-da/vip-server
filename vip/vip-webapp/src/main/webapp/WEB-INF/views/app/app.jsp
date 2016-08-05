@@ -81,7 +81,9 @@
 					case 2:
 						return '用户APP合作按钮';
 					case 3:
-						return 'VIP卡权益类型';
+						return 'VIP卡权益登入前轮播';
+					case 4:
+						return 'VIP卡权益登入后轮播';
 					}
 				}
 			},{
