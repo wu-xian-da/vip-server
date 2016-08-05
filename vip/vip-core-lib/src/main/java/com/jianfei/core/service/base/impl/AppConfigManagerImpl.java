@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConfig;
 import com.jianfei.core.bean.AppPicture;
-import com.jianfei.core.bean.SysViproom;
 import com.jianfei.core.common.enu.PictureType;
 import com.jianfei.core.common.enu.RightType;
 import com.jianfei.core.common.utils.Grid;
@@ -41,15 +40,16 @@ public class AppConfigManagerImpl implements AppConfigManager {
      */
     @Override
     public VipCardInfoDto getVipCardInfo(String phone) {
-        List<AppPicture> pictureList=appPictureManager.getPicture(PictureType.VIP_APP_RIGHT);
-        VipCardInfoDto vipCardInfoDto=new VipCardInfoDto();
+        List<AppPicture> pictureList;
 		AppConfig appConfig;
 		if (StringUtils.isBlank(phone)){
 			appConfig=getAppConfig(RightType.BEFORE_LOGIN_RIGHT);
-
+			pictureList=appPictureManager.getPicture(PictureType.BEFORE_VIP_APP_RIGHT);
 		}else {
 			appConfig=getAppConfig(RightType.AFTER_LOGIN_RIGHT);
+			pictureList=appPictureManager.getPicture(PictureType.AFTER_VIP_APP_RIGHT);
 		}
+		VipCardInfoDto vipCardInfoDto=new VipCardInfoDto();
 		vipCardInfoDto.setRight(appConfig.getContent());
         vipCardInfoDto.setImages(pictureList);
         return vipCardInfoDto;
