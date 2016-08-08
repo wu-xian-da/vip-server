@@ -472,7 +472,7 @@
 		<!-- =============================================================== -->
 		<profile>
 			<id>prod</id>
-			
+
 			<properties>
 				<!-- Database settings -->
 				<hbm2ddl.drop>false</hbm2ddl.drop>
@@ -597,7 +597,7 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>		
+		</profile>
 	</profiles>
 	<build>
 		<pluginManagement>
