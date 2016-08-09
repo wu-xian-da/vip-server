@@ -391,6 +391,16 @@
         */
 		//1、审核通过时，输入用户的账户信息（已完成）
         function onRefund(args){
+			//初始化页面
+			$("input[name='card-radio']").get(0).checked=true;
+			$('#orderPayMethod').text('');
+			$('#backCardNo0').val('');
+			$('#backCardNo1').val('');
+			$('#banckName').val('');
+			$('#backCardNo2').val('');
+			$('#userNames').val('');
+			$('#remainMoney').text('');
+
 			//支付方式
 			var payType = args.payType;
 			if(payType == 1){
