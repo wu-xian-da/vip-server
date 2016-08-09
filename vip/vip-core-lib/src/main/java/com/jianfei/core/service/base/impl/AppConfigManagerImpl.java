@@ -52,6 +52,7 @@ public class AppConfigManagerImpl implements AppConfigManager {
 		VipCardInfoDto vipCardInfoDto=new VipCardInfoDto();
 		vipCardInfoDto.setRight(appConfig.getContent());
         vipCardInfoDto.setImages(pictureList);
+		vipCardInfoDto.setShareUrl(appConfig.getUrl());
         return vipCardInfoDto;
     }
 
