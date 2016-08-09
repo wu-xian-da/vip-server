@@ -3,6 +3,8 @@ package com.jianfei.core.bean;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.jianfei.core.common.utils.CustomFloatSerialize;
 import com.jianfei.core.common.utils.GloabConfig;
 
 public class AppCardBack {
@@ -126,7 +128,8 @@ public class AppCardBack {
 	 * @return  the money
 	 * @version   1.0.0
 	*/
-	
+	// 序列化指定格式的double格式
+	@JsonSerialize(using = CustomFloatSerialize.class)
 	public float getMoney() {
 		return money;
 	}
@@ -266,7 +269,8 @@ public class AppCardBack {
 	public void setCustomerPhone(String customerPhone) {
 		this.customerPhone = customerPhone;
 	}
-
+	// 序列化指定格式的double格式
+	@JsonSerialize(using = CustomFloatSerialize.class)
 	public float getServiceMoney() {
 		return serviceMoney;
 	}
@@ -274,7 +278,8 @@ public class AppCardBack {
 	public void setServiceMoney(float serviceMoney) {
 		this.serviceMoney = serviceMoney;
 	}
-
+	// 序列化指定格式的double格式
+	@JsonSerialize(using = CustomFloatSerialize.class)
 	public float getSafeMoney() {
 		return safeMoney;
 	}
