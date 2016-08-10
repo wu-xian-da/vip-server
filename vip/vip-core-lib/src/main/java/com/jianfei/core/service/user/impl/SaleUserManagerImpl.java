@@ -91,7 +91,7 @@ public class SaleUserManagerImpl implements SaleUserManager {
         SimpleHash nweHash = new SimpleHash("md5", newPassword, users.get(0).getSalt());
         String md5Password = MD5.MD5Encode(newPassword);
         int num = userMapper.updatePasswordByUno(userNo,passwordMd5, nweHash.toString(), md5Password);
-        return num == 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("用户密码更新失败");
+        return num == 1 ? BaseMsgInfo.success(true) : BaseMsgInfo.msgFail("原密码输入错误，请重新输入");
     }
 
     /**
