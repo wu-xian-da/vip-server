@@ -147,8 +147,8 @@
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
 						</shiro:hasPermission>
-						<td><select id="imgType" name="imgType" style="font-size: 11px;width: 150px;height: 20px;" >
-											<option value="" selected="selected">请选择轮播图类型</option>
+						<td><select id="imgType" name="imgType" style="font-size: 13px;width: 150px;height: 20px;" >
+											<option value="" selected="selected">请选择类型</option>
 											<option value="0">业务APP轮播图</option>
 											<option value="1">用户APP轮播图</option>
 											<option value="2">用户APP合作按钮</option>
