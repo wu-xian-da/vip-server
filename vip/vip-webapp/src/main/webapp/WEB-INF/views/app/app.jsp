@@ -128,6 +128,12 @@
 			}
 		});
 	});
+	function blurClick(){
+		grid.datagrid('load',
+				{
+				_imagetype:$('#imgType').val()
+				});
+	}
 </script>
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
@@ -141,8 +147,23 @@
 							<td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'ext-icon-note_add',plain:true" onclick="addFun();">添加</a></td>
 							<td><div class="datagrid-btn-separator"></div></td>
 						</shiro:hasPermission>
-						
+						<td><select id="imgType" name="imgType" style="font-size: 11px;width: 150px;height: 20px;" >
+											<option value="" selected="selected">请选择轮播图类型</option>
+											<option value="0">业务APP轮播图</option>
+											<option value="1">用户APP轮播图</option>
+											<option value="2">用户APP合作按钮</option>
+											<option value="3">VIP卡权益登入前轮播</option>
+											<option value="4">VIP卡权益登入后轮播</option>
+										</select>&nbsp;&nbsp;</td>
+						<td>
+							<input type="button" value="查询" style="width: 60px;height: 20px;
+						    border: none;
+						    background: #698DC3;
+						    border-radius: 5px;
+						    text-align: center;
+						    color: #FFF;" onclick="blurClick();" /></td>
 						</tr>
+						
 					</table>
 				</td>
 			</tr>

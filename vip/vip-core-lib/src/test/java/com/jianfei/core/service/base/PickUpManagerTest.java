@@ -8,7 +8,10 @@
 package com.jianfei.core.service.base;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jianfei.core.bean.AppPicture;
+import com.jianfei.core.common.utils.MapUtils;
 import com.jianfei.core.common.utils.MessageDto;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,15 @@ public class PickUpManagerTest {
 
 	@Autowired
 	AppAirportTransManager pickUpManager;
+
+	@Autowired
+	private AppPictureManager appPictureManager;
+
+	@Test
+	public void testImageSelect() {
+		MessageDto<List<AppPicture>> messageDto = appPictureManager
+				.get(new MapUtils.Builder().setKeyValue("imagetype", 2).build());
+	}
 
 	/**
 	 * Test method for
