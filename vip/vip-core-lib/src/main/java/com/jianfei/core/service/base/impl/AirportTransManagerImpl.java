@@ -46,7 +46,7 @@ public class AirportTransManagerImpl implements AirportTransManager {
      * @return
      */
     @Override
-    public BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans) throws Exception {
+    public synchronized BaseMsgInfo addAirportTransInfo(AppAirportTrans airportTrans) throws Exception {
         //查找下相关用户
         AppCustomer customer= vipUserManager.getUserDetail(airportTrans.getPhone());
         if (customer==null || StringUtils.isBlank(customer.getCustomerId())){
