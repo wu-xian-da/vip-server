@@ -578,8 +578,8 @@
 				<konggang.key>S1-L6-D0-T1-G2-S7</konggang.key>
 				<!-- yeepay settings -->
 				<yeepay.query.url>http://cod.yeepay.com/cod/callback/codOrderQueryAction.do</yeepay.query.url>
-				<yeepay.customerId>10001676182</yeepay.customerId>
-				<yeepay.key>DFE23HLAW198820SQWE1224SDAQQ3319203945</yeepay.key>
+				<yeepay.customerId>10013719346</yeepay.customerId>
+				<yeepay.key>066Qjh17yho24111UB4i8X6F6XC5e7863Tz7rySVDB07wj30I9R76Ci6m30U</yeepay.key>
 				<yeepay.src.sysid>opsmart</yeepay.src.sysid>
 				<yeepay.dst.sysid>yeepay</yeepay.dst.sysid>
 				<yeepay.transaction.id>OPSMART</yeepay.transaction.id>
