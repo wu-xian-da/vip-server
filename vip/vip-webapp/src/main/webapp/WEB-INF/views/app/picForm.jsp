@@ -127,7 +127,7 @@ var checksubmit = function(){
 <body>
 	<form method="post" class="form">
 		<fieldset><input name="pictureId" type="hidden" value="${appPicture.pictureId }" readonly="readonly" />
-			<legend>用户基本信息</legend>
+			<legend>基本信息</legend>
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>排序:</th>
