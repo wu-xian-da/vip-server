@@ -95,7 +95,7 @@ public class RoleController extends BaseController {
 	@ResponseBody
 	public MessageDto<String> delete(Role t) {
 		t.setDtflag(1);
-		return roelManager.update(t);
+		return roelManager.delete(t);
 	}
 
 	/**

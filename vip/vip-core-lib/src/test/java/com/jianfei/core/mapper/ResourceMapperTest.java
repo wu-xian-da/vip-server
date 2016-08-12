@@ -57,7 +57,8 @@ public class ResourceMapperTest {
 	 */
 	@Test
 	public void testSaveListOfT() {
-		resourceMapper.findResourceByRoleId(2l);
+		List<Resource> resources = resourceMapper.selectChildResorceByPid(1l);
+		System.out.println(resources.size());
 	}
 
 	/**

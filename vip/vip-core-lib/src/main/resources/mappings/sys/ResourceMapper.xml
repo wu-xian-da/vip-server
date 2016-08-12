@@ -55,9 +55,6 @@
 			<if test="name!= null ">
 				and name= #{name}
 			</if>
-			<if test="pid!=null">
-				and pid=#{pid}
-			</if>
 		</where>
 	</select>
 
@@ -78,5 +75,25 @@
 	<select id="findEntityById" parameterType="Long" resultMap="resource">
 		select * from sys_author where id=#{id}
 	</select>
-
+	<!-- 更具父节点查找所有子节点 -->
+	<select id="selectChildResorceByPid" parameterType="Long"
+		resultMap="resource">
+		SELECT
+		`id`,
+		`name`,
+		`url`,
+		`description`,
+		`iconCls`,
+		`seq`,
+		`target`,
+		`isShow`,
+		`permission`,
+		`create_time`,
+		`update_time`,
+		`pid`,
+		`dtflag`,
+		`initPwd`
+		FROM
+		`sys_author` res WHERE res.`pid`=#{pid}
+	</select>
 </mapper>

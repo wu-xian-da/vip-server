@@ -27,7 +27,11 @@ public enum PictureType {
     /**
      *  VIP 权益
      */
-    VIP_APP_RIGHT(3);
+    BEFORE_VIP_APP_RIGHT(3),
+    /**
+     *  VIP 权益
+     */
+    AFTER_VIP_APP_RIGHT(4);
 
     private int name;
 

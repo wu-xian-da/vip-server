@@ -17,7 +17,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/jslib/** = anon
-				/cacheManager/** = anon
+				/cache/** = anon
 				/druid/** = anon
 				/layout/** = anon
 				/uploadPath/** = anon

@@ -48,14 +48,14 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDateProvinceIdAirport() {
 		Map<String, Object> mapCon = new HashMap<String, Object>();
-		mapCon.put("currentTime", "2016-08-01");
+		mapCon.put("currentTime", "2016-08-02");
 		archiveManager.dateProvinceIdApportIds(mapCon);
 	}
 
 	@Test
 	public void cacheDate() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("currentTime", "2016-08-01");
+		map.put("currentTime", "2016-08-02");
 		archiveManager.dateProvinceIdCache(map);
 	}
 
@@ -79,7 +79,7 @@ public class ArchiveManagerImplTest {
 	@Test
 	public void testDailyOrderArchice2() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Date date = DateUtil.getDate("2016-08-01", "yyyy-MM-dd");
+		Date date = DateUtil.getDate("2016-08-05", "yyyy-MM-dd");
 		map.put("maxTime", DateUtil.dateToString(date, "yyyy-MM-dd"));
 		archiveManager.baseDailyExtract(map);
 	}

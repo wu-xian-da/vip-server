@@ -34,6 +34,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.Grid;
 import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.ObjectUtils;
+import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.service.base.AppCustomerManager;
 import com.jianfei.core.service.base.AppPictureManager;
 
@@ -119,6 +120,9 @@ public class AppPicController extends BaseController {
 		appPicture.setUpdatetime(new Date());
 		if (ObjectUtils.isEmpty(appPicture.getPriority())) {
 			appPicture.setPriority(0);
+		}
+		if (ObjectUtils.isEmpty(appPicture.getClickUrl())) {
+			appPicture.setClickUrl(StringUtils.EMPTY);
 		}
 		appPicture.setDtflag(GloabConfig.OPEN);
 		if (null != appPicture.getPictureId() && 0 != appPicture.getPictureId()) {

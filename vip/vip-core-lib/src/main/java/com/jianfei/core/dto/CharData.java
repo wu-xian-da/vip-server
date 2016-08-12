@@ -15,7 +15,8 @@ public class CharData {
 	private String avgNum_back;
 	//归档日期
 	private Date date;
-	
+	//业务人员数
+	private String pcount;
 	/**
 	 * @return the avgNum_back
 	 */
@@ -89,15 +90,30 @@ public class CharData {
 		this.avgNum = avgNum;
 	}
 
+	/**
+	 * @return the pcount
+	 */
+	public String getPcount() {
+		return pcount;
+	}
+
+	/**
+	 * @param pcount the pcount to set
+	 */
+	public void setPcount(String pcount) {
+		this.pcount = pcount;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "CharData [total=" + total + ", avgNum=" + avgNum + ", back_order_total=" + back_order_total
-				+ ", avgNum_back=" + avgNum_back + ", date=" + date + "]";
+				+ ", avgNum_back=" + avgNum_back + ", date=" + date + ", pcount=" + pcount + "]";
 	}
 
+	
 	
 	
 }
