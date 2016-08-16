@@ -84,6 +84,8 @@
 						return 'VIP卡权益登入前轮播';
 					case 4:
 						return 'VIP卡权益登入后轮播';
+					case 5:
+						return '业务员APPVIP卡权益';
 					}
 				}
 			},{

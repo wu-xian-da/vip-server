@@ -145,6 +145,7 @@ var checksubmit = function(){
 							<option value="2" <c:if test="${appPicture.imagetype==2 }">selected="selected"</c:if> >用户APP合作按钮</option>
 							<option value="3" <c:if test="${appPicture.imagetype==3 }">selected="selected"</c:if> >VIP卡权益登入前轮播</option>
 							<option value="4" <c:if test="${appPicture.imagetype==3 }">selected="selected"</c:if> >VIP卡权益登入后轮播</option>
+							<option value="5" <c:if test="${appPicture.imagetype==3 }">selected="selected"</c:if> >业务员APPVIP卡权益</option>
 					</select></td>
 				</tr>
 				<tr>
