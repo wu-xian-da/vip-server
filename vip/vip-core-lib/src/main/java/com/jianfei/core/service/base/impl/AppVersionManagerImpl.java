@@ -41,7 +41,7 @@ public class AppVersionManagerImpl implements AppVersionManager {
             List<AppVersion> list = appVersionMapper.getVersions(channel);
             appVersion = list == null || list.isEmpty() ? new AppVersion() : list.get(0);
             Map map = new HashMap();
-            map.put("vip_load_url", "http://static.ycxvip.com/app/index.html");
+            map.put("vip_load_url", "http://www.trvok.com/ios");
             map.put("company_wechat_url", "http://www.baidu.com");
             map.put("company_kefu_phone", "4008000660");
             appVersion.setMap(map);
