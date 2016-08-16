@@ -156,6 +156,7 @@
 											<option value="2">用户APP合作按钮</option>
 											<option value="3">VIP卡权益登入前轮播</option>
 											<option value="4">VIP卡权益登入后轮播</option>
+											<option value="5">业务员APPVIP卡权益</option>
 										</select>&nbsp;&nbsp;</td>
 						<td>
 							<input type="button" value="查询" style="width: 60px;height: 20px;
