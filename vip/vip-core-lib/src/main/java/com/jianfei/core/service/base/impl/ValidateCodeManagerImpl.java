@@ -71,7 +71,7 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         String key = CacheCons.getVerifyPhoneKey(phone, msgType);
         String value = (String) JedisUtils.getObject(key);
         boolean flag = code == null || code.equals(value);
-        if (flag && !MsgType.REGISTER.equals(msgType)) {
+        if (flag) {
             JedisUtils.delObject(key);
         }
         return flag;
