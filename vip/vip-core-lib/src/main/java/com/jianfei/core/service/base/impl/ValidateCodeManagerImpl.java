@@ -51,9 +51,9 @@ public class ValidateCodeManagerImpl implements ValidateCodeManager {
         }
         String key = CacheCons.getVerifyPhoneKey(phone, msgType);
        if(MsgType.REGISTER.equals(msgType)){
-           JedisUtils.setObject(key, code, 1000000);
+           JedisUtils.setObject(key, code, 1800);
        }else {
-           JedisUtils.setObject(key, code, 1000000);
+           JedisUtils.setObject(key, code, 1800);
        }
         return code;
     }
