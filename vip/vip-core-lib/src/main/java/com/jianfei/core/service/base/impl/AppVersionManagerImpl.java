@@ -43,7 +43,7 @@ public class AppVersionManagerImpl implements AppVersionManager {
             Map map = new HashMap();
             map.put("vip_load_url", "http://www.trvok.com/ios");
             map.put("company_wechat_url", "http://www.baidu.com");
-            map.put("company_kefu_phone", "4008000660");
+            map.put("company_kefu_phone", "4008131888");
             appVersion.setMap(map);
             //数据库无论是否存在都设置值 防止缓存穿透
             JedisUtils.setObject("APP_VERSION_" + channel, appVersion, 0);
