@@ -114,6 +114,17 @@ public class QueueManagerImpl implements QueueManager {
 		}
 
 		String vipCardNo = map.get("vipCardNo");
+		// 暂时开放001，002，003
+		if ("001".equals(msgType) || "002".equals(msgType)
+				|| "003".equals(msgType)) {
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"放心短信类型为:" + msgType);
+		} else {
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"暂时禁用短信类型为:" + msgType);
+			return null;
+		}
+
 		boolean isOk = false;// 操作结果状态
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
