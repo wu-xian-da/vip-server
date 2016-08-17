@@ -18,6 +18,12 @@ import java.util.Map;
  */
 public interface AppConfigManager {
 
+   /**
+    * 获取销售信息VIP权益
+    * @return
+    */
+   VipCardInfoDto getVipCardInfo();
+
     /**
      * 获取配置信息VIP权益
      * @return
