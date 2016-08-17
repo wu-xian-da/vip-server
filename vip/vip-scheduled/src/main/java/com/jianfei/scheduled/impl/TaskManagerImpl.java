@@ -145,7 +145,7 @@ public class TaskManagerImpl implements ITaskManager {
 	 * 
 	 * @see com.jianfei.scheduled.ITaskManager#validateOrdereIsEfective()
 	 */
-	@Scheduled(fixedRate = 300000, initialDelay = 1800000)
+	@Scheduled(fixedRate = 300000, initialDelay = 1500000)
 	@Override
 	public void validateOrdereIsEfective() {
 		logger.info(DateUtil.dateToString(new Date(), DateUtil.ALL_FOMAT)

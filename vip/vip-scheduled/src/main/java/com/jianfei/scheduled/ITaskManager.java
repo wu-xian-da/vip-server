@@ -34,7 +34,7 @@ public interface ITaskManager {
 	void pullSmsMessage();
 
 	/**
-	 * 验证订单状态是否有效，如果无效更改订单状态为无效状态，每隔5分钟扫描一次
+	 * 验证订单状态是否有效，如果无效更改订单状态为无效状态，每隔5分钟扫描一次，服务器重启延迟25分钟校验
 	 */
 	void validateOrdereIsEfective();
 	
