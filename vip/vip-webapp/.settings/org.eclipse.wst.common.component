@@ -2,8 +2,6 @@
     <wb-module deploy-name="vip-webapp">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <dependent-module archiveName="wxpay-scanpay-java-sdk-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/wxpay-scanpay-java-sdk/wxpay-scanpay-java-sdk">
             <dependency-type>uses</dependency-type>
         </dependent-module>

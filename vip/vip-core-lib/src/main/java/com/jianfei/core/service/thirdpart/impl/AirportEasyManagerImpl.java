@@ -300,6 +300,62 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 //		else
 //			return false;
 	}
+
+	/**
+	 * 获取已禁用码的核销数据定义
+	 * @param 卡号
+	 * @return 核销数据，不包含批次号字段
+	 */
+	@Override
+	public AirportEasyUseInfo readDisCodeData(String vipCardNo) {
+    	String result = null;
+    	AirportEasyUseInfo aeInfo = null;
+    	String sign = sign("verify_code="+vipCardNo+"&partner="+GloabConfig.getConfig("konggang.partner")+GloabConfig.getConfig("konggang.key"));
+    	
+    	result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"readDisCodeData?"+
+    													"verify_code="+vipCardNo+
+    													"&partner="+GloabConfig.getConfig("konggang.partner")+
+    													"&sign=" + sign);
+
+   		JSONObject obj = JSON.parseObject(result);
+		int return_result = (Integer)obj.get("result");
+		if (return_result == 0){
+		    aeInfo = new AirportEasyUseInfo();
+			
+			JSONObject return_data = (JSONObject)obj.get("data");
+			int countNo = (Integer)return_data.get("CountNo");
+			int recordNo = (Integer)return_data.get("RecordNo");
+			aeInfo.setCountNo(countNo);
+			aeInfo.setRecordNo(recordNo);
+			List<AppConsume> cosumeList = new ArrayList<AppConsume>();
+			
+			JSONArray dataArr = return_data.getJSONArray("data");
+			int dataArrSize = dataArr.size();
+			for(int i=0;i<dataArrSize;i++){
+				JSONObject data = dataArr.getJSONObject(i);
+    			String code = (String)data.get("code");//核销码
+    			int count = (Integer)data.get("count");//核销次数
+    			String info = (String)data.get("info");//核销地点
+    			String checkintime = (String)data.get("checkintime");//核销时间
+    			AppConsume ac = new AppConsume();
+    			ac.setConsumeId(UUIDUtils.getPrimaryKey());
+    			ac.setCardNo(code);
+    			ac.setConsumeMoney(200f);
+    			Date checkinDate = null;
+    			try {
+    				checkinDate = sdf.parse(checkintime);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+    			
+    			ac.setConsumeTime(checkinDate);
+    			ac.setViproomName(info);
+    			cosumeList.add(ac);
+			}
+			aeInfo.setConsumeList(cosumeList);
+		}
+		return aeInfo;
+	}
 	
 
 }

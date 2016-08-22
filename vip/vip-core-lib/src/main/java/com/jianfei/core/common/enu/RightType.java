@@ -19,7 +19,11 @@ public enum RightType {
 	/**
 	 * 登录后vip卡权益
 	 */
-	AFTER_LOGIN_RIGHT(4);
+	AFTER_LOGIN_RIGHT(4),
+	/**
+	 * 销售VIP权益
+	 */
+	SALE_RIGHT(5);
 	
 	private int name;
 

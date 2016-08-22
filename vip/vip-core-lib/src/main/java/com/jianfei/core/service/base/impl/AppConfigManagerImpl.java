@@ -33,7 +33,24 @@ public class AppConfigManagerImpl implements AppConfigManager {
    private AppPictureManagerImpl appPictureManager;
    @Autowired
    private  AppConfigMapper appConfigMapper;
-    /**
+
+	/**
+	 * 获取销售信息VIP权益
+	 *
+	 * @return
+	 */
+	@Override
+	public VipCardInfoDto getVipCardInfo() {
+		AppConfig appConfig = getAppConfig(RightType.BEFORE_LOGIN_RIGHT);
+		List<AppPicture> pictureList = appPictureManager.getPicture(PictureType.SALE_VIP_APP_RIGHT);
+		VipCardInfoDto vipCardInfoDto = new VipCardInfoDto();
+		vipCardInfoDto.setRight(appConfig.getContent());
+		vipCardInfoDto.setImages(pictureList);
+		vipCardInfoDto.setShareUrl(appConfig.getUrl());
+		return vipCardInfoDto;
+	}
+
+	/**
      * 获取配置信息VIP权益
      *
      * @return

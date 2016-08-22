@@ -126,7 +126,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_getcardcode(){
 		try {
-			for (Long ii = 1715790l;ii<1715790l + 20 ;ii++)
+			for (Long ii = 1815790l;ii<1815790l + 20 ;ii++)
 				airportEasyManager.getCardCode(ii.toString());
 			
 //			airportEasyManager.getCardCode("31213413415");
