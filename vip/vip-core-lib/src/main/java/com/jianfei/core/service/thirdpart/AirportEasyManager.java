@@ -82,4 +82,6 @@ public interface AirportEasyManager {
      * @throws Exception 
      */
     String getQrcode(String vipCardNo) throws GetQrcodeException;
+    
+    AirportEasyUseInfo readDisCodeData(String vipCardNo);
 }
