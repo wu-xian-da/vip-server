@@ -155,7 +155,7 @@ public class OrderManagerImpl implements OrderManager {
         orders.setPayMoney(vipCard.getInitMoney());
         orders.setOrderId(IdGen.uuid());
         orders.setOrderTime(new Date());
-        orders.setRemark1("亿出行VIP卡");
+        orders.setRemark1("VIP卡");
         orders.setOrderState(VipOrderState.NOT_PAY.getName());
         orders.setDtflag(StateType.EXIST.getName());
         orders.setInvoiceFlag(0);

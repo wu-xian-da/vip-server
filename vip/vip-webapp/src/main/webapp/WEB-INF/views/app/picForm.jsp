@@ -127,7 +127,7 @@ var checksubmit = function(){
 <body>
 	<form method="post" class="form">
 		<fieldset><input name="pictureId" type="hidden" value="${appPicture.pictureId }" readonly="readonly" />
-			<legend>用户基本信息</legend>
+			<legend>基本信息</legend>
 			<table class="table" style="width: 100%;">
 				<tr>
 					<th>排序:</th>
@@ -144,7 +144,8 @@ var checksubmit = function(){
 							<option value="1" <c:if test="${appPicture.imagetype==1 }">selected="selected"</c:if> >用户APP轮播图</option>
 							<option value="2" <c:if test="${appPicture.imagetype==2 }">selected="selected"</c:if> >用户APP合作按钮</option>
 							<option value="3" <c:if test="${appPicture.imagetype==3 }">selected="selected"</c:if> >VIP卡权益登入前轮播</option>
-							<option value="4" <c:if test="${appPicture.imagetype==3 }">selected="selected"</c:if> >VIP卡权益登入后轮播</option>
+							<option value="4" <c:if test="${appPicture.imagetype==4 }">selected="selected"</c:if> >VIP卡权益登入后轮播</option>
+							<option value="5" <c:if test="${appPicture.imagetype==5 }">selected="selected"</c:if> >业务员APPVIP卡权益</option>
 					</select></td>
 				</tr>
 				<tr>

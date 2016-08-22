@@ -172,6 +172,20 @@ public class ResourceController  {
 	}
 
 	/**
+	 * 销售VIP卡权益信息
+	 */
+	@RequestMapping(value = "/saleVipCardRight", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseMsgInfo getVipCardRight() {
+		try {
+			return BaseMsgInfo.success(appConfigManager.getVipCardInfo());
+		}catch (Exception e){
+			log.error("获取VIP卡权益信息失败",e);
+			return BaseMsgInfo.msgFail("获取VIP卡权益信息失败");
+		}
+	}
+
+	/**
 	 * VIP卡权益信息
 	 */
 	@RequestMapping(value = "/getVipCardRight", method = RequestMethod.GET)

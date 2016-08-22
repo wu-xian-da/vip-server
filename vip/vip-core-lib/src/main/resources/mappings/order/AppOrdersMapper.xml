@@ -219,6 +219,7 @@
 		and ord.order_id = acb.order_id 
 		and ord.order_id=aoc.order_id 
 		and avp.card_no=aoc.card_id
+		and acb.dtflag =0 
 		<if test="backType != null">
 			and acb.back_type = #{backType}
 		</if>
