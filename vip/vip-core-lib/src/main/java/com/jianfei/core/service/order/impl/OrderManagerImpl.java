@@ -289,11 +289,16 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public double remainMoney(String orderId) {
         double remainMoney = 0.00;
+        int count = 0;
         //1、app_order_card表中返回卡号，用户初始金额
         AppOrderCard appOrderCard = appOrderCardMapper.getAppOrderCard(orderId);
         if (appOrderCard != null) {
-            //2、app_consume表中返回vip消费次数
-            int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
+            // >>>>>>>>>>2、app_consume表中返回vip消费次数-->改为从第三方接口获取
+            //int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
+        	AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(appOrderCard.getCardNo());
+        	if(airportEasyUseInfo != null){
+        		count = airportEasyUseInfo.getCountNo();
+        	}
             //3、计算用户vip卡剩余金额
             remainMoney = (float) (appOrderCard.getInitMoney() - count * 150 - 100);
             if (remainMoney < 0) {
