@@ -39,7 +39,7 @@
 				<li>出生日期：<fmt:formatDate value="${customer.birthDay}" pattern="yyyy-MM-dd"/> </li>
 				<li>用户手机号：${customer.phone }</li>
 				<li>用户性别：${customer.sex ==1 ? '男' : '女' }</li>
-				<li>常住地址：${customer.provinceName} ${customer.cityName} ${customer.address }</li>
+				<li>常住地址：${customer.provinceName} ${customer.cityName}</li>
 				<li>邮箱地址：${customer.email}</li>
 			</ul>
 
@@ -54,7 +54,7 @@
 		
 		<!-- 处理按钮 -->
 		<form action="updateFeedbackState" method="post">
-			<input type="hidden" name="id" value="${feedbackId }">
+			<input type="hidden" name="id" value="${feedbackId}">
 			<div id="clerk-footer">
 				<input type="submit" class="btn btn-submit" value="处理" style="background: #64A6E0"/>
 			</div>
