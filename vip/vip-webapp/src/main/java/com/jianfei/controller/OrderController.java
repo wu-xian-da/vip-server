@@ -47,6 +47,7 @@ import com.jianfei.core.common.utils.MessageDto;
 import com.jianfei.core.common.utils.SmartLog;
 import com.jianfei.core.common.utils.StateChangeUtils;
 import com.jianfei.core.common.utils.UUIDUtils;
+import com.jianfei.core.dto.AirportEasyUseInfo;
 import com.jianfei.core.dto.OrderDetailInfo;
 import com.jianfei.core.dto.OrderShowInfoDto;
 import com.jianfei.core.dto.ServiceMsgBuilder;
@@ -147,10 +148,15 @@ public class OrderController extends BaseController {
 		AppOrders appOrders = orderManagerImpl.selectByPrimaryKey(orderId); 
 		List<AppUserFeedback> appuserFeedBackInfoList  = appUserFeedbackImpl.getFeedBackInfoListByUserId(appOrders.getCustomerId());
 		
-		//6 vip使用记录 根据cardno
+		// >>>>>>>>>>>>>>>>6 vip使用记录 根据cardno-->改为从第三方接口获取
 		//6.1 根据orderId 获取carNo
 		AppOrderCard appOrderCard = orderManagerImpl.selectByOrderId(orderId);
-		List<AppConsume> consumeList = orderManagerImpl.selectByVipCardNo(appOrderCard.getCardNo());
+		//List<AppConsume> consumeList = orderManagerImpl.selectByVipCardNo(appOrderCard.getCardNo());
+		List<AppConsume> consumeList = null;
+		AirportEasyUseInfo airportEasyUseInfo = airportEasyManagerImpl.readDisCodeData(appOrderCard.getCardNo());
+		if(airportEasyUseInfo != null){
+			consumeList = airportEasyUseInfo.getConsumeList();
+		}
 		
 		model.addAttribute("orderDetailInfo", orderDetailInfo);
 		model.addAttribute("cardInfo", vipCardInfo);
@@ -850,7 +856,7 @@ public class OrderController extends BaseController {
 	public String unbundCard(@RequestParam(value="vipCardNo",required=true) String vipCardNo){
 		User user = getCurrentUser();
 		try {
-			if(airportEasyManagerImpl.disabledVipCard(vipCardNo)){
+			//if(airportEasyManagerImpl.disabledVipCard(vipCardNo)){
 				//更新卡状态，将解绑失败变成已退卡
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("card_state", VipCardState.BACK_CARD.getName());
@@ -867,7 +873,7 @@ public class OrderController extends BaseController {
 				}
 				
 				
-			};
+			//};
 			
 		} catch (Exception e) {
 			e.printStackTrace();

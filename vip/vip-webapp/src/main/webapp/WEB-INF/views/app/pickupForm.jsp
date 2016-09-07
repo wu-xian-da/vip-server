@@ -45,6 +45,8 @@
  	height: 60xp;
  	margin-bottom: 5px;
  }
+ table{table-layout: fixed;}
+td(word-break: break-all; word-wrap:break-word;)
 </style>
 </head>
 <body>
@@ -90,8 +92,8 @@
 					<td>${pk.number_peers }</td>
 				</tr>
 				<tr>
-						<th>详细地址</th>
-						<td>${pk.detail_address }</td>
+					<th style="width: 300px;">详细地址</th>
+					<td style="word-wrap: break-word;word-break: normal;">${pk.detail_address }</td>
 				</tr>
 			</table>
 		</fieldset>
