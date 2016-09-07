@@ -151,7 +151,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testKonggang_activeCard(){
 		try {
-			airportEasyManager.activeVipCard("07911331248", "13355602019", "刘东松");
+			airportEasyManager.activeVipCard("86822769557", "13355602018", "刘松");
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -238,12 +238,12 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void testkonggang_vipuserStatus(){
-		airportEasyManager.vipuserStatus("郭建", "13965011405");
+		airportEasyManager.vipuserStatus("何斌杰", "15375382463");
 	}
 	
 	@Test
 	public void testkonggang_cardBindStatus(){
-		airportEasyManager.cardBindStatus("07974134378");
+		airportEasyManager.cardBindStatus("86805336712");
 	}
 	
 	@Test
@@ -255,6 +255,11 @@ public class AlipayManagerImplTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testkonggang_checkone(){
+		airportEasyManager.checkone("86822769557");
 	}
 	
 	@Test

@@ -83,5 +83,12 @@ public interface AirportEasyManager {
      */
     String getQrcode(String vipCardNo) throws GetQrcodeException;
     
+    /**
+     * 查询核销码状态
+     * @param vipCardNo
+     * @return	0已使用；1可以使用；2 核销码已禁用；3会员卡已过期；4会员卡未激活 -1 接口错误
+     */
+    int checkone(String vipCardNo);
+    
     AirportEasyUseInfo readDisCodeData(String vipCardNo);
 }
