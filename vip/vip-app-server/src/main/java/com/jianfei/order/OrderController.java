@@ -333,4 +333,20 @@ public class OrderController {
 			return BaseMsgInfo.msgFail("用户取消退卡接口失败");
 		}
 	}
+
+	/**
+	 * 查询卡状态
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/checkCard")
+	@ResponseBody
+	public BaseMsgInfo checkVipCard(@RequestParam(value = "phone", required = true) String phone) {
+		try {
+			return vipUserManager.checkCardState(phone);
+		}catch (Exception e){
+			log.error("查询卡状态",e);
+			return BaseMsgInfo.msgFail("查询卡状态");
+		}
+	}
 }
