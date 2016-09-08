@@ -357,5 +357,28 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 		return aeInfo;
 	}
 	
+    /**
+     * 查询核销码状态
+     * @param vipCardNo
+     * @return	0已使用；1可以使用；2 核销码已禁用；3会员卡已过期；4会员卡未激活 -1 接口错误
+     */
+	@Override
+	public int checkone(String vipCardNo) {
+    	String result = null;
+    	String sign = sign("partner="+GloabConfig.getConfig("konggang.partner")+"&verify_code="+vipCardNo+GloabConfig.getConfig("konggang.key"));
+    	result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"checkone?"+
+    													"partner="+GloabConfig.getConfig("konggang.partner")+
+    													"&verify_code="+vipCardNo +
+    													"&sign=" + sign);
+    	
+    	logger.info("checkone:"+result);
+    	System.out.println("checkone:"+result);
+		JSONObject obj = JSON.parseObject(result);
+		if (obj.get("code").equals("00"))
+			return (int) obj.get("status");
+		else
+			return -1;		
+	}
+	
 
 }
