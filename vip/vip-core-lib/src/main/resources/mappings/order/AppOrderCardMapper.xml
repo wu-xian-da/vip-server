@@ -36,7 +36,7 @@
   <!-- Vip使用记录相关查询  -->
   <select id="getVipCardUseDetailInfo" resultMap="VipResultMap" parameterType="java.lang.String">
     SELECT c.card_id,o.pay_money,av.active_time as activat_time,u.customer_name,u.customer_phone,u.customer_identi,u.sex,u.card_type,o.order_id,o.pay_type,o.pay_user_id,o.invoice_flag,o.sale_name  FROM app_orders o JOIN app_order_card c
-   ON o.order_id=c.order_id JOIN app_customer u ON o.customer_id=u.customer_id join app_vipcard av on c.card_id=av.card_no WHERE u.customer_phone=#{customerPhone} AND  o.order_state=1
+   ON o.order_id=c.order_id JOIN app_customer u ON o.customer_id=u.customer_id join app_vipcard av on c.card_id=av.card_no WHERE u.customer_phone=#{customerPhone}
     <if test="vipCardNo != null">
        and c.card_id = #{vipCardNo}
     </if>

@@ -84,9 +84,9 @@ public interface VipUserManager {
     boolean haveAddOrderRight(String phone);
 
     /**
-     * 根据手机号查询卡状态
-     * @param phone
+     * 根据卡号查询卡状态
+     * @param vipCardNo
      * @return
      */
-    BaseMsgInfo checkCardState(String phone);
+    BaseMsgInfo checkCardState(String vipCardNo);
 }

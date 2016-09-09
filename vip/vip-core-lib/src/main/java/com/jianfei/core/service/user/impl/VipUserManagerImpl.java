@@ -183,22 +183,14 @@ public class VipUserManagerImpl implements VipUserManager {
     }
 
     /**
-     * 根据手机号查询卡状态
+     * 根据vipCard卡号查询卡状态
      *
-     * @param phone
+     * @param vipCardNo
      * @return
      */
     @Override
-    public BaseMsgInfo checkCardState(String phone) {
-        AppCustomer appCustomer=getUserDetail(phone);
-        if (appCustomer==null || appCustomer.getVipCards()==null || appCustomer.getVipCards().isEmpty()){
-            return BaseMsgInfo.msgFail("此用户暂无可用VIP卡");
-        }
-        AppVipcard card=appCustomer.getVipCards().get(0);
-        if (card==null || StringUtils.isBlank(card.getCardNo())){
-            return BaseMsgInfo.msgFail("此用户暂无可用VIP卡");
-        }
-        int code=  airportEasyManager.checkone(card.getCardNo());
+    public BaseMsgInfo checkCardState(String vipCardNo) {
+        int code=  airportEasyManager.checkone(vipCardNo);
         return BaseMsgInfo.success(code);
     }
 }

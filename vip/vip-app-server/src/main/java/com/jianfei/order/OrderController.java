@@ -341,11 +341,11 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/checkCard")
 	@ResponseBody
-	public BaseMsgInfo checkVipCard(@RequestParam(value = "phone", required = true) String phone) {
+	public BaseMsgInfo checkVipCard(@RequestParam(value = "vipCardNo", required = true) String vipCardNo) {
 		try {
-			return vipUserManager.checkCardState(phone);
+			return vipUserManager.checkCardState(vipCardNo);
 		}catch (Exception e){
-			log.error("查询卡状态",e);
+			log.error("查询卡状态失败",e);
 			return BaseMsgInfo.msgFail("查询卡状态");
 		}
 	}
