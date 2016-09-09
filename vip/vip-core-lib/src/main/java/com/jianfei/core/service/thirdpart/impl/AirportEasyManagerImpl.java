@@ -303,7 +303,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 
 	/**
 	 * 获取已禁用码的核销数据定义
-	 * @param 卡号
+	 * @param vipCardNo 卡号
 	 * @return 核销数据，不包含批次号字段
 	 */
 	@Override
@@ -375,7 +375,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     	System.out.println("checkone:"+result);
 		JSONObject obj = JSON.parseObject(result);
 		if (obj.get("code").equals("00"))
-			return (int) obj.get("Status");
+			return Integer.parseInt(obj.get("Status").toString());
 		else
 			return -1;		
 	}
