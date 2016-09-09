@@ -190,7 +190,7 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public BaseMsgInfo checkCardState(String vipCardNo) {
-        int code=  airportEasyManager.checkone(vipCardNo);
+        int code= airportEasyManager.checkone(vipCardNo);
         return BaseMsgInfo.success(code);
     }
 }
