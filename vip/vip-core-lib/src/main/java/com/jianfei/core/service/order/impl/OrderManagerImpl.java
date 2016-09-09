@@ -300,7 +300,7 @@ public class OrderManagerImpl implements OrderManager {
         		count = airportEasyUseInfo.getCountNo();
         	}
             //3、计算用户vip卡剩余金额
-            remainMoney = (float) (appOrderCard.getInitMoney() - count * 150 - 100);
+            remainMoney = (float) (appOrderCard.getInitMoney() - count * 150);
             if (remainMoney < 0) {
                 remainMoney = 0.00;
             }
