@@ -4,11 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppConsume;
 import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.dto.AirportEasyUseInfo;
 import com.jianfei.core.mapper.AppConsumeMapper;
 import com.jianfei.core.service.order.ConsumeManager;
+import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +28,9 @@ public class ConsumeManagerImpl implements ConsumeManager {
 
     @Autowired
      private AppConsumeMapper consumeMapper;
+
+    @Autowired
+    private AirportEasyManager airportEasyManager;
     /**
      * 添加消费记录
      *
@@ -69,7 +75,8 @@ public class ConsumeManagerImpl implements ConsumeManager {
      */
     @Override
     public List<AppConsume> getConsumesByVipNo(String vipCardNo) {
-        return consumeMapper.selectByVipCardNo(vipCardNo);
+        AirportEasyUseInfo easyUseInfo=airportEasyManager.readDisCodeData(vipCardNo);
+        return easyUseInfo == null ? new ArrayList<AppConsume>() : easyUseInfo.getConsumeList();
     }
 
 

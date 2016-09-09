@@ -375,7 +375,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     	System.out.println("checkone:"+result);
 		JSONObject obj = JSON.parseObject(result);
 		if (obj.get("code").equals("00"))
-			return (int) obj.get("status");
+			return (int) obj.get("Status");
 		else
 			return -1;		
 	}
