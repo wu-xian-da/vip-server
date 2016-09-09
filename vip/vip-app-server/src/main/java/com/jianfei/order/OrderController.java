@@ -346,7 +346,7 @@ public class OrderController {
 			return vipUserManager.checkCardState(vipCardNo);
 		}catch (Exception e){
 			log.error("查询卡状态失败",e);
-			return BaseMsgInfo.msgFail("查询卡状态");
+			return BaseMsgInfo.msgFail("查询卡状态失败");
 		}
 	}
 }
