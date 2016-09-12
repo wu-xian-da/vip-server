@@ -66,6 +66,13 @@
 										align : 'left',
 										sortable : true
 									},
+									{
+										width : '150',
+										title : '初始价格',
+										field : 'initMoney',
+										align : 'left',
+										sortable : true
+									},
 
 									{
 										width : '120',

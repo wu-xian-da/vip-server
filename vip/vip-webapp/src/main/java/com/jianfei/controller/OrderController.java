@@ -257,16 +257,23 @@ public class OrderController extends BaseController {
 				outData.put("opr", "0");
 				outData.put("phone", phone);
 				outData.put("invoice",appOrder.getInvoiceFlag());
+				
+				//新需求新增字段
+				double remainMoney = orderManagerImpl.remainMoney(orderId);
+				outData.put("remainMoney", remainMoney);
+				outData.put("payType", appOrder.getPayType());//支付方式
+				
 				//是否有‘申请退款’权限
 				boolean flag = subject.isPermitted("system:order:applyBackMoney");
 				if(flag){
-					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
+					//appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='onRefundApplication("+outData+",this)'>退单申请</button>");
+					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><button class='btn btn-back' onclick='onRefund("+outData+")'>退单申请</button>");
 				}else{
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
 				}
 				
 			}else if(appOrder.getOrderState() == 2){
-				appOrder.setOrderStateName("正在审核");
+				/*appOrder.setOrderStateName("正在审核");
 				JSONObject outData = new JSONObject(); 
 				orderId = appOrder.getOrderId();
 				double remainMoney = orderManagerImpl.remainMoney(orderId);
@@ -285,7 +292,7 @@ public class OrderController extends BaseController {
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a><input style='width:50px' type='text' value='"+smsCode+"' /> <button class='btn btn-confirm' onclick='onRefund("+outData+")'>✓</button><button class='btn btn-close' onclick='onError("+outData+",this)'>✕</button>");
 				}else{
 					appOrder.setOperation("<a href='returnOrderDetailInfoByOrderId?orderId="+orderId+"'><button class='btn'>查看</button></a>");
-				}
+				}*/
 				
 			
 			}else if(appOrder.getOrderState() ==3){

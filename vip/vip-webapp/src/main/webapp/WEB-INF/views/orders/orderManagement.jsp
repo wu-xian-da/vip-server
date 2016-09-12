@@ -67,7 +67,7 @@
 			                    <option value="">全部订单状态</option>
 			                    <option value="0">正在支付</option>
 			                    <option value="1">已支付</option>
-			                    <option value="2">正在审核</option>
+			                    <!-- <option value="2">正在审核</option> -->
 			                    <option value="3">审核通过</option>
 			                    <option value="4">已退款</option>
 			                    <option value="5">已失效</option>
