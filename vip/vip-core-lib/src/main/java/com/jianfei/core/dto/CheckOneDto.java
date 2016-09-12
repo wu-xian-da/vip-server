@@ -1,12 +1,14 @@
 package com.jianfei.core.dto;
 
+import java.util.Date;
+
 public class CheckOneDto {
 	
 	private int status;
 	
 	private String code;
 	
-	private String datas;
+	private Date datas;
 
 	public int getStatus() {
 		return status;
@@ -24,12 +26,13 @@ public class CheckOneDto {
 		this.code = code;
 	}
 
-	public String getDatas() {
+	public Date getDatas() {
 		return datas;
 	}
 
-	public void setDatas(String datas) {
+	public void setDatas(Date datas) {
 		this.datas = datas;
 	}
+
 
 }

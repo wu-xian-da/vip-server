@@ -13,6 +13,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -261,6 +262,7 @@ public class AlipayManagerImplTest {
 	@Test
 	public void testkonggang_checkone(){
 		CheckOneDto re = airportEasyManager.checkone("86800552799");
+		re.getDatas();
 		re.setCode("00");
 	}
 	

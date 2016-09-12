@@ -42,6 +42,7 @@ import com.tencent.common.MD5;
 @Service
 public class AirportEasyManagerImpl implements AirportEasyManager{
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/M/d hh:mm:ss");
 //	public static final String KONGGANG_URL = "http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/";
 //	public static final String KONGGANG_PARTNER = "20160607001";
 //	public static final String KONGGANG_KEY = "S1-L6-D0-T1-G2-S7";
@@ -378,10 +379,18 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 		CheckOneDto dto = new CheckOneDto();
 		if (obj.get("code").equals("00")){
 			dto.setCode("00");
-			int status = obj.getInteger("status");
+			int status = obj.getInteger("Status");
 			dto.setStatus(status);
-			if (status == 2)
-				dto.setDatas(obj.getString("datas"));
+			if (status == 2){
+				Date date = null;
+				try {
+					date = sdf.parse(obj.getString("datas"));
+				} catch (ParseException e) {
+					date = new Date();
+					e.printStackTrace();
+				}
+				dto.setDatas(date);
+			}
 		}
 
 		else
