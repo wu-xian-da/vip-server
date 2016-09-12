@@ -304,7 +304,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 
 	/**
 	 * 获取已禁用码的核销数据定义
-	 * @param 卡号
+	 * @param vipCardNo 卡号
 	 * @return 核销数据，不包含批次号字段
 	 */
 	@Override
@@ -361,7 +361,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     /**
      * 查询核销码状态
      * @param vipCardNo
-     * @return	0已使用；1可以使用；2 核销码已禁用；3会员卡已过期；4会员卡未激活 -1 接口错误
+     * @return	0已使用；1可以使用；2 核销码已禁用(可以读取vip卡禁用时间)；3会员卡已过期；4会员卡未激活 -1 接口错误  
      */
 	@Override
 	public CheckOneDto checkone(String vipCardNo) {
@@ -383,6 +383,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 			if (status == 2)
 				dto.setDatas(obj.getString("datas"));
 		}
+
 		else
 			dto.setStatus(-1);
 		

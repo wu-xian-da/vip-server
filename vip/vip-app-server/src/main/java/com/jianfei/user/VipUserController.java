@@ -81,7 +81,12 @@ public class VipUserController {
     @ResponseBody
     public BaseMsgInfo getVipCardUse(@RequestParam(value = "vipCardNo", required = true) String vipCardNo
     ) {
-        return BaseMsgInfo.success(consumeManager.getConsumesByVipNo(vipCardNo));
+        try {
+            return BaseMsgInfo.success(consumeManager.getConsumesByVipNo(vipCardNo));
+        }catch (Exception e){
+            log.error("VIP 使用记录查询失败",e);
+            return BaseMsgInfo.msgFail("使用记录查询失败");
+        }
     }
 
     /**
