@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 
 import com.jianfei.core.dto.AirportEasyUseInfo;
+import com.jianfei.core.dto.CheckOneDto;
 import com.jianfei.core.dto.exception.GetQrcodeException;
 
 
@@ -88,7 +89,7 @@ public interface AirportEasyManager {
      * @param vipCardNo
      * @return	0已使用；1可以使用；2 核销码已禁用；3会员卡已过期；4会员卡未激活 -1 接口错误
      */
-    int checkone(String vipCardNo);
+    CheckOneDto checkone(String vipCardNo);
     
     AirportEasyUseInfo readDisCodeData(String vipCardNo);
 }

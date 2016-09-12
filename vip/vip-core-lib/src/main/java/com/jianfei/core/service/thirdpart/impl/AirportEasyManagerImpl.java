@@ -26,6 +26,7 @@ import com.jianfei.core.common.utils.GloabConfig;
 import com.jianfei.core.common.utils.UUIDUtils;
 import com.jianfei.core.common.utils.impl.HttpServiceRequest;
 import com.jianfei.core.dto.AirportEasyUseInfo;
+import com.jianfei.core.dto.CheckOneDto;
 import com.jianfei.core.dto.exception.GetQrcodeException;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.tencent.common.MD5;
@@ -363,7 +364,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
      * @return	0已使用；1可以使用；2 核销码已禁用；3会员卡已过期；4会员卡未激活 -1 接口错误
      */
 	@Override
-	public int checkone(String vipCardNo) {
+	public CheckOneDto checkone(String vipCardNo) {
     	String result = null;
     	String sign = sign("partner="+GloabConfig.getConfig("konggang.partner")+"&verify_code="+vipCardNo+GloabConfig.getConfig("konggang.key"));
     	result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"checkone?"+
@@ -374,10 +375,18 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
     	logger.info("checkone:"+result);
     	System.out.println("checkone:"+result);
 		JSONObject obj = JSON.parseObject(result);
-		if (obj.get("code").equals("00"))
-			return (int) obj.get("status");
+		CheckOneDto dto = new CheckOneDto();
+		if (obj.get("code").equals("00")){
+			dto.setCode("00");
+			int status = obj.getInteger("status");
+			dto.setStatus(status);
+			if (status == 2)
+				dto.setDatas(obj.getString("datas"));
+		}
 		else
-			return -1;		
+			dto.setStatus(-1);
+		
+		return dto;
 	}
 	
 

@@ -259,7 +259,7 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void testkonggang_checkone(){
-		airportEasyManager.checkone("86822769557");
+		airportEasyManager.checkone("86800552799");
 	}
 	
 	@Test
