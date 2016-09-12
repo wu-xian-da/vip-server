@@ -378,7 +378,7 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 		CheckOneDto dto = new CheckOneDto();
 		if (obj.get("code").equals("00")){
 			dto.setCode("00");
-			int status = obj.getInteger("status");
+			int status = obj.getInteger("Status");
 			dto.setStatus(status);
 			if (status == 2)
 				dto.setDatas(obj.getString("datas"));

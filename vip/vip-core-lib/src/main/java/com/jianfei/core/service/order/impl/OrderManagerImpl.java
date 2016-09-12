@@ -407,6 +407,7 @@ public class OrderManagerImpl implements OrderManager {
         if (vipCardUseDetailInfo == null || StringUtils.isBlank(vipCardUseDetailInfo.getVipCardNo())) {
             return BaseMsgInfo.msgFail("暂未查询到此VIP卡相关信息");
         }
+        vipCardUseDetailInfo.setReturnDate(airportEasyManager.checkone(vipCardUseDetailInfo.getVipCardNo()).getDatas());
         getVipCardUseInfo(vipCardUseDetailInfo);
         return BaseMsgInfo.success(vipCardUseDetailInfo);
     }

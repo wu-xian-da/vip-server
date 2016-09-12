@@ -8,6 +8,7 @@ import com.jianfei.core.common.enu.VipUserSate;
 import com.jianfei.core.common.utils.IdGen;
 import com.jianfei.core.common.utils.StringUtils;
 import com.jianfei.core.dto.BaseMsgInfo;
+import com.jianfei.core.dto.CheckOneDto;
 import com.jianfei.core.dto.exception.GetQrcodeException;
 import com.jianfei.core.mapper.AppCustomerMapper;
 import com.jianfei.core.mapper.AppOrdersMapper;
@@ -190,7 +191,7 @@ public class VipUserManagerImpl implements VipUserManager {
      */
     @Override
     public BaseMsgInfo checkCardState(String vipCardNo) {
-        int code= airportEasyManager.checkone(vipCardNo);
-        return BaseMsgInfo.success(code);
+        CheckOneDto checkOneDto= airportEasyManager.checkone(vipCardNo);
+        return BaseMsgInfo.success(checkOneDto.getStatus());
     }
 }
