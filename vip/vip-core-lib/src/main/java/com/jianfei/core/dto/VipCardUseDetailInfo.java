@@ -113,7 +113,7 @@ public class VipCardUseDetailInfo {
     /**
      * 退卡日期
      */
-    private String returnDate;
+    private Date returnDate;
 
     public String getVipCardNo() {
         return vipCardNo;
@@ -292,11 +292,11 @@ public class VipCardUseDetailInfo {
         this.saleName = saleName;
     }
 
-    public String getReturnDate() {
+    public Date getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(String returnDate) {
+    public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
 }
