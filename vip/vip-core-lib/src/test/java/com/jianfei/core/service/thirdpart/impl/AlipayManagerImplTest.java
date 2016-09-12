@@ -30,6 +30,7 @@ import com.alipay.demo.trade.model.builder.AlipayTradePrecreateContentBuilder;
 import com.jianfei.core.common.pay.PayNotifyRequest;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.common.utils.DateUtil;
+import com.jianfei.core.dto.CheckOneDto;
 import com.jianfei.core.dto.exception.GetQrcodeException;
 import com.jianfei.core.service.stat.impl.ArchiveManagerImpl;
 import com.jianfei.core.service.thirdpart.AirportEasyManager;
@@ -259,7 +260,8 @@ public class AlipayManagerImplTest {
 	
 	@Test
 	public void testkonggang_checkone(){
-		airportEasyManager.checkone("86800552799");
+		CheckOneDto re = airportEasyManager.checkone("86800552799");
+		re.setCode("00");
 	}
 	
 	@Test
