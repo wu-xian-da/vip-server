@@ -379,7 +379,18 @@ public class OrderManagerImpl implements OrderManager {
      */
     @Override
     public AppOrders getOrderDetailByOrderId(String orderId) {
-        return appOrdersMapper.getOrderDetailByOrderId(orderId);
+        AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(orderId);
+        if (!orders.getVipCards().isEmpty()) {
+            List<AppVipcard> list = new ArrayList<>();
+            AppVipcard vipcard = orders.getVipCards().get(0);
+            AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(vipcard.getCardNo());
+            if (airportEasyUseInfo != null && !airportEasyUseInfo.getConsumeList().isEmpty()) {
+                vipcard.setActiveTime(airportEasyUseInfo.getConsumeList().get(0).getConsumeTime());
+            }
+            list.add(vipcard);
+            orders.setVipCards(list);
+        }
+        return orders;
     }
 
 
@@ -419,8 +430,13 @@ public class OrderManagerImpl implements OrderManager {
      */
     private void getVipCardUseInfo(VipCardUseDetailInfo vipCardUseDetailInfo) {
         //3、查询VIP使用信息
-        List<AppConsume> list = consumeManager.getConsumesByVipNo(vipCardUseDetailInfo.getVipCardNo());
-        int num = list == null ? 0 : list.size();
+        AirportEasyUseInfo easyUseInfo = airportEasyManager.readDisCodeData(vipCardUseDetailInfo.getVipCardNo());
+        List<AppConsume> list = new ArrayList<>();
+        if (easyUseInfo != null) {
+            list = easyUseInfo.getConsumeList();
+            vipCardUseDetailInfo.setActiveTime(list.get(0).getConsumeTime());
+        }
+        int num = list.size();
         float usedMoney = num * 200;
         float realMoney = num * 150;
         float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney - 100;
