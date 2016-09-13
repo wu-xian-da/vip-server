@@ -57,7 +57,7 @@ public class QueueManagerImplTest {
 	@Test
 	public void testProcessMessage() {
 		MessageDto<Map<String, String>> messageDto = queueManager
-				.processMessage("QU", QueueManager.SMS_QUEUE_VIP_BAK);
+				.processMessage("SMS_QUEUE_VIP", QueueManager.SMS_QUEUE_VIP_BAK);
 		if (null != messageDto) {
 			if (messageDto.isOk()) {
 				LoggerFactory.getLogger(getClass()).info(
@@ -73,13 +73,13 @@ public class QueueManagerImplTest {
 	public void testProcedureBack() {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userPhone", "13275601668");
-		map.put("msgType", "006");
+		map.put("msgType", "004");
 		map.put("userName", "tom");
 		map.put("vipCardNo", "07998371917");
 		Map<String, Object> m = new HashMap<String, Object>();
 		m.put("returnMoney", 0);
 		map.put("msgBody", JSONObject.toJSONString(m));
-		JedisUtils.lpushString("QU", JSONObject.toJSONString(map));
+		JedisUtils.lpushString("SMS_QUEUE_VIP", JSONObject.toJSONString(map));
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class QueueManagerImplTest {
 		map.put("msgType", "006");
 		map.put("userName", "tom");
 		map.put("userPhone", "13275601668");
-		JedisUtils.lpushString("QU", JSONObject.toJSONString(map));
+		JedisUtils.lpushString("SMS_QUEUE_VIP", JSONObject.toJSONString(map));
 	}
 
 	@Test
