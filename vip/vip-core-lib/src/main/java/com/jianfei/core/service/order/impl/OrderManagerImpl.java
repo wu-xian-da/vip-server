@@ -297,19 +297,21 @@ public class OrderManagerImpl implements OrderManager {
             //int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
         	AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(appOrderCard.getCardNo());
         	if(airportEasyUseInfo != null){
-        		count = airportEasyUseInfo.getCountNo();
+        		List<AppConsume> list = airportEasyUseInfo.getConsumeList();
+        		if(list != null && list.size() >0){
+        			count = list.size();
+        		}
         	}
             //3、计算用户vip卡剩余金额
-            remainMoney = (float) (appOrderCard.getInitMoney() - count * 150);
+        	remainMoney = (double) (appOrderCard.getInitMoney() - count * 150);
             if (remainMoney < 0) {
                 remainMoney = 0.00;
             }
 
         }
-        System.out.println("float remainMoney=" + remainMoney);
         return remainMoney;
     }
-
+   
 
     /**
      * 记录退卡流水号
@@ -432,7 +434,7 @@ public class OrderManagerImpl implements OrderManager {
         //3、查询VIP使用信息
         AirportEasyUseInfo easyUseInfo = airportEasyManager.readDisCodeData(vipCardUseDetailInfo.getVipCardNo());
         List<AppConsume> list = new ArrayList<>();
-        if (easyUseInfo != null) {
+        if (easyUseInfo != null && !easyUseInfo.getConsumeList().isEmpty()) {
             list = easyUseInfo.getConsumeList();
             vipCardUseDetailInfo.setActiveTime(list.get(0).getConsumeTime());
         }

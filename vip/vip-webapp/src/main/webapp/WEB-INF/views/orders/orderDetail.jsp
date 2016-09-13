@@ -64,7 +64,7 @@
 				
 				</li>
 				<li><label>支付时间：</label><fmt:formatDate value="${orderDetailInfo.payTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
-				<li><label>卡片激活时间：</label><fmt:formatDate value="${cardInfo.activeTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+				<li><label>卡片激活时间：</label><fmt:formatDate value="${activityTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 			</ul>
 
 			<div class="order-list-title">个人资料</div>

@@ -156,6 +156,9 @@ public class OrderController extends BaseController {
 		AirportEasyUseInfo airportEasyUseInfo = airportEasyManagerImpl.readDisCodeData(appOrderCard.getCardNo());
 		if(airportEasyUseInfo != null){
 			consumeList = airportEasyUseInfo.getConsumeList();
+			if(consumeList.size()>0){
+				model.addAttribute("activityTime", consumeList.get(0).getConsumeTime());
+			}
 		}
 		
 		model.addAttribute("orderDetailInfo", orderDetailInfo);
@@ -259,7 +262,7 @@ public class OrderController extends BaseController {
 				outData.put("invoice",appOrder.getInvoiceFlag());
 				
 				//新需求新增字段
-				double remainMoney = orderManagerImpl.remainMoney(orderId);
+				float remainMoney = (float)orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("payType", appOrder.getPayType());//支付方式
 				
