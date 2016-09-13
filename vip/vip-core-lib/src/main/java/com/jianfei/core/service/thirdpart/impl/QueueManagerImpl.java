@@ -231,13 +231,13 @@ public class QueueManagerImpl implements QueueManager {
 			}
 		}
 		// TODO 二期把注释去掉
-		// if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
-		// SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-		// "退卡操作,卡号为" + vipCardNo + "，发送短信成功...");
-		// } else {
-		// SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-		// "退卡操作,卡号为" + vipCardNo + "，发送短信失败，请稍后再试...");
-		// }
+		if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"退卡操作,卡号为" + vipCardNo + "，发送短信成功...");
+		} else {
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"退卡操作,卡号为" + vipCardNo + "，发送短信失败，请稍后再试...");
+		}
 
 		return messageDto;
 	}
