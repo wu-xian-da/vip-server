@@ -229,13 +229,13 @@
 					} ]
 				},
 				// Resize images on clientside if we can           
-				resize : {
+				/* resize : {
 					width : 200,
 					height : 200,
 					quality : 90,
 					crop : true
 				     
-				}, 
+				},  */
 				//Flash settings           
 				flash_swf_url : '../plupload/Moxie.swf',
 				//Silverlight settings           
