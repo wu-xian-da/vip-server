@@ -186,26 +186,26 @@ public class QueueManagerImpl implements QueueManager {
 		SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
 				"退卡操作，消息类型为" + msgType + "，准备开始退卡的解绑操作...");
 		// 调用空港绑定接口
-		if (!airportEasyManager.disabledVipCard(vipCardNo)) {
-			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-					"退卡操作，解绑失败，调用第三方接口失败，消息类型为" + msgType + "，准备更改卡号为"
-							+ vipCardNo + "的卡状态为‘解绑失败’...");
-			// 修改卡的状态
-			if (vipCardManager.activeAppCard(new MapUtils.Builder()
-					.setKeyValue("card_state",
-							VipCardState.UNBUNDLING_FAIL.getName())// 更改VIP卡状态
-					.setKeyValue("cardNo", vipCardNo).build())) {
-
-				SmartLog.warn(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-						"退卡操作，调用空港接口解除绑定卡号为" + vipCardNo
-								+ "卡失败，数据库更新卡号状态为‘解绑失败’状态成功");
-
-			} else {
-				SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-						"调用空港接口解除绑定卡号为" + vipCardNo
-								+ "卡失败，数据库更新卡号状态为‘解绑失败’状态失败");
-			}
-		} else {
+//		if (!airportEasyManager.disabledVipCard(vipCardNo)) {
+//			SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+//					"退卡操作，解绑失败，调用第三方接口失败，消息类型为" + msgType + "，准备更改卡号为"
+//							+ vipCardNo + "的卡状态为‘解绑失败’...");
+//			// 修改卡的状态
+//			if (vipCardManager.activeAppCard(new MapUtils.Builder()
+//					.setKeyValue("card_state",
+//							VipCardState.UNBUNDLING_FAIL.getName())// 更改VIP卡状态
+//					.setKeyValue("cardNo", vipCardNo).build())) {
+//
+//				SmartLog.warn(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+//						"退卡操作，调用空港接口解除绑定卡号为" + vipCardNo
+//								+ "卡失败，数据库更新卡号状态为‘解绑失败’状态成功");
+//
+//			} else {
+//				SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+//						"调用空港接口解除绑定卡号为" + vipCardNo
+//								+ "卡失败，数据库更新卡号状态为‘解绑失败’状态失败");
+//			}
+//		} else {
 			// 修改卡的状态
 			if (vipCardManager
 					.activeAppCard(new MapUtils.Builder()
@@ -220,7 +220,7 @@ public class QueueManagerImpl implements QueueManager {
 						"退卡操作,调用空港接口解除绑定卡号为" + vipCardNo
 								+ "卡卡成功，数据库更新卡号状态为退卡成功状态失败，准备发送短信...");
 			}
-		}
+//		}
 		if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
 			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
 					"退卡操作,卡号为" + vipCardNo + "，发送短信成功...");
