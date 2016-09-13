@@ -432,7 +432,7 @@ public class OrderManagerImpl implements OrderManager {
         //3、查询VIP使用信息
         AirportEasyUseInfo easyUseInfo = airportEasyManager.readDisCodeData(vipCardUseDetailInfo.getVipCardNo());
         List<AppConsume> list = new ArrayList<>();
-        if (easyUseInfo != null) {
+        if (easyUseInfo != null && !easyUseInfo.getConsumeList().isEmpty()) {
             list = easyUseInfo.getConsumeList();
             vipCardUseDetailInfo.setActiveTime(list.get(0).getConsumeTime());
         }
