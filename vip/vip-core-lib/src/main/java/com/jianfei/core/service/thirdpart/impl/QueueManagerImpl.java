@@ -116,7 +116,6 @@ public class QueueManagerImpl implements QueueManager {
 		String vipCardNo = map.get("vipCardNo");
 		isSend(userPhone, msgType);
 
-		boolean isOk = false;// 操作结果状态
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
 			// 激活卡号
@@ -131,22 +130,13 @@ public class QueueManagerImpl implements QueueManager {
 		} else {
 			// TODO 二期把isSend 去掉
 			if (isSend(userPhone, msgType)) {
-//				SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-//						"准备发送短信，(非激活操作非退卡完成和紧急退卡操作),消息类型为+" + msgType);
-				isOk = msgInfoManager.sendMsgInfo(userPhone, msgBody);
-			}
-		}
-
-		// TODO 二期把isSend 去掉
-		if (isSend(userPhone, msgType)) {
-			if (!isOk) {
-				SmartLog.error(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-						"发送短信,消息类型为+" + msgType
-								+ ",调用短信接口失败，请稍后重试...");
-			} else {
-				SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-						"发送短信,消息类型为+" + msgType
-								+ ",发送短信成功...");
+				if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
+					SmartLog.info(ModuleType.MESSAGE_MODULE.getName(),
+							userPhone, "发送短信,消息类型为+" + msgType + ",发送短信成功...");
+				} else {
+					SmartLog.error(ModuleType.MESSAGE_MODULE.getName(),
+							userPhone, "发送短信,消息类型为+" + msgType + ",发送短信失败...");
+				}
 			}
 		}
 
@@ -164,7 +154,8 @@ public class QueueManagerImpl implements QueueManager {
 	private boolean isSend(String userPhone, String msgType) {
 		// 暂时开放001，002，003
 		if ("001".equals(msgType) || "002".equals(msgType)
-				|| "003".equals(msgType)) {
+				|| "003".equals(msgType) || "006".equals(msgType)
+				|| "009".equals(msgType)) {
 			return true;
 		} else {
 			return false;
@@ -230,14 +221,13 @@ public class QueueManagerImpl implements QueueManager {
 								+ "卡卡成功，数据库更新卡号状态为退卡成功状态失败，准备发送短信...");
 			}
 		}
-		// TODO 二期把注释去掉
-		// if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
-		// SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-		// "退卡操作,卡号为" + vipCardNo + "，发送短信成功...");
-		// } else {
-		// SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
-		// "退卡操作,卡号为" + vipCardNo + "，发送短信失败，请稍后再试...");
-		// }
+		if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"退卡操作,卡号为" + vipCardNo + "，发送短信成功...");
+		} else {
+			SmartLog.info(ModuleType.MESSAGE_MODULE.getName(), userPhone,
+					"退卡操作,卡号为" + vipCardNo + "，发送短信失败，请稍后再试...");
+		}
 
 		return messageDto;
 	}
