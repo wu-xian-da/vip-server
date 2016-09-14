@@ -302,7 +302,7 @@ public class OrderController extends BaseController {
 				//退款
 				JSONObject outData = new JSONObject(); 
 				orderId = appOrder.getOrderId();
-				double remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
+				float remainMoney = (float) orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
 				AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", orderId);//订单号
@@ -408,7 +408,7 @@ public class OrderController extends BaseController {
 					//退款
 					JSONObject outData = new JSONObject(); 
 					orderId = appOrder.getOrderId();
-					double remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
+					float remainMoney = (float) orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
 					AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
 					outData.put("remainMoney", remainMoney);
 					outData.put("orderId", orderId);//订单号
