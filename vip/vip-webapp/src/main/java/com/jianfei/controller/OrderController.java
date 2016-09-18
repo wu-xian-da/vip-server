@@ -142,7 +142,8 @@ public class OrderController extends BaseController {
 		}
 		//4 退卡余额信息
 		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
-		
+		//最终退款金额
+		float finalBackMoney = (float)orderManagerImpl.remainMoney(orderId);
 		//5 反馈信息 根据用户id
 		//5.1 根据orderId获取用户id
 		AppOrders appOrders = orderManagerImpl.selectByPrimaryKey(orderId); 
@@ -160,7 +161,7 @@ public class OrderController extends BaseController {
 				model.addAttribute("activityTime", consumeList.get(0).getConsumeTime());
 			}
 		}
-		
+		model.addAttribute("finalBackMoney", finalBackMoney);
 		model.addAttribute("orderDetailInfo", orderDetailInfo);
 		model.addAttribute("cardInfo", vipCardInfo);
 		if(appInvoice !=null){
