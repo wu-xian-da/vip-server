@@ -2,10 +2,8 @@ package com.jianfei.core.bean;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.jianfei.core.common.utils.CustomFloatSerialize;
-import com.jianfei.core.common.utils.GloabConfig;
 
 public class AppCardBack {
 	
@@ -16,6 +14,7 @@ public class AppCardBack {
     private String customerCard;//退款卡号
     private int dtflag;//是否逻辑删除
     private float money;//退款金额
+    private float finalBackMoney;//最终退款金额
     private Date finishTime;//完成时间
     private String orderId;//订单号
     private String createrId;//创建人编号
@@ -250,18 +249,7 @@ public class AppCardBack {
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "AppCardBack [backId=" + backId + ", createTime=" + createTime + ", backType=" + backType
-				+ ", customerName=" + customerName + ", customerCard=" + customerCard + ", dtflag=" + dtflag
-				+ ", money=" + money + ", finishTime=" + finishTime + ", orderId=" + orderId + ", createrId="
-				+ createrId + ", checkId=" + checkId + ", agreementUrl=" + agreementUrl + ", cardNo=" + cardNo
-				+ ", bankName=" + bankName + "]";
-	}
-
+	
 	public String getCustomerPhone() {
 		return customerPhone;
 	}
@@ -295,4 +283,11 @@ public class AppCardBack {
 	public void setCreateName(String createName) {
 		this.createName = createName;
 	}
+	public float getFinalBackMoney() {
+		return finalBackMoney;
+	}
+	public void setFinalBackMoney(float finalBackMoney) {
+		this.finalBackMoney = finalBackMoney;
+	}
+	
 }
