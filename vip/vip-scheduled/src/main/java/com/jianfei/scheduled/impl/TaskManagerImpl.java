@@ -87,31 +87,31 @@ public class TaskManagerImpl implements ITaskManager {
 	 * @see com.jianfei.scheduled.ITaskManager#checkinDataSchedule()
 	 */
 	public void checkinDataSchedule() {
-//		logger.info("<<<<<<获取空港核销数据>>>>>>");
-//		try {
-//			AirportEasyUseInfo aeInfo = airportEasyManager.getVipCardUseInfo();
-//			if (aeInfo != null) {
-//				airportEasyManager.sendConfirmInfo(aeInfo.getBatchNo());
-//				List<AppConsume> clist = aeInfo.getConsumeList();
-//				if (clist != null) {
-//					int size = aeInfo.getConsumeList().size();
-//					for (int i = 0; i < size; i++) {
-//						AppConsume appConsume = clist.get(i);
-//						consumeManager.addConsume(appConsume);
-//
-//						// 判断是否是第一次使用，如果是，redis计时加1，更新卡的第一次使用时间和有效时间，如果不是,redis计时累计加1
-//						try {
-//							firstServiceHandle(appConsume);
-//						} catch (Exception e) {
-//							logger.error("对卡信息使用次数统计异常:" + e.getMessage());
-//						}
-//						return;
-//					}
-//				}
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} 
+		logger.info("<<<<<<获取空港核销数据>>>>>>");
+		try {
+			AirportEasyUseInfo aeInfo = airportEasyManager.getVipCardUseInfo();
+			if (aeInfo != null) {
+				airportEasyManager.sendConfirmInfo(aeInfo.getBatchNo());
+				List<AppConsume> clist = aeInfo.getConsumeList();
+				if (clist != null) {
+					int size = aeInfo.getConsumeList().size();
+					for (int i = 0; i < size; i++) {
+						AppConsume appConsume = clist.get(i);
+						consumeManager.addConsume(appConsume);
+
+						// 判断是否是第一次使用，如果是，redis计时加1，更新卡的第一次使用时间和有效时间，如果不是,redis计时累计加1
+						try {
+							firstServiceHandle(appConsume);
+						} catch (Exception e) {
+							logger.error("对卡信息使用次数统计异常:" + e.getMessage());
+						}
+						return;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
