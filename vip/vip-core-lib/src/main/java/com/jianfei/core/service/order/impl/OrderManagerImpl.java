@@ -441,10 +441,10 @@ public class OrderManagerImpl implements OrderManager {
         int num = list.size();
         float usedMoney = num * 200;
         float realMoney = num * 150;
-        float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney - 100;
+        float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney ;
         if (remainMoney < 0)
             remainMoney = 0;
-        vipCardUseDetailInfo.setSafeMoney(100);
+        vipCardUseDetailInfo.setSafeMoney(0);
         vipCardUseDetailInfo.setReturnMoney(remainMoney);
         vipCardUseDetailInfo.setRealMoney(realMoney);
         vipCardUseDetailInfo.setReturnInfo("由于开卡当日亿出行已为您投保，保费100元，若退卡，需扣除保费。" +
