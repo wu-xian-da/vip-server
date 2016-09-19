@@ -311,6 +311,28 @@ public class OrderManagerImpl implements OrderManager {
         }
         return remainMoney;
     }
+    
+    /**
+     * 根据订单号计算对应卡号的服务费
+     */
+    @Override
+    public double calculateServiceMoney(String orderId){
+    	double serviceMoney = 0.00;
+    	int count = 0;
+    	AppOrderCard appOrderCard = appOrderCardMapper.getAppOrderCard(orderId);
+        if (appOrderCard != null) {
+        	AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(appOrderCard.getCardNo());
+        	if(airportEasyUseInfo != null){
+        		List<AppConsume> list = airportEasyUseInfo.getConsumeList();
+        		if(list != null && list.size() >0){
+        			count = list.size();
+        		}
+        	}
+            //计算对应卡号的服务费
+        	serviceMoney = count * 150.00;
+        }
+        return serviceMoney;
+    }
    
 
     /**

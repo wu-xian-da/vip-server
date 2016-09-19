@@ -539,7 +539,7 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value="/applyBackCardaAudit")
 	@ResponseBody
-	public Map<String,Object> auditPass(String orderId,Integer opType,String phone){
+	public Map<String,Object> auditNoPass(String orderId,Integer opType,String phone){
 		User user = getCurrentUser();
 		//1、审核不通过
 		try {
@@ -615,6 +615,7 @@ public class OrderController extends BaseController {
 		
 		//2、将退款信息录入到流水表中
 		AppCardBack appCardBack = new AppCardBack();
+		appCardBack.setServiceMoney((float) orderManagerImpl.calculateServiceMoney(orderId));
 		appCardBack.setBackId(UUIDUtils.getPrimaryKey());
 		appCardBack.setCreateTime(new Date());
 		appCardBack.setOrderId(orderId);
@@ -717,6 +718,7 @@ public class OrderController extends BaseController {
 		Map<String,Object> parMap = new HashMap<String,Object>();
 		double finalBackMoney = orderManagerImpl.remainMoney(orderId);
 		parMap.put("finalBackMoney", finalBackMoney);
+		parMap.put("serviceMoney",orderManagerImpl.calculateServiceMoney(orderId));
 		parMap.put("finishTime", new Date());
 		parMap.put("orderId", orderId);
 		parMap.put("checkId", userId);

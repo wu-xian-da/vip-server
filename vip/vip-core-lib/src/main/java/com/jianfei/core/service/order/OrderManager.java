@@ -93,6 +93,13 @@ public interface OrderManager {
     double remainMoney(String orderId);
     
     /**
+     * 根据订单号计算对应卡号的服务费
+     * @param orderId
+     * @return
+     */
+    double calculateServiceMoney(String orderId);
+    
+    /**
      * guo.jian
      * insertBackCardInfo(记录退卡流水号)
      * @param appCardBack
