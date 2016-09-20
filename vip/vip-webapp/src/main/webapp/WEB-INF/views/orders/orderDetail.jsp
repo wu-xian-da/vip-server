@@ -136,7 +136,7 @@
 					test="${orderDetailInfo.orderState==3 || orderDetailInfo.orderState==4}">
 
 					<li>退款进度：${orderDetailInfo.orderState ==4 ?'已退款':'审核通过'}</li>
-					<li>退款金额：<fmt:formatNumber value="${appCardBack.finalBackMoney}"
+					<li>退款金额：<fmt:formatNumber value="${finalBackMoney}"
 							pattern="0.00" /> 元
 					</li>
 					<li>退款方式： <c:choose>
