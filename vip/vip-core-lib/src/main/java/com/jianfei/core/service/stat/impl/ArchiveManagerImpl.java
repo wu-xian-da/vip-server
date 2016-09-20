@@ -369,6 +369,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 	@Override
 	public List<Map<String, Object>> selectAirportByProvinceIds(
 			Map<String, Object> map) throws IllegalArgumentException {
+		
 		Object userNo = map.get("code");
 
 		if (StringUtils.isEmpty(StringUtils.obj2String(userNo))) {
@@ -424,7 +425,7 @@ public class ArchiveManagerImpl implements ArchiveManager {
 									StringUtils.obj2String(mapRole
 											.get("role_type")))) {
 						Map<String, Object> innerRsMap = new HashMap<String, Object>();
-						innerRsMap.put("aids", StringUtils.EMPTY);
+						innerRsMap.put("aids", m.get("aids").toString());
 						innerRsMap.put("anames", "所有场站");
 						maps.add(innerRsMap);
 					}
