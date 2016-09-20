@@ -546,8 +546,8 @@ public class OrderManagerImpl implements OrderManager {
         useDetailInfo.setVipCardNo(appCardBack.getCardNo());
         getVipCardUseInfo(useDetailInfo);
         appCardBack.setMoney(useDetailInfo.getReturnMoney());
-        appCardBack.setServiceMoney(useDetailInfo.getUsedMoney());
-        appCardBack.setSafeMoney(100);
+        appCardBack.setServiceMoney(useDetailInfo.getRealMoney());
+        appCardBack.setSafeMoney(0);
         User user=saleUserManager.getSaleUser(appCardBack.getCreaterId());
         appCardBack.setCreateName(user.getName());
         appCardBack.setCustomerName(orders.getCustomer().getCustomerName());
