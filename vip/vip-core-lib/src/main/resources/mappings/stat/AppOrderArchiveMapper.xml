@@ -312,7 +312,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
 						AND aoa.pid = #{pid}
 					</if>
 					<if test="airport_id != null and airport_id!=''">
-						AND aoa.airport_id = #{airport_id}
+						AND aoa.airport_id in (#{airport_id})
 					</if>
 				GROUP BY aoa.bid
 			union
@@ -340,7 +340,7 @@ where file_id = #{fileId,jdbcType=INTEGER}
 					AND aoa.pid = #{pid}
 				</if>
 				<if test="airport_id != null and airport_id!=''">
-					AND aoa.airport_id = #{airport_id}
+					AND aoa.airport_id in (#{airport_id})
 				</if>
 		<![CDATA[GROUP BY aoa.bid
 		) as ranking
