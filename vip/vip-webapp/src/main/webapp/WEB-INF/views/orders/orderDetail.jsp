@@ -64,7 +64,7 @@
 				
 				</li>
 				<li><label>支付时间：</label><fmt:formatDate value="${orderDetailInfo.payTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
-				<li><label>卡片激活时间：</label><fmt:formatDate value="${cardInfo.activeTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
+				<li><label>卡片激活时间：</label><fmt:formatDate value="${activityTime}" pattern="yyyy-MM-dd HH:mm:ss"/></li>
 			</ul>
 
 			<div class="order-list-title">个人资料</div>
@@ -136,7 +136,7 @@
 					test="${orderDetailInfo.orderState==3 || orderDetailInfo.orderState==4}">
 
 					<li>退款进度：${orderDetailInfo.orderState ==4 ?'已退款':'审核通过'}</li>
-					<li>退款金额：<fmt:formatNumber value="${appCardBack.money}"
+					<li>退款金额：<fmt:formatNumber value="${finalBackMoney}"
 							pattern="0.00" /> 元
 					</li>
 					<li>退款方式： <c:choose>

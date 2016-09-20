@@ -142,7 +142,8 @@ public class OrderController extends BaseController {
 		}
 		//4 退卡余额信息
 		AppCardBack appCardBack = orderManagerImpl.selCustomerCard(orderId);
-		
+		//最终退款金额
+		float finalBackMoney = (float)orderManagerImpl.remainMoney(orderId);
 		//5 反馈信息 根据用户id
 		//5.1 根据orderId获取用户id
 		AppOrders appOrders = orderManagerImpl.selectByPrimaryKey(orderId); 
@@ -156,8 +157,11 @@ public class OrderController extends BaseController {
 		AirportEasyUseInfo airportEasyUseInfo = airportEasyManagerImpl.readDisCodeData(appOrderCard.getCardNo());
 		if(airportEasyUseInfo != null){
 			consumeList = airportEasyUseInfo.getConsumeList();
+			if(consumeList.size()>0){
+				model.addAttribute("activityTime", consumeList.get(0).getConsumeTime());
+			}
 		}
-		
+		model.addAttribute("finalBackMoney", finalBackMoney);
 		model.addAttribute("orderDetailInfo", orderDetailInfo);
 		model.addAttribute("cardInfo", vipCardInfo);
 		if(appInvoice !=null){
@@ -259,7 +263,7 @@ public class OrderController extends BaseController {
 				outData.put("invoice",appOrder.getInvoiceFlag());
 				
 				//新需求新增字段
-				double remainMoney = orderManagerImpl.remainMoney(orderId);
+				float remainMoney = (float)orderManagerImpl.remainMoney(orderId);
 				outData.put("remainMoney", remainMoney);
 				outData.put("payType", appOrder.getPayType());//支付方式
 				
@@ -299,7 +303,7 @@ public class OrderController extends BaseController {
 				//退款
 				JSONObject outData = new JSONObject(); 
 				orderId = appOrder.getOrderId();
-				double remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
+				float remainMoney = (float) orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
 				AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
 				outData.put("remainMoney", remainMoney);
 				outData.put("orderId", orderId);//订单号
@@ -405,7 +409,7 @@ public class OrderController extends BaseController {
 					//退款
 					JSONObject outData = new JSONObject(); 
 					orderId = appOrder.getOrderId();
-					double remainMoney = orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
+					float remainMoney = (float) orderManagerImpl.remainMoney(appOrder.getOrderId());//退款金额
 					AppCardBack appCardBack = orderManagerImpl.selCustomerCard(appOrder.getOrderId());//退款卡号
 					outData.put("remainMoney", remainMoney);
 					outData.put("orderId", orderId);//订单号
@@ -535,7 +539,7 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value="/applyBackCardaAudit")
 	@ResponseBody
-	public Map<String,Object> auditPass(String orderId,Integer opType,String phone){
+	public Map<String,Object> auditNoPass(String orderId,Integer opType,String phone){
 		User user = getCurrentUser();
 		//1、审核不通过
 		try {
@@ -611,6 +615,7 @@ public class OrderController extends BaseController {
 		
 		//2、将退款信息录入到流水表中
 		AppCardBack appCardBack = new AppCardBack();
+		appCardBack.setServiceMoney((float) orderManagerImpl.calculateServiceMoney(orderId));
 		appCardBack.setBackId(UUIDUtils.getPrimaryKey());
 		appCardBack.setCreateTime(new Date());
 		appCardBack.setOrderId(orderId);
@@ -713,6 +718,7 @@ public class OrderController extends BaseController {
 		Map<String,Object> parMap = new HashMap<String,Object>();
 		double finalBackMoney = orderManagerImpl.remainMoney(orderId);
 		parMap.put("finalBackMoney", finalBackMoney);
+		parMap.put("serviceMoney",orderManagerImpl.calculateServiceMoney(orderId));
 		parMap.put("finishTime", new Date());
 		parMap.put("orderId", orderId);
 		parMap.put("checkId", userId);

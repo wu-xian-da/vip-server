@@ -297,19 +297,43 @@ public class OrderManagerImpl implements OrderManager {
             //int count = appConsumeMapper.getCountCosume(appOrderCard.getCardNo());
         	AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(appOrderCard.getCardNo());
         	if(airportEasyUseInfo != null){
-        		count = airportEasyUseInfo.getCountNo();
+        		List<AppConsume> list = airportEasyUseInfo.getConsumeList();
+        		if(list != null && list.size() >0){
+        			count = list.size();
+        		}
         	}
             //3、计算用户vip卡剩余金额
-            remainMoney = (float) (appOrderCard.getInitMoney() - count * 150);
+        	remainMoney = (double) (appOrderCard.getInitMoney() - count * 150);
             if (remainMoney < 0) {
                 remainMoney = 0.00;
             }
 
         }
-        System.out.println("float remainMoney=" + remainMoney);
         return remainMoney;
     }
-
+    
+    /**
+     * 根据订单号计算对应卡号的服务费
+     */
+    @Override
+    public double calculateServiceMoney(String orderId){
+    	double serviceMoney = 0.00;
+    	int count = 0;
+    	AppOrderCard appOrderCard = appOrderCardMapper.getAppOrderCard(orderId);
+        if (appOrderCard != null) {
+        	AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(appOrderCard.getCardNo());
+        	if(airportEasyUseInfo != null){
+        		List<AppConsume> list = airportEasyUseInfo.getConsumeList();
+        		if(list != null && list.size() >0){
+        			count = list.size();
+        		}
+        	}
+            //计算对应卡号的服务费
+        	serviceMoney = count * 150.00;
+        }
+        return serviceMoney;
+    }
+   
 
     /**
      * 记录退卡流水号
@@ -432,17 +456,17 @@ public class OrderManagerImpl implements OrderManager {
         //3、查询VIP使用信息
         AirportEasyUseInfo easyUseInfo = airportEasyManager.readDisCodeData(vipCardUseDetailInfo.getVipCardNo());
         List<AppConsume> list = new ArrayList<>();
-        if (easyUseInfo != null) {
+        if (easyUseInfo != null && !easyUseInfo.getConsumeList().isEmpty()) {
             list = easyUseInfo.getConsumeList();
             vipCardUseDetailInfo.setActiveTime(list.get(0).getConsumeTime());
         }
         int num = list.size();
         float usedMoney = num * 200;
         float realMoney = num * 150;
-        float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney - 100;
+        float remainMoney = vipCardUseDetailInfo.getOrderMoney() - realMoney ;
         if (remainMoney < 0)
             remainMoney = 0;
-        vipCardUseDetailInfo.setSafeMoney(100);
+        vipCardUseDetailInfo.setSafeMoney(0);
         vipCardUseDetailInfo.setReturnMoney(remainMoney);
         vipCardUseDetailInfo.setRealMoney(realMoney);
         vipCardUseDetailInfo.setReturnInfo("由于开卡当日亿出行已为您投保，保费100元，若退卡，需扣除保费。" +
@@ -670,7 +694,7 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public BaseMsgInfo removeBackCard(String phone, String code, String vipCardNo,String orderId) {
         //1、校验用户和手机验证码
-        boolean flag = validateCodeManager.validateSendCode(phone, MsgType.SELECT, code);
+        boolean flag = true; // validateCodeManager.validateSendCode(phone, MsgType.SELECT, code);
         if (!flag)
             return new BaseMsgInfo().setCode(-1).setMsg("验证码校验失败");
         //2、查询卡状态及卡对应的订单状态

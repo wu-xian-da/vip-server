@@ -141,7 +141,7 @@ public class AppOrderCard {
 	 *
 	 * @mbggenerated Thu Jun 02 14:29:29 CST 2016
 	 */
-	public Float getInitMoney() {
+	public float getInitMoney() {
 		return initMoney;
 	}
 
