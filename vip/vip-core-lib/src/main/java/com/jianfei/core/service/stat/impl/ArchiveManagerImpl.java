@@ -425,7 +425,12 @@ public class ArchiveManagerImpl implements ArchiveManager {
 									StringUtils.obj2String(mapRole
 											.get("role_type")))) {
 						Map<String, Object> innerRsMap = new HashMap<String, Object>();
-						innerRsMap.put("aids", m.get("aids").toString());
+						String uu = m.get("aids").toString();
+						//中文逗号变为英文逗号
+						if(StringUtils.isEmpty(uu)){
+							uu.replaceAll("，", ",");
+						}
+						innerRsMap.put("aids", uu);
 						innerRsMap.put("anames", "所有场站");
 						maps.add(innerRsMap);
 					}

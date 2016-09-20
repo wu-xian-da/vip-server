@@ -262,12 +262,16 @@ public class OrderStaController {
 			// 具体某个场站
 			if (!airportId.equals("")) {
 				Map<String, Object> mapItem = new HashMap<String, Object>();
-				mapItem.put("pid", areaId);
-				//**根据场站id获取场站名称
-				AriPort ariPort = ariPortService.selectAirPortInfoById(airportId);
-				mapItem.put("anames", ariPort.getName());
-				mapItem.put("airportId", airportId);
-				proIdApIdList.add(mapItem);
+				String[] airportIds = airportId.split(",");
+				for(String aid : airportIds){
+					mapItem.put("pid", aid);
+					//**根据场站id获取场站名称
+					AriPort ariPort = ariPortService.selectAirPortInfoById(aid);
+					mapItem.put("anames", ariPort.getName());
+					mapItem.put("airportId", aid);
+					proIdApIdList.add(mapItem);
+				}
+				
 
 			} else {
 				Map<String, Object> map = new HashMap<String, Object>();
