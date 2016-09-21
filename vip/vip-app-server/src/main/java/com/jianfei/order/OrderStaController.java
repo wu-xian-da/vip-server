@@ -261,10 +261,10 @@ public class OrderStaController {
 			List<Map<String, Object>> proIdApIdList = new ArrayList<Map<String, Object>>();
 			// 具体某个场站
 			if (!airportId.equals("")) {
-				Map<String, Object> mapItem = new HashMap<String, Object>();
 				String[] airportIds = airportId.split(",");
 				for(String aid : airportIds){
-					mapItem.put("pid", aid);
+					Map<String, Object> mapItem = new HashMap<String, Object>();
+					mapItem.put("pid", areaId);
 					//**根据场站id获取场站名称
 					AriPort ariPort = ariPortService.selectAirPortInfoById(aid);
 					mapItem.put("anames", ariPort.getName());
