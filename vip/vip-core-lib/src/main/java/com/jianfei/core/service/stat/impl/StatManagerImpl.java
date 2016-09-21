@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -375,7 +376,7 @@ public class StatManagerImpl implements StatManager {
 		param.put("endTime", end);
 		if (airportId != null)
 			if (!airportId.equals(""))
-				param.put("airport_id", airportId);
+				param.put("airport_id", StringUtils.split(airportId, ','));
 		if (pid != null)
 			if (!pid.equals(""))
 				param.put("pid", pid);
