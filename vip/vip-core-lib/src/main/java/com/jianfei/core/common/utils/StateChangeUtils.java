@@ -54,7 +54,7 @@ public class StateChangeUtils {
 		if(cardState == 0){
 			cardStateName = "未绑定";
 		}else if(cardState == 1){
-			cardStateName = "绑定成功未激活";
+			cardStateName = "绑定成功";
 		}else if(cardState == 2){
 			cardStateName = "已退卡";
 		}else if(cardState == 3){
