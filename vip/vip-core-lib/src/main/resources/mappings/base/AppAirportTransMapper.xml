@@ -423,7 +423,7 @@
 			ELSE
 				'男'
 			END AS sex,
-			 card.card_no,
+			card_no,
 			 `customer_phone`,
 			 aat.id,
 			 aat.airport_name,
@@ -440,7 +440,6 @@
 			FROM
 				app_airport_trans aat
 			inner JOIN app_customer cu ON aat.phone = cu.customer_phone 
-			inner JOIN app_vipcard card ON cu.customer_id = card.customer_id  
 			where  aat.id=#{id}
 		]]>
 	</select>
