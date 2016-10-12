@@ -562,10 +562,16 @@ public class OrderManagerImpl implements OrderManager {
             return BaseMsgInfo.msgFail("订单已经申请退款");
         }
 
+        String vipCardNo;
+        if (StringUtils.isBlank(appCardBack.getCardNo())){
+            vipCardNo=orders.getVipCards().get(0).getCardNo();
+        }else{
+            vipCardNo=appCardBack.getCardNo();
+        }
         // 2、重新计算可退余额 校验是否正确
         VipCardUseDetailInfo useDetailInfo=new VipCardUseDetailInfo();
         useDetailInfo.setOrderMoney(orders.getPayMoney());
-        useDetailInfo.setVipCardNo(appCardBack.getCardNo());
+        useDetailInfo.setVipCardNo(vipCardNo);
         getVipCardUseInfo(useDetailInfo);
         appCardBack.setMoney(useDetailInfo.getReturnMoney());
         appCardBack.setServiceMoney(useDetailInfo.getRealMoney());
@@ -576,7 +582,7 @@ public class OrderManagerImpl implements OrderManager {
 
         //3、封装消息体 及更改订单状态 和 卡状态
         ServiceMsgBuilder msgBuilder=new ServiceMsgBuilder().setUserPhone(orders.getCustomer().getPhone()).
-                setVipCardNo(orders.getVipCards().get(0).getCardNo()).setUserName(orders.getCustomer().getCustomerName());
+                setVipCardNo(vipCardNo).setUserName(orders.getCustomer().getCustomerName());
         JSONObject object=new JSONObject();
         object.put("returnMoney",useDetailInfo.getRealMoney());
         msgBuilder.setMsgBody(object.toJSONString());
@@ -590,7 +596,7 @@ public class OrderManagerImpl implements OrderManager {
 
             //紧急通道退卡 更改卡状态为已退卡
             AppVipcard vipcard=new AppVipcard();
-            vipcard.setCardNo(orders.getVipCards().get(0).getCardNo());
+            vipcard.setCardNo(vipCardNo);
             vipcard.setCardState(VipCardState.BACK_CARD.getName());
             vipCardManager.updateVipCard(vipcard);
             SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),vipcard.getCardNo(),

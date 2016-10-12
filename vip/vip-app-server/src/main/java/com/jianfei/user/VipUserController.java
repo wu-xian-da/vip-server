@@ -3,12 +3,15 @@ package com.jianfei.user;
 import com.alibaba.fastjson.JSONObject;
 import com.jianfei.core.bean.AppAirportTrans;
 import com.jianfei.core.bean.AppCustomer;
+import com.jianfei.core.bean.AppVipcard;
+import com.jianfei.core.dto.AirportEasyUseInfo;
 import com.jianfei.core.dto.BaseMsgInfo;
 import com.jianfei.core.service.base.AirportTransManager;
 import com.jianfei.core.service.base.AppConfigManager;
 import com.jianfei.core.service.base.impl.AppConfigManagerImpl;
 import com.jianfei.core.service.order.OrderPayManager;
 import com.jianfei.core.service.order.impl.ConsumeManagerImpl;
+import com.jianfei.core.service.thirdpart.AirportEasyManager;
 import com.jianfei.core.service.user.impl.VipUserManagerImpl;
 import com.jianfei.dto.VipTestVo;
 import com.jianfei.resource.ResourceController;
@@ -45,6 +48,9 @@ public class VipUserController {
     @Autowired
     private AirportTransManager transManager;
 
+    @Autowired
+    private AirportEasyManager airportEasyManager;
+
 
     /**
      * VIP 获取用户信息
@@ -56,6 +62,18 @@ public class VipUserController {
     public BaseMsgInfo getUser(@RequestParam(value = "phone", required = true) String phone
     ) {
         AppCustomer appCustomer = vipUserManager.getUserDetail(phone);
+        //调取空港易行 获取激活时间
+        if (appCustomer.getVipCards() != null && !appCustomer.getVipCards().isEmpty()) {
+            List<AppVipcard> list = new ArrayList<>();
+            AppVipcard vipcard = appCustomer.getVipCards().get(0);
+            AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(vipcard.getCardNo());
+            if (airportEasyUseInfo != null && !airportEasyUseInfo.getConsumeList().isEmpty()) {
+                vipcard.setActiveTime(airportEasyUseInfo.getConsumeList().get(0).getConsumeTime());
+            }
+            list.add(vipcard);
+            appCustomer.setVipCards(list);
+        }
+
         return BaseMsgInfo.success(appCustomer);
     }
 
