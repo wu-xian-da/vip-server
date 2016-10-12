@@ -95,9 +95,9 @@ public class QueueManagerImplTest {
 		// map.put("msgBody", JSONObject.toJSONString(m));
 		// JedisUtils.lpushString("QU", JSONObject.toJSONString(map));
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("msgType", "006");
+		map.put("msgType", "001");
 		map.put("userName", "tom");
-		map.put("userPhone", "13275601668");
+		map.put("userPhone", "15375382463");
 		JedisUtils.lpushString("SMS_QUEUE_VIP", JSONObject.toJSONString(map));
 	}
 
