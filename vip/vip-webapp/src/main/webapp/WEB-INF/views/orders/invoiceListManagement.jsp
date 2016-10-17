@@ -137,6 +137,24 @@
 						
 					</div>
 					
+					<!--电子发票  -->
+					<div class="easy-common-content" id="commonInvoiceDivel">
+						<div class="div-content-item">
+							<label>发票种类</label><label class="label-content-item" id="cmInvoiceKindel"></label>
+						</div>
+						<div class="div-content-item">
+							<label>发票抬头</label><label class="label-content-item" id="cmInvoiceTitleel"></label>
+						</div>
+						<div class="div-content-item">
+							<label>发票内容</label><label class="label-content-item" id="cmInvoiceContentel"></label>
+						</div>
+						<div class="div-content-item">
+							<label>邮箱地址</label><label class="label-content-item" id="email"></label>
+						</div>
+						
+						
+					</div>
+					
 					<div class="easy-common-content" id="specialInvoiceDiv">
 						<div class="div-content-item">
 							<label>发票种类</label><label class="label-content-item" id="spInvoiceKind"></label>
@@ -235,7 +253,8 @@
         	if(args.invoiceKind ==0){//--普通发票
 				$('#commonInvoiceDiv').show();
 				$('#specialInvoiceDiv').hide();
-				$('#cmInvoiceKind').text('增值税普通发票');
+				$('#commonInvoiceDivel').hide();
+				$('#cmInvoiceKind').text('增值税普通发票（纸质）');
 				$('#cmInvoiceTitle').text(args.invoiceTitle);
 				$('#cmInvoiceContent').text(args.invoiceContent);
 				$('#cmCustomerName').text(args.customerName);
@@ -244,8 +263,9 @@
 				$('#cmCustomerPhone').text(args.customerPhone);
 				$('#cmInvoiceNo').text(args.invoiceNo);
 				
-			}else{//--专用发票
+			}else if(args.invoiceKind ==1){//--专用发票
 				$('#commonInvoiceDiv').hide();
+				$('#commonInvoiceDivel').hide();
 				$('#specialInvoiceDiv').show();
 				$('#spInvoiceKind').text('增值税专用发票');
 				$('#spInvoiceContent').text(args.invoiceContent);
@@ -259,6 +279,14 @@
 				$('#spCustomerPhone').text(args.customerPhone);
 				$('#spBusinessLicenseUrl').attr('src',args.businessLicenseUrl);
 				$('#spInvoiceNo').text(args.invoiceNo);
+			}else{
+				$('#commonInvoiceDivel').show();
+				$('#specialInvoiceDiv').hide();
+				$('#commonInvoiceDiv').hide();
+				$('#cmInvoiceKindel').text('增值税普通发票（电子）');
+				$('#cmInvoiceTitleel').text(args.invoiceTitle);
+				$('#cmInvoiceContentel').text(args.invoiceContent);
+				$('#email').text(args.address);
 			}
         	$('#cmInvoiceNoDiv').show();
 			$('#spInvoiceNoDiv').show();
@@ -273,7 +301,8 @@
 			if(args.invoiceKind ==0){//--普通发票
 				$('#commonInvoiceDiv').show();
 				$('#specialInvoiceDiv').hide();
-				$('#cmInvoiceKind').text('增值税普通发票');
+				$('#commonInvoiceDivel').hide();
+				$('#cmInvoiceKind').text('增值税普通发票（纸质）');
 				$('#cmInvoiceTitle').text(args.invoiceTitle);
 				$('#cmInvoiceContent').text(args.invoiceContent);
 				$('#cmCustomerName').text(args.customerName);
@@ -281,8 +310,9 @@
 				$('#cmPostCode').text(args.postCode);
 				$('#cmCustomerPhone').text(args.customerPhone);
 				
-			}else{//--专用发票
+			}else if(args.invoiceKind ==1){//--专用发票
 				$('#commonInvoiceDiv').hide();
+				$('#commonInvoiceDivel').hide();
 				$('#specialInvoiceDiv').show();
 				$('#spInvoiceKind').text('增值税专用发票');
 				$('#spInvoiceContent').text(args.invoiceContent);
@@ -295,6 +325,14 @@
 				$('#spPostCode').text(args.postCode);
 				$('#spCustomerPhone').text(args.customerPhone);
 				$('#spBusinessLicenseUrl').attr('src',args.businessLicenseUrl);
+			}else{
+				$('#commonInvoiceDivel').show();
+				$('#specialInvoiceDiv').hide();
+				$('#commonInvoiceDiv').hide();
+				$('#cmInvoiceKindel').text('增值税普通发票（电子）');
+				$('#cmInvoiceTitleel').text(args.invoiceTitle);
+				$('#cmInvoiceContentel').text(args.invoiceContent);
+				$('#email').text(args.address);
 			}
 			$('#cmInvoiceNoDiv').hide();
 			$('#spInvoiceNoDiv').hide();
