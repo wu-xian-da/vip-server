@@ -131,7 +131,7 @@ public class AppInvoice {
     private String countryId;
 
     /**
-     * 发票种类 0 普通 1 增值税
+     * 发票种类 0 增值税普通发票（纸质） 1 增值税专用发票 2 增值税普通发票（电子）
      */
     private Integer invoiceKind;
 
