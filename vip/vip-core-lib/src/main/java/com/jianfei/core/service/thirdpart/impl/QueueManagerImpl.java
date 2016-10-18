@@ -117,18 +117,18 @@ public class QueueManagerImpl implements QueueManager {
 		// isSend(userPhone, msgType);
 
 		// 是否是激活vip卡标识
-		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
-			// 激活卡号
-			return activeCard(map, msgBody, userPhone);
-
-		} else if (MsgType.BACK_CARD_FINISH.getName().equals(msgType)// 退卡完成后短信
-																		// 紧急退卡完成
+		// if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
+		// // 激活卡号
+		// return activeCard(map, msgBody, userPhone);
+		//
+		// } else
+		if (MsgType.BACK_CARD_FINISH.getName().equals(msgType)// 退卡完成后短信
+																// 紧急退卡完成
 				|| MsgType.RIGHT_BACK_CARD.getName().equals(msgType)) {
 
 			return backCard(msgBody, userPhone, vipCardNo, map);
 
 		} else {
-			// TODO 二期把isSend 去掉
 			if (isSend(userPhone, msgType)) {
 				if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {
 					SmartLog.info(ModuleType.MESSAGE_MODULE.getName(),
@@ -155,7 +155,7 @@ public class QueueManagerImpl implements QueueManager {
 		// 暂时开放001，002，003
 		if ("001".equals(msgType) || "002".equals(msgType)
 				|| "003".equals(msgType) || "006".equals(msgType)
-				|| "009".equals(msgType)) {
+				|| "009".equals(msgType) || "005".equals(msgType)) {
 			return true;
 		} else {
 			return false;
