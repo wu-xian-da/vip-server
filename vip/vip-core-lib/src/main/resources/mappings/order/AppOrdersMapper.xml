@@ -120,7 +120,7 @@
 	<!--根据订单号查询订单详细信息 -->
 	<select id="selOrderDetailInfo" resultMap="orderDetailInfo"
 		parameterType="java.lang.String">
-		select
+		<!-- select
 		ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,ord.pay_money,
 		ord.apply_type,sa.airport_name,
 		agent.name,agent.phone,
@@ -128,6 +128,15 @@
 		cus.card_type,cus.birth_day
 		from app_orders ord,sys_airport sa,sys_users agent ,app_customer cus
 		where ord.airport_id = sa.airport_id and ord.sale_no = agent.code
+		and ord.customer_id = cus.customer_id and ord.order_id=#{orderId} -->
+		select
+		ord.order_id,ord.order_time,ord.order_state,ord.pay_type,ord.pay_time,ord.activat_time,ord.invoice_flag,ord.pay_money,
+		ord.apply_type,sa.airport_name,aoc.card_id,
+		agent.name,agent.phone,
+		cus.customer_name,cus.customer_identi,cus.customer_phone,cus.sex,cus.province_name,cus.city_name,cus.address,cus.email,
+		cus.card_type,cus.birth_day
+		from app_orders ord,sys_airport sa,sys_users agent ,app_customer cus,app_order_card aoc
+		where ord.airport_id = sa.airport_id and ord.sale_no = agent.code and ord.order_id=aoc.order_id
 		and ord.customer_id = cus.customer_id and ord.order_id=#{orderId}
 	</select>
 	

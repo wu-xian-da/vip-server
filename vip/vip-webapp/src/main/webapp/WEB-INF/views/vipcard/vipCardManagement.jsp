@@ -106,7 +106,7 @@
 											case 0:
 												return '未绑定';
 											case 1:
-												return '绑定成功未激活';
+												return '绑定成功';
 											case 2:
 												return '已退卡';
 											case 3:
@@ -219,7 +219,7 @@
 									<select name="_cardState" id="cardStateSel">
 										<option value="">全部vip卡状态</option>
 										<option value="0">未绑定</option>
-										<option value="1">绑定成功未激活</option>
+										<option value="1">绑定成功</option>
 										<option value="2">已退卡</option>
 										<option value="3">绑定失败</option>
 										<option value="4">待绑定</option>

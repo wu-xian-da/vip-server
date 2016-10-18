@@ -114,7 +114,7 @@ public class QueueManagerImpl implements QueueManager {
 		}
 
 		String vipCardNo = map.get("vipCardNo");
-		isSend(userPhone, msgType);
+		// isSend(userPhone, msgType);
 
 		// 是否是激活vip卡标识
 		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
@@ -155,7 +155,7 @@ public class QueueManagerImpl implements QueueManager {
 		// 暂时开放001，002，003
 		if ("001".equals(msgType) || "002".equals(msgType)
 				|| "003".equals(msgType) || "006".equals(msgType)
-				|| "009".equals(msgType) || "008".equals(msgType)) {
+				|| "009".equals(msgType)) {
 			return true;
 		} else {
 			return false;
