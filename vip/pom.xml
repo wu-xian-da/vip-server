@@ -451,9 +451,9 @@
 				<!-- p12 cert location -->
 				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>
 				<!-- kongGang settings -->
-				<konggang.url>http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/</konggang.url>
-				<konggang.partner>20160607001</konggang.partner>
-				<konggang.key>S1-L6-D0-T1-G2-S7</konggang.key>
+				<konggang.url>http://api.airportcip.com:8089/API/shanglvditui/ShanglvdituiPD.svc/</konggang.url>
+				<konggang.partner>20160911001</konggang.partner>
+				<konggang.key>S1-6L-D2-T7-22-W5</konggang.key>
 				<!-- yeepay settings -->
 				<!-- <yeepay.query.url>http://124.250.37.126:8081/cod/callback/codOrderQueryAction.do</yeepay.query.url> -->
 				<yeepay.query.url>http://cod.yeepay.com/cod/callback/codOrderQueryAction.do</yeepay.query.url>
@@ -506,9 +506,9 @@
 				<!-- p12 cert location -->
 				<wechat.cert.location>/home/jianfei/apiclient_cert.p12</wechat.cert.location>
 				<!-- kongGang settings -->
-				<konggang.url>http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/</konggang.url>
-				<konggang.partner>20160607001</konggang.partner>
-				<konggang.key>S1-L6-D0-T1-G2-S7</konggang.key>
+				<konggang.url>http://api.airportcip.com:8089/API/shanglvditui/ShanglvdituiPD.svc/</konggang.url>
+				<konggang.partner>20160911001</konggang.partner>
+				<konggang.key>S1-6L-D2-T7-22-W5</konggang.key>
 				<!-- yeepay settings -->
 				<yeepay.query.url>http://cod.yeepay.com/cod/callback/codOrderQueryAction.do</yeepay.query.url>
 				<yeepay.customerId>10001676182</yeepay.customerId>
@@ -571,9 +571,9 @@
 				<!-- p12 cert location -->
 				<wechat.cert.location>/opt/apiclient_cert.p12</wechat.cert.location>
 				<!-- kongGang settings -->
-				<konggang.url>http://apitest.airportcip.com:89/API/shanglvditui/ShanglvdituiPD.svc/</konggang.url>
-				<konggang.partner>20160607001</konggang.partner>
-				<konggang.key>S1-L6-D0-T1-G2-S7</konggang.key>
+				<konggang.url>http://api.airportcip.com:8089/API/shanglvditui/ShanglvdituiPD.svc/</konggang.url>
+				<konggang.partner>20160911001</konggang.partner>
+				<konggang.key>S1-6L-D2-T7-22-W5</konggang.key>
 				<!-- yeepay settings -->
 				<yeepay.query.url>http://cod.yeepay.com/cod/callback/codOrderQueryAction.do</yeepay.query.url>
 				<yeepay.customerId>10013719346</yeepay.customerId>

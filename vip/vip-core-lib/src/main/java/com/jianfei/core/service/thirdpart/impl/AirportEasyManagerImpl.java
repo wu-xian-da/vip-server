@@ -287,11 +287,11 @@ public class AirportEasyManagerImpl implements AirportEasyManager{
 	public boolean getCardCode(String tradeNo)
 			throws UnrecoverableKeyException, KeyManagementException,
 			NoSuchAlgorithmException, KeyStoreException, IOException {
-    	String sign = sign("out_trade_no="+tradeNo + "&partner="+ GloabConfig.getConfig("konggang.partner")+"&sku="+"0125"+GloabConfig.getConfig("konggang.key"));
+    	String sign = sign("out_trade_no="+tradeNo + "&partner="+ GloabConfig.getConfig("konggang.partner")+"&sku="+"0181"+GloabConfig.getConfig("konggang.key"));
     	String result = HttpServiceRequest.getInstance().sendGet(GloabConfig.getConfig("konggang.url")+"add?"+
     															"out_trade_no="+ tradeNo + 
     															"&partner="+GloabConfig.getConfig("konggang.partner") + 
-    															"&sku="+"0125" + 
+    															"&sku="+"0181" + 
     															"&sign=" + sign);
 		JSONObject obj = JSON.parseObject(result);
 		System.out.println(obj.get("verify_code").toString());
