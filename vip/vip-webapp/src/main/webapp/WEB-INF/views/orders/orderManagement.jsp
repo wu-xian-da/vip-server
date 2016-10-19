@@ -153,7 +153,7 @@
 					
 				
                 <div class="radio-tab-content">
-                    <div class="raidp-tab-content-item" style="display:block">
+                    <div class="raidp-tab-content-item" style="display:block" id="wxdiv1">
                     	<form id="wxform1">
                     	<input type="hidden" value="" id="hideOrderId"/>
                         <label>输入微信号&nbsp;</label><input class="easyui-validatebox" type="text" id="backCardNo0"  data-options="missingMessage:'必填项',required:true"/>
@@ -393,6 +393,10 @@
         function onRefund(args){
 			//初始化页面
 			$("input[name='card-radio']").get(0).checked=true;
+			$('#wxdiv1').show();
+			$('#tbdiv2').hide();
+			$('#bankdiv3').hide();
+			
 			$('#orderPayMethod').text('');
 			$('#backCardNo0').val('');
 			$('#backCardNo1').val('');
