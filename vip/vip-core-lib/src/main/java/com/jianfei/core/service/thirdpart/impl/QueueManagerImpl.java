@@ -297,15 +297,15 @@ public class QueueManagerImpl implements QueueManager {
 								+ cardNo
 								+ "的卡的saleTime字段为当前时间和更新该卡的状态为‘绑定成功未激活状态’成功，恭喜你，准备发送短信，告知客户...");
 				// DOTO 后期把注释去掉
-				// if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {// 激活短信
-				// SmartLog.info(ModuleType.MESSAGE_MODULE.getName(),
-				// userPhone, "激活卡操作,激活卡" + cardNo + "成功，发送激活短信成功,谢谢");
-				// } else {
-				// SmartLog.error(ModuleType.MESSAGE_MODULE.getName(),
-				// userPhone, "激活卡操作，激活卡" + cardNo
-				// + "成功，但是发送激活短信失败,sorry...");
-				//
-				// }
+				if (msgInfoManager.sendMsgInfo(userPhone, msgBody)) {// 激活短信
+					SmartLog.info(ModuleType.MESSAGE_MODULE.getName(),
+							userPhone, "激活卡操作,激活卡" + cardNo + "成功，发送激活短信成功,谢谢");
+				} else {
+					SmartLog.error(ModuleType.MESSAGE_MODULE.getName(),
+							userPhone, "激活卡操作，激活卡" + cardNo
+									+ "成功，但是发送激活短信失败,sorry...");
+
+				}
 			} else {
 				SmartLog.error(
 						ModuleType.MESSAGE_MODULE.getName(),
