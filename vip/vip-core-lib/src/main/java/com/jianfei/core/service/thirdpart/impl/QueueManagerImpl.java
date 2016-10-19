@@ -117,11 +117,11 @@ public class QueueManagerImpl implements QueueManager {
 		// isSend(userPhone, msgType);
 
 		// 是否是激活vip卡标识
-		// if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
-		// // 激活卡号
-		// return activeCard(map, msgBody, userPhone);
-		//
-		// } else
+		if (MsgType.ACTIVE_CARD.getName().equals(msgType)) {
+			// 激活卡号
+			return activeCard(map, msgBody, userPhone);
+
+		} else
 		if (MsgType.BACK_CARD_FINISH.getName().equals(msgType)// 退卡完成后短信
 																// 紧急退卡完成
 				|| MsgType.RIGHT_BACK_CARD.getName().equals(msgType)) {
