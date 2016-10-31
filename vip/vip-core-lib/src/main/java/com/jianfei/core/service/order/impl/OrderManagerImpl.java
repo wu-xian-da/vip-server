@@ -113,12 +113,8 @@ public class OrderManagerImpl implements OrderManager {
             addInfoDto.setMoney(appOrders.getPayMoney());
             return BaseMsgInfo.success(addInfoDto);
         }
-        //1、校验用户和手机验证码
-        boolean flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
-        if (!flag) {
-            return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
-        }
 
+        boolean flag=true;
         //2、校验空港易行的姓名接口及VIP卡
         flag=airportEasyManager.vipuserStatus(addInfoDto.getCustomerName(),addInfoDto.getPhone());
         log.info("验证空港易行用户名:"+addInfoDto.getCustomerName()+",手机号:"+addInfoDto.getPhone()+"验证结果:"+flag);
@@ -130,6 +126,8 @@ public class OrderManagerImpl implements OrderManager {
         if (!flag) {
             return BaseMsgInfo.msgFail("卡号无效请更换");
         }
+
+
         //3、根据查询VIP号查询卡片信息
         AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
         if (vipCard == null) {
@@ -140,6 +138,11 @@ public class OrderManagerImpl implements OrderManager {
         User user=saleUserManager.getSaleUser(addInfoDto.getUno());
         if (user == null || StringUtils.isBlank(user.getName())) {
             return BaseMsgInfo.msgFail("人员工号不存在");
+        }
+        //1、校验用户和手机验证码
+        flag = validateCodeManager.validateSendCode(addInfoDto.getPhone(), MsgType.REGISTER, addInfoDto.getCode());
+        if (!flag) {
+            return new BaseMsgInfo().setCode(-1).setMsg("手机验证码验证失败");
         }
         //3、添加或修改用户信息
         AppCustomer customer = new AppCustomer();
@@ -404,7 +407,7 @@ public class OrderManagerImpl implements OrderManager {
     @Override
     public AppOrders getOrderDetailByOrderId(String orderId) {
         AppOrders orders = appOrdersMapper.getOrderDetailByOrderId(orderId);
-        if (!orders.getVipCards().isEmpty()) {
+     /*   if (!orders.getVipCards().isEmpty()) {
             List<AppVipcard> list = new ArrayList<>();
             AppVipcard vipcard = orders.getVipCards().get(0);
             AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(vipcard.getCardNo());
@@ -413,7 +416,7 @@ public class OrderManagerImpl implements OrderManager {
             }
             list.add(vipcard);
             orders.setVipCards(list);
-        }
+        }*/
         return orders;
     }
 
@@ -518,6 +521,7 @@ public class OrderManagerImpl implements OrderManager {
         AppVipcard vipcard=new AppVipcard();
         vipcard.setCardNo(order.getVipCards().get(0).getCardNo());
         vipcard.setCardState(VipCardState.TO_ACTIVATE.getName());
+        vipcard.setActiveTime(new Date());
         vipCardManager.updateVipCard(vipcard);
 
         SmartLog.info(ModuleType.VIPCARD_MODULE.getName(),vipcard.getCardNo(),

@@ -62,7 +62,7 @@ public class VipUserController {
     public BaseMsgInfo getUser(@RequestParam(value = "phone", required = true) String phone
     ) {
         AppCustomer appCustomer = vipUserManager.getUserDetail(phone);
-        //调取空港易行 获取激活时间
+      /*  //调取空港易行 获取激活时间
         if (appCustomer.getVipCards() != null && !appCustomer.getVipCards().isEmpty()) {
             List<AppVipcard> list = new ArrayList<>();
             AppVipcard vipcard = appCustomer.getVipCards().get(0);
@@ -72,7 +72,7 @@ public class VipUserController {
             }
             list.add(vipcard);
             appCustomer.setVipCards(list);
-        }
+        }*/
 
         return BaseMsgInfo.success(appCustomer);
     }
