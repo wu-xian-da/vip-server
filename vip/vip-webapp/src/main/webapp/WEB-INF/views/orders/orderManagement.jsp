@@ -83,6 +83,16 @@
 			                  
 			                </select>
 			            </div>
+			            
+			            <div class="order-condition-item" style="width: 130px">
+			                <select id="payTypeSelect">
+			                    <option value="">支付方式</option>
+			                    <option value="1">微信</option>
+			                    <option value="2">支付宝</option>
+			                    <option value="3">刷卡</option>
+			                    <option value="4">现金</option>
+			                </select>
+			            </div>
 			
 			            <div class="order-condition-item" style="width: 230px">
 			                <input id="phoneOrUserName" type="text" placeholder="订单号/卡号/姓名/手机号" style="width: 150px">
@@ -259,6 +269,7 @@
         	$("#airportIdSelect").val("");
         	$("#orderStateSelect").val("");
         	$("#invoiceSelect").val("");
+        	$("#payTypeSelect").val("");
         	
         	//初始化表格
             $('#tt').datagrid();
@@ -519,6 +530,8 @@
         	var orderState = $("#orderStateSelect option:selected").val();
         	//发票状态
         	var invoiceState = $("#invoiceSelect option:selected").val();
+        	//支付方式
+        	var payTypes = $("#payTypeSelect option:selected").val();
         	//手机号后置用户姓名
         	var phoneOrUserName = $("#phoneOrUserName").val();
         	
@@ -527,7 +540,7 @@
         		$.messager.alert('提示','结束时间不能小于开始时间！','warning'); 
         	}else{
         		var url = "orderList?startTime="+startTime+"&endTime="+endTime+"&airportId="+airportId+"&orderState="+orderState+
-    			"&invoiceState="+invoiceState+"&phoneOrUserName="+phoneOrUserName;
+    			"&invoiceState="+invoiceState+"&payType="+payTypes+"&phoneOrUserName="+phoneOrUserName;
     			$('#tt').datagrid({url:url});
         	}
         })

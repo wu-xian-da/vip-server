@@ -192,6 +192,10 @@
 		<if test="invoiceState != null">
 			and ord.invoice_flag = #{invoiceState}
 		</if>
+		<!-- 支付方式 -->
+		<if test="payType != null">
+			and ord.pay_type = #{payType}
+		</if>
 		<!-- 用户名或者手机号码 -->
 		<if test="phoneOrUserName != null">
 			<!-- and INSTR(customer.customer_name,#{phoneOrUserName})>0 -->

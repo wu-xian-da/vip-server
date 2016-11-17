@@ -204,6 +204,7 @@ public class OrderController extends BaseController {
 			@RequestParam(value="airportId",required=false,defaultValue="") String airportId,
 			@RequestParam(value="orderState",required=false,defaultValue="") String orderState,
 			@RequestParam(value="invoiceState",required=false,defaultValue="") String invoiceState,
+			@RequestParam(value="payType",required=false,defaultValue="") String payType,
 			@RequestParam(value="phoneOrUserName",required=false,defaultValue="") String phoneOrUserName){
 		
 		//用户可以看到机场列表
@@ -228,6 +229,9 @@ public class OrderController extends BaseController {
 		}
 		if(!orderState.equals("")){
 			paramsMap.put("orderState", orderState);
+		}
+		if(!payType.equals("")){
+			paramsMap.put("payType", payType);
 		}
 		if(!invoiceState.equals("")){
 			paramsMap.put("invoiceState", invoiceState);
