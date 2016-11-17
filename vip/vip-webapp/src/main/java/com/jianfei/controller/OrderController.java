@@ -249,6 +249,7 @@ public class OrderController extends BaseController {
 		for(OrderShowInfoDto appOrder : list){
 			int invoiceFlag = appOrder.getInvoiceFlag();
 			appOrder.setInvoiceFlagName(StateChangeUtils.returnInvoiceFlagName(invoiceFlag));
+			appOrder.setPayTypeName(StateChangeUtils.returnPayTypeName(appOrder.getPayType()));
 			if(appOrder.getOrderState() ==0){
 				//未支付
 				orderId = appOrder.getOrderId();

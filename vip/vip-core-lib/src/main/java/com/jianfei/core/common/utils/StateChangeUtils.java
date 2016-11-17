@@ -111,5 +111,19 @@ public class StateChangeUtils {
 		return invoiceFlagName;
 	}
 	
+	public static String returnPayTypeName(Integer payType){
+		String payTypeName = "";
+		if(payType == 0){
+			payTypeName = "微信";
+		}else if(payType == 1){
+			payTypeName = "支付宝";
+		}else if(payType == 2){
+			payTypeName = "刷卡";
+		}else{
+			payTypeName = "现金";
+		}
+		return payTypeName;
+	}
+	
 	
 }

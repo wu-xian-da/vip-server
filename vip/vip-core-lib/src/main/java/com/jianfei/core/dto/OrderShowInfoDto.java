@@ -54,6 +54,7 @@ public class OrderShowInfoDto implements Serializable {
     private int cardState;//卡状态
     private String cardStateName;//卡状态的中文提示
     private int payType;//支付方式
+    private String payTypeName;//支付方式名称
     
     private String invoiceId; //发票id
     private String invoiceNo;//发票单号
@@ -586,6 +587,12 @@ public class OrderShowInfoDto implements Serializable {
 	 */
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+	public String getPayTypeName() {
+		return payTypeName;
+	}
+	public void setPayTypeName(String payTypeName) {
+		this.payTypeName = payTypeName;
 	}
 	
 	

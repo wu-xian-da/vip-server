@@ -135,6 +135,7 @@
 	                <th data-options="align:'center', field:'vipCardNo',width:100">vip卡号</th>
 	                <th data-options="align:'center', field:'invoiceFlagName',width:80">发票状态</th>
 	                <th data-options="align:'center', field:'orderStateName',width:100">订单状态</th>
+	                 <th data-options="align:'center', field:'payTypeName',width:100">支付方式</th>
 	                <th data-options="align:'center', field:'operation',width:230">操作</th>
 	                </tr>
 	            </thead>
