@@ -306,7 +306,7 @@ public class OrderManagerImpl implements OrderManager {
         		}
         	}
             //3、计算用户vip卡剩余金额
-        	remainMoney = (double) (appOrderCard.getInitMoney() - count * 150);
+        	remainMoney = (double) (appOrderCard.getInitMoney() - count * 200);
             if (remainMoney < 0) {
                 remainMoney = 0.00;
             }
