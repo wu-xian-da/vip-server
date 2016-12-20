@@ -7,9 +7,9 @@ package com.alipay.api;
 import com.alipay.api.internal.mapping.ApiField;
 
 /**
- * 多媒体文件下载响应
- * @author yikai.hu
- * @version $Id: AlipayMobilePublicMultiMediaDownloadResponse.java, v 0.1 Aug 15, 2014 10:19:31 AM yikai.hu Exp $
+ * 
+* @author yikai.hu
+* @version $Id: AlipayMobilePublicMultiMediaDownloadResponse.java, v 0.1 Aug 15, 2014 10:19:31 AM yikai.hu Exp $
  */
 public class AlipayMobilePublicMultiMediaDownloadResponse extends AlipayResponse {
 
