@@ -42,7 +42,7 @@
 					customer.`customer_phone`,
 					customer.`sex`,
 					customer.card_type,
-					customer.create_time,
+					DATE_FORMAT(customer.create_time,'%Y-%m-%d %H:%i:%s') AS create_time,
 					customer.`customer_identi`,
 					DATE_FORMAT(customer.birth_day,'%Y-%m-%d') as birthday,
 					ao.insured,

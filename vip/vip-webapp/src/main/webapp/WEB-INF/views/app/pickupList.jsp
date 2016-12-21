@@ -54,7 +54,7 @@
 			pageSize : 20,
 			pageList : [ 20, 30, 40, 50],
 			frozenColumns : [ [{
-				width : '120',
+				width : '100',
 				title : '姓名',
 				field : 'name'
 			},{
@@ -93,14 +93,19 @@
 					}
 				}
 			},{
-				width : '180',
+				width : '120',
 				title : '航班日期',
 				field : 'flight_date',
 				sortable : true,
 			}, {
-				width : '160',
+				width : '150',
 				title : '出发时间',
 				field : 'gooff_date',
+				sortable : true,
+			}, {
+				width : '150',
+				title : '创建时间',
+				field : 'create_time',
 				sortable : true,
 			}, {
 				width : '80',

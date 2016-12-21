@@ -429,9 +429,9 @@
 				<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
 				<jdbc.version>5.1.37</jdbc.version>
 				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-				<jdbc.url>jdbc:mysql://rm-bp1933ou3red8rpquo.mysql.rds.aliyuncs.com/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
-				<jdbc.username>vip</jdbc.username>
-				<jdbc.password>jfFlzx3kc</jdbc.password>
+				<jdbc.url>jdbc:mysql://192.168.110.149/app_server?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8</jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>refineli</jdbc.password>
 				<jdbc.pool.init>10</jdbc.pool.init>
 				<jdbc.pool.minIdle>15</jdbc.pool.minIdle>
 				<jdb.pool.maxActive>30</jdb.pool.maxActive>
@@ -447,7 +447,7 @@
 				<redis.pool.maxIdle>8</redis.pool.maxIdle>
 				<redis.pool.minIdle>0</redis.pool.minIdle>
 				<redis.pool.maxWaitMillis>30000</redis.pool.maxWaitMillis>
-				<redis.host>192.168.110.9</redis.host>
+				<redis.host>192.168.110.149</redis.host>
 				<redis.port>26379</redis.port>
 				<!-- p12 cert location -->
 				<wechat.cert.location>/Users/leoliu/Documents/apiclient_cert.p12</wechat.cert.location>

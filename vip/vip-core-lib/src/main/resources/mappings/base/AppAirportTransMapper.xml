@@ -384,7 +384,7 @@
 					  `cid`,
 					  `cname`,
 					  `detail_address`,
-					  `create_date`,
+					  DATE_FORMAT(create_date,'%Y-%m-%d %H:%i:%s') AS create_time,
 					  `pickup_type`,
 					  `remark`,
 					  `submit`,
