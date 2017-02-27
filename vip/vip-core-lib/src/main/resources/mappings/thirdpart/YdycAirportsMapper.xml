@@ -128,7 +128,7 @@
   <select id="getCityList"  resultMap="cityResult">
     select
     distinct (city) as name
-    from ydyc_airports
+    from ydyc_airports order by airport_id
   </select>
 
   <select id="selectAirports" parameterType="com.jianfei.core.bean.YdycAirports" resultMap="BaseResultMap">
