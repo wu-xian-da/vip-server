@@ -90,4 +90,10 @@ public interface AppOrdersMapper {
 	 * @return
      */
 	List<AppOrders> orderListByPhone(@Param(value = "phone")String phone);
+	
+	/**
+	 * 查询订单信息
+	 * @return
+	 */
+	List<Map<Object,Object>> selCosumeInfo();
 }

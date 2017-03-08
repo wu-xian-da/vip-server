@@ -10,6 +10,7 @@ import com.jianfei.core.common.enu.*;
 import com.jianfei.core.common.pay.PayQueryResult;
 import com.jianfei.core.common.pay.PreCreateResult;
 import com.jianfei.core.common.utils.*;
+import com.jianfei.core.common.utils.export.ExcelUtils;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppCardBackMapper;
 import com.jianfei.core.mapper.AppConsumeMapper;
@@ -923,5 +924,23 @@ public class OrderManagerImpl implements OrderManager {
 	public OrderDetailInfo selLogInfoByOrderId(String orderId) {
 		// TODO Auto-generated method stub
 		return appOrdersMapper.selLogInfoByOrderId(orderId);
+	}
+
+
+	@Override
+	public void exportcCounsumeInfoOfVipCard(HttpServletResponse response) {
+		List<Map<Object,Object>> list = appOrdersMapper.selCosumeInfo();
+		List<VipCardConsumeDto> vipCardConsumeDtos = new ArrayList<>();
+		for(Map<Object,Object> map : list){
+			VipCardConsumeDto vipCardConsumeDto = new VipCardConsumeDto();
+			vipCardConsumeDto.setCustomerName((String) map.get("customer_name"));
+			vipCardConsumeDto.setAgentName((String) map.get("name"));
+			vipCardConsumeDto.setCustomerPhone((String) map.get("customer_phone"));
+			vipCardConsumeDto.setOrderId((String) map.get("order_id"));
+			vipCardConsumeDto.setOrderStateName("已完成");
+			vipCardConsumeDtos.add(vipCardConsumeDto);
+		}
+		ExcelUtils.fillDataToExcel(vipCardConsumeDtos, response, VipCardConsumeDto.class);
+		
 	}
 }

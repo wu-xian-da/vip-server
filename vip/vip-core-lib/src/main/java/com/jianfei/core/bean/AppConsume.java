@@ -64,4 +64,12 @@ public class AppConsume {
     public void setDtflag(Integer dtflag) {
         this.dtflag = dtflag;
     }
+
+	@Override
+	public String toString() {
+		return "AppConsume [consumeId=" + consumeId + ", cardNo=" + cardNo + ", consumeMoney=" + consumeMoney
+				+ ", consumeTime=" + consumeTime + ", viproomName=" + viproomName + ", dtflag=" + dtflag + "]";
+	}
+    
+    
 }
