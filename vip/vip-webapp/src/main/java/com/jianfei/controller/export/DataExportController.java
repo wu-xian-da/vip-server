@@ -30,6 +30,11 @@ public class DataExportController {
 	 */
 	@RequestMapping("/cosumeInfoOfVipCard")
 	public void exportConsumeInfoOfVipCard(HttpServletResponse response) {
-		orderManager.exportCounsumeInfoOfVipCard(response);
+		try {
+			orderManager.exportCounsumeInfoOfVipCard(response);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -27,6 +27,8 @@ public class VipCardConsumeDto {
 
 	@ExcelAnnotation(name = "消费记录")
 	private String consumeInfo;
+	
+	
 
 	public String getAgentName() {
 		return agentName;
@@ -90,6 +92,13 @@ public class VipCardConsumeDto {
 
 	public void setConsumeInfo(String consumeInfo) {
 		this.consumeInfo = consumeInfo;
+	}
+
+	@Override
+	public String toString() {
+		return "VipCardConsumeDto [agentName=" + agentName + ", customerName=" + customerName + ", customerPhone="
+				+ customerPhone + ", orderId=" + orderId + ", cardNo=" + cardNo + ", orderStateName=" + orderStateName
+				+ ", consumeNum=" + consumeNum + ", consumeInfo=" + consumeInfo + "]";
 	}
 
 }

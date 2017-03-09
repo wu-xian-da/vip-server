@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.*;
 import com.jianfei.core.common.enu.*;
 import com.jianfei.core.common.utils.*;
+import com.jianfei.core.common.utils.bean.BeanUtil;
 import com.jianfei.core.common.utils.export.ExcelUtils;
 import com.jianfei.core.dto.*;
 import com.jianfei.core.mapper.AppCardBackMapper;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -931,27 +933,30 @@ public class OrderManagerImpl implements OrderManager {
 
 	/**
 	 * 导出核销记录
+	 * 
+	 * @throws IntrospectionException
+	 * @throws InvocationTargetException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
 	@Override
-	public void exportCounsumeInfoOfVipCard(HttpServletResponse response) {
+	public void exportCounsumeInfoOfVipCard(HttpServletResponse response) throws InstantiationException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, IntrospectionException {
 		List<Map<Object, Object>> basicConsumeInfoGroup = appOrdersMapper.selBasicConsumeInfo();
 		List<VipCardConsumeDto> vipCardConsumeDtoGroup = new ArrayList<>();
 
 		for (Map<Object, Object> map : basicConsumeInfoGroup) {
-			// 组装核销信息基本信息
-			VipCardConsumeDto consumeInfo = new VipCardConsumeDto();
-			consumeInfo.setCustomerName((String) map.get("customer_name"));
-			consumeInfo.setAgentName((String) map.get("name"));
-			consumeInfo.setCustomerPhone((String) map.get("customer_phone"));
-			consumeInfo.setOrderId((String) map.get("order_id"));
-			consumeInfo.setCardNo((String) map.get("card_id"));
+			// 组装核销记录基本信息
+			VipCardConsumeDto consumeInfo = (VipCardConsumeDto) BeanUtil.covertMap(VipCardConsumeDto.class, map);
 			consumeInfo.setOrderStateName(StateChangeUtils.returnOrderStateName((Integer) map.get("order_state")));
 			vipCardConsumeDtoGroup.add(consumeInfo);
-			// 组装核销信息消费信息
-			AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData((String) map.get("card_id"));
+
+			// 组装核销记录消费信息
+			AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData(consumeInfo.getCardNo());
 			if (airportEasyUseInfo == null) {
 				consumeInfo.setConsumeNum(0);
-				consumeInfo.setConsumeInfo("");
+				consumeInfo.setConsumeInfo(StringUtils.EMPTY);
 
 			} else {
 				List<AppConsume> consumeList = airportEasyUseInfo.getConsumeList();
@@ -965,7 +970,6 @@ public class OrderManagerImpl implements OrderManager {
 				}
 				consumeInfo.setConsumeInfo(jsonArray.toJSONString());
 			}
-
 		}
 		ExcelUtils.fillDataToExcel(vipCardConsumeDtoGroup, response, VipCardConsumeDto.class);
 

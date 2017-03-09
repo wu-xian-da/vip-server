@@ -678,11 +678,11 @@
 	<!--核销记录需要的基本信息  -->
 	<select id="selBasicConsumeInfo" resultType="java.util.Map">
 		SELECT
-		su.name,
-		ao.order_id,
-		ac.customer_name,
-		ac.customer_phone,
-		aoc.card_id,
+		su.name as agentName,
+		ao.order_id as orderId,
+		ac.customer_name as customerName,
+		ac.customer_phone as customerPhone,
+		aoc.card_id as cardNo,
 		ao.order_state
 		FROM
 		app_orders ao
