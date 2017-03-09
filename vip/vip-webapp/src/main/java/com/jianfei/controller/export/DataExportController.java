@@ -23,6 +23,11 @@ public class DataExportController {
 	@Autowired
 	private OrderManager orderManager;
 
+	/**
+	 * 导出所有订单对应卡号的核销记录
+	 * 
+	 * @param response
+	 */
 	@RequestMapping("/cosumeInfoOfVipCard")
 	public void exportConsumeInfoOfVipCard(HttpServletResponse response) {
 		orderManager.exportcCounsumeInfoOfVipCard(response);
