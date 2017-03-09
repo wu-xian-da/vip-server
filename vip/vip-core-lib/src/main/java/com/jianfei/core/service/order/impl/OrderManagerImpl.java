@@ -933,11 +933,11 @@ public class OrderManagerImpl implements OrderManager {
 	 * 导出核销记录
 	 */
 	@Override
-	public void exportcCounsumeInfoOfVipCard(HttpServletResponse response) {
-		List<Map<Object, Object>> list = appOrdersMapper.selCosumeInfo();
-		List<VipCardConsumeDto> vipCardConsumeDtos = new ArrayList<>();
+	public void exportCounsumeInfoOfVipCard(HttpServletResponse response) {
+		List<Map<Object, Object>> basicConsumeInfoGroup = appOrdersMapper.selBasicConsumeInfo();
+		List<VipCardConsumeDto> vipCardConsumeDtoGroup = new ArrayList<>();
 
-		for (Map<Object, Object> map : list) {
+		for (Map<Object, Object> map : basicConsumeInfoGroup) {
 			// 组装核销信息基本信息
 			VipCardConsumeDto consumeInfo = new VipCardConsumeDto();
 			consumeInfo.setCustomerName((String) map.get("customer_name"));
@@ -946,7 +946,7 @@ public class OrderManagerImpl implements OrderManager {
 			consumeInfo.setOrderId((String) map.get("order_id"));
 			consumeInfo.setCardNo((String) map.get("card_id"));
 			consumeInfo.setOrderStateName(StateChangeUtils.returnOrderStateName((Integer) map.get("order_state")));
-			vipCardConsumeDtos.add(consumeInfo);
+			vipCardConsumeDtoGroup.add(consumeInfo);
 			// 组装核销信息消费信息
 			AirportEasyUseInfo airportEasyUseInfo = airportEasyManager.readDisCodeData((String) map.get("card_id"));
 			if (airportEasyUseInfo == null) {
@@ -967,7 +967,7 @@ public class OrderManagerImpl implements OrderManager {
 			}
 
 		}
-		ExcelUtils.fillDataToExcel(vipCardConsumeDtos, response, VipCardConsumeDto.class);
+		ExcelUtils.fillDataToExcel(vipCardConsumeDtoGroup, response, VipCardConsumeDto.class);
 
 	}
 }

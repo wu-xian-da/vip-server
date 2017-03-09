@@ -3,7 +3,6 @@ package com.jianfei.core.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.github.pagehelper.PageInfo;
 import com.jianfei.core.bean.AppOrders;
 import com.jianfei.core.common.persistence.MyBatisDao;
 import com.jianfei.core.dto.GraphDto;
@@ -25,8 +24,8 @@ public interface AppOrdersMapper {
 
 	// 根据订单编号返回订单详细信息
 	OrderDetailInfo selOrderDetailInfo(String orderId);
-	
-	//根据订单号查询日志信息
+
+	// 根据订单号查询日志信息
 	OrderDetailInfo selLogInfoByOrderId(String orderId);
 
 	int deleteByPrimaryKey(String orderId);
@@ -49,19 +48,19 @@ public interface AppOrdersMapper {
 	 * @version 1.0.0
 	 */
 	List<Map<String, Object>> selectOrder(Map<String, Object> map);
-	
+
 	/**
-	 * 支付宝回调通知
-	 * 参数类型见：com.jianfei.core.common.pay.PayNotifyRequest
+	 * 支付宝回调通知 参数类型见：com.jianfei.core.common.pay.PayNotifyRequest
+	 * 
 	 * @param params
 	 * @return
 	 */
 	int payNotify(Map<String, Object> params);
-	
+
 	/**
 	 * 查询需要开发票的订单信息
 	 */
-	List<OrderShowInfoDto> invoicePageList(Map<String,Object> map);
+	List<OrderShowInfoDto> invoicePageList(Map<String, Object> map);
 
 	/**
 	 * 根据订单号返回订单详细信息
@@ -70,30 +69,37 @@ public interface AppOrdersMapper {
 
 	/**
 	 * 根据工号获取业务员需要处理的数据
-	 * @param uno 工号
+	 * 
+	 * @param uno
+	 *            工号
 	 * @return
 	 */
-	List<GraphDto> getSaleToDoData(@Param(value = "uno")String uno);
+	List<GraphDto> getSaleToDoData(@Param(value = "uno") String uno);
 
 	/**
 	 * 分页查询订单相关状态
+	 * 
 	 * @param uno
 	 * @param orderState
 	 * @param cardState
 	 * @return
 	 */
-	List<OrderPageDto> orderListBySale(@Param(value = "uno")String uno, @Param(value = "orderState")List<Integer> orderState, @Param(value = "cardState")List<Integer> cardState,@Param(value = "key")String key);
+	List<OrderPageDto> orderListBySale(@Param(value = "uno") String uno,
+			@Param(value = "orderState") List<Integer> orderState, @Param(value = "cardState") List<Integer> cardState,
+			@Param(value = "key") String key);
 
 	/**
 	 * 根据手机号获取订单列表
+	 * 
 	 * @param phone
 	 * @return
-     */
-	List<AppOrders> orderListByPhone(@Param(value = "phone")String phone);
-	
+	 */
+	List<AppOrders> orderListByPhone(@Param(value = "phone") String phone);
+
 	/**
 	 * 查询订单信息
+	 * 
 	 * @return
 	 */
-	List<Map<Object,Object>> selCosumeInfo();
+	List<Map<Object, Object>> selBasicConsumeInfo();
 }

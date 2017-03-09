@@ -246,5 +246,5 @@ public interface OrderManager {
 	 * 
 	 * @param response
 	 */
-	void exportcCounsumeInfoOfVipCard(HttpServletResponse response);
+	void exportCounsumeInfoOfVipCard(HttpServletResponse response);
 }

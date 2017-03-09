@@ -675,8 +675,8 @@
 		and u.customer_phone=(#{phone})
 	</select>
 
-	<!--核销记录需要的信息  -->
-	<select id="selCosumeInfo" resultType="java.util.Map">
+	<!--核销记录需要的基本信息  -->
+	<select id="selBasicConsumeInfo" resultType="java.util.Map">
 		SELECT
 		su.name,
 		ao.order_id,
