@@ -5,7 +5,6 @@
 	version="2.5">
 	<display-name>Archetype Created Web Application</display-name>
 
-	<display-name>Archetype Created Web Application</display-name>
 	<!-- needed for ContextLoaderListener -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -15,7 +14,8 @@
 			classpath:oauth2-security.xml
 		</param-value>
 	</context-param>
-
+	
+	<!-- 配置springSecurityFilterChain -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
