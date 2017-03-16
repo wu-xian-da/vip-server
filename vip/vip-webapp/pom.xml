@@ -224,6 +224,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.7</version>
 		</dependency>
 		<!-- java.util.logging 实际调用slf4j -->
 		<dependency>
@@ -271,6 +272,11 @@
 			<groupId>com.jianfei</groupId>
 			<artifactId>vip-scheduled</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>4.0.1.RELEASE</version>
 		</dependency>
 	</dependencies>
 	<build>
