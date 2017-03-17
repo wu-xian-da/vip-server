@@ -43,6 +43,8 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -170,6 +172,82 @@ public class OrderManagerImpl implements OrderManager {
 		appOrderCard.setCardType(vipCard.getCardType());
 		appOrderCardMapper.insert(appOrderCard);
 
+		addInfoDto.setOrderId(orders.getOrderId());
+		addInfoDto.setMoney(vipCard.getInitMoney());
+		// **日志记录（正常）
+		SmartLog.info(ModuleType.ORDER_MODULE.getName(), customer.getPhone(),
+				"【订单模块-订单添加】，订单编号：" + orders.getOrderId() + "，用户手机号：" + customer.getPhone() + "，用户姓名："
+						+ customer.getCustomerName() + "，操作员编号：" + user.getId() + "，操作员姓名：" + user.getName()
+						+ "，操作内容：【订单状态:未支付】，操作结果：【成功】");
+		return BaseMsgInfo.success(addInfoDto);
+
+	}
+	
+	/**
+	 * 自定义方法，用于后期补录订单信息，不走后台
+	 * @param addInfoDto
+	 * @return
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws ParseException 
+	 */
+	public BaseMsgInfo addOrderAndUserInfoByOutLine(OrderAddInfoDto addInfoDto)
+			throws InvocationTargetException, IllegalAccessException, ParseException {
+		// 根据查询VIP号查询卡片信息
+		AppVipcard vipCard = vipCardManager.getVipCardByNo(addInfoDto.getVipCardNo());
+		if (vipCard == null) {
+			return new BaseMsgInfo().setCode(-1).setMsg("VIP卡号错误");
+		} 
+		// 销售员信息
+		User user = saleUserManager.getSaleUser(addInfoDto.getUno());
+		if (user == null || StringUtils.isBlank(user.getName())) {
+			return BaseMsgInfo.msgFail("人员工号不存在");
+		}
+		
+		// 1、添加或修改用户信息
+		AppCustomer customer = new AppCustomer();
+		
+		BeanUtils.copyProperties(customer, addInfoDto);
+		customer.setSex(1);
+		vipUserManager.addORUpdateUser(customer);
+
+		// 2、添加订单信息
+		AppOrders orders = new AppOrders();
+		BeanUtils.copyProperties(orders, addInfoDto);
+		orders.setSaleNo(addInfoDto.getUno());
+		orders.setSaleName(user.getName());
+		orders.setCustomerId(customer.getCustomerId());
+		orders.setPayMoney(vipCard.getInitMoney());
+		orders.setOrderId(IdGen.uuid());
+		orders.setOrderTime(new Date());
+		orders.setRemark1("VIP卡");
+		orders.setOrderState(VipOrderState.ALREADY_PAY.getName());//订单状态-已支付
+		orders.setOrderTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-03-16 10:00:00"));
+		orders.setPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-03-16 10:01:00"));//支付时间
+		orders.setPayType(PayType.CASHPAY.getName());//支付方式-现金
+		orders.setDtflag(StateType.EXIST.getName());
+		orders.setInvoiceFlag(0);
+		appOrdersMapper.insertSelective(orders);
+
+		// 3、卡表及订单卡表
+		vipCard.setCustomerId(customer.getCustomerId());
+		vipCardManager.updateVipCard(vipCard);
+		AppOrderCard appOrderCard = new AppOrderCard();
+		appOrderCard.setId(IdGen.uuid());
+		appOrderCard.setOrderId(orders.getOrderId());
+		appOrderCard.setCardNo(addInfoDto.getVipCardNo());
+		appOrderCard.setCardNum(1);
+		appOrderCard.setInitMoney(vipCard.getInitMoney());
+		appOrderCard.setCardType(vipCard.getCardType());
+		appOrderCardMapper.insert(appOrderCard);
+		
+		//4 将卡的状态改为绑定成功未激活1
+		AppVipcard vipcard = new AppVipcard();
+		vipcard.setCardState(VipCardState.ACTIVE.getName());
+		vipCardManager.updateByPrimaryKeySelective(vipcard);
+		
+		
+		
 		addInfoDto.setOrderId(orders.getOrderId());
 		addInfoDto.setMoney(vipCard.getInitMoney());
 		// **日志记录（正常）
