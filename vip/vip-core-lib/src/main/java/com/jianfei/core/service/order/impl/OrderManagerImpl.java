@@ -223,8 +223,8 @@ public class OrderManagerImpl implements OrderManager {
 		orders.setOrderTime(new Date());
 		orders.setRemark1("VIP卡");
 		orders.setOrderState(VipOrderState.ALREADY_PAY.getName());// 订单状态-已支付
-		orders.setOrderTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-03-17 10:00:00"));
-		orders.setPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-03-17 10:01:00"));// 支付时间
+		orders.setOrderTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-03-22 10:00:00"));
+		orders.setPayTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-03-22 10:01:00"));// 支付时间
 		orders.setPayType(PayType.CASHPAY.getName());// 支付方式-现金
 		orders.setDtflag(StateType.EXIST.getName());
 		orders.setInvoiceFlag(0);
@@ -243,9 +243,8 @@ public class OrderManagerImpl implements OrderManager {
 		appOrderCardMapper.insert(appOrderCard);
 
 		// 4 将卡的状态改为绑定成功未激活1
-		AppVipcard vipcard = new AppVipcard();
-		vipcard.setCardState(VipCardState.ACTIVE.getName());
-		vipCardManager.updateByPrimaryKeySelective(vipcard);
+		vipCard.setCardState(VipCardState.ACTIVE.getName());
+		vipCardManager.updateByPrimaryKeySelective(vipCard);
 
 	}
 

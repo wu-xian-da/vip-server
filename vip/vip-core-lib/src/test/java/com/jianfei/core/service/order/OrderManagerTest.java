@@ -23,12 +23,12 @@ public class OrderManagerTest {
 
 	public List<OrderAddInfoDto> returnOrderInfos() {
 		OrderAddInfoDto addInfoDto1 = new OrderAddInfoDto();
-		addInfoDto1.setCustomerName("倪必天");
-		addInfoDto1.setPhone("15003669888");
-		addInfoDto1.setCustomerIdenti("350181197808111738");
-		addInfoDto1.setUno("020");
-		addInfoDto1.setVipCardNo("86869297088");
-		addInfoDto1.setAirportId("0468218270952502");
+		addInfoDto1.setCustomerName("GOH CHUI HONG");
+		addInfoDto1.setPhone("13521717030");
+		addInfoDto1.setCustomerIdenti("A31979591");
+		addInfoDto1.setUno("027");
+		addInfoDto1.setVipCardNo("86842464834");
+		addInfoDto1.setAirportId("0468045723714265");
 
 		List<OrderAddInfoDto> list = new ArrayList<>();
 		list.add(addInfoDto1);
